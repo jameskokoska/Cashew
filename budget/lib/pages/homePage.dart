@@ -1,3 +1,4 @@
+import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
@@ -68,6 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFont(text: "test"),
+            BudgetContainer(
+              title: "Budget Name",
+              color: Color(0x4F6ECA4A),
+              total: 500,
+              spent: 49.1,
+            ),
             Text(
               'You have pushed the button this many times:',
             ),
