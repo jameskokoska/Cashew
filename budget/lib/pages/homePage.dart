@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: "Budget Name",
               color: Color(0x4F6ECA4A),
               total: 500,
-              spent: 49.1,
+              spent: 210,
             ),
             Text(
               'You have pushed the button this many times:',

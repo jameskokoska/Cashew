@@ -38,15 +38,16 @@ class BudgetContainer extends StatelessWidget {
             Container(
               child: TextFont(
                 text: convertToMoney(spent),
-                fontSize: 20,
+                fontSize: 18,
                 textAlign: TextAlign.left,
+                fontWeight: FontWeight.bold,
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 3.0),
               child: Container(
                 child: TextFont(
-                  text: " spent of " + convertToMoney(total),
+                  text: " left of " + convertToMoney(total),
                   fontSize: 13,
                   textAlign: TextAlign.left,
                 ),
@@ -66,8 +67,7 @@ class BudgetContainer extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.fitWidth,
             child: TextFont(
-              text:
-                  "You can keep spending 15\$ each day for the rest of the period.",
+              text: "You can keep spending 15\$ each day.",
               fontSize: 15,
               textAlign: TextAlign.center,
             ),
@@ -199,6 +199,18 @@ class BudgetProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var percentText = Container(
+        child: Center(
+            child: Padding(
+          padding: const EdgeInsets.only(top: 4.3),
+          child: TextFont(
+            text: percent.toInt().toString() + "%",
+            fontSize: 14,
+            textAlign: TextAlign.center,
+            fontWeight: FontWeight.bold,
+          ),
+        )),
+        height: 22);
     return Stack(
       alignment: Alignment.bottomLeft,
       children: [
@@ -225,6 +237,7 @@ class BudgetProgress extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                         color: Colors.white.withOpacity(0.8)),
                   ),
+                  percent > 40 ? percentText : Container(),
                 ],
               ),
             ),
@@ -233,18 +246,7 @@ class BudgetProgress extends StatelessWidget {
         TodayIndicator(
           percent: todayPercent,
         ),
-        Container(
-            child: Center(
-                child: Padding(
-              padding: const EdgeInsets.only(top: 4.3),
-              child: TextFont(
-                text: percent.toInt().toString() + "%",
-                fontSize: 14,
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.bold,
-              ),
-            )),
-            height: 22),
+        percent <= 40 ? percentText : Container(),
       ],
     );
   }
@@ -289,7 +291,10 @@ class TodayIndicator extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.vertical(bottom: Radius.circular(5)),
-                        color: Theme.of(context).colorScheme.black),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .black
+                            .withOpacity(0.4)),
                   ),
                 ],
               ),
