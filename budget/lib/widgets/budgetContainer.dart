@@ -3,20 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import '../colors.dart';
 import '../functions.dart';
+import '../struct/budget.dart';
 
 class BudgetContainer extends StatelessWidget {
-  BudgetContainer({
-    Key? key,
-    required this.title,
-    required this.color,
-    required this.total,
-    required this.spent,
-  }) : super(key: key);
+  BudgetContainer({Key? key, required this.budget}) : super(key: key);
 
-  final String title;
-  final Color color;
-  final double total;
-  final double spent;
+  final Budget budget;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +17,7 @@ class BudgetContainer extends StatelessWidget {
         Container(
           width: double.infinity,
           child: TextFont(
-            text: title,
+            text: budget.title,
             fontWeight: FontWeight.bold,
             fontSize: 25,
             textAlign: TextAlign.left,
@@ -37,7 +29,7 @@ class BudgetContainer extends StatelessWidget {
           children: [
             Container(
               child: TextFont(
-                text: convertToMoney(spent),
+                text: convertToMoney(budget.spent),
                 fontSize: 18,
                 textAlign: TextAlign.left,
                 fontWeight: FontWeight.bold,
@@ -47,7 +39,7 @@ class BudgetContainer extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 3.0),
               child: Container(
                 child: TextFont(
-                  text: " left of " + convertToMoney(total),
+                  text: " left of " + convertToMoney(budget.total),
                   fontSize: 13,
                   textAlign: TextAlign.left,
                 ),
@@ -55,11 +47,7 @@ class BudgetContainer extends StatelessWidget {
             ),
           ],
         ),
-        BudgetTimeline(
-            startDate: "Sept 1",
-            endDate: "Oct 1",
-            percent: spent / total * 100,
-            color: this.color),
+        BudgetTimeline(budget: budget),
         Container(
           height: 14,
         ),
@@ -84,7 +72,7 @@ class BudgetContainer extends StatelessWidget {
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(15), boxShadow: [
           BoxShadow(
-              color: this.color,
+              color: budget.color,
               offset: Offset(0, 4.0),
               blurRadius: 15.0,
               spreadRadius: -5),
@@ -94,7 +82,7 @@ class BudgetContainer extends StatelessWidget {
           child: Stack(
             children: [
               Positioned.fill(
-                child: AnimatedGooBackground(color: color),
+                child: AnimatedGooBackground(color: budget.color),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -144,19 +132,10 @@ class AnimatedGooBackground extends StatelessWidget {
 }
 
 class BudgetTimeline extends StatelessWidget {
-  BudgetTimeline(
-      {Key? key,
-      required this.startDate,
-      required this.endDate,
-      required this.percent,
-      required this.color})
-      : super(key: key);
+  BudgetTimeline({Key? key, required this.budget}) : super(key: key);
 
-  final String startDate;
-  final String endDate;
-  final double percent;
-  final Color color;
-  double todayPercent = 20;
+  final Budget budget;
+  final double todayPercent = 45;
 
   @override
   Widget build(BuildContext context) {
@@ -164,18 +143,18 @@ class BudgetTimeline extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         TextFont(
-          text: this.startDate,
+          text: budget.startDate.day.toString(),
           fontSize: 12,
         ),
         Expanded(
           child: BudgetProgress(
-            color: this.color,
-            percent: percent,
+            color: budget.color,
+            percent: budget.getPercent(),
             todayPercent: todayPercent,
           ),
         ),
         TextFont(
-          text: this.endDate,
+          text: budget.endDate.day.toString(),
           fontSize: 12,
         ),
       ],
