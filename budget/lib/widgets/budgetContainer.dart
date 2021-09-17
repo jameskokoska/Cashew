@@ -1,3 +1,4 @@
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
@@ -222,8 +223,10 @@ class BudgetProgress extends StatelessWidget {
             ),
             margin: EdgeInsets.symmetric(horizontal: 8),
             height: 20),
-        TodayIndicator(
-          percent: todayPercent,
+        FadeIn(
+          child: TodayIndicator(
+            percent: todayPercent,
+          ),
         ),
         percent <= 40 ? percentText : Container(),
       ],
