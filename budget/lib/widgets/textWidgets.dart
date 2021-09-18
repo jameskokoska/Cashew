@@ -7,6 +7,7 @@ class TextFont extends StatelessWidget {
   final FontWeight fontWeight;
   final Color? textColor;
   final TextAlign textAlign;
+  final int? maxLines;
 
   const TextFont(
       {Key? key,
@@ -14,7 +15,8 @@ class TextFont extends StatelessWidget {
       this.fontSize = 20,
       this.fontWeight = FontWeight.normal,
       this.textAlign = TextAlign.left,
-      this.textColor})
+      this.textColor,
+      this.maxLines = null})
       : super(key: key);
 
   @override
@@ -27,7 +29,9 @@ class TextFont extends StatelessWidget {
     }
     return Text(
       '$text',
+      maxLines: maxLines,
       textAlign: textAlign,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontWeight: this.fontWeight,
           fontSize: this.fontSize,

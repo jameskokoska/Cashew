@@ -1,3 +1,6 @@
+import 'package:budget/struct/transactionCategory.dart';
+import 'package:flutter/foundation.dart';
+
 import './colors.dart';
 import './widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +41,15 @@ String convertToMoney(double amount) {
             formatOutput.length - 3, formatOutput.length, '');
   }
   return currencyType + currency.format(amount);
+}
+
+//TODO
+TransactionCategory findCategory(String id) {
+  return TransactionCategory(
+      title: "Food and Drink",
+      icon: "cutlery.png",
+      id: "id",
+      color: Colors.orange);
 }
 
 getMonth(currentMonth) {

@@ -1,4 +1,5 @@
 import 'package:budget/struct/budget.dart';
+import 'package:budget/struct/transaction.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -46,9 +47,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 periodLength: 10,
               ),
             ),
-            TransactionEntry(openPage: OpenTestPage()),
-            Text(
-              'You have pushed the button this many times:',
+            TransactionEntry(
+              openPage: OpenTestPage(),
+              transaction: Transaction(
+                  title: "Uber",
+                  amount: 50,
+                  categoryID: "id",
+                  date: DateTime.now(),
+                  note: "this is a transaction",
+                  tagIDs: ["id1", "id2"]),
+            ),
+            TransactionEntry(
+              openPage: OpenTestPage(),
+              transaction: Transaction(
+                  title: "",
+                  amount: 50,
+                  categoryID: "id",
+                  date: DateTime.now(),
+                  note: "this is a transaction",
+                  tagIDs: ["id1", "id2"]),
             ),
             Text(
               '$_counter',

@@ -13,7 +13,10 @@ extension ColorsDefined on ColorScheme {
       : const Color(0xFFCB94DB);
   Color get lightDarkAccent => brightness == Brightness.light
       ? const Color(0xFFFAFAFA)
-      : const Color(0xFF3B3B3B);
+      : const Color(0xFF242424);
+  Color get lightDarkAccentHeavy => brightness == Brightness.light
+      ? const Color(0xFFDBDBDB)
+      : const Color(0xFF444444);
   Color get shadowColor => brightness == Brightness.light
       ? const Color(0x655A5A5A)
       : const Color(0x69BDBDBD);
