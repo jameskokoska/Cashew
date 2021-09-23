@@ -19,7 +19,6 @@ class _FadeInState extends State<FadeIn> {
       setState(() {
         widgetOpacity = 1;
       });
-      print("Changed");
     });
   }
 

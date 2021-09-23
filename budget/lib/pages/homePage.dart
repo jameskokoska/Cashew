@@ -2,6 +2,7 @@ import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/transaction.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -34,6 +35,36 @@ class _MyHomePageState extends State<MyHomePage> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
+                Container(height: 100),
+                Container(
+                    width: 200,
+                    height: 200,
+                    child: Stack(
+                      children: [
+                        PieChartSample3(),
+                        IgnorePointer(
+                          child: Center(
+                            child: Container(
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                  color: Colors.black, shape: BoxShape.circle),
+                            ),
+                          ),
+                        ),
+                        IgnorePointer(
+                          child: Center(
+                            child: Container(
+                              width: 115,
+                              height: 115,
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.2),
+                                  shape: BoxShape.circle),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
                 Container(height: 100),
                 TextInput(labelText: "labelText"),
               ],

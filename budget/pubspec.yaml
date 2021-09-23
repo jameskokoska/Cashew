@@ -27,6 +27,7 @@ dependencies:
   intl: ^0.17.0
   animations: ^2.0.1
   flutter_sticky_header: ^0.6.0
+  fl_chart: ^0.40.0
 
 dev_dependencies:
   flutter_test:
