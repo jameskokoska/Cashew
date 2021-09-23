@@ -2,10 +2,12 @@ import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/transaction.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import "../struct/budget.dart";
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -27,52 +29,131 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextFont(text: "test"),
-            BudgetContainer(
-              budget: Budget(
-                title: "Budget Name",
-                color: Color(0x4F6ECA4A),
-                total: 500,
-                spent: 210,
-                endDate: DateTime.now(),
-                startDate: DateTime.now(),
-                period: "month",
-                periodLength: 10,
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Container(height: 100),
+                TextInput(labelText: "labelText"),
+              ],
+            ),
+          ),
+          SliverStickyHeader(
+            header: TextHeader(
+              text: "Home",
+            ),
+            sliver: SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    BudgetContainer(
+                      budget: Budget(
+                        title: "Budget Name",
+                        color: Color(0x4F6ECA4A),
+                        total: 500,
+                        spent: 210,
+                        endDate: DateTime.now(),
+                        startDate: DateTime.now(),
+                        period: "month",
+                        periodLength: 10,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            TransactionEntry(
-              openPage: OpenTestPage(),
-              transaction: Transaction(
-                  title: "Uber",
-                  amount: 50,
-                  categoryID: "id",
-                  date: DateTime.now(),
-                  note: "this is a transaction",
-                  tagIDs: ["id1", "id2"]),
+          ),
+
+          SliverStickyHeader(
+            header: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextHeader(
+                  text: "Transactions",
+                ),
+                DateDivider(date: DateTime.now()),
+              ],
             ),
-            TransactionEntry(
-              openPage: OpenTestPage(),
-              transaction: Transaction(
-                  title: "",
-                  amount: 50,
-                  categoryID: "id",
-                  date: DateTime.now(),
-                  note: "this is a transaction",
-                  tagIDs: ["id1", "id2"]),
+            sliver: SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return TransactionEntry(
+                      openPage: OpenTestPage(),
+                      transaction: Transaction(
+                        title: "Uber",
+                        amount: 50,
+                        categoryID: "id",
+                        date: DateTime.now(),
+                        note: "this is a transaction",
+                        tagIDs: ["id1", "id2"],
+                      ),
+                    );
+                  },
+                  childCount: 40,
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                TransactionEntry(
+                  openPage: OpenTestPage(),
+                  transaction: Transaction(
+                    title: "",
+                    amount: 50,
+                    categoryID: "id",
+                    date: DateTime.now(),
+                    note: "this is a transaction",
+                    tagIDs: ["id1", "id2"],
+                  ),
+                ),
+                TransactionEntry(
+                  openPage: OpenTestPage(),
+                  transaction: Transaction(
+                    title: "Uber",
+                    amount: 50,
+                    categoryID: "id",
+                    date: DateTime.now(),
+                    note: "this is a transaction",
+                    tagIDs: ["id1", "id2"],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          // SliverPadding(
+          //   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          //   sliver: SliverGrid(
+          //     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          //       maxCrossAxisExtent: 650,
+          //       mainAxisExtent: 95,
+          //       mainAxisSpacing: 15,
+          //       crossAxisSpacing: 15,
+          //     ),
+          //     delegate: SliverChildBuilderDelegate(
+          //       (BuildContext context, int index) {
+          //         return TransactionEntry(
+          //           openPage: OpenTestPage(),
+          //           transaction: Transaction(
+          //             title: "Uber",
+          //             amount: 50,
+          //             categoryID: "id",
+          //             date: DateTime.now(),
+          //             note: "this is a transaction",
+          //             tagIDs: ["id1", "id2"],
+          //           ),
+          //         );
+          //       },
+          //       childCount: 20,
+          //     ),
+          //   ),
+          // )
+        ],
       ),
     );
   }

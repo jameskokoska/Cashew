@@ -6,7 +6,7 @@ class FAB extends StatelessWidget {
 
   final Widget openPage;
 
-  double fabSize = 50;
+  final double fabSize = 60;
   @override
   Widget build(BuildContext context) {
     return OpenContainer(
@@ -49,7 +49,17 @@ class OpenTestPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Test page'),
       ),
-      body: Container(),
+      body: GestureDetector(
+        onDoubleTap: () {
+          print("hello");
+        },
+        onPanUpdate: (details) {
+          if (details.delta.dy > 10 || details.delta.dx > 10) {
+            Navigator.of(context).pop();
+          }
+        },
+        child: Container(),
+      ),
     );
   }
 }
