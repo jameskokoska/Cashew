@@ -14,6 +14,8 @@ class FAB extends StatelessWidget {
       openBuilder: (BuildContext context, VoidCallback _) {
         return openPage;
       },
+      tappable: false,
+      transitionDuration: Duration(milliseconds: 350),
       closedElevation: 6.0,
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
