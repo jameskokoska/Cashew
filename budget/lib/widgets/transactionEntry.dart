@@ -60,17 +60,28 @@ class TransactionEntry extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            transaction.title == ""
+                            transaction.title != ""
+                                ? TextFont(
+                                    text: transaction.title,
+                                    fontSize: 20,
+                                  )
+                                : Container(),
+                            transaction.title == "" &&
+                                    transaction.tagIDs.length > 0
                                 ? TagIcon(
                                     tag: TransactionTag(
                                         title: "test",
                                         id: "test",
                                         categoryID: "id"),
                                     size: 16)
-                                : TextFont(
-                                    text: transaction.title,
+                                : Container(),
+                            transaction.title == "" &&
+                                    transaction.tagIDs.length == 0
+                                ? TextFont(
+                                    text: category.title,
                                     fontSize: 20,
-                                  ),
+                                  )
+                                : Container(),
                             transaction.title == "" && transaction.note != ""
                                 ? Container(height: 4)
                                 : Container(),
@@ -85,14 +96,15 @@ class TransactionEntry extends StatelessWidget {
                                 ? Container()
                                 : Container(height: 4),
                             //TODO loop through all tags relating to this entry
-                            transaction.title == ""
-                                ? Container()
-                                : TagIcon(
+                            transaction.title != "" &&
+                                    transaction.tagIDs.length > 0
+                                ? TagIcon(
                                     tag: TransactionTag(
                                         title: "test",
                                         id: "test",
                                         categoryID: "id"),
                                     size: 12)
+                                : Container()
                           ],
                         ),
                       ),
@@ -151,16 +163,14 @@ class TagIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(1000),
         color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
       ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: 5.5 * this.size / 14,
-            right: 10 * this.size / 14,
-            left: 10 * this.size / 14,
-            bottom: 4 * this.size / 14),
-        child: TextFont(
-          text: "My Text",
-          fontSize: this.size,
-        ),
+      padding: EdgeInsets.only(
+          top: 5.5 * this.size / 14,
+          right: 10 * this.size / 14,
+          left: 10 * this.size / 14,
+          bottom: 4 * this.size / 14),
+      child: TextFont(
+        text: "My Text",
+        fontSize: this.size,
       ),
     );
   }
@@ -178,14 +188,11 @@ class DateDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.accentColor,
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: TextFont(
-          text: DateFormat.MMMMEEEEd('en_US').format(date).toString(),
-          fontSize: 15,
-        ),
+      child: TextFont(
+        text: DateFormat.MMMMEEEEd('en_US').format(date).toString(),
+        fontSize: 15,
       ),
     );
   }

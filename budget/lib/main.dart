@@ -1,3 +1,4 @@
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:flutter/material.dart';
 import './pages/homePage.dart';
@@ -42,7 +43,10 @@ class MyApp extends StatelessWidget {
         body: MyHomePage(
           title: "test",
         ),
-        floatingActionButton: FAB(openPage: OpenTestPage()),
+        floatingActionButton: FAB(
+            openPage: AddTransactionPage(
+          title: "",
+        )),
       ),
     );
   }

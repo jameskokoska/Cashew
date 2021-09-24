@@ -1,6 +1,7 @@
 import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/transaction.dart';
 import 'package:budget/widgets/budgetContainer.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textInput.dart';
@@ -27,14 +28,24 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        controller: scrollController,
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate(
               [
+                Container(height: 100),
+                Button(
+                  label: "button",
+                  width: 120,
+                  height: 40,
+                  onTap: () {},
+                ),
                 Container(height: 100),
                 Container(
                     width: 200,
@@ -120,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         categoryID: "id",
                         date: DateTime.now(),
                         note: "this is a transaction",
-                        tagIDs: ["id1", "id2"],
+                        tagIDs: ["id1"],
                       ),
                     );
                   },

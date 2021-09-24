@@ -36,14 +36,12 @@ class BudgetContainer extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.only(bottom: 3.0),
-              child: Container(
-                child: TextFont(
-                  text: " left of " + convertToMoney(budget.total),
-                  fontSize: 13,
-                  textAlign: TextAlign.left,
-                ),
+              child: TextFont(
+                text: " left of " + convertToMoney(budget.total),
+                fontSize: 13,
+                textAlign: TextAlign.left,
               ),
             ),
           ],
