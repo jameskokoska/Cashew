@@ -37,9 +37,10 @@ class TransactionEntry extends StatelessWidget {
       closedElevation: 0.0,
       openColor: Theme.of(context).colorScheme.lightDarkAccent,
       closedBuilder: (BuildContext _, VoidCallback openContainer) {
-        return Material(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+          child: Material(
+            borderRadius: BorderRadius.circular(15),
             child: InkWell(
               customBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -48,10 +49,15 @@ class TransactionEntry extends StatelessWidget {
                 openContainer();
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                margin:
+                    EdgeInsets.only(left: 14, right: 25, top: 12, bottom: 12),
                 child: Row(
                   children: [
-                    CategoryIcon(category: category, size: 50),
+                    CategoryIcon(
+                      category: category,
+                      size: 45,
+                      margin: EdgeInsets.zero,
+                    ),
                     Container(
                       width: 15,
                     ),
@@ -109,12 +115,9 @@ class TransactionEntry extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 8, left: 5),
-                      child: TextFont(
-                        text: convertToMoney(transaction.amount),
-                        fontSize: 25,
-                      ),
+                    TextFont(
+                      text: convertToMoney(transaction.amount),
+                      fontSize: 25,
                     ),
                   ],
                 ),
@@ -128,24 +131,85 @@ class TransactionEntry extends StatelessWidget {
 }
 
 class CategoryIcon extends StatelessWidget {
-  CategoryIcon({Key? key, required this.category, required this.size})
+  CategoryIcon(
+      {Key? key,
+      required this.category,
+      required this.size,
+      this.onTap,
+      this.label = false,
+      this.labelSize = 10,
+      this.margin,
+      this.sizePadding = 20,
+      this.outline = false})
       : super(key: key);
 
   final TransactionCategory category;
   final double size;
+  final VoidCallback? onTap;
+  final bool label;
+  final double labelSize;
+  final EdgeInsets? margin;
+  final double sizePadding;
+  final bool outline;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(shape: BoxShape.circle, color: category.color),
-      child: Center(
-        child: Image(
-          image: AssetImage("../assets/icons/categories/" + category.icon),
-          width: size * 0.5,
+    return Column(
+      children: [
+        AnimatedContainer(
+          duration: Duration(milliseconds: 250),
+          margin: margin ??
+              EdgeInsets.only(left: 8, right: 8, top: 8, bottom: label ? 2 : 8),
+          height: size + sizePadding,
+          width: size + sizePadding,
+          decoration: outline
+              ? BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.accentColorHeavy,
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                )
+              : BoxDecoration(
+                  border: Border.all(
+                    color: Colors.transparent,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                ),
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: category.color.withOpacity(0.6),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child: Center(
+                child: Image(
+                  image:
+                      AssetImage("../assets/icons/categories/" + category.icon),
+                  width: size,
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
+        label
+            ? Container(
+                margin: EdgeInsets.only(top: 3),
+                width: 60,
+                child: Center(
+                  child: TextFont(
+                    textAlign: TextAlign.center,
+                    text: category.title,
+                    fontSize: labelSize,
+                    maxLines: 1,
+                  ),
+                ),
+              )
+            : Container(
+                width: size + sizePadding,
+              ),
+      ],
     );
   }
 }
@@ -161,7 +225,8 @@ class TagIcon extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(1000),
-        color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+        color:
+            Theme.of(context).colorScheme.lightDarkAccentHeavy.withOpacity(0.6),
       ),
       padding: EdgeInsets.only(
           top: 5.5 * this.size / 14,

@@ -1,3 +1,4 @@
+import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/foundation.dart';
 
@@ -46,10 +47,15 @@ String convertToMoney(double amount) {
 //TODO
 TransactionCategory findCategory(String id) {
   return TransactionCategory(
-      title: "Food and Drink",
-      icon: "cutlery.png",
-      id: "id",
-      color: Colors.orange);
+    title: "Groceries",
+    icon: "groceries.png",
+    id: "id",
+    color: Colors.orange,
+  );
+}
+
+List<TransactionCategory> listCategory() {
+  return defaultCategories();
 }
 
 getMonth(currentMonth) {

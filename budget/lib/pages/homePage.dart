@@ -3,6 +3,7 @@ import 'package:budget/struct/transaction.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -47,6 +48,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () {},
                 ),
                 Container(height: 100),
+                CountUp(
+                  count: 50,
+                ),
+                CountUpInt(
+                  count: 50,
+                ),
                 Container(
                     width: 200,
                     height: 200,

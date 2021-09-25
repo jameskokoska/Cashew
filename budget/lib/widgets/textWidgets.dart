@@ -33,13 +33,14 @@ class TextFont extends StatelessWidget {
       textAlign: textAlign,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-          fontWeight: this.fontWeight,
-          fontSize: this.fontSize,
-          fontFamily: 'Avenir',
-          color: finalTextColor,
-          decoration: TextDecoration.underline,
-          decorationStyle: TextDecorationStyle.double,
-          decorationColor: Color(0x00FFFFFF)),
+        fontWeight: this.fontWeight,
+        fontSize: this.fontSize,
+        fontFamily: 'Avenir',
+        color: finalTextColor,
+        decoration: TextDecoration.underline,
+        decorationStyle: TextDecorationStyle.double,
+        decorationColor: Color(0x00FFFFFF),
+      ),
     );
   }
 }
