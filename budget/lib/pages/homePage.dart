@@ -49,10 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Container(height: 100),
                 CountUp(
-                  count: 50,
-                ),
-                CountUpInt(
-                  count: 50,
+                  count: 1,
+                  duration: Duration(seconds: 100),
                 ),
                 Container(
                     width: 200,
