@@ -6,6 +6,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:budget/colors.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -228,18 +229,109 @@ class SelectAmount extends StatefulWidget {
 
 class _SelectAmountState extends State<SelectAmount> {
   String amount = "";
-  addToAmount(input) {
-    setState(() {
-      amount += input;
-    });
+  addToAmount(String input) {
+    String amountClone = amount;
+    if (input == "." &&
+        !decimalCheck(operationsWithSpaces(amountClone + "."))) {
+      return;
+    }
+    if (amount.length == 0 && !includesOperations(input, false)) {
+      if (input == "0") {
+        return;
+      }
+      if (input == ".") {
+        setState(() {
+          amount += "0" + input;
+        });
+      } else {
+        setState(() {
+          amount += input;
+        });
+      }
+    } else if (amount.substring(amount.length - 1) == "0" && input == "0") {
+      return;
+    } else if ((!includesOperations(
+                amount.substring(amount.length - 1), true) &&
+            includesOperations(input, true)) ||
+        !includesOperations(input, true)) {
+      setState(() {
+        amount += input;
+      });
+    } else if (includesOperations(amount.substring(amount.length - 1), false) &&
+        input == ".") {
+      setState(() {
+        amount += "0" + input;
+      });
+    } else if (amount.substring(amount.length - 1) == "." &&
+        includesOperations(input, false)) {
+      setState(() {
+        amount = amount.substring(0, amount.length - 1) + input;
+      });
+    }
   }
 
-  removeToAmount() {
+  void removeToAmount() {
     setState(() {
       if (amount.length > 0) {
         amount = amount.substring(0, amount.length - 1);
       }
     });
+  }
+
+  bool includesOperations(String input, bool includeDecimal) {
+    List<String> operations = [
+      "÷",
+      "×",
+      "-",
+      "+",
+      (includeDecimal ? "." : "+")
+    ];
+    for (String operation in operations) {
+      if (input.contains(operation)) {
+        print(operation);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool decimalCheck(input) {
+    var splitInputs = input.split(" ");
+    for (var splitInput in splitInputs) {
+      print('.'.allMatches(splitInput));
+      if ('.'.allMatches(splitInput).length > 1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  String operationsWithSpaces(String input) {
+    return input
+        .replaceAll("÷", " ÷ ")
+        .replaceAll("×", " × ")
+        .replaceAll("-", " - ")
+        .replaceAll("+", " + ");
+  }
+
+  double calculateResult(input) {
+    if (input == "") {
+      return 0;
+    }
+    String changedInput = input;
+    if (includesOperations(input.substring(input.length - 1), true)) {
+      changedInput = input.substring(0, input.length - 1);
+    }
+    changedInput = changedInput.replaceAll("÷", "/");
+    changedInput = changedInput.replaceAll("×", "*");
+    double result = 0;
+    try {
+      ContextModel cm = ContextModel();
+      Parser p = new Parser();
+      Expression exp = p.parse(changedInput);
+      result = exp.evaluate(EvaluationType.REAL, cm);
+    } catch (e) {}
+    return result;
   }
 
   @override
@@ -248,10 +340,36 @@ class _SelectAmountState extends State<SelectAmount> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          TextFont(
-            text: getCurrencyString() + (amount == "" ? "0" : amount),
-            textAlign: TextAlign.right,
-            fontSize: 28,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.end,
+            children: [
+              FractionallySizedBox(
+                widthFactor: 0.5,
+                child: TextFont(
+                  text: (includesOperations(amount, false)
+                      ? operationsWithSpaces(amount)
+                      : ""),
+                  textAlign: TextAlign.left,
+                  fontSize: 18,
+                  maxLines: 5,
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.5,
+                child: TextFont(
+                  text: amount == ""
+                      ? getCurrencyString() + "0"
+                      : includesOperations(amount, false)
+                          ? convertToMoney(calculateResult(amount))
+                          : getCurrencyString() + amount,
+                  // text: amount,
+                  textAlign: TextAlign.right,
+                  fontSize: 28,
+                  maxLines: 5,
+                ),
+              ),
+            ],
           ),
           Row(
             children: [
