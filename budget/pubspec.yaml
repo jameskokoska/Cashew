@@ -30,6 +30,7 @@ dependencies:
   fl_chart: ^0.40.0
   modal_bottom_sheet: ^2.0.0
   math_expressions: ^2.2.0
+  visibility_detector: ^0.2.0
 
 dev_dependencies:
   flutter_test:
