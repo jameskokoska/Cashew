@@ -11,6 +11,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import "../struct/budget.dart";
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:budget/colors.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -30,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
         slivers: [
           SliverAppBar(
             leading: Container(),
-            backgroundColor: Colors.black,
+            backgroundColor: Theme.of(context).colorScheme.accentColor,
             floating: false,
             pinned: true,
             expandedHeight: 200.0,
@@ -38,9 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
             flexibleSpace: FlexibleSpaceBar(
                 titlePadding:
                     EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                title: HomeAppBar(key: _appBarKey, defaultTitle: "Home")),
+                title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
+                background: Container(
+                  color: Theme.of(context).canvasColor,
+                )),
           ),
-
           SliverList(
             delegate: SliverChildListDelegate(
               [
@@ -113,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SliverAppBar(
             leading: Container(),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.transparent,
             expandedHeight: 65.1,
             collapsedHeight: 65,
             flexibleSpace: LayoutBuilder(builder: (
@@ -200,33 +203,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          // SliverPadding(
-          //   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          //   sliver: SliverGrid(
-          //     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          //       maxCrossAxisExtent: 650,
-          //       mainAxisExtent: 95,
-          //       mainAxisSpacing: 15,
-          //       crossAxisSpacing: 15,
-          //     ),
-          //     delegate: SliverChildBuilderDelegate(
-          //       (BuildContext context, int index) {
-          //         return TransactionEntry(
-          //           openPage: OpenTestPage(),
-          //           transaction: Transaction(
-          //             title: "Uber",
-          //             amount: 50,
-          //             categoryID: "id",
-          //             date: DateTime.now(),
-          //             note: "this is a transaction",
-          //             tagIDs: ["id1", "id2"],
-          //           ),
-          //         );
-          //       },
-          //       childCount: 20,
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );
