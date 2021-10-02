@@ -23,6 +23,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<_HomeAppBarState> _appBarKey = GlobalKey();
+  double setTitleHeight = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +124,10 @@ class _MyHomePageState extends State<MyHomePage> {
               BuildContext context,
               BoxConstraints constraints,
             ) {
-              if (constraints.biggest.height <= 65) {
+              if (setTitleHeight == 0)
+                setTitleHeight = constraints.biggest.height;
+              print(setTitleHeight);
+              if (constraints.biggest.height < setTitleHeight) {
                 //occur when title disappears (scrolling down)
                 //add delay to wait for layout of children widgets first
                 Future.delayed(Duration.zero, () async {

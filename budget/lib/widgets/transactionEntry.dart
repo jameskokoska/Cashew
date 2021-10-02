@@ -26,9 +26,7 @@ class TransactionEntry extends StatelessWidget {
       openBuilder: (BuildContext context, VoidCallback _) {
         return openPage;
       },
-      onClosed: () {
-        print("hello");
-      }(),
+      onClosed: () {}(),
       closedColor: Theme.of(context).canvasColor,
       tappable: false,
       closedShape: const RoundedRectangleBorder(),
@@ -185,8 +183,7 @@ class CategoryIcon extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               child: Center(
                 child: Image(
-                  image:
-                      AssetImage("../assets/icons/categories/" + category.icon),
+                  image: AssetImage("assets/categories/" + category.icon),
                   width: size,
                 ),
               ),

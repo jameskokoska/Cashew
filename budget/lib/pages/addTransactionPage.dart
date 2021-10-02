@@ -153,7 +153,7 @@ class PopupFramework extends StatelessWidget {
                       ? Container(height: 5)
                       : TextFont(
                           text: title ?? "",
-                          fontSize: 26,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),
                   Container(height: 10),
@@ -180,41 +180,44 @@ class _SelectCategoryState extends State<SelectCategory> {
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        children: listCategory()
-            .asMap()
-            .map(
-              (index, category) => MapEntry(
-                index,
-                CategoryIcon(
-                  category: category,
-                  size: 42,
-                  label: true,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                    Future.delayed(Duration(milliseconds: 100), () {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Center(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: listCategory()
+              .asMap()
+              .map(
+                (index, category) => MapEntry(
+                  index,
+                  CategoryIcon(
+                    category: category,
+                    size: 50,
+                    label: true,
+                    onTap: () {
                       setState(() {
-                        Navigator.of(context).pop();
+                        selectedIndex = index;
                       });
-                      openBottomSheet(
-                        context,
-                        PopupFramework(
-                          title: "Enter Amount",
-                          child: SelectAmount(),
-                        ),
-                      );
-                    });
-                  },
-                  outline: selectedIndex == index,
+                      Future.delayed(Duration(milliseconds: 70), () {
+                        setState(() {
+                          Navigator.of(context).pop();
+                        });
+                        openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "Enter Amount",
+                            child: SelectAmount(),
+                          ),
+                        );
+                      });
+                    },
+                    outline: selectedIndex == index,
+                  ),
                 ),
-              ),
-            )
-            .values
-            .toList(),
+              )
+              .values
+              .toList(),
+        ),
       ),
     );
   }
@@ -248,8 +251,6 @@ class _SelectAmountState extends State<SelectAmount> {
           amount += input;
         });
       }
-    } else if (amount.substring(amount.length - 1) == "0" && input == "0") {
-      return;
     } else if ((!includesOperations(
                 amount.substring(amount.length - 1), true) &&
             includesOperations(input, true)) ||
@@ -340,44 +341,66 @@ class _SelectAmountState extends State<SelectAmount> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.end,
-            children: [
-              FractionallySizedBox(
-                widthFactor: 0.5,
-                child: TextFont(
-                  text: (includesOperations(amount, false)
-                      ? operationsWithSpaces(amount)
-                      : ""),
-                  textAlign: TextAlign.left,
-                  fontSize: 18,
-                  maxLines: 5,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.end,
+              children: [
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 400),
+                  child: FractionallySizedBox(
+                    key: ValueKey(amount),
+                    widthFactor: 0.5,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 3.0),
+                      child: TextFont(
+                        text: (includesOperations(amount, false)
+                            ? operationsWithSpaces(amount)
+                            : ""),
+                        textAlign: TextAlign.left,
+                        fontSize: 18,
+                        maxLines: 5,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.5,
-                child: TextFont(
-                  text: amount == ""
-                      ? getCurrencyString() + "0"
-                      : includesOperations(amount, false)
-                          ? convertToMoney(calculateResult(amount))
-                          : getCurrencyString() + amount,
-                  // text: amount,
-                  textAlign: TextAlign.right,
-                  fontSize: 28,
-                  maxLines: 5,
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200),
+                  child: FractionallySizedBox(
+                    key: ValueKey(amount == ""
+                        ? getCurrencyString() + "0"
+                        : includesOperations(amount, false)
+                            ? convertToMoney(calculateResult(amount))
+                            : getCurrencyString() + amount),
+                    widthFactor: 0.5,
+                    child: TextFont(
+                      text: amount == ""
+                          ? getCurrencyString() + "0"
+                          : includesOperations(amount, false)
+                              ? convertToMoney(calculateResult(amount))
+                              : getCurrencyString() + amount,
+                      // text: amount,
+                      textAlign: TextAlign.right,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      maxLines: 5,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          Container(height: 10),
           Row(
             children: [
               CalculatorButton(
-                  label: "1",
-                  editAmount: () {
-                    addToAmount("1");
-                  }),
+                label: "1",
+                editAmount: () {
+                  addToAmount("1");
+                },
+                topLeft: true,
+              ),
               CalculatorButton(
                   label: "2",
                   editAmount: () {
@@ -389,10 +412,12 @@ class _SelectAmountState extends State<SelectAmount> {
                     addToAmount("3");
                   }),
               CalculatorButton(
-                  label: "÷",
-                  editAmount: () {
-                    addToAmount("÷");
-                  }),
+                label: "÷",
+                editAmount: () {
+                  addToAmount("÷");
+                },
+                topRight: true,
+              ),
             ],
           ),
           Row(
@@ -446,10 +471,12 @@ class _SelectAmountState extends State<SelectAmount> {
           Row(
             children: [
               CalculatorButton(
-                  label: ".",
-                  editAmount: () {
-                    addToAmount(".");
-                  }),
+                label: ".",
+                editAmount: () {
+                  addToAmount(".");
+                },
+                bottomLeft: true,
+              ),
               CalculatorButton(
                   label: "0",
                   editAmount: () {
@@ -461,12 +488,15 @@ class _SelectAmountState extends State<SelectAmount> {
                     removeToAmount();
                   }),
               CalculatorButton(
-                  label: "+",
-                  editAmount: () {
-                    addToAmount("+");
-                  }),
+                label: "+",
+                editAmount: () {
+                  addToAmount("+");
+                },
+                bottomRight: true,
+              ),
             ],
           ),
+          Container(height: 15),
           AnimatedSwitcher(
             duration: Duration(milliseconds: 500),
             child: amount != ""
@@ -500,20 +530,45 @@ class _SelectAmountState extends State<SelectAmount> {
 }
 
 class CalculatorButton extends StatelessWidget {
-  CalculatorButton({Key? key, required this.label, required this.editAmount})
-      : super(key: key);
+  CalculatorButton({
+    Key? key,
+    required this.label,
+    required this.editAmount,
+    this.topRight = false,
+    this.topLeft = false,
+    this.bottomLeft = false,
+    this.bottomRight = false,
+  }) : super(key: key);
   final String label;
   final VoidCallback editAmount;
+  final bool topRight;
+  final bool topLeft;
+  final bool bottomLeft;
+  final bool bottomRight;
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Material(
+        color: Theme.of(context).colorScheme.white,
+        borderRadius: BorderRadius.only(
+          topRight: topRight ? Radius.circular(15) : Radius.circular(0),
+          topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
+          bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
+          bottomRight: bottomRight ? Radius.circular(15) : Radius.circular(0),
+        ),
         child: InkWell(
+          borderRadius: BorderRadius.only(
+            topRight: topRight ? Radius.circular(15) : Radius.circular(0),
+            topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
+            bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
+            bottomRight: bottomRight ? Radius.circular(15) : Radius.circular(0),
+          ),
           onTap: editAmount,
           child: Container(
-            height: 50,
+            height: 60,
             child: Center(
               child: TextFont(
+                fontSize: 24,
                 text: label,
               ),
             ),
