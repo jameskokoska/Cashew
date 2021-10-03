@@ -60,7 +60,7 @@ class OpenTestPage extends StatelessWidget {
             Navigator.of(context).pop();
           }
         },
-        child: Container(),
+        child: Container(color: Colors.blueGrey),
       ),
     );
   }

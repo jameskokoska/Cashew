@@ -31,7 +31,9 @@ class PieChartSample3State extends State {
             setState(() {
               if (!event.isInterestedForInteractions ||
                   pieTouchResponse == null ||
-                  pieTouchResponse.touchedSection == null) {
+                  pieTouchResponse.touchedSection == null ||
+                  touchedIndex ==
+                      pieTouchResponse.touchedSection!.touchedSectionIndex) {
                 touchedIndex = -1;
                 return;
               }

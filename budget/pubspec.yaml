@@ -34,6 +34,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.0.0
   path: ^1.8.0
+  math_expressions: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +66,8 @@ flutter:
 
   assets:
     - assets/fonts/
-    - assets/icons/
+    - assets/categories/
+    
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

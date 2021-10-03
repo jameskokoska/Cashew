@@ -11,7 +11,8 @@ class Button extends StatefulWidget {
       this.fontSize = 16,
       this.fractionScaleHeight = 0.93,
       this.fractionScaleWidth = 0.93,
-      required this.onTap})
+      required this.onTap,
+      this.color})
       : super(key: key);
   final String label;
   final double width;
@@ -20,6 +21,7 @@ class Button extends StatefulWidget {
   final double fractionScaleHeight;
   final double fractionScaleWidth;
   final VoidCallback onTap;
+  final Color? color;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -44,51 +46,51 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
     return Container(
       height: widget.height,
       width: widget.width,
-      child: Scaffold(
-        body: Center(
-          child: Material(
+      child: Center(
+        child: Material(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: widget.color ??
+              Theme.of(context).colorScheme.accentColor.withOpacity(0.8),
+          child: InkWell(
+            onHighlightChanged: (value) {
+              setState(() {
+                isTapped = value;
+              });
+            },
+            onTap: () {
+              _shrink();
+              widget.onTap();
+            },
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Theme.of(context).colorScheme.accentColor.withOpacity(0.8),
-            child: InkWell(
-              onHighlightChanged: (value) {
-                setState(() {
-                  isTapped = value;
-                });
-              },
-              onTap: () {
-                _shrink();
-                widget.onTap();
-              },
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 200),
-                curve: Curves.easeOutCubic,
-                height: isTapped
-                    ? widget.height * widget.fractionScaleHeight
-                    : widget.height,
-                width: isTapped
-                    ? widget.width * widget.fractionScaleWidth
-                    : widget.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(30),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .accentColor
-                          .withOpacity(0.5),
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
+              height: isTapped
+                  ? widget.height * widget.fractionScaleHeight
+                  : widget.height,
+              width: isTapped
+                  ? widget.width * widget.fractionScaleWidth
+                  : widget.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30),
                 ),
-                child: Center(
-                  child: TextFont(
-                    text: widget.label,
-                    fontSize: widget.fontSize,
+                boxShadow: [
+                  BoxShadow(
+                    color: widget.color ??
+                        Theme.of(context)
+                            .colorScheme
+                            .accentColor
+                            .withOpacity(0.5),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
                   ),
+                ],
+              ),
+              child: Center(
+                child: TextFont(
+                  text: widget.label,
+                  fontSize: widget.fontSize,
                 ),
               ),
             ),

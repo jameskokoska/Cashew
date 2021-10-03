@@ -11,6 +11,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import "../struct/budget.dart";
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:budget/colors.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -21,22 +22,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  final scrollController = ScrollController();
+  GlobalKey<_HomeAppBarState> _appBarKey = GlobalKey();
+  double setTitleHeight = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        controller: scrollController,
         slivers: [
+          SliverAppBar(
+            leading: Container(),
+            backgroundColor: Theme.of(context).colorScheme.accentColor,
+            floating: false,
+            pinned: true,
+            expandedHeight: 200.0,
+            collapsedHeight: 65,
+            flexibleSpace: FlexibleSpaceBar(
+                titlePadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
+                background: Container(
+                  color: Theme.of(context).canvasColor,
+                )),
+          ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
@@ -49,10 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Container(height: 100),
                 CountUp(
-                  count: 50,
-                ),
-                CountUpInt(
-                  count: 50,
+                  count: 1,
+                  duration: Duration(seconds: 100),
                 ),
                 Container(
                     width: 200,
@@ -88,40 +94,66 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          SliverStickyHeader(
-            header: TextHeader(
-              text: "Home",
-            ),
-            sliver: SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    BudgetContainer(
-                      budget: Budget(
-                        title: "Budget Name",
-                        color: Color(0x4F6ECA4A),
-                        total: 500,
-                        spent: 210,
-                        endDate: DateTime.now(),
-                        startDate: DateTime.now(),
-                        period: "month",
-                        periodLength: 10,
-                      ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: 0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  BudgetContainer(
+                    budget: Budget(
+                      title: "Budget Name",
+                      color: Color(0x4F6ECA4A),
+                      total: 500,
+                      spent: 210,
+                      endDate: DateTime.now(),
+                      startDate: DateTime.now(),
+                      period: "month",
+                      periodLength: 10,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-
+          SliverAppBar(
+            leading: Container(),
+            backgroundColor: Colors.transparent,
+            expandedHeight: 65.1,
+            collapsedHeight: 65,
+            flexibleSpace: LayoutBuilder(builder: (
+              BuildContext context,
+              BoxConstraints constraints,
+            ) {
+              if (setTitleHeight == 0)
+                setTitleHeight = constraints.biggest.height;
+              print(setTitleHeight);
+              if (constraints.biggest.height < setTitleHeight) {
+                //occur when title disappears (scrolling down)
+                //add delay to wait for layout of children widgets first
+                Future.delayed(Duration.zero, () async {
+                  _appBarKey.currentState?.changeTitle("Transactions", 1);
+                });
+              } else {
+                //occur when title appears (scrolling up)
+                Future.delayed(Duration.zero, () async {
+                  _appBarKey.currentState?.changeTitle("Home", -1);
+                });
+              }
+              return FlexibleSpaceBar(
+                titlePadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                title: TextFont(
+                  text: "Transactions",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }),
+          ),
           SliverStickyHeader(
             header: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextHeader(
-                  text: "Transactions",
-                ),
                 DateDivider(date: DateTime.now()),
               ],
             ),
@@ -175,34 +207,68 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          // SliverPadding(
-          //   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          //   sliver: SliverGrid(
-          //     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          //       maxCrossAxisExtent: 650,
-          //       mainAxisExtent: 95,
-          //       mainAxisSpacing: 15,
-          //       crossAxisSpacing: 15,
-          //     ),
-          //     delegate: SliverChildBuilderDelegate(
-          //       (BuildContext context, int index) {
-          //         return TransactionEntry(
-          //           openPage: OpenTestPage(),
-          //           transaction: Transaction(
-          //             title: "Uber",
-          //             amount: 50,
-          //             categoryID: "id",
-          //             date: DateTime.now(),
-          //             note: "this is a transaction",
-          //             tagIDs: ["id1", "id2"],
-          //           ),
-          //         );
-          //       },
-          //       childCount: 20,
-          //     ),
-          //   ),
-          // )
         ],
+      ),
+    );
+  }
+}
+
+class HomeAppBar extends StatefulWidget {
+  HomeAppBar({Key? key, required this.defaultTitle}) : super(key: key);
+  final String defaultTitle;
+
+  @override
+  _HomeAppBarState createState() => _HomeAppBarState();
+}
+
+class _HomeAppBarState extends State<HomeAppBar> {
+  late String title = "";
+  late int direction = -1;
+
+  @override
+  void initState() {
+    title = widget.defaultTitle;
+  }
+
+  void changeTitle(newTitle, newDirection) {
+    setState(() {
+      title = newTitle;
+      direction = newDirection;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 500),
+      switchInCurve: Curves.easeInOutCubic,
+      switchOutCurve: Curves.easeInOutCubic,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        final inAnimation = Tween<Offset>(
+                begin: Offset(0.0, direction == -1 ? -1 : 1),
+                end: Offset(0.0, 0.0))
+            .animate(animation);
+        final outAnimation = Tween<Offset>(
+                begin: Offset(0.0, direction == -1 ? 1 : -1),
+                end: Offset(0.0, 0.0))
+            .animate(animation);
+
+        return ClipRect(
+          child: SlideTransition(
+            position: child.key == ValueKey(title) ? inAnimation : outAnimation,
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        key: ValueKey(title),
+        child: TextFont(
+          text: title,
+          fontSize: 26,
+          fontWeight: FontWeight.bold,
+          textAlign: TextAlign.left,
+        ),
       ),
     );
   }

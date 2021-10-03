@@ -29,11 +29,14 @@ class BudgetContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              child: TextFont(
-                text: convertToMoney(budget.spent),
+              child: CountUp(
+                count: budget.spent,
+                prefix: getCurrencyString(),
+                duration: Duration(milliseconds: 1500),
                 fontSize: 18,
                 textAlign: TextAlign.left,
                 fontWeight: FontWeight.bold,
+                decimals: moneyDecimals(budget.spent),
               ),
             ),
             Container(
@@ -183,11 +186,16 @@ class BudgetProgress extends StatelessWidget {
         child: Center(
             child: Padding(
           padding: const EdgeInsets.only(top: 4.3),
-          child: TextFont(
-            text: percent.toInt().toString() + "%",
+          child: CountUp(
+            count: percent,
+            textColor: Colors.black,
+            decimals: 0,
+            suffix: "%",
             fontSize: 14,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.bold,
+            curve: Curves.decelerate,
+            duration: Duration(milliseconds: 1500),
           ),
         )),
         height: 22);
@@ -205,7 +213,7 @@ class BudgetProgress extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: SlideFadeTransition(
-              animationDuration: Duration(milliseconds: 1000),
+              animationDuration: Duration(milliseconds: 1400),
               reverse: true,
               direction: Direction.horizontal,
               child: Container(
