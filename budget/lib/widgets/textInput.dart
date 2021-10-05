@@ -8,6 +8,9 @@ class TextInput extends StatelessWidget {
   final bool obscureText;
   final IconData? icon;
   final EdgeInsets padding;
+  final bool autoFocus;
+  final VoidCallback? onEditingComplete;
+  final String? initialValue;
 
   const TextInput({
     Key? key,
@@ -17,13 +20,19 @@ class TextInput extends StatelessWidget {
     this.obscureText = false,
     this.icon,
     this.padding = const EdgeInsets.only(left: 18.0, right: 18),
+    this.autoFocus = false,
+    this.onEditingComplete,
+    this.initialValue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: TextField(
+      child: TextFormField(
+        initialValue: initialValue,
+        autofocus: autoFocus,
+        onEditingComplete: onEditingComplete,
         style: TextStyle(
           fontSize: 18,
         ),
@@ -60,7 +69,7 @@ class TextInput extends StatelessWidget {
             onChanged!(text);
           }
         },
-        onSubmitted: (text) {
+        onFieldSubmitted: (text) {
           if (onSubmitted != null) {
             onSubmitted!(text);
           }

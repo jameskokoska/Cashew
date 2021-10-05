@@ -262,7 +262,7 @@ class _TagIconState extends State<TagIcon> {
           padding: EdgeInsets.only(
             right: widget.onTap == null
                 ? 9 * widget.size / 14
-                : 6 * widget.size / 14,
+                : 8 * widget.size / 14,
             left: widget.onTap == null
                 ? 9 * widget.size / 14
                 : 6 * widget.size / 14,
