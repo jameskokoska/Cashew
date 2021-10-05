@@ -65,7 +65,8 @@ class TransactionEntry extends StatelessWidget {
                                   text: transaction.title,
                                   fontSize: 20,
                                 )
-                              : Container(),
+                              : Container(
+                                  height: transaction.note == "" ? 0 : 7),
                           transaction.title == "" &&
                                   transaction.tagIDs.length > 0
                               ? TagIcon(
@@ -73,13 +74,13 @@ class TransactionEntry extends StatelessWidget {
                                       title: "test",
                                       id: "test",
                                       categoryID: "id"),
-                                  size: 16)
+                                  size: transaction.note == "" ? 20 : 16)
                               : Container(),
                           transaction.title == "" &&
                                   transaction.tagIDs.length == 0
                               ? TextFont(
                                   text: category.title,
-                                  fontSize: 20,
+                                  fontSize: transaction.note == "" ? 23 : 20,
                                 )
                               : Container(),
                           transaction.title == "" && transaction.note != ""
