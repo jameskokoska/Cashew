@@ -94,86 +94,140 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          AnimatedSwitcher(
-                            duration: Duration(milliseconds: 300),
-                            child: CategoryIcon(
-                              key: ValueKey(selectedCategory?.id ?? ""),
-                              category: selectedCategory,
-                              size: 50,
-                              onTap: () {
-                                openBottomSheet(
-                                  context,
-                                  PopupFramework(
-                                    title: "Select Category",
-                                    child: SelectCategory(
-                                      setSelectedCategory: setSelectedCategory,
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      color: selectedCategory?.color ??
+                          Theme.of(context).canvasColor,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 17, right: 37, top: 20, bottom: 18),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AnimatedSwitcher(
+                              duration: Duration(milliseconds: 300),
+                              child: CategoryIcon(
+                                key: ValueKey(selectedCategory?.id ?? ""),
+                                category: selectedCategory,
+                                size: 60,
+                                onTap: () {
+                                  openBottomSheet(
+                                    context,
+                                    PopupFramework(
+                                      title: "Select Category",
+                                      child: SelectCategory(
+                                        setSelectedCategory:
+                                            setSelectedCategory,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                openBottomSheet(
-                                  context,
-                                  PopupFramework(
-                                    title: "Enter Amount",
-                                    child: SelectAmount(
-                                      setSelectedAmount: setSelectedAmount,
-                                      amountPassed:
-                                          selectedAmountCalculation ?? "",
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      right: 20, top: 20, bottom: 20),
-                                  child: AnimatedSwitcher(
-                                    duration: Duration(milliseconds: 350),
-                                    child: TextFont(
-                                      textAlign: TextAlign.right,
-                                      key: ValueKey(selectedAmount),
-                                      text: convertToMoney(selectedAmount ?? 0),
-                                      fontSize: 33,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                             ),
-                          ),
-                        ],
+                            Container(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Container(height: 8),
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      openBottomSheet(
+                                        context,
+                                        PopupFramework(
+                                          title: "Enter Amount",
+                                          child: SelectAmount(
+                                            setSelectedAmount:
+                                                setSelectedAmount,
+                                            amountPassed:
+                                                selectedAmountCalculation ?? "",
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: AnimatedSwitcher(
+                                      duration: Duration(milliseconds: 350),
+                                      child: Container(
+                                        key: ValueKey(selectedAmount),
+                                        width: double.infinity,
+                                        child: TextFont(
+                                          textAlign: TextAlign.right,
+                                          key: ValueKey(selectedAmount),
+                                          text: convertToMoney(
+                                              selectedAmount ?? 0),
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                          maxLines: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 350),
+                                    child: Container(
+                                      key: ValueKey(
+                                          selectedCategory?.title ?? ""),
+                                      width: double.infinity,
+                                      child: TextFont(
+                                        textAlign: TextAlign.right,
+                                        fontSize: 18,
+                                        text: selectedCategory?.title ?? "",
+                                      ),
+                                    ),
+                                  ),
+                                  Container(height: 3),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    TextInput(
-                      labelText: "Notes",
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            child: SelectTitle(
-                              setSelectedTitle: setSelectedTitle,
-                              selectedCategory: selectedCategory,
-                              setSelectedCategory: setSelectedCategory,
-                              selectedTitle: selectedTitle,
-                            ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        children: [
+                          Container(height: 20),
+                          TextInput(
+                            labelText: "Title",
+                            icon: Icons.title_rounded,
+                            padding: EdgeInsets.zero,
                           ),
-                        );
-                      },
-                      child: TextFont(text: selectedTitle ?? ""),
+                          Container(height: 14),
+                          TextInput(
+                            labelText: "Notes",
+                            icon: Icons.edit,
+                            padding: EdgeInsets.zero,
+                          ),
+                          Container(height: 14),
+                          TextInput(
+                            labelText: "Date",
+                            icon: Icons.calendar_today_rounded,
+                            padding: EdgeInsets.zero,
+                          ),
+                          Container(height: 20),
+                          SelectTag(),
+                          Container(height: 10),
+                          GestureDetector(
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  child: SelectTitle(
+                                    setSelectedTitle: setSelectedTitle,
+                                    selectedCategory: selectedCategory,
+                                    setSelectedCategory: setSelectedCategory,
+                                    selectedTitle: selectedTitle,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: TextFont(text: selectedTitle ?? ""),
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),

@@ -48,7 +48,7 @@ class TextInput extends StatelessWidget {
           icon: icon != null
               ? Icon(
                   icon,
-                  size: 40,
+                  size: 30,
                   color: Theme.of(context).colorScheme.accentColorHeavy,
                 )
               : null,
