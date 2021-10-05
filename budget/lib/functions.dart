@@ -1,5 +1,7 @@
 import 'package:budget/struct/defaultCategories.dart';
+import 'package:budget/struct/defaultTags.dart';
 import 'package:budget/struct/transactionCategory.dart';
+import 'package:budget/struct/transactionTag.dart';
 import 'package:flutter/foundation.dart';
 
 import './colors.dart';
@@ -68,6 +70,10 @@ TransactionCategory findCategory(String id) {
 
 List<TransactionCategory> listCategory() {
   return defaultCategories();
+}
+
+List<TransactionTag> listTag() {
+  return defaultTags();
 }
 
 getMonth(currentMonth) {

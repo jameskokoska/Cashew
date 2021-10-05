@@ -1,3 +1,4 @@
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/transaction.dart';
 import 'package:budget/widgets/budgetContainer.dart';
@@ -48,6 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
+                Container(height: 100),
+                Container(width: 200, height: 500, child: SelectTag()),
                 Container(height: 100),
                 Button(
                   label: "button",

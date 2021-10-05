@@ -1,3 +1,4 @@
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -47,51 +48,47 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       height: widget.height,
       width: widget.width,
       child: Center(
-        child: Material(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: widget.color ??
-              Theme.of(context).colorScheme.accentColor.withOpacity(0.8),
-          child: InkWell(
-            onHighlightChanged: (value) {
-              setState(() {
-                isTapped = value;
-              });
-            },
-            onTap: () {
-              _shrink();
-              widget.onTap();
-            },
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              curve: Curves.easeOutCubic,
-              height: isTapped
-                  ? widget.height * widget.fractionScaleHeight
-                  : widget.height,
-              width: isTapped
-                  ? widget.width * widget.fractionScaleWidth
-                  : widget.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(30),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: widget.color ??
-                        Theme.of(context)
-                            .colorScheme
-                            .accentColor
-                            .withOpacity(0.5),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
-                  ),
-                ],
+        child: Tappable(
+          color: Theme.of(context).colorScheme.accentColor.withOpacity(0.8),
+          onHighlightChanged: (value) {
+            setState(() {
+              isTapped = value;
+            });
+          },
+          onTap: () {
+            _shrink();
+            widget.onTap();
+          },
+          borderRadius: 10,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            height: isTapped
+                ? widget.height * widget.fractionScaleHeight
+                : widget.height,
+            width: isTapped
+                ? widget.width * widget.fractionScaleWidth
+                : widget.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
               ),
-              child: Center(
-                child: TextFont(
-                  text: widget.label,
-                  fontSize: widget.fontSize,
+              boxShadow: [
+                BoxShadow(
+                  color: widget.color ??
+                      Theme.of(context)
+                          .colorScheme
+                          .accentColor
+                          .withOpacity(0.5),
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
                 ),
+              ],
+            ),
+            child: Center(
+              child: TextFont(
+                text: widget.label,
+                fontSize: widget.fontSize,
               ),
             ),
           ),

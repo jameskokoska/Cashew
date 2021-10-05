@@ -25,6 +25,7 @@ class AddTransactionPage extends StatefulWidget {
 class _AddTransactionPageState extends State<AddTransactionPage> {
   TransactionCategory? selectedCategory;
   double? selectedAmount;
+  String? selectedAmountCalculation;
 
   void setSelectedCategory(TransactionCategory category) {
     setState(() {
@@ -33,9 +34,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     return;
   }
 
-  void setSelectedAmount(double amount) {
+  void setSelectedAmount(double amount, String amountCalculation) {
     setState(() {
       selectedAmount = amount;
+      selectedAmountCalculation = amountCalculation;
     });
     return;
   }
@@ -88,7 +90,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CategoryIcon(
                             category: selectedCategory,
@@ -116,7 +117,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   PopupFramework(
                                     title: "Enter Amount",
                                     child: SelectAmount(
-                                        setSelectedAmount: setSelectedAmount),
+                                      setSelectedAmount: setSelectedAmount,
+                                      amountPassed:
+                                          selectedAmountCalculation ?? "",
+                                    ),
                                   ),
                                 );
                               },
@@ -291,7 +295,7 @@ class SelectCategory extends StatefulWidget {
       this.openSelectAmount = true})
       : super(key: key);
   final Function(TransactionCategory) setSelectedCategory;
-  final Function(double) setSelectedAmount;
+  final Function(double, String) setSelectedAmount;
   final bool openSelectAmount;
 
   @override
@@ -350,8 +354,11 @@ class _SelectCategoryState extends State<SelectCategory> {
 }
 
 class SelectAmount extends StatefulWidget {
-  SelectAmount({Key? key, required this.setSelectedAmount}) : super(key: key);
-  final Function(double) setSelectedAmount;
+  SelectAmount(
+      {Key? key, required this.setSelectedAmount, this.amountPassed = ""})
+      : super(key: key);
+  final Function(double, String) setSelectedAmount;
+  final String amountPassed;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -359,6 +366,13 @@ class SelectAmount extends StatefulWidget {
 
 class _SelectAmountState extends State<SelectAmount> {
   String amount = "";
+
+  @override
+  void initState() {
+    super.initState();
+    amount = widget.amountPassed;
+  }
+
   addToAmount(String input) {
     String amountClone = amount;
     if (input == "." &&
@@ -392,11 +406,13 @@ class _SelectAmountState extends State<SelectAmount> {
         amount = amount.substring(0, amount.length - 1) + input;
       });
     }
-    widget.setSelectedAmount(amount == ""
-        ? 0
-        : includesOperations(amount, false)
-            ? calculateResult(amount)
-            : double.tryParse(amount) ?? 0);
+    widget.setSelectedAmount(
+        (amount == ""
+            ? 0
+            : includesOperations(amount, false)
+                ? calculateResult(amount)
+                : double.tryParse(amount) ?? 0),
+        amount);
   }
 
   void removeToAmount() {
@@ -405,11 +421,13 @@ class _SelectAmountState extends State<SelectAmount> {
         amount = amount.substring(0, amount.length - 1);
       }
     });
-    widget.setSelectedAmount(amount == ""
-        ? 0
-        : includesOperations(amount, false)
-            ? calculateResult(amount)
-            : double.tryParse(amount) ?? 0);
+    widget.setSelectedAmount(
+        (amount == ""
+            ? 0
+            : includesOperations(amount, false)
+                ? calculateResult(amount)
+                : double.tryParse(amount) ?? 0),
+        amount);
   }
 
   bool includesOperations(String input, bool includeDecimal) {
@@ -706,6 +724,43 @@ class CalculatorButton extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SelectTag extends StatefulWidget {
+  SelectTag({Key? key, this.setSelectedCategory}) : super(key: key);
+  final Function(TransactionCategory)? setSelectedCategory;
+
+  @override
+  _SelectTagState createState() => _SelectTagState();
+}
+
+class _SelectTagState extends State<SelectTag> {
+  int selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Center(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: listTag()
+              .asMap()
+              .map(
+                (index, tag) => MapEntry(
+                  index,
+                  TagIcon(
+                    tag: tag,
+                    size: 50,
+                    onTap: () {},
+                  ),
+                ),
+              )
+              .values
+              .toList(),
         ),
       ),
     );
