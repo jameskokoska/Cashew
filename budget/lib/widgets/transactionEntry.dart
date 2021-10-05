@@ -141,7 +141,7 @@ class CategoryIcon extends StatelessWidget {
       this.outline = false})
       : super(key: key);
 
-  final TransactionCategory category;
+  final TransactionCategory? category;
   final double size;
   final VoidCallback? onTap;
   final bool label;
@@ -177,15 +177,19 @@ class CategoryIcon extends StatelessWidget {
                 ),
           child: Material(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: category.color.withOpacity(0.6),
+            color: category?.color.withOpacity(0.6) ??
+                Theme.of(context).colorScheme.lightDarkAccent,
             child: InkWell(
               onTap: onTap,
               borderRadius: BorderRadius.all(Radius.circular(10)),
               child: Center(
-                child: Image(
-                  image: AssetImage("assets/categories/" + category.icon),
-                  width: size,
-                ),
+                child: (category?.icon != null
+                    ? Image(
+                        image:
+                            AssetImage("assets/categories/" + category!.icon),
+                        width: size,
+                      )
+                    : Container()),
               ),
             ),
           ),
@@ -197,7 +201,7 @@ class CategoryIcon extends StatelessWidget {
                 child: Center(
                   child: TextFont(
                     textAlign: TextAlign.center,
-                    text: category.title,
+                    text: category?.title ?? "",
                     fontSize: labelSize,
                     maxLines: 1,
                   ),

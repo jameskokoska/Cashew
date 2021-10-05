@@ -3,6 +3,8 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/struct/transactionCategory.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:budget/colors.dart';
@@ -21,6 +23,23 @@ class AddTransactionPage extends StatefulWidget {
 }
 
 class _AddTransactionPageState extends State<AddTransactionPage> {
+  TransactionCategory? selectedCategory;
+  double? selectedAmount;
+
+  void setSelectedCategory(TransactionCategory category) {
+    setState(() {
+      selectedCategory = category;
+    });
+    return;
+  }
+
+  void setSelectedAmount(double amount) {
+    setState(() {
+      selectedAmount = amount;
+    });
+    return;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +48,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         context,
         PopupFramework(
           title: "Select Category",
-          child: SelectCategory(),
+          child: SelectCategory(
+            setSelectedCategory: setSelectedCategory,
+            setSelectedAmount: setSelectedAmount,
+          ),
         ),
       );
     });
@@ -62,7 +84,67 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    TextInput(labelText: "labelText"),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CategoryIcon(
+                            category: selectedCategory,
+                            size: 50,
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Select Category",
+                                  child: SelectCategory(
+                                    setSelectedCategory: setSelectedCategory,
+                                    setSelectedAmount: setSelectedAmount,
+                                    openSelectAmount: false,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                openBottomSheet(
+                                  context,
+                                  PopupFramework(
+                                    title: "Enter Amount",
+                                    child: SelectAmount(
+                                        setSelectedAmount: setSelectedAmount),
+                                  ),
+                                );
+                              },
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      right: 20, top: 20, bottom: 20),
+                                  child: AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 350),
+                                    child: TextFont(
+                                      textAlign: TextAlign.right,
+                                      key: ValueKey(selectedAmount),
+                                      text: convertToMoney(selectedAmount ?? 0),
+                                      fontSize: 33,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    TextInput(
+                      labelText: "Notes",
+                    ),
                   ],
                 ),
               ),
@@ -71,22 +153,54 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Button(
-              label: "Select Category",
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              fractionScaleHeight: 0.93,
-              fractionScaleWidth: 0.98,
-              onTap: () {
-                openBottomSheet(
-                  context,
-                  PopupFramework(
-                    title: "Select Category",
-                    child: SelectCategory(),
-                  ),
-                );
-              },
-            ),
+            child: selectedCategory == null
+                ? Button(
+                    label: "Select Category",
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    fractionScaleHeight: 0.93,
+                    fractionScaleWidth: 0.98,
+                    onTap: () {
+                      openBottomSheet(
+                        context,
+                        PopupFramework(
+                          title: "Select Category",
+                          child: SelectCategory(
+                            setSelectedCategory: setSelectedCategory,
+                            setSelectedAmount: setSelectedAmount,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : selectedAmount == null
+                    ? Button(
+                        label: "Enter Amount",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        fractionScaleHeight: 0.93,
+                        fractionScaleWidth: 0.98,
+                        onTap: () {
+                          openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "Enter Amount",
+                              child: SelectAmount(
+                                  setSelectedAmount: setSelectedAmount),
+                            ),
+                          );
+                        },
+                      )
+                    : Button(
+                        label: "Add Transaction",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        fractionScaleHeight: 0.93,
+                        fractionScaleWidth: 0.98,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
           ),
         ],
       ),
@@ -170,7 +284,15 @@ class PopupFramework extends StatelessWidget {
 }
 
 class SelectCategory extends StatefulWidget {
-  SelectCategory({Key? key}) : super(key: key);
+  SelectCategory(
+      {Key? key,
+      required this.setSelectedCategory,
+      required this.setSelectedAmount,
+      this.openSelectAmount = true})
+      : super(key: key);
+  final Function(TransactionCategory) setSelectedCategory;
+  final Function(double) setSelectedAmount;
+  final bool openSelectAmount;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -195,6 +317,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                     size: 50,
                     label: true,
                     onTap: () {
+                      widget.setSelectedCategory(category);
                       setState(() {
                         selectedIndex = index;
                       });
@@ -202,13 +325,16 @@ class _SelectCategoryState extends State<SelectCategory> {
                         setState(() {
                           Navigator.of(context).pop();
                         });
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "Enter Amount",
-                            child: SelectAmount(),
-                          ),
-                        );
+                        if (widget.openSelectAmount) {
+                          openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "Enter Amount",
+                              child: SelectAmount(
+                                  setSelectedAmount: widget.setSelectedAmount),
+                            ),
+                          );
+                        }
                       });
                     },
                     outline: selectedIndex == index,
@@ -224,7 +350,8 @@ class _SelectCategoryState extends State<SelectCategory> {
 }
 
 class SelectAmount extends StatefulWidget {
-  SelectAmount({Key? key}) : super(key: key);
+  SelectAmount({Key? key, required this.setSelectedAmount}) : super(key: key);
+  final Function(double) setSelectedAmount;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -236,13 +363,9 @@ class _SelectAmountState extends State<SelectAmount> {
     String amountClone = amount;
     if (input == "." &&
         !decimalCheck(operationsWithSpaces(amountClone + "."))) {
-      return;
-    }
-    if (amount.length == 0 && !includesOperations(input, false)) {
+    } else if (amount.length == 0 && !includesOperations(input, false)) {
       if (input == "0") {
-        return;
-      }
-      if (input == ".") {
+      } else if (input == ".") {
         setState(() {
           amount += "0" + input;
         });
@@ -269,6 +392,11 @@ class _SelectAmountState extends State<SelectAmount> {
         amount = amount.substring(0, amount.length - 1) + input;
       });
     }
+    widget.setSelectedAmount(amount == ""
+        ? 0
+        : includesOperations(amount, false)
+            ? calculateResult(amount)
+            : double.tryParse(amount) ?? 0);
   }
 
   void removeToAmount() {
@@ -277,6 +405,11 @@ class _SelectAmountState extends State<SelectAmount> {
         amount = amount.substring(0, amount.length - 1);
       }
     });
+    widget.setSelectedAmount(amount == ""
+        ? 0
+        : includesOperations(amount, false)
+            ? calculateResult(amount)
+            : double.tryParse(amount) ?? 0);
   }
 
   bool includesOperations(String input, bool includeDecimal) {

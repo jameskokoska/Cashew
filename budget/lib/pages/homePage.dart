@@ -65,7 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 200,
                     child: Stack(
                       children: [
-                        PieChartSample3(),
+                        PieChartDisplay(
+                          data: [50, 10, 40],
+                        ),
                         IgnorePointer(
                           child: Center(
                             child: Container(

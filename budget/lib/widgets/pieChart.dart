@@ -3,126 +3,115 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
-class PieChartSample3 extends StatefulWidget {
+class PieChartDisplay extends StatefulWidget {
+  PieChartDisplay({Key? key, required this.data}) : super(key: key);
+  final List<double> data;
+
   @override
-  State<StatefulWidget> createState() => PieChartSample3State();
+  State<StatefulWidget> createState() => PieChartDisplayState();
 }
 
-class PieChartSample3State extends State {
-  int touchedIndex = 0;
+class PieChartDisplayState extends State<PieChartDisplay> {
+  int touchedIndex = -1;
+  Duration animationDuration = Duration(milliseconds: 1200);
+  Duration animationDurationAfter = Duration(milliseconds: 800);
+  Curve animationCurve = Curves.decelerate;
+  Curve animationCurveAfter = Curves.elasticOut;
 
-  var data = [100.0, 0.0, 0.0, 0.0, 0.0];
+  List<double> data = [-1];
   @override
   void initState() {
     super.initState();
+    print(widget.data);
     Future.delayed(Duration(milliseconds: 10), () {
       setState(() {
-        data = [0.0, 15.0, 15.0, 40.0, 30.0];
+        data = widget.data;
       });
+    });
+    Future.delayed(animationDuration, () {
+      animationDuration = animationDurationAfter;
+      animationCurve = animationCurveAfter;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return PieChart(
-      PieChartData(
-          pieTouchData: PieTouchData(
-              touchCallback: (FlTouchEvent event, pieTouchResponse) {
-            setState(() {
-              if (!event.isInterestedForInteractions ||
-                  pieTouchResponse == null ||
-                  pieTouchResponse.touchedSection == null ||
-                  touchedIndex ==
-                      pieTouchResponse.touchedSection!.touchedSectionIndex) {
-                touchedIndex = -1;
-                return;
-              }
-              touchedIndex =
-                  pieTouchResponse.touchedSection!.touchedSectionIndex;
-            });
-          }),
-          borderData: FlBorderData(
-            show: false,
-          ),
-          sectionsSpace: 0,
-          centerSpaceRadius: 0,
-          sections: showingSections()),
-      swapAnimationDuration: Duration(milliseconds: 1200),
-      swapAnimationCurve: Curves.decelerate,
-    );
+        PieChartData(
+            pieTouchData: PieTouchData(
+                touchCallback: (FlTouchEvent event, pieTouchResponse) {
+              setState(() {
+                if (!event.isInterestedForInteractions ||
+                    pieTouchResponse == null ||
+                    pieTouchResponse.touchedSection == null) {
+                  return;
+                }
+                if (event.runtimeType == FlTapDownEvent &&
+                    touchedIndex !=
+                        pieTouchResponse.touchedSection!.touchedSectionIndex) {
+                  print("event");
+                  touchedIndex =
+                      pieTouchResponse.touchedSection!.touchedSectionIndex;
+                } else if (event.runtimeType == FlTapDownEvent) {
+                  touchedIndex = -1;
+                }
+              });
+            }),
+            borderData: FlBorderData(
+              show: false,
+            ),
+            sectionsSpace: 0,
+            centerSpaceRadius: 0,
+            sections: showingSections()),
+        swapAnimationDuration: animationDuration,
+        swapAnimationCurve: animationCurve);
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+    return List.generate(widget.data.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
       final radius = isTouched ? 110.0 : 100.0;
       final widgetSize = isTouched ? 55.0 : 40.0;
-
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: const Color(0x00000000),
-            value: data[0],
-            showTitle: false,
-            radius: radius,
-          );
-        case 1:
-          return PieChartSectionData(
-            color: const Color(0xfff8b250),
-            value: data[1],
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              'assets/librarian-svgrepo-com.svg',
-              size: widgetSize,
-              borderColor: const Color(0xfff8b250),
-            ),
-            titlePositionPercentageOffset: 1.4,
-            badgePositionPercentageOffset: .98,
-          );
-        case 2:
-          return PieChartSectionData(
-            color: const Color(0xff845bef),
-            value: data[2],
-            title: '16%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              'assets/fitness-svgrepo-com.svg',
-              size: widgetSize,
-              borderColor: const Color(0xff845bef),
-            ),
-            titlePositionPercentageOffset: 1.4,
-            badgePositionPercentageOffset: .98,
-          );
-        case 3:
-          return PieChartSectionData(
-            color: const Color(0xff13d38e),
-            value: data[3],
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xffffffff)),
-            badgeWidget: _Badge(
-              'assets/worker-svgrepo-com.svg',
-              size: widgetSize,
-              borderColor: const Color(0xff13d38e),
-            ),
-            titlePositionPercentageOffset: 1.4,
-            badgePositionPercentageOffset: .98,
-          );
-        default:
-          throw 'Oh no';
+      if (data[0] == -1 && i == 0) {
+        return PieChartSectionData(
+          color: const Color(0x00000000),
+          value: 100,
+          showTitle: false,
+          radius: 0,
+        );
+      } else if (i == widget.data.length) {
+        return PieChartSectionData(
+          color: const Color(0x00FF0202),
+          value: 0,
+          showTitle: false,
+          radius: 0,
+        );
+      } else if (data[0] == -1) {
+        return PieChartSectionData(
+          color: const Color(0xFFFF0202),
+          value: 0,
+          showTitle: false,
+          radius: 0,
+        );
+      } else {
+        return PieChartSectionData(
+          color: Colors.purple[i * 100] ?? Colors.purple,
+          value: data[i],
+          title: data[i].toString() + '%',
+          radius: radius,
+          titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff)),
+          badgeWidget: _Badge(
+            'assets/librarian-svgrepo-com.svg',
+            size: widgetSize,
+            borderColor: Colors.purple[i * 100] ?? Colors.purple,
+          ),
+          titlePositionPercentageOffset: 1.4,
+          badgePositionPercentageOffset: .98,
+        );
       }
     });
   }
@@ -143,7 +132,8 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      curve: Curves.elasticOut,
+      duration: Duration(milliseconds: 800),
       width: size,
       height: size,
       decoration: BoxDecoration(

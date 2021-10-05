@@ -6,6 +6,8 @@ class TextInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final bool obscureText;
+  final IconData? icon;
+  final EdgeInsets padding;
 
   const TextInput({
     Key? key,
@@ -13,12 +15,14 @@ class TextInput extends StatelessWidget {
     this.onChanged,
     this.onSubmitted,
     this.obscureText = false,
+    this.icon,
+    this.padding = const EdgeInsets.only(left: 18.0, right: 18),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 18.0, right: 18),
+      padding: padding,
       child: TextField(
         style: TextStyle(
           fontSize: 18,
@@ -32,11 +36,13 @@ class TextInput extends StatelessWidget {
           fillColor:
               Theme.of(context).colorScheme.lightDarkAccent.withOpacity(0.2),
           isDense: true,
-          icon: Icon(
-            Icons.note_alt_rounded,
-            size: 40,
-            color: Theme.of(context).colorScheme.accentColorHeavy,
-          ),
+          icon: icon != null
+              ? Icon(
+                  icon,
+                  size: 40,
+                  color: Theme.of(context).colorScheme.accentColorHeavy,
+                )
+              : null,
           enabledBorder: UnderlineInputBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
             borderSide: BorderSide(
