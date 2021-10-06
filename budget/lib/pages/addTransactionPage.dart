@@ -93,7 +93,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   void initState() {
     super.initState();
     _titleInputController = new TextEditingController();
-    _dateInputController = new TextEditingController();
+    _dateInputController = new TextEditingController(text: "Today");
     Future.delayed(Duration(milliseconds: 0), () {
       openBottomSheet(
         context,
