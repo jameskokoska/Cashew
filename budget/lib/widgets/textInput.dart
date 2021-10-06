@@ -5,24 +5,28 @@ class TextInput extends StatelessWidget {
   final String labelText;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onTap;
   final bool obscureText;
   final IconData? icon;
   final EdgeInsets padding;
   final bool autoFocus;
   final VoidCallback? onEditingComplete;
   final String? initialValue;
+  final TextEditingController? controller;
 
   const TextInput({
     Key? key,
     required this.labelText,
     this.onChanged,
     this.onSubmitted,
+    this.onTap,
     this.obscureText = false,
     this.icon,
     this.padding = const EdgeInsets.only(left: 18.0, right: 18),
     this.autoFocus = false,
     this.onEditingComplete,
     this.initialValue,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -30,6 +34,8 @@ class TextInput extends StatelessWidget {
     return Padding(
       padding: padding,
       child: TextFormField(
+        onTap: onTap,
+        controller: controller,
         initialValue: initialValue,
         autofocus: autoFocus,
         onEditingComplete: onEditingComplete,

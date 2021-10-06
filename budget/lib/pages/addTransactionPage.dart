@@ -6,6 +6,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -27,6 +28,29 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
+  List<String> selectedTags = [];
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(DateTime.now().year - 2),
+      lastDate: DateTime(DateTime.now().year + 2),
+    );
+    if (picked != null && picked != selectedDate) {
+      String dateString = getWordedDate(picked);
+      _dateInputController.value = TextEditingValue(
+        text: dateString,
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: dateString.length),
+        ),
+      );
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   void setSelectedCategory(TransactionCategory category) {
     setState(() {
@@ -44,24 +68,71 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   void setSelectedTitle(String title) {
+    _titleInputController.value = TextEditingValue(
+      text: title,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: title.length),
+      ),
+    );
     setState(() {
       selectedTitle = title;
     });
     return;
   }
 
+  void setSelectedTags(List<String> tags) {
+    setState(() {
+      selectedTags = tags;
+    });
+  }
+
+  late TextEditingController _titleInputController;
+  late TextEditingController _dateInputController;
+
   @override
   void initState() {
     super.initState();
+    _titleInputController = new TextEditingController();
+    _dateInputController = new TextEditingController();
     Future.delayed(Duration(milliseconds: 0), () {
       openBottomSheet(
         context,
         PopupFramework(
           child: SelectTitle(
-            setSelectedTitle: setSelectedTitle,
-            selectedCategory: selectedCategory,
-            setSelectedCategory: setSelectedCategory,
-          ),
+              setSelectedTitle: setSelectedTitle,
+              setSelectedTags: setSelectedTags,
+              selectedCategory: selectedCategory,
+              setSelectedCategory: setSelectedCategory,
+              next: () {
+                openBottomSheet(
+                  context,
+                  PopupFramework(
+                    title: "Select Category",
+                    child: SelectCategory(
+                      selectedCategory: selectedCategory,
+                      setSelectedCategory: setSelectedCategory,
+                      skipIfSet: true,
+                      next: () {
+                        openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "Enter Amount",
+                            child: SelectAmount(
+                              amountPassed: selectedAmountCalculation ?? "",
+                              setSelectedAmount: setSelectedAmount,
+                              next: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              nextLabel: "Add Transaction",
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }),
         ),
       );
     });
@@ -194,6 +265,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             labelText: "Title",
                             icon: Icons.title_rounded,
                             padding: EdgeInsets.zero,
+                            controller: _titleInputController,
                           ),
                           Container(height: 14),
                           TextInput(
@@ -206,26 +278,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             labelText: "Date",
                             icon: Icons.calendar_today_rounded,
                             padding: EdgeInsets.zero,
+                            onTap: () {
+                              selectDate(context);
+                            },
+                            controller: _dateInputController,
                           ),
                           Container(height: 20),
                           SelectTag(),
                           Container(height: 10),
-                          GestureDetector(
-                            onTap: () {
-                              openBottomSheet(
-                                context,
-                                PopupFramework(
-                                  child: SelectTitle(
-                                    setSelectedTitle: setSelectedTitle,
-                                    selectedCategory: selectedCategory,
-                                    setSelectedCategory: setSelectedCategory,
-                                    selectedTitle: selectedTitle,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: TextFont(text: selectedTitle ?? ""),
-                          )
                         ],
                       ),
                     )
@@ -250,9 +310,27 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         PopupFramework(
                           title: "Select Category",
                           child: SelectCategory(
-                            setSelectedCategory: setSelectedCategory,
-                            setSelectedAmount: setSelectedAmount,
                             selectedCategory: selectedCategory,
+                            setSelectedCategory: setSelectedCategory,
+                            skipIfSet: true,
+                            next: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Enter Amount",
+                                  child: SelectAmount(
+                                    amountPassed:
+                                        selectedAmountCalculation ?? "",
+                                    setSelectedAmount: setSelectedAmount,
+                                    next: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    nextLabel: "Add Transaction",
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );
@@ -269,9 +347,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           openBottomSheet(
                             context,
                             PopupFramework(
-                              title: "Enter Amount",
                               child: SelectAmount(
-                                  setSelectedAmount: setSelectedAmount),
+                                amountPassed: selectedAmountCalculation ?? "",
+                                setSelectedAmount: setSelectedAmount,
+                                next: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                nextLabel: "Add Transaction",
+                              ),
                             ),
                           );
                         },
@@ -371,15 +455,19 @@ class PopupFramework extends StatelessWidget {
 class SelectTitle extends StatefulWidget {
   SelectTitle({
     Key? key,
-    this.setSelectedTitle,
+    required this.setSelectedTitle,
     this.selectedCategory,
-    this.setSelectedCategory,
+    required this.setSelectedCategory,
     this.selectedTitle,
+    required this.setSelectedTags,
+    this.next,
   }) : super(key: key);
-  final Function(String)? setSelectedTitle;
+  final Function(String) setSelectedTitle;
   final TransactionCategory? selectedCategory;
-  final Function(TransactionCategory)? setSelectedCategory;
+  final Function(TransactionCategory) setSelectedCategory;
+  final Function(List<String>) setSelectedTags;
   final String? selectedTitle;
+  final VoidCallback? next;
 
   @override
   _SelectTitleState createState() => _SelectTitleState();
@@ -423,10 +511,15 @@ class _SelectTitleState extends State<SelectTitle> {
                     onEditingComplete: () {
                       //if selected a tag and a category is set, then go to enter amount
                       //else enter amount
-                      widget.setSelectedTitle!(input!);
+                      widget.setSelectedTitle(input!);
+                      Navigator.pop(context);
+                      if (widget.next != null) {
+                        widget.next!();
+                      }
                     },
                     onChanged: (text) {
                       input = text;
+                      widget.setSelectedTitle(input!);
                     },
                     labelText: "Title",
                     padding: EdgeInsets.zero,
@@ -448,7 +541,7 @@ class _SelectTitleState extends State<SelectTitle> {
                       title: "Select Category",
                       child: SelectCategory(
                         setSelectedCategory: (TransactionCategory category) {
-                          widget.setSelectedCategory!(category);
+                          widget.setSelectedCategory(category);
                           setState(() {
                             selectedCategory = category;
                           });
@@ -465,14 +558,16 @@ class _SelectTitleState extends State<SelectTitle> {
         SelectTag(),
         Container(height: 20),
         Button(
-          key: Key("addSuccess"),
-          label: "Add Transaction",
+          label: selectedCategory == null ? "Select Category" : "Enter Amount",
           width: MediaQuery.of(context).size.width,
           height: 50,
           fractionScaleHeight: 0.93,
           fractionScaleWidth: 0.91,
           onTap: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
+            if (widget.next != null) {
+              widget.next!();
+            }
           },
         )
       ],
@@ -483,13 +578,15 @@ class _SelectTitleState extends State<SelectTitle> {
 class SelectCategory extends StatefulWidget {
   SelectCategory({
     Key? key,
-    this.setSelectedCategory,
-    this.setSelectedAmount,
+    required this.setSelectedCategory,
     this.selectedCategory,
+    this.next,
+    this.skipIfSet,
   }) : super(key: key);
-  final Function(TransactionCategory)? setSelectedCategory;
-  final Function(double, String)? setSelectedAmount;
+  final Function(TransactionCategory) setSelectedCategory;
   final TransactionCategory? selectedCategory;
+  final VoidCallback? next;
+  final bool? skipIfSet;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -497,6 +594,20 @@ class SelectCategory extends StatefulWidget {
 
 class _SelectCategoryState extends State<SelectCategory> {
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (widget.selectedCategory != null && widget.skipIfSet == true) {
+        Navigator.pop(context);
+        if (widget.next != null) {
+          widget.next!();
+        }
+      }
+    });
+  }
+
   //find the selected category using selectedCategory
   @override
   Widget build(BuildContext context) {
@@ -515,23 +626,14 @@ class _SelectCategoryState extends State<SelectCategory> {
                     size: 50,
                     label: true,
                     onTap: () {
-                      widget.setSelectedCategory!(category);
+                      widget.setSelectedCategory(category);
                       setState(() {
                         selectedIndex = index;
                       });
                       Future.delayed(Duration(milliseconds: 70), () {
-                        setState(() {
-                          Navigator.of(context).pop();
-                        });
-                        if (widget.setSelectedAmount != null) {
-                          openBottomSheet(
-                            context,
-                            PopupFramework(
-                              title: "Enter Amount",
-                              child: SelectAmount(
-                                  setSelectedAmount: widget.setSelectedAmount!),
-                            ),
-                          );
+                        Navigator.pop(context);
+                        if (widget.next != null) {
+                          widget.next!();
                         }
                       });
                     },
@@ -548,10 +650,17 @@ class _SelectCategoryState extends State<SelectCategory> {
 }
 
 class SelectAmount extends StatefulWidget {
-  SelectAmount({Key? key, this.setSelectedAmount, this.amountPassed = ""})
+  SelectAmount(
+      {Key? key,
+      required this.setSelectedAmount,
+      this.amountPassed = "",
+      this.next,
+      this.nextLabel})
       : super(key: key);
-  final Function(double, String)? setSelectedAmount;
+  final Function(double, String) setSelectedAmount;
   final String amountPassed;
+  final VoidCallback? next;
+  final String? nextLabel;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -599,7 +708,7 @@ class _SelectAmountState extends State<SelectAmount> {
         amount = amount.substring(0, amount.length - 1) + input;
       });
     }
-    widget.setSelectedAmount!(
+    widget.setSelectedAmount(
         (amount == ""
             ? 0
             : includesOperations(amount, false)
@@ -614,7 +723,7 @@ class _SelectAmountState extends State<SelectAmount> {
         amount = amount.substring(0, amount.length - 1);
       }
     });
-    widget.setSelectedAmount!(
+    widget.setSelectedAmount(
         (amount == ""
             ? 0
             : includesOperations(amount, false)
@@ -846,19 +955,20 @@ class _SelectAmountState extends State<SelectAmount> {
             child: amount != ""
                 ? Button(
                     key: Key("addSuccess"),
-                    label: "Add Transaction",
+                    label: widget.nextLabel ?? "",
                     width: MediaQuery.of(context).size.width,
                     height: 50,
                     fractionScaleHeight: 0.93,
                     fractionScaleWidth: 0.91,
                     onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
+                      if (widget.next != null) {
+                        widget.next!();
+                      }
                     },
                   )
                 : Button(
                     key: Key("addNoSuccess"),
-                    label: "Add Transaction",
+                    label: widget.nextLabel ?? "",
                     width: MediaQuery.of(context).size.width,
                     height: 50,
                     fractionScaleHeight: 0.93,

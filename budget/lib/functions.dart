@@ -130,3 +130,28 @@ getWeekDayShort(currentWeekDay) {
   var weekDays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
   return weekDays[currentWeekDay];
 }
+
+getWordedDate(DateTime date) {
+  DateTime now = DateTime.now();
+
+  if (date.day == now.day && date.month == now.month && date.year == now.year) {
+    return "Today";
+  }
+  DateTime tomorrow = now.add(Duration(days: 1));
+  if (date.day == tomorrow.day &&
+      date.month == tomorrow.month &&
+      date.year == tomorrow.year) {
+    return "Tomorrow";
+  }
+  DateTime yesterday = now.subtract(Duration(days: 1));
+  if (date.day == yesterday.day &&
+      date.month == yesterday.month &&
+      date.year == yesterday.year) {
+    return "Yesterday";
+  }
+  if (now.difference(date).inDays < 4 && now.difference(date).inDays > 0) {
+    String weekday = DateFormat('EEEE').format(date);
+    return "$weekday";
+  }
+  return DateFormat.MMMMEEEEd('en_US').format(date).toString();
+}
