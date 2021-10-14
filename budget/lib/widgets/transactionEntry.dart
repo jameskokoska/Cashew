@@ -333,7 +333,7 @@ class DateDivider extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       alignment: Alignment.centerLeft,
       child: TextFont(
-        text: DateFormat.MMMMEEEEd('en_US').format(date).toString(),
+        text: getWordedDate(date),
         fontSize: 15,
       ),
     );

@@ -3,6 +3,47 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
+class PieChartWrapper extends StatelessWidget {
+  const PieChartWrapper({Key? key, required this.data}) : super(key: key);
+  final List<double> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 200,
+      child: Stack(
+        children: [
+          PieChartDisplay(
+            data: data,
+          ),
+          IgnorePointer(
+            child: Center(
+              child: Container(
+                width: 90,
+                height: 90,
+                decoration:
+                    BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: Center(
+              child: Container(
+                width: 115,
+                height: 115,
+                decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.2),
+                    shape: BoxShape.circle),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class PieChartDisplay extends StatefulWidget {
   PieChartDisplay({Key? key, required this.data}) : super(key: key);
   final List<double> data;

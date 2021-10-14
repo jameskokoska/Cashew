@@ -39,85 +39,29 @@ class _MyHomePageState extends State<MyHomePage> {
             expandedHeight: 200.0,
             collapsedHeight: 65,
             flexibleSpace: FlexibleSpaceBar(
-                titlePadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
-                background: Container(
-                  color: Theme.of(context).canvasColor,
-                )),
+              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+              title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
+              background: Container(
+                color: Theme.of(context).canvasColor,
+              ),
+            ),
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                Container(height: 100),
-                Container(width: 200, height: 500, child: SelectTag()),
-                Container(height: 100),
-                Button(
-                  label: "button",
-                  width: 120,
-                  height: 40,
-                  onTap: () {},
-                ),
-                Container(height: 100),
-                CountUp(
-                  count: 1,
-                  duration: Duration(seconds: 100),
-                ),
-                Container(
-                    width: 200,
-                    height: 200,
-                    child: Stack(
-                      children: [
-                        PieChartDisplay(
-                          data: [50, 10, 40],
-                        ),
-                        IgnorePointer(
-                          child: Center(
-                            child: Container(
-                              width: 90,
-                              height: 90,
-                              decoration: BoxDecoration(
-                                  color: Colors.black, shape: BoxShape.circle),
-                            ),
-                          ),
-                        ),
-                        IgnorePointer(
-                          child: Center(
-                            child: Container(
-                              width: 115,
-                              height: 115,
-                              decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.2),
-                                  shape: BoxShape.circle),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-                Container(height: 100),
-                TextInput(labelText: "labelText"),
-              ],
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: 0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  BudgetContainer(
-                    budget: Budget(
-                      title: "Budget Name",
-                      color: Color(0x4F6ECA4A),
-                      total: 500,
-                      spent: 210,
-                      endDate: DateTime.now(),
-                      startDate: DateTime.now(),
-                      period: "month",
-                      periodLength: 10,
-                    ),
+                BudgetContainer(
+                  budget: Budget(
+                    title: "Budget Name",
+                    color: Color(0xFF51833D),
+                    total: 500,
+                    spent: 210,
+                    endDate: DateTime.now(),
+                    startDate: DateTime.now(),
+                    period: "month",
+                    periodLength: 10,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           SliverAppBar(

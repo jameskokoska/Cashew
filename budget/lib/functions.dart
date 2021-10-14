@@ -131,6 +131,12 @@ getWeekDayShort(currentWeekDay) {
   return weekDays[currentWeekDay];
 }
 
+// e.g. Mar 15
+getWordedDateShort(DateTime date) {
+  return DateFormat('MMM d').format(date);
+}
+
+//e.g. Today/yesterday/Tuesday/September 15
 getWordedDate(DateTime date) {
   DateTime now = DateTime.now();
 

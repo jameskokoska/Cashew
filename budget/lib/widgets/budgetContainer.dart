@@ -1,3 +1,5 @@
+import 'package:budget/pages/budgetPage.dart';
+import 'package:animations/animations.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -53,51 +55,89 @@ class BudgetContainer extends StatelessWidget {
         Container(
           height: 14,
         ),
-        Center(
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: TextFont(
-              text: "You can keep spending 15\$ each day.",
-              fontSize: 15,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+        DaySpending(budget: budget),
       ],
     );
-    return Container(
-        width: double.infinity,
-        margin: EdgeInsets.symmetric(
-          horizontal: 15.0,
-          vertical: 8,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: budget.color,
-                offset: Offset(0, 4.0),
-                blurRadius: 15.0,
-                spreadRadius: -5),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: AnimatedGooBackground(color: budget.color),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 25.0,
-                  vertical: 20,
+    return OpenContainer<bool>(
+      transitionType: ContainerTransitionType.fadeThrough,
+      openBuilder: (BuildContext context, VoidCallback _) {
+        return BudgetPage(budget: budget);
+      },
+      onClosed: () {}(),
+      closedColor: Theme.of(context).canvasColor,
+      tappable: false,
+      closedShape: const RoundedRectangleBorder(),
+      middleColor: Theme.of(context).colorScheme.white,
+      transitionDuration: Duration(milliseconds: 500),
+      closedElevation: 0.0,
+      openColor: Theme.of(context).canvasColor,
+      closedBuilder: (BuildContext _, VoidCallback openContainer) {
+        return GestureDetector(
+          onTap: () {
+            openContainer();
+          },
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(
+              horizontal: 15.0,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: budget.color.withOpacity(0.8),
+                  offset: Offset(0, 4.0),
+                  blurRadius: 15.0,
+                  spreadRadius: -5,
                 ),
-                child: widget,
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: AnimatedGooBackground(
+                        color: budget.color.withOpacity(0.8)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 25.0,
+                      vertical: 20,
+                    ),
+                    child: widget,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ));
+        );
+      },
+    );
+  }
+}
+
+class DaySpending extends StatelessWidget {
+  const DaySpending(
+      {Key? key, required Budget this.budget, bool this.large = false})
+      : super(key: key);
+
+  final Budget budget;
+  final bool large;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: FittedBox(
+        fit: BoxFit.fitWidth,
+        child: TextFont(
+          text: "You can keep spending 15\$ each day.",
+          fontSize: large ? 17 : 15,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 }
 
@@ -119,7 +159,7 @@ class AnimatedGooBackground extends StatelessWidget {
       child: PlasmaRenderer(
         type: PlasmaType.infinity,
         particles: 10,
-        color: this.color,
+        color: this.color.withOpacity(0.5),
         blur: 0.5,
         size: 1.3,
         speed: 2.9,
@@ -136,10 +176,12 @@ class AnimatedGooBackground extends StatelessWidget {
 }
 
 class BudgetTimeline extends StatelessWidget {
-  BudgetTimeline({Key? key, required this.budget}) : super(key: key);
+  BudgetTimeline({Key? key, required this.budget, this.large = false})
+      : super(key: key);
 
   final Budget budget;
   final double todayPercent = 45;
+  final bool large;
 
   @override
   Widget build(BuildContext context) {
@@ -147,19 +189,20 @@ class BudgetTimeline extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         TextFont(
-          text: budget.startDate.day.toString(),
-          fontSize: 12,
+          text: getWordedDateShort(budget.startDate),
+          fontSize: large ? 16 : 12,
         ),
         Expanded(
           child: BudgetProgress(
             color: budget.color,
             percent: budget.getPercent(),
             todayPercent: todayPercent,
+            large: large,
           ),
         ),
         TextFont(
-          text: budget.endDate.day.toString(),
-          fontSize: 12,
+          text: getWordedDateShort(budget.startDate),
+          fontSize: large ? 16 : 12,
         ),
       ],
     );
@@ -173,41 +216,45 @@ class BudgetProgress extends StatelessWidget {
       {Key? key,
       required this.color,
       required this.percent,
-      required this.todayPercent})
+      required this.todayPercent,
+      this.large = false})
       : super(key: key);
 
   final Color color;
   final double percent;
   final double todayPercent;
+  final bool large;
 
   @override
   Widget build(BuildContext context) {
     var percentText = Container(
-        child: Center(
-            child: Padding(
+      child: Center(
+        child: Padding(
           padding: const EdgeInsets.only(top: 4.3),
           child: CountUp(
             count: percent,
             textColor: Colors.black,
             decimals: 0,
             suffix: "%",
-            fontSize: 14,
+            fontSize: large ? 16 : 14,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.bold,
             curve: Curves.decelerate,
             duration: Duration(milliseconds: 1500),
           ),
-        )),
-        height: 22);
+        ),
+      ),
+    );
     return Stack(
       alignment: Alignment.bottomLeft,
       children: [
         Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: darken(color, 0.5)),
-            margin: EdgeInsets.symmetric(horizontal: 8),
-            height: 20),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: darken(color, 0.5)),
+          margin: EdgeInsets.symmetric(horizontal: 8),
+          height: large ? 25 : 20,
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: ClipRRect(
@@ -238,12 +285,13 @@ class BudgetProgress extends StatelessWidget {
                       ],
                     ),
                   ),
-                  height: 20),
+                  height: large ? 25 : 20),
             ),
           ),
         ),
         TodayIndicator(
           percent: todayPercent,
+          large: large,
         ),
         percent <= 40 ? percentText : Container(),
       ],
@@ -252,9 +300,11 @@ class BudgetProgress extends StatelessWidget {
 }
 
 class TodayIndicator extends StatelessWidget {
-  TodayIndicator({Key? key, required this.percent}) : super(key: key);
+  TodayIndicator({Key? key, required this.percent, this.large = false})
+      : super(key: key);
 
   final double percent;
+  final bool large;
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +313,7 @@ class TodayIndicator extends StatelessWidget {
       child: Container(
         child: Container(
           width: 20,
-          height: 39,
+          height: large ? 45 : 39,
           child: OverflowBox(
             maxWidth: 500,
             child: SizedBox(
@@ -281,7 +331,7 @@ class TodayIndicator extends StatelessWidget {
                           child: TextFont(
                             textAlign: TextAlign.center,
                             text: "Today",
-                            fontSize: 9,
+                            fontSize: large ? 10 : 9,
                             textColor: Theme.of(context).colorScheme.white,
                           ),
                         )),
@@ -289,14 +339,15 @@ class TodayIndicator extends StatelessWidget {
                   FadeIn(
                     child: Container(
                       width: 3,
-                      height: 21,
+                      height: large ? 26 : 21,
                       decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.vertical(bottom: Radius.circular(5)),
-                          color: Theme.of(context)
-                              .colorScheme
-                              .black
-                              .withOpacity(0.4)),
+                        borderRadius:
+                            BorderRadius.vertical(bottom: Radius.circular(5)),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .black
+                            .withOpacity(0.4),
+                      ),
                     ),
                   ),
                 ],
