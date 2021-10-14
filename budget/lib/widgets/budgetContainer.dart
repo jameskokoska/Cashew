@@ -185,25 +185,51 @@ class BudgetTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Column(
       children: [
-        TextFont(
-          text: getWordedDateShort(budget.startDate),
-          fontSize: large ? 16 : 12,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            large
+                ? Container()
+                : TextFont(
+                    text: getWordedDateShort(budget.startDate),
+                    fontSize: large ? 16 : 12,
+                  ),
+            Expanded(
+              child: BudgetProgress(
+                color: budget.color,
+                percent: budget.getPercent(),
+                todayPercent: todayPercent,
+                large: large,
+              ),
+            ),
+            large
+                ? Container()
+                : TextFont(
+                    text: getWordedDateShort(budget.startDate),
+                    fontSize: large ? 16 : 12,
+                  ),
+          ],
         ),
-        Expanded(
-          child: BudgetProgress(
-            color: budget.color,
-            percent: budget.getPercent(),
-            todayPercent: todayPercent,
-            large: large,
-          ),
-        ),
-        TextFont(
-          text: getWordedDateShort(budget.startDate),
-          fontSize: large ? 16 : 12,
-        ),
+        large
+            ? Container(
+                padding: EdgeInsets.only(top: 6),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextFont(
+                      text: getWordedDateShortMore(budget.startDate),
+                      fontSize: large ? 15 : 12,
+                    ),
+                    TextFont(
+                      text: getWordedDateShortMore(budget.startDate),
+                      fontSize: large ? 15 : 12,
+                    ),
+                  ],
+                ),
+              )
+            : Container()
       ],
     );
   }

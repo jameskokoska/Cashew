@@ -126,20 +126,8 @@ getWeekDay(currentWeekDay) {
   return weekDays[currentWeekDay];
 }
 
-getWeekDayShort(currentWeekDay) {
-  var weekDays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
-  return weekDays[currentWeekDay];
-}
-
-// e.g. Mar 15
-getWordedDateShort(DateTime date) {
-  return DateFormat('MMM d').format(date);
-}
-
-//e.g. Today/yesterday/Tuesday/September 15
-getWordedDate(DateTime date) {
+checkYesterdayTodayTomorrow(DateTime date) {
   DateTime now = DateTime.now();
-
   if (date.day == now.day && date.month == now.month && date.year == now.year) {
     return "Today";
   }
@@ -155,9 +143,42 @@ getWordedDate(DateTime date) {
       date.year == yesterday.year) {
     return "Yesterday";
   }
+
+  return false;
+}
+
+getWeekDayShort(currentWeekDay) {
+  var weekDays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+  return weekDays[currentWeekDay];
+}
+
+// e.g. Today/Yesterday/Tomorrow/Tuesday/ Mar 15
+getWordedDateShort(DateTime date) {
+  if (checkYesterdayTodayTomorrow(date) != false) {
+    return checkYesterdayTodayTomorrow(date);
+  }
+  return DateFormat('MMM d').format(date);
+}
+
+// e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
+getWordedDateShortMore(DateTime date) {
+  if (checkYesterdayTodayTomorrow(date) != false) {
+    return checkYesterdayTodayTomorrow(date);
+  }
+  return DateFormat('MMMM d').format(date);
+}
+
+//e.g. Today/Yesterday/Tomorrow/Tuesday/ Thursday, September 15
+getWordedDate(DateTime date) {
+  DateTime now = DateTime.now();
+
+  if (checkYesterdayTodayTomorrow(date) != false) {
+    return checkYesterdayTodayTomorrow(date);
+  }
+
   if (now.difference(date).inDays < 4 && now.difference(date).inDays > 0) {
     String weekday = DateFormat('EEEE').format(date);
-    return "$weekday";
+    return weekday;
   }
   return DateFormat.MMMMEEEEd('en_US').format(date).toString();
 }

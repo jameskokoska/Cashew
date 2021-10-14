@@ -45,7 +45,7 @@ class BudgetPage extends StatelessWidget {
           delegate: SliverChildListDelegate(
             [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 22, vertical: 0),
                 decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(10)),
@@ -62,27 +62,27 @@ class BudgetPage extends StatelessWidget {
                             count: budget.spent,
                             prefix: getCurrencyString(),
                             duration: Duration(milliseconds: 1500),
-                            fontSize: 22,
+                            fontSize: 25,
                             textAlign: TextAlign.left,
                             fontWeight: FontWeight.bold,
                             decimals: moneyDecimals(budget.spent),
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(bottom: 2),
+                          padding: const EdgeInsets.only(bottom: 4.8),
                           child: TextFont(
                             text: " left of " + convertToMoney(budget.total),
-                            fontSize: 15,
+                            fontSize: 16,
                             textAlign: TextAlign.left,
                           ),
                         ),
                       ],
                     ),
-                    Container(height: 5),
+                    Container(height: 10),
                     BudgetTimeline(budget: budget, large: true),
-                    Container(height: 18),
-                    DaySpending(budget: budget, large: true),
                     Container(height: 15),
+                    DaySpending(budget: budget, large: true),
+                    Container(height: 17),
                   ],
                 ),
               ),
