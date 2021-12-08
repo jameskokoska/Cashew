@@ -17,7 +17,7 @@ const int DEFAULT_LIMIT = 50;
 const int DEFAULT_OFFSET = 0;
 
 enum BudgetReoccurence { daily, weekly, monthly, yearly }
-enum Theme { dark, light }
+enum ThemeSetting { dark, light }
 
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
@@ -85,7 +85,7 @@ class Budgets extends Table {
 class Settings extends Table {
   IntColumn get userPk => integer().autoIncrement()();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
-  IntColumn get theme => intEnum<Theme>()();
+  IntColumn get theme => intEnum<ThemeSetting>()();
   TextColumn get currency => text().withLength(max: CURRENCY_LIMIT)();
 }
 

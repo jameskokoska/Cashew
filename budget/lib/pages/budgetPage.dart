@@ -111,7 +111,7 @@ class BudgetPage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return CategoryEntry(
-                  category: TransactionCategory(
+                  category: TransactionCategoryOld(
                       title: "Shopping",
                       icon: "shopping.png",
                       id: "12901-",
@@ -135,27 +135,27 @@ class BudgetPage extends StatelessWidget {
             ]),
           ),
         ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 5),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return TransactionEntry(
-                  openPage: OpenTestPage(),
-                  transaction: Transaction(
-                    title: "Uber",
-                    amount: 50,
-                    categoryID: "id",
-                    date: DateTime.now(),
-                    note: "this is a transaction",
-                    tagIDs: ["id1"],
-                  ),
-                );
-              },
-              childCount: 2,
-            ),
-          ),
-        ),
+        // SliverPadding(
+        //   padding: EdgeInsets.symmetric(vertical: 5),
+        //   sliver: SliverList(
+        //     delegate: SliverChildBuilderDelegate(
+        //       (BuildContext context, int index) {
+        //         return TransactionEntry(
+        //           openPage: OpenTestPage(),
+        //           transaction: Transaction(
+        //             title: "Uber",
+        //             amount: 50,
+        //             categoryID: "id",
+        //             date: DateTime.now(),
+        //             note: "this is a transaction",
+        //             tagIDs: ["id1"],
+        //           ),
+        //         );
+        //       },
+        //       childCount: 2,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

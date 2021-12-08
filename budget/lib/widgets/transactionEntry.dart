@@ -1,5 +1,5 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/struct/transaction.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/struct/transactionTag.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -18,7 +18,7 @@ class TransactionEntry extends StatelessWidget {
   final Transaction transaction;
 
   final double fabSize = 50;
-  final TransactionCategory category = findCategory("id");
+  final TransactionCategoryOld category = findCategory("id");
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +47,11 @@ class TransactionEntry extends StatelessWidget {
               margin: EdgeInsets.only(left: 14, right: 25, top: 12, bottom: 12),
               child: Row(
                 children: [
-                  CategoryIcon(
-                    category: category,
-                    size: 45,
-                    margin: EdgeInsets.zero,
-                  ),
+                  // CategoryIcon(
+                  //   category: category,
+                  //   size: 45,
+                  //   margin: EdgeInsets.zero,
+                  // ),
                   Container(
                     width: 15,
                   ),
@@ -60,15 +60,15 @@ class TransactionEntry extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          transaction.title != ""
+                          transaction.name != ""
                               ? TextFont(
-                                  text: transaction.title,
+                                  text: transaction.name,
                                   fontSize: 20,
                                 )
                               : Container(
                                   height: transaction.note == "" ? 0 : 7),
-                          transaction.title == "" &&
-                                  transaction.tagIDs.length > 0
+                          transaction.name == "" &&
+                                  (transaction.labelFks?.length ?? 0) > 0
                               ? TagIcon(
                                   tag: TransactionTag(
                                       title: "test",
@@ -76,14 +76,14 @@ class TransactionEntry extends StatelessWidget {
                                       categoryID: "id"),
                                   size: transaction.note == "" ? 20 : 16)
                               : Container(),
-                          transaction.title == "" &&
-                                  transaction.tagIDs.length == 0
+                          transaction.name == "" &&
+                                  (transaction.labelFks?.length ?? 0) == 0
                               ? TextFont(
                                   text: category.title,
                                   fontSize: transaction.note == "" ? 23 : 20,
                                 )
                               : Container(),
-                          transaction.title == "" && transaction.note != ""
+                          transaction.name == "" && transaction.note != ""
                               ? Container(height: 4)
                               : Container(),
                           transaction.note == ""
@@ -97,8 +97,8 @@ class TransactionEntry extends StatelessWidget {
                               ? Container()
                               : Container(height: 4),
                           //TODO loop through all tags relating to this entry
-                          transaction.title != "" &&
-                                  transaction.tagIDs.length > 0
+                          transaction.name != "" &&
+                                  (transaction.labelFks?.length ?? 0) > 0
                               ? TagIcon(
                                   tag: TransactionTag(
                                       title: "test",
@@ -134,7 +134,8 @@ class CategoryIcon extends StatelessWidget {
       this.labelSize = 10,
       this.margin,
       this.sizePadding = 20,
-      this.outline = false})
+      this.outline = false,
+      this.noBackground = false})
       : super(key: key);
 
   final TransactionCategory? category;
@@ -145,6 +146,7 @@ class CategoryIcon extends StatelessWidget {
   final EdgeInsets? margin;
   final double sizePadding;
   final bool outline;
+  final bool noBackground;
 
   @override
   Widget build(BuildContext context) {
@@ -172,14 +174,16 @@ class CategoryIcon extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(13)),
                 ),
           child: Tappable(
-            color: category?.color.withOpacity(0.6) ??
-                Theme.of(context).colorScheme.lightDarkAccent,
+            color: HexColor(category?.colour,
+                    Theme.of(context).colorScheme.lightDarkAccent)
+                .withOpacity(noBackground ? 0 : 0.55),
             onTap: onTap,
             borderRadius: 10,
             child: Center(
-              child: (category?.icon != null
+              child: (category?.iconName != null
                   ? Image(
-                      image: AssetImage("assets/categories/" + category!.icon),
+                      image: AssetImage(
+                          "assets/categories/" + (category?.iconName ?? "")),
                       width: size,
                     )
                   : Container()),
@@ -193,7 +197,7 @@ class CategoryIcon extends StatelessWidget {
                 child: Center(
                   child: TextFont(
                     textAlign: TextAlign.center,
-                    text: category?.title ?? "",
+                    text: category?.name ?? "",
                     fontSize: labelSize,
                     maxLines: 1,
                   ),

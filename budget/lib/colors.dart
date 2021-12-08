@@ -45,3 +45,30 @@ Color lighten(Color color, [double amount = .1]) {
 
   return hslLight.toColor();
 }
+
+class HexColor extends Color {
+  static int _getColorFromHex(String? hexColor, Color? defaultColor) {
+    if (hexColor == null) {
+      if (defaultColor == null) {
+        return Colors.blue.value;
+      } else {
+        return defaultColor.value;
+      }
+    }
+    hexColor = hexColor.replaceAll("#", "");
+    hexColor = hexColor.replaceAll("0x", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String? hexColor, [final Color? defaultColor])
+      : super(_getColorFromHex(hexColor, defaultColor));
+}
+
+String toHexString(Color color) {
+  String valueString = color.value.toRadixString(16);
+  print(valueString);
+  return "0x" + valueString;
+}

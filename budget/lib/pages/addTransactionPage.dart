@@ -1,4 +1,6 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -16,7 +18,10 @@ import 'package:math_expressions/math_expressions.dart';
 //put recent used tags at the top? when no category selected
 
 class AddTransactionPage extends StatefulWidget {
-  AddTransactionPage({Key? key, required this.title}) : super(key: key);
+  AddTransactionPage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
   final String title;
 
   @override
@@ -86,6 +91,18 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     });
   }
 
+  Future addTransaction() async {
+    print("Added transaction");
+    await database.createOrUpdateTransaction(Transaction(
+        transactionPk: DateTime.now().millisecondsSinceEpoch,
+        name: selectedTitle ?? "",
+        amount: selectedAmount ?? 10,
+        note: "",
+        budgetFk: 0,
+        categoryFk: 0,
+        dateCreated: DateTime.now()));
+  }
+
   late TextEditingController _titleInputController;
   late TextEditingController _dateInputController;
 
@@ -120,7 +137,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             child: SelectAmount(
                               amountPassed: selectedAmountCalculation ?? "",
                               setSelectedAmount: setSelectedAmount,
-                              next: () {
+                              next: () async {
+                                await addTransaction();
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               },
@@ -147,7 +165,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             slivers: [
               SliverAppBar(
                 leading: Container(),
-                backgroundColor: Colors.black,
+                backgroundColor: Theme.of(context).canvasColor,
                 floating: false,
                 pinned: true,
                 expandedHeight: 200.0,
@@ -167,8 +185,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   [
                     AnimatedContainer(
                       duration: Duration(milliseconds: 300),
-                      color: selectedCategory?.color ??
-                          Theme.of(context).canvasColor,
+                      color: HexColor(selectedCategory?.colour,
+                              Theme.of(context).canvasColor)
+                          .withOpacity(0.55),
                       child: Padding(
                         padding: EdgeInsets.only(
                             left: 17, right: 37, top: 20, bottom: 18),
@@ -179,7 +198,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             AnimatedSwitcher(
                               duration: Duration(milliseconds: 300),
                               child: CategoryIcon(
-                                key: ValueKey(selectedCategory?.id ?? ""),
+                                noBackground: true,
+                                key: ValueKey(
+                                    selectedCategory?.categoryPk ?? ""),
                                 category: selectedCategory,
                                 size: 60,
                                 onTap: () {
@@ -239,12 +260,12 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     duration: Duration(milliseconds: 350),
                                     child: Container(
                                       key: ValueKey(
-                                          selectedCategory?.title ?? ""),
+                                          selectedCategory?.name ?? ""),
                                       width: double.infinity,
                                       child: TextFont(
                                         textAlign: TextAlign.right,
                                         fontSize: 18,
-                                        text: selectedCategory?.title ?? "",
+                                        text: selectedCategory?.name ?? "",
                                       ),
                                     ),
                                   ),
@@ -322,7 +343,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     amountPassed:
                                         selectedAmountCalculation ?? "",
                                     setSelectedAmount: setSelectedAmount,
-                                    next: () {
+                                    next: () async {
+                                      await addTransaction;
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                     },
@@ -350,7 +372,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               child: SelectAmount(
                                 amountPassed: selectedAmountCalculation ?? "",
                                 setSelectedAmount: setSelectedAmount,
-                                next: () {
+                                next: () async {
+                                  await addTransaction();
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 },
@@ -366,7 +389,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         height: 50,
                         fractionScaleHeight: 0.93,
                         fractionScaleWidth: 0.98,
-                        onTap: () {
+                        onTap: () async {
+                          await addTransaction();
                           Navigator.of(context).pop();
                         },
                       ),
@@ -530,7 +554,7 @@ class _SelectTitleState extends State<SelectTitle> {
             AnimatedSwitcher(
               duration: Duration(milliseconds: 300),
               child: CategoryIcon(
-                key: ValueKey(selectedCategory?.id ?? ""),
+                key: ValueKey(selectedCategory?.categoryPk ?? ""),
                 margin: EdgeInsets.zero,
                 category: selectedCategory,
                 size: 55,
@@ -611,41 +635,49 @@ class _SelectCategoryState extends State<SelectCategory> {
   //find the selected category using selectedCategory
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: listCategory()
-              .asMap()
-              .map(
-                (index, category) => MapEntry(
-                  index,
-                  CategoryIcon(
-                    category: category,
-                    size: 50,
-                    label: true,
-                    onTap: () {
-                      widget.setSelectedCategory(category);
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                      Future.delayed(Duration(milliseconds: 70), () {
-                        Navigator.pop(context);
-                        if (widget.next != null) {
-                          widget.next!();
-                        }
-                      });
-                    },
-                    outline: selectedIndex == index,
-                  ),
+    return StreamBuilder<List<TransactionCategory>>(
+        stream: database.watchAllCategories(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Center(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  children: snapshot.data!
+                      .asMap()
+                      .map(
+                        (index, category) => MapEntry(
+                          index,
+                          CategoryIcon(
+                            category: category,
+                            size: 50,
+                            label: true,
+                            onTap: () {
+                              widget.setSelectedCategory(category);
+                              setState(() {
+                                selectedIndex = index;
+                              });
+                              Future.delayed(Duration(milliseconds: 70), () {
+                                Navigator.pop(context);
+                                if (widget.next != null) {
+                                  widget.next!();
+                                }
+                              });
+                            },
+                            outline: selectedIndex == index,
+                          ),
+                        ),
+                      )
+                      .values
+                      .toList(),
                 ),
-              )
-              .values
-              .toList(),
-        ),
-      ),
-    );
+              ),
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 }
 
@@ -1035,7 +1067,7 @@ class CalculatorButton extends StatelessWidget {
 
 class SelectTag extends StatefulWidget {
   SelectTag({Key? key, this.setSelectedCategory}) : super(key: key);
-  final Function(TransactionCategory)? setSelectedCategory;
+  final Function(TransactionCategoryOld)? setSelectedCategory;
 
   @override
   _SelectTagState createState() => _SelectTagState();

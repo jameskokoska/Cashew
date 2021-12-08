@@ -10,7 +10,7 @@ import '../colors.dart';
 class CategoryEntry extends StatelessWidget {
   CategoryEntry({Key? key, required this.category}) : super(key: key);
 
-  final TransactionCategory category;
+  final TransactionCategoryOld category;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,11 @@ class CategoryEntry extends StatelessWidget {
         margin: EdgeInsets.only(left: 14, right: 25, top: 6, bottom: 6),
         child: Row(
           children: [
-            CategoryIcon(
-              category: category,
-              size: 30,
-              margin: EdgeInsets.zero,
-            ),
+            // CategoryIcon(
+            //   category: category,
+            //   size: 30,
+            //   margin: EdgeInsets.zero,
+            // ),
             Container(
               width: 15,
             ),

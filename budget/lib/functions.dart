@@ -59,8 +59,8 @@ String getCurrencyString() {
 }
 
 //TODO
-TransactionCategory findCategory(String id) {
-  return TransactionCategory(
+TransactionCategoryOld findCategory(String id) {
+  return TransactionCategoryOld(
     title: "Groceries",
     icon: "groceries.png",
     id: "id",
@@ -68,8 +68,8 @@ TransactionCategory findCategory(String id) {
   );
 }
 
-List<TransactionCategory> listCategory() {
-  return defaultCategories();
+List<TransactionCategoryOld> listCategory() {
+  return defaultCategoriesOld();
 }
 
 List<TransactionTag> listTag() {

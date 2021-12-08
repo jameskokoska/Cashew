@@ -1445,7 +1445,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
 class UserSettings extends DataClass implements Insertable<UserSettings> {
   final int userPk;
   final String name;
-  final Theme theme;
+  final ThemeSetting theme;
   final String currency;
   UserSettings(
       {required this.userPk,
@@ -1494,7 +1494,7 @@ class UserSettings extends DataClass implements Insertable<UserSettings> {
     return UserSettings(
       userPk: serializer.fromJson<int>(json['userPk']),
       name: serializer.fromJson<String>(json['name']),
-      theme: serializer.fromJson<Theme>(json['theme']),
+      theme: serializer.fromJson<ThemeSetting>(json['theme']),
       currency: serializer.fromJson<String>(json['currency']),
     );
   }
@@ -1504,13 +1504,13 @@ class UserSettings extends DataClass implements Insertable<UserSettings> {
     return <String, dynamic>{
       'userPk': serializer.toJson<int>(userPk),
       'name': serializer.toJson<String>(name),
-      'theme': serializer.toJson<Theme>(theme),
+      'theme': serializer.toJson<ThemeSetting>(theme),
       'currency': serializer.toJson<String>(currency),
     };
   }
 
   UserSettings copyWith(
-          {int? userPk, String? name, Theme? theme, String? currency}) =>
+          {int? userPk, String? name, ThemeSetting? theme, String? currency}) =>
       UserSettings(
         userPk: userPk ?? this.userPk,
         name: name ?? this.name,
@@ -1544,7 +1544,7 @@ class UserSettings extends DataClass implements Insertable<UserSettings> {
 class SettingsCompanion extends UpdateCompanion<UserSettings> {
   final Value<int> userPk;
   final Value<String> name;
-  final Value<Theme> theme;
+  final Value<ThemeSetting> theme;
   final Value<String> currency;
   const SettingsCompanion({
     this.userPk = const Value.absent(),
@@ -1555,7 +1555,7 @@ class SettingsCompanion extends UpdateCompanion<UserSettings> {
   SettingsCompanion.insert({
     this.userPk = const Value.absent(),
     required String name,
-    required Theme theme,
+    required ThemeSetting theme,
     required String currency,
   })  : name = Value(name),
         theme = Value(theme),
@@ -1563,7 +1563,7 @@ class SettingsCompanion extends UpdateCompanion<UserSettings> {
   static Insertable<UserSettings> custom({
     Expression<int>? userPk,
     Expression<String>? name,
-    Expression<Theme>? theme,
+    Expression<ThemeSetting>? theme,
     Expression<String>? currency,
   }) {
     return RawValuesInsertable({
@@ -1577,7 +1577,7 @@ class SettingsCompanion extends UpdateCompanion<UserSettings> {
   SettingsCompanion copyWith(
       {Value<int>? userPk,
       Value<String>? name,
-      Value<Theme>? theme,
+      Value<ThemeSetting>? theme,
       Value<String>? currency}) {
     return SettingsCompanion(
       userPk: userPk ?? this.userPk,
@@ -1636,10 +1636,10 @@ class $SettingsTable extends Settings
       typeName: 'TEXT',
       requiredDuringInsert: true);
   final VerificationMeta _themeMeta = const VerificationMeta('theme');
-  late final GeneratedColumnWithTypeConverter<Theme, int?> theme =
+  late final GeneratedColumnWithTypeConverter<ThemeSetting, int?> theme =
       GeneratedColumn<int?>('theme', aliasedName, false,
               typeName: 'INTEGER', requiredDuringInsert: true)
-          .withConverter<Theme>($SettingsTable.$converter0);
+          .withConverter<ThemeSetting>($SettingsTable.$converter0);
   final VerificationMeta _currencyMeta = const VerificationMeta('currency');
   late final GeneratedColumn<String?> currency = GeneratedColumn<String?>(
       'currency', aliasedName, false,
@@ -1690,8 +1690,8 @@ class $SettingsTable extends Settings
     return $SettingsTable(_db, alias);
   }
 
-  static TypeConverter<Theme, int> $converter0 =
-      const EnumIndexConverter<Theme>(Theme.values);
+  static TypeConverter<ThemeSetting, int> $converter0 =
+      const EnumIndexConverter<ThemeSetting>(ThemeSetting.values);
 }
 
 abstract class _$FinanceDatabase extends GeneratedDatabase {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class TransactionCategory {
+class TransactionCategoryOld {
   final String title;
   final String icon;
   final String id;
   final Color color;
-  TransactionCategory({
+  TransactionCategoryOld({
     required this.title,
     required this.icon,
     required this.id,

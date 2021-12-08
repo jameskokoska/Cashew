@@ -1,6 +1,7 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/budget.dart';
-import 'package:budget/struct/transaction.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
@@ -15,7 +16,10 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:budget/colors.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
   final String title;
 
   @override
@@ -29,178 +33,191 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            leading: Container(),
-            backgroundColor: Theme.of(context).colorScheme.accentColor,
-            floating: false,
-            pinned: true,
-            expandedHeight: 200.0,
-            collapsedHeight: 65,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-              title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
-              background: Container(
-                color: Theme.of(context).canvasColor,
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                BudgetContainer(
-                  budget: Budget(
-                    title: "Budget Name",
-                    color: Color(0xFF51833D),
-                    total: 500,
-                    spent: 210,
-                    endDate: DateTime.now(),
-                    startDate: DateTime.now(),
-                    period: "month",
-                    periodLength: 10,
+      body: StreamBuilder<List<Transaction>>(
+        stream: database.watchAllTransactionsFiltered(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            print(snapshot.data);
+            return CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  leading: Container(),
+                  backgroundColor: Theme.of(context).colorScheme.accentColor,
+                  floating: false,
+                  pinned: true,
+                  expandedHeight: 200.0,
+                  collapsedHeight: 65,
+                  flexibleSpace: FlexibleSpaceBar(
+                    titlePadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                    title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
+                    background: Container(
+                      color: Theme.of(context).canvasColor,
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
-          SliverAppBar(
-            leading: Container(),
-            backgroundColor: Colors.transparent,
-            expandedHeight: 65.1,
-            collapsedHeight: 65,
-            flexibleSpace: LayoutBuilder(builder: (
-              BuildContext context,
-              BoxConstraints constraints,
-            ) {
-              if (setTitleHeight == 0)
-                setTitleHeight = constraints.biggest.height;
-              print(setTitleHeight);
-              if (constraints.biggest.height < setTitleHeight) {
-                //occur when title disappears (scrolling down)
-                //add delay to wait for layout of children widgets first
-                Future.delayed(Duration.zero, () async {
-                  _appBarKey.currentState?.changeTitle("Transactions", 1);
-                });
-              } else {
-                //occur when title appears (scrolling up)
-                Future.delayed(Duration.zero, () async {
-                  _appBarKey.currentState?.changeTitle("Home", -1);
-                });
-              }
-              return FlexibleSpaceBar(
-                titlePadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                title: TextFont(
-                  text: "Transactions",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
-            }),
-          ),
-          SliverStickyHeader(
-            header: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DateDivider(date: DateTime.now()),
-              ],
-            ),
-            sliver: SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return TransactionEntry(
-                      openPage: OpenTestPage(),
-                      transaction: Transaction(
-                        title: "Uber",
-                        amount: 50,
-                        categoryID: "id",
-                        date: DateTime.now(),
-                        note: "this is a transaction",
-                        tagIDs: ["id1"],
+                // SliverList(
+                //   delegate: SliverChildListDelegate(
+                //     [
+                //       BudgetContainer(
+                //         budget: Budget(
+                //           title: "Budget Name",
+                //           color: Color(0xFF51833D),
+                //           total: 500,
+                //           spent: 210,
+                //           endDate: DateTime.now(),
+                //           startDate: DateTime.now(),
+                //           period: "month",
+                //           periodLength: 10,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                SliverAppBar(
+                  leading: Container(),
+                  backgroundColor: Colors.transparent,
+                  expandedHeight: 65.1,
+                  collapsedHeight: 65,
+                  flexibleSpace: LayoutBuilder(builder: (
+                    BuildContext context,
+                    BoxConstraints constraints,
+                  ) {
+                    if (setTitleHeight == 0)
+                      setTitleHeight = constraints.biggest.height;
+                    print(setTitleHeight);
+                    if (constraints.biggest.height < setTitleHeight) {
+                      //occur when title disappears (scrolling down)
+                      //add delay to wait for layout of children widgets first
+                      Future.delayed(Duration.zero, () async {
+                        _appBarKey.currentState?.changeTitle("Transactions", 1);
+                      });
+                    } else {
+                      //occur when title appears (scrolling up)
+                      Future.delayed(Duration.zero, () async {
+                        _appBarKey.currentState?.changeTitle("Home", -1);
+                      });
+                    }
+                    return FlexibleSpaceBar(
+                      titlePadding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                      title: TextFont(
+                        text: "Transactions",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     );
-                  },
-                  childCount: 2,
+                  }),
                 ),
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                TransactionEntry(
-                  openPage: OpenTestPage(),
-                  transaction: Transaction(
-                    title: "",
-                    amount: 50,
-                    categoryID: "id",
-                    date: DateTime.now(),
-                    note: "this is a transaction",
-                    tagIDs: ["id1", "id2"],
+                SliverStickyHeader(
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DateDivider(date: DateTime.now()),
+                    ],
+                  ),
+                  sliver: SliverPadding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return TransactionEntry(
+                            openPage: OpenTestPage(),
+                            transaction: Transaction(
+                              transactionPk:
+                                  snapshot.data![index].transactionPk,
+                              name: snapshot.data![index].name,
+                              amount: snapshot.data![index].amount,
+                              note: snapshot.data![index].note,
+                              budgetFk: snapshot.data![index].budgetFk,
+                              categoryFk: snapshot.data![index].categoryFk,
+                              dateCreated: snapshot.data![index].dateCreated,
+                            ),
+                          );
+                        },
+                        childCount: snapshot.data?.length,
+                      ),
+                    ),
                   ),
                 ),
-                TransactionEntry(
-                  openPage: OpenTestPage(),
-                  transaction: Transaction(
-                    title: "Uber",
-                    amount: 50,
-                    categoryID: "id",
-                    date: DateTime.now(),
-                    note: "this is a transaction",
-                    tagIDs: ["id1", "id2"],
-                  ),
-                ),
-                TransactionEntry(
-                  openPage: OpenTestPage(),
-                  transaction: Transaction(
-                    title: "",
-                    amount: 50,
-                    categoryID: "id",
-                    date: DateTime.now(),
-                    note: "",
-                    tagIDs: [],
-                  ),
-                ),
-                TransactionEntry(
-                  openPage: OpenTestPage(),
-                  transaction: Transaction(
-                    title: "",
-                    amount: 50,
-                    categoryID: "id",
-                    date: DateTime.now(),
-                    note: "hello",
-                    tagIDs: [],
-                  ),
-                ),
-                TransactionEntry(
-                  openPage: OpenTestPage(),
-                  transaction: Transaction(
-                    title: "",
-                    amount: 50,
-                    categoryID: "id",
-                    date: DateTime.now(),
-                    note: "",
-                    tagIDs: ["id"],
-                  ),
-                ),
-                TransactionEntry(
-                  openPage: OpenTestPage(),
-                  transaction: Transaction(
-                    title: "",
-                    amount: 50,
-                    categoryID: "id",
-                    date: DateTime.now(),
-                    note: "hello",
-                    tagIDs: ["id"],
-                  ),
-                ),
+                // SliverList(
+                //   delegate: SliverChildListDelegate(
+                //     [
+                //       TransactionEntry(
+                //         openPage: OpenTestPage(),
+                //         transaction: Transaction(
+                //           title: "",
+                //           amount: 50,
+                //           categoryID: "id",
+                //           date: DateTime.now(),
+                //           note: "this is a transaction",
+                //           tagIDs: ["id1", "id2"],
+                //         ),
+                //       ),
+                //       TransactionEntry(
+                //         openPage: OpenTestPage(),
+                //         transaction: Transaction(
+                //           title: "Uber",
+                //           amount: 50,
+                //           categoryID: "id",
+                //           date: DateTime.now(),
+                //           note: "this is a transaction",
+                //           tagIDs: ["id1", "id2"],
+                //         ),
+                //       ),
+                //       TransactionEntry(
+                //         openPage: OpenTestPage(),
+                //         transaction: Transaction(
+                //           title: "",
+                //           amount: 50,
+                //           categoryID: "id",
+                //           date: DateTime.now(),
+                //           note: "",
+                //           tagIDs: [],
+                //         ),
+                //       ),
+                //       TransactionEntry(
+                //         openPage: OpenTestPage(),
+                //         transaction: Transaction(
+                //           title: "",
+                //           amount: 50,
+                //           categoryID: "id",
+                //           date: DateTime.now(),
+                //           note: "hello",
+                //           tagIDs: [],
+                //         ),
+                //       ),
+                //       TransactionEntry(
+                //         openPage: OpenTestPage(),
+                //         transaction: Transaction(
+                //           title: "",
+                //           amount: 50,
+                //           categoryID: "id",
+                //           date: DateTime.now(),
+                //           note: "",
+                //           tagIDs: ["id"],
+                //         ),
+                //       ),
+                //       TransactionEntry(
+                //         openPage: OpenTestPage(),
+                //         transaction: Transaction(
+                //           title: "",
+                //           amount: 50,
+                //           categoryID: "id",
+                //           date: DateTime.now(),
+                //           note: "hello",
+                //           tagIDs: ["id"],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
-            ),
-          ),
-        ],
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }
