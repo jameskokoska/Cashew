@@ -176,7 +176,9 @@ class CategoryIcon extends StatelessWidget {
           child: Tappable(
             color: HexColor(category?.colour,
                     Theme.of(context).colorScheme.lightDarkAccent)
-                .withOpacity(noBackground ? 0 : 0.55),
+                .withOpacity(noBackground
+                    ? (category?.colour == null ? 0.55 : 0)
+                    : 0.55),
             onTap: onTap,
             borderRadius: 10,
             child: Center(

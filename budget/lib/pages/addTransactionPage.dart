@@ -739,6 +739,12 @@ class _SelectAmountState extends State<SelectAmount> {
       setState(() {
         amount = amount.substring(0, amount.length - 1) + input;
       });
+    } else if (includesOperations(amount.substring(amount.length - 1), false) &&
+        includesOperations(input, false)) {
+      //replace last input operation with a new one
+      setState(() {
+        amount = amount.substring(0, amount.length - 1) + input;
+      });
     }
     widget.setSelectedAmount(
         (amount == ""
@@ -853,18 +859,56 @@ class _SelectAmountState extends State<SelectAmount> {
                 AnimatedSwitcher(
                   duration: Duration(milliseconds: 200),
                   child: FractionallySizedBox(
-                    key: ValueKey(amount == ""
-                        ? getCurrencyString() + "0"
-                        : includesOperations(amount, false)
-                            ? convertToMoney(calculateResult(amount))
-                            : getCurrencyString() + amount),
+                    key: ValueKey(
+                      amount == ""
+                          ? getCurrencyString() + "0"
+                          : includesOperations(amount, false)
+                              ? convertToMoney(calculateResult(amount))
+                              : convertToMoney(double.tryParse(amount.substring(
+                                                      amount.length - 1) ==
+                                                  "." ||
+                                              (amount.length > 2 &&
+                                                  amount.substring(
+                                                          amount.length - 2) ==
+                                                      ".0")
+                                          ? amount.substring(
+                                              0, amount.length - 1)
+                                          : amount) ??
+                                      0) +
+                                  (amount.substring(amount.length - 1) == "."
+                                      ? "."
+                                      : "") +
+                                  (amount.length > 2 &&
+                                          amount.substring(amount.length - 2) ==
+                                              ".0"
+                                      ? ".0"
+                                      : ""),
+                    ),
                     widthFactor: 0.5,
                     child: TextFont(
                       text: amount == ""
                           ? getCurrencyString() + "0"
                           : includesOperations(amount, false)
                               ? convertToMoney(calculateResult(amount))
-                              : getCurrencyString() + amount,
+                              : convertToMoney(double.tryParse(amount.substring(
+                                                      amount.length - 1) ==
+                                                  "." ||
+                                              (amount.length > 2 &&
+                                                  amount.substring(
+                                                          amount.length - 2) ==
+                                                      ".0")
+                                          ? amount.substring(
+                                              0, amount.length - 1)
+                                          : amount) ??
+                                      0) +
+                                  (amount.substring(amount.length - 1) == "."
+                                      ? "."
+                                      : "") +
+                                  (amount.length > 2 &&
+                                          amount.substring(amount.length - 2) ==
+                                              ".0"
+                                      ? ".0"
+                                      : ""),
                       // text: amount,
                       textAlign: TextAlign.right,
                       fontSize: 35,
