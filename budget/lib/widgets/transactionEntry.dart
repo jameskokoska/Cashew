@@ -1,9 +1,11 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/struct/transactionTag.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import '../colors.dart';
@@ -18,7 +20,6 @@ class TransactionEntry extends StatelessWidget {
   final Transaction transaction;
 
   final double fabSize = 50;
-  final TransactionCategoryOld category = findCategory("id");
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +48,11 @@ class TransactionEntry extends StatelessWidget {
               margin: EdgeInsets.only(left: 14, right: 25, top: 12, bottom: 12),
               child: Row(
                 children: [
-                  // CategoryIcon(
-                  //   category: category,
-                  //   size: 45,
-                  //   margin: EdgeInsets.zero,
-                  // ),
+                  CategoryIcon(
+                    categoryPk: transaction.categoryFk,
+                    size: 45,
+                    margin: EdgeInsets.zero,
+                  ),
                   Container(
                     width: 15,
                   ),
@@ -79,7 +80,7 @@ class TransactionEntry extends StatelessWidget {
                           transaction.name == "" &&
                                   (transaction.labelFks?.length ?? 0) == 0
                               ? TextFont(
-                                  text: category.title,
+                                  text: "category.title",
                                   fontSize: transaction.note == "" ? 23 : 20,
                                 )
                               : Container(),
@@ -127,7 +128,7 @@ class TransactionEntry extends StatelessWidget {
 class CategoryIcon extends StatelessWidget {
   CategoryIcon(
       {Key? key,
-      required this.category,
+      required this.categoryPk,
       required this.size,
       this.onTap,
       this.label = false,
@@ -138,7 +139,7 @@ class CategoryIcon extends StatelessWidget {
       this.noBackground = false})
       : super(key: key);
 
-  final TransactionCategory? category;
+  final int categoryPk;
   final double size;
   final VoidCallback? onTap;
   final bool label;
@@ -150,65 +151,71 @@ class CategoryIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AnimatedContainer(
-          duration: Duration(milliseconds: 250),
-          margin: margin ??
-              EdgeInsets.only(left: 8, right: 8, top: 8, bottom: label ? 2 : 8),
-          height: size + sizePadding,
-          width: size + sizePadding,
-          decoration: outline
-              ? BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.accentColorHeavy,
-                    width: 3,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
-                )
-              : BoxDecoration(
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
-                ),
-          child: Tappable(
-            color: HexColor(category?.colour,
-                    Theme.of(context).colorScheme.lightDarkAccent)
-                .withOpacity(noBackground
-                    ? (category?.colour == null ? 0.55 : 0)
-                    : 0.55),
-            onTap: onTap,
-            borderRadius: 10,
-            child: Center(
-              child: (category?.iconName != null
-                  ? Image(
-                      image: AssetImage(
-                          "assets/categories/" + (category?.iconName ?? "")),
-                      width: size,
+    return StreamBuilder<TransactionCategory>(
+      stream: database.getCategory(categoryPk),
+      builder: (context, snapshot) {
+        return Column(
+          children: [
+            AnimatedContainer(
+              duration: Duration(milliseconds: 250),
+              margin: margin ??
+                  EdgeInsets.only(
+                      left: 8, right: 8, top: 8, bottom: label ? 2 : 8),
+              height: size + sizePadding,
+              width: size + sizePadding,
+              decoration: outline
+                  ? BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.accentColorHeavy,
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(13)),
                     )
-                  : Container()),
-            ),
-          ),
-        ),
-        label
-            ? Container(
-                margin: EdgeInsets.only(top: 3),
-                width: 60,
+                  : BoxDecoration(
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 0,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(13)),
+                    ),
+              child: Tappable(
+                color: HexColor(snapshot.data?.colour,
+                        Theme.of(context).colorScheme.lightDarkAccent)
+                    .withOpacity(noBackground
+                        ? (snapshot.data?.colour == null ? 0.55 : 0)
+                        : 0.55),
+                onTap: onTap,
+                borderRadius: 10,
                 child: Center(
-                  child: TextFont(
-                    textAlign: TextAlign.center,
-                    text: category?.name ?? "",
-                    fontSize: labelSize,
-                    maxLines: 1,
-                  ),
+                  child: (snapshot.data?.iconName != null
+                      ? Image(
+                          image: AssetImage("assets/categories/" +
+                              (snapshot.data?.iconName ?? "")),
+                          width: size,
+                        )
+                      : Container()),
                 ),
-              )
-            : Container(
-                width: size + sizePadding,
               ),
-      ],
+            ),
+            label
+                ? Container(
+                    margin: EdgeInsets.only(top: 3),
+                    width: 60,
+                    child: Center(
+                      child: TextFont(
+                        textAlign: TextAlign.center,
+                        text: snapshot.data?.name ?? "",
+                        fontSize: labelSize,
+                        maxLines: 1,
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: size + sizePadding,
+                  ),
+          ],
+        );
+      },
     );
   }
 }

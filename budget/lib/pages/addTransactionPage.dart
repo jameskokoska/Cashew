@@ -33,6 +33,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
+  String? selectedNote;
   List<String> selectedTags = [];
   DateTime selectedDate = DateTime.now();
 
@@ -91,15 +92,22 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     });
   }
 
+  void setSelectedNote(String note) {
+    setState(() {
+      selectedNote = note;
+    });
+    return;
+  }
+
   Future addTransaction() async {
     print("Added transaction");
     await database.createOrUpdateTransaction(Transaction(
         transactionPk: DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
         amount: selectedAmount ?? 10,
-        note: "",
+        note: selectedNote ?? "",
         budgetFk: 0,
-        categoryFk: 0,
+        categoryFk: selectedCategory?.categoryPk ?? 0,
         dateCreated: DateTime.now()));
   }
 
@@ -201,7 +209,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 noBackground: true,
                                 key: ValueKey(
                                     selectedCategory?.categoryPk ?? ""),
-                                category: selectedCategory,
+                                categoryPk: selectedCategory?.categoryPk ?? 0,
                                 size: 60,
                                 onTap: () {
                                   openBottomSheet(
@@ -231,10 +239,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                         PopupFramework(
                                           title: "Enter Amount",
                                           child: SelectAmount(
-                                            setSelectedAmount:
-                                                setSelectedAmount,
                                             amountPassed:
                                                 selectedAmountCalculation ?? "",
+                                            setSelectedAmount:
+                                                setSelectedAmount,
+                                            next: () async {
+                                              await addTransaction();
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                            },
+                                            nextLabel: "Add Transaction",
                                           ),
                                         ),
                                       );
@@ -287,12 +301,18 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             icon: Icons.title_rounded,
                             padding: EdgeInsets.zero,
                             controller: _titleInputController,
+                            onChanged: (text) {
+                              setSelectedTitle(text);
+                            },
                           ),
                           Container(height: 14),
                           TextInput(
                             labelText: "Notes",
                             icon: Icons.edit,
                             padding: EdgeInsets.zero,
+                            onChanged: (text) {
+                              setSelectedNote(text);
+                            },
                           ),
                           Container(height: 14),
                           TextInput(
@@ -413,11 +433,15 @@ openBottomSheet(context, child) {
         Navigator.of(context).pop();
       },
       behavior: HitTestBehavior.opaque,
-      child: Align(
-        alignment: Alignment.bottomLeft,
-        child: SingleChildScrollView(
-          controller: ModalScrollController.of(context),
-          child: child,
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Align(
+          alignment: Alignment.bottomLeft,
+          child: SingleChildScrollView(
+            controller: ModalScrollController.of(context),
+            child: child,
+          ),
         ),
       ),
     ),
@@ -556,7 +580,7 @@ class _SelectTitleState extends State<SelectTitle> {
               child: CategoryIcon(
                 key: ValueKey(selectedCategory?.categoryPk ?? ""),
                 margin: EdgeInsets.zero,
-                category: selectedCategory,
+                categoryPk: selectedCategory?.categoryPk ?? 0,
                 size: 55,
                 onTap: () {
                   openBottomSheet(
@@ -650,7 +674,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                         (index, category) => MapEntry(
                           index,
                           CategoryIcon(
-                            category: category,
+                            categoryPk: category.categoryPk,
                             size: 50,
                             label: true,
                             onTap: () {

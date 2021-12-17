@@ -201,6 +201,11 @@ class FinanceDatabase extends _$FinanceDatabase {
     return into(settings).insertOnConflictUpdate(setting);
   }
 
+  Stream<TransactionCategory> getCategory(int categoryPk) {
+    return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
+        .watchSingle();
+  }
+
   // TODO: add budget pk filter
   // get total amount spent in each category
   Stream<List<TypedResult>> watchTotalSpentInEachCategory() {
