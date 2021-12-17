@@ -38,19 +38,20 @@ class TransactionEntry extends StatelessWidget {
       openColor: Theme.of(context).colorScheme.lightDarkAccent,
       closedBuilder: (BuildContext _, VoidCallback openContainer) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
           child: Tappable(
             borderRadius: 15,
             onTap: () {
               openContainer();
             },
             child: Container(
-              margin: EdgeInsets.only(left: 14, right: 25, top: 12, bottom: 12),
+              margin: EdgeInsets.only(left: 8, right: 12, top: 7, bottom: 7),
               child: Row(
                 children: [
                   CategoryIcon(
                     categoryPk: transaction.categoryFk,
-                    size: 45,
+                    size: 33,
+                    sizePadding: 15,
                     margin: EdgeInsets.zero,
                   ),
                   Container(
@@ -81,7 +82,7 @@ class TransactionEntry extends StatelessWidget {
                                   (transaction.labelFks?.length ?? 0) == 0
                               ? TextFont(
                                   text: "category.title",
-                                  fontSize: transaction.note == "" ? 23 : 20,
+                                  fontSize: transaction.note == "" ? 20 : 20,
                                 )
                               : Container(),
                           transaction.name == "" && transaction.note != ""
@@ -113,7 +114,8 @@ class TransactionEntry extends StatelessWidget {
                   ),
                   TextFont(
                     text: convertToMoney(transaction.amount),
-                    fontSize: 25,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
                   ),
                 ],
               ),

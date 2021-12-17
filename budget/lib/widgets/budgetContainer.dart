@@ -11,7 +11,7 @@ import '../struct/budget.dart';
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({Key? key, required this.budget}) : super(key: key);
 
-  final Budget budget;
+  final BudgetOld budget;
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +120,10 @@ class BudgetContainer extends StatelessWidget {
 
 class DaySpending extends StatelessWidget {
   const DaySpending(
-      {Key? key, required Budget this.budget, bool this.large = false})
+      {Key? key, required BudgetOld this.budget, bool this.large = false})
       : super(key: key);
 
-  final Budget budget;
+  final BudgetOld budget;
   final bool large;
 
   @override
@@ -179,7 +179,7 @@ class BudgetTimeline extends StatelessWidget {
   BudgetTimeline({Key? key, required this.budget, this.large = false})
       : super(key: key);
 
-  final Budget budget;
+  final BudgetOld budget;
   final double todayPercent = 45;
   final bool large;
 

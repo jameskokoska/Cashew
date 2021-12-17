@@ -201,9 +201,16 @@ class FinanceDatabase extends _$FinanceDatabase {
     return into(settings).insertOnConflictUpdate(setting);
   }
 
+  // watch category given key
   Stream<TransactionCategory> getCategory(int categoryPk) {
     return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
         .watchSingle();
+  }
+
+  // get category given key
+  Future<TransactionCategory> getCategoryInstance(int categoryPk) {
+    return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
+        .getSingle();
   }
 
   // TODO: add budget pk filter

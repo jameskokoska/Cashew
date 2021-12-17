@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Budget {
+class BudgetOld {
   final String title;
   final DateTime startDate;
   final DateTime endDate;
@@ -10,7 +10,7 @@ class Budget {
   final double total;
   final double spent;
 
-  Budget(
+  BudgetOld(
       {required this.title,
       required this.startDate,
       required this.endDate,

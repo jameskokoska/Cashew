@@ -93,6 +93,12 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   void setSelectedNote(String note) {
+    _noteInputController.value = TextEditingValue(
+      text: note,
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: note.length),
+      ),
+    );
     setState(() {
       selectedNote = note;
     });
@@ -108,17 +114,20 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         note: selectedNote ?? "",
         budgetFk: 0,
         categoryFk: selectedCategory?.categoryPk ?? 0,
-        dateCreated: DateTime.now()));
+        dateCreated: selectedDate));
   }
 
   late TextEditingController _titleInputController;
   late TextEditingController _dateInputController;
+  late TextEditingController _noteInputController;
 
   @override
   void initState() {
     super.initState();
     _titleInputController = new TextEditingController();
     _dateInputController = new TextEditingController(text: "Today");
+    _noteInputController = new TextEditingController();
+
     Future.delayed(Duration(milliseconds: 0), () {
       openBottomSheet(
         context,
@@ -319,6 +328,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               labelText: "Notes",
                               icon: Icons.edit,
                               padding: EdgeInsets.zero,
+                              controller: _noteInputController,
                               onChanged: (text) {
                                 setSelectedNote(text);
                               },

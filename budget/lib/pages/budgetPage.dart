@@ -13,9 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class BudgetPage extends StatelessWidget {
-  const BudgetPage({Key? key, required Budget this.budget}) : super(key: key);
+  const BudgetPage({Key? key, required BudgetOld this.budget})
+      : super(key: key);
 
-  final Budget budget;
+  final BudgetOld budget;
 
   @override
   Widget build(BuildContext context) {
