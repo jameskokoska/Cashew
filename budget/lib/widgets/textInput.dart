@@ -13,6 +13,8 @@ class TextInput extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final String? initialValue;
   final TextEditingController? controller;
+  final bool? showCursor;
+  final bool readOnly;
 
   const TextInput({
     Key? key,
@@ -27,6 +29,8 @@ class TextInput extends StatelessWidget {
     this.onEditingComplete,
     this.initialValue,
     this.controller,
+    this.showCursor,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -35,6 +39,8 @@ class TextInput extends StatelessWidget {
       padding: padding,
       child: TextFormField(
         onTap: onTap,
+        showCursor: showCursor,
+        readOnly: readOnly,
         controller: controller,
         initialValue: initialValue,
         autofocus: autoFocus,
