@@ -988,8 +988,9 @@ class Budget extends DataClass implements Insertable<Budget> {
   final String colour;
   final DateTime startDate;
   final DateTime endDate;
+  final List<int>? categoryFks;
+  final int periodLength;
   final BudgetReoccurence? reoccurrence;
-  final double? optimalDailySpending;
   final DateTime dateCreated;
   Budget(
       {required this.budgetPk,
@@ -998,8 +999,9 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.colour,
       required this.startDate,
       required this.endDate,
+      this.categoryFks,
+      required this.periodLength,
       this.reoccurrence,
-      this.optimalDailySpending,
       required this.dateCreated});
   factory Budget.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
@@ -1017,10 +1019,12 @@ class Budget extends DataClass implements Insertable<Budget> {
           .mapFromDatabaseResponse(data['${effectivePrefix}start_date'])!,
       endDate: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}end_date'])!,
-      reoccurrence: $BudgetsTable.$converter0.mapToDart(const IntType()
+      categoryFks: $BudgetsTable.$converter0.mapToDart(const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}category_fks'])),
+      periodLength: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}period_length'])!,
+      reoccurrence: $BudgetsTable.$converter1.mapToDart(const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}reoccurrence'])),
-      optimalDailySpending: const RealType().mapFromDatabaseResponse(
-          data['${effectivePrefix}optimal_daily_spending']),
       dateCreated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
     );
@@ -1034,12 +1038,14 @@ class Budget extends DataClass implements Insertable<Budget> {
     map['colour'] = Variable<String>(colour);
     map['start_date'] = Variable<DateTime>(startDate);
     map['end_date'] = Variable<DateTime>(endDate);
-    if (!nullToAbsent || reoccurrence != null) {
+    if (!nullToAbsent || categoryFks != null) {
       final converter = $BudgetsTable.$converter0;
-      map['reoccurrence'] = Variable<int?>(converter.mapToSql(reoccurrence));
+      map['category_fks'] = Variable<String?>(converter.mapToSql(categoryFks));
     }
-    if (!nullToAbsent || optimalDailySpending != null) {
-      map['optimal_daily_spending'] = Variable<double?>(optimalDailySpending);
+    map['period_length'] = Variable<int>(periodLength);
+    if (!nullToAbsent || reoccurrence != null) {
+      final converter = $BudgetsTable.$converter1;
+      map['reoccurrence'] = Variable<int?>(converter.mapToSql(reoccurrence));
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
     return map;
@@ -1053,12 +1059,13 @@ class Budget extends DataClass implements Insertable<Budget> {
       colour: Value(colour),
       startDate: Value(startDate),
       endDate: Value(endDate),
+      categoryFks: categoryFks == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryFks),
+      periodLength: Value(periodLength),
       reoccurrence: reoccurrence == null && nullToAbsent
           ? const Value.absent()
           : Value(reoccurrence),
-      optimalDailySpending: optimalDailySpending == null && nullToAbsent
-          ? const Value.absent()
-          : Value(optimalDailySpending),
       dateCreated: Value(dateCreated),
     );
   }
@@ -1073,10 +1080,10 @@ class Budget extends DataClass implements Insertable<Budget> {
       colour: serializer.fromJson<String>(json['colour']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime>(json['endDate']),
+      categoryFks: serializer.fromJson<List<int>?>(json['categoryFks']),
+      periodLength: serializer.fromJson<int>(json['periodLength']),
       reoccurrence:
           serializer.fromJson<BudgetReoccurence?>(json['reoccurrence']),
-      optimalDailySpending:
-          serializer.fromJson<double?>(json['optimalDailySpending']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
     );
   }
@@ -1090,8 +1097,9 @@ class Budget extends DataClass implements Insertable<Budget> {
       'colour': serializer.toJson<String>(colour),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime>(endDate),
+      'categoryFks': serializer.toJson<List<int>?>(categoryFks),
+      'periodLength': serializer.toJson<int>(periodLength),
       'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
-      'optimalDailySpending': serializer.toJson<double?>(optimalDailySpending),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
     };
   }
@@ -1103,8 +1111,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           String? colour,
           DateTime? startDate,
           DateTime? endDate,
+          List<int>? categoryFks,
+          int? periodLength,
           BudgetReoccurence? reoccurrence,
-          double? optimalDailySpending,
           DateTime? dateCreated}) =>
       Budget(
         budgetPk: budgetPk ?? this.budgetPk,
@@ -1113,8 +1122,9 @@ class Budget extends DataClass implements Insertable<Budget> {
         colour: colour ?? this.colour,
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
+        categoryFks: categoryFks ?? this.categoryFks,
+        periodLength: periodLength ?? this.periodLength,
         reoccurrence: reoccurrence ?? this.reoccurrence,
-        optimalDailySpending: optimalDailySpending ?? this.optimalDailySpending,
         dateCreated: dateCreated ?? this.dateCreated,
       );
   @override
@@ -1126,8 +1136,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('colour: $colour, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
+          ..write('categoryFks: $categoryFks, ')
+          ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
-          ..write('optimalDailySpending: $optimalDailySpending, ')
           ..write('dateCreated: $dateCreated')
           ..write(')'))
         .toString();
@@ -1147,9 +1158,11 @@ class Budget extends DataClass implements Insertable<Budget> {
                       $mrjc(
                           endDate.hashCode,
                           $mrjc(
-                              reoccurrence.hashCode,
-                              $mrjc(optimalDailySpending.hashCode,
-                                  dateCreated.hashCode)))))))));
+                              categoryFks.hashCode,
+                              $mrjc(
+                                  periodLength.hashCode,
+                                  $mrjc(reoccurrence.hashCode,
+                                      dateCreated.hashCode))))))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1160,8 +1173,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.colour == this.colour &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
+          other.categoryFks == this.categoryFks &&
+          other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
-          other.optimalDailySpending == this.optimalDailySpending &&
           other.dateCreated == this.dateCreated);
 }
 
@@ -1172,8 +1186,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<String> colour;
   final Value<DateTime> startDate;
   final Value<DateTime> endDate;
+  final Value<List<int>?> categoryFks;
+  final Value<int> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
-  final Value<double?> optimalDailySpending;
   final Value<DateTime> dateCreated;
   const BudgetsCompanion({
     this.budgetPk = const Value.absent(),
@@ -1182,8 +1197,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.colour = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
+    this.categoryFks = const Value.absent(),
+    this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
-    this.optimalDailySpending = const Value.absent(),
     this.dateCreated = const Value.absent(),
   });
   BudgetsCompanion.insert({
@@ -1193,14 +1209,16 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     required String colour,
     required DateTime startDate,
     required DateTime endDate,
+    this.categoryFks = const Value.absent(),
+    required int periodLength,
     this.reoccurrence = const Value.absent(),
-    this.optimalDailySpending = const Value.absent(),
     this.dateCreated = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         colour = Value(colour),
         startDate = Value(startDate),
-        endDate = Value(endDate);
+        endDate = Value(endDate),
+        periodLength = Value(periodLength);
   static Insertable<Budget> custom({
     Expression<int>? budgetPk,
     Expression<String>? name,
@@ -1208,8 +1226,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<String>? colour,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
+    Expression<List<int>?>? categoryFks,
+    Expression<int>? periodLength,
     Expression<BudgetReoccurence?>? reoccurrence,
-    Expression<double?>? optimalDailySpending,
     Expression<DateTime>? dateCreated,
   }) {
     return RawValuesInsertable({
@@ -1219,9 +1238,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (colour != null) 'colour': colour,
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
+      if (categoryFks != null) 'category_fks': categoryFks,
+      if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
-      if (optimalDailySpending != null)
-        'optimal_daily_spending': optimalDailySpending,
       if (dateCreated != null) 'date_created': dateCreated,
     });
   }
@@ -1233,8 +1252,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<String>? colour,
       Value<DateTime>? startDate,
       Value<DateTime>? endDate,
+      Value<List<int>?>? categoryFks,
+      Value<int>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
-      Value<double?>? optimalDailySpending,
       Value<DateTime>? dateCreated}) {
     return BudgetsCompanion(
       budgetPk: budgetPk ?? this.budgetPk,
@@ -1243,8 +1263,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       colour: colour ?? this.colour,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      categoryFks: categoryFks ?? this.categoryFks,
+      periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
-      optimalDailySpending: optimalDailySpending ?? this.optimalDailySpending,
       dateCreated: dateCreated ?? this.dateCreated,
     );
   }
@@ -1270,14 +1291,18 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     if (endDate.present) {
       map['end_date'] = Variable<DateTime>(endDate.value);
     }
-    if (reoccurrence.present) {
+    if (categoryFks.present) {
       final converter = $BudgetsTable.$converter0;
+      map['category_fks'] =
+          Variable<String?>(converter.mapToSql(categoryFks.value));
+    }
+    if (periodLength.present) {
+      map['period_length'] = Variable<int>(periodLength.value);
+    }
+    if (reoccurrence.present) {
+      final converter = $BudgetsTable.$converter1;
       map['reoccurrence'] =
           Variable<int?>(converter.mapToSql(reoccurrence.value));
-    }
-    if (optimalDailySpending.present) {
-      map['optimal_daily_spending'] =
-          Variable<double?>(optimalDailySpending.value);
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
@@ -1294,8 +1319,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('colour: $colour, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
+          ..write('categoryFks: $categoryFks, ')
+          ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
-          ..write('optimalDailySpending: $optimalDailySpending, ')
           ..write('dateCreated: $dateCreated')
           ..write(')'))
         .toString();
@@ -1336,17 +1362,23 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   late final GeneratedColumn<DateTime?> endDate = GeneratedColumn<DateTime?>(
       'end_date', aliasedName, false,
       typeName: 'INTEGER', requiredDuringInsert: true);
+  final VerificationMeta _categoryFksMeta =
+      const VerificationMeta('categoryFks');
+  late final GeneratedColumnWithTypeConverter<List<int>, String?> categoryFks =
+      GeneratedColumn<String?>('category_fks', aliasedName, true,
+              typeName: 'TEXT', requiredDuringInsert: false)
+          .withConverter<List<int>>($BudgetsTable.$converter0);
+  final VerificationMeta _periodLengthMeta =
+      const VerificationMeta('periodLength');
+  late final GeneratedColumn<int?> periodLength = GeneratedColumn<int?>(
+      'period_length', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _reoccurrenceMeta =
       const VerificationMeta('reoccurrence');
   late final GeneratedColumnWithTypeConverter<BudgetReoccurence?, int?>
       reoccurrence = GeneratedColumn<int?>('reoccurrence', aliasedName, true,
               typeName: 'INTEGER', requiredDuringInsert: false)
-          .withConverter<BudgetReoccurence?>($BudgetsTable.$converter0);
-  final VerificationMeta _optimalDailySpendingMeta =
-      const VerificationMeta('optimalDailySpending');
-  late final GeneratedColumn<double?> optimalDailySpending =
-      GeneratedColumn<double?>('optimal_daily_spending', aliasedName, true,
-          typeName: 'REAL', requiredDuringInsert: false);
+          .withConverter<BudgetReoccurence?>($BudgetsTable.$converter1);
   final VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   late final GeneratedColumn<DateTime?> dateCreated =
@@ -1362,8 +1394,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         colour,
         startDate,
         endDate,
+        categoryFks,
+        periodLength,
         reoccurrence,
-        optimalDailySpending,
         dateCreated
       ];
   @override
@@ -1409,13 +1442,16 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     } else if (isInserting) {
       context.missing(_endDateMeta);
     }
-    context.handle(_reoccurrenceMeta, const VerificationResult.success());
-    if (data.containsKey('optimal_daily_spending')) {
+    context.handle(_categoryFksMeta, const VerificationResult.success());
+    if (data.containsKey('period_length')) {
       context.handle(
-          _optimalDailySpendingMeta,
-          optimalDailySpending.isAcceptableOrUnknown(
-              data['optimal_daily_spending']!, _optimalDailySpendingMeta));
+          _periodLengthMeta,
+          periodLength.isAcceptableOrUnknown(
+              data['period_length']!, _periodLengthMeta));
+    } else if (isInserting) {
+      context.missing(_periodLengthMeta);
     }
+    context.handle(_reoccurrenceMeta, const VerificationResult.success());
     if (data.containsKey('date_created')) {
       context.handle(
           _dateCreatedMeta,
@@ -1438,7 +1474,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     return $BudgetsTable(_db, alias);
   }
 
-  static TypeConverter<BudgetReoccurence?, int> $converter0 =
+  static TypeConverter<List<int>, String> $converter0 =
+      const IntListInColumnConverter();
+  static TypeConverter<BudgetReoccurence?, int> $converter1 =
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
 }
 

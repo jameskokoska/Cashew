@@ -6,6 +6,9 @@ import 'dart:io';
 
 part 'tables.g.dart';
 
+// Generate databse code
+// flutter packages pub run build_runner build
+
 // Character Limits
 const int NAME_LIMIT = 250;
 const int NOTE_LIMIT = 500;
@@ -75,8 +78,11 @@ class Budgets extends Table {
   TextColumn get colour => text().withLength(max: COLOUR_LIMIT)();
   DateTimeColumn get startDate => dateTime()();
   DateTimeColumn get endDate => dateTime()();
+  TextColumn get categoryFks =>
+      text().map(const IntListInColumnConverter()).nullable()();
+  IntColumn get periodLength => integer()();
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
-  RealColumn get optimalDailySpending => real().nullable()();
+  // RealColumn get optimalDailySpending => real().nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
 }
@@ -106,7 +112,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   // get all filtered transactions from earliest to oldest date created, paginated
   Stream<List<Transaction>> watchAllTransactionsFiltered(
