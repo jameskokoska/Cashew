@@ -1,7 +1,7 @@
-import 'package:moor/ffi.dart';
+import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'dart:io';
 
 part 'tables.g.dart';
@@ -102,17 +102,17 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return VmDatabase(file);
+    return NativeDatabase(file);
   });
 }
 
-@UseMoor(tables: [Transactions, Categories, Labels, Budgets, Settings])
+@DriftDatabase(tables: [Transactions, Categories, Labels, Budgets, Settings])
 class FinanceDatabase extends _$FinanceDatabase {
   FinanceDatabase() : super(_openConnection());
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   // get all filtered transactions from earliest to oldest date created, paginated
   Stream<List<Transaction>> watchAllTransactionsFiltered(

@@ -25,8 +25,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.categoryFk,
       this.labelFks,
       required this.dateCreated});
-  factory Transaction.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Transaction.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Transaction(
       transactionPk: const IntType()
@@ -81,7 +80,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
 
   factory Transaction.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Transaction(
       transactionPk: serializer.fromJson<int>(json['transactionPk']),
       name: serializer.fromJson<String>(json['name']),
@@ -95,7 +94,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'transactionPk': serializer.toJson<int>(transactionPk),
       'name': serializer.toJson<String>(name),
@@ -143,18 +142,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      transactionPk.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(
-              amount.hashCode,
-              $mrjc(
-                  note.hashCode,
-                  $mrjc(
-                      budgetFk.hashCode,
-                      $mrjc(categoryFk.hashCode,
-                          $mrjc(labelFks.hashCode, dateCreated.hashCode))))))));
+  int get hashCode => Object.hash(transactionPk, name, amount, note, budgetFk,
+      categoryFk, labelFks, dateCreated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -299,45 +288,53 @@ class $TransactionsTable extends Transactions
   $TransactionsTable(this._db, [this._alias]);
   final VerificationMeta _transactionPkMeta =
       const VerificationMeta('transactionPk');
+  @override
   late final GeneratedColumn<int?> transactionPk = GeneratedColumn<int?>(
       'transaction_pk', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
   late final GeneratedColumn<double?> amount = GeneratedColumn<double?>(
       'amount', aliasedName, false,
-      typeName: 'REAL', requiredDuringInsert: true);
+      type: const RealType(), requiredDuringInsert: true);
   final VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
   late final GeneratedColumn<String?> note = GeneratedColumn<String?>(
       'note', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _budgetFkMeta = const VerificationMeta('budgetFk');
+  @override
   late final GeneratedColumn<int?> budgetFk = GeneratedColumn<int?>(
       'budget_fk', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _categoryFkMeta = const VerificationMeta('categoryFk');
+  @override
   late final GeneratedColumn<int?> categoryFk = GeneratedColumn<int?>(
       'category_fk', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _labelFksMeta = const VerificationMeta('labelFks');
+  @override
   late final GeneratedColumnWithTypeConverter<List<int>, String?> labelFks =
       GeneratedColumn<String?>('label_fks', aliasedName, true,
-              typeName: 'TEXT', requiredDuringInsert: false)
+              type: const StringType(), requiredDuringInsert: false)
           .withConverter<List<int>>($TransactionsTable.$converter0);
   final VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
+  @override
   late final GeneratedColumn<DateTime?> dateCreated =
       GeneratedColumn<DateTime?>('date_created', aliasedName, false,
-          typeName: 'INTEGER',
+          type: const IntType(),
           requiredDuringInsert: false,
           clientDefault: () => new DateTime.now());
   @override
@@ -412,7 +409,7 @@ class $TransactionsTable extends Transactions
   Set<GeneratedColumn> get $primaryKey => {transactionPk};
   @override
   Transaction map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Transaction.fromData(data, _db,
+    return Transaction.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -438,8 +435,7 @@ class TransactionCategory extends DataClass
       this.colour,
       this.iconName,
       required this.dateCreated});
-  factory TransactionCategory.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory TransactionCategory.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return TransactionCategory(
@@ -485,7 +481,7 @@ class TransactionCategory extends DataClass
 
   factory TransactionCategory.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return TransactionCategory(
       categoryPk: serializer.fromJson<int>(json['categoryPk']),
       name: serializer.fromJson<String>(json['name']),
@@ -496,7 +492,7 @@ class TransactionCategory extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'categoryPk': serializer.toJson<int>(categoryPk),
       'name': serializer.toJson<String>(name),
@@ -532,12 +528,8 @@ class TransactionCategory extends DataClass
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      categoryPk.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(colour.hashCode,
-              $mrjc(iconName.hashCode, dateCreated.hashCode)))));
+  int get hashCode =>
+      Object.hash(categoryPk, name, colour, iconName, dateCreated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -640,32 +632,37 @@ class $CategoriesTable extends Categories
   final String? _alias;
   $CategoriesTable(this._db, [this._alias]);
   final VerificationMeta _categoryPkMeta = const VerificationMeta('categoryPk');
+  @override
   late final GeneratedColumn<int?> categoryPk = GeneratedColumn<int?>(
       'category_pk', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _colourMeta = const VerificationMeta('colour');
+  @override
   late final GeneratedColumn<String?> colour = GeneratedColumn<String?>(
       'colour', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: false);
   final VerificationMeta _iconNameMeta = const VerificationMeta('iconName');
+  @override
   late final GeneratedColumn<String?> iconName = GeneratedColumn<String?>(
       'icon_name', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
+  @override
   late final GeneratedColumn<DateTime?> dateCreated =
       GeneratedColumn<DateTime?>('date_created', aliasedName, false,
-          typeName: 'INTEGER',
+          type: const IntType(),
           requiredDuringInsert: false,
           clientDefault: () => new DateTime.now());
   @override
@@ -714,7 +711,7 @@ class $CategoriesTable extends Categories
   Set<GeneratedColumn> get $primaryKey => {categoryPk};
   @override
   TransactionCategory map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return TransactionCategory.fromData(data, _db,
+    return TransactionCategory.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -735,8 +732,7 @@ class TransactionLabel extends DataClass
       required this.name,
       required this.categoryFk,
       required this.dateCreated});
-  factory TransactionLabel.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory TransactionLabel.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return TransactionLabel(
@@ -771,7 +767,7 @@ class TransactionLabel extends DataClass
 
   factory TransactionLabel.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return TransactionLabel(
       label_pk: serializer.fromJson<int>(json['label_pk']),
       name: serializer.fromJson<String>(json['name']),
@@ -781,7 +777,7 @@ class TransactionLabel extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'label_pk': serializer.toJson<int>(label_pk),
       'name': serializer.toJson<String>(name),
@@ -813,8 +809,7 @@ class TransactionLabel extends DataClass
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(label_pk.hashCode,
-      $mrjc(name.hashCode, $mrjc(categoryFk.hashCode, dateCreated.hashCode))));
+  int get hashCode => Object.hash(label_pk, name, categoryFk, dateCreated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -906,26 +901,30 @@ class $LabelsTable extends Labels
   final String? _alias;
   $LabelsTable(this._db, [this._alias]);
   final VerificationMeta _label_pkMeta = const VerificationMeta('label_pk');
+  @override
   late final GeneratedColumn<int?> label_pk = GeneratedColumn<int?>(
       'label_pk', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _categoryFkMeta = const VerificationMeta('categoryFk');
+  @override
   late final GeneratedColumn<int?> categoryFk = GeneratedColumn<int?>(
       'category_fk', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
+  @override
   late final GeneratedColumn<DateTime?> dateCreated =
       GeneratedColumn<DateTime?>('date_created', aliasedName, false,
-          typeName: 'INTEGER',
+          type: const IntType(),
           requiredDuringInsert: false,
           clientDefault: () => new DateTime.now());
   @override
@@ -971,7 +970,7 @@ class $LabelsTable extends Labels
   Set<GeneratedColumn> get $primaryKey => {label_pk};
   @override
   TransactionLabel map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return TransactionLabel.fromData(data, _db,
+    return TransactionLabel.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1003,8 +1002,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.periodLength,
       this.reoccurrence,
       required this.dateCreated});
-  factory Budget.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Budget.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Budget(
       budgetPk: const IntType()
@@ -1072,7 +1070,7 @@ class Budget extends DataClass implements Insertable<Budget> {
 
   factory Budget.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Budget(
       budgetPk: serializer.fromJson<int>(json['budgetPk']),
       name: serializer.fromJson<String>(json['name']),
@@ -1089,7 +1087,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'budgetPk': serializer.toJson<int>(budgetPk),
       'name': serializer.toJson<String>(name),
@@ -1145,24 +1143,8 @@ class Budget extends DataClass implements Insertable<Budget> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      budgetPk.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(
-              amount.hashCode,
-              $mrjc(
-                  colour.hashCode,
-                  $mrjc(
-                      startDate.hashCode,
-                      $mrjc(
-                          endDate.hashCode,
-                          $mrjc(
-                              categoryFks.hashCode,
-                              $mrjc(
-                                  periodLength.hashCode,
-                                  $mrjc(reoccurrence.hashCode,
-                                      dateCreated.hashCode))))))))));
+  int get hashCode => Object.hash(budgetPk, name, amount, colour, startDate,
+      endDate, categoryFks, periodLength, reoccurrence, dateCreated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1333,57 +1315,67 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   final String? _alias;
   $BudgetsTable(this._db, [this._alias]);
   final VerificationMeta _budgetPkMeta = const VerificationMeta('budgetPk');
+  @override
   late final GeneratedColumn<int?> budgetPk = GeneratedColumn<int?>(
       'budget_pk', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
   late final GeneratedColumn<double?> amount = GeneratedColumn<double?>(
       'amount', aliasedName, false,
-      typeName: 'REAL', requiredDuringInsert: true);
+      type: const RealType(), requiredDuringInsert: true);
   final VerificationMeta _colourMeta = const VerificationMeta('colour');
+  @override
   late final GeneratedColumn<String?> colour = GeneratedColumn<String?>(
       'colour', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _startDateMeta = const VerificationMeta('startDate');
+  @override
   late final GeneratedColumn<DateTime?> startDate = GeneratedColumn<DateTime?>(
       'start_date', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _endDateMeta = const VerificationMeta('endDate');
+  @override
   late final GeneratedColumn<DateTime?> endDate = GeneratedColumn<DateTime?>(
       'end_date', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _categoryFksMeta =
       const VerificationMeta('categoryFks');
+  @override
   late final GeneratedColumnWithTypeConverter<List<int>, String?> categoryFks =
       GeneratedColumn<String?>('category_fks', aliasedName, true,
-              typeName: 'TEXT', requiredDuringInsert: false)
+              type: const StringType(), requiredDuringInsert: false)
           .withConverter<List<int>>($BudgetsTable.$converter0);
   final VerificationMeta _periodLengthMeta =
       const VerificationMeta('periodLength');
+  @override
   late final GeneratedColumn<int?> periodLength = GeneratedColumn<int?>(
       'period_length', aliasedName, false,
-      typeName: 'INTEGER', requiredDuringInsert: true);
+      type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _reoccurrenceMeta =
       const VerificationMeta('reoccurrence');
+  @override
   late final GeneratedColumnWithTypeConverter<BudgetReoccurence?, int?>
       reoccurrence = GeneratedColumn<int?>('reoccurrence', aliasedName, true,
-              typeName: 'INTEGER', requiredDuringInsert: false)
+              type: const IntType(), requiredDuringInsert: false)
           .withConverter<BudgetReoccurence?>($BudgetsTable.$converter1);
   final VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
+  @override
   late final GeneratedColumn<DateTime?> dateCreated =
       GeneratedColumn<DateTime?>('date_created', aliasedName, false,
-          typeName: 'INTEGER',
+          type: const IntType(),
           requiredDuringInsert: false,
           clientDefault: () => new DateTime.now());
   @override
@@ -1465,7 +1457,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   Set<GeneratedColumn> get $primaryKey => {budgetPk};
   @override
   Budget map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Budget.fromData(data, _db,
+    return Budget.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1490,8 +1482,7 @@ class UserSettings extends DataClass implements Insertable<UserSettings> {
       required this.name,
       required this.theme,
       required this.currency});
-  factory UserSettings.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory UserSettings.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return UserSettings(
       userPk: const IntType()
@@ -1528,7 +1519,7 @@ class UserSettings extends DataClass implements Insertable<UserSettings> {
 
   factory UserSettings.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return UserSettings(
       userPk: serializer.fromJson<int>(json['userPk']),
       name: serializer.fromJson<String>(json['name']),
@@ -1538,7 +1529,7 @@ class UserSettings extends DataClass implements Insertable<UserSettings> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'userPk': serializer.toJson<int>(userPk),
       'name': serializer.toJson<String>(name),
@@ -1567,8 +1558,7 @@ class UserSettings extends DataClass implements Insertable<UserSettings> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(userPk.hashCode,
-      $mrjc(name.hashCode, $mrjc(theme.hashCode, currency.hashCode))));
+  int get hashCode => Object.hash(userPk, name, theme, currency);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1662,27 +1652,31 @@ class $SettingsTable extends Settings
   final String? _alias;
   $SettingsTable(this._db, [this._alias]);
   final VerificationMeta _userPkMeta = const VerificationMeta('userPk');
+  @override
   late final GeneratedColumn<int?> userPk = GeneratedColumn<int?>(
       'user_pk', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _themeMeta = const VerificationMeta('theme');
+  @override
   late final GeneratedColumnWithTypeConverter<ThemeSetting, int?> theme =
       GeneratedColumn<int?>('theme', aliasedName, false,
-              typeName: 'INTEGER', requiredDuringInsert: true)
+              type: const IntType(), requiredDuringInsert: true)
           .withConverter<ThemeSetting>($SettingsTable.$converter0);
   final VerificationMeta _currencyMeta = const VerificationMeta('currency');
+  @override
   late final GeneratedColumn<String?> currency = GeneratedColumn<String?>(
       'currency', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [userPk, name, theme, currency];
@@ -1719,7 +1713,7 @@ class $SettingsTable extends Settings
   Set<GeneratedColumn> get $primaryKey => {userPk};
   @override
   UserSettings map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return UserSettings.fromData(data, _db,
+    return UserSettings.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
