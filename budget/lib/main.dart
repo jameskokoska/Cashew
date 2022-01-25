@@ -8,7 +8,7 @@ import './pages/homePage.dart';
 import 'package:budget/colors.dart';
 
 void main() async {
-  database = await FinanceDatabase();
+  database = await constructDb();
   runApp(MyApp());
 }
 

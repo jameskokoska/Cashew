@@ -69,6 +69,5 @@ class HexColor extends Color {
 
 String toHexString(Color color) {
   String valueString = color.value.toRadixString(16);
-  print(valueString);
   return "0x" + valueString;
 }

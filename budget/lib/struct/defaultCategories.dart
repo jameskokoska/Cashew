@@ -51,7 +51,6 @@ List<TransactionCategoryOld> defaultCategoriesOld() {
 }
 
 List<TransactionCategory> defaultCategories() {
-  toHexString(Colors.green);
   return [
     TransactionCategory(
       categoryPk: 1,
