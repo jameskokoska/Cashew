@@ -1,9 +1,8 @@
-import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
 import 'dart:io';
-
+export 'platform/shared.dart';
 part 'tables.g.dart';
 
 // Generate databse code
@@ -95,20 +94,10 @@ class Settings extends Table {
   TextColumn get currency => text().withLength(max: CURRENCY_LIMIT)();
 }
 
-LazyDatabase _openConnection() {
-  // the LazyDatabase util lets us find the right location for the file async.
-  return LazyDatabase(() async {
-    // put the database file, called db.sqlite here, into the documents folder
-    // for your app.
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
-    return NativeDatabase(file);
-  });
-}
-
 @DriftDatabase(tables: [Transactions, Categories, Labels, Budgets, Settings])
 class FinanceDatabase extends _$FinanceDatabase {
-  FinanceDatabase() : super(_openConnection());
+  // FinanceDatabase() : super(_openConnection());
+  FinanceDatabase(QueryExecutor e) : super(e);
 
   // you should bump this number whenever you change or add a table definition
   @override
