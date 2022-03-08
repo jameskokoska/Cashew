@@ -32,6 +32,55 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> transactionsWidgets = [];
+    List<DateTime> dates = [];
+    for (DateTime indexDay = DateTime(2022, 03, 1);
+        indexDay.month == 03;
+        indexDay = indexDay.add(Duration(days: 1))) {
+      dates.add(indexDay);
+    }
+    for (DateTime date in dates.reversed) {
+      transactionsWidgets.add(StreamBuilder<List<Transaction>>(
+          stream: database.getTransactionWithDay(date),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+              return SliverStickyHeader(
+                header: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DateDivider(date: date),
+                  ],
+                ),
+                sliver: SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return TransactionEntry(
+                          openPage: AddTransactionPage(
+                              title: "Edit Transaction",
+                              transaction: snapshot.data![index]),
+                          transaction: Transaction(
+                            transactionPk: snapshot.data![index].transactionPk,
+                            name: snapshot.data![index].name,
+                            amount: snapshot.data![index].amount,
+                            note: snapshot.data![index].note,
+                            budgetFk: snapshot.data![index].budgetFk,
+                            categoryFk: snapshot.data![index].categoryFk,
+                            dateCreated: snapshot.data![index].dateCreated,
+                          ),
+                        );
+                      },
+                      childCount: snapshot.data?.length,
+                    ),
+                  ),
+                ),
+              );
+            }
+            return SliverToBoxAdapter(child: SizedBox());
+          }));
+    }
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -134,47 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             }),
           ),
-          SliverStickyHeader(
-            header: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DateDivider(date: DateTime.now()),
-              ],
-            ),
-            sliver: SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              sliver: StreamBuilder<List<Transaction>>(
-                stream: database.watchAllTransactionsFiltered(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return TransactionEntry(
-                            openPage: EditTransactionPage(
-                                transaction: snapshot.data![index]),
-                            transaction: Transaction(
-                              transactionPk:
-                                  snapshot.data![index].transactionPk,
-                              name: snapshot.data![index].name,
-                              amount: snapshot.data![index].amount,
-                              note: snapshot.data![index].note,
-                              budgetFk: snapshot.data![index].budgetFk,
-                              categoryFk: snapshot.data![index].categoryFk,
-                              dateCreated: snapshot.data![index].dateCreated,
-                            ),
-                          );
-                        },
-                        childCount: snapshot.data?.length,
-                      ),
-                    );
-                  } else {
-                    return SliverFillRemaining();
-                  }
-                },
-              ),
-            ),
-          ),
+          ...transactionsWidgets,
         ],
       ),
     );

@@ -41,7 +41,7 @@ class TransactionEntry extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
           child: Tappable(
             borderRadius: 15,
-            onTap: () {
+            onTap: () async {
               openContainer();
             },
             child: Container(
@@ -80,10 +80,23 @@ class TransactionEntry extends StatelessWidget {
                               : Container(),
                           transaction.name == "" &&
                                   (transaction.labelFks?.length ?? 0) == 0
-                              ? TextFont(
-                                  text: "category.title",
-                                  fontSize: transaction.note == "" ? 20 : 20,
-                                )
+                              ? StreamBuilder<TransactionCategory>(
+                                  stream: database
+                                      .getCategory(transaction.categoryFk),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return TextFont(
+                                        text: snapshot.data!.name,
+                                        fontSize:
+                                            transaction.note == "" ? 20 : 20,
+                                      );
+                                    }
+                                    return TextFont(
+                                      text: "",
+                                      fontSize:
+                                          transaction.note == "" ? 20 : 20,
+                                    );
+                                  })
                               : Container(),
                           transaction.name == "" && transaction.note != ""
                               ? Container(height: 4)

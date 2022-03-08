@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
                 ),
                 floatingActionButton: FAB(
                   openPage: AddTransactionPage(
-                    title: "",
+                    title: "Add Transaction",
                   ),
                 ),
               ),

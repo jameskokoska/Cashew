@@ -140,6 +140,33 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  //get transactions that occurred on a given day
+  Stream<List<Transaction>> getTransactionWithDay(DateTime date) {
+    return (select(transactions)
+          ..where((tbl) {
+            final dateCreated = tbl.dateCreated;
+            return dateCreated.year.equals(date.year) &
+                dateCreated.month.equals(date.month) &
+                dateCreated.day.equals(date.day);
+          }))
+        .watch();
+  }
+
+  //get dates of all transactions in the month
+  Stream<List<DateTime>> getTransactionDays(DateTime date) {
+    final query = (select(transactions)
+      ..where((tbl) {
+        final dateCreated = tbl.dateCreated;
+        return dateCreated.year.equals(date.year) &
+            dateCreated.month.equals(date.month);
+      }));
+
+    return query
+        .map((tbl) => DateTime(
+            tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day))
+        .watch();
+  }
+
   // watch all categories
   Stream<List<TransactionCategory>> watchAllCategories() {
     return (select(categories)).watch();

@@ -47,10 +47,16 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
     selectedNote = widget.transaction.note;
     selectedDate = widget.transaction.dateCreated;
     selectedAmount = widget.transaction.amount;
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      updateInitial();
+    });
+  }
 
-    Future.delayed(Duration(milliseconds: 0), () async {
-      selectedCategory =
-          await database.getCategoryInstance(widget.transaction.categoryFk);
+  updateInitial() async {
+    TransactionCategory? getSelectedCategory =
+        await database.getCategoryInstance(widget.transaction.categoryFk);
+    setState(() {
+      selectedCategory = getSelectedCategory;
     });
   }
 
@@ -131,7 +137,7 @@ class _EditTransactionPageState extends State<EditTransactionPage> {
         note: selectedNote ?? "",
         budgetFk: 0,
         categoryFk: selectedCategory?.categoryPk ?? 0,
-        dateCreated: DateTime.now()));
+        dateCreated: selectedDate));
   }
 
   late TextEditingController _titleInputController;

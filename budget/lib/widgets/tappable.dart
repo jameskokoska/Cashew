@@ -8,6 +8,7 @@ class Tappable extends StatelessWidget {
       this.onHighlightChanged,
       this.borderRadius = 0,
       this.color,
+      this.type = MaterialType.canvas,
       required this.child})
       : super(key: key);
 
@@ -16,11 +17,13 @@ class Tappable extends StatelessWidget {
   final ValueChanged<bool>? onHighlightChanged;
   final Color? color;
   final Widget child;
+  final MaterialType type;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: color,
+      type: type,
       borderRadius: BorderRadius.circular(borderRadius),
       child: InkWell(
         borderRadius: BorderRadius.circular(borderRadius),

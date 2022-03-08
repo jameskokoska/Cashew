@@ -21,8 +21,10 @@ class AddTransactionPage extends StatefulWidget {
   AddTransactionPage({
     Key? key,
     required this.title,
+    this.transaction,
   }) : super(key: key);
   final String title;
+  final Transaction? transaction;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -124,53 +126,79 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   @override
   void initState() {
     super.initState();
-    _titleInputController = new TextEditingController();
-    _dateInputController = new TextEditingController(text: "Today");
-    _noteInputController = new TextEditingController();
+    if (widget.transaction != null) {
+      _titleInputController =
+          new TextEditingController(text: widget.transaction!.name);
+      _noteInputController =
+          new TextEditingController(text: widget.transaction!.note);
+      _dateInputController = new TextEditingController(
+          text: getWordedDate(widget.transaction!.dateCreated));
+      selectedTitle = widget.transaction!.name;
+      selectedNote = widget.transaction!.note;
+      selectedDate = widget.transaction!.dateCreated;
+      selectedAmount = widget.transaction!.amount;
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        updateInitial();
+      });
+    } else {
+      _titleInputController = new TextEditingController();
+      _dateInputController = new TextEditingController(text: "Today");
+      _noteInputController = new TextEditingController();
 
-    Future.delayed(Duration(milliseconds: 0), () {
-      openBottomSheet(
-        context,
-        PopupFramework(
-          child: SelectTitle(
-              setSelectedTitle: setSelectedTitle,
-              setSelectedTags: setSelectedTags,
-              selectedCategory: selectedCategory,
-              setSelectedCategory: setSelectedCategory,
-              next: () {
-                openBottomSheet(
-                  context,
-                  PopupFramework(
-                    title: "Select Category",
-                    child: SelectCategory(
-                      selectedCategory: selectedCategory,
-                      setSelectedCategory: setSelectedCategory,
-                      skipIfSet: true,
-                      next: () {
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "Enter Amount",
-                            child: SelectAmount(
-                              amountPassed: selectedAmountCalculation ?? "",
-                              setSelectedAmount: setSelectedAmount,
-                              next: () async {
-                                await addTransaction();
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                              nextLabel: "Add Transaction",
+      Future.delayed(Duration(milliseconds: 0), () {
+        openBottomSheet(
+          context,
+          PopupFramework(
+            child: SelectTitle(
+                setSelectedTitle: setSelectedTitle,
+                setSelectedTags: setSelectedTags,
+                selectedCategory: selectedCategory,
+                setSelectedCategory: setSelectedCategory,
+                next: () {
+                  openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "Select Category",
+                      child: SelectCategory(
+                        selectedCategory: selectedCategory,
+                        setSelectedCategory: setSelectedCategory,
+                        skipIfSet: true,
+                        next: () {
+                          openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "Enter Amount",
+                              child: SelectAmount(
+                                amountPassed: selectedAmountCalculation ?? "",
+                                setSelectedAmount: setSelectedAmount,
+                                next: () async {
+                                  await addTransaction();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                nextLabel: "Add Transaction",
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
-              }),
-        ),
-      );
-    });
+                  );
+                }),
+          ),
+        );
+      });
+    }
+  }
+
+  updateInitial() async {
+    if (widget.transaction != null) {
+      TransactionCategory? getSelectedCategory =
+          await database.getCategoryInstance(widget.transaction!.categoryFk);
+      setState(() {
+        selectedCategory = getSelectedCategory;
+      });
+    }
   }
 
   @override
@@ -199,7 +227,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     titlePadding:
                         EdgeInsets.symmetric(vertical: 15, horizontal: 18),
                     title: TextFont(
-                      text: "Add Transaction",
+                      text: widget.title,
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
@@ -234,6 +262,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                       PopupFramework(
                                         title: "Select Category",
                                         child: SelectCategory(
+                                          selectedCategory: selectedCategory,
                                           setSelectedCategory:
                                               setSelectedCategory,
                                         ),
@@ -262,11 +291,35 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                               setSelectedAmount:
                                                   setSelectedAmount,
                                               next: () async {
-                                                await addTransaction();
-                                                Navigator.pop(context);
-                                                Navigator.pop(context);
+                                                if (selectedCategory == null) {
+                                                  Navigator.pop(context);
+                                                  openBottomSheet(
+                                                    context,
+                                                    PopupFramework(
+                                                      title: "Select Category",
+                                                      child: SelectCategory(
+                                                        selectedCategory:
+                                                            selectedCategory,
+                                                        setSelectedCategory:
+                                                            setSelectedCategory,
+                                                        next: () async {
+                                                          await addTransaction();
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  await addTransaction();
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                }
                                               },
-                                              nextLabel: "Add Transaction",
+                                              nextLabel:
+                                                  selectedCategory == null
+                                                      ? "Select Category"
+                                                      : "Add Transaction",
                                             ),
                                           ),
                                         );
@@ -714,7 +767,10 @@ class _SelectCategoryState extends State<SelectCategory> {
                                 }
                               });
                             },
-                            outline: selectedIndex == index,
+                            outline: widget.selectedCategory == null
+                                ? selectedIndex == index
+                                : category.categoryPk ==
+                                    widget.selectedCategory!.categoryPk,
                           ),
                         ),
                       )

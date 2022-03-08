@@ -1,6 +1,7 @@
 import 'package:budget/pages/budgetPage.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
@@ -72,44 +73,46 @@ class BudgetContainer extends StatelessWidget {
       closedElevation: 0.0,
       openColor: Theme.of(context).canvasColor,
       closedBuilder: (BuildContext _, VoidCallback openContainer) {
-        return GestureDetector(
-          onTap: () {
-            openContainer();
-          },
-          child: Container(
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(
-              horizontal: 15.0,
-              vertical: 8,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: budget.color.withOpacity(0.8),
-                  offset: Offset(0, 4.0),
-                  blurRadius: 15.0,
-                  spreadRadius: -5,
+        return Container(
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 15,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: budget.color.withOpacity(0.8),
+                offset: Offset(0, 0),
+                blurRadius: 15.0,
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            clipBehavior: Clip.antiAlias,
+            borderRadius: BorderRadius.circular(15),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: AnimatedGooBackground(
+                      color: budget.color.withOpacity(0.8)),
                 ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: AnimatedGooBackground(
-                        color: budget.color.withOpacity(0.8)),
-                  ),
-                  Padding(
+                Tappable(
+                  type: MaterialType.transparency,
+                  onTap: () {
+                    openContainer();
+                  },
+                  child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 25.0,
                       vertical: 20,
                     ),
                     child: widget,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
