@@ -1,6 +1,5 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/editTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
@@ -58,8 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       (BuildContext context, int index) {
                         return TransactionEntry(
                           openPage: AddTransactionPage(
-                              title: "Edit Transaction",
-                              transaction: snapshot.data![index]),
+                            title: "Edit Transaction",
+                            transaction: snapshot.data![index],
+                          ),
                           transaction: Transaction(
                             transactionPk: snapshot.data![index].transactionPk,
                             name: snapshot.data![index].name,

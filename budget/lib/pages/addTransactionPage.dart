@@ -24,6 +24,8 @@ class AddTransactionPage extends StatefulWidget {
     this.transaction,
   }) : super(key: key);
   final String title;
+
+  //When a transaction is passed in, we are editing that transaction
   final Transaction? transaction;
 
   @override
@@ -38,6 +40,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   String? selectedNote;
   List<String> selectedTags = [];
   DateTime selectedDate = DateTime.now();
+
+  String? textAddTransaction = "Add Transaction";
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -110,7 +114,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   Future addTransaction() async {
     print("Added transaction");
     await database.createOrUpdateTransaction(Transaction(
-        transactionPk: DateTime.now().millisecondsSinceEpoch,
+        transactionPk: widget.transaction != null
+            ? widget.transaction!.transactionPk
+            : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
         amount: selectedAmount ?? 10,
         note: selectedNote ?? "",
@@ -127,6 +133,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   void initState() {
     super.initState();
     if (widget.transaction != null) {
+      //We are editing a transaction
+      //Fill in the information from the passed in transaction
       _titleInputController =
           new TextEditingController(text: widget.transaction!.name);
       _noteInputController =
@@ -137,6 +145,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
       selectedAmount = widget.transaction!.amount;
+      var amountString = widget.transaction!.amount.toStringAsFixed(2);
+      // if (amountString.substring(amountString.length - 2) == "00") {
+      //   selectedAmountCalculation =
+      //       amountString.substring(0, amountString.length - 3);
+      // } else {
+      //   selectedAmountCalculation = amountString;
+      // }
+      textAddTransaction = "Edit Transaction";
+
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         updateInitial();
       });
@@ -176,7 +193,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 },
-                                nextLabel: "Add Transaction",
+                                nextLabel: textAddTransaction,
                               ),
                             ),
                           );
@@ -319,7 +336,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                               nextLabel:
                                                   selectedCategory == null
                                                       ? "Select Category"
-                                                      : "Add Transaction",
+                                                      : textAddTransaction,
                                             ),
                                           ),
                                         );
@@ -442,7 +459,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
-                                      nextLabel: "Add Transaction",
+                                      nextLabel: textAddTransaction,
                                     ),
                                   ),
                                 );
@@ -471,14 +488,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   },
-                                  nextLabel: "Add Transaction",
+                                  nextLabel: textAddTransaction,
                                 ),
                               ),
                             );
                           },
                         )
                       : Button(
-                          label: "Add Transaction",
+                          label: textAddTransaction ?? "",
                           width: MediaQuery.of(context).size.width,
                           height: 50,
                           fractionScaleHeight: 0.93,
