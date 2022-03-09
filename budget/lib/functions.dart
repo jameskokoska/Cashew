@@ -182,3 +182,12 @@ getWordedDate(DateTime date) {
   }
   return DateFormat.MMMMEEEEd('en_US').format(date).toString();
 }
+
+setTextInput(inputController, value) {
+  inputController.value = TextEditingValue(
+    text: value,
+    selection: TextSelection.fromPosition(
+      TextPosition(offset: value.length),
+    ),
+  );
+}

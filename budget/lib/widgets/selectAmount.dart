@@ -2,6 +2,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:budget/colors.dart';
 
@@ -9,7 +10,7 @@ class SelectAmount extends StatefulWidget {
   SelectAmount(
       {Key? key,
       required this.setSelectedAmount,
-      this.amountPassed = "",
+      this.amountPassed = "", //the string of calculations
       this.next,
       this.nextLabel})
       : super(key: key);
@@ -25,10 +26,128 @@ class SelectAmount extends StatefulWidget {
 class _SelectAmountState extends State<SelectAmount> {
   String amount = "";
 
+  FocusNode _focusNode = FocusNode();
+  late FocusAttachment _focusAttachment;
+
+  bool fired = false;
   @override
   void initState() {
     super.initState();
     amount = widget.amountPassed;
+    _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
+      if (fired) {
+        fired = false;
+      } else if (event.logicalKey == LogicalKeyboardKey.digit0) {
+        fired = true;
+        addToAmount("0");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit1) {
+        fired = true;
+        addToAmount("1");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit2) {
+        fired = true;
+        addToAmount("2");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit3) {
+        fired = true;
+        addToAmount("3");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit4) {
+        fired = true;
+        addToAmount("4");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit5) {
+        fired = true;
+        addToAmount("5");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit6) {
+        fired = true;
+        addToAmount("6");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit7) {
+        fired = true;
+        addToAmount("7");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit8) {
+        fired = true;
+        addToAmount("8");
+      } else if (event.logicalKey == LogicalKeyboardKey.digit9) {
+        fired = true;
+        addToAmount("9");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad0) {
+        fired = true;
+        addToAmount("0");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad1) {
+        fired = true;
+        addToAmount("1");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad2) {
+        fired = true;
+        addToAmount("2");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad3) {
+        fired = true;
+        addToAmount("3");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad4) {
+        fired = true;
+        addToAmount("4");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad5) {
+        fired = true;
+        addToAmount("5");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad6) {
+        fired = true;
+        addToAmount("6");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad7) {
+        fired = true;
+        addToAmount("7");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad8) {
+        fired = true;
+        addToAmount("8");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpad9) {
+        fired = true;
+        addToAmount("9");
+      } else if (event.logicalKey == LogicalKeyboardKey.asterisk) {
+        fired = true;
+        addToAmount("×");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadMultiply) {
+        fired = true;
+        addToAmount("×");
+      } else if (event.logicalKey == LogicalKeyboardKey.slash) {
+        fired = true;
+        addToAmount("÷");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadDivide) {
+        fired = true;
+        addToAmount("÷");
+      } else if (event.logicalKey == LogicalKeyboardKey.add) {
+        fired = true;
+        addToAmount("+");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadAdd) {
+        fired = true;
+        addToAmount("+");
+      } else if (event.logicalKey == LogicalKeyboardKey.minus) {
+        fired = true;
+        addToAmount("-");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadSubtract) {
+        fired = true;
+        addToAmount("-");
+      } else if (event.logicalKey == LogicalKeyboardKey.period) {
+        fired = true;
+        addToAmount(".");
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+        fired = true;
+        addToAmount(".");
+      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+        fired = true;
+        removeToAmount();
+      } else if (event.logicalKey == LogicalKeyboardKey.delete) {
+        fired = true;
+        removeToAmount();
+      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+        fired = true;
+        if (widget.next != null) {
+          widget.next!();
+        }
+      }
+      return KeyEventResult.handled;
+    });
+    _focusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   addToAmount(String input) {
@@ -104,7 +223,7 @@ class _SelectAmountState extends State<SelectAmount> {
     ];
     for (String operation in operations) {
       if (input.contains(operation)) {
-        print(operation);
+        // print(operation);
         return true;
       }
     }
@@ -114,7 +233,7 @@ class _SelectAmountState extends State<SelectAmount> {
   bool decimalCheck(input) {
     var splitInputs = input.split(" ");
     for (var splitInput in splitInputs) {
-      print('.'.allMatches(splitInput));
+      // print('.'.allMatches(splitInput));
       if ('.'.allMatches(splitInput).length > 1) {
         return false;
       }
@@ -152,6 +271,7 @@ class _SelectAmountState extends State<SelectAmount> {
 
   @override
   Widget build(BuildContext context) {
+    _focusAttachment.reparent();
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,

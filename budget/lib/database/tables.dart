@@ -18,7 +18,7 @@ const int CURRENCY_LIMIT = 3;
 const int DEFAULT_LIMIT = 50;
 const int DEFAULT_OFFSET = 0;
 
-enum BudgetReoccurence { daily, weekly, monthly, yearly }
+enum BudgetReoccurence { custom, daily, weekly, monthly, yearly }
 enum ThemeSetting { dark, light }
 
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {

@@ -33,7 +33,7 @@ class AddBudgetPage extends StatefulWidget {
 }
 
 class _AddBudgetPageState extends State<AddBudgetPage> {
-  TransactionCategory? selectedCategory;
+  List<TransactionCategory>? selectedCategories;
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
@@ -42,7 +42,24 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  String? textAddTransaction = "Add Transaction";
+  String? textAddBudget = "Add Transaction";
+
+  Future<void> selectAmount(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Enter Amount",
+        child: SelectAmount(
+          amountPassed: selectedAmountCalculation ?? "",
+          setSelectedAmount: setSelectedAmount,
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "Set Amount",
+        ),
+      ),
+    );
+  }
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -65,56 +82,29 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     }
   }
 
-  void setSelectedCategory(TransactionCategory category) {
+  void setSelectedCategories(List<TransactionCategory> categories) {
     setState(() {
-      selectedCategory = category;
+      selectedCategories = categories;
     });
     return;
   }
 
   void setSelectedAmount(double amount, String amountCalculation) {
-    setState(() {
-      selectedAmount = amount;
-      selectedAmountCalculation = amountCalculation;
-    });
+    selectedAmount = amount;
+    selectedAmountCalculation = amountCalculation;
+    setTextInput(_amountInputController, convertToMoney(amount));
     return;
   }
 
   void setSelectedTitle(String title) {
-    _titleInputController.value = TextEditingValue(
-      text: title,
-      selection: TextSelection.fromPosition(
-        TextPosition(offset: title.length),
-      ),
-    );
-    setState(() {
-      selectedTitle = title;
-    });
+    selectedTitle = title;
     return;
   }
 
-  void setSelectedTags(List<String> tags) {
-    setState(() {
-      selectedTags = tags;
-    });
-  }
-
-  void setSelectedNote(String note) {
-    _noteInputController.value = TextEditingValue(
-      text: note,
-      selection: TextSelection.fromPosition(
-        TextPosition(offset: note.length),
-      ),
-    );
-    setState(() {
-      selectedNote = note;
-    });
-    return;
-  }
-
-  Future addTransaction() async {
+  Future addBudget() async {
     print("Added budget");
-    await database.createOrUpdateBudget(Budget(
+    await database.createOrUpdateBudget(
+      Budget(
         budgetPk: widget.budget != null
             ? widget.budget!.budgetPk
             : DateTime.now().millisecondsSinceEpoch,
@@ -127,20 +117,22 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         periodLength: 30,
         reoccurrence: BudgetReoccurence.monthly,
         dateCreated: selectedDate,
-        pinned: false));
+        pinned: false,
+      ),
+    );
   }
 
-  late TextEditingController _titleInputController;
+  late TextEditingController _nameInputController;
   late TextEditingController _dateInputController;
-  late TextEditingController _noteInputController;
+  late TextEditingController _amountInputController;
 
   @override
   void initState() {
     super.initState();
     if (widget.budget != null) {
-      //We are editing a transaction
-      //Fill in the information from the passed in transaction
-      _titleInputController =
+      //We are editing a budget
+      //Fill in the information from the passed in budget
+      _nameInputController =
           new TextEditingController(text: widget.budget!.name);
 
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
@@ -150,15 +142,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       // } else {
       //   selectedAmountCalculation = amountString;
       // }
-      textAddTransaction = "Edit Transaction";
+      textAddBudget = "Edit Transaction";
 
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         updateInitial();
       });
     } else {
-      _titleInputController = new TextEditingController();
+      _nameInputController = new TextEditingController();
       _dateInputController = new TextEditingController(text: "Today");
-      _noteInputController = new TextEditingController();
+      _amountInputController =
+          new TextEditingController(text: convertToMoney(0));
     }
   }
 
@@ -213,17 +206,60 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           children: [
                             Container(height: 20),
                             TextInput(
-                              labelText: "Title",
+                              labelText: "Budget Name",
                               icon: Icons.title_rounded,
                               padding: EdgeInsets.zero,
-                              controller: _titleInputController,
+                              controller: _nameInputController,
                               onChanged: (text) {
                                 setSelectedTitle(text);
                               },
                             ),
                             Container(height: 14),
                             TextInput(
-                              labelText: "Date",
+                              labelText: "Amount",
+                              icon: Icons.attach_money_rounded,
+                              padding: EdgeInsets.zero,
+                              controller: _amountInputController,
+                              onTap: () {
+                                selectAmount(context);
+                              },
+                              readOnly: true,
+                              showCursor: false,
+                            ),
+                            TextInput(
+                              labelText: "Select Categories",
+                              icon: Icons.title_rounded,
+                              padding: EdgeInsets.zero,
+                              controller: _nameInputController,
+                              onChanged: (text) {
+                                setSelectedTitle(text);
+                              },
+                              onTap: () {
+                                selectDate(context);
+                              },
+                            ),
+                            TextInput(
+                              labelText: "Recurrence",
+                              icon: Icons.title_rounded,
+                              padding: EdgeInsets.zero,
+                              controller: _nameInputController,
+                              onChanged: (text) {
+                                setSelectedTitle(text);
+                              },
+                            ),
+                            TextInput(
+                              labelText: "Start Date",
+                              icon: Icons.calendar_today_rounded,
+                              padding: EdgeInsets.zero,
+                              onTap: () {
+                                selectDate(context);
+                              },
+                              readOnly: true,
+                              showCursor: false,
+                              controller: _dateInputController,
+                            ),
+                            TextInput(
+                              labelText: "End Date",
                               icon: Icons.calendar_today_rounded,
                               padding: EdgeInsets.zero,
                               onTap: () {

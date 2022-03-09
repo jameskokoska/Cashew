@@ -65,10 +65,11 @@ class App extends StatelessWidget {
               home: Scaffold(
                 body: MyHomePage(),
                 floatingActionButton: FAB(
-                  openPage: AddTransactionPage(
-                    title: "Add Transaction",
-                  ),
-                  // AddBudgetPage(title: "Add Budget"),
+                  openPage:
+                      // AddTransactionPage(
+                      //   title: "Add Transaction",
+                      // ),
+                      AddBudgetPage(title: "Add Budget"),
                 ),
               ),
             );

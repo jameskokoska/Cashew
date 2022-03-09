@@ -64,9 +64,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           TextPosition(offset: dateString.length),
         ),
       );
-      setState(() {
-        selectedDate = picked;
-      });
+      selectedDate = picked;
     }
   }
 
@@ -78,23 +76,25 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   void setSelectedAmount(double amount, String amountCalculation) {
-    setState(() {
-      selectedAmount = amount;
+    if (amount == selectedAmount) {
       selectedAmountCalculation = amountCalculation;
-    });
+    } else {
+      setState(() {
+        selectedAmount = amount;
+        selectedAmountCalculation = amountCalculation;
+      });
+    }
     return;
   }
 
   void setSelectedTitle(String title) {
-    _titleInputController.value = TextEditingValue(
-      text: title,
-      selection: TextSelection.fromPosition(
-        TextPosition(offset: title.length),
-      ),
-    );
-    setState(() {
-      selectedTitle = title;
-    });
+    selectedTitle = title;
+    return;
+  }
+
+  void setSelectedTitleController(String title) {
+    setTextInput(_titleInputController, title);
+    selectedTitle = title;
     return;
   }
 
@@ -105,15 +105,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   void setSelectedNote(String note) {
-    _noteInputController.value = TextEditingValue(
-      text: note,
-      selection: TextSelection.fromPosition(
-        TextPosition(offset: note.length),
-      ),
-    );
-    setState(() {
-      selectedNote = note;
-    });
+    selectedNote = note;
     return;
   }
 
@@ -174,7 +166,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           context,
           PopupFramework(
             child: SelectTitle(
-                setSelectedTitle: setSelectedTitle,
+                setSelectedTitle: setSelectedTitleController,
                 setSelectedTags: setSelectedTags,
                 selectedCategory: selectedCategory,
                 setSelectedCategory: setSelectedCategory,
@@ -434,6 +426,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                 SliverFillRemaining()
               ],
             ),
+            //This align causes a state update when keyboard pushes it up... optimize in the future?
             Align(
               alignment: Alignment.bottomCenter,
               child: selectedCategory == null
