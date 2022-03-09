@@ -991,6 +991,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final int periodLength;
   final BudgetReoccurence? reoccurrence;
   final DateTime dateCreated;
+  final bool pinned;
   Budget(
       {required this.budgetPk,
       required this.name,
@@ -1001,7 +1002,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       this.categoryFks,
       required this.periodLength,
       this.reoccurrence,
-      required this.dateCreated});
+      required this.dateCreated,
+      required this.pinned});
   factory Budget.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Budget(
@@ -1025,6 +1027,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           .mapFromDatabaseResponse(data['${effectivePrefix}reoccurrence'])),
       dateCreated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
+      pinned: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}pinned'])!,
     );
   }
   @override
@@ -1046,6 +1050,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       map['reoccurrence'] = Variable<int?>(converter.mapToSql(reoccurrence));
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
+    map['pinned'] = Variable<bool>(pinned);
     return map;
   }
 
@@ -1065,6 +1070,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           ? const Value.absent()
           : Value(reoccurrence),
       dateCreated: Value(dateCreated),
+      pinned: Value(pinned),
     );
   }
 
@@ -1083,6 +1089,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       reoccurrence:
           serializer.fromJson<BudgetReoccurence?>(json['reoccurrence']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      pinned: serializer.fromJson<bool>(json['pinned']),
     );
   }
   @override
@@ -1099,6 +1106,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       'periodLength': serializer.toJson<int>(periodLength),
       'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'pinned': serializer.toJson<bool>(pinned),
     };
   }
 
@@ -1112,7 +1120,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           List<int>? categoryFks,
           int? periodLength,
           BudgetReoccurence? reoccurrence,
-          DateTime? dateCreated}) =>
+          DateTime? dateCreated,
+          bool? pinned}) =>
       Budget(
         budgetPk: budgetPk ?? this.budgetPk,
         name: name ?? this.name,
@@ -1124,6 +1133,7 @@ class Budget extends DataClass implements Insertable<Budget> {
         periodLength: periodLength ?? this.periodLength,
         reoccurrence: reoccurrence ?? this.reoccurrence,
         dateCreated: dateCreated ?? this.dateCreated,
+        pinned: pinned ?? this.pinned,
       );
   @override
   String toString() {
@@ -1137,14 +1147,15 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('categoryFks: $categoryFks, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
-          ..write('dateCreated: $dateCreated')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('pinned: $pinned')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(budgetPk, name, amount, colour, startDate,
-      endDate, categoryFks, periodLength, reoccurrence, dateCreated);
+      endDate, categoryFks, periodLength, reoccurrence, dateCreated, pinned);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1158,7 +1169,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.categoryFks == this.categoryFks &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
-          other.dateCreated == this.dateCreated);
+          other.dateCreated == this.dateCreated &&
+          other.pinned == this.pinned);
 }
 
 class BudgetsCompanion extends UpdateCompanion<Budget> {
@@ -1172,6 +1184,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<int> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
   final Value<DateTime> dateCreated;
+  final Value<bool> pinned;
   const BudgetsCompanion({
     this.budgetPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -1183,6 +1196,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.pinned = const Value.absent(),
   });
   BudgetsCompanion.insert({
     this.budgetPk = const Value.absent(),
@@ -1195,12 +1209,14 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     required int periodLength,
     this.reoccurrence = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    required bool pinned,
   })  : name = Value(name),
         amount = Value(amount),
         colour = Value(colour),
         startDate = Value(startDate),
         endDate = Value(endDate),
-        periodLength = Value(periodLength);
+        periodLength = Value(periodLength),
+        pinned = Value(pinned);
   static Insertable<Budget> custom({
     Expression<int>? budgetPk,
     Expression<String>? name,
@@ -1212,6 +1228,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<int>? periodLength,
     Expression<BudgetReoccurence?>? reoccurrence,
     Expression<DateTime>? dateCreated,
+    Expression<bool>? pinned,
   }) {
     return RawValuesInsertable({
       if (budgetPk != null) 'budget_pk': budgetPk,
@@ -1224,6 +1241,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (pinned != null) 'pinned': pinned,
     });
   }
 
@@ -1237,7 +1255,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<List<int>?>? categoryFks,
       Value<int>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
-      Value<DateTime>? dateCreated}) {
+      Value<DateTime>? dateCreated,
+      Value<bool>? pinned}) {
     return BudgetsCompanion(
       budgetPk: budgetPk ?? this.budgetPk,
       name: name ?? this.name,
@@ -1249,6 +1268,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
       dateCreated: dateCreated ?? this.dateCreated,
+      pinned: pinned ?? this.pinned,
     );
   }
 
@@ -1289,6 +1309,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
     }
+    if (pinned.present) {
+      map['pinned'] = Variable<bool>(pinned.value);
+    }
     return map;
   }
 
@@ -1304,7 +1327,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('categoryFks: $categoryFks, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
-          ..write('dateCreated: $dateCreated')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('pinned: $pinned')
           ..write(')'))
         .toString();
   }
@@ -1378,6 +1402,13 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           type: const IntType(),
           requiredDuringInsert: false,
           clientDefault: () => new DateTime.now());
+  final VerificationMeta _pinnedMeta = const VerificationMeta('pinned');
+  @override
+  late final GeneratedColumn<bool?> pinned = GeneratedColumn<bool?>(
+      'pinned', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'CHECK (pinned IN (0, 1))');
   @override
   List<GeneratedColumn> get $columns => [
         budgetPk,
@@ -1389,7 +1420,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         categoryFks,
         periodLength,
         reoccurrence,
-        dateCreated
+        dateCreated,
+        pinned
       ];
   @override
   String get aliasedName => _alias ?? 'budgets';
@@ -1449,6 +1481,12 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           _dateCreatedMeta,
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('pinned')) {
+      context.handle(_pinnedMeta,
+          pinned.isAcceptableOrUnknown(data['pinned']!, _pinnedMeta));
+    } else if (isInserting) {
+      context.missing(_pinnedMeta);
     }
     return context;
   }

@@ -1,16 +1,21 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './pages/homePage.dart';
 import 'package:budget/colors.dart';
+import 'dart:math';
 
 void main() async {
   database = await constructDb();
-  runApp(MyApp());
+  runApp(App());
 }
+
+int randomInt = Random().nextInt(100);
 
 Future initialize() async {
   //Initialize default categories
@@ -20,8 +25,8 @@ Future initialize() async {
   return true;
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+class App extends StatelessWidget {
+  App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,45 +35,45 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return MaterialApp(
-              title: 'Flutter Demo',
+              title: 'Budget App',
               theme: ThemeData(
                 fontFamily: 'Avenir',
-                buttonColor: Theme.of(context).colorScheme.accentColor,
                 primaryColor: Colors.white,
-                accentColor: Theme.of(context).colorScheme.accentColor,
                 primaryColorDark: Colors.grey[200],
                 primaryColorLight: Colors.grey[100],
                 primaryColorBrightness: Brightness.light,
                 brightness: Brightness.light,
                 canvasColor: Colors.grey[100],
-                appBarTheme: AppBarTheme(brightness: Brightness.light),
+                accentColor: Theme.of(context).colorScheme.accentColor,
+                appBarTheme:
+                    AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
               ),
               darkTheme: ThemeData(
                 fontFamily: 'Avenir',
-                buttonColor: Theme.of(context).colorScheme.accentColor,
                 primaryColor: Colors.black,
-                accentColor: Theme.of(context).colorScheme.accentColor,
                 primaryColorDark: Colors.grey[800],
                 primaryColorBrightness: Brightness.dark,
                 primaryColorLight: Colors.grey[850],
                 brightness: Brightness.dark,
                 indicatorColor: Colors.white,
                 canvasColor: Colors.black,
-                appBarTheme: AppBarTheme(brightness: Brightness.dark),
+                accentColor: Theme.of(context).colorScheme.accentColor,
+                appBarTheme:
+                    AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
               ),
               themeMode: ThemeMode.system,
               home: Scaffold(
-                body: MyHomePage(
-                  title: "test",
-                ),
+                body: MyHomePage(),
                 floatingActionButton: FAB(
                   openPage: AddTransactionPage(
                     title: "Add Transaction",
                   ),
+                  // AddBudgetPage(title: "Add Budget"),
                 ),
               ),
             );
           } else {
+            //loading
             return Container();
           }
         });

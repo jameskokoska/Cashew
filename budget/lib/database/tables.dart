@@ -5,7 +5,7 @@ import 'dart:io';
 export 'platform/shared.dart';
 part 'tables.g.dart';
 
-// Generate databse code
+// Generate database code
 // flutter packages pub run build_runner build
 
 // Character Limits
@@ -84,6 +84,7 @@ class Budgets extends Table {
   // RealColumn get optimalDailySpending => real().nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  BoolColumn get pinned => boolean()();
 }
 
 @DataClassName('UserSettings')
@@ -101,7 +102,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   // get all filtered transactions from earliest to oldest date created, paginated
   Stream<List<Transaction>> watchAllTransactionsFiltered(

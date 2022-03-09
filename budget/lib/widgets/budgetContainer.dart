@@ -1,3 +1,4 @@
+import 'package:budget/main.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -163,16 +164,16 @@ class AnimatedGooBackground extends StatelessWidget {
         type: PlasmaType.infinity,
         particles: 10,
         color: this.color.withOpacity(0.5),
-        blur: 0.5,
+        blur: 0.3,
         size: 1.3,
-        speed: 2.9,
+        speed: 3.3,
         offset: 0,
         blendMode: BlendMode.srcOver,
         particleType: ParticleType.atlas,
         variation1: 0,
         variation2: 0,
         variation3: 0,
-        rotation: 0,
+        rotation: randomInt.toDouble(),
       ),
     );
   }
