@@ -4,10 +4,12 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
+import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -48,6 +50,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime selectedEndDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  Color? selectedColor;
 
   late TextEditingController _nameInputController;
   late TextEditingController _startDateInputController;
@@ -55,6 +58,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   late TextEditingController _amountInputController;
   late TextEditingController _selectCategoriesInputController;
   late TextEditingController _periodLengthInputController;
+  late TextEditingController _colorInputController;
   late FocusNode _periodLengthFocusNode;
 
   String? textAddBudget = "Add Transaction";
@@ -84,12 +88,24 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         child: SelectCategory(
           selectedCategories: selectedCategories,
           setSelectedCategories: setSelectedCategories,
-          skipIfSet: true,
           nextLabel: "Set Categories",
           next: () {
             Navigator.pop(context);
             setSelectedCategories(selectedCategories ?? []);
           },
+        ),
+      ),
+    );
+  }
+
+  Future<void> selectColor(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Select Color",
+        child: SelectColor(
+          selectedColor: selectedColor,
+          setSelectedColor: setSelectedColor,
         ),
       ),
     );
@@ -173,21 +189,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   void setSelectedPeriodLength(String period) {
     try {
       selectedPeriodLength = int.parse(period);
-      _periodLengthInputController.value = TextEditingValue(
-        text: selectedPeriodLength.toString(),
-        selection: TextSelection.fromPosition(
-          TextPosition(offset: selectedPeriodLength.toString().length),
-        ),
-      );
+      setTextInput(
+          _periodLengthInputController, selectedPeriodLength.toString());
     } catch (e) {
       selectedPeriodLength = 0;
-      _periodLengthInputController.value = TextEditingValue(
-        text: "0",
-        selection: TextSelection.fromPosition(
-          TextPosition(offset: 1),
-        ),
-      );
+      setTextInput(_periodLengthInputController, "0");
     }
+    return;
+  }
+
+  void setSelectedColor(Color color) {
+    selectedColor = color;
+    setTextInput(_colorInputController, toHexString(color));
     return;
   }
 
@@ -200,7 +213,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
         amount: selectedAmount ?? 10,
-        colour: toHexString(Colors.blueGrey),
+        colour: toHexString(selectedColor ?? Colors.green),
         startDate: DateTime.now(),
         endDate: DateTime.now(),
         categoryFks: [0, 1, 2],
@@ -239,6 +252,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       //   selectedAmountCalculation = amountString;
       // }
       textAddBudget = "Edit Transaction";
+      _colorInputController = new TextEditingController();
 
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         updateInitial();
@@ -254,6 +268,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       _selectCategoriesInputController =
           new TextEditingController(text: "All categories");
       _periodLengthInputController = new TextEditingController(text: "0");
+      _colorInputController = new TextEditingController();
     }
   }
 
@@ -393,6 +408,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               },
                             ),
                             Container(height: 14),
+                            DropdownSelect(
+                                initial: "Custom",
+                                items: [
+                                  "Custom",
+                                  "Weekly",
+                                  "Monthly",
+                                  "Yearly"
+                                ],
+                                onChanged: (_) {}),
+                            Container(height: 14),
                             TextInput(
                               labelText: "Start Date",
                               icon: Icons.calendar_today_rounded,
@@ -442,6 +467,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               showCursor: false,
                               controller: _customDateInputController,
                               maxLines: 3,
+                            ),
+                            Container(height: 14),
+                            TextInput(
+                              labelText: "Select color",
+                              icon: Icons.color_lens_rounded,
+                              padding: EdgeInsets.zero,
+                              onTap: () {
+                                selectColor(context);
+                              },
+                              readOnly: true,
+                              showCursor: false,
+                              controller: _colorInputController,
                             ),
                             Container(height: 14),
                             Container(height: 20),

@@ -26,6 +26,48 @@ extension ColorsDefined on ColorScheme {
   Color get accentColorHeavy => brightness == Brightness.light
       ? const Color(0xFF1C683E)
       : const Color(0xFF7CFF77);
+
+  Color get selectableColorRed => brightness == Brightness.light
+      ? Colors.red.shade400
+      : Colors.red.shade400;
+  Color get selectableColorGreen => brightness == Brightness.light
+      ? Colors.green.shade400
+      : Colors.green.shade400;
+  Color get selectableColorBlue => brightness == Brightness.light
+      ? Colors.blue.shade400
+      : Colors.blue.shade400;
+  Color get selectableColorPurple => brightness == Brightness.light
+      ? Colors.purple.shade400
+      : Colors.purple.shade400;
+  Color get selectableColorOrange => brightness == Brightness.light
+      ? Colors.orange.shade400
+      : Colors.orange.shade400;
+  Color get selectableColorBlueGrey => brightness == Brightness.light
+      ? Colors.blueGrey.shade400
+      : Colors.blueGrey.shade400;
+  Color get selectableColorYellow => brightness == Brightness.light
+      ? Colors.yellow.shade400
+      : Colors.yellow.shade400;
+  Color get selectableColorAqua => brightness == Brightness.light
+      ? Colors.teal.shade400
+      : Colors.teal.shade400;
+  Color get selectableColorInidigo =>
+      brightness == Brightness.light ? Colors.indigo : Colors.indigo;
+  Color get selectableColorGrey => brightness == Brightness.light
+      ? Colors.grey.shade400
+      : Colors.grey.shade400;
+  Color get selectableColorBrown => brightness == Brightness.light
+      ? Colors.brown.shade400
+      : Colors.brown.shade400;
+  Color get selectableColorDeepPurple => brightness == Brightness.light
+      ? Colors.deepPurple.shade400
+      : Colors.deepPurple.shade400;
+  Color get selectableColorDeepOrange => brightness == Brightness.light
+      ? Colors.deepOrange.shade400
+      : Colors.deepOrange.shade400;
+  Color get selectableColorCyan => brightness == Brightness.light
+      ? Colors.cyan.shade400
+      : Colors.cyan.shade400;
 }
 
 Color darken(Color color, [double amount = .1]) {
@@ -70,4 +112,23 @@ class HexColor extends Color {
 String toHexString(Color color) {
   String valueString = color.value.toRadixString(16);
   return "0x" + valueString;
+}
+
+List<Color> selectableColors(context) {
+  return [
+    Theme.of(context).colorScheme.selectableColorRed,
+    Theme.of(context).colorScheme.selectableColorGreen,
+    Theme.of(context).colorScheme.selectableColorBlue,
+    Theme.of(context).colorScheme.selectableColorPurple,
+    Theme.of(context).colorScheme.selectableColorOrange,
+    Theme.of(context).colorScheme.selectableColorBlueGrey,
+    Theme.of(context).colorScheme.selectableColorYellow,
+    Theme.of(context).colorScheme.selectableColorAqua,
+    Theme.of(context).colorScheme.selectableColorInidigo,
+    Theme.of(context).colorScheme.selectableColorGrey,
+    Theme.of(context).colorScheme.selectableColorBrown,
+    Theme.of(context).colorScheme.selectableColorDeepPurple,
+    Theme.of(context).colorScheme.selectableColorDeepOrange,
+    Theme.of(context).colorScheme.selectableColorCyan,
+  ];
 }

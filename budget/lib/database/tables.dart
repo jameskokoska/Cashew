@@ -269,6 +269,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  // get all transactions that occured in a given time period that belong to a category
+
   // TODO: total spent in each month
   // Stream<List<Transaction>> watchTotalSpentEachMonth() {
   //   final totalAmt = transactions.amount.sum();
