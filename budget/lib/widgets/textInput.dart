@@ -1,3 +1,4 @@
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 
@@ -15,6 +16,13 @@ class TextInput extends StatelessWidget {
   final TextEditingController? controller;
   final bool? showCursor;
   final bool readOnly;
+  final int minLines;
+  final int maxLines;
+  final bool numbersOnly;
+  final String? prefix;
+  final String? suffix;
+  final double paddingRight;
+  final FocusNode? focusNode;
 
   const TextInput({
     Key? key,
@@ -31,6 +39,13 @@ class TextInput extends StatelessWidget {
     this.controller,
     this.showCursor,
     this.readOnly = false,
+    this.minLines = 1,
+    this.maxLines = 1,
+    this.numbersOnly = false,
+    this.prefix,
+    this.suffix,
+    this.paddingRight = 12,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -38,6 +53,10 @@ class TextInput extends StatelessWidget {
     return Padding(
       padding: padding,
       child: TextFormField(
+        focusNode: focusNode,
+        keyboardType: numbersOnly ? TextInputType.number : null,
+        maxLines: maxLines,
+        minLines: minLines,
         onTap: onTap,
         showCursor: showCursor,
         readOnly: readOnly,
@@ -50,8 +69,10 @@ class TextInput extends StatelessWidget {
         ),
         cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
         decoration: new InputDecoration(
-          contentPadding:
-              EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
+          prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
+          suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
+          contentPadding: EdgeInsets.only(
+              left: 12, right: paddingRight, top: 15, bottom: 10),
           hintText: labelText,
           filled: true,
           fillColor:

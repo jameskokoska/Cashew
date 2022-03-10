@@ -79,6 +79,7 @@ class Budgets extends Table {
   DateTimeColumn get endDate => dateTime()();
   TextColumn get categoryFks =>
       text().map(const IntListInColumnConverter()).nullable()();
+  BoolColumn get allCategoryFks => boolean()();
   IntColumn get periodLength => integer()();
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
   // RealColumn get optimalDailySpending => real().nullable()();

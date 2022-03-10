@@ -1,3 +1,4 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/transaction.dart';
@@ -13,10 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class BudgetPage extends StatelessWidget {
-  const BudgetPage({Key? key, required BudgetOld this.budget})
-      : super(key: key);
+  const BudgetPage({Key? key, required Budget this.budget}) : super(key: key);
 
-  final BudgetOld budget;
+  final Budget budget;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class BudgetPage extends StatelessWidget {
       slivers: [
         SliverAppBar(
           leading: Container(),
-          backgroundColor: budget.color,
+          backgroundColor: HexColor(budget.colour),
           floating: false,
           pinned: true,
           expandedHeight: 200.0,
@@ -33,12 +33,12 @@ class BudgetPage extends StatelessWidget {
             titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
             title: TextFont(
               fontSize: 26,
-              text: budget.title,
+              text: budget.name,
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.left,
             ),
             background: Container(
-              color: budget.color,
+              color: HexColor(budget.colour),
             ),
           ),
         ),
@@ -50,7 +50,7 @@ class BudgetPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.vertical(bottom: Radius.circular(10)),
-                  color: budget.color,
+                  color: HexColor(budget.colour),
                 ),
                 child: Column(
                   children: [
@@ -60,19 +60,19 @@ class BudgetPage extends StatelessWidget {
                       children: [
                         Container(
                           child: CountUp(
-                            count: budget.spent,
+                            count: budget.amount,
                             prefix: getCurrencyString(),
                             duration: Duration(milliseconds: 1500),
                             fontSize: 25,
                             textAlign: TextAlign.left,
                             fontWeight: FontWeight.bold,
-                            decimals: moneyDecimals(budget.spent),
+                            decimals: moneyDecimals(budget.amount),
                           ),
                         ),
                         Container(
                           padding: const EdgeInsets.only(bottom: 4.8),
                           child: TextFont(
-                            text: " left of " + convertToMoney(budget.total),
+                            text: " left of " + convertToMoney(budget.amount),
                             fontSize: 16,
                             textAlign: TextAlign.left,
                           ),

@@ -107,14 +107,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return BudgetContainer(
-                          budget: BudgetOld(
-                            title: "Budget Name",
-                            color: Color(0xFF51833D),
-                            total: 500,
-                            spent: 210,
+                          budget: Budget(
+                            name: "Budget Name",
+                            amount: 50,
+                            budgetPk: 0,
+                            colour: toHexString(Colors.green.shade500),
+                            dateCreated: DateTime.now(),
+                            pinned: true,
+                            categoryFks: [],
+                            allCategoryFks: false,
+                            reoccurrence: BudgetReoccurence.custom,
                             endDate: DateTime.now(),
                             startDate: DateTime.now(),
-                            period: "month",
                             periodLength: 10,
                           ),
                         );

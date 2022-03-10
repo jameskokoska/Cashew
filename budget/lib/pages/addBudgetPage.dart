@@ -3,13 +3,16 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/struct/transactionCategory.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -38,9 +41,21 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String? selectedAmountCalculation;
   String? selectedTitle;
   String? selectedNote;
+  bool selectedAllCategories = true;
+  int selectedPeriodLength = 1;
   List<String> selectedTags = [];
-  DateTime selectedDate =
+  DateTime selectedStartDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedEndDate =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  late TextEditingController _nameInputController;
+  late TextEditingController _startDateInputController;
+  late TextEditingController _customDateInputController;
+  late TextEditingController _amountInputController;
+  late TextEditingController _selectCategoriesInputController;
+  late TextEditingController _periodLengthInputController;
+  late FocusNode _periodLengthFocusNode;
 
   String? textAddBudget = "Add Transaction";
 
@@ -61,31 +76,85 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     );
   }
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> selectCategories(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Select Categories",
+        child: SelectCategory(
+          selectedCategories: selectedCategories,
+          setSelectedCategories: setSelectedCategories,
+          skipIfSet: true,
+          nextLabel: "Set Categories",
+          next: () {
+            Navigator.pop(context);
+            setSelectedCategories(selectedCategories ?? []);
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: selectedStartDate,
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime(DateTime.now().year + 2),
     );
-    if (picked != null && picked != selectedDate) {
+    if (picked != null && picked != selectedStartDate) {
       String dateString = getWordedDate(picked);
-      _dateInputController.value = TextEditingValue(
+      _startDateInputController.value = TextEditingValue(
         text: dateString,
         selection: TextSelection.fromPosition(
           TextPosition(offset: dateString.length),
         ),
       );
-      setState(() {
-        selectedDate = picked;
-      });
+      selectedStartDate = picked;
+    }
+  }
+
+  Future<void> selectDateRange(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(DateTime.now().year - 2),
+      lastDate: DateTime(DateTime.now().year + 2),
+    );
+    if (picked != null) {
+      String dateString =
+          getWordedDate(picked.start) + " - " + getWordedDate(picked.end);
+      _customDateInputController.value = TextEditingValue(
+        text: dateString,
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: dateString.length),
+        ),
+      );
+      selectedStartDate = picked.start;
+      selectedEndDate = picked.end;
     }
   }
 
   void setSelectedCategories(List<TransactionCategory> categories) {
-    setState(() {
-      selectedCategories = categories;
-    });
+    if (categories.length <= 0) {
+      setState(() {
+        selectedCategories = categories;
+        selectedAllCategories = true;
+      });
+      _selectCategoriesInputController.text = "All categories";
+    } else {
+      setState(() {
+        selectedCategories = categories;
+        selectedAllCategories = false;
+      });
+      if (categories.length == 1) {
+        _selectCategoriesInputController.text =
+            categories.length.toString() + " " + "category";
+      } else {
+        _selectCategoriesInputController.text =
+            categories.length.toString() + " " + "categories";
+      }
+    }
+
     return;
   }
 
@@ -98,6 +167,27 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   void setSelectedTitle(String title) {
     selectedTitle = title;
+    return;
+  }
+
+  void setSelectedPeriodLength(String period) {
+    try {
+      selectedPeriodLength = int.parse(period);
+      _periodLengthInputController.value = TextEditingValue(
+        text: selectedPeriodLength.toString(),
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: selectedPeriodLength.toString().length),
+        ),
+      );
+    } catch (e) {
+      selectedPeriodLength = 0;
+      _periodLengthInputController.value = TextEditingValue(
+        text: "0",
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: 1),
+        ),
+      );
+    }
     return;
   }
 
@@ -114,27 +204,33 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         startDate: DateTime.now(),
         endDate: DateTime.now(),
         categoryFks: [0, 1, 2],
+        allCategoryFks: false,
         periodLength: 30,
         reoccurrence: BudgetReoccurence.monthly,
-        dateCreated: selectedDate,
+        dateCreated: DateTime.now(),
         pinned: false,
       ),
     );
   }
 
-  late TextEditingController _nameInputController;
-  late TextEditingController _dateInputController;
-  late TextEditingController _amountInputController;
-
   @override
   void initState() {
     super.initState();
+    _periodLengthFocusNode = FocusNode();
+
     if (widget.budget != null) {
       //We are editing a budget
       //Fill in the information from the passed in budget
       _nameInputController =
           new TextEditingController(text: widget.budget!.name);
+      _startDateInputController = new TextEditingController(text: "Today");
+      _customDateInputController =
+          new TextEditingController(text: "Date Range");
 
+      _amountInputController = new TextEditingController(
+          text: convertToMoney(widget.budget!.amount));
+      selectedAllCategories = widget.budget!.allCategoryFks;
+      _periodLengthInputController = new TextEditingController(text: "0");
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -149,10 +245,22 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       });
     } else {
       _nameInputController = new TextEditingController();
-      _dateInputController = new TextEditingController(text: "Today");
+      _startDateInputController = new TextEditingController(text: "Today");
+      _customDateInputController =
+          new TextEditingController(text: "Date Range");
+
       _amountInputController =
           new TextEditingController(text: convertToMoney(0));
+      _selectCategoriesInputController =
+          new TextEditingController(text: "All categories");
+      _periodLengthInputController = new TextEditingController(text: "0");
     }
+  }
+
+  @override
+  void dispose() {
+    _periodLengthFocusNode.dispose();
+    super.dispose();
   }
 
   updateInitial() async {
@@ -226,49 +334,116 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               readOnly: true,
                               showCursor: false,
                             ),
-                            TextInput(
-                              labelText: "Select Categories",
-                              icon: Icons.title_rounded,
-                              padding: EdgeInsets.zero,
-                              controller: _nameInputController,
-                              onChanged: (text) {
-                                setSelectedTitle(text);
-                              },
-                              onTap: () {
-                                selectDate(context);
-                              },
+                            Container(height: 14),
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: TextInput(
+                                    labelText: "Select Categories",
+                                    icon: Icons.category_rounded,
+                                    padding: EdgeInsets.zero,
+                                    controller:
+                                        _selectCategoriesInputController,
+                                    onChanged: (text) {
+                                      setSelectedTitle(text);
+                                    },
+                                    onTap: () {
+                                      selectCategories(context);
+                                    },
+                                    readOnly: true,
+                                    showCursor: false,
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    CupertinoSwitch(
+                                      value: selectedAllCategories,
+                                      onChanged: (value) {
+                                        if (value == false) {
+                                          selectCategories(context);
+                                        } else {
+                                          setState(() {
+                                            selectedAllCategories = value;
+                                            _selectCategoriesInputController
+                                                .text = "All categories";
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    Container(
+                                      child: TextFont(
+                                        text: "All Categories",
+                                        maxLines: 2,
+                                        fontSize: 8,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
+                            Container(height: 14),
                             TextInput(
                               labelText: "Recurrence",
-                              icon: Icons.title_rounded,
+                              icon: Icons.loop_rounded,
                               padding: EdgeInsets.zero,
                               controller: _nameInputController,
                               onChanged: (text) {
                                 setSelectedTitle(text);
                               },
                             ),
+                            Container(height: 14),
                             TextInput(
                               labelText: "Start Date",
                               icon: Icons.calendar_today_rounded,
                               padding: EdgeInsets.zero,
                               onTap: () {
-                                selectDate(context);
+                                selectStartDate(context);
                               },
                               readOnly: true,
                               showCursor: false,
-                              controller: _dateInputController,
+                              controller: _startDateInputController,
                             ),
+                            Container(height: 14),
+                            GestureDetector(
+                              onTap: () {
+                                _periodLengthFocusNode.requestFocus();
+                              },
+                              child: Row(
+                                children: [
+                                  Container(width: 55),
+                                  TextFont(text: "Repeat every "),
+                                  IntrinsicWidth(
+                                    child: TextInput(
+                                      focusNode: _periodLengthFocusNode,
+                                      labelText: "",
+                                      padding: EdgeInsets.zero,
+                                      onChanged: (text) {
+                                        setSelectedPeriodLength(text);
+                                      },
+                                      numbersOnly: true,
+                                      controller: _periodLengthInputController,
+                                      paddingRight: 8,
+                                    ),
+                                  ),
+                                  TextFont(text: " weeks.")
+                                ],
+                              ),
+                            ),
+                            Container(height: 14),
                             TextInput(
-                              labelText: "End Date",
+                              labelText: "Custom Date Range",
                               icon: Icons.calendar_today_rounded,
                               padding: EdgeInsets.zero,
                               onTap: () {
-                                selectDate(context);
+                                selectDateRange(context);
                               },
                               readOnly: true,
                               showCursor: false,
-                              controller: _dateInputController,
+                              controller: _customDateInputController,
+                              maxLines: 3,
                             ),
+                            Container(height: 14),
                             Container(height: 20),
                             Container(height: 10),
                           ],

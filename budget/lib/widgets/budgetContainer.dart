@@ -1,3 +1,4 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:animations/animations.dart';
@@ -13,7 +14,7 @@ import '../struct/budget.dart';
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({Key? key, required this.budget}) : super(key: key);
 
-  final BudgetOld budget;
+  final Budget budget;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class BudgetContainer extends StatelessWidget {
         Container(
           width: double.infinity,
           child: TextFont(
-            text: budget.title,
+            text: budget.name,
             fontWeight: FontWeight.bold,
             fontSize: 25,
             textAlign: TextAlign.left,
@@ -34,19 +35,19 @@ class BudgetContainer extends StatelessWidget {
           children: [
             Container(
               child: CountUp(
-                count: budget.spent,
+                count: budget.amount,
                 prefix: getCurrencyString(),
                 duration: Duration(milliseconds: 1500),
                 fontSize: 18,
                 textAlign: TextAlign.left,
                 fontWeight: FontWeight.bold,
-                decimals: moneyDecimals(budget.spent),
+                decimals: moneyDecimals(budget.amount),
               ),
             ),
             Container(
               padding: const EdgeInsets.only(bottom: 3.0),
               child: TextFont(
-                text: " left of " + convertToMoney(budget.total),
+                text: " left of " + convertToMoney(budget.amount),
                 fontSize: 13,
                 textAlign: TextAlign.left,
               ),
@@ -84,10 +85,10 @@ class BudgetContainer extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
-                color: budget.color.withOpacity(0.8),
-                offset: Offset(0, 0),
-                blurRadius: 15.0,
-                spreadRadius: 0,
+                color: HexColor(budget.colour).withOpacity(0.8),
+                offset: Offset(0, 2),
+                blurRadius: 10.0,
+                spreadRadius: -2,
               ),
             ],
           ),
@@ -98,7 +99,7 @@ class BudgetContainer extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: AnimatedGooBackground(
-                      color: budget.color.withOpacity(0.8)),
+                      color: HexColor(budget.colour).withOpacity(0.8)),
                 ),
                 Tappable(
                   type: MaterialType.transparency,
@@ -124,10 +125,10 @@ class BudgetContainer extends StatelessWidget {
 
 class DaySpending extends StatelessWidget {
   const DaySpending(
-      {Key? key, required BudgetOld this.budget, bool this.large = false})
+      {Key? key, required Budget this.budget, bool this.large = false})
       : super(key: key);
 
-  final BudgetOld budget;
+  final Budget budget;
   final bool large;
 
   @override
@@ -183,7 +184,7 @@ class BudgetTimeline extends StatelessWidget {
   BudgetTimeline({Key? key, required this.budget, this.large = false})
       : super(key: key);
 
-  final BudgetOld budget;
+  final Budget budget;
   final double todayPercent = 45;
   final bool large;
 
@@ -202,8 +203,8 @@ class BudgetTimeline extends StatelessWidget {
                   ),
             Expanded(
               child: BudgetProgress(
-                color: budget.color,
-                percent: budget.getPercent(),
+                color: HexColor(budget.colour),
+                percent: 45,
                 todayPercent: todayPercent,
                 large: large,
               ),
