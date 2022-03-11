@@ -1,8 +1,10 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultTags.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/struct/transactionTag.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 
 import './colors.dart';
 import './widgets/textWidgets.dart';
@@ -153,19 +155,27 @@ getWeekDayShort(currentWeekDay) {
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ Mar 15
-getWordedDateShort(DateTime date) {
+getWordedDateShort(DateTime date, {includeYear = false}) {
   if (checkYesterdayTodayTomorrow(date) != false) {
     return checkYesterdayTodayTomorrow(date);
   }
-  return DateFormat('MMM d').format(date);
+  if (includeYear) {
+    return DateFormat('MMM d\nyyyy').format(date);
+  } else {
+    return DateFormat('MMM d').format(date);
+  }
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
-getWordedDateShortMore(DateTime date) {
+getWordedDateShortMore(DateTime date, {includeYear = false}) {
   if (checkYesterdayTodayTomorrow(date) != false) {
     return checkYesterdayTodayTomorrow(date);
   }
-  return DateFormat('MMMM d').format(date);
+  if (includeYear) {
+    return DateFormat('MMMM d, yyyy').format(date);
+  } else {
+    return DateFormat('MMMM d').format(date);
+  }
 }
 
 //e.g. Today/Yesterday/Tomorrow/Tuesday/ Thursday, September 15
@@ -190,4 +200,51 @@ setTextInput(inputController, value) {
       TextPosition(offset: value.length),
     ),
   );
+}
+
+BudgetReoccurence mapRecurrence(String? recurrenceString) {
+  if (recurrenceString == null) {
+    return BudgetReoccurence.monthly;
+  } else if (recurrenceString == "Custom") {
+    return BudgetReoccurence.custom;
+  } else if (recurrenceString == "Weekly") {
+    return BudgetReoccurence.weekly;
+  } else if (recurrenceString == "Monthly") {
+    return BudgetReoccurence.monthly;
+  } else if (recurrenceString == "Yearly") {
+    return BudgetReoccurence.yearly;
+  }
+  return BudgetReoccurence.monthly;
+}
+
+DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
+  if (budget.reoccurrence == BudgetReoccurence.custom) {
+    return DateTimeRange(start: budget.startDate, end: budget.endDate);
+  } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
+    DateTime currentDateLoop = currentDate;
+    for (int daysToGoBack = 0; daysToGoBack <= 7; daysToGoBack++) {
+      if (currentDateLoop.weekday == budget.startDate.weekday) {
+        DateTime endDate = new DateTime(currentDateLoop.year,
+            currentDateLoop.month, currentDateLoop.day + 6);
+        return DateTimeRange(start: currentDateLoop, end: endDate);
+      }
+      currentDateLoop = currentDateLoop.subtract(Duration(days: 1));
+    }
+  } else if (budget.reoccurrence == BudgetReoccurence.monthly) {
+    DateTime startDate =
+        new DateTime(currentDate.year, currentDate.month, budget.startDate.day);
+    DateTime endDate = new DateTime(
+        currentDate.year, currentDate.month + 1, budget.startDate.day - 1);
+    return DateTimeRange(start: startDate, end: endDate);
+  } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
+    DateTime startDate =
+        new DateTime(currentDate.year, budget.startDate.month, currentDate.day);
+    DateTime endDate = new DateTime(
+        currentDate.year, budget.startDate.month + 12, currentDate.day - 1);
+    return DateTimeRange(start: startDate, end: endDate);
+  }
+  return DateTimeRange(
+      start: budget.startDate,
+      end: DateTime(budget.startDate.year + 1, budget.startDate.month,
+          budget.startDate.day));
 }

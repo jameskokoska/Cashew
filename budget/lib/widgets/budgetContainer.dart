@@ -99,6 +99,7 @@ class BudgetContainer extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: AnimatedGooBackground(
+                      randomOffset: budget.name.length,
                       color: HexColor(budget.colour).withOpacity(0.8)),
                 ),
                 Tappable(
@@ -150,9 +151,11 @@ class AnimatedGooBackground extends StatelessWidget {
   const AnimatedGooBackground({
     Key? key,
     required this.color,
+    this.randomOffset = 1,
   });
 
   final Color color;
+  final int randomOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +177,8 @@ class AnimatedGooBackground extends StatelessWidget {
         variation1: 0,
         variation2: 0,
         variation3: 0,
-        rotation: randomInt.toDouble(),
+        rotation:
+            (randomInt % (randomOffset > 0 ? randomOffset : 1)).toDouble(),
       ),
     );
   }
@@ -198,7 +202,11 @@ class BudgetTimeline extends StatelessWidget {
             large
                 ? Container()
                 : TextFont(
-                    text: getWordedDateShort(budget.startDate),
+                    textAlign: TextAlign.center,
+                    text: getWordedDateShort(
+                        getBudgetDate(budget, DateTime.now()).start,
+                        includeYear:
+                            budget.reoccurrence == BudgetReoccurence.yearly),
                     fontSize: large ? 16 : 12,
                   ),
             Expanded(
@@ -212,7 +220,11 @@ class BudgetTimeline extends StatelessWidget {
             large
                 ? Container()
                 : TextFont(
-                    text: getWordedDateShort(budget.startDate),
+                    textAlign: TextAlign.center,
+                    text: getWordedDateShort(
+                        getBudgetDate(budget, DateTime.now()).end,
+                        includeYear:
+                            budget.reoccurrence == BudgetReoccurence.yearly),
                     fontSize: large ? 16 : 12,
                   ),
           ],
@@ -224,11 +236,19 @@ class BudgetTimeline extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextFont(
-                      text: getWordedDateShortMore(budget.startDate),
+                      textAlign: TextAlign.center,
+                      text: getWordedDateShortMore(
+                          getBudgetDate(budget, DateTime.now()).start,
+                          includeYear:
+                              budget.reoccurrence == BudgetReoccurence.yearly),
                       fontSize: large ? 15 : 12,
                     ),
                     TextFont(
-                      text: getWordedDateShortMore(budget.startDate),
+                      textAlign: TextAlign.center,
+                      text: getWordedDateShortMore(
+                          getBudgetDate(budget, DateTime.now()).end,
+                          includeYear:
+                              budget.reoccurrence == BudgetReoccurence.yearly),
                       fontSize: large ? 15 : 12,
                     ),
                   ],

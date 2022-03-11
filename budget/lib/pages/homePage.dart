@@ -37,7 +37,8 @@ class _MyHomePageState extends State<MyHomePage> {
       dates.add(indexDay);
     }
     for (DateTime date in dates.reversed) {
-      transactionsWidgets.add(StreamBuilder<List<Transaction>>(
+      transactionsWidgets.add(
+        StreamBuilder<List<Transaction>>(
           stream: database.getTransactionWithDay(date),
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
@@ -76,7 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             }
             return SliverToBoxAdapter(child: SizedBox());
-          }));
+          },
+        ),
+      );
     }
 
     return Scaffold(
@@ -97,41 +100,29 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            sliver: StreamBuilder<List<Budget>>(
-              stream: database.watchAllBudgets(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return SliverList(
+          StreamBuilder<List<Budget>>(
+            stream: database.watchAllPinnedBudgets(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return BudgetContainer(
-                          budget: Budget(
-                            name: "Budget Name",
-                            amount: 50,
-                            budgetPk: 0,
-                            colour: toHexString(Colors.green.shade500),
-                            dateCreated: DateTime.now(),
-                            pinned: true,
-                            categoryFks: [],
-                            allCategoryFks: false,
-                            reoccurrence: BudgetReoccurence.custom,
-                            endDate: DateTime.now(),
-                            startDate: DateTime.now(),
-                            periodLength: 10,
-                          ),
+                          budget: snapshot.data![index],
                         );
                       },
-                      childCount: 1, //snapshot.data?.length
+                      childCount: snapshot.data?.length, //snapshot.data?.length
                     ),
-                  );
-                } else {
-                  return SliverFillRemaining();
-                }
-              },
-            ),
+                  ),
+                );
+              } else {
+                return SliverToBoxAdapter(child: SizedBox());
+              }
+            },
           ),
+
           // SliverList(
           //   delegate: SliverChildListDelegate(
           //     [

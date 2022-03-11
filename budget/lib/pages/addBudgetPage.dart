@@ -280,24 +280,29 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   Future addBudget() async {
     print("Added budget");
+    List<int> categoryFks = [];
+    for (TransactionCategory category in selectedCategories ?? []) {
+      categoryFks.add(category.categoryPk);
+    }
     await database.createOrUpdateBudget(
       Budget(
         budgetPk: widget.budget != null
             ? widget.budget!.budgetPk
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
-        amount: selectedAmount ?? 10,
+        amount: selectedAmount ?? 0,
         colour: toHexString(selectedColor ?? Colors.green),
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        categoryFks: [0, 1, 2],
-        allCategoryFks: false,
-        periodLength: 30,
-        reoccurrence: BudgetReoccurence.monthly,
+        startDate: selectedStartDate ?? DateTime.now(),
+        endDate: selectedEndDate ?? DateTime.now(),
+        categoryFks: categoryFks,
+        allCategoryFks: selectedAllCategories,
+        periodLength: selectedPeriodLength,
+        reoccurrence: mapRecurrence(selectedRecurrence),
         dateCreated: DateTime.now(),
-        pinned: false,
+        pinned: true,
       ),
     );
+    Navigator.pop(context);
   }
 
   @override
@@ -599,7 +604,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       height: 50,
                       fractionScaleHeight: 0.93,
                       fractionScaleWidth: 0.98,
-                      onTap: () {},
+                      onTap: () {
+                        addBudget();
+                      },
                     )
                   : Button(
                       label: "Add Budget",
@@ -607,7 +614,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       height: 50,
                       fractionScaleHeight: 0.93,
                       fractionScaleWidth: 0.98,
-                      onTap: () {},
+                      onTap: () {
+                        addBudget();
+                      },
                       color: Colors.grey,
                     ),
             ),

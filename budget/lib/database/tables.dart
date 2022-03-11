@@ -3,6 +3,7 @@ import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
 import 'dart:io';
 export 'platform/shared.dart';
+import 'dart:convert';
 part 'tables.g.dart';
 
 // Generate database code
@@ -26,13 +27,15 @@ class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   @override
   List<int>? mapToDart(String? label_fks_from_db) {
     if (label_fks_from_db == null) return null;
-    return label_fks_from_db.split(',').map(int.parse).toList();
+    // return label_fks_from_db.split(',').map(int.parse).toList();
+    return new List<int>.from(json.decode(label_fks_from_db));
   }
 
   @override
   String? mapToSql(List<int>? label_fks) {
     if (label_fks == null) return null;
-    throw label_fks.map((fk) => toString).join(',');
+    // throw label_fks.map((fk) => toString).join(',');
+    return json.encode(label_fks);
   }
 }
 
@@ -195,6 +198,15 @@ class FinanceDatabase extends _$FinanceDatabase {
   // watch all budgets that have been created
   Stream<List<Budget>> watchAllBudgets({int? limit, int? offset}) {
     return (select(budgets)
+          ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch();
+  }
+
+  // watch all budgets that have been created that are pinned
+  Stream<List<Budget>> watchAllPinnedBudgets({int? limit, int? offset}) {
+    return (select(budgets)
+          ..where((tbl) => tbl.pinned)
           ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
