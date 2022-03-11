@@ -217,6 +217,7 @@ BudgetReoccurence mapRecurrence(String? recurrenceString) {
   return BudgetReoccurence.monthly;
 }
 
+//get the current period of a repetitive budget
 DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
   if (budget.reoccurrence == BudgetReoccurence.custom) {
     return DateTimeRange(start: budget.startDate, end: budget.endDate);
@@ -231,16 +232,30 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
       currentDateLoop = currentDateLoop.subtract(Duration(days: 1));
     }
   } else if (budget.reoccurrence == BudgetReoccurence.monthly) {
+    //this gives weird things when you select 31 and current month is march... because of february
     DateTime startDate =
         new DateTime(currentDate.year, currentDate.month, budget.startDate.day);
     DateTime endDate = new DateTime(
         currentDate.year, currentDate.month + 1, budget.startDate.day - 1);
+    if (startDate.isBefore(currentDate)) {
+      return DateTimeRange(start: startDate, end: endDate);
+    }
+    startDate = new DateTime(currentDate.year, currentDate.month - 1, 0);
+    endDate = new DateTime(
+        currentDate.year, currentDate.month, budget.startDate.day - 1);
     return DateTimeRange(start: startDate, end: endDate);
   } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
     DateTime startDate =
         new DateTime(currentDate.year, budget.startDate.month, currentDate.day);
     DateTime endDate = new DateTime(
         currentDate.year, budget.startDate.month + 12, currentDate.day - 1);
+    if (startDate.isBefore(currentDate)) {
+      return DateTimeRange(start: startDate, end: endDate);
+    }
+    startDate = new DateTime(
+        currentDate.year, budget.startDate.month - 12, currentDate.day);
+    endDate = new DateTime(
+        currentDate.year, budget.startDate.month, currentDate.day - 1);
     return DateTimeRange(start: startDate, end: endDate);
   }
   return DateTimeRange(

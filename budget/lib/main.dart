@@ -73,12 +73,17 @@ class App extends StatelessWidget {
             themeMode: ThemeMode.system,
             home: Scaffold(
               body: MyHomePage(),
-              floatingActionButton: FAB(
-                openPage:
-                    // AddTransactionPage(
-                    //   title: "Add Transaction",
-                    // ),
-                    AddBudgetPage(title: "Add Budget"),
+              floatingActionButton: Row(
+                children: [
+                  FAB(
+                    openPage: AddTransactionPage(
+                      title: "Add Transaction",
+                    ),
+                  ),
+                  FAB(
+                    openPage: AddBudgetPage(title: "Add Budget"),
+                  ),
+                ],
               ),
             ),
           );

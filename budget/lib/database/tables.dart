@@ -157,7 +157,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  //get dates of all transactions in the month
+  //get dates of all transactions in the month and year
   Stream<List<DateTime>> getTransactionDays(DateTime date) {
     final query = (select(transactions)
       ..where((tbl) {
@@ -281,7 +281,25 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  // get all transactions that occured in a given time period that belong to a category
+  // get all transactions that occurred in a given time period that belong to categories
+  Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
+      DateTime start, DateTime end, List<int> categoryFks, bool allCategories) {
+    if (allCategories) {
+      return (select(transactions)
+            ..where((tbl) {
+              final dateCreated = tbl.dateCreated;
+              return dateCreated.isBetweenValues(start, end);
+            }))
+          .watch();
+    }
+    return (select(transactions)
+          ..where((tbl) {
+            final dateCreated = tbl.dateCreated;
+            return dateCreated.isBetweenValues(start, end) &
+                tbl.categoryFk.isIn(categoryFks);
+          }))
+        .watch();
+  }
 
   // TODO: total spent in each month
   // Stream<List<Transaction>> watchTotalSpentEachMonth() {

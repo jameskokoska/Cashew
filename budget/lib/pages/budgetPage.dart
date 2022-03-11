@@ -1,7 +1,8 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/budget.dart';
-import 'package:budget/struct/transaction.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -45,6 +46,7 @@ class BudgetPage extends StatelessWidget {
         SliverList(
           delegate: SliverChildListDelegate(
             [
+              //offset to remove 1 pixel line
               Transform.translate(
                 offset: Offset(0, -1),
                 child: Container(
@@ -138,6 +140,43 @@ class BudgetPage extends StatelessWidget {
               ),
             ]),
           ),
+        ),
+        StreamBuilder<List<Transaction>>(
+          stream: database.getTransactionsInTimeRangeFromCategories(
+              getBudgetDate(budget, DateTime.now()).start,
+              getBudgetDate(budget, DateTime.now()).end,
+              budget.categoryFks ?? [],
+              budget.allCategoryFks),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+              return SliverPadding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return TransactionEntry(
+                        openPage: AddTransactionPage(
+                          title: "Edit Transaction",
+                          transaction: snapshot.data![index],
+                        ),
+                        transaction: Transaction(
+                          transactionPk: snapshot.data![index].transactionPk,
+                          name: snapshot.data![index].name,
+                          amount: snapshot.data![index].amount,
+                          note: snapshot.data![index].note,
+                          budgetFk: snapshot.data![index].budgetFk,
+                          categoryFk: snapshot.data![index].categoryFk,
+                          dateCreated: snapshot.data![index].dateCreated,
+                        ),
+                      );
+                    },
+                    childCount: snapshot.data?.length,
+                  ),
+                ),
+              );
+            }
+            return SliverToBoxAdapter(child: SizedBox());
+          },
         ),
         // SliverPadding(
         //   padding: EdgeInsets.symmetric(vertical: 5),
