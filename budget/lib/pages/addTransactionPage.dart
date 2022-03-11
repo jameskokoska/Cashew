@@ -55,6 +55,26 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       initialDate: selectedDate,
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime(DateTime.now().year + 2),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).brightness == Brightness.light
+              ? ThemeData.light().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.accentColor,
+                  colorScheme: ColorScheme.light(
+                      primary: Theme.of(context).colorScheme.accentColor),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                )
+              : ThemeData.dark().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
+                  colorScheme: ColorScheme.dark(
+                      primary: Theme.of(context).colorScheme.accentColorHeavy),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+          child: child ?? Container(),
+        );
+      },
     );
     if (picked != null && picked != selectedDate) {
       String dateString = getWordedDate(picked);

@@ -7,6 +7,7 @@ import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
@@ -38,19 +39,20 @@ class AddBudgetPage extends StatefulWidget {
 }
 
 class _AddBudgetPageState extends State<AddBudgetPage> {
+  bool? canAddBudget;
+
   List<TransactionCategory>? selectedCategories;
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
   String? selectedNote;
   bool selectedAllCategories = true;
-  int selectedPeriodLength = 1;
+  int selectedPeriodLength = 0;
   List<String> selectedTags = [];
-  DateTime selectedStartDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime selectedEndDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
   Color? selectedColor;
+  String? selectedRecurrence;
 
   late TextEditingController _nameInputController;
   late TextEditingController _startDateInputController;
@@ -59,6 +61,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   late TextEditingController _selectCategoriesInputController;
   late TextEditingController _periodLengthInputController;
   late TextEditingController _colorInputController;
+  late TextEditingController _recurrenceInputController;
   late FocusNode _periodLengthFocusNode;
 
   String? textAddBudget = "Add Transaction";
@@ -111,23 +114,67 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     );
   }
 
+  Future<void> selectRecurrence(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Select Period",
+        child: RadioItems(
+          items: ["Custom", "Weekly", "Monthly", "Yearly"],
+          initial: selectedRecurrence ?? "",
+          onChanged: (value) {
+            if (value == "Custom") {
+              selectedStartDate = null;
+              selectedEndDate = null;
+            }
+            setState(() {
+              selectedRecurrence = value;
+            });
+            determineBottomButton();
+            setTextInput(_recurrenceInputController, value);
+          },
+        ),
+      ),
+    );
+  }
+
   Future<void> selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedStartDate,
+      initialDate: selectedStartDate ?? DateTime.now(),
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime(DateTime.now().year + 2),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).brightness == Brightness.light
+              ? ThemeData.light().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.accentColor,
+                  colorScheme: ColorScheme.light(
+                      primary: Theme.of(context).colorScheme.accentColor),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                )
+              : ThemeData.dark().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
+                  colorScheme: ColorScheme.dark(
+                      primary: Theme.of(context).colorScheme.accentColorHeavy),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+          child: child ?? Container(),
+        );
+      },
     );
-    if (picked != null && picked != selectedStartDate) {
-      String dateString = getWordedDate(picked);
-      _startDateInputController.value = TextEditingValue(
-        text: dateString,
-        selection: TextSelection.fromPosition(
-          TextPosition(offset: dateString.length),
-        ),
-      );
-      selectedStartDate = picked;
+    setSelectedStartDate(picked);
+  }
+
+  setSelectedStartDate(DateTime? date) {
+    if (date != null && date != selectedStartDate) {
+      String dateString = getWordedDate(date);
+      setTextInput(_startDateInputController, dateString);
+      selectedStartDate = date;
     }
+    determineBottomButton();
   }
 
   Future<void> selectDateRange(BuildContext context) async {
@@ -135,18 +182,41 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       context: context,
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime(DateTime.now().year + 2),
+      initialDateRange: DateTimeRange(
+        start: selectedStartDate ?? DateTime.now(),
+        end: selectedEndDate ??
+            DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, DateTime.now().hour + 5),
+      ),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).brightness == Brightness.light
+              ? ThemeData.light().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.accentColor,
+                  colorScheme: ColorScheme.light(
+                      primary: Theme.of(context).colorScheme.accentColor),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                )
+              : ThemeData.dark().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
+                  colorScheme: ColorScheme.dark(
+                      primary: Theme.of(context).colorScheme.accentColorHeavy),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+          child: child ?? Container(),
+        );
+      },
     );
     if (picked != null) {
       String dateString =
           getWordedDate(picked.start) + " - " + getWordedDate(picked.end);
-      _customDateInputController.value = TextEditingValue(
-        text: dateString,
-        selection: TextSelection.fromPosition(
-          TextPosition(offset: dateString.length),
-        ),
-      );
+      setTextInput(_customDateInputController, dateString);
+      setTextInput(_startDateInputController, getWordedDate(picked.start));
       selectedStartDate = picked.start;
       selectedEndDate = picked.end;
+      determineBottomButton();
     }
   }
 
@@ -170,7 +240,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             categories.length.toString() + " " + "categories";
       }
     }
-
+    determineBottomButton();
     return;
   }
 
@@ -178,11 +248,13 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     selectedAmount = amount;
     selectedAmountCalculation = amountCalculation;
     setTextInput(_amountInputController, convertToMoney(amount));
+    determineBottomButton();
     return;
   }
 
   void setSelectedTitle(String title) {
     selectedTitle = title;
+    determineBottomButton();
     return;
   }
 
@@ -195,12 +267,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       selectedPeriodLength = 0;
       setTextInput(_periodLengthInputController, "0");
     }
+    determineBottomButton();
     return;
   }
 
   void setSelectedColor(Color color) {
     selectedColor = color;
     setTextInput(_colorInputController, toHexString(color));
+    determineBottomButton();
     return;
   }
 
@@ -237,8 +311,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       _nameInputController =
           new TextEditingController(text: widget.budget!.name);
       _startDateInputController = new TextEditingController(text: "Today");
-      _customDateInputController =
-          new TextEditingController(text: "Date Range");
+      _customDateInputController = new TextEditingController();
 
       _amountInputController = new TextEditingController(
           text: convertToMoney(widget.budget!.amount));
@@ -253,15 +326,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       // }
       textAddBudget = "Edit Transaction";
       _colorInputController = new TextEditingController();
+      _recurrenceInputController = new TextEditingController();
 
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         updateInitial();
       });
     } else {
       _nameInputController = new TextEditingController();
-      _startDateInputController = new TextEditingController(text: "Today");
-      _customDateInputController =
-          new TextEditingController(text: "Date Range");
+      _startDateInputController = new TextEditingController();
+      _customDateInputController = new TextEditingController();
 
       _amountInputController =
           new TextEditingController(text: convertToMoney(0));
@@ -269,6 +342,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           new TextEditingController(text: "All categories");
       _periodLengthInputController = new TextEditingController(text: "0");
       _colorInputController = new TextEditingController();
+      _recurrenceInputController = new TextEditingController();
     }
   }
 
@@ -285,6 +359,27 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       // setState(() {
       //   selectedCategory = getSelectedCategory;
       // });
+    }
+  }
+
+  determineBottomButton() {
+    if (selectedTitle != null &&
+        (selectedAmount ?? 0) >= 0 &&
+        selectedAmount != null &&
+        selectedColor != null &&
+        selectedStartDate != null &&
+        ((selectedRecurrence == "Custom" && selectedEndDate != null) ||
+            (selectedRecurrence != "Custom" && selectedPeriodLength != 0))) {
+      print(selectedPeriodLength);
+      if (canAddBudget != true)
+        this.setState(() {
+          canAddBudget = true;
+        });
+    } else {
+      if (canAddBudget != false)
+        this.setState(() {
+          canAddBudget = false;
+        });
     }
   }
 
@@ -350,6 +445,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               showCursor: false,
                             ),
                             Container(height: 14),
+                            TextInput(
+                              labelText: "Select color",
+                              icon: Icons.color_lens_rounded,
+                              padding: EdgeInsets.zero,
+                              onTap: () {
+                                selectColor(context);
+                              },
+                              readOnly: true,
+                              showCursor: false,
+                              controller: _colorInputController,
+                            ),
+                            Container(height: 14),
                             Row(
                               children: [
                                 Flexible(
@@ -402,84 +509,75 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               labelText: "Recurrence",
                               icon: Icons.loop_rounded,
                               padding: EdgeInsets.zero,
-                              controller: _nameInputController,
-                              onChanged: (text) {
-                                setSelectedTitle(text);
-                              },
-                            ),
-                            Container(height: 14),
-                            DropdownSelect(
-                                initial: "Custom",
-                                items: [
-                                  "Custom",
-                                  "Weekly",
-                                  "Monthly",
-                                  "Yearly"
-                                ],
-                                onChanged: (_) {}),
-                            Container(height: 14),
-                            TextInput(
-                              labelText: "Start Date",
-                              icon: Icons.calendar_today_rounded,
-                              padding: EdgeInsets.zero,
-                              onTap: () {
-                                selectStartDate(context);
-                              },
+                              controller: _recurrenceInputController,
                               readOnly: true,
                               showCursor: false,
-                              controller: _startDateInputController,
-                            ),
-                            Container(height: 14),
-                            GestureDetector(
                               onTap: () {
-                                _periodLengthFocusNode.requestFocus();
+                                selectRecurrence(context);
                               },
-                              child: Row(
-                                children: [
-                                  Container(width: 55),
-                                  TextFont(text: "Repeat every "),
-                                  IntrinsicWidth(
-                                    child: TextInput(
-                                      focusNode: _periodLengthFocusNode,
-                                      labelText: "",
-                                      padding: EdgeInsets.zero,
-                                      onChanged: (text) {
-                                        setSelectedPeriodLength(text);
-                                      },
-                                      numbersOnly: true,
-                                      controller: _periodLengthInputController,
-                                      paddingRight: 8,
-                                    ),
+                            ),
+                            selectedRecurrence != "Custom"
+                                ? Column(
+                                    children: [
+                                      Container(height: 14),
+                                      TextInput(
+                                        labelText: "Start Date",
+                                        icon: Icons.calendar_today_rounded,
+                                        padding: EdgeInsets.zero,
+                                        onTap: () {
+                                          selectStartDate(context);
+                                        },
+                                        readOnly: true,
+                                        showCursor: false,
+                                        controller: _startDateInputController,
+                                      ),
+                                      Container(height: 14),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _periodLengthFocusNode.requestFocus();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Container(width: 55),
+                                            TextFont(text: "Repeat every "),
+                                            IntrinsicWidth(
+                                              child: TextInput(
+                                                focusNode:
+                                                    _periodLengthFocusNode,
+                                                labelText: "",
+                                                padding: EdgeInsets.zero,
+                                                onChanged: (text) {
+                                                  setSelectedPeriodLength(text);
+                                                },
+                                                numbersOnly: true,
+                                                controller:
+                                                    _periodLengthInputController,
+                                                paddingRight: 8,
+                                              ),
+                                            ),
+                                            TextFont(text: " weeks.")
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Container(height: 14),
+                                      TextInput(
+                                        labelText: "Custom Date Range",
+                                        icon: Icons.calendar_today_rounded,
+                                        padding: EdgeInsets.zero,
+                                        onTap: () {
+                                          selectDateRange(context);
+                                        },
+                                        readOnly: true,
+                                        showCursor: false,
+                                        controller: _customDateInputController,
+                                        maxLines: 3,
+                                      ),
+                                    ],
                                   ),
-                                  TextFont(text: " weeks.")
-                                ],
-                              ),
-                            ),
-                            Container(height: 14),
-                            TextInput(
-                              labelText: "Custom Date Range",
-                              icon: Icons.calendar_today_rounded,
-                              padding: EdgeInsets.zero,
-                              onTap: () {
-                                selectDateRange(context);
-                              },
-                              readOnly: true,
-                              showCursor: false,
-                              controller: _customDateInputController,
-                              maxLines: 3,
-                            ),
-                            Container(height: 14),
-                            TextInput(
-                              labelText: "Select color",
-                              icon: Icons.color_lens_rounded,
-                              padding: EdgeInsets.zero,
-                              onTap: () {
-                                selectColor(context);
-                              },
-                              readOnly: true,
-                              showCursor: false,
-                              controller: _colorInputController,
-                            ),
                             Container(height: 14),
                             Container(height: 20),
                             Container(height: 10),
@@ -491,6 +589,27 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 ),
                 SliverFillRemaining()
               ],
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: canAddBudget ?? false
+                  ? Button(
+                      label: "Add Budget",
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      fractionScaleHeight: 0.93,
+                      fractionScaleWidth: 0.98,
+                      onTap: () {},
+                    )
+                  : Button(
+                      label: "Add Budget",
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      fractionScaleHeight: 0.93,
+                      fractionScaleWidth: 0.98,
+                      onTap: () {},
+                      color: Colors.grey,
+                    ),
             ),
           ],
         ),

@@ -73,7 +73,7 @@ class _SelectColorState extends State<SelectColor> {
                             setState(() {
                               selectedColor = color;
                             });
-                            Future.delayed(Duration(milliseconds: 225), () {
+                            Future.delayed(Duration(milliseconds: 70), () {
                               Navigator.pop(context);
                               if (widget.next != null) {
                                 widget.next!();

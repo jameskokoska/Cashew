@@ -37,6 +37,9 @@ class _SelectAmountState extends State<SelectAmount> {
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
       if (fired) {
         fired = false;
+      } else if (event.logicalKey.keyLabel == "Go Back") {
+        fired = true;
+        Navigator.pop(context);
       } else if (event.logicalKey == LogicalKeyboardKey.digit0) {
         fired = true;
         addToAmount("0");
@@ -165,24 +168,27 @@ class _SelectAmountState extends State<SelectAmount> {
           amount += input;
         });
       }
-    } else if ((!includesOperations(
-                amount.substring(amount.length - 1), true) &&
-            includesOperations(input, true)) ||
+    } else if (amount.length != 0 &&
+            (!includesOperations(amount.substring(amount.length - 1), true) &&
+                includesOperations(input, true)) ||
         !includesOperations(input, true)) {
       setState(() {
         amount += input;
       });
-    } else if (includesOperations(amount.substring(amount.length - 1), false) &&
+    } else if (amount.length != 0 &&
+        includesOperations(amount.substring(amount.length - 1), false) &&
         input == ".") {
       setState(() {
         amount += "0" + input;
       });
-    } else if (amount.substring(amount.length - 1) == "." &&
+    } else if (amount.length != 0 &&
+        amount.substring(amount.length - 1) == "." &&
         includesOperations(input, false)) {
       setState(() {
         amount = amount.substring(0, amount.length - 1) + input;
       });
-    } else if (includesOperations(amount.substring(amount.length - 1), false) &&
+    } else if (amount.length != 0 &&
+        includesOperations(amount.substring(amount.length - 1), false) &&
         includesOperations(input, false)) {
       //replace last input operation with a new one
       setState(() {
