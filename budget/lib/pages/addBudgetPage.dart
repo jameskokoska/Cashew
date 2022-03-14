@@ -315,6 +315,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       //Fill in the information from the passed in budget
       _nameInputController =
           new TextEditingController(text: widget.budget!.name);
+      selectedTitle = widget.budget!.name;
+
       _startDateInputController = new TextEditingController(text: "Today");
       _customDateInputController = new TextEditingController();
 
@@ -322,16 +324,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           text: convertToMoney(widget.budget!.amount));
       selectedAllCategories = widget.budget!.allCategoryFks;
       _periodLengthInputController = new TextEditingController(text: "0");
-      // var amountString = widget.transaction!.amount.toStringAsFixed(2);
-      // if (amountString.substring(amountString.length - 2) == "00") {
-      //   selectedAmountCalculation =
-      //       amountString.substring(0, amountString.length - 3);
-      // } else {
-      //   selectedAmountCalculation = amountString;
-      // }
+      var amountString = widget.budget!.amount.toStringAsFixed(2);
+      if (amountString.substring(amountString.length - 2) == "00") {
+        selectedAmountCalculation =
+            amountString.substring(0, amountString.length - 3);
+      } else {
+        selectedAmountCalculation = amountString;
+      }
       textAddBudget = "Edit Transaction";
-      _colorInputController = new TextEditingController();
-      _recurrenceInputController = new TextEditingController();
+      _colorInputController =
+          new TextEditingController(text: widget.budget!.colour);
+      _recurrenceInputController = new TextEditingController(
+          text: widget.budget!.reoccurrence.toString());
+      _selectCategoriesInputController =
+          new TextEditingController(text: "All categories");
 
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         updateInitial();

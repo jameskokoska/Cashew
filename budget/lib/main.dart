@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/fab.dart';
@@ -82,6 +83,9 @@ class App extends StatelessWidget {
                   ),
                   FAB(
                     openPage: AddBudgetPage(title: "Add Budget"),
+                  ),
+                  FAB(
+                    openPage: EditBudgetPage(title: "Edit Budgets"),
                   ),
                 ],
               ),

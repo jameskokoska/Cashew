@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -8,6 +9,7 @@ import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';

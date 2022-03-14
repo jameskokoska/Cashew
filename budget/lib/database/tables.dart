@@ -284,18 +284,20 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get all transactions that occurred in a given time period that belong to categories
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
       DateTime start, DateTime end, List<int> categoryFks, bool allCategories) {
+    DateTime startDate = DateTime(start.year, start.month, start.day);
+    DateTime endDate = DateTime(end.year, end.month, end.day + 1);
     if (allCategories) {
       return (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.isBetweenValues(start, end);
+              return dateCreated.isBetweenValues(startDate, endDate);
             }))
           .watch();
     }
     return (select(transactions)
           ..where((tbl) {
             final dateCreated = tbl.dateCreated;
-            return dateCreated.isBetweenValues(start, end) &
+            return dateCreated.isBetweenValues(startDate, endDate) &
                 tbl.categoryFk.isIn(categoryFks);
           }))
         .watch();
