@@ -3,15 +3,18 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './pages/homePage.dart';
 import 'package:budget/colors.dart';
 import 'dart:math';
+import 'package:budget/colors.dart';
 
 void main() async {
   database = await constructDb();
@@ -72,24 +75,7 @@ class App extends StatelessWidget {
                   AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
             ),
             themeMode: ThemeMode.system,
-            home: Scaffold(
-              body: MyHomePage(),
-              floatingActionButton: Row(
-                children: [
-                  FAB(
-                    openPage: AddTransactionPage(
-                      title: "Add Transaction",
-                    ),
-                  ),
-                  FAB(
-                    openPage: AddBudgetPage(title: "Add Budget"),
-                  ),
-                  FAB(
-                    openPage: EditBudgetPage(title: "Edit Budgets"),
-                  ),
-                ],
-              ),
-            ),
+            home: PageNavigationFramework(),
           );
         }
         return AnimatedSwitcher(

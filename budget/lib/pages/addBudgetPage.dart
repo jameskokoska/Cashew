@@ -6,6 +6,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
@@ -407,198 +408,171 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         },
         child: Stack(
           children: [
-            CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  leading: Container(),
-                  backgroundColor: Theme.of(context).canvasColor,
-                  floating: false,
-                  pinned: true,
-                  expandedHeight: 200.0,
-                  collapsedHeight: 65,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                    title: TextFont(
-                      text: widget.title,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          children: [
-                            Container(height: 20),
-                            TextInput(
-                              labelText: "Budget Name",
-                              icon: Icons.title_rounded,
+            PageFramework(
+              title: widget.title,
+              navbar: false,
+              listWidgets: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      Container(height: 20),
+                      TextInput(
+                        labelText: "Budget Name",
+                        icon: Icons.title_rounded,
+                        padding: EdgeInsets.zero,
+                        controller: _nameInputController,
+                        onChanged: (text) {
+                          setSelectedTitle(text);
+                        },
+                      ),
+                      Container(height: 14),
+                      TextInput(
+                        labelText: "Amount",
+                        icon: Icons.attach_money_rounded,
+                        padding: EdgeInsets.zero,
+                        controller: _amountInputController,
+                        onTap: () {
+                          selectAmount(context);
+                        },
+                        readOnly: true,
+                        showCursor: false,
+                      ),
+                      Container(height: 14),
+                      TextInput(
+                        labelText: "Select color",
+                        icon: Icons.color_lens_rounded,
+                        padding: EdgeInsets.zero,
+                        onTap: () {
+                          selectColor(context);
+                        },
+                        readOnly: true,
+                        showCursor: false,
+                        controller: _colorInputController,
+                      ),
+                      Container(height: 14),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: TextInput(
+                              labelText: "Select Categories",
+                              icon: Icons.category_rounded,
                               padding: EdgeInsets.zero,
-                              controller: _nameInputController,
+                              controller: _selectCategoriesInputController,
                               onChanged: (text) {
                                 setSelectedTitle(text);
                               },
-                            ),
-                            Container(height: 14),
-                            TextInput(
-                              labelText: "Amount",
-                              icon: Icons.attach_money_rounded,
-                              padding: EdgeInsets.zero,
-                              controller: _amountInputController,
                               onTap: () {
-                                selectAmount(context);
+                                selectCategories(context);
                               },
                               readOnly: true,
                               showCursor: false,
                             ),
-                            Container(height: 14),
-                            TextInput(
-                              labelText: "Select color",
-                              icon: Icons.color_lens_rounded,
-                              padding: EdgeInsets.zero,
-                              onTap: () {
-                                selectColor(context);
-                              },
-                              readOnly: true,
-                              showCursor: false,
-                              controller: _colorInputController,
-                            ),
-                            Container(height: 14),
-                            Row(
+                          ),
+                          Column(
+                            children: [
+                              CupertinoSwitch(
+                                value: selectedAllCategories,
+                                onChanged: (value) {
+                                  if (value == false) {
+                                    selectCategories(context);
+                                  } else {
+                                    setState(() {
+                                      selectedAllCategories = value;
+                                      _selectCategoriesInputController.text =
+                                          "All categories";
+                                    });
+                                  }
+                                },
+                              ),
+                              Container(
+                                child: TextFont(
+                                  text: "All Categories",
+                                  maxLines: 2,
+                                  fontSize: 8,
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      Container(height: 14),
+                      TextInput(
+                        labelText: "Recurrence",
+                        icon: Icons.loop_rounded,
+                        padding: EdgeInsets.zero,
+                        controller: _recurrenceInputController,
+                        readOnly: true,
+                        showCursor: false,
+                        onTap: () {
+                          selectRecurrence(context);
+                        },
+                      ),
+                      selectedRecurrence != "Custom"
+                          ? Column(
                               children: [
-                                Flexible(
-                                  child: TextInput(
-                                    labelText: "Select Categories",
-                                    icon: Icons.category_rounded,
-                                    padding: EdgeInsets.zero,
-                                    controller:
-                                        _selectCategoriesInputController,
-                                    onChanged: (text) {
-                                      setSelectedTitle(text);
-                                    },
-                                    onTap: () {
-                                      selectCategories(context);
-                                    },
-                                    readOnly: true,
-                                    showCursor: false,
+                                Container(height: 14),
+                                TextInput(
+                                  labelText: "Start Date",
+                                  icon: Icons.calendar_today_rounded,
+                                  padding: EdgeInsets.zero,
+                                  onTap: () {
+                                    selectStartDate(context);
+                                  },
+                                  readOnly: true,
+                                  showCursor: false,
+                                  controller: _startDateInputController,
+                                ),
+                                Container(height: 14),
+                                GestureDetector(
+                                  onTap: () {
+                                    _periodLengthFocusNode.requestFocus();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(width: 55),
+                                      TextFont(text: "Repeat every "),
+                                      IntrinsicWidth(
+                                        child: TextInput(
+                                          focusNode: _periodLengthFocusNode,
+                                          labelText: "",
+                                          padding: EdgeInsets.zero,
+                                          onChanged: (text) {
+                                            setSelectedPeriodLength(text);
+                                          },
+                                          numbersOnly: true,
+                                          controller:
+                                              _periodLengthInputController,
+                                          paddingRight: 8,
+                                        ),
+                                      ),
+                                      TextFont(text: " weeks.")
+                                    ],
                                   ),
                                 ),
-                                Column(
-                                  children: [
-                                    CupertinoSwitch(
-                                      value: selectedAllCategories,
-                                      onChanged: (value) {
-                                        if (value == false) {
-                                          selectCategories(context);
-                                        } else {
-                                          setState(() {
-                                            selectedAllCategories = value;
-                                            _selectCategoriesInputController
-                                                .text = "All categories";
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    Container(
-                                      child: TextFont(
-                                        text: "All Categories",
-                                        maxLines: 2,
-                                        fontSize: 8,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Container(height: 14),
+                                TextInput(
+                                  labelText: "Custom Date Range",
+                                  icon: Icons.calendar_today_rounded,
+                                  padding: EdgeInsets.zero,
+                                  onTap: () {
+                                    selectDateRange(context);
+                                  },
+                                  readOnly: true,
+                                  showCursor: false,
+                                  controller: _customDateInputController,
+                                  maxLines: 3,
                                 ),
                               ],
                             ),
-                            Container(height: 14),
-                            TextInput(
-                              labelText: "Recurrence",
-                              icon: Icons.loop_rounded,
-                              padding: EdgeInsets.zero,
-                              controller: _recurrenceInputController,
-                              readOnly: true,
-                              showCursor: false,
-                              onTap: () {
-                                selectRecurrence(context);
-                              },
-                            ),
-                            selectedRecurrence != "Custom"
-                                ? Column(
-                                    children: [
-                                      Container(height: 14),
-                                      TextInput(
-                                        labelText: "Start Date",
-                                        icon: Icons.calendar_today_rounded,
-                                        padding: EdgeInsets.zero,
-                                        onTap: () {
-                                          selectStartDate(context);
-                                        },
-                                        readOnly: true,
-                                        showCursor: false,
-                                        controller: _startDateInputController,
-                                      ),
-                                      Container(height: 14),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _periodLengthFocusNode.requestFocus();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Container(width: 55),
-                                            TextFont(text: "Repeat every "),
-                                            IntrinsicWidth(
-                                              child: TextInput(
-                                                focusNode:
-                                                    _periodLengthFocusNode,
-                                                labelText: "",
-                                                padding: EdgeInsets.zero,
-                                                onChanged: (text) {
-                                                  setSelectedPeriodLength(text);
-                                                },
-                                                numbersOnly: true,
-                                                controller:
-                                                    _periodLengthInputController,
-                                                paddingRight: 8,
-                                              ),
-                                            ),
-                                            TextFont(text: " weeks.")
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Container(height: 14),
-                                      TextInput(
-                                        labelText: "Custom Date Range",
-                                        icon: Icons.calendar_today_rounded,
-                                        padding: EdgeInsets.zero,
-                                        onTap: () {
-                                          selectDateRange(context);
-                                        },
-                                        readOnly: true,
-                                        showCursor: false,
-                                        controller: _customDateInputController,
-                                        maxLines: 3,
-                                      ),
-                                    ],
-                                  ),
-                            Container(height: 14),
-                            Container(height: 20),
-                            Container(height: 10),
-                          ],
-                        ),
-                      )
                     ],
                   ),
-                ),
-                SliverFillRemaining()
+                )
               ],
             ),
             Align(

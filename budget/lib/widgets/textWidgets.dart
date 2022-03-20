@@ -8,16 +8,18 @@ class TextFont extends StatelessWidget {
   final Color? textColor;
   final TextAlign textAlign;
   final int? maxLines;
+  final bool fixParagraphMargin;
 
-  const TextFont(
-      {Key? key,
-      required this.text,
-      this.fontSize = 20,
-      this.fontWeight = FontWeight.normal,
-      this.textAlign = TextAlign.left,
-      this.textColor,
-      this.maxLines = null})
-      : super(key: key);
+  const TextFont({
+    Key? key,
+    required this.text,
+    this.fontSize = 20,
+    this.fontWeight = FontWeight.normal,
+    this.textAlign = TextAlign.left,
+    this.textColor,
+    this.maxLines = null,
+    this.fixParagraphMargin = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +29,22 @@ class TextFont extends StatelessWidget {
     } else {
       finalTextColor = textColor;
     }
-    return Text(
-      '$text',
-      maxLines: maxLines,
-      textAlign: textAlign,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontWeight: this.fontWeight,
-        fontSize: this.fontSize,
-        fontFamily: 'Avenir',
-        color: finalTextColor,
-        decoration: TextDecoration.underline,
-        decorationStyle: TextDecorationStyle.double,
-        decorationColor: Color(0x00FFFFFF),
+    return Transform.translate(
+      offset: Offset(0, this.fontSize * 0.1),
+      child: Text(
+        '$text',
+        maxLines: maxLines,
+        textAlign: textAlign,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontWeight: this.fontWeight,
+          fontSize: this.fontSize,
+          fontFamily: 'Avenir',
+          color: finalTextColor,
+          decoration: TextDecoration.underline,
+          decorationStyle: TextDecorationStyle.double,
+          decorationColor: Color(0x00FFFFFF),
+        ),
       ),
     );
   }

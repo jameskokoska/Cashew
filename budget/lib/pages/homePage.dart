@@ -14,16 +14,20 @@ import "../struct/budget.dart";
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:budget/colors.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({
+class HomePage extends StatefulWidget {
+  HomePage({
     Key? key,
   }) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   GlobalKey<_HomeAppBarState> _appBarKey = GlobalKey();
   double setTitleHeight = 0;
 
@@ -83,101 +87,106 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            leading: Container(),
-            backgroundColor: Theme.of(context).colorScheme.accentColor,
-            floating: false,
-            pinned: true,
-            expandedHeight: 200.0,
-            collapsedHeight: 65,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-              title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
-              background: Container(
-                color: Theme.of(context).canvasColor,
-              ),
-            ),
-          ),
-          StreamBuilder<List<Budget>>(
-            stream: database.watchAllPinnedBudgets(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return SliverPadding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return BudgetContainer(
-                          budget: snapshot.data![index],
-                        );
-                      },
-                      childCount: snapshot.data?.length, //snapshot.data?.length
-                    ),
-                  ),
-                );
-              } else {
-                return SliverToBoxAdapter(child: SizedBox());
-              }
-            },
-          ),
-
-          // SliverList(
-          //   delegate: SliverChildListDelegate(
-          //     [
-          //       BudgetContainer(
-          //         budget: Budget(
-          //           title: "Budget Name",
-          //           color: Color(0xFF51833D),
-          //           total: 500,
-          //           spent: 210,
-          //           endDate: DateTime.now(),
-          //           startDate: DateTime.now(),
-          //           period: "month",
-          //           periodLength: 10,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          SliverAppBar(
-            leading: Container(),
-            backgroundColor: Colors.transparent,
-            expandedHeight: 65.1,
-            collapsedHeight: 65,
-            flexibleSpace: LayoutBuilder(builder: (
-              BuildContext context,
-              BoxConstraints constraints,
-            ) {
-              if (setTitleHeight == 0)
-                setTitleHeight = constraints.biggest.height;
-              print(setTitleHeight);
-              if (constraints.biggest.height < setTitleHeight) {
-                //occur when title disappears (scrolling down)
-                //add delay to wait for layout of children widgets first
-                Future.delayed(Duration.zero, () async {
-                  _appBarKey.currentState?.changeTitle("Transactions", 1);
-                });
-              } else {
-                //occur when title appears (scrolling up)
-                Future.delayed(Duration.zero, () async {
-                  _appBarKey.currentState?.changeTitle("Home", -1);
-                });
-              }
-              return FlexibleSpaceBar(
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 48),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              leading: Container(),
+              backgroundColor: Theme.of(context).colorScheme.accentColor,
+              floating: false,
+              pinned: true,
+              expandedHeight: 200.0,
+              collapsedHeight: 65,
+              flexibleSpace: FlexibleSpaceBar(
                 titlePadding:
                     EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                title: TextFont(
-                  text: "Transactions",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
+                background: Container(
+                  color: Theme.of(context).canvasColor,
                 ),
-              );
-            }),
-          ),
-          ...transactionsWidgets,
-        ],
+              ),
+            ),
+            StreamBuilder<List<Budget>>(
+              stream: database.watchAllPinnedBudgets(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return SliverPadding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return BudgetContainer(
+                            budget: snapshot.data![index],
+                          );
+                        },
+                        childCount:
+                            snapshot.data?.length, //snapshot.data?.length
+                      ),
+                    ),
+                  );
+                } else {
+                  return SliverToBoxAdapter(child: SizedBox());
+                }
+              },
+            ),
+
+            // SliverList(
+            //   delegate: SliverChildListDelegate(
+            //     [
+            //       BudgetContainer(
+            //         budget: Budget(
+            //           title: "Budget Name",
+            //           color: Color(0xFF51833D),
+            //           total: 500,
+            //           spent: 210,
+            //           endDate: DateTime.now(),
+            //           startDate: DateTime.now(),
+            //           period: "month",
+            //           periodLength: 10,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            SliverAppBar(
+              leading: Container(),
+              backgroundColor: Colors.transparent,
+              expandedHeight: 65.1,
+              collapsedHeight: 65,
+              flexibleSpace: LayoutBuilder(builder: (
+                BuildContext context,
+                BoxConstraints constraints,
+              ) {
+                if (setTitleHeight == 0)
+                  setTitleHeight = constraints.biggest.height;
+                print(setTitleHeight);
+                if (constraints.biggest.height < setTitleHeight) {
+                  //occur when title disappears (scrolling down)
+                  //add delay to wait for layout of children widgets first
+                  Future.delayed(Duration.zero, () async {
+                    _appBarKey.currentState?.changeTitle("Transactions", 1);
+                  });
+                } else {
+                  //occur when title appears (scrolling up)
+                  Future.delayed(Duration.zero, () async {
+                    _appBarKey.currentState?.changeTitle("Home", -1);
+                  });
+                }
+                return FlexibleSpaceBar(
+                  titlePadding:
+                      EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                  title: TextFont(
+                    text: "Transactions",
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }),
+            ),
+            ...transactionsWidgets,
+          ],
+        ),
       ),
     );
   }

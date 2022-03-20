@@ -280,19 +280,16 @@ class BudgetProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     var percentText = Container(
       child: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 4.3),
-          child: CountUp(
-            count: percent,
-            textColor: Colors.black,
-            decimals: 0,
-            suffix: "%",
-            fontSize: large ? 16 : 14,
-            textAlign: TextAlign.center,
-            fontWeight: FontWeight.bold,
-            curve: Curves.decelerate,
-            duration: Duration(milliseconds: 1500),
-          ),
+        child: CountUp(
+          count: percent,
+          textColor: Colors.black,
+          decimals: 0,
+          suffix: "%",
+          fontSize: large ? 16 : 14,
+          textAlign: TextAlign.center,
+          fontWeight: FontWeight.bold,
+          curve: Curves.decelerate,
+          duration: Duration(milliseconds: 1500),
         ),
       ),
     );
@@ -378,7 +375,7 @@ class TodayIndicator extends StatelessWidget {
                             color: Theme.of(context).colorScheme.black),
                         child: Padding(
                           padding: EdgeInsets.only(
-                              top: 4, right: 5, left: 5, bottom: 3),
+                              top: 3, right: 5, left: 5, bottom: 3),
                           child: TextFont(
                             textAlign: TextAlign.center,
                             text: "Today",
@@ -390,7 +387,7 @@ class TodayIndicator extends StatelessWidget {
                   FadeIn(
                     child: Container(
                       width: 3,
-                      height: large ? 26 : 21,
+                      height: large ? 27 : 22,
                       decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.vertical(bottom: Radius.circular(5)),

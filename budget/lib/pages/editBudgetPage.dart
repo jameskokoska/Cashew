@@ -3,6 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
+import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -21,50 +22,37 @@ class EditBudgetPage extends StatefulWidget {
 class _EditBudgetPageState extends State<EditBudgetPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            leading: Container(),
-            backgroundColor: Theme.of(context).canvasColor,
-            floating: false,
-            pinned: true,
-            expandedHeight: 200.0,
-            collapsedHeight: 65,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-              title: TextFont(
-                text: widget.title,
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          StreamBuilder<List<Budget>>(
-            stream: database.watchAllBudgets(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-                return SliverReorderableList(
-                  itemBuilder: (context, index) {
-                    return BudgetRowEntry(
-                      budget: snapshot.data![index],
-                      index: index,
-                      key: ValueKey(index),
-                    );
-                  },
-                  itemCount: snapshot.data!.length,
-                  onReorder: (_, _int) {
-                    print("object");
-                  },
-                );
-              }
-              return SliverToBoxAdapter(
-                child: Container(),
+    return PageFramework(
+      title: widget.title,
+      navbar: false,
+      slivers: [
+        StreamBuilder<List<Budget>>(
+          stream: database.watchAllBudgets(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+              return SliverReorderableList(
+                itemBuilder: (context, index) {
+                  return BudgetRowEntry(
+                    budget: snapshot.data![index],
+                    index: index,
+                    key: ValueKey(index),
+                  );
+                },
+                itemCount: snapshot.data!.length,
+                onReorder: (_, _int) {
+                  print("object");
+                },
               );
-            },
-          ),
-        ],
-      ),
+            }
+            return SliverToBoxAdapter(
+              child: Container(),
+            );
+          },
+        ),
+        SliverFillRemaining(),
+        SliverFillRemaining(),
+        SliverFillRemaining(),
+      ],
     );
   }
 }
