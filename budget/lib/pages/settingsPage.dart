@@ -26,6 +26,21 @@ class SettingsPage extends StatelessWidget {
           icon: Icons.lock_rounded,
           onSwitched: (value) {},
         ),
+        SettingsContainerOpenPage(
+          openPage: Container(
+            color: Colors.white,
+          ),
+          title: "Edit Budgets",
+          description: "Edit the order and budget details",
+          icon: Icons.bungalow_outlined,
+        ),
+        SettingsContainerDropdown(
+          title: "Theme Mode",
+          icon: Icons.dark_mode_rounded,
+          initial: "Light",
+          items: ["Light", "Dark", "System"],
+          onChanged: (_) {},
+        ),
       ],
     );
   }
