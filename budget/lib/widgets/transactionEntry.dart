@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/struct/transactionTag.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
@@ -37,103 +38,148 @@ class TransactionEntry extends StatelessWidget {
       closedElevation: 0.0,
       openColor: Theme.of(context).colorScheme.lightDarkAccent,
       closedBuilder: (BuildContext _, VoidCallback openContainer) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-          child: Tappable(
-            borderRadius: 15,
-            onTap: () async {
-              openContainer();
-            },
-            child: Container(
-              margin: EdgeInsets.only(left: 8, right: 12, top: 7, bottom: 7),
-              child: Row(
-                children: [
-                  CategoryIcon(
-                    categoryPk: transaction.categoryFk,
-                    size: 33,
-                    sizePadding: 15,
-                    margin: EdgeInsets.zero,
-                  ),
-                  Container(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          transaction.name != ""
-                              ? TextFont(
-                                  text: transaction.name,
-                                  fontSize: 20,
-                                )
-                              : Container(
-                                  height: transaction.note == "" ? 0 : 7),
-                          transaction.name == "" &&
-                                  (transaction.labelFks?.length ?? 0) > 0
-                              ? TagIcon(
-                                  tag: TransactionTag(
-                                      title: "test",
-                                      id: "test",
-                                      categoryID: "id"),
-                                  size: transaction.note == "" ? 20 : 16)
-                              : Container(),
-                          transaction.name == "" &&
-                                  (transaction.labelFks?.length ?? 0) == 0
-                              ? StreamBuilder<TransactionCategory>(
-                                  stream: database
-                                      .getCategory(transaction.categoryFk),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return TextFont(
-                                        text: snapshot.data!.name,
-                                        fontSize:
-                                            transaction.note == "" ? 20 : 20,
-                                      );
-                                    }
-                                    return TextFont(
-                                      text: "",
-                                      fontSize:
-                                          transaction.note == "" ? 20 : 20,
-                                    );
-                                  })
-                              : Container(),
-                          transaction.name == "" && transaction.note != ""
-                              ? Container(height: 4)
-                              : Container(),
-                          transaction.note == ""
-                              ? Container()
-                              : TextFont(
-                                  text: transaction.note,
-                                  fontSize: 16,
-                                  maxLines: 2,
-                                ),
-                          transaction.note == ""
-                              ? Container()
-                              : Container(height: 4),
-                          //TODO loop through all tags relating to this entry
-                          transaction.name != "" &&
-                                  (transaction.labelFks?.length ?? 0) > 0
-                              ? TagIcon(
-                                  tag: TransactionTag(
-                                      title: "test",
-                                      id: "test",
-                                      categoryID: "id"),
-                                  size: 12)
-                              : Container()
-                        ],
-                      ),
-                    ),
-                  ),
-                  TextFont(
-                    text: convertToMoney(transaction.amount),
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ],
+        return Dismissible(
+          confirmDismiss: (DismissDirection direction) async {
+            return await openPopup(
+              context,
+              description: "Delete " + transaction.name,
+              icon: Icons.delete,
+              onCancel: () => Navigator.of(context).pop(false),
+              onCancelLabel: "Cancel",
+              onSubmit: () => Navigator.of(context).pop(true),
+              onSubmitLabel: "Delete",
+            );
+          },
+          background: Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.redAccent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: AlignmentDirectional.centerStart,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
               ),
             ),
           ),
+          secondaryBackground: Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.redAccent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: AlignmentDirectional.centerEnd,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+            child: Tappable(
+              borderRadius: 15,
+              onTap: () async {
+                openContainer();
+              },
+              child: Container(
+                margin: EdgeInsets.only(left: 8, right: 12, top: 7, bottom: 7),
+                child: Row(
+                  children: [
+                    CategoryIcon(
+                      categoryPk: transaction.categoryFk,
+                      size: 33,
+                      sizePadding: 15,
+                      margin: EdgeInsets.zero,
+                    ),
+                    Container(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            transaction.name != ""
+                                ? TextFont(
+                                    text: transaction.name,
+                                    fontSize: 20,
+                                  )
+                                : Container(
+                                    height: transaction.note == "" ? 0 : 7),
+                            transaction.name == "" &&
+                                    (transaction.labelFks?.length ?? 0) > 0
+                                ? TagIcon(
+                                    tag: TransactionTag(
+                                        title: "test",
+                                        id: "test",
+                                        categoryID: "id"),
+                                    size: transaction.note == "" ? 20 : 16)
+                                : Container(),
+                            transaction.name == "" &&
+                                    (transaction.labelFks?.length ?? 0) == 0
+                                ? StreamBuilder<TransactionCategory>(
+                                    stream: database
+                                        .getCategory(transaction.categoryFk),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return TextFont(
+                                          text: snapshot.data!.name,
+                                          fontSize:
+                                              transaction.note == "" ? 20 : 20,
+                                        );
+                                      }
+                                      return TextFont(
+                                        text: "",
+                                        fontSize:
+                                            transaction.note == "" ? 20 : 20,
+                                      );
+                                    })
+                                : Container(),
+                            transaction.name == "" && transaction.note != ""
+                                ? Container(height: 4)
+                                : Container(),
+                            transaction.note == ""
+                                ? Container()
+                                : TextFont(
+                                    text: transaction.note,
+                                    fontSize: 16,
+                                    maxLines: 2,
+                                  ),
+                            transaction.note == ""
+                                ? Container()
+                                : Container(height: 4),
+                            //TODO loop through all tags relating to this entry
+                            transaction.name != "" &&
+                                    (transaction.labelFks?.length ?? 0) > 0
+                                ? TagIcon(
+                                    tag: TransactionTag(
+                                        title: "test",
+                                        id: "test",
+                                        categoryID: "id"),
+                                    size: 12)
+                                : Container()
+                          ],
+                        ),
+                      ),
+                    ),
+                    TextFont(
+                      text: convertToMoney(transaction.amount),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          key: ValueKey<int>(transaction.transactionPk),
+          onDismissed: (DismissDirection direction) {},
         );
       },
     );

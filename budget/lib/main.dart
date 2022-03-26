@@ -6,7 +6,6 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
-import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +13,12 @@ import 'package:flutter/services.dart';
 import './pages/homePage.dart';
 import 'package:budget/colors.dart';
 import 'dart:math';
-import 'package:budget/colors.dart';
 
 void main() async {
   database = await constructDb();
-  runApp(App());
+  runApp(App(
+    key: appStateKey,
+  ));
 }
 
 int randomInt = Random().nextInt(100);
@@ -31,8 +31,24 @@ Future initialize() async {
   return true;
 }
 
-class App extends StatelessWidget {
+GlobalKey<AppState> appStateKey = GlobalKey();
+
+class App extends StatefulWidget {
   App({Key? key}) : super(key: key);
+
+  @override
+  State<App> createState() => AppState();
+}
+
+class AppState extends State<App> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  void changeTheme(ThemeMode themeMode) {
+    print("object");
+    setState(() {
+      _themeMode = themeMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +90,7 @@ class App extends StatelessWidget {
               appBarTheme:
                   AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
             ),
-            themeMode: ThemeMode.system,
+            themeMode: _themeMode,
             home: PageNavigationFramework(),
           );
         }

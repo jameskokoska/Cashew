@@ -1,10 +1,13 @@
+import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:budget/colors.dart';
 
 class FAB extends StatelessWidget {
-  FAB({Key? key, required this.openPage}) : super(key: key);
+  FAB({Key? key, required this.openPage, this.tooltip = ""}) : super(key: key);
 
   final Widget openPage;
+  final String tooltip;
 
   final double fabSize = 60;
   @override
@@ -24,17 +27,21 @@ class FAB extends StatelessWidget {
       ),
       closedColor: Theme.of(context).colorScheme.secondary,
       closedBuilder: (BuildContext context, VoidCallback openContainer) {
-        return InkWell(
-          onTap: () {
-            openContainer();
-          },
-          child: SizedBox(
-            height: fabSize,
-            width: fabSize,
-            child: Center(
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).colorScheme.onSecondary,
+        return Tooltip(
+          message: tooltip,
+          child: Tappable(
+            color: Theme.of(context).colorScheme.secondary,
+            onTap: () {
+              openContainer();
+            },
+            child: SizedBox(
+              height: fabSize,
+              width: fabSize,
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
               ),
             ),
           ),

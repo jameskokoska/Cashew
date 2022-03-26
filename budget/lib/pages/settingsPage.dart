@@ -3,6 +3,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/main.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -18,7 +19,13 @@ class SettingsPage extends StatelessWidget {
           description: "Set the overall theme of the app. yesss",
           initialValue: true,
           icon: Icons.dark_mode_rounded,
-          onSwitched: (value) {},
+          onSwitched: (value) {
+            if (value) {
+              appStateKey.currentState?.changeTheme(ThemeMode.light);
+            } else {
+              appStateKey.currentState?.changeTheme(ThemeMode.dark);
+            }
+          },
         ),
         SettingsContainerSwitch(
           title: "Test",

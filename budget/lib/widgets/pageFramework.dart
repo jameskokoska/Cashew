@@ -49,6 +49,21 @@ class _PageFrameworkState extends State<PageFramework>
       _animationControllerOpacity.value =
           0.5 + (_scrollController.offset / (200 - 65) / 2);
     }
+    if (widget.showElevationAfterScrollPast != null &&
+        showElevation == false &&
+        _scrollController.offset <
+            widget.showElevationAfterScrollPast! + 200 - 65) {
+      setState(() {
+        showElevation = true;
+      });
+    } else if (widget.showElevationAfterScrollPast != null &&
+        showElevation == true &&
+        _scrollController.offset >
+            widget.showElevationAfterScrollPast! + 200 - 65) {
+      setState(() {
+        showElevation = false;
+      });
+    }
   }
 
   @override

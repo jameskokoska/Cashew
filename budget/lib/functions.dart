@@ -11,20 +11,6 @@ import './widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-showSnackbar(context, text, Color? textColor, Color? backgroundColor) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: TextFont(
-        text: text,
-        fontSize: 16,
-        textColor:
-            textColor == null ? Theme.of(context).colorScheme.white : textColor,
-      ),
-      backgroundColor: backgroundColor == null
-          ? Theme.of(context).colorScheme.black
-          : backgroundColor));
-  return;
-}
-
 extension CapExtension on String {
   String get capitalizeFirst =>
       this.length > 0 ? '${this[0].toUpperCase()}${this.substring(1)}' : '';

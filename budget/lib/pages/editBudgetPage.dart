@@ -3,6 +3,8 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
+import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -80,6 +82,27 @@ class BudgetRowEntry extends StatelessWidget {
           TextFont(text: budget.name),
           Row(
             children: [
+              Tappable(
+                color: Colors.transparent,
+                borderRadius: 50,
+                child: Container(
+                    width: 40, height: 50, child: Icon(Icons.delete_rounded)),
+                onTap: () {
+                  openPopup(context,
+                      description: "Delete " + budget.name + "?",
+                      icon: Icons.delete_rounded,
+                      onCancel: () {
+                        Navigator.pop(context);
+                      },
+                      onCancelLabel: "Cancel",
+                      onSubmit: () {
+                        database.deleteBudget(budget.budgetPk);
+                        Navigator.pop(context);
+                        openSnackbar(context, "Deleted " + budget.name);
+                      },
+                      onSubmitLabel: "Delete");
+                },
+              ),
               OpenContainerNavigation(
                 closedColor: HexColor(budget.colour),
                 button: (openContainer) {

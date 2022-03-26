@@ -249,6 +249,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  // delete budget given key
+  Future deleteBudget(int budgetPk) {
+    return (delete(budgets)..where((t) => t.budgetPk.equals(budgetPk))).go();
+  }
+
   // TODO: add budget pk filter
   // get total amount spent in each category
   Stream<List<TypedResult>> watchTotalSpentInEachCategory() {

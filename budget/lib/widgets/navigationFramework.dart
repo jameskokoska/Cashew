@@ -5,6 +5,8 @@ import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 
 class PageNavigationFramework extends StatefulWidget {
@@ -19,7 +21,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   List<Widget> pages = [HomePage(), Container(), SettingsPage(), Container()];
 
   final pageController = PageController();
-  final GlobalKey<PageNavigationFrameworkState> navigationKey = GlobalKey();
 
   void changePage(int index2) {
     // pageController.animateToPage(index,
@@ -56,6 +57,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         child: Row(
           children: [
             FAB(
+              tooltip: "Add Transaction",
               openPage: AddTransactionPage(
                 title: "Add Transaction",
               ),
@@ -65,6 +67,49 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
             ),
             FAB(
               openPage: EditBudgetPage(title: "Edit Budgets"),
+            ),
+            Tappable(
+              color: Colors.green,
+              child: Container(width: 20, height: 20),
+              onTap: () {
+                openPopup(
+                  context,
+                  icon: Icons.ac_unit_outlined,
+                  description: "hello",
+                );
+              },
+            ),
+            Tappable(
+              color: Colors.green,
+              child: Container(width: 20, height: 20),
+              onTap: () {
+                openPopup(context, title: "hello", description: "test");
+              },
+            ),
+            Tappable(
+              color: Colors.green,
+              child: Container(width: 20, height: 20),
+              onTap: () {
+                openPopup(
+                  context,
+                  title: "hello",
+                  description: "test",
+                  onSubmitLabel: "submit",
+                  onCancelLabel: "cancel",
+                );
+              },
+            ),
+            Tappable(
+              color: Colors.green,
+              child: Container(width: 20, height: 20),
+              onTap: () {
+                openPopup(
+                  context,
+                  icon: Icons.ac_unit_outlined,
+                  description: "hello",
+                  onSubmitLabel: "submit",
+                );
+              },
             ),
           ],
         ),
