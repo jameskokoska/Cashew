@@ -141,8 +141,12 @@ getWeekDayShort(currentWeekDay) {
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ Mar 15
-getWordedDateShort(DateTime date, {includeYear = false}) {
-  if (checkYesterdayTodayTomorrow(date) != false) {
+getWordedDateShort(
+  DateTime date, {
+  includeYear = false,
+  showTodayTomorrow = true,
+}) {
+  if (showTodayTomorrow && checkYesterdayTodayTomorrow(date) != false) {
     return checkYesterdayTodayTomorrow(date);
   }
   if (includeYear) {
@@ -248,4 +252,12 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
       start: budget.startDate,
       end: DateTime(budget.startDate.year + 1, budget.startDate.month,
           budget.startDate.day));
+}
+
+String getWordedNumber(double value) {
+  if (value >= 1000) {
+    return (value / 1000).toStringAsFixed(1) + "K";
+  } else {
+    return value.toInt().toString();
+  }
 }

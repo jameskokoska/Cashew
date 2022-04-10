@@ -21,11 +21,11 @@ extension ColorsDefined on ColorScheme {
       ? const Color(0x2D5A5A5A)
       : const Color(0x4BBDBDBD);
   Color get accentColor => brightness == Brightness.light
-      ? const Color(0xFF46A872)
-      : const Color(0xFF1E7A1B);
+      ? const Color(0xFF4668A8)
+      : const Color(0xFF1B447A);
   Color get accentColorHeavy => brightness == Brightness.light
-      ? const Color(0xFF1C683E)
-      : const Color(0xFF7CFF77);
+      ? const Color(0xFF29457A)
+      : const Color(0xFF5586C5);
 
   Color get selectableColorRed => brightness == Brightness.light
       ? Colors.red.shade400

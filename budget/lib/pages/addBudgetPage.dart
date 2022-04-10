@@ -582,8 +582,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       label: "Add Budget",
                       width: MediaQuery.of(context).size.width,
                       height: 50,
-                      fractionScaleHeight: 0.93,
-                      fractionScaleWidth: 0.98,
                       onTap: () {
                         addBudget();
                       },
@@ -592,8 +590,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       label: "Add Budget",
                       width: MediaQuery.of(context).size.width,
                       height: 50,
-                      fractionScaleHeight: 0.93,
-                      fractionScaleWidth: 0.98,
                       onTap: () {
                         addBudget();
                       },

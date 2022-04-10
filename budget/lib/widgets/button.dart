@@ -7,20 +7,16 @@ class Button extends StatefulWidget {
   Button(
       {Key? key,
       required this.label,
-      required this.width,
-      required this.height,
+      this.width,
+      this.height,
       this.fontSize = 16,
-      this.fractionScaleHeight = 0.93,
-      this.fractionScaleWidth = 0.93,
       required this.onTap,
       this.color})
       : super(key: key);
   final String label;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final double fontSize;
-  final double fractionScaleHeight;
-  final double fractionScaleWidth;
   final VoidCallback onTap;
   final Color? color;
 
@@ -44,52 +40,43 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: widget.height,
-      width: widget.width,
-      child: Center(
-        child: Tappable(
-          color: Theme.of(context).colorScheme.accentColor.withOpacity(0.8),
-          onHighlightChanged: (value) {
-            setState(() {
-              isTapped = value;
-            });
-          },
-          onTap: () {
-            _shrink();
-            widget.onTap();
-          },
-          borderRadius: 10,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            curve: Curves.easeOutCubic,
-            height: isTapped
-                ? widget.height * widget.fractionScaleHeight
-                : widget.height,
-            width: isTapped
-                ? widget.width * widget.fractionScaleWidth
-                : widget.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: widget.color ??
-                      Theme.of(context)
-                          .colorScheme
-                          .accentColor
-                          .withOpacity(0.5),
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                ),
-              ],
+    return AnimatedScale(
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeOutCubic,
+      scale: isTapped ? 0.9 : 1,
+      child: Tappable(
+        color: Theme.of(context).colorScheme.accentColor.withOpacity(0.8),
+        onHighlightChanged: (value) {
+          setState(() {
+            isTapped = value;
+          });
+        },
+        onTap: () {
+          _shrink();
+          widget.onTap();
+        },
+        borderRadius: 10,
+        child: Container(
+          width: widget.width,
+          height: widget.height,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(30),
             ),
-            child: Center(
-              child: TextFont(
-                text: widget.label,
-                fontSize: widget.fontSize,
+            boxShadow: [
+              BoxShadow(
+                color: widget.color ??
+                    Theme.of(context).colorScheme.accentColor.withOpacity(0.5),
+                blurRadius: 10,
+                offset: Offset(0, 4),
               ),
+            ],
+          ),
+          child: Center(
+            child: TextFont(
+              text: widget.label,
+              fontSize: widget.fontSize,
             ),
           ),
         ),

@@ -4,6 +4,50 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/textWidgets.dart';
 
+// Tappable(
+//   color: Colors.green,
+//   child: Container(width: 20, height: 20),
+//   onTap: () {
+//     openPopup(
+//       context,
+//       icon: Icons.ac_unit_outlined,
+//       description: "hello",
+//     );
+//   },
+// ),
+// Tappable(
+//   color: Colors.green,
+//   child: Container(width: 20, height: 20),
+//   onTap: () {
+//     openPopup(context, title: "hello", description: "test");
+//   },
+// ),
+// Tappable(
+//   color: Colors.green,
+//   child: Container(width: 20, height: 20),
+//   onTap: () {
+//     openPopup(
+//       context,
+//       title: "hello",
+//       description: "test",
+//       onSubmitLabel: "submit",
+//       onCancelLabel: "cancel",
+//     );
+//   },
+// ),
+// Tappable(
+//   color: Colors.green,
+//   child: Container(width: 20, height: 20),
+//   onTap: () {
+//     openPopup(
+//       context,
+//       icon: Icons.ac_unit_outlined,
+//       description: "hello",
+//       onSubmitLabel: "submit",
+//     );
+//   },
+// ),
+
 Future<T?> openPopup<T extends Object?>(context,
     {IconData? icon,
     String? title,
@@ -40,7 +84,7 @@ Future<T?> openPopup<T extends Object?>(context,
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           margin: EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
-            color: Colors.grey,
+            color: Theme.of(context).colorScheme.lightDarkAccent,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Stack(
@@ -51,7 +95,7 @@ Future<T?> openPopup<T extends Object?>(context,
                       offset: Offset(0, -50),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: Theme.of(context).colorScheme.accentColor,
                           borderRadius: BorderRadius.circular(1000),
                         ),
                         padding: EdgeInsets.all(15),

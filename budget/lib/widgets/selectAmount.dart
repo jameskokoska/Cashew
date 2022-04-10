@@ -484,8 +484,6 @@ class _SelectAmountState extends State<SelectAmount> {
                     label: widget.nextLabel ?? "",
                     width: MediaQuery.of(context).size.width,
                     height: 50,
-                    fractionScaleHeight: 0.93,
-                    fractionScaleWidth: 0.91,
                     onTap: () {
                       if (widget.next != null) {
                         widget.next!();
@@ -497,8 +495,6 @@ class _SelectAmountState extends State<SelectAmount> {
                     label: widget.nextLabel ?? "",
                     width: MediaQuery.of(context).size.width,
                     height: 50,
-                    fractionScaleHeight: 0.93,
-                    fractionScaleWidth: 0.91,
                     onTap: () {},
                     color: Colors.grey,
                   ),
@@ -547,11 +543,12 @@ class CalculatorButton extends StatelessWidget {
           child: Container(
             height: 60,
             child: Center(
-              child: TextFont(
-                fontSize: 24,
-                text: label,
-              ),
-            ),
+                child: label != "<"
+                    ? TextFont(
+                        fontSize: 24,
+                        text: label,
+                      )
+                    : Icon(Icons.backspace_rounded)),
           ),
         ),
       ),

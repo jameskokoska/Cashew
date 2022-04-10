@@ -157,6 +157,14 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  //watch all transactions sorted by date
+  Stream<List<Transaction>> watchAllTransactions({int? limit}) {
+    return (select(transactions)
+          ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
+          ..limit(limit ?? DEFAULT_LIMIT))
+        .watch();
+  }
+
   //get dates of all transactions in the month and year
   Stream<List<DateTime>> getTransactionDays(DateTime date) {
     final query = (select(transactions)
@@ -254,6 +262,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (delete(budgets)..where((t) => t.budgetPk.equals(budgetPk))).go();
   }
 
+  //delete transaction given key
+  Future deleteTransaction(int transactionPk) {
+    return (delete(transactions)
+          ..where((t) => t.transactionPk.equals(transactionPk)))
+        .go();
+  }
+
   // TODO: add budget pk filter
   // get total amount spent in each category
   Stream<List<TypedResult>> watchTotalSpentInEachCategory() {
@@ -287,6 +302,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get all transactions that occurred in a given time period that belong to categories
+  //TODO: should sort them based on date
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
       DateTime start, DateTime end, List<int> categoryFks, bool allCategories) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
@@ -296,7 +312,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
               return dateCreated.isBetweenValues(startDate, endDate);
-            }))
+            })
+            ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
           .watch();
     }
     return (select(transactions)

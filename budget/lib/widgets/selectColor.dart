@@ -12,34 +12,21 @@ class SelectColor extends StatefulWidget {
     this.setSelectedColor,
     this.selectedColor,
     this.next,
-    this.nextLabel,
-    this.skipIfSet,
   }) : super(key: key);
   final Function(Color)? setSelectedColor;
   final Color? selectedColor;
   final VoidCallback? next;
-  final String? nextLabel;
-  final bool? skipIfSet;
 
   @override
   _SelectColorState createState() => _SelectColorState();
 }
 
 class _SelectColorState extends State<SelectColor> {
-  List<TransactionCategory> selectedCategories = [];
   Color? selectedColor;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (widget.selectedColor != null && widget.skipIfSet == true) {
-        Navigator.pop(context);
-        if (widget.next != null) {
-          widget.next!();
-        }
-      }
-    });
     if (widget.selectedColor != null) {
       setState(() {
         selectedColor = widget.selectedColor;
@@ -89,40 +76,6 @@ class _SelectColorState extends State<SelectColor> {
                   .toList(),
             ),
           ),
-          widget.nextLabel != null
-              ? Column(
-                  children: [
-                    Container(height: 15),
-                    AnimatedSwitcher(
-                      duration: Duration(milliseconds: 500),
-                      child: selectedCategories.length > 0
-                          ? Button(
-                              key: Key("addSuccess"),
-                              label: widget.nextLabel ?? "",
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              fractionScaleHeight: 0.93,
-                              fractionScaleWidth: 0.91,
-                              onTap: () {
-                                if (widget.next != null) {
-                                  widget.next!();
-                                }
-                              },
-                            )
-                          : Button(
-                              key: Key("addNoSuccess"),
-                              label: widget.nextLabel ?? "",
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              fractionScaleHeight: 0.93,
-                              fractionScaleWidth: 0.91,
-                              onTap: () {},
-                              color: Colors.grey,
-                            ),
-                    )
-                  ],
-                )
-              : Container()
         ],
       ),
     );

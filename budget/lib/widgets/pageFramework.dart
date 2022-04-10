@@ -10,6 +10,7 @@ class PageFramework extends StatefulWidget {
     this.listWidgets,
     this.navbar = true,
     this.appBarBackgroundColor,
+    this.appBarBackgroundColorStart,
     this.showElevationAfterScrollPast,
     this.backButton = true,
   }) : super(key: key);
@@ -21,6 +22,7 @@ class PageFramework extends StatefulWidget {
   final Color? appBarBackgroundColor;
   final double? showElevationAfterScrollPast;
   final bool backButton;
+  final Color? appBarBackgroundColorStart;
 
   @override
   State<PageFramework> createState() => _PageFrameworkState();
@@ -44,7 +46,7 @@ class _PageFrameworkState extends State<PageFramework>
 
   _scrollListener() {
     double percent = _scrollController.offset / (200 - 65);
-    if (percent >= 0 && percent <= 1) {
+    if (widget.backButton == true && percent >= 0 && percent <= 1) {
       _animationControllerShift.value = (_scrollController.offset / (200 - 65));
       _animationControllerOpacity.value =
           0.5 + (_scrollController.offset / (200 - 65) / 2);
@@ -84,7 +86,10 @@ class _PageFrameworkState extends State<PageFramework>
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          icon: Icon(Icons.arrow_back_rounded),
+                          icon: Icon(
+                            Icons.arrow_back_rounded,
+                            color: Theme.of(context).colorScheme.black,
+                          ),
                         ),
                       ),
                     )
@@ -113,6 +118,9 @@ class _PageFrameworkState extends State<PageFramework>
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+                background: Container(
+                  color: widget.appBarBackgroundColorStart,
                 ),
               ),
               shape: ContinuousRectangleBorder(

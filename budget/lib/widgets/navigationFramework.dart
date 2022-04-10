@@ -1,8 +1,10 @@
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/budgetsListPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/settingsPage.dart';
+import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -18,7 +20,12 @@ class PageNavigationFramework extends StatefulWidget {
 }
 
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
-  List<Widget> pages = [HomePage(), Container(), SettingsPage(), Container()];
+  List<Widget> pages = [
+    HomePage(),
+    BudgetsListPage(),
+    TransactionsListPage(),
+    SettingsPage()
+  ];
 
   final pageController = PageController();
 
@@ -53,63 +60,44 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         }),
       ]),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.all(50.0),
-        child: Row(
+        padding: const EdgeInsets.only(bottom: 60, right: 10),
+        child: Stack(
           children: [
-            FAB(
-              tooltip: "Add Transaction",
-              openPage: AddTransactionPage(
-                title: "Add Transaction",
+            AnimatedScale(
+              duration: index == 0
+                  ? Duration(milliseconds: 1300)
+                  : Duration(milliseconds: 0),
+              scale: index == 0 ? 1 : 0,
+              curve: Curves.elasticOut,
+              child: FAB(
+                tooltip: "Add Transaction",
+                openPage: AddTransactionPage(
+                  title: "Add Transaction",
+                ),
               ),
             ),
-            FAB(
-              openPage: AddBudgetPage(title: "Add Budget"),
+            AnimatedScale(
+              duration: index == 1
+                  ? Duration(milliseconds: 1300)
+                  : Duration(milliseconds: 0),
+              scale: index == 1 ? 1 : 0,
+              curve: Curves.elasticOut,
+              child: FAB(
+                openPage: AddBudgetPage(title: "Add Budget"),
+              ),
             ),
-            FAB(
-              openPage: EditBudgetPage(title: "Edit Budgets"),
-            ),
-            Tappable(
-              color: Colors.green,
-              child: Container(width: 20, height: 20),
-              onTap: () {
-                openPopup(
-                  context,
-                  icon: Icons.ac_unit_outlined,
-                  description: "hello",
-                );
-              },
-            ),
-            Tappable(
-              color: Colors.green,
-              child: Container(width: 20, height: 20),
-              onTap: () {
-                openPopup(context, title: "hello", description: "test");
-              },
-            ),
-            Tappable(
-              color: Colors.green,
-              child: Container(width: 20, height: 20),
-              onTap: () {
-                openPopup(
-                  context,
-                  title: "hello",
-                  description: "test",
-                  onSubmitLabel: "submit",
-                  onCancelLabel: "cancel",
-                );
-              },
-            ),
-            Tappable(
-              color: Colors.green,
-              child: Container(width: 20, height: 20),
-              onTap: () {
-                openPopup(
-                  context,
-                  icon: Icons.ac_unit_outlined,
-                  description: "hello",
-                  onSubmitLabel: "submit",
-                );
-              },
+            AnimatedScale(
+              duration: index == 2
+                  ? Duration(milliseconds: 1300)
+                  : Duration(milliseconds: 0),
+              scale: index == 2 ? 1 : 0,
+              curve: Curves.elasticOut,
+              child: FAB(
+                tooltip: "Add Transaction",
+                openPage: AddTransactionPage(
+                  title: "Add Transaction",
+                ),
+              ),
             ),
           ],
         ),

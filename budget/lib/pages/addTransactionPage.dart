@@ -425,8 +425,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                       label: "Select Category",
                       width: MediaQuery.of(context).size.width,
                       height: 50,
-                      fractionScaleHeight: 0.93,
-                      fractionScaleWidth: 0.98,
                       onTap: () {
                         openBottomSheet(
                           context,
@@ -465,8 +463,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           label: "Enter Amount",
                           width: MediaQuery.of(context).size.width,
                           height: 50,
-                          fractionScaleHeight: 0.93,
-                          fractionScaleWidth: 0.98,
                           onTap: () {
                             openBottomSheet(
                               context,
@@ -489,8 +485,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           label: textAddTransaction ?? "",
                           width: MediaQuery.of(context).size.width,
                           height: 50,
-                          fractionScaleHeight: 0.93,
-                          fractionScaleWidth: 0.98,
                           onTap: () async {
                             await addTransaction();
                             Navigator.of(context).pop();
@@ -613,8 +607,6 @@ class _SelectTitleState extends State<SelectTitle> {
           label: selectedCategory == null ? "Select Category" : "Enter Amount",
           width: MediaQuery.of(context).size.width,
           height: 50,
-          fractionScaleHeight: 0.93,
-          fractionScaleWidth: 0.91,
           onTap: () {
             Navigator.pop(context);
             if (widget.next != null) {

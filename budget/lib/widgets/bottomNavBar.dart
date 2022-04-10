@@ -25,8 +25,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
       alignment: Alignment.bottomCenter,
       child: ClipRRect(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
         ),
         child: BottomNavigationBar(
           items: <BottomNavigationBarItem>[

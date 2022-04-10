@@ -129,8 +129,6 @@ class _SelectCategoryState extends State<SelectCategory> {
                                       label: widget.nextLabel ?? "",
                                       width: MediaQuery.of(context).size.width,
                                       height: 50,
-                                      fractionScaleHeight: 0.93,
-                                      fractionScaleWidth: 0.91,
                                       onTap: () {
                                         if (widget.next != null) {
                                           widget.next!();
@@ -142,8 +140,6 @@ class _SelectCategoryState extends State<SelectCategory> {
                                       label: widget.nextLabel ?? "",
                                       width: MediaQuery.of(context).size.width,
                                       height: 50,
-                                      fractionScaleHeight: 0.93,
-                                      fractionScaleWidth: 0.91,
                                       onTap: () {},
                                       color: Colors.grey,
                                     ),

@@ -46,7 +46,12 @@ class TransactionEntry extends StatelessWidget {
               icon: Icons.delete,
               onCancel: () => Navigator.of(context).pop(false),
               onCancelLabel: "Cancel",
-              onSubmit: () => Navigator.of(context).pop(true),
+              onSubmit: () {
+                Navigator.of(context).pop(true);
+                Future.delayed(Duration(milliseconds: 500), () async {
+                  await database.deleteTransaction(transaction.transactionPk);
+                });
+              },
               onSubmitLabel: "Delete",
             );
           },
@@ -81,14 +86,14 @@ class TransactionEntry extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+            padding: EdgeInsets.only(top: 1, bottom: 3, left: 13, right: 13),
             child: Tappable(
               borderRadius: 15,
               onTap: () async {
                 openContainer();
               },
               child: Container(
-                margin: EdgeInsets.only(left: 8, right: 12, top: 7, bottom: 7),
+                margin: EdgeInsets.only(left: 8, right: 12, top: 4, bottom: 4),
                 child: Row(
                   children: [
                     CategoryIcon(
@@ -101,73 +106,93 @@ class TransactionEntry extends StatelessWidget {
                       width: 15,
                     ),
                     Expanded(
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            transaction.name != ""
-                                ? TextFont(
-                                    text: transaction.name,
-                                    fontSize: 20,
-                                  )
-                                : Container(
-                                    height: transaction.note == "" ? 0 : 7),
-                            transaction.name == "" &&
-                                    (transaction.labelFks?.length ?? 0) > 0
-                                ? TagIcon(
-                                    tag: TransactionTag(
-                                        title: "test",
-                                        id: "test",
-                                        categoryID: "id"),
-                                    size: transaction.note == "" ? 20 : 16)
-                                : Container(),
-                            transaction.name == "" &&
-                                    (transaction.labelFks?.length ?? 0) == 0
-                                ? StreamBuilder<TransactionCategory>(
-                                    stream: database
-                                        .getCategory(transaction.categoryFk),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return TextFont(
-                                          text: snapshot.data!.name,
-                                          fontSize:
-                                              transaction.note == "" ? 20 : 20,
-                                        );
-                                      }
-                                      return TextFont(
-                                        text: "",
-                                        fontSize:
-                                            transaction.note == "" ? 20 : 20,
-                                      );
-                                    })
-                                : Container(),
-                            transaction.name == "" && transaction.note != ""
-                                ? Container(height: 4)
-                                : Container(),
-                            transaction.note == ""
-                                ? Container()
-                                : TextFont(
-                                    text: transaction.note,
-                                    fontSize: 16,
-                                    maxLines: 2,
-                                  ),
-                            transaction.note == ""
-                                ? Container()
-                                : Container(height: 4),
-                            //TODO loop through all tags relating to this entry
-                            transaction.name != "" &&
-                                    (transaction.labelFks?.length ?? 0) > 0
-                                ? TagIcon(
-                                    tag: TransactionTag(
-                                        title: "test",
-                                        id: "test",
-                                        categoryID: "id"),
-                                    size: 12)
-                                : Container()
-                          ],
-                        ),
-                      ),
+                      child: transaction.name != ""
+                          ? TextFont(
+                              text: transaction.name,
+                              fontSize: 18,
+                            )
+                          : StreamBuilder<TransactionCategory>(
+                              stream:
+                                  database.getCategory(transaction.categoryFk),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return TextFont(
+                                    text: snapshot.data!.name,
+                                    fontSize: 18,
+                                  );
+                                }
+                                return Container();
+                              },
+                            ),
                     ),
+                    // Expanded(
+                    //   child: Container(
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         transaction.name != ""
+                    //             ? TextFont(
+                    //                 text: transaction.name,
+                    //                 fontSize: 20,
+                    //               )
+                    //             : Container(
+                    //                 height: transaction.note == "" ? 0 : 7),
+                    //         transaction.name == "" &&
+                    //                 (transaction.labelFks?.length ?? 0) > 0
+                    //             ? TagIcon(
+                    //                 tag: TransactionTag(
+                    //                     title: "test",
+                    //                     id: "test",
+                    //                     categoryID: "id"),
+                    //                 size: transaction.note == "" ? 20 : 16)
+                    //             : Container(),
+                    //         transaction.name == "" &&
+                    //                 (transaction.labelFks?.length ?? 0) == 0
+                    //             ? StreamBuilder<TransactionCategory>(
+                    //                 stream: database
+                    //                     .getCategory(transaction.categoryFk),
+                    //                 builder: (context, snapshot) {
+                    //                   if (snapshot.hasData) {
+                    //                     return TextFont(
+                    //                       text: snapshot.data!.name,
+                    //                       fontSize:
+                    //                           transaction.note == "" ? 20 : 20,
+                    //                     );
+                    //                   }
+                    //                   return TextFont(
+                    //                     text: "",
+                    //                     fontSize:
+                    //                         transaction.note == "" ? 20 : 20,
+                    //                   );
+                    //                 })
+                    //             : Container(),
+                    //         transaction.name == "" && transaction.note != ""
+                    //             ? Container(height: 4)
+                    //             : Container(),
+                    //         transaction.note == ""
+                    //             ? Container()
+                    //             : TextFont(
+                    //                 text: transaction.note,
+                    //                 fontSize: 16,
+                    //                 maxLines: 2,
+                    //               ),
+                    //         transaction.note == ""
+                    //             ? Container()
+                    //             : Container(height: 4),
+                    //         //TODO loop through all tags relating to this entry
+                    //         transaction.name != "" &&
+                    //                 (transaction.labelFks?.length ?? 0) > 0
+                    //             ? TagIcon(
+                    //                 tag: TransactionTag(
+                    //                     title: "test",
+                    //                     id: "test",
+                    //                     categoryID: "id"),
+                    //                 size: 12)
+                    //             : Container()
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     TextFont(
                       text: convertToMoney(transaction.amount),
                       fontSize: 20,
@@ -377,7 +402,7 @@ class _TagIconState extends State<TagIcon> {
                     : Container(),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 5.5 * widget.size / 14,
+                    top: 4 * widget.size / 14,
                     bottom: 4 * widget.size / 14,
                   ),
                   child: TextFont(
@@ -403,12 +428,13 @@ class DateDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.accentColor,
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      color: Theme.of(context).canvasColor,
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
       alignment: Alignment.centerLeft,
       child: TextFont(
         text: getWordedDate(date),
-        fontSize: 15,
+        fontSize: 14,
+        textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
       ),
     );
   }

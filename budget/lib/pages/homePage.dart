@@ -4,6 +4,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -30,12 +31,14 @@ class _HomePageState extends State<HomePage>
   GlobalKey<_HomeAppBarState> _appBarKey = GlobalKey();
   double setTitleHeight = 0;
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     List<Widget> transactionsWidgets = [];
     List<DateTime> dates = [];
-    for (DateTime indexDay = DateTime(2022, 03, 1);
-        indexDay.month == 03;
+    for (DateTime indexDay = DateTime(2022, 04, 1);
+        indexDay.month == 04;
         indexDay = indexDay.add(Duration(days: 1))) {
       dates.add(indexDay);
     }
@@ -46,35 +49,27 @@ class _HomePageState extends State<HomePage>
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverStickyHeader(
-                header: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DateDivider(date: date),
-                  ],
-                ),
-                sliver: SliverPadding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return TransactionEntry(
-                          openPage: AddTransactionPage(
-                            title: "Edit Transaction",
-                            transaction: snapshot.data![index],
-                          ),
-                          transaction: Transaction(
-                            transactionPk: snapshot.data![index].transactionPk,
-                            name: snapshot.data![index].name,
-                            amount: snapshot.data![index].amount,
-                            note: snapshot.data![index].note,
-                            budgetFk: snapshot.data![index].budgetFk,
-                            categoryFk: snapshot.data![index].categoryFk,
-                            dateCreated: snapshot.data![index].dateCreated,
-                          ),
-                        );
-                      },
-                      childCount: snapshot.data?.length,
-                    ),
+                header: DateDivider(date: date),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return TransactionEntry(
+                        openPage: AddTransactionPage(
+                          title: "Edit Transaction",
+                          transaction: snapshot.data![index],
+                        ),
+                        transaction: Transaction(
+                          transactionPk: snapshot.data![index].transactionPk,
+                          name: snapshot.data![index].name,
+                          amount: snapshot.data![index].amount,
+                          note: snapshot.data![index].note,
+                          budgetFk: snapshot.data![index].budgetFk,
+                          categoryFk: snapshot.data![index].categoryFk,
+                          dateCreated: snapshot.data![index].dateCreated,
+                        ),
+                      );
+                    },
+                    childCount: snapshot.data?.length,
                   ),
                 ),
               );
@@ -89,6 +84,7 @@ class _HomePageState extends State<HomePage>
       body: Padding(
         padding: const EdgeInsets.only(bottom: 48),
         child: CustomScrollView(
+          controller: _scrollController,
           slivers: [
             SliverAppBar(
               leading: Container(),
@@ -97,14 +93,110 @@ class _HomePageState extends State<HomePage>
               pinned: true,
               expandedHeight: 200.0,
               collapsedHeight: 65,
+              shape: ContinuousRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(25),
+                ),
+              ),
               flexibleSpace: FlexibleSpaceBar(
                 titlePadding:
                     EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                title: HomeAppBar(key: _appBarKey, defaultTitle: "Home"),
+                title: HomeAppBar(
+                  key: _appBarKey,
+                  defaultTitle: "Hello James",
+                  scrollController: _scrollController,
+                  firstTitle: "Overview",
+                ),
                 background: Container(
                   color: Theme.of(context).canvasColor,
                 ),
               ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: 20,
+              ),
+            ),
+            StreamBuilder<List<Transaction>>(
+              stream: database.getTransactionsInTimeRangeFromCategories(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 1,
+                    DateTime.now().day,
+                  ),
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    DateTime.now().day - 1,
+                  ),
+                  [],
+                  true),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Pair> points = [];
+                  snapshot.data!.forEach((point) {
+                    print(point.dateCreated.toString());
+                  });
+                  for (DateTime indexDay = DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 1,
+                    DateTime.now().day,
+                  );
+                      indexDay.compareTo(DateTime.now()) < 0;
+                      indexDay = indexDay.add(Duration(days: 1))) {
+                    //can be optimized...
+                    double totalForDay = 0;
+                    snapshot.data!.forEach((transaction) {
+                      if (indexDay.year == transaction.dateCreated.year &&
+                          indexDay.month == transaction.dateCreated.month &&
+                          indexDay.day == transaction.dateCreated.day) {
+                        totalForDay += transaction.amount;
+                      }
+                    });
+                    points.add(Pair(points.length.toDouble(), totalForDay));
+                  }
+                  return SliverToBoxAdapter(
+                    child: LineChartWrapper(points: points),
+                  );
+                }
+                return SliverToBoxAdapter(child: SizedBox());
+              },
+            ),
+
+            SliverAppBar(
+              leading: Container(),
+              backgroundColor: Colors.transparent,
+              expandedHeight: 65.1,
+              collapsedHeight: 65,
+              flexibleSpace: LayoutBuilder(builder: (
+                BuildContext context,
+                BoxConstraints constraints,
+              ) {
+                if (setTitleHeight == 0)
+                  setTitleHeight = constraints.biggest.height;
+                print(setTitleHeight);
+                if (constraints.biggest.height < setTitleHeight) {
+                  //occur when title disappears (scrolling down)
+                  //add delay to wait for layout of children widgets first
+                  Future.delayed(Duration.zero, () async {
+                    _appBarKey.currentState?.changeTitle("Budgets", 1);
+                  });
+                } else {
+                  //occur when title appears (scrolling up)
+                  Future.delayed(Duration.zero, () async {
+                    _appBarKey.currentState?.changeTitle("Summary", -1);
+                  });
+                }
+                return FlexibleSpaceBar(
+                  titlePadding:
+                      EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                  title: TextFont(
+                    text: "Budgets",
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }),
             ),
             StreamBuilder<List<Budget>>(
               stream: database.watchAllPinnedBudgets(),
@@ -169,7 +261,7 @@ class _HomePageState extends State<HomePage>
                 } else {
                   //occur when title appears (scrolling up)
                   Future.delayed(Duration.zero, () async {
-                    _appBarKey.currentState?.changeTitle("Home", -1);
+                    _appBarKey.currentState?.changeTitle("Budgets", -1);
                   });
                 }
                 return FlexibleSpaceBar(
@@ -192,27 +284,58 @@ class _HomePageState extends State<HomePage>
 }
 
 class HomeAppBar extends StatefulWidget {
-  HomeAppBar({Key? key, required this.defaultTitle}) : super(key: key);
+  HomeAppBar(
+      {Key? key,
+      required this.defaultTitle,
+      required this.firstTitle,
+      required this.scrollController})
+      : super(key: key);
   final String defaultTitle;
+  final String firstTitle;
+  final ScrollController scrollController;
 
   @override
   _HomeAppBarState createState() => _HomeAppBarState();
 }
 
-class _HomeAppBarState extends State<HomeAppBar> {
+class _HomeAppBarState extends State<HomeAppBar> with TickerProviderStateMixin {
   late String title = "";
   late int direction = -1;
+  bool switchDefaultTitle = false;
+  int skipFirstChangeRequests = 0;
 
   @override
   void initState() {
-    title = widget.defaultTitle;
+    widget.scrollController.addListener(_scrollListener);
   }
 
   void changeTitle(newTitle, newDirection) {
+    if (skipFirstChangeRequests < 2) {
+      skipFirstChangeRequests = skipFirstChangeRequests + 1;
+      Future.delayed(Duration(milliseconds: 0), () async {
+        changeTitle(widget.defaultTitle, -1);
+      });
+      return;
+    }
     setState(() {
       title = newTitle;
       direction = newDirection;
     });
+  }
+
+  _scrollListener() {
+    double percent = widget.scrollController.offset / (200 - 65);
+    if (percent >= 0 && percent <= 1 && switchDefaultTitle == false) {
+      setState(() {
+        switchDefaultTitle = true;
+      });
+      changeTitle(widget.defaultTitle, -1);
+    } else if (percent >= 1 && switchDefaultTitle) {
+      setState(() {
+        switchDefaultTitle = false;
+      });
+      changeTitle(widget.firstTitle, 1);
+    }
   }
 
   @override

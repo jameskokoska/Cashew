@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 
 class OpenContainerNavigation extends StatelessWidget {
-  OpenContainerNavigation(
-      {Key? key,
-      required this.openPage,
-      required this.button,
-      this.closedColor})
-      : super(key: key);
+  OpenContainerNavigation({
+    Key? key,
+    required this.openPage,
+    required this.button,
+    this.closedColor,
+    this.borderRadius = 250,
+  }) : super(key: key);
 
   final Widget openPage;
   final Widget Function(VoidCallback) button;
   final Color? closedColor;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class OpenContainerNavigation extends StatelessWidget {
       },
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
-          Radius.circular(250),
+          Radius.circular(borderRadius),
         ),
       ),
     );
