@@ -14,11 +14,15 @@ import 'package:intl/intl.dart';
 
 class TransactionEntry extends StatelessWidget {
   TransactionEntry(
-      {Key? key, required this.openPage, required this.transaction})
+      {Key? key,
+      required this.openPage,
+      required this.transaction,
+      this.category})
       : super(key: key);
 
   final Widget openPage;
   final Transaction transaction;
+  final TransactionCategory? category;
 
   final double fabSize = 50;
 
@@ -111,19 +115,24 @@ class TransactionEntry extends StatelessWidget {
                               text: transaction.name,
                               fontSize: 18,
                             )
-                          : StreamBuilder<TransactionCategory>(
-                              stream:
-                                  database.getCategory(transaction.categoryFk),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return TextFont(
-                                    text: snapshot.data!.name,
-                                    fontSize: 18,
-                                  );
-                                }
-                                return Container();
-                              },
-                            ),
+                          : category == null
+                              ? StreamBuilder<TransactionCategory>(
+                                  stream: database
+                                      .getCategory(transaction.categoryFk),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return TextFont(
+                                        text: snapshot.data!.name,
+                                        fontSize: 18,
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                )
+                              : TextFont(
+                                  text: category!.name,
+                                  fontSize: 18,
+                                ),
                     ),
                     // Expanded(
                     //   child: Container(
@@ -212,18 +221,19 @@ class TransactionEntry extends StatelessWidget {
 }
 
 class CategoryIcon extends StatelessWidget {
-  CategoryIcon(
-      {Key? key,
-      required this.categoryPk,
-      required this.size,
-      this.onTap,
-      this.label = false,
-      this.labelSize = 10,
-      this.margin,
-      this.sizePadding = 20,
-      this.outline = false,
-      this.noBackground = false})
-      : super(key: key);
+  CategoryIcon({
+    Key? key,
+    required this.categoryPk,
+    required this.size,
+    this.onTap,
+    this.label = false,
+    this.labelSize = 10,
+    this.margin,
+    this.sizePadding = 20,
+    this.outline = false,
+    this.noBackground = false,
+    this.category,
+  }) : super(key: key);
 
   final int categoryPk;
   final double size;
@@ -234,73 +244,81 @@ class CategoryIcon extends StatelessWidget {
   final double sizePadding;
   final bool outline;
   final bool noBackground;
+  final TransactionCategory? category;
+
+  categoryIconWidget(context, TransactionCategory? category) {
+    return Column(
+      children: [
+        AnimatedContainer(
+          duration: Duration(milliseconds: 250),
+          margin: margin ??
+              EdgeInsets.only(left: 8, right: 8, top: 8, bottom: label ? 2 : 8),
+          height: size + sizePadding,
+          width: size + sizePadding,
+          decoration: outline
+              ? BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.accentColorHeavy,
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                )
+              : BoxDecoration(
+                  border: Border.all(
+                    color: Colors.transparent,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                ),
+          child: Tappable(
+            color: category != null
+                ? HexColor(category.colour,
+                        Theme.of(context).colorScheme.lightDarkAccent)
+                    .withOpacity(
+                        noBackground ? (category == null ? 0.55 : 0) : 0.55)
+                : Theme.of(context).colorScheme.lightDarkAccent,
+            onTap: onTap,
+            borderRadius: 10,
+            child: Center(
+              child: (category != null
+                  ? Image(
+                      image: AssetImage(
+                          "assets/categories/" + (category.iconName ?? "")),
+                      width: size,
+                    )
+                  : Container()),
+            ),
+          ),
+        ),
+        label
+            ? Container(
+                margin: EdgeInsets.only(top: 3),
+                width: 60,
+                child: Center(
+                  child: TextFont(
+                    textAlign: TextAlign.center,
+                    text: category != null ? category.name : "",
+                    fontSize: labelSize,
+                    maxLines: 1,
+                  ),
+                ),
+              )
+            : Container(
+                width: size + sizePadding,
+              ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (category != null) {
+      return categoryIconWidget(context, category);
+    }
     return StreamBuilder<TransactionCategory>(
       stream: database.getCategory(categoryPk),
       builder: (context, snapshot) {
-        return Column(
-          children: [
-            AnimatedContainer(
-              duration: Duration(milliseconds: 250),
-              margin: margin ??
-                  EdgeInsets.only(
-                      left: 8, right: 8, top: 8, bottom: label ? 2 : 8),
-              height: size + sizePadding,
-              width: size + sizePadding,
-              decoration: outline
-                  ? BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.accentColorHeavy,
-                        width: 3,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(13)),
-                    )
-                  : BoxDecoration(
-                      border: Border.all(
-                        color: Colors.transparent,
-                        width: 0,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(13)),
-                    ),
-              child: Tappable(
-                color: HexColor(snapshot.data?.colour,
-                        Theme.of(context).colorScheme.lightDarkAccent)
-                    .withOpacity(noBackground
-                        ? (snapshot.data?.colour == null ? 0.55 : 0)
-                        : 0.55),
-                onTap: onTap,
-                borderRadius: 10,
-                child: Center(
-                  child: (snapshot.data?.iconName != null
-                      ? Image(
-                          image: AssetImage("assets/categories/" +
-                              (snapshot.data?.iconName ?? "")),
-                          width: size,
-                        )
-                      : Container()),
-                ),
-              ),
-            ),
-            label
-                ? Container(
-                    margin: EdgeInsets.only(top: 3),
-                    width: 60,
-                    child: Center(
-                      child: TextFont(
-                        textAlign: TextAlign.center,
-                        text: snapshot.data?.name ?? "",
-                        fontSize: labelSize,
-                        maxLines: 1,
-                      ),
-                    ),
-                  )
-                : Container(
-                    width: size + sizePadding,
-                  ),
-          ],
-        );
+        return categoryIconWidget(context, snapshot.data);
       },
     );
   }
@@ -421,9 +439,11 @@ class DateDivider extends StatelessWidget {
   DateDivider({
     Key? key,
     required this.date,
+    this.info,
   }) : super(key: key);
 
   final DateTime date;
+  final String? info;
 
   @override
   Widget build(BuildContext context) {
@@ -431,10 +451,22 @@ class DateDivider extends StatelessWidget {
       color: Theme.of(context).canvasColor,
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
       alignment: Alignment.centerLeft,
-      child: TextFont(
-        text: getWordedDate(date),
-        fontSize: 14,
-        textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextFont(
+            text: getWordedDate(date),
+            fontSize: 14,
+            textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+          ),
+          info != null
+              ? TextFont(
+                  text: info!,
+                  fontSize: 14,
+                  textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                )
+              : SizedBox()
+        ],
       ),
     );
   }

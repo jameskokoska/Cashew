@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
@@ -99,6 +101,23 @@ class Settings extends Table {
   TextColumn get currency => text().withLength(max: CURRENCY_LIMIT)();
 }
 
+class TransactionWithCategory {
+  final TransactionCategory category;
+  final Transaction transaction;
+  TransactionWithCategory({required this.category, required this.transaction});
+}
+
+class CategoryWithTotal {
+  final TransactionCategory category;
+  final double total;
+  final int transactionCount;
+  CategoryWithTotal({
+    required this.category,
+    required this.total,
+    this.transactionCount = 0,
+  });
+}
+
 @DriftDatabase(tables: [Transactions, Categories, Labels, Budgets, Settings])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -106,7 +125,11 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
+
+  @override
+  MigrationStrategy get migration =>
+      MigrationStrategy(onUpgrade: (migrator, from, to) async {});
 
   // get all filtered transactions from earliest to oldest date created, paginated
   Stream<List<Transaction>> watchAllTransactionsFiltered(
@@ -145,16 +168,60 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  //get transactions that occurred on a given day
-  Stream<List<Transaction>> getTransactionWithDay(DateTime date) {
-    return (select(transactions)
-          ..where((tbl) {
-            final dateCreated = tbl.dateCreated;
-            return dateCreated.year.equals(date.year) &
-                dateCreated.month.equals(date.month) &
-                dateCreated.day.equals(date.day);
-          }))
-        .watch();
+  //get transactions that occurred on a given day and category
+  Stream<List<TransactionWithCategory>> getTransactionCategoryWithDay(
+    DateTime date, {
+    String search = "",
+    // Search will be ignored... if these params are passed in
+    List<int> categoryFks = const [],
+  }) {
+    JoinedSelectStatement<HasResultSet, dynamic> query;
+    if (categoryFks.length > 0) {
+      query = (select(transactions)
+            ..where((tbl) {
+              final dateCreated = tbl.dateCreated;
+              return dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day) &
+                  tbl.categoryFk.isIn(categoryFks);
+            }))
+          .join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ]);
+    } else if (search == "") {
+      query = (select(transactions)
+            ..where((tbl) {
+              final dateCreated = tbl.dateCreated;
+              return dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day);
+            }))
+          .join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ]);
+    } else {
+      query = ((select(transactions)
+            ..where((tbl) {
+              final dateCreated = tbl.dateCreated;
+              return dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day);
+            }))
+          .join([
+        innerJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ]))
+        ..where(categories.name.like("%" + search + "%") |
+            transactions.name.like("%" + search + "%"));
+    }
+
+    return query.watch().map((rows) => rows.map((row) {
+          return TransactionWithCategory(
+              category: row.readTable(categories),
+              transaction: row.readTable(transactions));
+        }).toList());
   }
 
   //watch all transactions sorted by date
@@ -279,6 +346,65 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  // The total amount of that category will always be that last column
+  // print(snapshot.data![0].rawData.data["transactions.category_fk"]);
+  // print(snapshot.data![0].rawData.data["c" + (snapshot.data![0].rawData.data.length).toString()]);
+  Stream<List<CategoryWithTotal>>
+      watchTotalSpentInEachCategoryInTimeRangeFromCategories(DateTime start,
+          DateTime end, List<int> categoryFks, bool allCategories) {
+    DateTime startDate = DateTime(start.year, start.month, start.day);
+    DateTime endDate = DateTime(end.year, end.month, end.day);
+    final totalAmt = transactions.amount.sum();
+    final totalCount = transactions.transactionPk.count();
+
+    if (allCategories) {
+      final query = (select(transactions)
+        ..where((tbl) {
+          final dateCreated = tbl.dateCreated;
+          return dateCreated.isBetweenValues(startDate, endDate);
+        })
+        ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]));
+      return (query.join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ])
+            ..addColumns([totalAmt, totalCount])
+            ..groupBy([categories.categoryPk]))
+          .map((row) {
+        final category = row.readTable(categories);
+        final total = row.read(totalAmt);
+        final transactionCount = row.read(totalCount);
+        return CategoryWithTotal(
+            category: category,
+            total: total ?? 0,
+            transactionCount: transactionCount);
+      }).watch();
+    } else {
+      final query = (select(transactions)
+        ..where((tbl) {
+          final dateCreated = tbl.dateCreated;
+          return dateCreated.isBetweenValues(startDate, endDate) &
+              tbl.categoryFk.isIn(categoryFks);
+        }));
+      return (query.join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ])
+            ..addColumns([totalAmt, totalCount])
+            ..groupBy([categories.categoryPk]))
+          .map((row) {
+        final category = row.readTable(categories);
+        final total = row.read(totalAmt);
+        final transactionCount = row.read(totalCount);
+
+        return CategoryWithTotal(
+            category: category,
+            total: total ?? 0,
+            transactionCount: transactionCount);
+      }).watch();
+    }
+  }
+
   // get total amount spent in each day
   Stream<List<Transaction>> watchTotalSpentEachDayInPeriod(
       DateTime startDate, DateTime endDate) {
@@ -302,11 +428,10 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get all transactions that occurred in a given time period that belong to categories
-  //TODO: should sort them based on date
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
       DateTime start, DateTime end, List<int> categoryFks, bool allCategories) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day + 1);
+    DateTime endDate = DateTime(end.year, end.month, end.day);
     if (allCategories) {
       return (select(transactions)
             ..where((tbl) {

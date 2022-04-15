@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
@@ -35,51 +36,6 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> transactionsWidgets = [];
-    List<DateTime> dates = [];
-    for (DateTime indexDay = DateTime(2022, 04, 1);
-        indexDay.month == 04;
-        indexDay = indexDay.add(Duration(days: 1))) {
-      dates.add(indexDay);
-    }
-    for (DateTime date in dates.reversed) {
-      transactionsWidgets.add(
-        StreamBuilder<List<Transaction>>(
-          stream: database.getTransactionWithDay(date),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-              return SliverStickyHeader(
-                header: DateDivider(date: date),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return TransactionEntry(
-                        openPage: AddTransactionPage(
-                          title: "Edit Transaction",
-                          transaction: snapshot.data![index],
-                        ),
-                        transaction: Transaction(
-                          transactionPk: snapshot.data![index].transactionPk,
-                          name: snapshot.data![index].name,
-                          amount: snapshot.data![index].amount,
-                          note: snapshot.data![index].note,
-                          budgetFk: snapshot.data![index].budgetFk,
-                          categoryFk: snapshot.data![index].categoryFk,
-                          dateCreated: snapshot.data![index].dateCreated,
-                        ),
-                      );
-                    },
-                    childCount: snapshot.data?.length,
-                  ),
-                ),
-              );
-            }
-            return SliverToBoxAdapter(child: SizedBox());
-          },
-        ),
-      );
-    }
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(bottom: 48),
@@ -127,7 +83,7 @@ class _HomePageState extends State<HomePage>
                   DateTime(
                     DateTime.now().year,
                     DateTime.now().month,
-                    DateTime.now().day - 1,
+                    DateTime.now().day,
                   ),
                   [],
                   true),
@@ -162,7 +118,6 @@ class _HomePageState extends State<HomePage>
                 return SliverToBoxAdapter(child: SizedBox());
               },
             ),
-
             SliverAppBar(
               leading: Container(),
               backgroundColor: Colors.transparent,
@@ -203,12 +158,15 @@ class _HomePageState extends State<HomePage>
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return SliverPadding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(vertical: 0),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          return BudgetContainer(
-                            budget: snapshot.data![index],
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 18.0),
+                            child: BudgetContainer(
+                              budget: snapshot.data![index],
+                            ),
                           );
                         },
                         childCount:
@@ -221,25 +179,6 @@ class _HomePageState extends State<HomePage>
                 }
               },
             ),
-
-            // SliverList(
-            //   delegate: SliverChildListDelegate(
-            //     [
-            //       BudgetContainer(
-            //         budget: Budget(
-            //           title: "Budget Name",
-            //           color: Color(0xFF51833D),
-            //           total: 500,
-            //           spent: 210,
-            //           endDate: DateTime.now(),
-            //           startDate: DateTime.now(),
-            //           period: "month",
-            //           periodLength: 10,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             SliverAppBar(
               leading: Container(),
               backgroundColor: Colors.transparent,
@@ -265,8 +204,7 @@ class _HomePageState extends State<HomePage>
                   });
                 }
                 return FlexibleSpaceBar(
-                  titlePadding:
-                      EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                  titlePadding: EdgeInsets.only(bottom: 8, left: 18, right: 18),
                   title: TextFont(
                     text: "Transactions",
                     fontSize: 20,
@@ -275,7 +213,10 @@ class _HomePageState extends State<HomePage>
                 );
               }),
             ),
-            ...transactionsWidgets,
+            ...getTransactionsSlivers(
+                DateTime(DateTime.now().year, DateTime.now().month - 1,
+                    DateTime.now().day),
+                DateTime.now()),
           ],
         ),
       ),

@@ -261,3 +261,12 @@ String getWordedNumber(double value) {
     return value.toInt().toString();
   }
 }
+
+double getPercentBetweenDates(DateTimeRange timeRange, DateTime currentTime) {
+  int millisecondDifference = timeRange.end.millisecondsSinceEpoch -
+      timeRange.start.millisecondsSinceEpoch;
+  double percent = (currentTime.millisecondsSinceEpoch -
+          timeRange.start.millisecondsSinceEpoch) /
+      millisecondDifference;
+  return percent * 100;
+}

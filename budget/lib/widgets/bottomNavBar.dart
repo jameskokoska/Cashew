@@ -17,6 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     setState(() {
       selectedIndex = index;
     });
+    FocusScope.of(context).unfocus(); //remove keyboard focus on any input boxes
   }
 
   @override
@@ -37,16 +38,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   darken(Theme.of(context).colorScheme.accentColor, 0.01),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.list_rounded),
-              label: "Budgets",
-              backgroundColor:
-                  darken(Theme.of(context).colorScheme.accentColor, 0.1),
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.attach_money_rounded),
               label: "Transactions",
               backgroundColor:
                   darken(Theme.of(context).colorScheme.accentColor, 0.2),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list_rounded),
+              label: "Budgets",
+              backgroundColor:
+                  darken(Theme.of(context).colorScheme.accentColor, 0.1),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_rounded),

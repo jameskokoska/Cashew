@@ -22,8 +22,8 @@ class PageNavigationFramework extends StatefulWidget {
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   List<Widget> pages = [
     HomePage(),
-    BudgetsListPage(),
     TransactionsListPage(),
+    BudgetsListPage(),
     SettingsPage()
   ];
 
@@ -64,26 +64,16 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         child: Stack(
           children: [
             AnimatedScale(
-              duration: index == 0
+              duration: index == 0 || index == 1
                   ? Duration(milliseconds: 1300)
                   : Duration(milliseconds: 0),
-              scale: index == 0 ? 1 : 0,
+              scale: index == 0 || index == 1 ? 1 : 0,
               curve: Curves.elasticOut,
               child: FAB(
                 tooltip: "Add Transaction",
                 openPage: AddTransactionPage(
                   title: "Add Transaction",
                 ),
-              ),
-            ),
-            AnimatedScale(
-              duration: index == 1
-                  ? Duration(milliseconds: 1300)
-                  : Duration(milliseconds: 0),
-              scale: index == 1 ? 1 : 0,
-              curve: Curves.elasticOut,
-              child: FAB(
-                openPage: AddBudgetPage(title: "Add Budget"),
               ),
             ),
             AnimatedScale(
@@ -93,10 +83,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
               scale: index == 2 ? 1 : 0,
               curve: Curves.elasticOut,
               child: FAB(
-                tooltip: "Add Transaction",
-                openPage: AddTransactionPage(
-                  title: "Add Transaction",
-                ),
+                openPage: AddBudgetPage(title: "Add Budget"),
               ),
             ),
           ],

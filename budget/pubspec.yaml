@@ -35,6 +35,9 @@ dependencies:
   path_provider: ^2.0.0
   path: ^1.8.0
   math_expressions: ^2.2.0
+  share_plus: ^4.0.4
+  google_sign_in: ^5.3.0
+  googleapis: ^8.1.0
 
 dev_dependencies:
   flutter_test:

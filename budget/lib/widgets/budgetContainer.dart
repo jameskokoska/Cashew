@@ -2,6 +2,8 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:animations/animations.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -18,49 +20,101 @@ class BudgetContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var widget = Column(
-      children: [
-        Container(
-          width: double.infinity,
-          child: TextFont(
-            text: budget.name,
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-            textAlign: TextAlign.left,
-          ),
-        ),
-        Container(height: 2),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              child: CountUp(
-                count: budget.amount,
-                prefix: getCurrencyString(),
-                duration: Duration(milliseconds: 1500),
-                fontSize: 18,
-                textAlign: TextAlign.left,
-                fontWeight: FontWeight.bold,
-                decimals: moneyDecimals(budget.amount),
+    DateTimeRange budgetRange = getBudgetDate(budget, DateTime.now());
+    var widget = (StreamBuilder<List<CategoryWithTotal>>(
+      stream: database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+        budgetRange.start,
+        budgetRange.end,
+        budget.categoryFks ?? [],
+        budget.allCategoryFks,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+          double totalSpent = 0;
+          snapshot.data!.forEach((category) {
+            totalSpent = totalSpent + category.total;
+          });
+          return Column(
+            children: [
+              Container(
+                width: double.infinity,
+                child: TextFont(
+                  text: budget.name,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  textAlign: TextAlign.left,
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(bottom: 3.0),
-              child: TextFont(
-                text: " left of " + convertToMoney(budget.amount),
-                fontSize: 13,
-                textAlign: TextAlign.left,
+              Container(height: 2),
+              budget.amount - totalSpent >= 0
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          child: CountUp(
+                            count: budget.amount - totalSpent,
+                            prefix: getCurrencyString(),
+                            duration: Duration(milliseconds: 2500),
+                            fontSize: 18,
+                            textAlign: TextAlign.left,
+                            fontWeight: FontWeight.bold,
+                            decimals: moneyDecimals(budget.amount),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 3.8),
+                          child: TextFont(
+                            text: " left of " + convertToMoney(budget.amount),
+                            fontSize: 13,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          child: CountUp(
+                            count: -1 * (budget.amount - totalSpent),
+                            prefix: getCurrencyString(),
+                            duration: Duration(milliseconds: 2500),
+                            fontSize: 18,
+                            textAlign: TextAlign.left,
+                            fontWeight: FontWeight.bold,
+                            decimals: moneyDecimals(budget.amount),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 3.8),
+                          child: TextFont(
+                            text: " overspent of " +
+                                convertToMoney(budget.amount),
+                            fontSize: 13,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
+                    ),
+              BudgetTimeline(
+                budget: budget,
+                percent: totalSpent / budget.amount * 100,
+                todayPercent:
+                    getPercentBetweenDates(budgetRange, DateTime.now()),
               ),
-            ),
-          ],
-        ),
-        BudgetTimeline(budget: budget),
-        Container(
-          height: 14,
-        ),
-        DaySpending(budget: budget),
-      ],
-    );
+              Container(
+                height: 14,
+              ),
+              DaySpending(budget: budget),
+            ],
+          );
+        } else {
+          return SizedBox();
+        }
+      },
+    ));
     return OpenContainer<bool>(
       transitionType: ContainerTransitionType.fadeThrough,
       openBuilder: (BuildContext context, VoidCallback _) {
@@ -79,7 +133,7 @@ class BudgetContainer extends StatelessWidget {
           width: double.infinity,
           margin: EdgeInsets.symmetric(
             horizontal: 10.0,
-            vertical: 15,
+            vertical: 0,
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
@@ -138,7 +192,7 @@ class DaySpending extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.fitWidth,
         child: TextFont(
-          text: "You can keep spending 15\$ each day.",
+          text: "You can keep spending " + getCurrencyString() + "15 each day.",
           fontSize: large ? 17 : 15,
           textAlign: TextAlign.center,
         ),
@@ -185,12 +239,18 @@ class AnimatedGooBackground extends StatelessWidget {
 }
 
 class BudgetTimeline extends StatelessWidget {
-  BudgetTimeline({Key? key, required this.budget, this.large = false})
-      : super(key: key);
+  BudgetTimeline({
+    Key? key,
+    required this.budget,
+    this.large = false,
+    this.percent = 0,
+    this.todayPercent = 0,
+  }) : super(key: key);
 
   final Budget budget;
-  final double todayPercent = 45;
+  final double todayPercent;
   final bool large;
+  final double percent;
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +272,7 @@ class BudgetTimeline extends StatelessWidget {
             Expanded(
               child: BudgetProgress(
                 color: HexColor(budget.colour),
-                percent: 45,
+                percent: percent,
                 todayPercent: todayPercent,
                 large: large,
               ),
@@ -329,7 +389,7 @@ class BudgetProgress extends StatelessWidget {
                             color: Colors.white.withOpacity(0.8),
                           ),
                         ),
-                        percent > 40 ? percentText : Container(),
+                        percent > 30 ? percentText : Container(),
                       ],
                     ),
                   ),

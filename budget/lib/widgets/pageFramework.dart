@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class PageFramework extends StatefulWidget {
-  const PageFramework({
-    Key? key,
-    required this.title,
-    this.slivers = const [],
-    this.listWidgets,
-    this.navbar = true,
-    this.appBarBackgroundColor,
-    this.appBarBackgroundColorStart,
-    this.showElevationAfterScrollPast,
-    this.backButton = true,
-  }) : super(key: key);
+  const PageFramework(
+      {Key? key,
+      required this.title,
+      this.slivers = const [],
+      this.listWidgets,
+      this.navbar = true,
+      this.appBarBackgroundColor,
+      this.appBarBackgroundColorStart,
+      this.showElevationAfterScrollPast,
+      this.backButton = true,
+      this.subtitle = null,
+      this.subtitleSize = null,
+      this.subtitleAnimationSpeed = 5})
+      : super(key: key);
 
   final String title;
   final List<Widget> slivers;
@@ -23,7 +26,9 @@ class PageFramework extends StatefulWidget {
   final double? showElevationAfterScrollPast;
   final bool backButton;
   final Color? appBarBackgroundColorStart;
-
+  final Widget? subtitle;
+  final double? subtitleSize;
+  final double subtitleAnimationSpeed;
   @override
   State<PageFramework> createState() => _PageFrameworkState();
 }
@@ -34,22 +39,28 @@ class _PageFrameworkState extends State<PageFramework>
   late ScrollController _scrollController;
   late AnimationController _animationControllerShift;
   late AnimationController _animationControllerOpacity;
+  late AnimationController _animationController0at50;
   void initState() {
     super.initState();
-    _animationControllerShift = AnimationController(
-      vsync: this,
-    );
+    _animationControllerShift = AnimationController(vsync: this);
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
+    _animationController0at50 = AnimationController(vsync: this, value: 1);
+
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
   }
 
   _scrollListener() {
     double percent = _scrollController.offset / (200 - 65);
-    if (widget.backButton == true && percent >= 0 && percent <= 1) {
+    if (widget.backButton == true ||
+        widget.subtitle != null && percent >= 0 && percent <= 1) {
       _animationControllerShift.value = (_scrollController.offset / (200 - 65));
       _animationControllerOpacity.value =
           0.5 + (_scrollController.offset / (200 - 65) / 2);
+    }
+    if (widget.subtitle != null && percent <= 0.75 && percent >= 0) {
+      _animationController0at50.value =
+          1 - (_scrollController.offset / (200 - 65)) * 1.75;
     }
     if (widget.showElevationAfterScrollPast != null &&
         showElevation == false &&
@@ -66,6 +77,14 @@ class _PageFrameworkState extends State<PageFramework>
         showElevation = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationControllerShift.dispose();
+    _animationControllerOpacity.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -109,7 +128,13 @@ class _PageFrameworkState extends State<PageFramework>
                   animation: _animationControllerShift,
                   builder: (_, child) {
                     return Transform.translate(
-                      offset: Offset(40 * _animationControllerShift.value, 0),
+                      offset: Offset(
+                        widget.backButton
+                            ? 40 * _animationControllerShift.value
+                            : 0,
+                        -(widget.subtitleSize ?? 0) *
+                            (1 - _animationControllerShift.value),
+                      ),
                       child: child,
                     );
                   },
@@ -119,8 +144,34 @@ class _PageFrameworkState extends State<PageFramework>
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                background: Container(
-                  color: widget.appBarBackgroundColorStart,
+                background: Stack(
+                  children: [
+                    Container(
+                      color: widget.appBarBackgroundColorStart,
+                    ),
+                    widget.subtitle != null
+                        ? AnimatedBuilder(
+                            animation: _animationControllerShift,
+                            builder: (_, child) {
+                              return Transform.translate(
+                                  offset: Offset(
+                                    0,
+                                    -(widget.subtitleSize ?? 0) *
+                                        (_animationControllerShift.value) *
+                                        widget.subtitleAnimationSpeed,
+                                  ),
+                                  child: child);
+                            },
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: FadeTransition(
+                                opacity: _animationController0at50,
+                                child: widget.subtitle,
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
+                  ],
                 ),
               ),
               shape: ContinuousRectangleBorder(

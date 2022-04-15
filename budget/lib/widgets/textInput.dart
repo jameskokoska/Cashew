@@ -23,6 +23,7 @@ class TextInput extends StatelessWidget {
   final String? suffix;
   final double paddingRight;
   final FocusNode? focusNode;
+  final bool? bubbly;
 
   const TextInput({
     Key? key,
@@ -46,67 +47,116 @@ class TextInput extends StatelessWidget {
     this.suffix,
     this.paddingRight = 12,
     this.focusNode,
+    this.bubbly = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool _keyboardIsVisible() {
+      return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
+    }
+
     return Padding(
       padding: padding,
-      child: TextFormField(
-        focusNode: focusNode,
-        keyboardType: numbersOnly ? TextInputType.number : null,
-        maxLines: maxLines,
-        minLines: minLines,
-        onTap: onTap,
-        showCursor: showCursor,
-        readOnly: readOnly,
-        controller: controller,
-        initialValue: initialValue,
-        autofocus: autoFocus,
-        onEditingComplete: onEditingComplete,
-        style: TextStyle(
-          fontSize: 18,
+      child: Container(
+        decoration: BoxDecoration(
+          color: bubbly == false
+              ? Colors.transparent
+              : Theme.of(context).colorScheme.lightDarkAccent.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10),
         ),
-        cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
-        decoration: new InputDecoration(
-          prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
-          suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
-          contentPadding: EdgeInsets.only(
-              left: 12, right: paddingRight, top: 15, bottom: 10),
-          hintText: labelText,
-          filled: true,
-          fillColor:
-              Theme.of(context).colorScheme.lightDarkAccent.withOpacity(0.2),
-          isDense: true,
-          icon: icon != null
-              ? Icon(
-                  icon,
-                  size: 30,
-                  color: Theme.of(context).colorScheme.accentColorHeavy,
-                )
-              : null,
-          enabledBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
-            borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.lightDarkAccent),
+        child: TextFormField(
+          focusNode: focusNode,
+          keyboardType: numbersOnly ? TextInputType.number : null,
+          maxLines: maxLines,
+          minLines: minLines,
+          onTap: onTap,
+          showCursor: showCursor,
+          readOnly: readOnly,
+          controller: controller,
+          initialValue: initialValue,
+          autofocus: autoFocus,
+          onEditingComplete: onEditingComplete,
+          style: TextStyle(
+            fontSize: bubbly == false ? 18 : 15,
+            height: 1.7,
           ),
-          focusedBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(5.0)),
-            borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.accentColorHeavy),
+          cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
+          decoration: new InputDecoration(
+            prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
+            suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
+            contentPadding: EdgeInsets.only(
+              left: bubbly == false ? 12 : 18,
+              right: paddingRight,
+              top: bubbly == false ? 15 : 10,
+              bottom: bubbly == false ? 10 : 0,
+            ),
+            hintText: labelText,
+            filled: bubbly == false ? true : false,
+            fillColor:
+                Theme.of(context).colorScheme.lightDarkAccent.withOpacity(0.2),
+            isDense: true,
+            suffixIconConstraints: BoxConstraints(maxHeight: 20),
+            suffixIcon: bubbly == false || icon == null
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.only(right: 13.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Icon(
+                          icon,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.accentColorHeavy,
+                        ),
+                      ],
+                    ),
+                  ),
+            icon: bubbly == false
+                ? icon != null
+                    ? Icon(
+                        icon,
+                        size: 30,
+                        color: Theme.of(context).colorScheme.accentColorHeavy,
+                      )
+                    : null
+                : null,
+            enabledBorder: bubbly == false
+                ? UnderlineInputBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(8.0)),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.lightDarkAccent),
+                  )
+                : null,
+            focusedBorder: bubbly == false
+                ? UnderlineInputBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(5.0)),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.accentColorHeavy),
+                  )
+                : null,
+            border: bubbly == false
+                ? null
+                : OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
           ),
+          obscureText: obscureText,
+          onChanged: (text) {
+            if (onChanged != null) {
+              onChanged!(text);
+            }
+          },
+          onFieldSubmitted: (text) {
+            if (onSubmitted != null) {
+              onSubmitted!(text);
+            }
+          },
         ),
-        obscureText: obscureText,
-        onChanged: (text) {
-          if (onChanged != null) {
-            onChanged!(text);
-          }
-        },
-        onFieldSubmitted: (text) {
-          if (onSubmitted != null) {
-            onSubmitted!(text);
-          }
-        },
       ),
     );
   }

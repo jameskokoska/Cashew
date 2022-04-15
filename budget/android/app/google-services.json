@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "267621253497",
+    "project_id": "budget-app-flutter",
+    "storage_bucket": "budget-app-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267621253497:android:e490a30d3f7208e6842fa8",
+        "android_client_info": {
+          "package_name": "com.example.budget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267621253497-qr0vit1n0l5f2k5h0qnumkrgm6td1fsu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.budget",
+            "certificate_hash": "1066b81467dc8c595807e67062163d24efe8c3b5"
+          }
+        },
+        {
+          "client_id": "267621253497-1na8q1lt56qg9177dskkrkdds5jjiqrn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNVDtwGJUHBZohwB2RDeUco-5hAGfx2bA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267621253497-1na8q1lt56qg9177dskkrkdds5jjiqrn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

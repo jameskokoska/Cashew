@@ -347,7 +347,7 @@ class SettingsContainerButton extends StatelessWidget {
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
-                          description == null
+                          description == null || description == ""
                               ? SizedBox.shrink()
                               : Column(
                                   mainAxisAlignment: MainAxisAlignment.start,

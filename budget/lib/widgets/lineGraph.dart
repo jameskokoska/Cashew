@@ -166,8 +166,15 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         isStrokeCapRound: true,
         dotData: FlDotData(
           show: false,
+          getDotPainter: (spot, percent, barData, index) {
+            return FlDotCirclePainter(
+              radius: 2,
+              color: Colors.blue,
+              strokeWidth: 0,
+            );
+          },
         ),
-        isCurved: true,
+        isCurved: false,
         belowBarData: BarAreaData(
           show: true,
           colors: [

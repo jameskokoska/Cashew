@@ -9,6 +9,7 @@ class TextFont extends StatelessWidget {
   final TextAlign textAlign;
   final int? maxLines;
   final bool fixParagraphMargin;
+  final bool? shadow;
 
   const TextFont({
     Key? key,
@@ -19,6 +20,7 @@ class TextFont extends StatelessWidget {
     this.textColor,
     this.maxLines = null,
     this.fixParagraphMargin = false,
+    this.shadow = false,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,15 @@ class TextFont extends StatelessWidget {
           decoration: TextDecoration.underline,
           decorationStyle: TextDecorationStyle.double,
           decorationColor: Color(0x00FFFFFF),
+          shadows: shadow == true
+              ? [
+                  Shadow(
+                    offset: Offset(0.0, 0.5),
+                    blurRadius: 8.0,
+                    color: Color(0x65000000),
+                  ),
+                ]
+              : [],
         ),
       ),
     );

@@ -1,11 +1,53 @@
+import 'dart:math';
+
+import 'package:budget/colors.dart';
+import 'package:budget/database/tables.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
+class CategoryTotal {
+  CategoryTotal(
+    this.categoryPk,
+    this.total,
+  );
+
+  int categoryPk;
+  double total;
+}
+
+class CategoryTotalDetailed {
+  CategoryTotalDetailed(this.categoryPk, this.total, this.categoryDetails);
+
+  int categoryPk;
+  double total;
+  TransactionCategory categoryDetails;
+}
+
+Future<List<CategoryTotalDetailed>> getCategoryDetails(
+    List<CategoryTotal> data) async {
+  List<CategoryTotalDetailed> output = [];
+  for (CategoryTotal element in data) {
+    output.add(
+      CategoryTotalDetailed(
+        element.categoryPk,
+        element.total,
+        await database.getCategoryInstance(element.categoryPk),
+      ),
+    );
+  }
+  return output;
+}
+
 class PieChartWrapper extends StatelessWidget {
-  const PieChartWrapper({Key? key, required this.data}) : super(key: key);
-  final List<double> data;
+  const PieChartWrapper(
+      {Key? key, required this.data, required this.totalSpent})
+      : super(key: key);
+  final List<CategoryWithTotal> data;
+  final double totalSpent;
 
   @override
   Widget build(BuildContext context) {
@@ -16,25 +58,28 @@ class PieChartWrapper extends StatelessWidget {
         children: [
           PieChartDisplay(
             data: data,
+            totalSpent: totalSpent,
           ),
           IgnorePointer(
             child: Center(
               child: Container(
-                width: 90,
-                height: 90,
-                decoration:
-                    BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    shape: BoxShape.circle),
               ),
             ),
           ),
           IgnorePointer(
             child: Center(
               child: Container(
-                width: 115,
-                height: 115,
+                width: 105,
+                height: 105,
                 decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
-                    shape: BoxShape.circle),
+                  color: Theme.of(context).colorScheme.white.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
           ),
@@ -45,8 +90,10 @@ class PieChartWrapper extends StatelessWidget {
 }
 
 class PieChartDisplay extends StatefulWidget {
-  PieChartDisplay({Key? key, required this.data}) : super(key: key);
-  final List<double> data;
+  PieChartDisplay({Key? key, required this.data, required this.totalSpent})
+      : super(key: key);
+  final List<CategoryWithTotal> data;
+  final double totalSpent;
 
   @override
   State<StatefulWidget> createState() => PieChartDisplayState();
@@ -54,58 +101,54 @@ class PieChartDisplay extends StatefulWidget {
 
 class PieChartDisplayState extends State<PieChartDisplay> {
   int touchedIndex = -1;
-  Duration animationDuration = Duration(milliseconds: 1200);
-  Duration animationDurationAfter = Duration(milliseconds: 800);
-  Curve animationCurve = Curves.decelerate;
-  Curve animationCurveAfter = Curves.elasticOut;
-
-  List<double> data = [-1];
+  bool scaleIn = false;
   @override
   void initState() {
     super.initState();
-    print(widget.data);
-    Future.delayed(Duration(milliseconds: 10), () {
+    Future.delayed(Duration(milliseconds: 0), () {
       setState(() {
-        data = widget.data;
+        scaleIn = true;
       });
-    });
-    Future.delayed(animationDuration, () {
-      animationDuration = animationDurationAfter;
-      animationCurve = animationCurveAfter;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return PieChart(
+    return AnimatedScale(
+      scale: scaleIn ? 1 : 0,
+      duration: Duration(milliseconds: 2500),
+      curve: ElasticOutCurve(0.8),
+      child: PieChart(
         PieChartData(
-            pieTouchData: PieTouchData(
-                touchCallback: (FlTouchEvent event, pieTouchResponse) {
-              setState(() {
-                if (!event.isInterestedForInteractions ||
-                    pieTouchResponse == null ||
-                    pieTouchResponse.touchedSection == null) {
-                  return;
-                }
-                if (event.runtimeType == FlTapDownEvent &&
-                    touchedIndex !=
-                        pieTouchResponse.touchedSection!.touchedSectionIndex) {
-                  print("event");
-                  touchedIndex =
-                      pieTouchResponse.touchedSection!.touchedSectionIndex;
-                } else if (event.runtimeType == FlTapDownEvent) {
-                  touchedIndex = -1;
-                }
-              });
-            }),
-            borderData: FlBorderData(
-              show: false,
-            ),
-            sectionsSpace: 0,
-            centerSpaceRadius: 0,
-            sections: showingSections()),
-        swapAnimationDuration: animationDuration,
-        swapAnimationCurve: animationCurve);
+          pieTouchData: PieTouchData(
+              touchCallback: (FlTouchEvent event, pieTouchResponse) {
+            setState(() {
+              if (!event.isInterestedForInteractions ||
+                  pieTouchResponse == null ||
+                  pieTouchResponse.touchedSection == null) {
+                return;
+              }
+              if (event.runtimeType == FlTapDownEvent &&
+                  touchedIndex !=
+                      pieTouchResponse.touchedSection!.touchedSectionIndex) {
+                touchedIndex =
+                    pieTouchResponse.touchedSection!.touchedSectionIndex;
+              } else if (event.runtimeType == FlTapDownEvent) {
+                touchedIndex = -1;
+              }
+            });
+          }),
+          borderData: FlBorderData(
+            show: false,
+          ),
+          sectionsSpace: 0,
+          centerSpaceRadius: 0,
+          sections: showingSections(),
+        ),
+        swapAnimationDuration: Duration(milliseconds: 200),
+        swapAnimationCurve: Curves.decelerate,
+      ),
+    );
   }
 
   List<PieChartSectionData> showingSections() {
@@ -113,84 +156,87 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
       final radius = isTouched ? 110.0 : 100.0;
-      final widgetSize = isTouched ? 55.0 : 40.0;
-      if (data[0] == -1 && i == 0) {
-        return PieChartSectionData(
-          color: const Color(0x00000000),
-          value: 100,
-          showTitle: false,
-          radius: 0,
-        );
-      } else if (i == widget.data.length) {
-        return PieChartSectionData(
-          color: const Color(0x00FF0202),
-          value: 0,
-          showTitle: false,
-          radius: 0,
-        );
-      } else if (data[0] == -1) {
-        return PieChartSectionData(
-          color: const Color(0xFFFF0202),
-          value: 0,
-          showTitle: false,
-          radius: 0,
-        );
-      } else {
-        return PieChartSectionData(
-          color: Colors.purple[i * 100] ?? Colors.purple,
-          value: data[i],
-          title: data[i].toString() + '%',
-          radius: radius,
-          titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff)),
-          badgeWidget: _Badge(
-            'assets/librarian-svgrepo-com.svg',
-            size: widgetSize,
-            borderColor: Colors.purple[i * 100] ?? Colors.purple,
+      final widgetScale = isTouched ? 1.4 : 1.0;
+      return PieChartSectionData(
+        color: HexColor(widget.data[i].category.colour).withOpacity(0.8),
+        value: widget.data[i].total / widget.totalSpent,
+        title: "",
+        radius: radius,
+        badgeWidget: _Badge(
+          scale: widgetScale,
+          borderColor:
+              HexColor(widget.data[i].category.colour).withOpacity(0.8),
+          assetImage: AssetImage(
+            "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),
-          titlePositionPercentageOffset: 1.4,
-          badgePositionPercentageOffset: .98,
-        );
-      }
+          percent: (widget.data[i].total / widget.totalSpent * 100)
+                  .toStringAsFixed(0) +
+              '%',
+        ),
+        titlePositionPercentageOffset: 1.4,
+        badgePositionPercentageOffset: .98,
+      );
     });
   }
 }
 
 class _Badge extends StatelessWidget {
-  final String svgAsset;
-  final double size;
+  final double scale;
   final Color borderColor;
+  final AssetImage assetImage;
+  final String percent;
 
-  const _Badge(
-    this.svgAsset, {
+  const _Badge({
     Key? key,
-    required this.size,
+    required this.scale,
     required this.borderColor,
+    required this.assetImage,
+    required this.percent,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      curve: Curves.elasticOut,
-      duration: Duration(milliseconds: 800),
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: borderColor,
-          width: 2,
+    return AnimatedScale(
+      curve: Curves.decelerate,
+      duration: Duration(milliseconds: 200),
+      scale: scale,
+      child: Container(
+        width: 45,
+        height: 45,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: borderColor,
+            width: 2,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: Image(
+                image: assetImage,
+                width: 25,
+              ),
+            ),
+            AnimatedOpacity(
+              duration: Duration(milliseconds: 200),
+              opacity: this.scale == 1 ? 0 : 1,
+              child: Center(
+                child: Transform.translate(
+                  offset: Offset(0, 32),
+                  child: TextFont(
+                    text: percent,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    shadow: true,
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
-      padding: EdgeInsets.all(size * .15),
-      child: Center(
-          child: Icon(
-        Icons.umbrella,
-        color: Colors.black,
-      )),
     );
   }
 }

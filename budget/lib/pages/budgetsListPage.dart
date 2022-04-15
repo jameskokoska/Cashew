@@ -32,7 +32,7 @@ class _BudgetsListPageState extends State<BudgetsListPage> {
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       slivers: [
         StreamBuilder<List<Budget>>(
-          stream: database.watchAllBudgets(),
+          stream: database.watchAllPinnedBudgets(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SliverPadding(
@@ -40,8 +40,11 @@ class _BudgetsListPageState extends State<BudgetsListPage> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      return BudgetContainer(
-                        budget: snapshot.data![index],
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 18.0),
+                        child: BudgetContainer(
+                          budget: snapshot.data![index],
+                        ),
                       );
                     },
                     childCount: snapshot.data?.length, //snapshot.data?.length
