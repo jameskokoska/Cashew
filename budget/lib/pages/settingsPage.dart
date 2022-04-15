@@ -25,8 +25,13 @@ import 'package:share_plus/share_plus.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:http/http.dart' as http;
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'dart:math' as math;
+
+//To get SHA1 Key run
+// ./gradlew signingReport
+//in budget\Android
+//Generate new OAuth and put JSON in budget\android\app folder
 
 class GoogleAuthClient extends http.BaseClient {
   final Map<String, String> _headers;

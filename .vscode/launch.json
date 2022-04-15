@@ -8,21 +8,20 @@
       "name": "Flutter",
       "request": "launch",
       "type": "dart",
-      "args": ["-d", "chrome","--web-port", "5000"],
-      "deviceId": "Chrome"
+      "args": ["--web-port", "5000"],
     },
-    {
-      "name": "budget",
-      "cwd": "budget",
-      "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "budget (profile mode)",
-      "cwd": "budget",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "profile"
-    },
+    // {
+    //   "name": "budget",
+    //   "cwd": "budget",
+    //   "request": "launch",
+    //   "type": "dart"
+    // },
+    // {
+    //   "name": "budget (profile mode)",
+    //   "cwd": "budget",
+    //   "request": "launch",
+    //   "type": "dart",
+    //   "flutterMode": "profile"
+    // },
   ]
 }
