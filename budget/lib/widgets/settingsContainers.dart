@@ -304,17 +304,20 @@ class SettingsContainerButton extends StatelessWidget {
     this.description,
     this.icon,
     required this.onTap,
+    this.compact = false,
   }) : super(key: key);
 
   final String title;
   final String? description;
   final IconData? icon;
   final VoidCallback onTap;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      padding: EdgeInsets.symmetric(
+          horizontal: compact ? 0 : 10, vertical: compact ? 0 : 7),
       child: Tappable(
         onTap: () {
           onTap();
@@ -322,13 +325,16 @@ class SettingsContainerButton extends StatelessWidget {
         borderRadius: 10,
         color: Theme.of(context).colorScheme.lightDarkAccent,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+          padding: EdgeInsets.symmetric(
+              horizontal: compact ? 10 : 22, vertical: compact ? 10 : 13),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: compact
+                      ? CrossAxisAlignment.center
+                      : CrossAxisAlignment.start,
                   children: [
                     Icon(
                       icon,
@@ -344,7 +350,7 @@ class SettingsContainerButton extends StatelessWidget {
                           TextFont(
                             fixParagraphMargin: true,
                             text: title,
-                            fontSize: 22,
+                            fontSize: compact ? 18 : 22,
                             fontWeight: FontWeight.bold,
                           ),
                           description == null || description == ""

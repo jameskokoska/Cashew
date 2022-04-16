@@ -13,7 +13,7 @@ import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -54,66 +54,198 @@ class _SettingsPageState extends State<SettingsPage> {
   signIn.GoogleSignInAccount? user;
   late signIn.GoogleSignIn googleSignIn;
 
-  Future<void> _showList() async {
-    final authHeaders = await user!.authHeaders;
-    final authenticateClient = GoogleAuthClient(authHeaders);
-    final driveApi = drive.DriveApi(authenticateClient);
-
-    if (driveApi == null) {
-      return;
+  Future<void> _signIn() async {
+    try {
+      openLoadingPopup(context);
+      if (user == null) {
+        googleSignIn = signIn.GoogleSignIn.standard(scopes: [
+          drive.DriveApi.driveAppdataScope,
+        ]);
+        final signIn.GoogleSignInAccount? account = await googleSignIn.signIn();
+        if (account != null) {
+          setState(() {
+            user = account;
+          });
+        } else {
+          throw ("Login failed");
+        }
+      } else {
+        await googleSignIn.signOut();
+        setState(() {
+          user = null;
+        });
+        print("Signedout");
+      }
+      Navigator.of(context).pop();
+    } catch (e) {
+      Navigator.of(context).pop();
+      openSnackbar(context, e.toString());
     }
+  }
 
-    final fileList = await driveApi.files.list(
-        spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
-    final files = fileList.files;
-    if (files == null) {
-      openSnackbar(context, "NO FILEs");
-    }
-    //get the latest file with index 0... in the future make user be able to select which file
-    inspect(await driveApi.files.get(files![0].id ?? "").asStream());
-    List<int> dataStore = [];
-    dynamic response = await driveApi.files.get(files[0].id ?? "",
-        downloadOptions: drive.DownloadOptions.fullMedia);
-    response.stream.listen((data) {
-      print("Data: ${data.length}");
-      dataStore.insertAll(dataStore.length, data);
-    }, onDone: () async {
+  Future<void> _createBackup() async {
+    try {
+      openLoadingPopup(context);
+      var dbFileBytes;
+      late Stream<List<int>> mediaStream;
       if (kIsWeb) {
         final html.Storage localStorage = html.window.localStorage;
-        localStorage["moor_db_str_db"] =
-            bin2str.encode(Uint8List.fromList(dataStore));
+        dbFileBytes = bin2str.decode(localStorage["moor_db_str_db"] ?? "");
+        mediaStream = Stream.value(dbFileBytes);
       } else {
         final dbFolder = await getApplicationDocumentsDirectory();
         final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-        await dbFile.writeAsBytes(dataStore);
         // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
         //     text: 'Database');
+        // await file.readAsBytes();
+        dbFileBytes = await dbFile.readAsBytes();
+        mediaStream = Stream.value(List<int>.from(dbFileBytes));
+      }
+      final authHeaders = await user!.authHeaders;
+      final authenticateClient = GoogleAuthClient(authHeaders);
+      final driveApi = drive.DriveApi(authenticateClient);
+
+      var media = new drive.Media(mediaStream, dbFileBytes.length);
+
+      var driveFile = new drive.File();
+      final timestamp = DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now());
+      driveFile.name = "db-$timestamp.sqlite";
+      driveFile.modifiedTime = DateTime.now().toUtc();
+      driveFile.parents = ["appDataFolder"];
+
+      await driveApi.files.create(driveFile, uploadMedia: media);
+      Navigator.of(context).pop();
+      openSnackbar(context, "Backup created: " + (driveFile.name ?? ""));
+    } catch (e) {
+      Navigator.of(context).pop();
+      openSnackbar(context, e.toString());
+    }
+  }
+
+  Future<void> _deleteRecentBackups(amountToKeep) async {
+    try {
+      openLoadingPopup(context);
+
+      final authHeaders = await user!.authHeaders;
+      final authenticateClient = GoogleAuthClient(authHeaders);
+      final driveApi = drive.DriveApi(authenticateClient);
+      if (driveApi == null) {
+        throw "Failed to login to Google Drive";
       }
 
-      print("File created");
-      openSnackbar(context, "RESTART");
-      openPopup(
-        context,
-        description: "Please Restart the Application",
-        barrierDismissible: false,
-        icon: Icons.restart_alt_rounded,
-      );
-    }, onError: (error) {
-      print(error.toString());
-    });
-    final alert = AlertDialog(
-      title: Text("Item List"),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: files.map((e) => Text(e.name ?? "no-name")).toList(),
-        ),
-      ),
-    );
+      final fileList = await driveApi.files.list(
+          spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+      final files = fileList.files;
+      if (files == null) {
+        throw "No backups found.";
+      }
 
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) => alert,
-    );
+      int index = 0;
+      files.forEach((file) {
+        if (index >= amountToKeep) {
+          _deleteBackup(driveApi, file.id ?? "");
+        }
+        index++;
+      });
+
+      Navigator.of(context).pop();
+    } catch (e) {
+      Navigator.of(context).pop();
+      openSnackbar(context, e.toString());
+    }
+  }
+
+  Future<void> _deleteBackup(drive.DriveApi driveApi, String fileId) async {
+    await driveApi.files.delete(fileId);
+  }
+
+  Future<void> _loadBackup(drive.DriveApi driveApi, String fileId) async {
+    try {
+      openLoadingPopup(context);
+
+      List<int> dataStore = [];
+      dynamic response = await driveApi.files
+          .get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
+      response.stream.listen(
+        (data) {
+          print("Data: ${data.length}");
+          dataStore.insertAll(dataStore.length, data);
+        },
+        onDone: () async {
+          if (kIsWeb) {
+            final html.Storage localStorage = html.window.localStorage;
+            localStorage["moor_db_str_db"] =
+                bin2str.encode(Uint8List.fromList(dataStore));
+          } else {
+            final dbFolder = await getApplicationDocumentsDirectory();
+            final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
+            await dbFile.writeAsBytes(dataStore);
+            // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
+            //     text: 'Database');
+          }
+
+          Navigator.of(context).pop();
+          openPopup(
+            context,
+            description: "Please Restart the Application",
+            barrierDismissible: false,
+            icon: Icons.restart_alt_rounded,
+          );
+        },
+        onError: (error) {
+          openSnackbar(context, error.toString());
+        },
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+      openSnackbar(context, e.toString());
+    }
+  }
+
+  Future<void> _chooseBackup() async {
+    try {
+      openLoadingPopup(context);
+
+      final authHeaders = await user!.authHeaders;
+      final authenticateClient = GoogleAuthClient(authHeaders);
+      final driveApi = drive.DriveApi(authenticateClient);
+      if (driveApi == null) {
+        throw "Failed to login to Google Drive";
+      }
+
+      final fileList = await driveApi.files.list(
+          spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+      final files = fileList.files;
+      if (files == null) {
+        throw "No backups found.";
+      }
+
+      Navigator.of(context).pop();
+
+      openBottomSheet(
+        context,
+        PopupFramework(
+          title: "Choose a Backup to Restore",
+          child: Column(
+            children: files
+                .map(
+                  (file) => SettingsContainerButton(
+                    compact: true,
+                    icon: Icons.file_open_rounded,
+                    title: file.name ?? "No name",
+                    onTap: () {
+                      _loadBackup(driveApi, file.id ?? "");
+                    },
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+      openSnackbar(context, e.toString());
+    }
   }
 
   @override
@@ -124,81 +256,22 @@ class _SettingsPageState extends State<SettingsPage> {
       listWidgets: [
         SettingsContainerButton(
           onTap: () async {
-            try {
-              if (user == null) {
-                googleSignIn = signIn.GoogleSignIn.standard(scopes: [
-                  drive.DriveApi.driveAppdataScope,
-                ]);
-                final signIn.GoogleSignInAccount? account =
-                    await googleSignIn.signIn();
-                if (account != null) {
-                  setState(() {
-                    user = account;
-                  });
-                  // final client = GoogleAuthClient(headers);
-
-                  // driveApi = drive.DriveApi(client);
-                } else {
-                  throw ("Login failed");
-                }
-              } else {
-                await googleSignIn.signOut();
-                setState(() {
-                  user = null;
-                });
-                print("Signedout");
-              }
-            } catch (e) {
-              print(e.toString());
-              openSnackbar(context, e.toString());
-            }
+            await _signIn();
           },
           title: user == null ? "Sign-In" : user!.displayName ?? "",
           icon: Icons.account_circle,
         ),
         SettingsContainerButton(
           onTap: () async {
-            var dbFileBytes;
-            late Stream<List<int>> mediaStream;
-            if (kIsWeb) {
-              final html.Storage localStorage = html.window.localStorage;
-              dbFileBytes =
-                  bin2str.decode(localStorage["moor_db_str_db"] ?? "");
-              mediaStream = Stream.value(dbFileBytes);
-            } else {
-              final dbFolder = await getApplicationDocumentsDirectory();
-              final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-              // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
-              //     text: 'Database');
-              // await file.readAsBytes();
-              dbFileBytes = await dbFile.readAsBytes();
-              mediaStream = Stream.value(List<int>.from(dbFileBytes));
-            }
-            final authHeaders = await user!.authHeaders;
-            final authenticateClient = GoogleAuthClient(authHeaders);
-            final driveApi = drive.DriveApi(authenticateClient);
-
-            var media = new drive.Media(mediaStream, dbFileBytes.length);
-
-            var driveFile = new drive.File();
-            final timestamp =
-                DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now());
-            driveFile.name = "db-$timestamp.sqlite";
-            driveFile.modifiedTime = DateTime.now().toUtc();
-            driveFile.parents = ["appDataFolder"];
-
-            final response =
-                await driveApi.files.create(driveFile, uploadMedia: media);
+            await _deleteRecentBackups(10);
+            await _createBackup();
           },
           title: "Export Database",
           icon: Icons.upload_rounded,
         ),
         SettingsContainerButton(
           onTap: () async {
-            _showList();
-            // final dbFolder = await getApplicationDocumentsDirectory();
-            // final org = File(p.join(dbFolder.path, 'db.sqlite'));
-            // File(dbLocation).writeAsBytes(updatedContent)
+            await _chooseBackup();
           },
           title: "Import Database",
           icon: Icons.download_rounded,

@@ -89,10 +89,9 @@ class _HomePageState extends State<HomePage>
                   true),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  bool cumulative = true;
+                  double cumulativeTotal = 0;
                   List<Pair> points = [];
-                  snapshot.data!.forEach((point) {
-                    print(point.dateCreated.toString());
-                  });
                   for (DateTime indexDay = DateTime(
                     DateTime.now().year,
                     DateTime.now().month - 1,
@@ -109,10 +108,12 @@ class _HomePageState extends State<HomePage>
                         totalForDay += transaction.amount;
                       }
                     });
-                    points.add(Pair(points.length.toDouble(), totalForDay));
+                    cumulativeTotal += totalForDay;
+                    points.add(Pair(points.length.toDouble(),
+                        cumulative ? cumulativeTotal : totalForDay));
                   }
                   return SliverToBoxAdapter(
-                    child: LineChartWrapper(points: points),
+                    child: LineChartWrapper(points: points, isCurved: false),
                   );
                 }
                 return SliverToBoxAdapter(child: SizedBox());

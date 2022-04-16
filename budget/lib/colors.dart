@@ -8,6 +8,8 @@ extension ColorsDefined on ColorScheme {
       brightness == Brightness.light ? Colors.white : Colors.black;
   Color get black =>
       brightness == Brightness.light ? Colors.black : Colors.white;
+  Color get textLight =>
+      brightness == Brightness.light ? Color(0xFF888888) : Color(0xFF494949);
   Color get lightDarkAccent => brightness == Brightness.light
       ? const Color(0xFFFAFAFA)
       : const Color(0xFF242424);

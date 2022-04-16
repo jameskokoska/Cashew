@@ -13,12 +13,15 @@ class _LineChart extends StatefulWidget {
     required this.maxPair,
     required this.minPair,
     required this.color,
+    this.isCurved = false,
     Key? key,
   }) : super(key: key);
+
   final List<FlSpot> spots;
   final Pair maxPair;
   final Pair minPair;
   final Color color;
+  final bool isCurved;
 
   @override
   State<_LineChart> createState() => _LineChartState();
@@ -174,12 +177,13 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             );
           },
         ),
-        isCurved: false,
+        isCurved: widget.isCurved,
         belowBarData: BarAreaData(
           show: true,
           colors: [
             widget.color,
             widget.color.withAlpha(100),
+            widget.color.withAlpha(10),
           ],
           gradientColorStops: [0, 0.5, 1.0],
           gradientFrom: const Offset(0, 0),
@@ -197,9 +201,14 @@ class Pair {
 }
 
 class LineChartWrapper extends StatelessWidget {
-  const LineChartWrapper({required this.points, Key? key}) : super(key: key);
+  const LineChartWrapper({
+    required this.points,
+    this.isCurved = false,
+    Key? key,
+  }) : super(key: key);
 
   final List<Pair> points;
+  final bool isCurved;
 
   List<FlSpot> convertPoints(points) {
     List<FlSpot> pointsOut = [];
@@ -262,6 +271,7 @@ class LineChartWrapper extends StatelessWidget {
               maxPair: getMaxPoint(points),
               minPair: getMinPoint(points),
               color: Theme.of(context).colorScheme.accentColor,
+              isCurved: isCurved,
             ),
           ),
         ),

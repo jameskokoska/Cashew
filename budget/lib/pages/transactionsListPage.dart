@@ -50,12 +50,13 @@ List<Widget> getTransactionsSlivers(DateTime startDay, DateTime endDay,
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return TransactionEntry(
-                        category: snapshot.data![index].category,
-                        openPage: AddTransactionPage(
-                          title: "Edit Transaction",
-                          transaction: snapshot.data![index].transaction,
-                        ),
-                        transaction: snapshot.data![index].transaction);
+                      category: snapshot.data![index].category,
+                      openPage: AddTransactionPage(
+                        title: "Edit Transaction",
+                        transaction: snapshot.data![index].transaction,
+                      ),
+                      transaction: snapshot.data![index].transaction,
+                    );
                   },
                   childCount: snapshot.data?.length,
                 ),

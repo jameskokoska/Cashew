@@ -457,13 +457,13 @@ class DateDivider extends StatelessWidget {
           TextFont(
             text: getWordedDate(date),
             fontSize: 14,
-            textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+            textColor: Theme.of(context).colorScheme.textLight,
           ),
           info != null
               ? TextFont(
                   text: info!,
                   fontSize: 14,
-                  textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                  textColor: Theme.of(context).colorScheme.textLight,
                 )
               : SizedBox()
         ],

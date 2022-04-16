@@ -55,10 +55,13 @@ class _BudgetPageState extends State<BudgetPage> {
               List<Widget> categoryEntries = [];
               snapshot.data!.forEach((category) {
                 totalSpent = totalSpent + category.total;
+              });
+              snapshot.data!.forEach((category) {
                 categoryEntries.add(CategoryEntry(
                   category: category.category,
-                  totalSpent: category.total,
+                  totalSpent: totalSpent,
                   transactionCount: category.transactionCount,
+                  categorySpent: category.total,
                 ));
               });
               return SliverList(

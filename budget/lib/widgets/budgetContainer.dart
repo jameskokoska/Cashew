@@ -380,8 +380,8 @@ class BudgetProgress extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              color: Colors
-                                  .red), //can change this color to tint the progress bar
+                              color:
+                                  color), //can change this color to tint the progress bar
                         ),
                         Container(
                           decoration: BoxDecoration(
