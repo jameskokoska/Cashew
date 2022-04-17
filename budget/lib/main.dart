@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -10,20 +12,65 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:googleapis/books/v1.dart';
 import './pages/homePage.dart';
 import 'package:budget/colors.dart';
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   database = await constructDb();
-  runApp(App(
-    key: appStateKey,
-  ));
+  runApp(InitializeDatabase());
 }
 
-int randomInt = Random().nextInt(100);
+final int randomInt = Random().nextInt(100);
 
-Future initialize() async {
+Future<bool> updateSettings(setting, value) async {
+  final prefs = await SharedPreferences.getInstance();
+  appStateSettings[setting] = value;
+  await prefs.setString('userSettings', json.encode(appStateSettings));
+  appStateKey.currentState?.changeSetting();
+  return true;
+}
+
+Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
+  Map<String, dynamic> themeSetting = {
+    "system": ThemeMode.system,
+    "light": ThemeMode.light,
+    "dark": ThemeMode.dark,
+  };
+
+  Map<String, dynamic> userSettingsNew = {...userSettings};
+  userSettingsNew["theme"] = themeSetting[userSettings["theme"]];
+  userSettingsNew["accentColor"] = HexColor(userSettings["accentColor"]);
+  return userSettingsNew;
+}
+
+Future<Map<String, dynamic>> getUserSettings() async {
+  Map<String, dynamic> userPreferencesDefault = {
+    "theme": "system",
+    "selectedWallet": 0,
+    "accentColor": toHexString(Color(0xFF1B447A)),
+  };
+
+  final prefs = await SharedPreferences.getInstance();
+  String? userSettings = prefs.getString('userSettings');
+  if (userSettings == null) {
+    await prefs.setString('userSettings', json.encode(userPreferencesDefault));
+    return userPreferencesDefault;
+  } else {
+    return json.decode(userSettings);
+  }
+}
+
+Future<bool> initializeSettings() async {
+  Map<String, dynamic> userSettings = await getUserSettings();
+  appStateSettings = userSettings;
+  return true;
+}
+
+//Initialize default values in database
+Future<bool> initializeDatabase() async {
   //Initialize default categories
   for (var category in defaultCategories()) {
     await database.createOrUpdateCategory(category);
@@ -31,30 +78,53 @@ Future initialize() async {
   return true;
 }
 
-GlobalKey<AppState> appStateKey = GlobalKey();
-
-class App extends StatefulWidget {
-  App({Key? key}) : super(key: key);
+class InitializeDatabase extends StatelessWidget {
+  const InitializeDatabase({Key? key}) : super(key: key);
 
   @override
-  State<App> createState() => AppState();
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: initializeDatabase(),
+      builder: (context, snapshot) {
+        debugPrint("Initialized Database");
+        Widget child = Container(
+          key: ValueKey(0),
+          width: 50,
+          height: 50,
+          color: Color(0xFF912937),
+        );
+        if (snapshot.hasData) {
+          child = InitializeApp(
+            key: appStateKey,
+          );
+        }
+        return child;
+      },
+    );
+  }
 }
 
-class AppState extends State<App> {
-  ThemeMode _themeMode = ThemeMode.system;
+GlobalKey<InitializeAppState> appStateKey = GlobalKey();
+Map<String, dynamic> appStateSettings = {};
 
-  void changeTheme(ThemeMode themeMode) {
-    print("object");
-    setState(() {
-      _themeMode = themeMode;
-    });
+class InitializeApp extends StatefulWidget {
+  InitializeApp({Key? key}) : super(key: key);
+
+  @override
+  State<InitializeApp> createState() => InitializeAppState();
+}
+
+class InitializeAppState extends State<InitializeApp> {
+  void changeSetting() {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: initialize(),
+      future: initializeSettings(),
       builder: (context, snapshot) {
+        debugPrint("Initialized Settings");
         Widget child = Container(
           key: ValueKey(0),
           width: 50,
@@ -62,37 +132,7 @@ class AppState extends State<App> {
           color: Colors.blueGrey,
         );
         if (snapshot.hasData) {
-          child = MaterialApp(
-            key: ValueKey(1),
-            title: 'Budget App',
-            theme: ThemeData(
-              fontFamily: 'Avenir',
-              primaryColor: Colors.white,
-              primaryColorDark: Colors.grey[200],
-              primaryColorLight: Colors.grey[100],
-              primaryColorBrightness: Brightness.light,
-              brightness: Brightness.light,
-              canvasColor: Colors.grey[100],
-              accentColor: Theme.of(context).colorScheme.accentColor,
-              appBarTheme:
-                  AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
-            ),
-            darkTheme: ThemeData(
-              fontFamily: 'Avenir',
-              primaryColor: Colors.black,
-              primaryColorDark: Colors.grey[800],
-              primaryColorBrightness: Brightness.dark,
-              primaryColorLight: Colors.grey[850],
-              brightness: Brightness.dark,
-              indicatorColor: Colors.white,
-              canvasColor: Colors.black,
-              accentColor: Theme.of(context).colorScheme.accentColor,
-              appBarTheme:
-                  AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
-            ),
-            themeMode: _themeMode,
-            home: PageNavigationFramework(),
-          );
+          child = App();
         }
         return AnimatedSwitcher(
           duration: Duration(milliseconds: 500),
@@ -104,6 +144,44 @@ class AppState extends State<App> {
           child: child,
         );
       },
+    );
+  }
+}
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      key: ValueKey(1),
+      title: 'Budget App',
+      theme: ThemeData(
+        fontFamily: 'Avenir',
+        primaryColor: Colors.white,
+        primaryColorDark: Colors.grey[200],
+        primaryColorLight: Colors.grey[100],
+        primaryColorBrightness: Brightness.light,
+        brightness: Brightness.light,
+        canvasColor: Colors.grey[100],
+        accentColor: getSettingConstants(appStateSettings)["accentColor"],
+        appBarTheme:
+            AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+      ),
+      darkTheme: ThemeData(
+        fontFamily: 'Avenir',
+        primaryColor: Colors.black,
+        primaryColorDark: Colors.grey[800],
+        primaryColorBrightness: Brightness.dark,
+        primaryColorLight: Colors.grey[850],
+        brightness: Brightness.dark,
+        indicatorColor: Colors.white,
+        canvasColor: Colors.black,
+        accentColor: getSettingConstants(appStateSettings)["accentColor"],
+        appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
+      ),
+      themeMode: getSettingConstants(appStateSettings)["theme"],
+      home: PageNavigationFramework(),
     );
   }
 }

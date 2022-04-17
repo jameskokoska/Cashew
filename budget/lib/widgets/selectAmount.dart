@@ -280,7 +280,7 @@ class _SelectAmountState extends State<SelectAmount> {
     _focusAttachment.reparent();
     return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -336,6 +336,9 @@ class _SelectAmountState extends State<SelectAmount> {
                     ),
                     widthFactor: 0.5,
                     child: TextFont(
+                      autoSizeText: true,
+                      maxLines: 1,
+                      minFontSize: 16,
                       text: amount == ""
                           ? getCurrencyString() + "0"
                           : includesOperations(amount, false)
@@ -363,7 +366,6 @@ class _SelectAmountState extends State<SelectAmount> {
                       textAlign: TextAlign.right,
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
-                      maxLines: 5,
                     ),
                   ),
                 ),

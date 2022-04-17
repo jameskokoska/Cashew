@@ -48,9 +48,16 @@ class _SelectCategoryState extends State<SelectCategory> {
       });
     } else if (widget.selectedCategory != null) {
       setState(() {
-        selectedCategories.add(widget.selectedCategory ??
-            TransactionCategory(
-                categoryPk: 1, name: "", dateCreated: DateTime.now()));
+        selectedCategories.add(
+          widget.selectedCategory ??
+              TransactionCategory(
+                categoryPk: 1,
+                name: "",
+                dateCreated: DateTime.now(),
+                income: false,
+                order: 0,
+              ),
+        );
       });
     }
   }

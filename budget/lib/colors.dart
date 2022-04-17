@@ -1,3 +1,4 @@
+import 'package:budget/main.dart';
 import 'package:flutter/material.dart';
 
 //import 'package:budget/colors.dart';
@@ -22,12 +23,19 @@ extension ColorsDefined on ColorScheme {
   Color get shadowColorLight => brightness == Brightness.light
       ? const Color(0x2D5A5A5A)
       : const Color(0x4BBDBDBD);
+  // Color get accentColor => brightness == Brightness.light
+  //     ? const Color(0xFF4668A8)
+  //     : const Color(0xFF1B447A);
+  // Color get accentColorHeavy => brightness == Brightness.light
+  //     ? const Color(0xFF29457A)
+  //     : const Color(0xFF5586C5);
+
   Color get accentColor => brightness == Brightness.light
-      ? const Color(0xFF4668A8)
-      : const Color(0xFF1B447A);
+      ? getSettingConstants(appStateSettings)["accentColor"]
+      : getSettingConstants(appStateSettings)["accentColor"];
   Color get accentColorHeavy => brightness == Brightness.light
-      ? const Color(0xFF29457A)
-      : const Color(0xFF5586C5);
+      ? getSettingConstants(appStateSettings)["accentColor"]
+      : getSettingConstants(appStateSettings)["accentColor"];
 
   Color get selectableColorRed => brightness == Brightness.light
       ? Colors.red.shade400

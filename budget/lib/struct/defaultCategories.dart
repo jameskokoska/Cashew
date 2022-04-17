@@ -58,6 +58,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.blueGrey),
       iconName: "cutlery.png",
       dateCreated: DateTime.now(),
+      order: 0,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 2,
@@ -65,6 +67,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.green),
       iconName: "groceries.png",
       dateCreated: DateTime.now(),
+      order: 1,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 3,
@@ -72,6 +76,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.pink),
       iconName: "shopping.png",
       dateCreated: DateTime.now(),
+      order: 2,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 4,
@@ -79,6 +85,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.yellow),
       iconName: "tram.png",
       dateCreated: DateTime.now(),
+      order: 3,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 5,
@@ -86,6 +94,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.blue),
       iconName: "popcorn.png",
       dateCreated: DateTime.now(),
+      order: 4,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 6,
@@ -93,6 +103,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.green),
       iconName: "bills.png",
       dateCreated: DateTime.now(),
+      order: 5,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 7,
@@ -100,6 +112,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.blue),
       iconName: "graduation.png",
       dateCreated: DateTime.now(),
+      order: 6,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 8,
@@ -107,6 +121,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.red),
       iconName: "gift.png",
       dateCreated: DateTime.now(),
+      order: 7,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 9,
@@ -114,6 +130,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.cyan),
       iconName: "sports.png",
       dateCreated: DateTime.now(),
+      order: 8,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 10,
@@ -121,6 +139,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.purple),
       iconName: "flower.png",
       dateCreated: DateTime.now(),
+      order: 9,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 11,
@@ -128,6 +148,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.brown),
       iconName: "briefcase.png",
       dateCreated: DateTime.now(),
+      order: 10,
+      income: false,
     ),
     TransactionCategory(
       categoryPk: 12,
@@ -135,6 +157,8 @@ List<TransactionCategory> defaultCategories() {
       colour: toHexString(Colors.orange),
       iconName: "plane.png",
       dateCreated: DateTime.now(),
+      order: 11,
+      income: false,
     ),
   ];
 }

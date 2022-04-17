@@ -68,12 +68,22 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
-        minY: 0,
-        maxY: widget.maxPair.y + 0.2,
+        minY: widget.minPair.y,
+        maxY: widget.maxPair.y,
         maxX: widget.maxPair.x + 1,
         axisTitleData: axisTitleData,
         titlesData: titlesData,
-        clipData: FlClipData.all(),
+        extraLinesData: extraLinesData,
+        // clipData: FlClipData.all(),
+      );
+
+  ExtraLinesData get extraLinesData => ExtraLinesData(
+        horizontalLines: [
+          HorizontalLine(
+            y: 0,
+            color: widget.color.withAlpha(170),
+          ),
+        ],
       );
 
   FlTitlesData get titlesData => FlTitlesData(
@@ -99,7 +109,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             return getWordedNumber(value);
           },
           reservedSize: 30,
-          interval: widget.maxPair.y / 5,
+          interval:
+              ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 5.5) /
+                          5)
+                      .ceil() *
+                  5,
         ),
         topTitles: SideTitles(
           showTitles: false,
@@ -131,8 +145,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   FlGridData get gridData => FlGridData(
         show: true,
-        verticalInterval: widget.maxPair.x / 5,
-        horizontalInterval: widget.maxPair.y / 6,
+        verticalInterval:
+            ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) / 5,
+        horizontalInterval:
+            ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 6,
         getDrawingHorizontalLine: (value) {
           return FlLine(
             color: widget.color.withAlpha(170),
@@ -152,7 +168,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   FlBorderData get borderData => FlBorderData(
         show: true,
         border: Border(
-          bottom: BorderSide(color: widget.color.withAlpha(200), width: 3),
+          bottom: BorderSide(color: Colors.transparent),
           left: BorderSide(color: widget.color.withAlpha(200), width: 3),
           right: BorderSide(color: Colors.transparent),
           top: BorderSide(color: Colors.transparent),
@@ -178,16 +194,35 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           },
         ),
         isCurved: widget.isCurved,
+        aboveBarData: BarAreaData(
+          applyCutOffY: true,
+          cutOffY: 0,
+          show: true,
+          colors: [
+            widget.color.withAlpha(10),
+            widget.color,
+          ],
+          gradientColorStops: [0, 1],
+          gradientFrom: Offset(
+              0,
+              ((widget.maxPair.y).abs()) /
+                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+          gradientTo: const Offset(0, 1),
+        ),
         belowBarData: BarAreaData(
+          applyCutOffY: true,
+          cutOffY: 0,
           show: true,
           colors: [
             widget.color,
-            widget.color.withAlpha(100),
             widget.color.withAlpha(10),
           ],
-          gradientColorStops: [0, 0.5, 1.0],
+          gradientColorStops: [0, 1],
           gradientFrom: const Offset(0, 0),
-          gradientTo: const Offset(0, 1),
+          gradientTo: Offset(
+              0,
+              ((widget.maxPair.y).abs()) /
+                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
         spots: loaded ? widget.spots : [],
       );
@@ -249,33 +284,18 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Center(
-          child: TextFont(
-            text: "Monthly Overview",
-            textColor: Theme.of(context).colorScheme.black,
-            textAlign: TextAlign.center,
-            fontWeight: FontWeight.bold,
-          ),
+    return Container(
+      height: 175,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 16.0, left: 6.0),
+        child: _LineChart(
+          spots: convertPoints(points),
+          maxPair: getMaxPoint(points),
+          minPair: getMinPoint(points),
+          color: Theme.of(context).colorScheme.accentColor,
+          isCurved: isCurved,
         ),
-        SizedBox(
-          height: 17,
-        ),
-        Container(
-          height: 175,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16.0, left: 6.0),
-            child: _LineChart(
-              spots: convertPoints(points),
-              maxPair: getMaxPoint(points),
-              minPair: getMinPoint(points),
-              color: Theme.of(context).colorScheme.accentColor,
-              isCurved: isCurved,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

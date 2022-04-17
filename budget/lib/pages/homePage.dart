@@ -7,9 +7,11 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/pieChart.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
 import "../struct/budget.dart";
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -68,25 +70,55 @@ class _HomePageState extends State<HomePage>
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 20,
+            SliverPadding(
+              padding: EdgeInsets.only(top: 0, bottom: 25),
+              sliver: SliverToBoxAdapter(
+                child: Container(
+                  height: 85.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      bool lastIndex = index == 5 - 1;
+                      if (lastIndex) {
+                        return WalletEntryAdd();
+                      }
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          left: (index == 0 ? 8 : 0.0),
+                        ),
+                        child: WalletEntry(
+                          selected: index == 1,
+                          wallet: TransactionWallet(
+                            dateCreated: DateTime.now(),
+                            walletPk: 0,
+                            name: "Wallet",
+                            order: 0,
+                            colour: toHexString(Color(0xFF578F5B)),
+                            iconName: "",
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
             StreamBuilder<List<Transaction>>(
               stream: database.getTransactionsInTimeRangeFromCategories(
-                  DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month - 1,
-                    DateTime.now().day,
-                  ),
-                  DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month,
-                    DateTime.now().day,
-                  ),
-                  [],
-                  true),
+                DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month - 1,
+                  DateTime.now().day,
+                ),
+                DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                ),
+                [],
+                true,
+              ),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   bool cumulative = true;
@@ -218,6 +250,7 @@ class _HomePageState extends State<HomePage>
                 DateTime(DateTime.now().year, DateTime.now().month - 1,
                     DateTime.now().day),
                 DateTime.now()),
+            SliverToBoxAdapter(child: Container(height: 15)),
           ],
         ),
       ),

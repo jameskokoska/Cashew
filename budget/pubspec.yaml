@@ -39,6 +39,9 @@ dependencies:
   google_sign_in: ^5.3.0
   googleapis: ^8.1.0
   universal_html: ^2.0.8
+  file_picker: ^4.5.1
+  auto_size_text: ^3.0.0
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:

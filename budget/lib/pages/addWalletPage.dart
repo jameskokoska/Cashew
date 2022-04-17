@@ -24,8 +24,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-class AddBudgetPage extends StatefulWidget {
-  AddBudgetPage({
+class AddWalletPage extends StatefulWidget {
+  AddWalletPage({
     Key? key,
     required this.title,
     this.budget,
@@ -36,10 +36,10 @@ class AddBudgetPage extends StatefulWidget {
   final Budget? budget;
 
   @override
-  _AddBudgetPageState createState() => _AddBudgetPageState();
+  _AddWalletPageState createState() => _AddWalletPageState();
 }
 
-class _AddBudgetPageState extends State<AddBudgetPage> {
+class _AddWalletPageState extends State<AddWalletPage> {
   bool? canAddBudget;
 
   List<TransactionCategory>? selectedCategories;

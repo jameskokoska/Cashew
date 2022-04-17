@@ -43,9 +43,11 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
     return AnimatedScale(
       duration: Duration(milliseconds: 200),
       curve: Curves.easeOutCubic,
-      scale: isTapped ? 0.9 : 1,
+      scale: isTapped ? 0.95 : 1,
       child: Tappable(
-        color: Theme.of(context).colorScheme.accentColor.withOpacity(0.8),
+        color: widget.color != null
+            ? widget.color!.withOpacity(0.8)
+            : Theme.of(context).colorScheme.accentColor,
         onHighlightChanged: (value) {
           setState(() {
             isTapped = value;
@@ -66,10 +68,12 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             ),
             boxShadow: [
               BoxShadow(
-                color: widget.color ??
-                    Theme.of(context).colorScheme.accentColor.withOpacity(0.5),
-                blurRadius: 10,
-                offset: Offset(0, 4),
+                color: widget.color != null
+                    ? widget.color!.withOpacity(0.5)
+                    : Theme.of(context).colorScheme.accentColor,
+                blurRadius: 20,
+                offset: Offset(0, 2),
+                spreadRadius: -4,
               ),
             ],
           ),

@@ -41,18 +41,30 @@ class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   }
 }
 
+@DataClassName('TransactionWallet')
+class Wallets extends Table {
+  IntColumn get walletPk => integer().autoIncrement()();
+  TextColumn get name => text().withLength(max: NAME_LIMIT)();
+  TextColumn get colour => text().withLength(max: COLOUR_LIMIT).nullable()();
+  TextColumn get iconName => text().nullable()();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+  IntColumn get order => integer()();
+}
+
 @DataClassName('Transaction')
 class Transactions extends Table {
   IntColumn get transactionPk => integer().autoIncrement()();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   RealColumn get amount => real()();
   TextColumn get note => text().withLength(max: NOTE_LIMIT)();
-  IntColumn get budgetFk => integer()();
   IntColumn get categoryFk => integer()();
+  IntColumn get walletFk => integer()();
   TextColumn get labelFks =>
       text().map(const IntListInColumnConverter()).nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  BoolColumn get income => boolean().withDefault(const Constant(false))();
 }
 
 @DataClassName('TransactionCategory')
@@ -63,6 +75,8 @@ class Categories extends Table {
   TextColumn get iconName => text().nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  IntColumn get order => integer()();
+  BoolColumn get income => boolean().withDefault(const Constant(false))();
 }
 
 @DataClassName('TransactionLabel')
@@ -72,6 +86,7 @@ class Labels extends Table {
   IntColumn get categoryFk => integer()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  IntColumn get order => integer()();
 }
 
 @DataClassName('Budget')
@@ -87,18 +102,11 @@ class Budgets extends Table {
   BoolColumn get allCategoryFks => boolean()();
   IntColumn get periodLength => integer()();
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
-  // RealColumn get optimalDailySpending => real().nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
-  BoolColumn get pinned => boolean()();
-}
-
-@DataClassName('UserSettings')
-class Settings extends Table {
-  IntColumn get userPk => integer().autoIncrement()();
-  TextColumn get name => text().withLength(max: NAME_LIMIT)();
-  IntColumn get theme => intEnum<ThemeSetting>()();
-  TextColumn get currency => text().withLength(max: CURRENCY_LIMIT)();
+  BoolColumn get pinned => boolean().withDefault(const Constant(false))();
+  IntColumn get order => integer()();
+  IntColumn get walletFk => integer()();
 }
 
 class TransactionWithCategory {
@@ -118,14 +126,14 @@ class CategoryWithTotal {
   });
 }
 
-@DriftDatabase(tables: [Transactions, Categories, Labels, Budgets, Settings])
+@DriftDatabase(tables: [Wallets, Transactions, Categories, Labels, Budgets])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
   FinanceDatabase(QueryExecutor e) : super(e);
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration =>
@@ -147,20 +155,20 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get all filtered transactions from a given budget ordered by date and paginated
-  Stream<List<Transaction>> watchAllTransactionsFromBudgetFiltered(int budgetPk,
-      {int? categoryPk, String? itemPk, int? limit, int? offset}) {
-    return (categoryPk != null
-            ? (select(transactions)
-              ..where((tbl) => tbl.categoryFk.equals(categoryPk)))
-            : itemPk != null
-                ? (select(transactions)
-                  ..where((tbl) => tbl.labelFks.contains(itemPk)))
-                : select(transactions)
-          ..where((tbl) => tbl.budgetFk.equals(budgetPk))
-          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-        .watch();
-  }
+  // Stream<List<Transaction>> watchAllTransactionsFromBudgetFiltered(int budgetPk,
+  //     {int? categoryPk, String? itemPk, int? limit, int? offset}) {
+  //   return (categoryPk != null
+  //           ? (select(transactions)
+  //             ..where((tbl) => tbl.categoryFk.equals(categoryPk)))
+  //           : itemPk != null
+  //               ? (select(transactions)
+  //                 ..where((tbl) => tbl.labelFks.contains(itemPk)))
+  //               : select(transactions)
+  //         ..where((tbl) => tbl.budgetFk.equals(budgetPk))
+  //         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
+  //         ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+  //       .watch();
+  // }
 
   //get transactions that occurred on a given date
   Stream<List<Transaction>> getTransactionWithDate(DateTime date) {
@@ -305,11 +313,6 @@ class FinanceDatabase extends _$FinanceDatabase {
   // create or update a budget
   Future<int> createOrUpdateBudget(Budget budget) {
     return into(budgets).insertOnConflictUpdate(budget);
-  }
-
-  // create or update a user's settings
-  Future<int> createOrUpdateUserSettings(UserSettings setting) {
-    return into(settings).insertOnConflictUpdate(setting);
   }
 
   // watch category given key

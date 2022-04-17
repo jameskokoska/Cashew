@@ -133,16 +133,20 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   Future addTransaction() async {
     print("Added transaction");
     print(selectedDate);
-    await database.createOrUpdateTransaction(Transaction(
+    await database.createOrUpdateTransaction(
+      Transaction(
         transactionPk: widget.transaction != null
             ? widget.transaction!.transactionPk
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
         amount: selectedAmount ?? 10,
         note: selectedNote ?? "",
-        budgetFk: 0,
         categoryFk: selectedCategory?.categoryPk ?? 0,
-        dateCreated: selectedDate));
+        dateCreated: selectedDate,
+        income: false,
+        walletFk: 0,
+      ),
+    );
   }
 
   late TextEditingController _titleInputController;
