@@ -28,17 +28,34 @@ enum ThemeSetting { dark, light }
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
   @override
-  List<int>? mapToDart(String? label_fks_from_db) {
-    if (label_fks_from_db == null) return null;
+  List<int>? mapToDart(String? string_from_db) {
+    if (string_from_db == null) return null;
     // return label_fks_from_db.split(',').map(int.parse).toList();
-    return new List<int>.from(json.decode(label_fks_from_db));
+    return new List<int>.from(json.decode(string_from_db));
   }
 
   @override
-  String? mapToSql(List<int>? label_fks) {
-    if (label_fks == null) return null;
+  String? mapToSql(List<int>? ints) {
+    if (ints == null) return null;
     // throw label_fks.map((fk) => toString).join(',');
-    return json.encode(label_fks);
+    return json.encode(ints);
+  }
+}
+
+class StringListInColumnConverter extends TypeConverter<List<String>, String> {
+  const StringListInColumnConverter();
+  @override
+  List<String>? mapToDart(String? string_from_db) {
+    if (string_from_db == null) return null;
+    // return label_fks_from_db.split(',').map(int.parse).toList();
+    return new List<String>.from(json.decode(string_from_db));
+  }
+
+  @override
+  String? mapToSql(List<String>? strings) {
+    if (strings == null) return null;
+    // throw label_fks.map((fk) => toString).join(',');
+    return json.encode(strings);
   }
 }
 
@@ -78,6 +95,12 @@ class Categories extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
+  //If a title is in a smart label, automatically choose this category
+  // For e.g. for Food category
+  // smartLabels = ["apple", "pear"]
+  // Then when user sets title to pineapple, it will set the category to Food. Because "apple" is in "pineapple".
+  TextColumn get smartLabels =>
+      text().map(const StringListInColumnConverter()).nullable()();
 }
 
 @DataClassName('TransactionLabel')
@@ -134,7 +157,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration =>
@@ -318,6 +341,13 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(w) => OrderingTerm.desc(w.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Future<List<TransactionWallet>> getAllWallets({int? limit, int? offset}) {
+    return (select(wallets)
+          ..orderBy([(w) => OrderingTerm.desc(w.dateCreated)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .get();
   }
 
   //create or update a new wallet

@@ -798,6 +798,7 @@ class TransactionCategory extends DataClass
   final DateTime dateCreated;
   final int order;
   final bool income;
+  final List<String>? smartLabels;
   TransactionCategory(
       {required this.categoryPk,
       required this.name,
@@ -805,7 +806,8 @@ class TransactionCategory extends DataClass
       this.iconName,
       required this.dateCreated,
       required this.order,
-      required this.income});
+      required this.income,
+      this.smartLabels});
   factory TransactionCategory.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -824,6 +826,8 @@ class TransactionCategory extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}order'])!,
       income: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}income'])!,
+      smartLabels: $CategoriesTable.$converter0.mapToDart(const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}smart_labels'])),
     );
   }
   @override
@@ -840,6 +844,10 @@ class TransactionCategory extends DataClass
     map['date_created'] = Variable<DateTime>(dateCreated);
     map['order'] = Variable<int>(order);
     map['income'] = Variable<bool>(income);
+    if (!nullToAbsent || smartLabels != null) {
+      final converter = $CategoriesTable.$converter0;
+      map['smart_labels'] = Variable<String?>(converter.mapToSql(smartLabels));
+    }
     return map;
   }
 
@@ -855,6 +863,9 @@ class TransactionCategory extends DataClass
       dateCreated: Value(dateCreated),
       order: Value(order),
       income: Value(income),
+      smartLabels: smartLabels == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smartLabels),
     );
   }
 
@@ -869,6 +880,7 @@ class TransactionCategory extends DataClass
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       order: serializer.fromJson<int>(json['order']),
       income: serializer.fromJson<bool>(json['income']),
+      smartLabels: serializer.fromJson<List<String>?>(json['smartLabels']),
     );
   }
   @override
@@ -882,6 +894,7 @@ class TransactionCategory extends DataClass
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'order': serializer.toJson<int>(order),
       'income': serializer.toJson<bool>(income),
+      'smartLabels': serializer.toJson<List<String>?>(smartLabels),
     };
   }
 
@@ -892,7 +905,8 @@ class TransactionCategory extends DataClass
           String? iconName,
           DateTime? dateCreated,
           int? order,
-          bool? income}) =>
+          bool? income,
+          List<String>? smartLabels}) =>
       TransactionCategory(
         categoryPk: categoryPk ?? this.categoryPk,
         name: name ?? this.name,
@@ -901,6 +915,7 @@ class TransactionCategory extends DataClass
         dateCreated: dateCreated ?? this.dateCreated,
         order: order ?? this.order,
         income: income ?? this.income,
+        smartLabels: smartLabels ?? this.smartLabels,
       );
   @override
   String toString() {
@@ -911,14 +926,15 @@ class TransactionCategory extends DataClass
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('order: $order, ')
-          ..write('income: $income')
+          ..write('income: $income, ')
+          ..write('smartLabels: $smartLabels')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      categoryPk, name, colour, iconName, dateCreated, order, income);
+  int get hashCode => Object.hash(categoryPk, name, colour, iconName,
+      dateCreated, order, income, smartLabels);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -929,7 +945,8 @@ class TransactionCategory extends DataClass
           other.iconName == this.iconName &&
           other.dateCreated == this.dateCreated &&
           other.order == this.order &&
-          other.income == this.income);
+          other.income == this.income &&
+          other.smartLabels == this.smartLabels);
 }
 
 class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
@@ -940,6 +957,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<DateTime> dateCreated;
   final Value<int> order;
   final Value<bool> income;
+  final Value<List<String>?> smartLabels;
   const CategoriesCompanion({
     this.categoryPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -948,6 +966,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.dateCreated = const Value.absent(),
     this.order = const Value.absent(),
     this.income = const Value.absent(),
+    this.smartLabels = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.categoryPk = const Value.absent(),
@@ -957,6 +976,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.dateCreated = const Value.absent(),
     required int order,
     this.income = const Value.absent(),
+    this.smartLabels = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionCategory> custom({
@@ -967,6 +987,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<DateTime>? dateCreated,
     Expression<int>? order,
     Expression<bool>? income,
+    Expression<List<String>?>? smartLabels,
   }) {
     return RawValuesInsertable({
       if (categoryPk != null) 'category_pk': categoryPk,
@@ -976,6 +997,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (dateCreated != null) 'date_created': dateCreated,
       if (order != null) 'order': order,
       if (income != null) 'income': income,
+      if (smartLabels != null) 'smart_labels': smartLabels,
     });
   }
 
@@ -986,7 +1008,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<String?>? iconName,
       Value<DateTime>? dateCreated,
       Value<int>? order,
-      Value<bool>? income}) {
+      Value<bool>? income,
+      Value<List<String>?>? smartLabels}) {
     return CategoriesCompanion(
       categoryPk: categoryPk ?? this.categoryPk,
       name: name ?? this.name,
@@ -995,6 +1018,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       dateCreated: dateCreated ?? this.dateCreated,
       order: order ?? this.order,
       income: income ?? this.income,
+      smartLabels: smartLabels ?? this.smartLabels,
     );
   }
 
@@ -1022,6 +1046,11 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
     }
+    if (smartLabels.present) {
+      final converter = $CategoriesTable.$converter0;
+      map['smart_labels'] =
+          Variable<String?>(converter.mapToSql(smartLabels.value));
+    }
     return map;
   }
 
@@ -1034,7 +1063,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('order: $order, ')
-          ..write('income: $income')
+          ..write('income: $income, ')
+          ..write('smartLabels: $smartLabels')
           ..write(')'))
         .toString();
   }
@@ -1092,9 +1122,24 @@ class $CategoriesTable extends Categories
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (income IN (0, 1))',
       defaultValue: const Constant(false));
+  final VerificationMeta _smartLabelsMeta =
+      const VerificationMeta('smartLabels');
   @override
-  List<GeneratedColumn> get $columns =>
-      [categoryPk, name, colour, iconName, dateCreated, order, income];
+  late final GeneratedColumnWithTypeConverter<List<String>, String?>
+      smartLabels = GeneratedColumn<String?>('smart_labels', aliasedName, true,
+              type: const StringType(), requiredDuringInsert: false)
+          .withConverter<List<String>>($CategoriesTable.$converter0);
+  @override
+  List<GeneratedColumn> get $columns => [
+        categoryPk,
+        name,
+        colour,
+        iconName,
+        dateCreated,
+        order,
+        income,
+        smartLabels
+      ];
   @override
   String get aliasedName => _alias ?? 'categories';
   @override
@@ -1141,6 +1186,7 @@ class $CategoriesTable extends Categories
       context.handle(_incomeMeta,
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
     }
+    context.handle(_smartLabelsMeta, const VerificationResult.success());
     return context;
   }
 
@@ -1156,6 +1202,9 @@ class $CategoriesTable extends Categories
   $CategoriesTable createAlias(String alias) {
     return $CategoriesTable(_db, alias);
   }
+
+  static TypeConverter<List<String>, String> $converter0 =
+      const StringListInColumnConverter();
 }
 
 class TransactionLabel extends DataClass

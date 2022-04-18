@@ -38,15 +38,6 @@ import '../functions.dart';
 //in budget\Android
 //Generate new OAuth and put JSON in budget\android\app folder
 
-class GoogleAuthClient extends http.BaseClient {
-  final Map<String, String> _headers;
-  final http.Client _client = new http.Client();
-  GoogleAuthClient(this._headers);
-  Future<http.StreamedResponse> send(http.BaseRequest request) {
-    return _client.send(request..headers.addAll(_headers));
-  }
-}
-
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 

@@ -8,6 +8,8 @@ class DropdownSelect extends StatefulWidget {
   final Function(String) onChanged;
   final Color? backgroundColor;
   final bool compact;
+  final bool
+      checkInitialValue; //Check if the initial value not in list, default to using the first index
 
   const DropdownSelect({
     Key? key,
@@ -16,6 +18,7 @@ class DropdownSelect extends StatefulWidget {
     required this.onChanged,
     this.backgroundColor,
     this.compact = false,
+    this.checkInitialValue = false,
   }) : super(key: key);
 
   @override
@@ -28,7 +31,12 @@ class _DropdownSelectState extends State<DropdownSelect> {
   @override
   void initState() {
     super.initState();
-    currentValue = widget.initial;
+    if (widget.checkInitialValue == true &&
+        !widget.items.contains(widget.initial)) {
+      currentValue = widget.items[0];
+    } else {
+      currentValue = widget.initial;
+    }
   }
 
   @override

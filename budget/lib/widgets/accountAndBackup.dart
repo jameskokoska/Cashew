@@ -1,11 +1,17 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:budget/database/binary_string_conversion.dart';
+import 'package:budget/database/tables.dart';
 import 'package:budget/pages/settingsPage.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
-import 'package:drift/drift.dart' hide Column;
+import 'package:budget/widgets/textWidgets.dart';
+import 'package:drift/drift.dart' hide Column hide Table;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +25,16 @@ import 'package:universal_html/html.dart' as html;
 import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'package:csv/csv.dart';
+
+class GoogleAuthClient extends http.BaseClient {
+  final Map<String, String> _headers;
+  final http.Client _client = new http.Client();
+  GoogleAuthClient(this._headers);
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    return _client.send(request..headers.addAll(_headers));
+  }
+}
 
 class AccountAndBackup extends StatefulWidget {
   const AccountAndBackup({Key? key}) : super(key: key);
@@ -229,27 +245,167 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
     try {
       openLoadingPopup(context);
 
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowedExtensions: ['csv'],
+        type: FileType.custom,
+      );
 
       if (result != null) {
         File file = File(result.files.single.path ?? "");
+        String fileString = await file.readAsString();
+        List<List<String>> fileContents = CsvToListConverter()
+            .convert(fileString, eol: '\n', shouldParseNumbers: false);
+        List<String> headers = fileContents[0];
+        List<String> firstEntry = fileContents[1];
+
+        Navigator.of(context).pop();
+
+        Transaction(
+          amount: 0,
+          categoryFk: 0,
+          dateCreated: DateTime.now(),
+          income: false,
+          name: "test",
+          note: "hello",
+          transactionPk: 0,
+          walletFk: 0,
+          labelFks: [],
+        );
+
+        Map<String, Map<String, dynamic>> assignedColumns = {
+          "date": {
+            "displayName": "Date",
+            "headerValues": ["date"],
+            "required": true,
+            "setHeaderValue": "",
+          },
+          "amount": {
+            "displayName": "Amount",
+            "headerValues": ["amount"],
+            "required": true,
+            "setHeaderValue": "",
+          },
+          "category": {
+            "displayName": "Category",
+            "headerValues": ["category", "category name"],
+            // "extraOptions": ["Use Smart Categories"],
+            //This will be implements later...
+            //Use title to determine category. If smart category entry not found, ask user to select which category when importing. Save these selections to that category.
+            "required": true,
+            "setHeaderValue": "",
+          },
+          "title": {
+            "displayName": "Title",
+            "headerValues": ["title"],
+            "required": false,
+            "setHeaderValue": "",
+          },
+          "note": {
+            "displayName": "Note",
+            "headerValues": ["note"],
+            "required": false,
+            "setHeaderValue": "",
+          },
+          "wallet": {
+            "displayName": "Wallet",
+            "headerValues": ["wallet"],
+            "required": true,
+            "setHeaderValue": "",
+          },
+        };
+
+        openBottomSheet(
+          context,
+          PopupFramework(
+            title: "Assign Columns",
+            child: Column(
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Table(
+                      border: TableBorder.all(),
+                      defaultColumnWidth: IntrinsicColumnWidth(),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      children: <TableRow>[
+                        TableRow(
+                          decoration: const BoxDecoration(
+                            color: Colors.grey,
+                          ),
+                          children: <Widget>[
+                            for (dynamic header in headers)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextFont(
+                                  text: header.toString(),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                          ],
+                        ),
+                        TableRow(
+                          children: <Widget>[
+                            for (dynamic entry in firstEntry)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextFont(text: entry.toString()),
+                              )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Column(children: [
+                  for (dynamic key in assignedColumns.keys)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextFont(
+                            text: assignedColumns[key]!["displayName"]
+                                .toString()),
+                        DropdownSelect(
+                          compact: true,
+                          initial: determindInitialValue(
+                              assignedColumns[key]!["headerValues"],
+                              headers,
+                              assignedColumns[key]!["required"]),
+                          items: assignedColumns[key]!["required"]
+                              ? headers
+                              : ["None", ...headers],
+                          onChanged: (_) {},
+                          backgroundColor: Theme.of(context).canvasColor,
+                          checkInitialValue: true,
+                        ),
+                      ],
+                    )
+                ]),
+              ],
+            ),
+          ),
+        );
       } else {
         throw "No file selected";
       }
-
-      Navigator.of(context).pop();
-
-      openBottomSheet(
-        context,
-        PopupFramework(
-          title: "Choose a Backup to Restore",
-          child: Column(children: []),
-        ),
-      );
     } catch (e) {
       Navigator.of(context).pop();
       openSnackbar(context, e.toString());
     }
+  }
+
+  String determindInitialValue(
+      List<String> headerValues, List<String> headers, bool required) {
+    for (String header in headers) {
+      if (headerValues.contains(header.toLowerCase())) {
+        return header;
+      }
+    }
+    if (!required) {
+      return "None";
+    }
+    return headerValues[0];
   }
 
   @override
