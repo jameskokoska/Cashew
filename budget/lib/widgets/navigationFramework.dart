@@ -19,42 +19,79 @@ class PageNavigationFramework extends StatefulWidget {
       PageNavigationFrameworkState();
 }
 
+//can also do GlobalKey<dynamic> for private state classes, but bad practice and no autocomplete
+GlobalKey<HomePageState> homePageStateKey = GlobalKey();
+GlobalKey<TransactionsListPageState> transactionsListPageStateKey = GlobalKey();
+GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
+GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
+
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   List<Widget> pages = [
-    HomePage(),
-    TransactionsListPage(),
-    BudgetsListPage(),
-    SettingsPage()
+    HomePage(key: homePageStateKey),
+    TransactionsListPage(key: transactionsListPageStateKey),
+    BudgetsListPage(key: budgetsListPageStateKey),
+    SettingsPage(key: settingsPageStateKey)
   ];
+
+  int currentPage = 0;
+  Map<int, bool> pagesNeedingRefresh = {
+    0: false,
+    1: false,
+    2: false,
+    3: false,
+  };
+
+  sendRequestRefresh(List<int> newPagesNeedingRefresh) {
+    for (int page in newPagesNeedingRefresh) {
+      print("page" + page.toString());
+      print("currentPage" + currentPage.toString());
+
+      if (currentPage == 0 && page == 0) {
+        homePageStateKey.currentState?.refreshState();
+      } else if (currentPage == 1 && page == 1) {
+        transactionsListPageStateKey.currentState?.refreshState();
+      } else if (currentPage == 2 && page == 2) {
+        budgetsListPageStateKey.currentState?.refreshState();
+      } else if (currentPage == 3 && page == 3) {
+        settingsPageStateKey.currentState?.refreshState();
+      } else {
+        pagesNeedingRefresh[page] = true;
+      }
+    }
+    print(pagesNeedingRefresh);
+  }
 
   final pageController = PageController();
 
-  void changePage(int index2) {
-    // pageController.animateToPage(index,
-    //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
-    // pageController.jumpToPage(index);
-
+  void changePage(int page) {
     setState(() {
-      index = index2;
+      currentPage = page;
     });
-  }
+    // pageController.animateToPage(page,
+    //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
+    pageController.jumpToPage(page);
 
-  int index = 0;
+    // Send a request for refresh, if this page needs to be updated
+    if (pagesNeedingRefresh[currentPage] == true) {
+      print("UPDATING CURRENT PAGE");
+      sendRequestRefresh([currentPage]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        // PageView(
-        //   controller: pageController,
-        //   onPageChanged: (int index) {},
-        //   children: pages,
-        //   physics: NeverScrollableScrollPhysics(),
-        // ),
-        IndexedStack(
+        PageView(
+          controller: pageController,
+          onPageChanged: (int index) {},
           children: pages,
-          index: index,
+          physics: NeverScrollableScrollPhysics(),
         ),
+        // IndexedStack(
+        //   children: pages,
+        //   index: index,
+        // ),
         BottomNavBar(onChanged: (index) {
           changePage(index);
         }),
@@ -64,10 +101,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         child: Stack(
           children: [
             AnimatedScale(
-              duration: index == 0 || index == 1
+              duration: currentPage == 0 || currentPage == 1
                   ? Duration(milliseconds: 1300)
                   : Duration(milliseconds: 0),
-              scale: index == 0 || index == 1 ? 1 : 0,
+              scale: currentPage == 0 || currentPage == 1 ? 1 : 0,
               curve: Curves.elasticOut,
               child: FAB(
                 tooltip: "Add Transaction",
@@ -77,10 +114,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
               ),
             ),
             AnimatedScale(
-              duration: index == 2
+              duration: currentPage == 2
                   ? Duration(milliseconds: 1300)
                   : Duration(milliseconds: 0),
-              scale: index == 2 ? 1 : 0,
+              scale: currentPage == 2 ? 1 : 0,
               curve: Curves.elasticOut,
               child: FAB(
                 openPage: AddBudgetPage(title: "Add Budget"),

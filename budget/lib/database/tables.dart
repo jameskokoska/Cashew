@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:budget/main.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
@@ -183,12 +184,14 @@ class FinanceDatabase extends _$FinanceDatabase {
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
   }) {
+    print(appStateSettings["selectedWallet"]);
     JoinedSelectStatement<HasResultSet, dynamic> query;
     if (categoryFks.length > 0) {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.year.equals(date.year) &
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day) &
                   tbl.categoryFk.isIn(categoryFks);
@@ -201,7 +204,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.year.equals(date.year) &
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day);
             }))
@@ -293,6 +297,18 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Stream<List<TransactionWallet>> watchAllWallets({int? limit, int? offset}) {
+    return (select(wallets)
+          ..orderBy([(w) => OrderingTerm.desc(w.dateCreated)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch();
+  }
+
+  //create or update a new wallet
+  Future<int> createOrUpdateWallet(TransactionWallet wallet) {
+    return into(wallets).insertOnConflictUpdate(wallet);
   }
 
   // create or update a new transaction

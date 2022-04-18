@@ -75,10 +75,19 @@ class TransactionsListPage extends StatefulWidget {
   const TransactionsListPage({Key? key}) : super(key: key);
 
   @override
-  State<TransactionsListPage> createState() => _TransactionsListPageState();
+  State<TransactionsListPage> createState() => TransactionsListPageState();
 }
 
-class _TransactionsListPageState extends State<TransactionsListPage> {
+class TransactionsListPageState extends State<TransactionsListPage>
+    with AutomaticKeepAliveClientMixin {
+  void refreshState() {
+    setState(() {});
+    searchTransaction("");
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
   late Color selectedColor = Colors.red;
   late List<Widget> transactionWidgets = [];
   @override

@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -27,7 +28,7 @@ class WalletEntry extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              width: selected ? 0 : 1.5,
+              width: 1.5,
               color: HexColor(wallet.colour).withOpacity(0.7),
             ),
             borderRadius: BorderRadius.circular(15),
@@ -57,7 +58,10 @@ class WalletEntry extends StatelessWidget {
             ),
           ),
         ),
-        onTap: () {},
+        onTap: () {
+          updateSettings("selectedWallet", wallet.walletPk,
+              newPagesNeedingRefresh: [0, 1, 2]);
+        },
       ),
     );
   }

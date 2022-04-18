@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -23,11 +24,14 @@ class HomePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin {
+class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+  void refreshState() {
+    setState(() {});
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -38,221 +42,218 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 48),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverAppBar(
-              leading: Container(),
-              backgroundColor: Theme.of(context).colorScheme.accentColor,
-              floating: false,
-              pinned: true,
-              expandedHeight: 200.0,
-              collapsedHeight: 65,
-              shape: ContinuousRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(25),
-                ),
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                titlePadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                title: HomeAppBar(
-                  key: _appBarKey,
-                  defaultTitle: "Hello James",
-                  scrollController: _scrollController,
-                  firstTitle: "Overview",
-                ),
-                background: Container(
-                  color: Theme.of(context).canvasColor,
-                ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 48),
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverAppBar(
+            leading: Container(),
+            backgroundColor: Theme.of(context).colorScheme.accentColor,
+            floating: false,
+            pinned: true,
+            expandedHeight: 200.0,
+            collapsedHeight: 65,
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(25),
               ),
             ),
-            SliverPadding(
-              padding: EdgeInsets.only(top: 0, bottom: 25),
-              sliver: SliverToBoxAdapter(
-                child: Container(
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+              title: HomeAppBar(
+                key: _appBarKey,
+                defaultTitle: "Hello James",
+                scrollController: _scrollController,
+                firstTitle: "Overview",
+              ),
+              background: Container(
+                color: Theme.of(context).canvasColor,
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(top: 0, bottom: 25),
+            sliver: SliverToBoxAdapter(
+              child: Container(
                   height: 85.0,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      bool lastIndex = index == 5 - 1;
-                      if (lastIndex) {
-                        return WalletEntryAdd();
-                      }
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: (index == 0 ? 8 : 0.0),
-                        ),
-                        child: WalletEntry(
-                          selected: index == 1,
-                          wallet: TransactionWallet(
-                            dateCreated: DateTime.now(),
-                            walletPk: 0,
-                            name: "Wallet",
-                            order: 0,
-                            colour: toHexString(Color(0xFF578F5B)),
-                            iconName: "",
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+                  child: StreamBuilder<List<TransactionWallet>>(
+                      stream: database.watchAllWallets(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data!.length + 1,
+                            itemBuilder: (context, index) {
+                              bool lastIndex = index == snapshot.data!.length;
+                              if (lastIndex) {
+                                return WalletEntryAdd();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  left: (index == 0 ? 8 : 0.0),
+                                ),
+                                child: WalletEntry(
+                                  selected:
+                                      appStateSettings["selectedWallet"] ==
+                                          snapshot.data![index].walletPk,
+                                  wallet: snapshot.data![index],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        return Container();
+                      })),
             ),
-            StreamBuilder<List<Transaction>>(
-              stream: database.getTransactionsInTimeRangeFromCategories(
-                DateTime(
+          ),
+          StreamBuilder<List<Transaction>>(
+            stream: database.getTransactionsInTimeRangeFromCategories(
+              DateTime(
+                DateTime.now().year,
+                DateTime.now().month - 1,
+                DateTime.now().day,
+              ),
+              DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+                DateTime.now().day,
+              ),
+              [],
+              true,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                bool cumulative = true;
+                double cumulativeTotal = 0;
+                List<Pair> points = [];
+                for (DateTime indexDay = DateTime(
                   DateTime.now().year,
                   DateTime.now().month - 1,
                   DateTime.now().day,
-                ),
-                DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                ),
-                [],
-                true,
-              ),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  bool cumulative = true;
-                  double cumulativeTotal = 0;
-                  List<Pair> points = [];
-                  for (DateTime indexDay = DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month - 1,
-                    DateTime.now().day,
-                  );
-                      indexDay.compareTo(DateTime.now()) < 0;
-                      indexDay = indexDay.add(Duration(days: 1))) {
-                    //can be optimized...
-                    double totalForDay = 0;
-                    snapshot.data!.forEach((transaction) {
-                      if (indexDay.year == transaction.dateCreated.year &&
-                          indexDay.month == transaction.dateCreated.month &&
-                          indexDay.day == transaction.dateCreated.day) {
-                        totalForDay += transaction.amount;
-                      }
-                    });
-                    cumulativeTotal += totalForDay;
-                    points.add(Pair(points.length.toDouble(),
-                        cumulative ? cumulativeTotal : totalForDay));
-                  }
-                  return SliverToBoxAdapter(
-                    child: LineChartWrapper(points: points, isCurved: false),
-                  );
-                }
-                return SliverToBoxAdapter(child: SizedBox());
-              },
-            ),
-            SliverAppBar(
-              leading: Container(),
-              backgroundColor: Colors.transparent,
-              expandedHeight: 65.1,
-              collapsedHeight: 65,
-              flexibleSpace: LayoutBuilder(builder: (
-                BuildContext context,
-                BoxConstraints constraints,
-              ) {
-                if (setTitleHeight == 0)
-                  setTitleHeight = constraints.biggest.height;
-                print(setTitleHeight);
-                if (constraints.biggest.height < setTitleHeight) {
-                  //occur when title disappears (scrolling down)
-                  //add delay to wait for layout of children widgets first
-                  Future.delayed(Duration.zero, () async {
-                    _appBarKey.currentState?.changeTitle("Budgets", 1);
-                  });
-                } else {
-                  //occur when title appears (scrolling up)
-                  Future.delayed(Duration.zero, () async {
-                    _appBarKey.currentState?.changeTitle("Summary", -1);
-                  });
-                }
-                return FlexibleSpaceBar(
-                  titlePadding:
-                      EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                  title: TextFont(
-                    text: "Budgets",
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
                 );
-              }),
-            ),
-            StreamBuilder<List<Budget>>(
-              stream: database.watchAllPinnedBudgets(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return SliverPadding(
-                    padding: EdgeInsets.symmetric(vertical: 0),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 18.0),
-                            child: BudgetContainer(
-                              budget: snapshot.data![index],
-                            ),
-                          );
-                        },
-                        childCount:
-                            snapshot.data?.length, //snapshot.data?.length
-                      ),
+                    indexDay.compareTo(DateTime.now()) < 0;
+                    indexDay = indexDay.add(Duration(days: 1))) {
+                  //can be optimized...
+                  double totalForDay = 0;
+                  snapshot.data!.forEach((transaction) {
+                    if (indexDay.year == transaction.dateCreated.year &&
+                        indexDay.month == transaction.dateCreated.month &&
+                        indexDay.day == transaction.dateCreated.day) {
+                      totalForDay += transaction.amount;
+                    }
+                  });
+                  cumulativeTotal += totalForDay;
+                  points.add(Pair(points.length.toDouble(),
+                      cumulative ? cumulativeTotal : totalForDay));
+                }
+                return SliverToBoxAdapter(
+                  child: LineChartWrapper(points: points, isCurved: false),
+                );
+              }
+              return SliverToBoxAdapter(child: SizedBox());
+            },
+          ),
+          SliverAppBar(
+            leading: Container(),
+            backgroundColor: Colors.transparent,
+            expandedHeight: 65.1,
+            collapsedHeight: 65,
+            flexibleSpace: LayoutBuilder(builder: (
+              BuildContext context,
+              BoxConstraints constraints,
+            ) {
+              if (setTitleHeight == 0)
+                setTitleHeight = constraints.biggest.height;
+              print(setTitleHeight);
+              if (constraints.biggest.height < setTitleHeight) {
+                //occur when title disappears (scrolling down)
+                //add delay to wait for layout of children widgets first
+                Future.delayed(Duration.zero, () async {
+                  _appBarKey.currentState?.changeTitle("Budgets", 1);
+                });
+              } else {
+                //occur when title appears (scrolling up)
+                Future.delayed(Duration.zero, () async {
+                  _appBarKey.currentState?.changeTitle("Summary", -1);
+                });
+              }
+              return FlexibleSpaceBar(
+                titlePadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                title: TextFont(
+                  text: "Budgets",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }),
+          ),
+          StreamBuilder<List<Budget>>(
+            stream: database.watchAllPinnedBudgets(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: 0),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 18.0),
+                          child: BudgetContainer(
+                            budget: snapshot.data![index],
+                          ),
+                        );
+                      },
+                      childCount: snapshot.data?.length, //snapshot.data?.length
                     ),
-                  );
-                } else {
-                  return SliverToBoxAdapter(child: SizedBox());
-                }
-              },
-            ),
-            SliverAppBar(
-              leading: Container(),
-              backgroundColor: Colors.transparent,
-              expandedHeight: 65.1,
-              collapsedHeight: 65,
-              flexibleSpace: LayoutBuilder(builder: (
-                BuildContext context,
-                BoxConstraints constraints,
-              ) {
-                if (setTitleHeight == 0)
-                  setTitleHeight = constraints.biggest.height;
-                print(setTitleHeight);
-                if (constraints.biggest.height < setTitleHeight) {
-                  //occur when title disappears (scrolling down)
-                  //add delay to wait for layout of children widgets first
-                  Future.delayed(Duration.zero, () async {
-                    _appBarKey.currentState?.changeTitle("Transactions", 1);
-                  });
-                } else {
-                  //occur when title appears (scrolling up)
-                  Future.delayed(Duration.zero, () async {
-                    _appBarKey.currentState?.changeTitle("Budgets", -1);
-                  });
-                }
-                return FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.only(bottom: 8, left: 18, right: 18),
-                  title: TextFont(
-                    text: "Transactions",
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
                   ),
                 );
-              }),
-            ),
-            ...getTransactionsSlivers(
-                DateTime(DateTime.now().year, DateTime.now().month - 1,
-                    DateTime.now().day),
-                DateTime.now()),
-            SliverToBoxAdapter(child: Container(height: 15)),
-          ],
-        ),
+              } else {
+                return SliverToBoxAdapter(child: SizedBox());
+              }
+            },
+          ),
+          SliverAppBar(
+            leading: Container(),
+            backgroundColor: Colors.transparent,
+            expandedHeight: 65.1,
+            collapsedHeight: 65,
+            flexibleSpace: LayoutBuilder(builder: (
+              BuildContext context,
+              BoxConstraints constraints,
+            ) {
+              if (setTitleHeight == 0)
+                setTitleHeight = constraints.biggest.height;
+              print(setTitleHeight);
+              if (constraints.biggest.height < setTitleHeight) {
+                //occur when title disappears (scrolling down)
+                //add delay to wait for layout of children widgets first
+                Future.delayed(Duration.zero, () async {
+                  _appBarKey.currentState?.changeTitle("Transactions", 1);
+                });
+              } else {
+                //occur when title appears (scrolling up)
+                Future.delayed(Duration.zero, () async {
+                  _appBarKey.currentState?.changeTitle("Budgets", -1);
+                });
+              }
+              return FlexibleSpaceBar(
+                titlePadding: EdgeInsets.only(bottom: 8, left: 18, right: 18),
+                title: TextFont(
+                  text: "Transactions",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }),
+          ),
+          ...getTransactionsSlivers(
+              DateTime(DateTime.now().year, DateTime.now().month - 1,
+                  DateTime.now().day),
+              DateTime.now()),
+          SliverToBoxAdapter(child: Container(height: 15)),
+        ],
       ),
     );
   }

@@ -28,79 +28,28 @@ class AddWalletPage extends StatefulWidget {
   AddWalletPage({
     Key? key,
     required this.title,
-    this.budget,
+    this.wallet,
   }) : super(key: key);
   final String title;
 
-  //When a transaction is passed in, we are editing that transaction
-  final Budget? budget;
+  //When a wallet is passed in, we are editing that wallet
+  final TransactionWallet? wallet;
 
   @override
   _AddWalletPageState createState() => _AddWalletPageState();
 }
 
 class _AddWalletPageState extends State<AddWalletPage> {
-  bool? canAddBudget;
+  bool? canAddWallet;
 
-  List<TransactionCategory>? selectedCategories;
-  double? selectedAmount;
-  String? selectedAmountCalculation;
   String? selectedTitle;
-  String? selectedNote;
-  bool selectedAllCategories = true;
-  int selectedPeriodLength = 0;
-  List<String> selectedTags = [];
-  DateTime? selectedStartDate;
-  DateTime? selectedEndDate;
   Color? selectedColor;
-  String? selectedRecurrence;
 
   late TextEditingController _nameInputController;
-  late TextEditingController _startDateInputController;
-  late TextEditingController _customDateInputController;
-  late TextEditingController _amountInputController;
-  late TextEditingController _selectCategoriesInputController;
-  late TextEditingController _periodLengthInputController;
   late TextEditingController _colorInputController;
-  late TextEditingController _recurrenceInputController;
   late FocusNode _periodLengthFocusNode;
 
-  String? textAddBudget = "Add Transaction";
-
-  Future<void> selectAmount(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Amount",
-        child: SelectAmount(
-          amountPassed: selectedAmountCalculation ?? "",
-          setSelectedAmount: setSelectedAmount,
-          next: () async {
-            Navigator.pop(context);
-          },
-          nextLabel: "Set Amount",
-        ),
-      ),
-    );
-  }
-
-  Future<void> selectCategories(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Select Categories",
-        child: SelectCategory(
-          selectedCategories: selectedCategories,
-          setSelectedCategories: setSelectedCategories,
-          nextLabel: "Set Categories",
-          next: () {
-            Navigator.pop(context);
-            setSelectedCategories(selectedCategories ?? []);
-          },
-        ),
-      ),
-    );
-  }
+  String? textAddWallet = "Add Wallet";
 
   Future<void> selectColor(BuildContext context) async {
     openBottomSheet(
@@ -115,159 +64,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
     );
   }
 
-  Future<void> selectRecurrence(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Select Period",
-        child: RadioItems(
-          items: ["Custom", "Weekly", "Monthly", "Yearly"],
-          initial: selectedRecurrence ?? "",
-          onChanged: (value) {
-            if (value == "Custom") {
-              selectedStartDate = null;
-              selectedEndDate = null;
-            }
-            setState(() {
-              selectedRecurrence = value;
-            });
-            determineBottomButton();
-            setTextInput(_recurrenceInputController, value);
-          },
-        ),
-      ),
-    );
-  }
-
-  Future<void> selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedStartDate ?? DateTime.now(),
-      firstDate: DateTime(DateTime.now().year - 2),
-      lastDate: DateTime(DateTime.now().year + 2),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColor,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.accentColor),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.accentColorHeavy),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? Container(),
-        );
-      },
-    );
-    setSelectedStartDate(picked);
-  }
-
-  setSelectedStartDate(DateTime? date) {
-    if (date != null && date != selectedStartDate) {
-      String dateString = getWordedDate(date);
-      setTextInput(_startDateInputController, dateString);
-      selectedStartDate = date;
-    }
-    determineBottomButton();
-  }
-
-  Future<void> selectDateRange(BuildContext context) async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(DateTime.now().year - 2),
-      lastDate: DateTime(DateTime.now().year + 2),
-      initialDateRange: DateTimeRange(
-        start: selectedStartDate ?? DateTime.now(),
-        end: selectedEndDate ??
-            DateTime(DateTime.now().year, DateTime.now().month,
-                DateTime.now().day, DateTime.now().hour + 5),
-      ),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColor,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.accentColor),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.accentColorHeavy),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? Container(),
-        );
-      },
-    );
-    if (picked != null) {
-      String dateString =
-          getWordedDate(picked.start) + " - " + getWordedDate(picked.end);
-      setTextInput(_customDateInputController, dateString);
-      setTextInput(_startDateInputController, getWordedDate(picked.start));
-      selectedStartDate = picked.start;
-      selectedEndDate = picked.end;
-      determineBottomButton();
-    }
-  }
-
-  void setSelectedCategories(List<TransactionCategory> categories) {
-    if (categories.length <= 0) {
-      setState(() {
-        selectedCategories = categories;
-        selectedAllCategories = true;
-      });
-      _selectCategoriesInputController.text = "All categories";
-    } else {
-      setState(() {
-        selectedCategories = categories;
-        selectedAllCategories = false;
-      });
-      if (categories.length == 1) {
-        _selectCategoriesInputController.text =
-            categories.length.toString() + " " + "category";
-      } else {
-        _selectCategoriesInputController.text =
-            categories.length.toString() + " " + "categories";
-      }
-    }
-    determineBottomButton();
-    return;
-  }
-
-  void setSelectedAmount(double amount, String amountCalculation) {
-    selectedAmount = amount;
-    selectedAmountCalculation = amountCalculation;
-    setTextInput(_amountInputController, convertToMoney(amount));
-    determineBottomButton();
-    return;
-  }
-
   void setSelectedTitle(String title) {
     selectedTitle = title;
-    determineBottomButton();
-    return;
-  }
-
-  void setSelectedPeriodLength(String period) {
-    try {
-      selectedPeriodLength = int.parse(period);
-      setTextInput(
-          _periodLengthInputController, selectedPeriodLength.toString());
-    } catch (e) {
-      selectedPeriodLength = 0;
-      setTextInput(_periodLengthInputController, "0");
-    }
     determineBottomButton();
     return;
   }
@@ -279,30 +77,17 @@ class _AddWalletPageState extends State<AddWalletPage> {
     return;
   }
 
-  Future addBudget() async {
+  Future addWallet() async {
     print("Added budget");
-    List<int> categoryFks = [];
-    for (TransactionCategory category in selectedCategories ?? []) {
-      categoryFks.add(category.categoryPk);
-    }
-    await database.createOrUpdateBudget(
-      Budget(
-        budgetPk: widget.budget != null
-            ? widget.budget!.budgetPk
+    await database.createOrUpdateWallet(
+      TransactionWallet(
+        walletPk: widget.wallet != null
+            ? widget.wallet!.walletPk
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
-        amount: selectedAmount ?? 0,
         colour: toHexString(selectedColor ?? Colors.green),
-        startDate: selectedStartDate ?? DateTime.now(),
-        endDate: selectedEndDate ?? DateTime.now(),
-        categoryFks: categoryFks,
-        allCategoryFks: selectedAllCategories,
-        periodLength: selectedPeriodLength,
-        reoccurrence: mapRecurrence(selectedRecurrence),
         dateCreated: DateTime.now(),
-        pinned: true,
         order: 0,
-        walletFk: 0,
       ),
     );
     Navigator.pop(context);
@@ -313,50 +98,19 @@ class _AddWalletPageState extends State<AddWalletPage> {
     super.initState();
     _periodLengthFocusNode = FocusNode();
 
-    if (widget.budget != null) {
-      //We are editing a budget
-      //Fill in the information from the passed in budget
+    if (widget.wallet != null) {
+      //We are editing a wallet
+      textAddWallet = "Edit Wallet";
+      selectedTitle = widget.wallet!.name;
+      //Fill in the information from the passed in wallet
       _nameInputController =
-          new TextEditingController(text: widget.budget!.name);
-      selectedTitle = widget.budget!.name;
-
-      _startDateInputController = new TextEditingController(text: "Today");
-      _customDateInputController = new TextEditingController();
-
-      _amountInputController = new TextEditingController(
-          text: convertToMoney(widget.budget!.amount));
-      selectedAllCategories = widget.budget!.allCategoryFks;
-      _periodLengthInputController = new TextEditingController(text: "0");
-      var amountString = widget.budget!.amount.toStringAsFixed(2);
-      if (amountString.substring(amountString.length - 2) == "00") {
-        selectedAmountCalculation =
-            amountString.substring(0, amountString.length - 3);
-      } else {
-        selectedAmountCalculation = amountString;
-      }
-      textAddBudget = "Edit Transaction";
+          new TextEditingController(text: widget.wallet!.name);
       _colorInputController =
-          new TextEditingController(text: widget.budget!.colour);
-      _recurrenceInputController = new TextEditingController(
-          text: widget.budget!.reoccurrence.toString());
-      _selectCategoriesInputController =
-          new TextEditingController(text: "All categories");
-
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        updateInitial();
-      });
+          new TextEditingController(text: widget.wallet!.colour);
+      WidgetsBinding.instance?.addPostFrameCallback((_) {});
     } else {
       _nameInputController = new TextEditingController();
-      _startDateInputController = new TextEditingController();
-      _customDateInputController = new TextEditingController();
-
-      _amountInputController =
-          new TextEditingController(text: convertToMoney(0));
-      _selectCategoriesInputController =
-          new TextEditingController(text: "All categories");
-      _periodLengthInputController = new TextEditingController(text: "0");
       _colorInputController = new TextEditingController();
-      _recurrenceInputController = new TextEditingController();
     }
   }
 
@@ -366,33 +120,16 @@ class _AddWalletPageState extends State<AddWalletPage> {
     super.dispose();
   }
 
-  updateInitial() async {
-    if (widget.budget != null) {
-      // TransactionCategory? getSelectedCategory =
-      //     await database.getCategoryInstance(widget.budget!.categoryFk);
-      // setState(() {
-      //   selectedCategory = getSelectedCategory;
-      // });
-    }
-  }
-
   determineBottomButton() {
-    if (selectedTitle != null &&
-        (selectedAmount ?? 0) >= 0 &&
-        selectedAmount != null &&
-        selectedColor != null &&
-        selectedStartDate != null &&
-        ((selectedRecurrence == "Custom" && selectedEndDate != null) ||
-            (selectedRecurrence != "Custom" && selectedPeriodLength != 0))) {
-      print(selectedPeriodLength);
-      if (canAddBudget != true)
+    if (selectedTitle != null && selectedColor != null) {
+      if (canAddWallet != true)
         this.setState(() {
-          canAddBudget = true;
+          canAddWallet = true;
         });
     } else {
-      if (canAddBudget != false)
+      if (canAddWallet != false)
         this.setState(() {
-          canAddBudget = false;
+          canAddWallet = false;
         });
     }
   }
@@ -420,25 +157,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     children: [
                       Container(height: 20),
                       TextInput(
-                        labelText: "Budget Name",
+                        labelText: "Wallet Name",
                         icon: Icons.title_rounded,
                         padding: EdgeInsets.zero,
                         controller: _nameInputController,
                         onChanged: (text) {
                           setSelectedTitle(text);
                         },
-                      ),
-                      Container(height: 14),
-                      TextInput(
-                        labelText: "Amount",
-                        icon: Icons.attach_money_rounded,
-                        padding: EdgeInsets.zero,
-                        controller: _amountInputController,
-                        onTap: () {
-                          selectAmount(context);
-                        },
-                        readOnly: true,
-                        showCursor: false,
                       ),
                       Container(height: 14),
                       TextInput(
@@ -452,126 +177,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         showCursor: false,
                         controller: _colorInputController,
                       ),
-                      Container(height: 14),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: TextInput(
-                              labelText: "Select Categories",
-                              icon: Icons.category_rounded,
-                              padding: EdgeInsets.zero,
-                              controller: _selectCategoriesInputController,
-                              onChanged: (text) {
-                                setSelectedTitle(text);
-                              },
-                              onTap: () {
-                                selectCategories(context);
-                              },
-                              readOnly: true,
-                              showCursor: false,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              CupertinoSwitch(
-                                value: selectedAllCategories,
-                                onChanged: (value) {
-                                  if (value == false) {
-                                    selectCategories(context);
-                                  } else {
-                                    setState(() {
-                                      selectedAllCategories = value;
-                                      _selectCategoriesInputController.text =
-                                          "All categories";
-                                    });
-                                  }
-                                },
-                              ),
-                              Container(
-                                child: TextFont(
-                                  text: "All Categories",
-                                  maxLines: 2,
-                                  fontSize: 8,
-                                  textAlign: TextAlign.center,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      Container(height: 14),
-                      TextInput(
-                        labelText: "Recurrence",
-                        icon: Icons.loop_rounded,
-                        padding: EdgeInsets.zero,
-                        controller: _recurrenceInputController,
-                        readOnly: true,
-                        showCursor: false,
-                        onTap: () {
-                          selectRecurrence(context);
-                        },
-                      ),
-                      selectedRecurrence != "Custom"
-                          ? Column(
-                              children: [
-                                Container(height: 14),
-                                TextInput(
-                                  labelText: "Start Date",
-                                  icon: Icons.calendar_today_rounded,
-                                  padding: EdgeInsets.zero,
-                                  onTap: () {
-                                    selectStartDate(context);
-                                  },
-                                  readOnly: true,
-                                  showCursor: false,
-                                  controller: _startDateInputController,
-                                ),
-                                Container(height: 14),
-                                GestureDetector(
-                                  onTap: () {
-                                    _periodLengthFocusNode.requestFocus();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Container(width: 55),
-                                      TextFont(text: "Repeat every "),
-                                      IntrinsicWidth(
-                                        child: TextInput(
-                                          focusNode: _periodLengthFocusNode,
-                                          labelText: "",
-                                          padding: EdgeInsets.zero,
-                                          onChanged: (text) {
-                                            setSelectedPeriodLength(text);
-                                          },
-                                          numbersOnly: true,
-                                          controller:
-                                              _periodLengthInputController,
-                                          paddingRight: 8,
-                                        ),
-                                      ),
-                                      TextFont(text: " weeks.")
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                Container(height: 14),
-                                TextInput(
-                                  labelText: "Custom Date Range",
-                                  icon: Icons.calendar_today_rounded,
-                                  padding: EdgeInsets.zero,
-                                  onTap: () {
-                                    selectDateRange(context);
-                                  },
-                                  readOnly: true,
-                                  showCursor: false,
-                                  controller: _customDateInputController,
-                                  maxLines: 3,
-                                ),
-                              ],
-                            ),
                     ],
                   ),
                 )
@@ -579,21 +184,21 @@ class _AddWalletPageState extends State<AddWalletPage> {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: canAddBudget ?? false
+              child: canAddWallet ?? false
                   ? Button(
-                      label: "Add Budget",
+                      label: "Add Wallet",
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       onTap: () {
-                        addBudget();
+                        addWallet();
                       },
                     )
                   : Button(
-                      label: "Add Budget",
+                      label: "Add Wallet",
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       onTap: () {
-                        addBudget();
+                        addWallet();
                       },
                       color: Colors.grey,
                     ),

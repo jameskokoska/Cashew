@@ -50,10 +50,9 @@ class _SelectColorState extends State<SelectColor> {
                     (index, color) => MapEntry(
                       index,
                       ColorIcon(
-                        sizePadding: 5,
                         margin: EdgeInsets.all(5),
                         color: color,
-                        size: 50,
+                        size: 55,
                         onTap: () {
                           if (widget.setSelectedColor != null) {
                             widget.setSelectedColor!(color);
@@ -89,7 +88,6 @@ class ColorIcon extends StatelessWidget {
     required this.size,
     this.onTap,
     this.margin,
-    this.sizePadding = 20,
     this.outline = false,
   }) : super(key: key);
 
@@ -97,7 +95,6 @@ class ColorIcon extends StatelessWidget {
   final double size;
   final VoidCallback? onTap;
   final EdgeInsets? margin;
-  final double sizePadding;
   final bool outline;
 
   @override
@@ -105,12 +102,13 @@ class ColorIcon extends StatelessWidget {
     return AnimatedContainer(
       duration: Duration(milliseconds: 250),
       margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
-      height: size + sizePadding,
-      width: size + sizePadding,
+      height: size,
+      width: size,
       decoration: outline
           ? BoxDecoration(
               border: Border.all(
-                color: Theme.of(context).colorScheme.accentColorHeavy,
+                color:
+                    darken(Theme.of(context).colorScheme.accentColorHeavy, 0.2),
                 width: 3,
               ),
               borderRadius: BorderRadius.all(Radius.circular(500)),

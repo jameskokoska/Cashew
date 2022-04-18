@@ -52,7 +52,7 @@ class PopupFramework extends StatelessWidget {
                 title == null ? Container() : Container(height: 10),
                 Padding(
                   padding: padding
-                      ? EdgeInsets.only(left: 18, right:18, bottom: 10)
+                      ? EdgeInsets.only(left: 18, right: 18, bottom: 10)
                       : EdgeInsets.zero,
                   child: child,
                 ),

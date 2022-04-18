@@ -12,6 +12,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -50,18 +51,42 @@ class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<SettingsPage> createState() => SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class SettingsPageState extends State<SettingsPage>
+    with AutomaticKeepAliveClientMixin {
   late Color selectedColor = Colors.red;
+  void refreshState() {
+    print("refresh settings");
+    setState(() {});
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    print("BUILT SETTINGS");
     return PageFramework(
       title: "Settings",
       backButton: false,
       listWidgets: [
+        SettingsContainerButton(
+          onTap: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                title: "Select Icon",
+                child: SelectCategoryImage(
+                  setSelectedImage: (_) {},
+                ),
+              ),
+            );
+          },
+          title: "Select Icon",
+          icon: Icons.portrait,
+        ),
         AccountAndBackup(),
         SettingsContainerOpenPage(
           openPage: EditBudgetPage(title: "Edit Budgets"),

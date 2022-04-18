@@ -17,11 +17,18 @@ class BudgetsListPage extends StatefulWidget {
   const BudgetsListPage({Key? key}) : super(key: key);
 
   @override
-  State<BudgetsListPage> createState() => _BudgetsListPageState();
+  State<BudgetsListPage> createState() => BudgetsListPageState();
 }
 
-class _BudgetsListPageState extends State<BudgetsListPage> {
+class BudgetsListPageState extends State<BudgetsListPage>
+    with AutomaticKeepAliveClientMixin {
   late Color selectedColor = Colors.red;
+  void refreshState() {
+    setState(() {});
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

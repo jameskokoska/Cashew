@@ -25,11 +25,14 @@ void main() async {
 
 final int randomInt = Random().nextInt(100);
 
-Future<bool> updateSettings(setting, value) async {
+Future<bool> updateSettings(setting, value,
+    {List<int> newPagesNeedingRefresh: const []}) async {
   final prefs = await SharedPreferences.getInstance();
   appStateSettings[setting] = value;
   await prefs.setString('userSettings', json.encode(appStateSettings));
-  appStateKey.currentState?.changeSetting();
+  appStateKey.currentState?.refreshAppState();
+  pageNavigationFrameworkKey.currentState
+      ?.sendRequestRefresh(newPagesNeedingRefresh);
   return true;
 }
 
@@ -104,18 +107,21 @@ class InitializeDatabase extends StatelessWidget {
   }
 }
 
-GlobalKey<InitializeAppState> appStateKey = GlobalKey();
+GlobalKey<_InitializeAppState> appStateKey = GlobalKey();
+GlobalKey<PageNavigationFrameworkState> pageNavigationFrameworkKey =
+    GlobalKey();
+
 Map<String, dynamic> appStateSettings = {};
 
 class InitializeApp extends StatefulWidget {
   InitializeApp({Key? key}) : super(key: key);
 
   @override
-  State<InitializeApp> createState() => InitializeAppState();
+  State<InitializeApp> createState() => _InitializeAppState();
 }
 
-class InitializeAppState extends State<InitializeApp> {
-  void changeSetting() {
+class _InitializeAppState extends State<InitializeApp> {
+  void refreshAppState() {
     setState(() {});
   }
 
@@ -181,7 +187,7 @@ class App extends StatelessWidget {
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
       ),
       themeMode: getSettingConstants(appStateSettings)["theme"],
-      home: PageNavigationFramework(),
+      home: PageNavigationFramework(key: pageNavigationFrameworkKey),
     );
   }
 }
