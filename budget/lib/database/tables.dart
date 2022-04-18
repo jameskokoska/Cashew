@@ -145,11 +145,17 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? categoryPk, String? itemPk, int? limit, int? offset}) {
     return (categoryPk != null
             ? (select(transactions)
-              ..where((tbl) => tbl.categoryFk.equals(categoryPk)))
+              ..where((tbl) =>
+                  tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  tbl.categoryFk.equals(categoryPk)))
             : itemPk != null
                 ? (select(transactions)
-                  ..where((tbl) => tbl.labelFks.contains(itemPk)))
+                  ..where((tbl) =>
+                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                      tbl.labelFks.contains(itemPk)))
                 : select(transactions)
+          ..where(
+              (tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]))
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -160,12 +166,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   //     {int? categoryPk, String? itemPk, int? limit, int? offset}) {
   //   return (categoryPk != null
   //           ? (select(transactions)
-  //             ..where((tbl) => tbl.categoryFk.equals(categoryPk)))
+  //             ..where((tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]) & tbl.categoryFk.equals(categoryPk)))
   //           : itemPk != null
   //               ? (select(transactions)
-  //                 ..where((tbl) => tbl.labelFks.contains(itemPk)))
+  //                 ..where((tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]) & tbl.labelFks.contains(itemPk)))
   //               : select(transactions)
-  //         ..where((tbl) => tbl.budgetFk.equals(budgetPk))
+  //         ..where((tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]) & tbl.budgetFk.equals(budgetPk))
   //         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
   //         ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
   //       .watch();
@@ -173,7 +179,10 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //get transactions that occurred on a given date
   Stream<List<Transaction>> getTransactionWithDate(DateTime date) {
-    return (select(transactions)..where((tbl) => tbl.dateCreated.equals(date)))
+    return (select(transactions)
+          ..where((tbl) =>
+              tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+              tbl.dateCreated.equals(date)))
         .watch();
   }
 
@@ -217,7 +226,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = ((select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.year.equals(date.year) &
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day);
             }))
@@ -239,6 +249,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   //watch all transactions sorted by date
   Stream<List<Transaction>> watchAllTransactions({int? limit}) {
     return (select(transactions)
+          ..where((tbl) {
+            return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+          })
           ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT))
         .watch();
@@ -249,7 +262,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = (select(transactions)
       ..where((tbl) {
         final dateCreated = tbl.dateCreated;
-        return dateCreated.year.equals(date.year) &
+        return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+            dateCreated.year.equals(date.year) &
             dateCreated.month.equals(date.month);
       }));
 
@@ -380,7 +394,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = (select(transactions)
         ..where((tbl) {
           final dateCreated = tbl.dateCreated;
-          return dateCreated.isBetweenValues(startDate, endDate);
+          return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+              dateCreated.isBetweenValues(startDate, endDate);
         })
         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]));
       return (query.join([
@@ -402,7 +417,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = (select(transactions)
         ..where((tbl) {
           final dateCreated = tbl.dateCreated;
-          return dateCreated.isBetweenValues(startDate, endDate) &
+          return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+              dateCreated.isBetweenValues(startDate, endDate) &
               tbl.categoryFk.isIn(categoryFks);
         }));
       return (query.join([
@@ -431,6 +447,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     final date = transactions.dateCreated.date;
     return (select(transactions)
           ..where((tbl) =>
+              tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
               tbl.dateCreated.isBiggerOrEqualValue(startDate) &
               tbl.dateCreated.isSmallerOrEqualValue(endDate))
           ..addColumns([totalAmt, date]).join([]).groupBy([date]))
@@ -441,6 +458,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     final totalAmt = transactions.amount.sum();
     final date = transactions.dateCreated.date;
     return (select(transactions)
+          ..where((tbl) {
+            return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+          })
           ..addColumns([totalAmt, date]).join([]).groupBy([date])
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
         .watch();
@@ -455,7 +475,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       return (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.isBetweenValues(startDate, endDate);
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  dateCreated.isBetweenValues(startDate, endDate);
             })
             ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
           .watch();
@@ -463,7 +484,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(transactions)
           ..where((tbl) {
             final dateCreated = tbl.dateCreated;
-            return dateCreated.isBetweenValues(startDate, endDate) &
+            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                dateCreated.isBetweenValues(startDate, endDate) &
                 tbl.categoryFk.isIn(categoryFks);
           }))
         .watch();
@@ -474,6 +496,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   //   final totalAmt = transactions.amount.sum();
   //   final month = transactions.dateCreated.date;
   //   return (select(transactions)
+  //         ..where((tbl) {
+  //           return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+  //         })
   //         ..addColumns([totalAmt, month]).join([]).groupBy([])
   //         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
   //       .watch();

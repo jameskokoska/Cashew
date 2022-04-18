@@ -23,15 +23,16 @@ class WalletEntry extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 6, right: 6),
       child: Tappable(
-        color: selected ? HexColor(wallet.colour) : Colors.transparent,
         borderRadius: 15,
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 250),
           decoration: BoxDecoration(
             border: Border.all(
               width: 1.5,
               color: HexColor(wallet.colour).withOpacity(0.7),
             ),
             borderRadius: BorderRadius.circular(15),
+            color: selected ? HexColor(wallet.colour) : Colors.transparent,
           ),
           child: Padding(
             padding: const EdgeInsets.only(left: 18, right: 18),
