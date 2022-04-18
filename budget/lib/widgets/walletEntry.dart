@@ -60,7 +60,7 @@ class WalletEntry extends StatelessWidget {
         ),
         onTap: () {
           updateSettings("selectedWallet", wallet.walletPk,
-              newPagesNeedingRefresh: [0, 1, 2]);
+              pagesNeedingRefresh: [0, 1, 2]);
         },
       ),
     );

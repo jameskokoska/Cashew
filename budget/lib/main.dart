@@ -26,13 +26,25 @@ void main() async {
 final int randomInt = Random().nextInt(100);
 
 Future<bool> updateSettings(setting, value,
-    {List<int> newPagesNeedingRefresh: const []}) async {
+    {List<int> pagesNeedingRefresh: const []}) async {
   final prefs = await SharedPreferences.getInstance();
   appStateSettings[setting] = value;
   await prefs.setString('userSettings', json.encode(appStateSettings));
+
   appStateKey.currentState?.refreshAppState();
-  pageNavigationFrameworkKey.currentState
-      ?.sendRequestRefresh(newPagesNeedingRefresh);
+  //Refresh any pages listed
+  for (int page in pagesNeedingRefresh) {
+    if (page == 0) {
+      homePageStateKey.currentState?.refreshState();
+    } else if (page == 1) {
+      transactionsListPageStateKey.currentState?.refreshState();
+    } else if (page == 2) {
+      budgetsListPageStateKey.currentState?.refreshState();
+    } else if (page == 3) {
+      settingsPageStateKey.currentState?.refreshState();
+    }
+  }
+
   return true;
 }
 

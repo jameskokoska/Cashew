@@ -34,32 +34,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   ];
 
   int currentPage = 0;
-  Map<int, bool> pagesNeedingRefresh = {
-    0: false,
-    1: false,
-    2: false,
-    3: false,
-  };
-
-  sendRequestRefresh(List<int> newPagesNeedingRefresh) {
-    for (int page in newPagesNeedingRefresh) {
-      print("page" + page.toString());
-      print("currentPage" + currentPage.toString());
-
-      if (currentPage == 0 && page == 0) {
-        homePageStateKey.currentState?.refreshState();
-      } else if (currentPage == 1 && page == 1) {
-        transactionsListPageStateKey.currentState?.refreshState();
-      } else if (currentPage == 2 && page == 2) {
-        budgetsListPageStateKey.currentState?.refreshState();
-      } else if (currentPage == 3 && page == 3) {
-        settingsPageStateKey.currentState?.refreshState();
-      } else {
-        pagesNeedingRefresh[page] = true;
-      }
-    }
-    print(pagesNeedingRefresh);
-  }
 
   final pageController = PageController();
 
@@ -70,12 +44,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     // pageController.animateToPage(page,
     //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
     pageController.jumpToPage(page);
-
-    // Send a request for refresh, if this page needs to be updated
-    if (pagesNeedingRefresh[currentPage] == true) {
-      print("UPDATING CURRENT PAGE");
-      sendRequestRefresh([currentPage]);
-    }
   }
 
   @override
@@ -90,7 +58,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         ),
         // IndexedStack(
         //   children: pages,
-        //   index: index,
+        //   index: currentPage,
         // ),
         BottomNavBar(onChanged: (index) {
           changePage(index);
