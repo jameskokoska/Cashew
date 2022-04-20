@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/settingsPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -241,6 +243,17 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
     }
   }
 
+  _getHeaderIndex(List<String> headers, String header) {
+    int index = 0;
+    for (String headerEntry in headers) {
+      if (header == headerEntry) {
+        return index;
+      }
+      index++;
+    }
+    return -1;
+  }
+
   Future<void> _chooseBackupFile() async {
     try {
       openLoadingPopup(context);
@@ -278,12 +291,14 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
             "headerValues": ["date"],
             "required": true,
             "setHeaderValue": "",
+            "setHeaderIndex": -1,
           },
           "amount": {
             "displayName": "Amount",
             "headerValues": ["amount"],
             "required": true,
             "setHeaderValue": "",
+            "setHeaderIndex": -1,
           },
           "category": {
             "displayName": "Category",
@@ -293,24 +308,28 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
             //Use title to determine category. If smart category entry not found, ask user to select which category when importing. Save these selections to that category.
             "required": true,
             "setHeaderValue": "",
+            "setHeaderIndex": -1,
           },
           "title": {
             "displayName": "Title",
             "headerValues": ["title"],
             "required": false,
             "setHeaderValue": "",
+            "setHeaderIndex": -1,
           },
           "note": {
             "displayName": "Note",
             "headerValues": ["note"],
             "required": false,
             "setHeaderValue": "",
+            "setHeaderIndex": -1,
           },
           "wallet": {
             "displayName": "Wallet",
             "headerValues": ["wallet"],
             "required": true,
             "setHeaderValue": "",
+            "setHeaderIndex": -1,
           },
         };
 
@@ -358,30 +377,42 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                     ),
                   ),
                 ),
-                Column(children: [
-                  for (dynamic key in assignedColumns.keys)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextFont(
-                            text: assignedColumns[key]!["displayName"]
-                                .toString()),
-                        DropdownSelect(
-                          compact: true,
-                          initial: determindInitialValue(
-                              assignedColumns[key]!["headerValues"],
-                              headers,
-                              assignedColumns[key]!["required"]),
-                          items: assignedColumns[key]!["required"]
-                              ? headers
-                              : ["None", ...headers],
-                          onChanged: (_) {},
-                          backgroundColor: Theme.of(context).canvasColor,
-                          checkInitialValue: true,
-                        ),
-                      ],
-                    )
-                ]),
+                Column(
+                  children: [
+                    for (dynamic key in assignedColumns.keys)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextFont(
+                              text: assignedColumns[key]!["displayName"]
+                                  .toString()),
+                          DropdownSelect(
+                            compact: true,
+                            initial: determindInitialValue(
+                                assignedColumns[key]!["headerValues"],
+                                headers,
+                                assignedColumns[key]!["required"]),
+                            items: assignedColumns[key]!["required"]
+                                ? headers
+                                : ["None", ...headers],
+                            onChanged: (String setHeaderValue) {
+                              assignedColumns[key]!["setHeaderValue"] =
+                                  setHeaderValue;
+                              assignedColumns[key]!["setHeaderIndex"] =
+                                  _getHeaderIndex(headers, setHeaderValue);
+                            },
+                            backgroundColor: Theme.of(context).canvasColor,
+                            checkInitialValue: true,
+                          ),
+                        ],
+                      )
+                  ],
+                ),
+                Button(
+                    label: "label",
+                    onTap: () async {
+                      _importEntries(assignedColumns, fileContents);
+                    })
               ],
             ),
           ),
@@ -392,6 +423,56 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
     } catch (e) {
       Navigator.of(context).pop();
       openSnackbar(context, e.toString());
+    }
+  }
+
+  Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
+      List<List<String>> fileContents) async {
+    for (List<String> row in fileContents) {
+      int transactionPk = 0;
+
+      String name = "";
+      if (assignedColumns["name"]!["setHeaderIndex"] != -1) {}
+
+      double amount = 0;
+      amount =
+          double.parse(row[assignedColumns["category"]!["setHeaderIndex"]]);
+
+      String note = "";
+      if (assignedColumns["note"]!["setHeaderIndex"] != -1) {}
+
+      int categoryFk = 0;
+      try {
+        inspect(await database.getCategoryInstanceGivenName(
+            row[assignedColumns["category"]!["setHeaderIndex"]]));
+      } catch (_) {
+        print("category not found");
+      }
+
+      int walletFk = 0;
+      try {
+        inspect(await database.getCategoryInstanceGivenName(
+            row[assignedColumns["wallet"]!["setHeaderIndex"]]));
+      } catch (_) {
+        print("category not found");
+      }
+
+      DateTime dateCreated = DateTime.now();
+
+      bool income = amount > 0;
+
+      await database.createOrUpdateTransaction(
+        Transaction(
+          transactionPk: transactionPk,
+          name: name,
+          amount: amount,
+          note: note,
+          categoryFk: categoryFk,
+          walletFk: walletFk,
+          dateCreated: dateCreated,
+          income: income,
+        ),
+      );
     }
   }
 

@@ -387,6 +387,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  // get category given name
+  Future<TransactionCategory> getCategoryInstanceGivenName(String name) {
+    return (select(categories)..where((t) => t.name.equals(name))).getSingle();
+  }
+
+  // get wallet given name
+  Future<TransactionWallet> getWalletInstanceGivenName(String name) {
+    return (select(wallets)..where((t) => t.name.equals(name))).getSingle();
+  }
+
   // delete budget given key
   Future deleteBudget(int budgetPk) {
     return (delete(budgets)..where((t) => t.budgetPk.equals(budgetPk))).go();
