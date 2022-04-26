@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class PageFramework extends StatefulWidget {
-  const PageFramework(
-      {Key? key,
-      required this.title,
-      this.slivers = const [],
-      this.listWidgets,
-      this.navbar = true,
-      this.appBarBackgroundColor,
-      this.appBarBackgroundColorStart,
-      this.showElevationAfterScrollPast,
-      this.backButton = true,
-      this.subtitle = null,
-      this.subtitleSize = null,
-      this.subtitleAnimationSpeed = 5})
-      : super(key: key);
+  const PageFramework({
+    Key? key,
+    required this.title,
+    this.slivers = const [],
+    this.listWidgets,
+    this.navbar = true,
+    this.appBarBackgroundColor,
+    this.appBarBackgroundColorStart,
+    this.showElevationAfterScrollPast,
+    this.backButton = true,
+    this.subtitle = null,
+    this.subtitleSize = null,
+    this.subtitleAnimationSpeed = 5,
+    this.onBottomReached,
+  }) : super(key: key);
 
   final String title;
   final List<Widget> slivers;
@@ -29,6 +30,7 @@ class PageFramework extends StatefulWidget {
   final Widget? subtitle;
   final double? subtitleSize;
   final double subtitleAnimationSpeed;
+  final VoidCallback? onBottomReached;
   @override
   State<PageFramework> createState() => _PageFrameworkState();
 }
@@ -51,6 +53,11 @@ class _PageFrameworkState extends State<PageFramework>
   }
 
   _scrollListener() {
+    if (widget.onBottomReached != null &&
+        _scrollController.offset >=
+            _scrollController.position.maxScrollExtent) {
+      widget.onBottomReached!();
+    }
     double percent = _scrollController.offset / (200 - 65);
     if (widget.backButton == true ||
         widget.subtitle != null && percent >= 0 && percent <= 1) {

@@ -87,9 +87,18 @@ Future<bool> initializeSettings() async {
 //Initialize default values in database
 Future<bool> initializeDatabase() async {
   //Initialize default categories
-  for (var category in defaultCategories()) {
+  for (TransactionCategory category in defaultCategories()) {
     await database.createOrUpdateCategory(category);
   }
+  await database.createOrUpdateWallet(
+    TransactionWallet(
+      walletPk: 0,
+      name: "Wallet",
+      dateCreated: DateTime.now(),
+      order: 0,
+      colour: toHexString(Colors.green),
+    ),
+  );
   return true;
 }
 

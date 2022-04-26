@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -11,6 +13,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:drift/drift.dart' hide Column hide Table;
@@ -226,7 +229,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                 .map(
                   (file) => SettingsContainerButton(
                     compact: true,
-                    icon: Icons.file_open_rounded,
+                    icon: Icons.file_copy,
                     title: file.name ?? "No name",
                     onTap: () {
                       _loadBackup(driveApi, file.id ?? "");
@@ -304,15 +307,15 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
             "displayName": "Category",
             "headerValues": ["category", "category name"],
             // "extraOptions": ["Use Smart Categories"],
-            //This will be implements later...
+            //This will be implemented later... in the future
             //Use title to determine category. If smart category entry not found, ask user to select which category when importing. Save these selections to that category.
             "required": true,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
           },
-          "title": {
-            "displayName": "Title",
-            "headerValues": ["title"],
+          "name": {
+            "displayName": "Transaction Name",
+            "headerValues": ["title", "name"],
             "required": false,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
@@ -331,7 +334,17 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
             "setHeaderValue": "",
             "setHeaderIndex": -1,
           },
+          //In the future make it so users can select a default wallet already made
         };
+        for (dynamic key in assignedColumns.keys) {
+          String setHeaderValue = determineInitialValue(
+              assignedColumns[key]!["headerValues"],
+              headers,
+              assignedColumns[key]!["required"]);
+          assignedColumns[key]!["setHeaderValue"] = setHeaderValue;
+          assignedColumns[key]!["setHeaderIndex"] =
+              _getHeaderIndex(headers, setHeaderValue);
+        }
 
         openBottomSheet(
           context,
@@ -388,12 +401,16 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                                   .toString()),
                           DropdownSelect(
                             compact: true,
-                            initial: determindInitialValue(
-                                assignedColumns[key]!["headerValues"],
-                                headers,
-                                assignedColumns[key]!["required"]),
+                            initial: assignedColumns[key]!["setHeaderValue"],
                             items: assignedColumns[key]!["required"]
-                                ? headers
+                                ? [
+                                    ...(assignedColumns[key]![
+                                                "setHeaderValue"] ==
+                                            ""
+                                        ? [""]
+                                        : []),
+                                    ...headers
+                                  ]
                                 : ["None", ...headers],
                             onChanged: (String setHeaderValue) {
                               assignedColumns[key]!["setHeaderValue"] =
@@ -428,55 +445,44 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
 
   Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
       List<List<String>> fileContents) async {
-    for (List<String> row in fileContents) {
-      int transactionPk = 0;
-
-      String name = "";
-      if (assignedColumns["name"]!["setHeaderIndex"] != -1) {}
-
-      double amount = 0;
-      amount =
-          double.parse(row[assignedColumns["category"]!["setHeaderIndex"]]);
-
-      String note = "";
-      if (assignedColumns["note"]!["setHeaderIndex"] != -1) {}
-
-      int categoryFk = 0;
-      try {
-        inspect(await database.getCategoryInstanceGivenName(
-            row[assignedColumns["category"]!["setHeaderIndex"]]));
-      } catch (_) {
-        print("category not found");
+    try {
+      //Check to see if all the required parameters have been set
+      for (dynamic key in assignedColumns.keys) {
+        if (assignedColumns[key]!["setHeaderValue"] == "") {
+          throw "Please make sure you select a parameter for each required field.";
+        }
+        print(assignedColumns[key]!["setHeaderIndex"]);
       }
-
-      int walletFk = 0;
-      try {
-        inspect(await database.getCategoryInstanceGivenName(
-            row[assignedColumns["wallet"]!["setHeaderIndex"]]));
-      } catch (_) {
-        print("category not found");
-      }
-
-      DateTime dateCreated = DateTime.now();
-
-      bool income = amount > 0;
-
-      await database.createOrUpdateTransaction(
-        Transaction(
-          transactionPk: transactionPk,
-          name: name,
-          amount: amount,
-          note: note,
-          categoryFk: categoryFk,
-          walletFk: walletFk,
-          dateCreated: dateCreated,
-          income: income,
-        ),
+    } catch (e) {
+      openPopup(
+        context,
+        description: e.toString(),
+        icon: Icons.error_rounded,
+        onSubmitLabel: "OK",
+        onSubmit: () {
+          Navigator.of(context).pop();
+        },
       );
     }
+    Navigator.of(context).pop();
+    // Open the progress bar
+    // This Widget opened will actually do the importing
+    openPopupCustom(
+      context,
+      title: "Importing...",
+      child: ImportingEntriesPopup(
+        assignedColumns: assignedColumns,
+        fileContents: fileContents,
+        next: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      barrierDismissible: false,
+    );
+    return;
   }
 
-  String determindInitialValue(
+  String determineInitialValue(
       List<String> headerValues, List<String> headers, bool required) {
     for (String header in headers) {
       if (headerValues.contains(header.toLowerCase())) {
@@ -486,7 +492,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
     if (!required) {
       return "None";
     }
-    return headerValues[0];
+    return "";
   }
 
   @override
@@ -523,6 +529,145 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           icon: Icons.download_rounded,
         ),
       ],
+    );
+  }
+}
+
+class ImportingEntriesPopup extends StatefulWidget {
+  const ImportingEntriesPopup({
+    required this.assignedColumns,
+    required this.fileContents,
+    required this.next,
+    Key? key,
+  }) : super(key: key);
+
+  final Map<String, Map<String, dynamic>> assignedColumns;
+  final List<List<String>> fileContents;
+  final VoidCallback next;
+
+  @override
+  State<ImportingEntriesPopup> createState() => _ImportingEntriesPopupState();
+}
+
+class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
+  double currentPercent = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback(
+        (_) => _importEntries(widget.assignedColumns, widget.fileContents));
+  }
+
+  Future<void> _importEntry(Map<String, Map<String, dynamic>> assignedColumns,
+      List<String> row, int i) async {
+    int transactionPk = 0;
+    transactionPk = DateTime.now().millisecondsSinceEpoch;
+
+    String name = "";
+    if (assignedColumns["name"]!["setHeaderIndex"] != -1) {
+      name = row[assignedColumns["name"]!["setHeaderIndex"]].toString();
+    }
+
+    double amount = 0;
+    amount = double.parse(row[assignedColumns["amount"]!["setHeaderIndex"]]);
+
+    String note = "";
+    if (assignedColumns["note"]!["setHeaderIndex"] != -1) {
+      note = row[assignedColumns["note"]!["setHeaderIndex"]].toString();
+    }
+
+    int categoryFk = 0;
+    try {
+      categoryFk = (await database.getCategoryInstanceGivenName(
+              row[assignedColumns["category"]!["setHeaderIndex"]]))
+          .categoryPk;
+    } catch (_) {
+      print("category not found");
+      await database.createOrUpdateCategory(
+        TransactionCategory(
+          categoryPk: DateTime.now().millisecondsSinceEpoch,
+          name: row[assignedColumns["category"]!["setHeaderIndex"]],
+          dateCreated: DateTime.now(),
+          order: 0,
+          colour:
+              toHexString(getSettingConstants(appStateSettings)["accentColor"]),
+          income: amount > 0,
+          iconName: "image.png",
+          smartLabels: [],
+        ),
+      );
+      categoryFk = (await database.getCategoryInstanceGivenName(
+              row[assignedColumns["category"]!["setHeaderIndex"]]))
+          .categoryPk;
+    }
+
+    int walletFk = 0;
+    try {
+      walletFk = (await database.getWalletInstanceGivenName(
+              row[assignedColumns["wallet"]!["setHeaderIndex"]]))
+          .walletPk;
+    } catch (_) {
+      print("wallet not found");
+      throw "Wallet not found!";
+    }
+
+    DateTime dateCreated =
+        DateTime.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
+
+    bool income = amount > 0;
+
+    await database.createOrUpdateTransaction(
+      Transaction(
+        transactionPk: transactionPk,
+        name: name,
+        amount: amount,
+        note: note,
+        categoryFk: categoryFk,
+        walletFk: walletFk,
+        dateCreated: dateCreated,
+        income: income,
+      ),
+    );
+
+    return;
+  }
+
+  Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
+      List<List<String>> fileContents) async {
+    List<String> categoriesCreated = [];
+    try {
+      for (int i = 0; i < fileContents.length; i++) {
+        if (i == 0) {
+          continue;
+        }
+        setState(() {
+          currentPercent = i / fileContents.length * 100;
+        });
+        await Future.delayed(Duration(milliseconds: 0), () async {
+          List<String> row = fileContents[i];
+          await _importEntry(assignedColumns, row, i);
+        });
+      }
+      widget.next();
+    } catch (e) {
+      openPopup(
+        context,
+        description: e.toString(),
+        icon: Icons.error_rounded,
+        onSubmitLabel: "OK",
+        onSubmit: () {
+          Navigator.of(context).pop();
+        },
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProgressBar(
+      currentPercent: currentPercent,
+      color: Colors.black,
     );
   }
 }

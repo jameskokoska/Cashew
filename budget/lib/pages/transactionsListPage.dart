@@ -90,17 +90,34 @@ class TransactionsListPageState extends State<TransactionsListPage>
 
   late Color selectedColor = Colors.red;
   late List<Widget> transactionWidgets = [];
+  int monthsBack = 0;
   @override
   void initState() {
     super.initState();
     transactionWidgets = getTransactionsSlivers(
-        DateTime(2022, 01, 1),
-        new DateTime(
-            DateTime.now().year, DateTime.now().month + 1, DateTime.now().day));
+      DateTime(2022, 01, 1),
+      new DateTime(
+          DateTime.now().year, DateTime.now().month + 1, DateTime.now().day),
+    );
   }
 
-  searchTransaction(String search) {
+  void _onBottomReached() {
+    print("bottom");
+    print(monthsBack);
     setState(() {
+      monthsBack = monthsBack + 1;
+      transactionWidgets.addAll(getTransactionsSlivers(
+        DateTime(DateTime.now().year, DateTime.now().month - monthsBack,
+            DateTime.now().day),
+        new DateTime(DateTime.now().year, DateTime.now().month - monthsBack + 1,
+            DateTime.now().day),
+      ));
+    });
+  }
+
+  searchTransaction(String? search) {
+    setState(() {
+      monthsBack = 0;
       transactionWidgets = getTransactionsSlivers(
           DateTime(2022, 01, 1),
           new DateTime(DateTime.now().year, DateTime.now().month + 1,
@@ -139,6 +156,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
         ),
         subtitleSize: 20,
         subtitleAnimationSpeed: 4.5,
+        onBottomReached: _onBottomReached,
       ),
     );
   }

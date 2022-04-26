@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -26,16 +28,22 @@ class Button extends StatefulWidget {
 
 class _ButtonState extends State<Button> with TickerProviderStateMixin {
   bool isTapped = false;
-
+  Timer? timer;
   void _shrink() {
     setState(() {
       isTapped = true;
     });
-    Future.delayed(Duration(milliseconds: 200), () {
+    timer = Timer(Duration(milliseconds: 200), () {
       setState(() {
         isTapped = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (timer != null) timer!.cancel();
   }
 
   @override
