@@ -48,13 +48,20 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(children: [
-        PageView(
-          controller: pageController,
-          onPageChanged: (int index) {},
-          children: pages,
-          physics: NeverScrollableScrollPhysics(),
+    return WillPopScope(
+      onWillPop: () async {
+        //Handle global back button
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        return false;
+      },
+      child: Stack(children: [
+        Scaffold(
+          body: PageView(
+            controller: pageController,
+            onPageChanged: (int index) {},
+            children: pages,
+            physics: NeverScrollableScrollPhysics(),
+          ),
         ),
         // IndexedStack(
         //   children: pages,
@@ -63,37 +70,40 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         BottomNavBar(onChanged: (index) {
           changePage(index);
         }),
-      ]),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 60, right: 10),
-        child: Stack(
-          children: [
-            AnimatedScale(
-              duration: currentPage == 0 || currentPage == 1
-                  ? Duration(milliseconds: 1300)
-                  : Duration(milliseconds: 0),
-              scale: currentPage == 0 || currentPage == 1 ? 1 : 0,
-              curve: Curves.elasticOut,
-              child: FAB(
-                tooltip: "Add Transaction",
-                openPage: AddTransactionPage(
-                  title: "Add Transaction",
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 75, right: 15),
+            child: Stack(
+              children: [
+                AnimatedScale(
+                  duration: currentPage == 0 || currentPage == 1
+                      ? Duration(milliseconds: 1100)
+                      : Duration(milliseconds: 0),
+                  scale: currentPage == 0 || currentPage == 1 ? 1 : 0,
+                  curve: ElasticOutCurve(0.8),
+                  child: FAB(
+                    tooltip: "Add Transaction",
+                    openPage: AddTransactionPage(
+                      title: "Add Transaction",
+                    ),
+                  ),
                 ),
-              ),
+                AnimatedScale(
+                  duration: currentPage == 2
+                      ? Duration(milliseconds: 1100)
+                      : Duration(milliseconds: 0),
+                  scale: currentPage == 2 ? 1 : 0,
+                  curve: ElasticOutCurve(0.8),
+                  child: FAB(
+                    openPage: AddBudgetPage(title: "Add Budget"),
+                  ),
+                ),
+              ],
             ),
-            AnimatedScale(
-              duration: currentPage == 2
-                  ? Duration(milliseconds: 1300)
-                  : Duration(milliseconds: 0),
-              scale: currentPage == 2 ? 1 : 0,
-              curve: Curves.elasticOut,
-              child: FAB(
-                openPage: AddBudgetPage(title: "Add Budget"),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }

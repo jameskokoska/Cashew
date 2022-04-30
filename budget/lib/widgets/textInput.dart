@@ -24,6 +24,7 @@ class TextInput extends StatelessWidget {
   final double paddingRight;
   final FocusNode? focusNode;
   final bool? bubbly;
+  final Color? backgroundColor;
 
   const TextInput({
     Key? key,
@@ -48,6 +49,7 @@ class TextInput extends StatelessWidget {
     this.paddingRight = 12,
     this.focusNode,
     this.bubbly = false,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -62,8 +64,12 @@ class TextInput extends StatelessWidget {
         decoration: BoxDecoration(
           color: bubbly == false
               ? Colors.transparent
-              : Theme.of(context).colorScheme.lightDarkAccent.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10),
+              : backgroundColor ??
+                  Theme.of(context)
+                      .colorScheme
+                      .lightDarkAccent
+                      .withOpacity(0.2),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: TextFormField(
           focusNode: focusNode,
@@ -88,8 +94,8 @@ class TextInput extends StatelessWidget {
             contentPadding: EdgeInsets.only(
               left: bubbly == false ? 12 : 18,
               right: paddingRight,
-              top: bubbly == false ? 15 : 10,
-              bottom: bubbly == false ? 10 : 0,
+              top: bubbly == false ? 7 : 10,
+              bottom: bubbly == false ? 7 : 0,
             ),
             hintText: labelText,
             filled: bubbly == false ? true : false,

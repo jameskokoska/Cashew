@@ -65,15 +65,12 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
           _shrink();
           widget.onTap();
         },
-        borderRadius: 10,
+        borderRadius: 20,
         child: Container(
           width: widget.width,
           height: widget.height,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30),
-            ),
             boxShadow: [
               BoxShadow(
                 color: widget.color != null

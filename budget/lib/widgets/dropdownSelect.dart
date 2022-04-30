@@ -44,9 +44,9 @@ class _DropdownSelectState extends State<DropdownSelect> {
     return Container(
       padding: EdgeInsets.only(
           left: widget.compact ? 13 : 15,
-          right: widget.compact ? 2 : 6,
-          top: widget.compact ? 5 : 10,
-          bottom: widget.compact ? 5 : 10),
+          right: widget.compact ? 1 : 6,
+          top: widget.compact ? 2 : 10,
+          bottom: widget.compact ? 2 : 10),
       decoration: BoxDecoration(
         color: widget.backgroundColor == null
             ? Theme.of(context).colorScheme.lightDarkAccent
@@ -77,7 +77,7 @@ class _DropdownSelectState extends State<DropdownSelect> {
             alignment: Alignment.centerLeft,
             child: TextFont(
               text: value,
-              fontSize: widget.compact ? 15 : 18,
+              fontSize: widget.compact ? 14 : 18,
             ),
             value: value,
           );

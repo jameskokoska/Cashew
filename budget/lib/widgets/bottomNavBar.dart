@@ -24,42 +24,55 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-        child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: "Home",
-              backgroundColor:
-                  darken(Theme.of(context).colorScheme.accentColor, 0.01),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0, left: 10, right: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.lightDarkAccent,
+                blurRadius: 15,
+                offset: Offset(0, 5),
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: NavigationBarTheme(
+              data: NavigationBarThemeData(
+                backgroundColor:
+                    darken(Theme.of(context).colorScheme.accentColor, 0.2),
+                indicatorColor:
+                    lighten(Theme.of(context).colorScheme.accentColor),
+                labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+                height: 50,
+              ),
+              child: NavigationBar(
+                animationDuration: Duration(milliseconds: 1000),
+                destinations: [
+                  NavigationDestination(
+                    icon: Icon(Icons.home_rounded),
+                    label: "Home",
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.payments_rounded),
+                    label: "Transactions",
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.pie_chart_rounded),
+                    label: "Budgets",
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.settings_rounded),
+                    label: "Settings",
+                  ),
+                ],
+                selectedIndex: selectedIndex,
+                onDestinationSelected: onItemTapped,
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.attach_money_rounded),
-              label: "Transactions",
-              backgroundColor:
-                  darken(Theme.of(context).colorScheme.accentColor, 0.2),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_rounded),
-              label: "Budgets",
-              backgroundColor:
-                  darken(Theme.of(context).colorScheme.accentColor, 0.1),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings_rounded),
-              label: "Settings",
-              backgroundColor:
-                  darken(Theme.of(context).colorScheme.accentColor, 0.3),
-            ),
-          ],
-          currentIndex: selectedIndex,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.grey,
-          onTap: onItemTapped,
+          ),
         ),
       ),
     );

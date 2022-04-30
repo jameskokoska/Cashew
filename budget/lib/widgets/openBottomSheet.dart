@@ -1,41 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:budget/colors.dart';
 
-openBottomSheet(context, child, {bool maxHeight: true}) {
+openBottomSheet(context, child, {bool maxHeight: true, bool handle: true}) {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
-
-  return showMaterialModalBottomSheet(
-    animationCurve: Curves.fastOutSlowIn,
-    duration: Duration(milliseconds: 250),
-    backgroundColor: Colors.transparent,
-    expand: true,
-    context: context,
-    builder: (context) => GestureDetector(
-      onTap: () {
-        Navigator.of(context).pop();
-      },
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: ScrollConfiguration(
-            behavior: const ScrollBehavior().copyWith(overscroll: false),
-            child: SingleChildScrollView(
-              controller: ModalScrollController.of(context),
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      top: maxHeight == false
-                          ? 0
-                          : MediaQuery.of(context).size.height * 0.35),
-                  child: child),
-            ),
-          ),
-        ),
+  showSlidingBottomSheet(context, builder: (context) {
+    return SlidingSheetDialog(
+      elevation: 8,
+      isBackdropInteractable: true,
+      dismissOnBackdropTap: true,
+      snapSpec: const SnapSpec(
+        snap: true,
+        snappings: [0.6, 1.0],
+        positioning: SnapPositioning.relativeToAvailableSpace,
       ),
-    ),
-  );
+      color: Colors.transparent,
+      // headerBuilder: (context, _) {
+      //   if (handle) {
+      //     return Padding(
+      //       padding: const EdgeInsets.only(bottom: 5.0),
+      //       child: Container(
+      //         width: 40,
+      //         height: 5,
+      //         decoration: BoxDecoration(
+      //           borderRadius: BorderRadius.circular(100),
+      //           color: Theme.of(context)
+      //               .colorScheme
+      //               .lightDarkAccent
+      //               .withOpacity(0.5),
+      //         ),
+      //       ),
+      //     );
+      //   } else {
+      //     return SizedBox();
+      //   }
+      // },
+      cornerRadius: 20,
+      duration: Duration(milliseconds: 300),
+      builder: (context, state) {
+        return Material(
+          child: SingleChildScrollView(
+            child: child,
+          ),
+        );
+      },
+    );
+  });
 }

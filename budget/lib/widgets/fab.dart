@@ -39,7 +39,7 @@ class FAB extends StatelessWidget {
               width: fabSize,
               child: Center(
                 child: Icon(
-                  Icons.add,
+                  Icons.add_rounded,
                   color: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),

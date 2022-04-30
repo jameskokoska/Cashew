@@ -17,48 +17,34 @@ class PopupFramework extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 40,
-          height: 5,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color:
-                Theme.of(context).colorScheme.lightDarkAccent.withOpacity(0.5),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+            color: Theme.of(context).colorScheme.lightDarkAccent,
           ),
-        ),
-        Container(height: 5),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-              color: Theme.of(context).colorScheme.lightDarkAccent,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(height: 15),
-                title == null
-                    ? Container()
-                    : Padding(
-                        padding: EdgeInsets.only(left: 18, right: 18, top: 10),
-                        child: TextFont(
-                          text: title ?? "",
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          maxLines: 5,
-                        ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 15),
+              title == null
+                  ? Container()
+                  : Padding(
+                      padding: EdgeInsets.only(left: 18, right: 18, top: 5),
+                      child: TextFont(
+                        text: title ?? "",
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        maxLines: 5,
                       ),
-                title == null ? Container() : Container(height: 10),
-                Padding(
-                  padding: padding
-                      ? EdgeInsets.only(left: 18, right: 18, bottom: 10)
-                      : EdgeInsets.zero,
-                  child: child,
-                ),
-                Container(height: 10),
-              ],
-            ),
+                    ),
+              title == null ? Container() : Container(height: 10),
+              Padding(
+                padding: padding
+                    ? EdgeInsets.only(left: 18, right: 18, bottom: 10)
+                    : EdgeInsets.zero,
+                child: child,
+              ),
+              Container(height: 10),
+            ],
           ),
         ),
       ],

@@ -5,7 +5,8 @@ import 'package:budget/colors.dart';
 class PageFramework extends StatefulWidget {
   const PageFramework({
     Key? key,
-    required this.title,
+    this.title = "",
+    this.titleWidget,
     this.slivers = const [],
     this.listWidgets,
     this.navbar = true,
@@ -17,9 +18,13 @@ class PageFramework extends StatefulWidget {
     this.subtitleSize = null,
     this.subtitleAnimationSpeed = 5,
     this.onBottomReached,
+    this.pinned = true,
+    this.subtitleAlignment = Alignment.bottomCenter,
+    this.customTitleBuilder,
   }) : super(key: key);
 
   final String title;
+  final Widget? titleWidget;
   final List<Widget> slivers;
   final List<Widget>? listWidgets;
   final bool navbar;
@@ -31,6 +36,9 @@ class PageFramework extends StatefulWidget {
   final double? subtitleSize;
   final double subtitleAnimationSpeed;
   final VoidCallback? onBottomReached;
+  final bool pinned;
+  final Alignment subtitleAlignment;
+  final Function(AnimationController _animationController)? customTitleBuilder;
   @override
   State<PageFramework> createState() => _PageFrameworkState();
 }
@@ -97,110 +105,130 @@ class _PageFrameworkState extends State<PageFramework>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(bottom: widget.navbar ? 48 : 0),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverAppBar(
-              leading: widget.backButton == true
-                  ? Container(
-                      padding: EdgeInsets.only(top: 12.5),
-                      child: FadeTransition(
-                        opacity: _animationControllerOpacity,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_rounded,
-                            color: Theme.of(context).colorScheme.black,
-                          ),
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverAppBar(
+            leading: widget.backButton == true
+                ? Container(
+                    padding: EdgeInsets.only(top: 12.5),
+                    child: FadeTransition(
+                      opacity: _animationControllerOpacity,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(
+                          Icons.arrow_back_rounded,
+                          color: Theme.of(context).colorScheme.black,
                         ),
                       ),
-                    )
-                  : Container(),
-              backgroundColor: widget.appBarBackgroundColor == null
-                  ? Theme.of(context).canvasColor
-                  : widget.appBarBackgroundColor,
-              floating: false,
-              pinned: true,
-              expandedHeight: 200.0,
-              collapsedHeight: 65,
-              elevation: showElevation ? 0 : 5,
-              flexibleSpace: FlexibleSpaceBar(
-                titlePadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-                title: AnimatedBuilder(
-                  animation: _animationControllerShift,
-                  builder: (_, child) {
-                    return Transform.translate(
-                      offset: Offset(
-                        widget.backButton
-                            ? 40 * _animationControllerShift.value
-                            : 0,
-                        -(widget.subtitleSize ?? 0) *
-                            (1 - _animationControllerShift.value),
-                      ),
-                      child: child,
-                    );
-                  },
-                  child: TextFont(
-                    text: widget.title,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                background: Stack(
-                  children: [
-                    Container(
-                      color: widget.appBarBackgroundColorStart,
                     ),
-                    widget.subtitle != null
-                        ? AnimatedBuilder(
-                            animation: _animationControllerShift,
-                            builder: (_, child) {
-                              return Transform.translate(
-                                  offset: Offset(
-                                    0,
-                                    -(widget.subtitleSize ?? 0) *
-                                        (_animationControllerShift.value) *
-                                        widget.subtitleAnimationSpeed,
-                                  ),
-                                  child: child);
-                            },
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: FadeTransition(
-                                opacity: _animationController0at50,
-                                child: widget.subtitle,
-                              ),
+                  )
+                : Container(),
+            backgroundColor: widget.appBarBackgroundColor == null
+                ? Theme.of(context).canvasColor
+                : widget.appBarBackgroundColor,
+            floating: false,
+            pinned: widget.pinned,
+            expandedHeight: 200.0,
+            collapsedHeight: 65,
+            elevation: showElevation ? 0 : 5,
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+              title: widget.customTitleBuilder == null
+                  ? AnimatedBuilder(
+                      animation: _animationControllerShift,
+                      builder: (_, child) {
+                        return Transform.translate(
+                          offset: Offset(
+                            widget.backButton
+                                ? 40 * _animationControllerShift.value
+                                : 0,
+                            -(widget.subtitleSize ?? 0) *
+                                (1 - _animationControllerShift.value),
+                          ),
+                          child: child,
+                        );
+                      },
+                      child: widget.titleWidget ??
+                          TextFont(
+                            text: widget.title,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    )
+                  : widget.customTitleBuilder!(_animationControllerShift),
+              background: Stack(
+                children: [
+                  Container(
+                    color: widget.appBarBackgroundColorStart,
+                  ),
+                  widget.subtitle != null
+                      ? AnimatedBuilder(
+                          animation: _animationControllerShift,
+                          builder: (_, child) {
+                            return Transform.translate(
+                                offset: Offset(
+                                  0,
+                                  -(widget.subtitleSize ?? 0) *
+                                      (_animationControllerShift.value) *
+                                      widget.subtitleAnimationSpeed,
+                                ),
+                                child: child);
+                          },
+                          child: Align(
+                            alignment: widget.subtitleAlignment,
+                            child: FadeTransition(
+                              opacity: _animationController0at50,
+                              child: widget.subtitle,
                             ),
-                          )
-                        : SizedBox(),
-                  ],
-                ),
-              ),
-              shape: ContinuousRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(25),
-                ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
               ),
             ),
-            ...widget.slivers,
-            widget.listWidgets != null
-                ? SliverList(
-                    delegate: SliverChildListDelegate([
-                      ...widget.listWidgets!,
-                      widget.navbar ? Container(height: 17) : Container(),
-                    ]),
-                  )
-                : SliverToBoxAdapter(
-                    child: widget.navbar ? Container(height: 17) : Container(),
-                  ),
-          ],
-        ),
+            shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(25),
+              ),
+            ),
+          ),
+          ...widget.slivers,
+          widget.listWidgets != null
+              ? SliverList(
+                  delegate: SliverChildListDelegate([
+                    ...widget.listWidgets!,
+                    widget.navbar ? Container(height: 67) : Container(),
+                  ]),
+                )
+              : SliverToBoxAdapter(
+                  child: widget.navbar ? Container(height: 67) : Container(),
+                ),
+        ],
       ),
     );
   }
 }
+
+
+// customTitleBuilder: (_animationControllerShift) {
+//   return AnimatedBuilder(
+//     animation: _animationControllerShift,
+//     builder: (_, child) {
+//       return Transform.translate(
+//         offset: Offset(
+//           _animationControllerShift.value * 10,
+//           0,
+//         ),
+//         child: child,
+//       );
+//     },
+//     child: TextFont(
+//       text: "Test",
+//       fontSize: 26,
+//       fontWeight: FontWeight.bold,
+//     ),
+//   );
+// },

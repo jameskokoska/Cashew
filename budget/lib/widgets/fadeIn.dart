@@ -186,3 +186,68 @@ class _CountUpState extends State<CountUp> {
     );
   }
 }
+
+class CountNumber extends StatefulWidget {
+  const CountNumber({
+    Key? key,
+    required this.count,
+    required this.textBuilder,
+    this.fontSize = 16,
+    this.duration = const Duration(milliseconds: 3000),
+    this.curve = Curves.easeOutExpo,
+    this.initialCount = 0,
+    this.decimals = 2,
+    this.dynamicDecimals = false,
+  }) : super(key: key);
+
+  final double count;
+  final Function(double) textBuilder;
+  final double fontSize;
+  final Duration duration;
+  final Curve curve;
+  final double initialCount;
+  final int decimals;
+  final bool dynamicDecimals;
+
+  @override
+  State<CountNumber> createState() => _CountNumberState();
+}
+
+class _CountNumberState extends State<CountNumber> {
+  double previousAmount = 0;
+  int decimals = 2;
+  @override
+  void initState() {
+    super.initState();
+    previousAmount = widget.initialCount;
+    decimals = widget.decimals;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.dynamicDecimals) {
+      if (widget.count % 1 == 0) {
+        decimals = 0;
+      } else {
+        decimals = widget.decimals;
+      }
+    }
+
+    Widget builtWidget = TweenAnimationBuilder<int>(
+      tween: IntTween(
+        begin: (previousAmount * pow(10, decimals)).toInt(),
+        end: (widget.count * pow(10, decimals)).toInt(),
+      ),
+      duration: widget.duration,
+      curve: widget.curve,
+      builder: (BuildContext context, int animatedCount, Widget? child) {
+        return widget.textBuilder(
+          animatedCount / pow(10, decimals).toDouble(),
+        );
+      },
+    );
+
+    previousAmount = widget.count;
+    return builtWidget;
+  }
+}

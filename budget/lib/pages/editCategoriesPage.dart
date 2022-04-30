@@ -10,51 +10,50 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 
-class EditBudgetPage extends StatefulWidget {
-  EditBudgetPage({
+class EditCategoriesPage extends StatefulWidget {
+  EditCategoriesPage({
     Key? key,
     required this.title,
   }) : super(key: key);
   final String title;
 
   @override
-  _EditBudgetPageState createState() => _EditBudgetPageState();
+  _EditCategoriesPageState createState() => _EditCategoriesPageState();
 }
 
-class _EditBudgetPageState extends State<EditBudgetPage> {
+class _EditCategoriesPageState extends State<EditCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
       title: widget.title,
       navbar: false,
       slivers: [
-        StreamBuilder<List<Budget>>(
-          stream: database.watchAllBudgets(),
+        StreamBuilder<List<TransactionCategory>>(
+          stream: database.watchAllCategories(),
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverReorderableList(
                 itemBuilder: (context, index) {
-                  return BudgetRowEntry(
-                    budget: snapshot.data![index],
+                  return CategoryRowEntry(
+                    category: snapshot.data![index],
                     index: index,
                     key: ValueKey(index),
                   );
                 },
                 itemCount: snapshot.data!.length,
                 onReorder: (_intPrevious, _intNew) async {
-                  Budget oldBudget = snapshot.data![_intPrevious];
-
-                  print(oldBudget.name);
-                  print(oldBudget.order);
+                  TransactionCategory oldCategory =
+                      snapshot.data![_intPrevious];
 
                   if (_intNew > _intPrevious) {
-                    await database.moveBudget(
-                        oldBudget.budgetPk, _intNew - 1, oldBudget.order);
+                    await database.moveCategory(
+                        oldCategory.categoryPk, _intNew - 1, oldCategory.order);
                   } else {
-                    await database.moveBudget(
-                        oldBudget.budgetPk, _intNew, oldBudget.order);
+                    await database.moveCategory(
+                        oldCategory.categoryPk, _intNew, oldCategory.order);
                   }
                 },
               );
@@ -69,27 +68,36 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
   }
 }
 
-class BudgetRowEntry extends StatelessWidget {
-  const BudgetRowEntry({required this.index, required this.budget, Key? key})
+class CategoryRowEntry extends StatelessWidget {
+  const CategoryRowEntry(
+      {required this.index, required this.category, Key? key})
       : super(key: key);
   final int index;
-  final Budget budget;
+  final TransactionCategory category;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: EdgeInsets.only(left: 20, right: 10),
+      padding: EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: HexColor(budget.colour),
+        color: HexColor(category.colour),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextFont(text: budget.name + " - " + budget.order.toString()),
+          Row(
+            children: [
+              CategoryIcon(
+                categoryPk: category.categoryPk,
+                size: 40,
+                category: category,
+              ),
+              TextFont(text: category.name + " - " + category.order.toString()),
+            ],
+          ),
           Row(
             children: [
               Tappable(
@@ -99,38 +107,38 @@ class BudgetRowEntry extends StatelessWidget {
                     width: 40, height: 50, child: Icon(Icons.delete_rounded)),
                 onTap: () {
                   openPopup(context,
-                      description: "Delete " + budget.name + "?",
+                      description: "Delete " + category.name + "?",
                       icon: Icons.delete_rounded,
                       onCancel: () {
                         Navigator.pop(context);
                       },
                       onCancelLabel: "Cancel",
                       onSubmit: () {
-                        database.deleteBudget(budget.budgetPk);
+                        // database.deleteCategory(category.categoryPk);
                         Navigator.pop(context);
-                        openSnackbar(context, "Deleted " + budget.name);
+                        openSnackbar(context, "Deleted " + category.name);
                       },
                       onSubmitLabel: "Delete");
                 },
               ),
-              OpenContainerNavigation(
-                closedColor: HexColor(budget.colour),
-                button: (openContainer) {
-                  return Tappable(
-                    color: Colors.transparent,
-                    borderRadius: 50,
-                    child: Container(
-                        width: 40, height: 50, child: Icon(Icons.edit_rounded)),
-                    onTap: () {
-                      openContainer();
-                    },
-                  );
-                },
-                openPage: AddBudgetPage(
-                  title: "Edit " + budget.name + " Budget",
-                  budget: budget,
-                ),
-              ),
+              // OpenContainerNavigation(
+              //   closedColor: HexColor(category.colour),
+              //   button: (openContainer) {
+              //     return Tappable(
+              //       color: Colors.transparent,
+              //       borderRadius: 50,
+              //       child: Container(
+              //           width: 40, height: 50, child: Icon(Icons.edit_rounded)),
+              //       onTap: () {
+              //         openContainer();
+              //       },
+              //     );
+              //   },
+              //   openPage: AddBudgetPage(
+              //     title: "Edit " + category.name + " Category",
+              //     category: category,
+              //   ),
+              // ),
               Material(
                 color: Colors.transparent,
                 child: ReorderableDragStartListener(

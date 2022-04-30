@@ -5,6 +5,8 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
+import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -58,34 +60,34 @@ class SettingsPageState extends State<SettingsPage>
 
   @override
   Widget build(BuildContext context) {
-    print("BUILT SETTINGS");
     return PageFramework(
       title: "Settings",
       backButton: false,
+      navbar: true,
       listWidgets: [
-        SettingsContainerButton(
-          onTap: () {
-            openBottomSheet(
-              context,
-              PopupFramework(
-                title: "Select Icon",
-                child: SelectCategoryImage(
-                  setSelectedImage: (_) {},
-                ),
-              ),
-            );
-          },
-          title: "Select Icon",
-          icon: Icons.portrait,
+        SettingsHeader(title: "Data"),
+        SettingsContainerOpenPage(
+          openPage: EditCategoriesPage(title: "Edit Categories"),
+          title: "Edit Categories",
+          description: "Add and edit the order of categories",
+          icon: Icons.category_rounded,
         ),
-        AccountAndBackup(),
         SettingsContainerOpenPage(
           openPage: EditBudgetPage(title: "Edit Budgets"),
           title: "Edit Budgets",
           description: "Edit the order and budget details",
-          icon: Icons.bungalow_outlined,
+          icon: Icons.price_change_rounded,
         ),
-        SettingsContainerButton(
+        SettingsContainerOpenPage(
+          openPage: EditWalletsPage(title: "Edit Wallets"),
+          title: "Edit Wallets",
+          description: "Edit the order and wallet details",
+          icon: Icons.category_rounded,
+        ),
+        SettingsHeader(title: "Account and Backups"),
+        AccountAndBackup(),
+        SettingsHeader(title: "Theme"),
+        SettingsContainer(
           onTap: () {
             openBottomSheet(
               context,
@@ -118,6 +120,21 @@ class SettingsPageState extends State<SettingsPage>
               updateSettings("theme", "system");
             }
           },
+        ),
+        SettingsContainer(
+          onTap: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                title: "Select Icon",
+                child: SelectCategoryImage(
+                  setSelectedImage: (_) {},
+                ),
+              ),
+            );
+          },
+          title: "Select Icon",
+          icon: Icons.portrait,
         ),
       ],
     );

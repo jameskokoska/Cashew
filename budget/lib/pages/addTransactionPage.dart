@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
@@ -16,7 +17,6 @@ import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -342,20 +342,20 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     ),
                                   );
                                 },
-                                child: AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 350),
-                                  child: Container(
-                                    key: ValueKey(selectedAmount),
-                                    width: double.infinity,
-                                    child: TextFont(
+                                child: CountNumber(
+                                  count: selectedAmount ?? 0,
+                                  duration: Duration(milliseconds: 1000),
+                                  dynamicDecimals: true,
+                                  initialCount: selectedAmount ?? 0,
+                                  textBuilder: (number) {
+                                    return TextFont(
                                       textAlign: TextAlign.right,
-                                      key: ValueKey(selectedAmount),
-                                      text: convertToMoney(selectedAmount ?? 0),
+                                      text: convertToMoney(number),
                                       fontSize: 32,
                                       fontWeight: FontWeight.bold,
                                       maxLines: 2,
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ),
                               AnimatedSwitcher(
@@ -415,8 +415,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         controller: _dateInputController,
                       ),
                       Container(height: 20),
-                      SelectTag(),
-                      Container(height: 10),
                     ],
                   ),
                 ),
@@ -557,6 +555,9 @@ class _SelectTitleState extends State<SelectTitle> {
                 Container(
                   width: MediaQuery.of(context).size.width - 130,
                   child: TextInput(
+                    bubbly: true,
+                    icon: Icons.title_rounded,
+                    backgroundColor: Theme.of(context).canvasColor,
                     initialValue: widget.selectedTitle,
                     autoFocus: true,
                     onEditingComplete: () {
@@ -605,8 +606,6 @@ class _SelectTitleState extends State<SelectTitle> {
             )
           ],
         ),
-        Container(height: 20),
-        SelectTag(),
         Container(height: 20),
         Button(
           label: selectedCategory == null ? "Select Category" : "Enter Amount",

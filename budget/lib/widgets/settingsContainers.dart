@@ -46,71 +46,15 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      child: Tappable(
-        onTap: () {
+    return SettingsContainer(
+      title: widget.title,
+      description: widget.description,
+      afterWidget: CupertinoSwitch(
+        activeColor: Theme.of(context).colorScheme.accentColorHeavy,
+        value: value,
+        onChanged: (_) {
           toggleSwitch();
         },
-        borderRadius: 10,
-        color: Theme.of(context).colorScheme.lightDarkAccent,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 13),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      widget.icon,
-                      size: 27,
-                      color: Theme.of(context).colorScheme.accentColorHeavy,
-                    ),
-                    Container(width: 12),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFont(
-                            fixParagraphMargin: true,
-                            text: widget.title,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          widget.description == null
-                              ? SizedBox.shrink()
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(height: 3),
-                                    TextFont(
-                                      text: widget.description!,
-                                      fontSize: 15,
-                                      maxLines: 5,
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ],
-                                ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CupertinoSwitch(
-                activeColor: Theme.of(context).colorScheme.accentColorHeavy,
-                value: value,
-                onChanged: (_) {
-                  toggleSwitch();
-                },
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -134,72 +78,19 @@ class SettingsContainerOpenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return OpenContainerNavigation(
       closedColor: Colors.transparent,
-      borderRadius: 10,
+      borderRadius: 0,
       button: (openContainer) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-          child: Tappable(
-            onTap: () {
-              openContainer();
-            },
-            borderRadius: 10,
-            color: Theme.of(context).colorScheme.lightDarkAccent,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 22, vertical: 13),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          icon,
-                          size: 27,
-                          color: Theme.of(context).colorScheme.accentColorHeavy,
-                        ),
-                        Container(width: 12),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFont(
-                                fixParagraphMargin: true,
-                                text: title,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              description == null
-                                  ? SizedBox.shrink()
-                                  : Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(height: 3),
-                                        TextFont(
-                                          text: description!,
-                                          fontSize: 15,
-                                          maxLines: 5,
-                                        ),
-                                      ],
-                                    ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    size: 27,
-                    color: Theme.of(context).colorScheme.accentColor,
-                  ),
-                ],
-              ),
-            ),
+        return SettingsContainer(
+          title: title,
+          description: description,
+          icon: icon,
+          onTap: () {
+            openContainer();
+          },
+          afterWidget: Icon(
+            Icons.chevron_right_rounded,
+            size: 30,
+            color: Theme.of(context).colorScheme.accentColor,
           ),
         );
       },
@@ -228,120 +119,62 @@ class SettingsContainerDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.lightDarkAccent,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: EdgeInsets.only(left: 22, right: 15, top: 13, bottom: 13),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    icon,
-                    size: 27,
-                    color: Theme.of(context).colorScheme.accentColorHeavy,
-                  ),
-                  Container(width: 12),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFont(
-                          fixParagraphMargin: true,
-                          text: title,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        description == null
-                            ? SizedBox.shrink()
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(height: 3),
-                                  TextFont(
-                                    text: description!,
-                                    fontSize: 15,
-                                    maxLines: 5,
-                                  ),
-                                ],
-                              ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: DropdownSelect(
-                compact: true,
-                initial: initial,
-                items: items,
-                onChanged: onChanged,
-                backgroundColor: Theme.of(context).canvasColor,
-              ),
-            ),
-          ],
+    return SettingsContainer(
+      title: title,
+      description: description,
+      icon: icon,
+      afterWidget: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: DropdownSelect(
+          compact: true,
+          initial: initial,
+          items: items,
+          onChanged: onChanged,
+          backgroundColor: Theme.of(context).colorScheme.lightDarkAccent,
         ),
       ),
     );
   }
 }
 
-class SettingsContainerButton extends StatelessWidget {
-  const SettingsContainerButton({
+class SettingsContainer extends StatelessWidget {
+  const SettingsContainer({
     Key? key,
     required this.title,
     this.description,
     this.icon,
-    required this.onTap,
-    this.compact = false,
+    this.afterWidget,
+    this.onTap,
   }) : super(key: key);
 
   final String title;
   final String? description;
   final IconData? icon;
-  final VoidCallback onTap;
-  final bool compact;
+  final Widget? afterWidget;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: compact ? 0 : 10, vertical: compact ? 0 : 7),
+      padding: EdgeInsets.symmetric(vertical: 0),
       child: Tappable(
-        onTap: () {
-          onTap();
-        },
-        borderRadius: 10,
-        color: Theme.of(context).colorScheme.lightDarkAccent,
+        onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: compact ? 10 : 22, vertical: compact ? 10 : 13),
+          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Row(
-                  crossAxisAlignment: compact
-                      ? CrossAxisAlignment.center
-                      : CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
                       icon,
-                      size: 27,
-                      color: Theme.of(context).colorScheme.accentColorHeavy,
+                      size: 30,
+                      color: lighten(
+                          Theme.of(context).colorScheme.accentColorHeavy),
                     ),
-                    Container(width: 12),
+                    Container(width: 16),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -350,10 +183,10 @@ class SettingsContainerButton extends StatelessWidget {
                           TextFont(
                             fixParagraphMargin: true,
                             text: title,
-                            fontSize: compact ? 18 : 22,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
-                          description == null || description == ""
+                          description == null
                               ? SizedBox.shrink()
                               : Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -373,14 +206,32 @@ class SettingsContainerButton extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 27,
-                color: Theme.of(context).colorScheme.accentColor,
-              ),
+              afterWidget ?? SizedBox()
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SettingsHeader extends StatelessWidget {
+  const SettingsHeader({Key? key, required this.title}) : super(key: key);
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 63.0,
+        top: 15,
+        bottom: 7,
+      ),
+      child: TextFont(
+        text: title,
+        fontSize: 15,
+        fontWeight: FontWeight.bold,
+        textColor: Theme.of(context).colorScheme.accentColor,
       ),
     );
   }

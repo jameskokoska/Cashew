@@ -232,7 +232,7 @@ class CategoryIcon extends StatelessWidget {
     this.sizePadding = 20,
     this.outline = false,
     this.noBackground = false,
-    this.category,
+    this.category, //pass this in to not look it up again
   }) : super(key: key);
 
   final int categoryPk;

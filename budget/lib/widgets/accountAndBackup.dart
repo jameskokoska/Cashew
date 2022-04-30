@@ -227,8 +227,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           child: Column(
             children: files
                 .map(
-                  (file) => SettingsContainerButton(
-                    compact: true,
+                  (file) => SettingsContainer(
                     icon: Icons.file_copy,
                     title: file.name ?? "No name",
                     onTap: () {
@@ -499,14 +498,14 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SettingsContainerButton(
+        SettingsContainer(
           onTap: () async {
             await _signIn();
           },
           title: user == null ? "Sign-In" : user!.displayName ?? "",
           icon: Icons.account_circle,
         ),
-        SettingsContainerButton(
+        SettingsContainer(
           onTap: () async {
             await _deleteRecentBackups(10);
             await _createBackup();
@@ -514,14 +513,14 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           title: "Export Database",
           icon: Icons.upload_rounded,
         ),
-        SettingsContainerButton(
+        SettingsContainer(
           onTap: () async {
             await _chooseBackup();
           },
           title: "Import Database",
           icon: Icons.download_rounded,
         ),
-        SettingsContainerButton(
+        SettingsContainer(
           onTap: () async {
             await _chooseBackupFile();
           },

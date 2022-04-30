@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -12,49 +13,46 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
-class EditBudgetPage extends StatefulWidget {
-  EditBudgetPage({
+class EditWalletsPage extends StatefulWidget {
+  EditWalletsPage({
     Key? key,
     required this.title,
   }) : super(key: key);
   final String title;
 
   @override
-  _EditBudgetPageState createState() => _EditBudgetPageState();
+  _EditWalletsPageState createState() => _EditWalletsPageState();
 }
 
-class _EditBudgetPageState extends State<EditBudgetPage> {
+class _EditWalletsPageState extends State<EditWalletsPage> {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
       title: widget.title,
       navbar: false,
       slivers: [
-        StreamBuilder<List<Budget>>(
-          stream: database.watchAllBudgets(),
+        StreamBuilder<List<TransactionWallet>>(
+          stream: database.watchAllWallets(),
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverReorderableList(
                 itemBuilder: (context, index) {
-                  return BudgetRowEntry(
-                    budget: snapshot.data![index],
+                  return WalletRowEntry(
+                    wallet: snapshot.data![index],
                     index: index,
                     key: ValueKey(index),
                   );
                 },
                 itemCount: snapshot.data!.length,
                 onReorder: (_intPrevious, _intNew) async {
-                  Budget oldBudget = snapshot.data![_intPrevious];
-
-                  print(oldBudget.name);
-                  print(oldBudget.order);
+                  TransactionWallet oldWallet = snapshot.data![_intPrevious];
 
                   if (_intNew > _intPrevious) {
-                    await database.moveBudget(
-                        oldBudget.budgetPk, _intNew - 1, oldBudget.order);
+                    await database.moveWallet(
+                        oldWallet.walletPk, _intNew - 1, oldWallet.order);
                   } else {
-                    await database.moveBudget(
-                        oldBudget.budgetPk, _intNew, oldBudget.order);
+                    await database.moveWallet(
+                        oldWallet.walletPk, _intNew, oldWallet.order);
                   }
                 },
               );
@@ -69,11 +67,11 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
   }
 }
 
-class BudgetRowEntry extends StatelessWidget {
-  const BudgetRowEntry({required this.index, required this.budget, Key? key})
+class WalletRowEntry extends StatelessWidget {
+  const WalletRowEntry({required this.index, required this.wallet, Key? key})
       : super(key: key);
   final int index;
-  final Budget budget;
+  final TransactionWallet wallet;
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +81,13 @@ class BudgetRowEntry extends StatelessWidget {
       padding: EdgeInsets.only(left: 20, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: HexColor(budget.colour),
+        color: HexColor(wallet.colour),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextFont(text: budget.name + " - " + budget.order.toString()),
+          TextFont(text: wallet.name + " - " + wallet.order.toString()),
           Row(
             children: [
               Tappable(
@@ -99,22 +97,22 @@ class BudgetRowEntry extends StatelessWidget {
                     width: 40, height: 50, child: Icon(Icons.delete_rounded)),
                 onTap: () {
                   openPopup(context,
-                      description: "Delete " + budget.name + "?",
+                      description: "Delete " + wallet.name + "?",
                       icon: Icons.delete_rounded,
                       onCancel: () {
                         Navigator.pop(context);
                       },
                       onCancelLabel: "Cancel",
                       onSubmit: () {
-                        database.deleteBudget(budget.budgetPk);
+                        // database.deleteWallet(wallet.walletPk);
                         Navigator.pop(context);
-                        openSnackbar(context, "Deleted " + budget.name);
+                        openSnackbar(context, "Deleted " + wallet.name);
                       },
                       onSubmitLabel: "Delete");
                 },
               ),
               OpenContainerNavigation(
-                closedColor: HexColor(budget.colour),
+                closedColor: HexColor(wallet.colour),
                 button: (openContainer) {
                   return Tappable(
                     color: Colors.transparent,
@@ -126,9 +124,9 @@ class BudgetRowEntry extends StatelessWidget {
                     },
                   );
                 },
-                openPage: AddBudgetPage(
-                  title: "Edit " + budget.name + " Budget",
-                  budget: budget,
+                openPage: AddWalletPage(
+                  title: "Edit " + wallet.name + " Wallet",
+                  wallet: wallet,
                 ),
               ),
               Material(

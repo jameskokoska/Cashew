@@ -20,7 +20,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -301,10 +300,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         reoccurrence: mapRecurrence(selectedRecurrence),
         dateCreated: DateTime.now(),
         pinned: true,
-        order: 0,
+        order: await database.getAmountOfBudgets(),
         walletFk: 0,
       ),
     );
+    print(await database.getAmountOfBudgets());
     Navigator.pop(context);
   }
 

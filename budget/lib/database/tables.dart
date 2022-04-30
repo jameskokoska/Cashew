@@ -296,11 +296,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  // watch all categories
-  Stream<List<TransactionCategory>> watchAllCategories() {
-    return (select(categories)).watch();
-  }
-
   // watch all labels in a category (if given)
   Stream<List<TransactionLabel>> watchAllLabelsInCategory(int? categoryPk) {
     return (categoryPk != null
@@ -322,7 +317,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   // watch all budgets that have been created
   Stream<List<Budget>> watchAllBudgets({int? limit, int? offset}) {
     return (select(budgets)
-          ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
+          ..orderBy([(b) => OrderingTerm.asc(b.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
   }
@@ -331,23 +326,111 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<Budget>> watchAllPinnedBudgets({int? limit, int? offset}) {
     return (select(budgets)
           ..where((tbl) => tbl.pinned)
-          ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
+          ..orderBy([(b) => OrderingTerm.asc(b.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
   }
 
+  Future getAmountOfBudgets() async {
+    return (await select(budgets).get()).length;
+  }
+
+  Future moveBudget(int budgetPk, int newPosition, int oldPosition) async {
+    List<Budget> budgetsList = await (select(budgets)
+          ..orderBy([(b) => OrderingTerm.asc(b.order)]))
+        .get();
+    if (newPosition > oldPosition) {
+      for (Budget budget in budgetsList) {
+        await (update(budgets)
+              ..where(
+                (b) =>
+                    b.budgetPk.equals(budget.budgetPk) &
+                    b.order.isBiggerOrEqualValue(oldPosition) &
+                    b.order.isSmallerOrEqualValue(newPosition),
+              ))
+            .write(
+          BudgetsCompanion(order: Value(budget.order - 1)),
+        );
+      }
+    } else {
+      for (Budget budget in budgetsList) {
+        await (update(budgets)
+              ..where(
+                (b) =>
+                    b.budgetPk.equals(budget.budgetPk) &
+                    b.order.isBiggerOrEqualValue(newPosition) &
+                    b.order.isSmallerOrEqualValue(oldPosition),
+              ))
+            .write(
+          BudgetsCompanion(order: Value(budget.order + 1)),
+        );
+      }
+    }
+    await (update(budgets)
+          ..where(
+            (b) => b.budgetPk.equals(budgetPk),
+          ))
+        .write(
+      BudgetsCompanion(order: Value(newPosition)),
+    );
+  }
+
   Stream<List<TransactionWallet>> watchAllWallets({int? limit, int? offset}) {
     return (select(wallets)
-          ..orderBy([(w) => OrderingTerm.desc(w.dateCreated)])
+          ..orderBy([(w) => OrderingTerm.asc(w.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
   }
 
   Future<List<TransactionWallet>> getAllWallets({int? limit, int? offset}) {
     return (select(wallets)
-          ..orderBy([(w) => OrderingTerm.desc(w.dateCreated)])
+          ..orderBy([(w) => OrderingTerm.asc(w.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .get();
+  }
+
+  Future getAmountOfWallets() async {
+    return (await select(budgets).get()).length;
+  }
+
+  Future moveWallet(int walletPk, int newPosition, int oldPosition) async {
+    List<TransactionWallet> walletsList = await (select(wallets)
+          ..orderBy([(w) => OrderingTerm.asc(w.order)]))
+        .get();
+    if (newPosition > oldPosition) {
+      for (TransactionWallet wallet in walletsList) {
+        await (update(wallets)
+              ..where(
+                (w) =>
+                    w.walletPk.equals(wallet.walletPk) &
+                    w.order.isBiggerOrEqualValue(oldPosition) &
+                    w.order.isSmallerOrEqualValue(newPosition),
+              ))
+            .write(
+          WalletsCompanion(order: Value(wallet.order - 1)),
+        );
+      }
+    } else {
+      for (TransactionWallet wallet in walletsList) {
+        await (update(wallets)
+              ..where(
+                (w) =>
+                    w.walletPk.equals(wallet.walletPk) &
+                    w.order.isBiggerOrEqualValue(newPosition) &
+                    w.order.isSmallerOrEqualValue(oldPosition),
+              ))
+            .write(
+          WalletsCompanion(order: Value(wallet.order + 1)),
+        );
+      }
+    }
+    await (update(wallets)
+          ..where(
+            (w) => w.walletPk.equals(walletPk),
+          ))
+        .write(
+      WalletsCompanion(order: Value(newPosition)),
+    );
   }
 
   //create or update a new wallet
@@ -390,6 +473,58 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get category given name
   Future<TransactionCategory> getCategoryInstanceGivenName(String name) {
     return (select(categories)..where((t) => t.name.equals(name))).getSingle();
+  }
+
+  Stream<List<TransactionCategory>> watchAllCategories(
+      {int? limit, int? offset}) {
+    return (select(categories)
+          ..orderBy([(c) => OrderingTerm.asc(c.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch();
+  }
+
+  Future getAmountOfCategories() async {
+    return (await select(categories).get()).length;
+  }
+
+  Future moveCategory(int categoryPk, int newPosition, int oldPosition) async {
+    List<TransactionCategory> categoriesList = await (select(categories)
+          ..orderBy([(c) => OrderingTerm.asc(c.order)]))
+        .get();
+    if (newPosition > oldPosition) {
+      for (TransactionCategory category in categoriesList) {
+        await (update(categories)
+              ..where(
+                (c) =>
+                    c.categoryPk.equals(category.categoryPk) &
+                    c.order.isBiggerOrEqualValue(oldPosition) &
+                    c.order.isSmallerOrEqualValue(newPosition),
+              ))
+            .write(
+          CategoriesCompanion(order: Value(category.order - 1)),
+        );
+      }
+    } else {
+      for (TransactionCategory category in categoriesList) {
+        await (update(categories)
+              ..where(
+                (c) =>
+                    c.categoryPk.equals(category.categoryPk) &
+                    c.order.isBiggerOrEqualValue(newPosition) &
+                    c.order.isSmallerOrEqualValue(oldPosition),
+              ))
+            .write(
+          CategoriesCompanion(order: Value(category.order + 1)),
+        );
+      }
+    }
+    await (update(categories)
+          ..where(
+            (c) => c.categoryPk.equals(categoryPk),
+          ))
+        .write(
+      CategoriesCompanion(order: Value(newPosition)),
+    );
   }
 
   // get wallet given name
