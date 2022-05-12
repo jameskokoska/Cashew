@@ -216,7 +216,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
   }) {
-    print(appStateSettings["selectedWallet"]);
     JoinedSelectStatement<HasResultSet, dynamic> query;
     if (categoryFks.length > 0) {
       query = (select(transactions)
@@ -269,11 +268,141 @@ class FinanceDatabase extends _$FinanceDatabase {
         }).toList());
   }
 
+  // //get days that transactions occurred on
+  // Stream<List<DateTime?>> getDatesOfTransaction({
+  //   String search = "",
+  //   // Search will be ignored... if these params are passed in
+  //   List<int> categoryFks = const [],
+  // }) {
+  //   final query = selectOnly(transactions, distinct: true)
+  //     ..addColumns([transactions.dateCreated]);
+
+  //   return query.map((row) => row.read(transactions.dateCreated)).watch();
+  // }
+
+  // Stream<List<DateTime?>> getDatesOfTransaction(
+  //     {int? limit,
+  //     String search = "",
+  //     DateTime? startDate,
+  //     DateTime? endDate}) {
+  //   final query = (selectOnly(transactions)
+  //     ..where(transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
+  //         transactions.dateCreated.isBiggerOrEqualValue(startDate) &
+  //         transactions.dateCreated.isSmallerOrEqualValue(endDate))
+  //     ..limit(limit ?? DEFAULT_LIMIT)
+  //     ..addColumns([transactions.dateCreated])
+  //     ..orderBy([
+  //       OrderingTerm(
+  //           expression: transactions.dateCreated, mode: OrderingMode.asc)
+  //     ]));
+  //   return query.map((row) => row.read(transactions.dateCreated)).watch();
+  // }
+
+  //get the days that a transaction occurs on, specify search term, categories, or time period to list these
+  Stream<List<DateTime?>> watchDatesOfTransaction(
+      {DateTime? startDate,
+      DateTime? endDate,
+      String search = "",
+      // Search will be ignored... if these params are passed in
+      List<int> categoryFks = const []}) {
+    if (categoryFks.length > 0) {
+      final query = (select(transactions)
+        ..where((tbl) {
+          if (startDate != null && endDate != null) {
+            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+                tbl.dateCreated.isSmallerOrEqualValue(endDate) &
+                tbl.categoryFk.isIn(categoryFks);
+          } else {
+            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                tbl.categoryFk.isIn(categoryFks);
+          }
+        })
+        ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
+      DateTime previousDate = DateTime.now();
+      return query.map((tbl) {
+        DateTime currentDate = DateTime(
+            tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
+        if (previousDate != currentDate) {
+          previousDate = currentDate;
+          return currentDate;
+        } else {
+          previousDate = currentDate;
+          return null;
+        }
+      }).watch();
+    } else if (search == "") {
+      print("THIS ONE");
+      final query = (select(transactions)
+        ..where((tbl) {
+          if (startDate != null && endDate != null) {
+            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+                tbl.dateCreated.isSmallerOrEqualValue(endDate);
+          } else {
+            return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+          }
+        })
+        ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
+      DateTime previousDate = DateTime.now();
+      return query.map((tbl) {
+        DateTime currentDate = DateTime(
+            tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
+        if (previousDate != currentDate) {
+          previousDate = currentDate;
+          return currentDate;
+        } else {
+          previousDate = currentDate;
+          return null;
+        }
+      }).watch();
+    } else {
+      final query = ((select(transactions)
+            ..where((tbl) {
+              if (startDate != null && endDate != null) {
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+                    tbl.dateCreated.isSmallerOrEqualValue(endDate);
+              } else {
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+              }
+            })
+            ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]))
+          .join([
+        innerJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ]))
+        ..where(categories.name.like("%" + search + "%") |
+            transactions.name.like("%" + search + "%"));
+      DateTime previousDate = DateTime.now();
+      return query.watch().map((rows) => rows.map((row) {
+            DateTime currentDate = DateTime(
+                row.readTable(transactions).dateCreated.year,
+                row.readTable(transactions).dateCreated.month,
+                row.readTable(transactions).dateCreated.day);
+            if (previousDate != currentDate) {
+              previousDate = currentDate;
+              return currentDate;
+            } else {
+              previousDate = currentDate;
+              return null;
+            }
+          }).toList());
+    }
+  }
+
   //watch all transactions sorted by date
-  Stream<List<Transaction>> watchAllTransactions({int? limit}) {
+  Stream<List<Transaction>> watchAllTransactions(
+      {int? limit, DateTime? startDate, DateTime? endDate}) {
     return (select(transactions)
           ..where((tbl) {
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+            if (startDate != null && endDate != null) {
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+                  tbl.dateCreated.isSmallerOrEqualValue(endDate);
+            } else {
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+            }
           })
           ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT))

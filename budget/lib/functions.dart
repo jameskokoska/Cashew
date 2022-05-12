@@ -64,7 +64,7 @@ List<TransactionTag> listTag() {
   return defaultTags();
 }
 
-getMonth(currentMonth) {
+getMonth(int currentMonth) {
   var months = [
     'January',
     'February',
@@ -82,7 +82,7 @@ getMonth(currentMonth) {
   return months[currentMonth];
 }
 
-getMonthShort(currentMonth) {
+getMonthShort(int currentMonth) {
   var months = [
     'Jan',
     'Feb',
@@ -101,7 +101,7 @@ getMonthShort(currentMonth) {
   return months[currentMonth];
 }
 
-getWeekDay(currentWeekDay) {
+getWeekDay(int currentWeekDay) {
   var weekDays = [
     'Sunday',
     'Monday',

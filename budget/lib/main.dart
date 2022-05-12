@@ -17,6 +17,7 @@ import './pages/homePage.dart';
 import 'package:budget/colors.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/gestures.dart';
 
 void main() async {
   database = await constructDb();
@@ -207,8 +208,18 @@ class App extends StatelessWidget {
         accentColor: getSettingConstants(appStateSettings)["accentColor"],
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
       ),
+      scrollBehavior: ScrollBehavior(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
       home: PageNavigationFramework(key: pageNavigationFrameworkKey),
     );
   }
+}
+
+class ScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
