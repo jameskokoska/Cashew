@@ -77,7 +77,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
   }
 
   Future addWallet() async {
-    print("Added budget");
+    print("Added wallet");
+    int numberOfWallets = (await database.getTotalCountOfWallets())[0] ?? 0;
     await database.createOrUpdateWallet(
       TransactionWallet(
         walletPk: widget.wallet != null
@@ -86,7 +87,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
         name: selectedTitle ?? "",
         colour: toHexString(selectedColor ?? Colors.green),
         dateCreated: DateTime.now(),
-        order: 0,
+        order: numberOfWallets,
       ),
     );
     Navigator.pop(context);

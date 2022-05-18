@@ -155,7 +155,12 @@ class _BudgetPageState extends State<BudgetPage> {
                                   budgetRange, DateTime.now()),
                             ),
                             Container(height: 15),
-                            DaySpending(budget: widget.budget, large: true),
+                            DaySpending(
+                              budget: widget.budget,
+                              amount: (widget.budget.amount - totalSpent) /
+                                  daysBetween(DateTime.now(), budgetRange.end),
+                              large: true,
+                            ),
                             Container(height: 10),
                           ],
                         ),

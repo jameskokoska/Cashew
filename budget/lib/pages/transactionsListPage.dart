@@ -20,7 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'dart:math';
+import 'package:sliver_tools/sliver_tools.dart';
 
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 // List<Widget> getTransactionsSlivers({
 //   search = "",
 //   List<int> categoryFks = const [],
@@ -160,10 +164,17 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 //   return transactionsWidgets;
 // }
 
-List<Widget> getTransactionsSlivers(DateTime startDay, DateTime endDay,
-    {search = "", List<int> categoryFks = const []}) {
+List<Widget> getTransactionsSlivers(
+  DateTime startDay,
+  DateTime endDay, {
+  search = "",
+  List<int> categoryFks = const [],
+  Function(Transaction, bool)? onSelected,
+  String? listID,
+}) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
+  DateTime indexDay;
   for (DateTime indexDay = startDay;
       indexDay.millisecondsSinceEpoch <= endDay.millisecondsSinceEpoch;
       indexDay = indexDay.add(Duration(days: 1))) {
@@ -175,7 +186,9 @@ List<Widget> getTransactionsSlivers(DateTime startDay, DateTime endDay,
         stream: database.getTransactionCategoryWithDay(date,
             search: search, categoryFks: categoryFks),
         builder: (context, snapshot) {
-          if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+          if (snapshot.data != null &&
+              snapshot.hasData &&
+              (snapshot.data ?? []).length > 0) {
             double totalSpentForDay = 0;
             snapshot.data!.forEach((transaction) {
               totalSpentForDay += transaction.transaction.amount;
@@ -197,6 +210,11 @@ List<Widget> getTransactionsSlivers(DateTime startDay, DateTime endDay,
                         transaction: snapshot.data![index].transaction,
                       ),
                       transaction: snapshot.data![index].transaction,
+                      onSelected: (Transaction transaction, bool selected) {
+                        if (onSelected != null)
+                          onSelected(transaction, selected);
+                      },
+                      listID: listID,
                     );
                   },
                   childCount: snapshot.data?.length,
@@ -220,7 +238,7 @@ class TransactionsListPage extends StatefulWidget {
 }
 
 class TransactionsListPageState extends State<TransactionsListPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   void refreshState() {
     setState(() {});
     searchTransaction("");
@@ -229,10 +247,24 @@ class TransactionsListPageState extends State<TransactionsListPage>
   @override
   bool get wantKeepAlive => true;
 
-  late Color selectedColor = Colors.red;
+  bool showAppBarPaddingOffset = false;
+  bool alreadyChanged = false;
+
   late List<Widget> transactionWidgets = [];
   DateTime selectedDateStart =
       DateTime(DateTime.now().year, DateTime.now().month);
+  late ScrollController _scrollController;
+  late AnimationController _animationControllerSearch;
+  late PageController _pageController;
+  late List<int> selectedTransactionIDs = [];
+
+  GlobalKey<_MonthSelectorState> monthSelectorStateKey = GlobalKey();
+
+  onSelected(Transaction transaction, bool selected) {
+    // print(transaction.transactionPk.toString() + " selected!");
+    // print(globalSelectedID["Transactions"]);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -240,7 +272,21 @@ class TransactionsListPageState extends State<TransactionsListPage>
       selectedDateStart,
       new DateTime(selectedDateStart.year, selectedDateStart.month + 1,
           selectedDateStart.day - 1),
+      onSelected: onSelected,
+      listID: "Transactions",
     );
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _animationControllerSearch = AnimationController(vsync: this, value: 1);
+    _pageController = PageController(initialPage: 1);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _animationControllerSearch.dispose();
+    _pageController.dispose();
+    super.dispose();
   }
 
   void _loadNewTransactions() {
@@ -249,6 +295,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
         selectedDateStart,
         new DateTime(selectedDateStart.year, selectedDateStart.month + 1,
             selectedDateStart.day - 1),
+        onSelected: onSelected,
+        listID: "Transactions",
       );
     });
   }
@@ -256,11 +304,22 @@ class TransactionsListPageState extends State<TransactionsListPage>
   searchTransaction(String? search) {
     setState(() {
       transactionWidgets = getTransactionsSlivers(
-          DateTime(2022, 01, 1),
-          new DateTime(DateTime.now().year, DateTime.now().month + 1,
-              DateTime.now().day),
-          search: search);
+        DateTime(2021, 01, 1),
+        new DateTime(
+            DateTime.now().year, DateTime.now().month + 1, DateTime.now().day),
+        search: search,
+        onSelected: onSelected,
+        listID: "Transactions",
+      );
     });
+  }
+
+  _scrollListener() {
+    double percent = _scrollController.offset /
+        (MediaQuery.of(context).padding.top + 65 + 50);
+    if (percent >= 0 && percent <= 1) {
+      _animationControllerSearch.value = 1 - percent;
+    }
   }
 
   @override
@@ -273,39 +332,363 @@ class TransactionsListPageState extends State<TransactionsListPage>
           currentFocus.unfocus();
         }
       },
-      child: PageFramework(
-        title: "Transactions",
-        backButton: false,
-        appBarBackgroundColor: Theme.of(context).colorScheme.accentColor,
-        appBarBackgroundColorStart: Theme.of(context).canvasColor,
-        slivers: [
-          SliverToBoxAdapter(
-              child: MonthSelector(
-            selectedDateStart: selectedDateStart,
-            setSelectedDateStart: (DateTime currentDateTime) {
-              setState(() {
-                selectedDateStart = currentDateTime;
-                _loadNewTransactions();
-              });
-            },
-          )),
-          SliverToBoxAdapter(child: SizedBox(height: 5)),
-          ...transactionWidgets,
-        ],
-        subtitle: TextInput(
-          labelText: "Search",
-          bubbly: true,
-          icon: Icons.search_rounded,
-          onSubmitted: (value) {
-            searchTransaction(value);
+      child: NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder:
+            (BuildContext contextHeader, bool innerBoxIsScrolled) {
+          return <Widget>[
+            // SliverOverlapAbsorber(
+            //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+            //       contextHeader),
+            //   sliver: MultiSliver(pushPinnedChildren: false, children: <Widget>[
+            //     PageFrameworkSliverAppBar(
+            //       title: "Transactions",
+            //       appBarBackgroundColor: Colors.transparent,
+            //       appBarBackgroundColorStart: Theme.of(context).canvasColor,
+            //     ),
+            //     AnimatedBuilder(
+            //       animation: _animationControllerSearch,
+            //       builder: (_, child) {
+            //         return Transform.translate(
+            //           offset: Offset(
+            //             0,
+            //             8 - _animationControllerSearch.value * 8,
+            //           ),
+            //           child: child,
+            //         );
+            //       },
+            //       child: TextInput(
+            //         labelText: "Search",
+            //         bubbly: true,
+            //         icon: Icons.search_rounded,
+            //         onSubmitted: (value) {
+            //           searchTransaction(value);
+            //         },
+            //         onChanged: (value) => searchTransaction(value),
+            //       ),
+            //     ),
+            //     MonthSelector(
+            //       selectedDateStart: selectedDateStart,
+            //       setSelectedDateStart: (DateTime currentDateTime) {
+            //         setState(() {
+            //           selectedDateStart = currentDateTime;
+            //           _loadNewTransactions();
+            //         });
+            //       },
+            //     ),
+            //   ]),
+            // ),
+
+            // SliverAppBar(
+            //   backgroundColor: Theme.of(context).colorScheme.accentColor,
+            //   pinned: true,
+            //   expandedHeight: 200.0,
+            //   flexibleSpace: FlexibleSpaceBar(
+            //     titlePadding:
+            //         EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+            //     title: TextFont(
+            //       text: "Transactions",
+            //       fontSize: 26,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //     background: Stack(
+            //       children: [
+            //         Container(
+            //           color: Theme.of(context).canvasColor,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            //   shape: ContinuousRectangleBorder(
+            //     borderRadius: BorderRadius.vertical(
+            //       bottom: Radius.circular(30),
+            //     ),
+            //   ),
+            // ),
+            // SliverOverlapAbsorber(
+            //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+            //       contextHeader),
+            //   sliver: MultiSliver(
+            //     pushPinnedChildren: false,
+            //     children: <Widget>[
+            //       SliverAppBar(
+            //         backgroundColor: Theme.of(context).colorScheme.accentColor,
+            //         pinned: true,
+            //         expandedHeight: 200.0,
+            //         flexibleSpace: FlexibleSpaceBar(
+            //           titlePadding:
+            //               EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+            //           title: TextFont(
+            //             text: "Transactions",
+            //             fontSize: 26,
+            //             fontWeight: FontWeight.bold,
+            //           ),
+            //           background: Stack(
+            //             children: [
+            //               Container(
+            //                 color: Theme.of(context).canvasColor,
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //         shape: ContinuousRectangleBorder(
+            //           borderRadius: BorderRadius.vertical(
+            //             bottom: Radius.circular(30),
+            //           ),
+            //         ),
+            //       ),
+            //       SliverPersistentHeader(
+            //         delegate: _ProductTabSliver(
+            //           Container(
+            //             height: 50,
+            //             child: TextInput(
+            //               labelText: "Search",
+            //               bubbly: true,
+            //               icon: Icons.search_rounded,
+            //               onSubmitted: (value) {
+            //                 searchTransaction(value);
+            //               },
+            //               onChanged: (value) => searchTransaction(value),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       //or list of widgets here... but doesnt work, scroll is padded by no scrolling...
+            //     ],
+            //   ),
+            // ),
+            PageFrameworkSliverAppBar(
+              title: "Transactions",
+              appBarBackgroundColor: Theme.of(context).colorScheme.accentColor,
+              appBarBackgroundColorStart: Theme.of(context).canvasColor,
+              actions: [
+                Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child:
+                        IconButton(onPressed: () {}, icon: Icon(Icons.search)))
+              ],
+            ),
+            // !showAppBarPaddingOffset
+            //     ? SliverToBoxAdapter(
+            //         child: AnimatedBuilder(
+            //           animation: _animationControllerSearch,
+            //           builder: (_, child) {
+            //             return Transform.translate(
+            //               offset: Offset(
+            //                 0,
+            //                 8 - _animationControllerSearch.value * 8,
+            //               ),
+            //               child: child,
+            //             );
+            //           },
+            //           child: TextInput(
+            //             labelText: "Search",
+            //             bubbly: true,
+            //             icon: Icons.search_rounded,
+            //             onSubmitted: (value) {
+            //               searchTransaction(value);
+            //             },
+            //             onChanged: (value) => searchTransaction(value),
+            //           ),
+            //         ),
+            //       )
+            //     : SliverToBoxAdapter(
+            //         child: SizedBox.shrink(),
+            //       ),
+            // !showAppBarPaddingOffset
+            //     ? SliverToBoxAdapter(
+            //         child: MonthSelector(
+            //           selectedDateStart: selectedDateStart,
+            //           setSelectedDateStart: (DateTime currentDateTime) {
+            //             setState(() {
+            //               selectedDateStart = currentDateTime;
+            //               _loadNewTransactions();
+            //             });
+            //           },
+            //         ),
+            //       )
+            //     : SliverToBoxAdapter(
+            //         child: SizedBox.shrink(),
+            //       ),
+            // SliverOverlapAbsorber(
+            //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            //   sliver: SliverPersistentHeader(
+            //     pinned: true,
+            //     delegate: _ProductTabSliver(Container(
+            //       height: 100,
+            //       color: Colors.red,
+            //       child: Text("hello"),
+            //     )),
+            //   ),
+            // ),
+          ];
+        },
+        body: Builder(
+          builder: (BuildContext context2) {
+            return Scaffold(
+              extendBodyBehindAppBar: false,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                title: MediaQuery.of(context).padding.top >= 25
+                    ? FadeTransition(
+                        opacity: _animationControllerSearch,
+                        child: TextInput(
+                          labelText: "Search",
+                          bubbly: true,
+                          icon: Icons.search_rounded,
+                          onSubmitted: (value) {
+                            searchTransaction(value);
+                          },
+                          onChanged: (value) => searchTransaction(value),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                titleSpacing: 0,
+                primary: false,
+                toolbarHeight: 65,
+                bottom: PreferredSize(
+                  child: Column(
+                    children: [
+                      MonthSelector(
+                        key: monthSelectorStateKey,
+                        selectedDateStart: selectedDateStart,
+                        setSelectedDateStart: (DateTime currentDateTime) {
+                          setState(() {
+                            selectedDateStart = currentDateTime;
+                            _loadNewTransactions();
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
+                  preferredSize: Size.fromHeight(0),
+                ),
+              ),
+              body: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  if (alreadyChanged) {
+                    alreadyChanged = false;
+                    _pageController.animateToPage(
+                      1,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeInOutCubicEmphasized,
+                    );
+                  } else {
+                    alreadyChanged = true;
+                    setState(() {
+                      selectedDateStart = DateTime(selectedDateStart.year,
+                          selectedDateStart.month + index - 1);
+                      _loadNewTransactions();
+                    });
+                    _pageController.animateToPage(
+                      1,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeInOutCubicEmphasized,
+                    );
+                    double middle =
+                        -MediaQuery.of(context).size.width / 2 + 100 / 2;
+                    int difference =
+                        (DateTime.now().year - selectedDateStart.year) * 12 +
+                            (DateTime.now().month - selectedDateStart.month) +
+                            1;
+                    monthSelectorStateKey.currentState!
+                        .scrollTo(middle - difference * 100 + 100);
+                  }
+                },
+                children: <Widget>[
+                  Center(
+                    child: Text('First Page'),
+                  ),
+                  CustomScrollView(
+                    // controller: _scrollController,
+                    slivers: [
+                      // SliverOverlapInjector(
+                      //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      //       context2),
+                      // ),
+                      // SliverAppBar(
+                      //   title: Text("hello"),
+                      //   pinned: true,
+                      //   expandedHeight: 100,
+                      //   toolbarHeight: 100,
+                      // ),
+
+                      //Needed in older version of flutter:
+                      // SliverToBoxAdapter(),
+                      ...transactionWidgets,
+                      // SliverToBoxAdapter(),
+
+                      // SliverFillRemaining(),
+                    ],
+                  ),
+                  Center(
+                    child: Text('Third Page'),
+                  )
+                ],
+              ),
+            );
           },
-          onChanged: (value) => searchTransaction(value),
         ),
-        subtitleSize: 20,
-        subtitleAnimationSpeed: 4.5,
-        // onBottomReached: _onBottomReached,
       ),
     );
+  }
+}
+
+class _ProductTabSliver extends SliverPersistentHeaderDelegate {
+  final Widget widget;
+
+  _ProductTabSliver(this.widget);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.red,
+        ),
+        child: widget);
+  }
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
+}
+
+class _ProductTabSliver2 extends SliverPersistentHeaderDelegate {
+  final Widget widget;
+
+  _ProductTabSliver2(this.widget);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.red,
+        ),
+        child: widget);
+  }
+
+  @override
+  double get maxExtent => 100;
+
+  @override
+  double get minExtent => 100;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }
 
@@ -328,36 +711,45 @@ class _MonthSelectorState extends State<MonthSelector> {
   GlobalKey<_MultiDirectionalInfiniteScrollState>
       MultiDirectionalInfiniteScrollKey = GlobalKey();
 
-  @override
-  Widget build(BuildContext context) {
+  scrollTo(double position) {
+    MultiDirectionalInfiniteScrollKey.currentState!
+        .scrollTo(Duration(milliseconds: 700), position: position);
+  }
+
+  _onScroll(double position) {
     final upperBound = 200;
     final lowerBound = -200 - MediaQuery.of(context).size.width / 2 - 100;
+    if (position > upperBound) {
+      if (showScrollBottom == false)
+        setState(() {
+          showScrollBottom = true;
+        });
+    } else if (position < lowerBound) {
+      if (showScrollTop == false)
+        setState(() {
+          showScrollTop = true;
+        });
+    }
+    if (position > lowerBound && position < upperBound) {
+      if (showScrollTop == true)
+        setState(() {
+          showScrollTop = false;
+        });
+      if (showScrollBottom == true)
+        setState(() {
+          showScrollBottom = false;
+        });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         MultiDirectionalInfiniteScroll(
           key: MultiDirectionalInfiniteScrollKey,
           onScroll: (position) {
-            if (position > upperBound) {
-              if (showScrollBottom == false)
-                setState(() {
-                  showScrollBottom = true;
-                });
-            } else if (position < lowerBound) {
-              if (showScrollTop == false)
-                setState(() {
-                  showScrollTop = true;
-                });
-            }
-            if (position > lowerBound && position < upperBound) {
-              if (showScrollTop == true)
-                setState(() {
-                  showScrollTop = false;
-                });
-              if (showScrollBottom == true)
-                setState(() {
-                  showScrollBottom = false;
-                });
-            }
+            _onScroll(position);
           },
           height: 50,
           overBoundsDetection: 50,
@@ -415,8 +807,7 @@ class _MonthSelectorState extends State<MonthSelector> {
                                           : FontWeight.normal,
                                     ),
                             ),
-                            currentDateTime.month == 1 &&
-                                    DateTime.now().month != 1
+                            DateTime.now().year != currentDateTime.year
                                 ? AnimatedSwitcher(
                                     duration: Duration(milliseconds: 300),
                                     child: isSelected
@@ -568,41 +959,6 @@ class _MonthSelectorState extends State<MonthSelector> {
   }
 }
 
-// class TrianglePainter extends CustomPainter {
-//   final Color strokeColor;
-//   final PaintingStyle paintingStyle;
-//   final double strokeWidth;
-
-//   TrianglePainter(
-//       {this.strokeColor = Colors.black,
-//       this.strokeWidth = 3,
-//       this.paintingStyle = PaintingStyle.stroke});
-
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     Paint paint = Paint()
-//       ..color = strokeColor
-//       ..strokeWidth = strokeWidth
-//       ..style = paintingStyle;
-
-//     canvas.drawPath(getTrianglePath(size.width, size.height), paint);
-//   }
-
-//   Path getTrianglePath(double x, double y) {
-//     return Path()
-//       ..moveTo(0, y)
-//       ..lineTo(x / 2, 0)
-//       ..lineTo(x, y);
-//   }
-
-//   @override
-//   bool shouldRepaint(TrianglePainter oldDelegate) {
-//     return oldDelegate.strokeColor != strokeColor ||
-//         oldDelegate.paintingStyle != paintingStyle ||
-//         oldDelegate.strokeWidth != strokeWidth;
-//   }
-// }
-
 class MultiDirectionalInfiniteScroll extends StatefulWidget {
   const MultiDirectionalInfiniteScroll({
     Key? key,
@@ -683,7 +1039,6 @@ class _MultiDirectionalInfiniteScrollState
     if (_scrollController.offset <=
         _scrollController.position.minScrollExtent +
             widget.overBoundsDetection) {
-      print(_scrollController.position.minScrollExtent);
       _onStartReached();
       if (widget.onBottomLoaded != null) {
         widget.onBottomLoaded!();
@@ -738,28 +1093,84 @@ class _MultiDirectionalInfiniteScrollState
   }
 }
 
-// SliverPersistentHeader(
-//   delegate: SectionHeaderDelegate(TextFont(text: "text")),
-//   pinned: true,
-// ),
+class SliverPinnedOverlapInjector extends SingleChildRenderObjectWidget {
+  const SliverPinnedOverlapInjector({
+    required this.handle,
+    Key? key,
+  }) : super(key: key);
 
-// class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
-//   final Widget widget;
-//   final double height;
+  final SliverOverlapAbsorberHandle handle;
 
-//   SectionHeaderDelegate(this.widget, [this.height = 50]);
+  @override
+  RenderSliverPinnedOverlapInjector createRenderObject(BuildContext context) {
+    return RenderSliverPinnedOverlapInjector(
+      handle: handle,
+    );
+  }
 
-//   @override
-//   Widget build(context, double shrinkOffset, bool overlapsContent) {
-//     return widget;
-//   }
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    RenderSliverPinnedOverlapInjector renderObject,
+  ) {
+    renderObject.handle = handle;
+  }
+}
 
-//   @override
-//   double get maxExtent => height;
+class RenderSliverPinnedOverlapInjector extends RenderSliver {
+  RenderSliverPinnedOverlapInjector({
+    required SliverOverlapAbsorberHandle handle,
+  }) : _handle = handle;
 
-//   @override
-//   double get minExtent => height;
+  double? _currentLayoutExtent;
+  double? _currentMaxExtent;
 
-//   @override
-//   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
-// }
+  SliverOverlapAbsorberHandle get handle => _handle;
+  SliverOverlapAbsorberHandle _handle;
+  set handle(SliverOverlapAbsorberHandle value) {
+    if (handle == value) return;
+    if (attached) {
+      handle.removeListener(markNeedsLayout);
+    }
+    _handle = value;
+    if (attached) {
+      handle.addListener(markNeedsLayout);
+      if (handle.layoutExtent != _currentLayoutExtent ||
+          handle.scrollExtent != _currentMaxExtent) markNeedsLayout();
+    }
+  }
+
+  @override
+  void attach(PipelineOwner owner) {
+    super.attach(owner);
+    handle.addListener(markNeedsLayout);
+    if (handle.layoutExtent != _currentLayoutExtent ||
+        handle.scrollExtent != _currentMaxExtent) markNeedsLayout();
+  }
+
+  @override
+  void detach() {
+    handle.removeListener(markNeedsLayout);
+    super.detach();
+  }
+
+  @override
+  void performLayout() {
+    _currentLayoutExtent = handle.layoutExtent;
+
+    final paintedExtent = min(
+      _currentLayoutExtent!,
+      constraints.remainingPaintExtent - constraints.overlap,
+    );
+
+    geometry = SliverGeometry(
+      paintExtent: paintedExtent,
+      maxPaintExtent: _currentLayoutExtent!,
+      maxScrollObstructionExtent: _currentLayoutExtent!,
+      paintOrigin: constraints.overlap,
+      scrollExtent: _currentLayoutExtent!,
+      layoutExtent: max(0, paintedExtent - constraints.scrollOffset),
+      hasVisualOverflow: paintedExtent < _currentLayoutExtent!,
+    );
+  }
+}

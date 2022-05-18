@@ -96,19 +96,24 @@ class WalletRowEntry extends StatelessWidget {
                 child: Container(
                     width: 40, height: 50, child: Icon(Icons.delete_rounded)),
                 onTap: () {
-                  openPopup(context,
-                      description: "Delete " + wallet.name + "?",
-                      icon: Icons.delete_rounded,
-                      onCancel: () {
-                        Navigator.pop(context);
-                      },
-                      onCancelLabel: "Cancel",
-                      onSubmit: () {
-                        // database.deleteWallet(wallet.walletPk);
-                        Navigator.pop(context);
-                        openSnackbar(context, "Deleted " + wallet.name);
-                      },
-                      onSubmitLabel: "Delete");
+                  openPopup(
+                    context,
+                    description: "Delete " +
+                        wallet.name +
+                        "?\nThis will delete all transactions associated with this wallet.",
+                    icon: Icons.delete_rounded,
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                    onCancelLabel: "Cancel",
+                    onSubmit: () {
+                      database.deleteWallet(wallet.walletPk);
+                      database.deleteWalletsTransactions(wallet.walletPk);
+                      Navigator.pop(context);
+                      openSnackbar(context, "Deleted " + wallet.name);
+                    },
+                    onSubmitLabel: "Delete",
+                  );
                 },
               ),
               OpenContainerNavigation(

@@ -107,7 +107,11 @@ class BudgetContainer extends StatelessWidget {
               Container(
                 height: 14,
               ),
-              DaySpending(budget: budget),
+              DaySpending(
+                budget: budget,
+                amount: (budget.amount - totalSpent) /
+                    daysBetween(DateTime.now(), budgetRange.end),
+              ),
             ],
           );
         } else {
@@ -179,12 +183,16 @@ class BudgetContainer extends StatelessWidget {
 }
 
 class DaySpending extends StatelessWidget {
-  const DaySpending(
-      {Key? key, required Budget this.budget, bool this.large = false})
-      : super(key: key);
+  const DaySpending({
+    Key? key,
+    required Budget this.budget,
+    required double this.amount,
+    bool this.large = false,
+  }) : super(key: key);
 
   final Budget budget;
   final bool large;
+  final double amount;
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +200,8 @@ class DaySpending extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.fitWidth,
         child: TextFont(
-          text: "You can keep spending " + getCurrencyString() + "15 each day.",
+          text:
+              "You can keep spending " + convertToMoney(amount) + " each day.",
           fontSize: large ? 17 : 15,
           textAlign: TextAlign.center,
         ),

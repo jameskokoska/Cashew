@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -44,16 +49,49 @@ class WalletEntry extends StatelessWidget {
                   text: wallet.name,
                   fontWeight: FontWeight.bold,
                 ),
-                TextFont(
-                  text: "\$ -9,700",
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                StreamBuilder<List<double?>>(
+                  stream: database.watchTotalOfWallet(wallet.walletPk),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return CountNumber(
+                        count: (snapshot.data![0] ?? 0 * -1),
+                        duration: Duration(milliseconds: 4000),
+                        dynamicDecimals: true,
+                        initialCount: (snapshot.data![0] ?? 0 * -1),
+                        textBuilder: (number) {
+                          return TextFont(
+                            textAlign: TextAlign.left,
+                            text: convertToMoney(number),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          );
+                        },
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
                 ),
-                TextFont(
-                  text: "5 transactions",
-                  fontSize: 14,
-                  textColor:
-                      Theme.of(context).colorScheme.black.withOpacity(0.65),
+                StreamBuilder<List<int?>>(
+                  stream: database
+                      .watchTotalCountOfTransactionsInWallet(wallet.walletPk),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return TextFont(
+                        textAlign: TextAlign.left,
+                        text: snapshot.data![0] == 1
+                            ? (snapshot.data![0].toString() + " transaction")
+                            : (snapshot.data![0].toString() + " transactions"),
+                        fontSize: 14,
+                        textColor: Theme.of(context)
+                            .colorScheme
+                            .black
+                            .withOpacity(0.65),
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
                 ),
               ],
             ),

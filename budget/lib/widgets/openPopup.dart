@@ -93,91 +93,69 @@ Future<T?> openPopup<T extends Object?>(
               color: Theme.of(context).colorScheme.lightDarkAccent,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Stack(
-              alignment: Alignment.topCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                icon != null
-                    ? Transform.translate(
-                        offset: Offset(0, -50),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.accentColor,
-                            borderRadius: BorderRadius.circular(1000),
-                          ),
-                          padding: EdgeInsets.all(15),
-                          child: Icon(
-                            icon,
-                            size: 50,
-                          ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
+                Container(height: 7),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  child: Icon(
+                    icon,
+                    size: 65,
+                    color: Theme.of(context).colorScheme.accentColor,
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  child: TextFont(
+                    text: title ?? "",
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  child: TextFont(
+                    textAlign: TextAlign.center,
+                    text: description ?? "",
+                    fontSize: 17,
+                    maxLines: 100,
+                  ),
+                ),
+                onSubmitLabel != null || onCancelLabel != null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            icon == null
-                                ? TextFont(
-                                    text: title ?? "",
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                : Container(
-                                    height: 30,
-                                    width: 1,
-                                  ),
-                            description != null
-                                ? TextFont(
-                                    text: description,
-                                    fontSize: 19,
-                                    maxLines: 100,
-                                  )
+                            onSubmitLabel != null
+                                ? Button(
+                                    label: onSubmitLabel,
+                                    width: 100,
+                                    height: 50,
+                                    onTap: onSubmit ?? () {})
                                 : SizedBox.shrink(),
-                            onSubmitLabel != null || onCancelLabel != null
+                            onSubmitLabel != null && onCancelLabel != null
                                 ? Container(
-                                    height: 12,
-                                    width: 1,
+                                    width: 15,
                                   )
                                 : SizedBox.shrink(),
-                            onSubmitLabel != null || onCancelLabel != null
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      onSubmitLabel != null
-                                          ? Button(
-                                              label: onSubmitLabel,
-                                              width: 100,
-                                              height: 50,
-                                              onTap: onSubmit ?? () {})
-                                          : SizedBox.shrink(),
-                                      onSubmitLabel != null &&
-                                              onCancelLabel != null
-                                          ? Container(
-                                              width: 15,
-                                            )
-                                          : SizedBox.shrink(),
-                                      onCancelLabel != null
-                                          ? Button(
-                                              label: onCancelLabel,
-                                              width: 100,
-                                              height: 50,
-                                              onTap: onCancel ?? () {})
-                                          : SizedBox.shrink(),
-                                    ],
-                                  )
+                            onCancelLabel != null
+                                ? Button(
+                                    label: onCancelLabel,
+                                    width: 100,
+                                    height: 50,
+                                    onTap: onCancel ?? () {})
                                 : SizedBox.shrink(),
                           ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                      )
+                    : SizedBox.shrink(),
+                Container(height: 6),
               ],
             ),
           ),

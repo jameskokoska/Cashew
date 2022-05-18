@@ -64,6 +64,8 @@ class SettingsPageState extends State<SettingsPage>
       title: "Settings",
       backButton: false,
       navbar: true,
+      appBarBackgroundColor: Theme.of(context).colorScheme.accentColor,
+      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
         SettingsHeader(title: "Data"),
         SettingsContainerOpenPage(
@@ -135,6 +137,25 @@ class SettingsPageState extends State<SettingsPage>
           },
           title: "Select Icon",
           icon: Icons.portrait,
+        ),
+        SettingsHeader(title: "Layout Customization"),
+        SettingsContainerSwitch(
+          title: "Show Wallet Switcher",
+          description: "On home page",
+          onSwitched: (value) {
+            updateSettings("showWalletSwitcher", value,
+                pagesNeedingRefresh: [0]);
+          },
+          initialValue: appStateSettings["showWalletSwitcher"],
+        ),
+        SettingsContainerSwitch(
+          title: "Show Cumulative Spending",
+          description: "On home page spending graph",
+          onSwitched: (value) {
+            updateSettings("showCumulativeSpending", value,
+                pagesNeedingRefresh: [0]);
+          },
+          initialValue: appStateSettings["showCumulativeSpending"],
         ),
       ],
     );

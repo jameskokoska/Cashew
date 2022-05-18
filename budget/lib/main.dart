@@ -19,6 +19,10 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 
+/*
+adb tcpip 5555
+adb connect 192.168.0.22
+*/
 void main() async {
   database = await constructDb();
   runApp(InitializeDatabase());
@@ -67,6 +71,8 @@ Future<Map<String, dynamic>> getUserSettings() async {
     "theme": "system",
     "selectedWallet": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
+    "showWalletSwitcher": true,
+    "showCumulativeSpending": true,
   };
 
   final prefs = await SharedPreferences.getInstance();
@@ -75,7 +81,14 @@ Future<Map<String, dynamic>> getUserSettings() async {
     await prefs.setString('userSettings', json.encode(userPreferencesDefault));
     return userPreferencesDefault;
   } else {
-    return json.decode(userSettings);
+    var userSettingsJSON = json.decode(userSettings);
+    //Set to defaults if a new setting is added, but no entry saved
+    userPreferencesDefault.forEach((key, value) {
+      if (userSettingsJSON[key] == null) {
+        userSettingsJSON[key] = userPreferencesDefault[key];
+      }
+    });
+    return userSettingsJSON;
   }
 }
 

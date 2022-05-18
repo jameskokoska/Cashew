@@ -583,12 +583,14 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           .categoryPk;
     } catch (_) {
       print("category not found");
+      int numberOfCategories =
+          (await database.getTotalCountOfCategories())[0] ?? 0;
       await database.createOrUpdateCategory(
         TransactionCategory(
           categoryPk: DateTime.now().millisecondsSinceEpoch,
           name: row[assignedColumns["category"]!["setHeaderIndex"]],
           dateCreated: DateTime.now(),
-          order: 0,
+          order: numberOfCategories,
           colour:
               toHexString(getSettingConstants(appStateSettings)["accentColor"]),
           income: amount > 0,

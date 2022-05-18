@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import '../colors.dart';
 
 class Tappable extends StatelessWidget {
-  Tappable(
-      {Key? key,
-      this.onTap,
-      this.onHighlightChanged,
-      this.borderRadius = 0,
-      this.color,
-      this.type = MaterialType.canvas,
-      required this.child})
-      : super(key: key);
+  Tappable({
+    Key? key,
+    this.onTap,
+    this.onHighlightChanged,
+    this.borderRadius = 0,
+    this.color,
+    this.type = MaterialType.canvas,
+    required this.child,
+    this.onLongPress,
+  }) : super(key: key);
 
   final double borderRadius;
   final VoidCallback? onTap;
@@ -18,6 +19,7 @@ class Tappable extends StatelessWidget {
   final Color? color;
   final Widget child;
   final MaterialType type;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class Tappable extends StatelessWidget {
         onTap: onTap,
         onHighlightChanged: onHighlightChanged,
         child: child,
+        onLongPress: onLongPress,
       ),
     );
   }

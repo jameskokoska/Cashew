@@ -268,6 +268,64 @@ class FinanceDatabase extends _$FinanceDatabase {
         }).toList());
   }
 
+  Stream<List<TransactionWithCategory>> getTransactionCategoryWithMonth(
+    DateTime date, {
+    String search = "",
+    // Search will be ignored... if these params are passed in
+    List<int> categoryFks = const [],
+  }) {
+    JoinedSelectStatement<HasResultSet, dynamic> query;
+    if (categoryFks.length > 0) {
+      query = (select(transactions)
+            ..where((tbl) {
+              final dateCreated = tbl.dateCreated;
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day) &
+                  tbl.categoryFk.isIn(categoryFks);
+            }))
+          .join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ]);
+    } else if (search == "") {
+      query = (select(transactions)
+            ..where((tbl) {
+              final dateCreated = tbl.dateCreated;
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day);
+            }))
+          .join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ]);
+    } else {
+      query = ((select(transactions)
+            ..where((tbl) {
+              final dateCreated = tbl.dateCreated;
+              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                  dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day);
+            }))
+          .join([
+        innerJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ]))
+        ..where(categories.name.like("%" + search + "%") |
+            transactions.name.like("%" + search + "%"));
+    }
+
+    return query.watch().map((rows) => rows.map((row) {
+          return TransactionWithCategory(
+              category: row.readTable(categories),
+              transaction: row.readTable(transactions));
+        }).toList());
+  }
+
   // //get days that transactions occurred on
   // Stream<List<DateTime?>> getDatesOfTransaction({
   //   String search = "",
@@ -506,7 +564,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Stream<List<TransactionWallet>> watchAllWallets({int? limit, int? offset}) {
     return (select(wallets)
-          ..orderBy([(w) => OrderingTerm.asc(w.dateCreated)])
+          ..orderBy([(w) => OrderingTerm.asc(w.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
   }
@@ -673,6 +731,17 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
+  //delete wallet given key
+  Future deleteWallet(int walletPk) {
+    return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
+  }
+
+  //delete transactions that belong to specific wallet key
+  Future deleteWalletsTransactions(int walletPk) {
+    return (delete(transactions)..where((t) => t.walletFk.equals(walletPk)))
+        .go();
+  }
+
   // TODO: add budget pk filter
   // get total amount spent in each category
   Stream<List<TypedResult>> watchTotalSpentInEachCategory() {
@@ -756,6 +825,34 @@ class FinanceDatabase extends _$FinanceDatabase {
               tbl.dateCreated.isSmallerOrEqualValue(endDate))
           ..addColumns([totalAmt, date]).join([]).groupBy([date]))
         .watch();
+  }
+
+  Stream<List<double?>> watchTotalOfWallet(int walletPk) {
+    final totalAmt = transactions.amount.sum();
+    final query = selectOnly(transactions)
+      ..addColumns([totalAmt])
+      ..where(transactions.walletFk.equals(walletPk));
+    return query.map((row) => row.read(totalAmt)).watch();
+  }
+
+  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(int walletPk) {
+    final totalCount = transactions.transactionPk.count();
+    final query = selectOnly(transactions)
+      ..addColumns([totalCount])
+      ..where(transactions.walletFk.equals(walletPk));
+    return query.map((row) => row.read(totalCount)).watch();
+  }
+
+  Future<List<int?>> getTotalCountOfCategories() async {
+    final totalCount = categories.categoryPk.count();
+    final query = selectOnly(categories)..addColumns([totalCount]);
+    return query.map((row) => row.read(totalCount)).get();
+  }
+
+  Future<List<int?>> getTotalCountOfWallets() async {
+    final totalCount = wallets.walletPk.count();
+    final query = selectOnly(wallets)..addColumns([totalCount]);
+    return query.map((row) => row.read(totalCount)).get();
   }
 
   Stream<List<Transaction>> watchTotalSpentEachDay(int? budgetPk) {

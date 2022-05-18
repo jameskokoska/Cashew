@@ -30,9 +30,10 @@ class _FadeInState extends State<FadeIn> {
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-        opacity: widgetOpacity,
-        duration: Duration(milliseconds: 500),
-        child: widget.child);
+      opacity: widgetOpacity,
+      duration: Duration(milliseconds: 500),
+      child: widget.child,
+    );
   }
 }
 
@@ -198,6 +199,7 @@ class CountNumber extends StatefulWidget {
     this.initialCount = 0,
     this.decimals = 2,
     this.dynamicDecimals = false,
+    this.lazyFirstRender = true,
   }) : super(key: key);
 
   final double count;
@@ -208,6 +210,7 @@ class CountNumber extends StatefulWidget {
   final double initialCount;
   final int decimals;
   final bool dynamicDecimals;
+  final bool lazyFirstRender;
 
   @override
   State<CountNumber> createState() => _CountNumberState();
@@ -216,15 +219,24 @@ class CountNumber extends StatefulWidget {
 class _CountNumberState extends State<CountNumber> {
   double previousAmount = 0;
   int decimals = 2;
+  bool lazyFirstRender = true;
   @override
   void initState() {
     super.initState();
     previousAmount = widget.initialCount;
     decimals = widget.decimals;
+    lazyFirstRender = widget.lazyFirstRender;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (lazyFirstRender && widget.initialCount == widget.count) {
+      lazyFirstRender = false;
+      return widget.textBuilder(
+        widget.initialCount,
+      );
+    }
+
     if (widget.dynamicDecimals) {
       if (widget.count % 1 == 0) {
         decimals = 0;
