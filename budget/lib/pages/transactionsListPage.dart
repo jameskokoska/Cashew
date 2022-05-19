@@ -22,7 +22,7 @@ import 'package:budget/colors.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'dart:math';
 import 'package:sliver_tools/sliver_tools.dart';
-
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 // List<Widget> getTransactionsSlivers({
@@ -528,7 +528,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
             return Scaffold(
               extendBodyBehindAppBar: false,
               appBar: AppBar(
-                backgroundColor: Colors.transparent,
+                backgroundColor: Theme.of(context).canvasColor,
+                elevation: 0,
                 title: MediaQuery.of(context).padding.top >= 25
                     ? FadeTransition(
                         opacity: _animationControllerSearch,
@@ -568,6 +569,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                 ),
               ),
               body: PageView(
+                physics: AlwaysScrollableScrollPhysics(),
                 controller: _pageController,
                 onPageChanged: (index) {
                   if (alreadyChanged) {
@@ -600,9 +602,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
                   }
                 },
                 children: <Widget>[
-                  Center(
-                    child: Text('First Page'),
-                  ),
+                  LoadingShimmer(),
+                  // Container(),
                   CustomScrollView(
                     // controller: _scrollController,
                     slivers: [
@@ -625,13 +626,39 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       // SliverFillRemaining(),
                     ],
                   ),
-                  Center(
-                    child: Text('Third Page'),
-                  )
+                  LoadingShimmer(),
                 ],
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingShimmer extends StatelessWidget {
+  const LoadingShimmer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      period: Duration(milliseconds: 1100),
+      baseColor: Theme.of(context).colorScheme.lightDarkAccent,
+      highlightColor:
+          Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
+      child: ListView.builder(
+        itemBuilder: (_, __) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Colors.white,
+            ),
+            height: 60,
+          ),
         ),
       ),
     );
@@ -873,9 +900,8 @@ class _MonthSelectorState extends State<MonthSelector> {
                     child: AnimatedScale(
                       duration: Duration(milliseconds: 500),
                       scale: isSelected ? 1 : 0,
-                      curve: isSelected
-                          ? ElasticOutCurve(0.8)
-                          : Curves.easeOutQuart,
+                      curve:
+                          isSelected ? Curves.decelerate : Curves.easeOutQuart,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
@@ -1004,7 +1030,7 @@ class _MultiDirectionalInfiniteScrollState
     }
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
         widget.startingScrollPosition,
         duration: widget.duration,

@@ -110,9 +110,11 @@ Future<T?> openPopup<T extends Object?>(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                   child: TextFont(
+                    textAlign: TextAlign.center,
                     text: title ?? "",
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
+                    maxLines: 5,
                   ),
                 ),
                 Padding(

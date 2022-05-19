@@ -17,6 +17,7 @@ import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
 import "../struct/budget.dart";
 import 'package:budget/colors.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -72,9 +73,10 @@ class HomePageState extends State<HomePage>
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              height: 236,
+          SliverList(
+              delegate: SliverChildListDelegate([
+            Container(
+              height: 207 + MediaQuery.of(context).padding.top,
               alignment: Alignment.bottomLeft,
               padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
               child: Row(
@@ -143,45 +145,82 @@ class HomePageState extends State<HomePage>
                 ],
               ),
             ),
-          ),
+          ])),
           appStateSettings["showWalletSwitcher"] == true
-              ? SliverPadding(
-                  padding: EdgeInsets.only(top: 0, bottom: 25),
-                  sliver: SliverToBoxAdapter(
-                    child: Container(
-                        height: 85.0,
-                        child: StreamBuilder<List<TransactionWallet>>(
-                            stream: database.watchAllWallets(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: snapshot.data!.length + 1,
-                                  itemBuilder: (context, index) {
-                                    bool lastIndex =
-                                        index == snapshot.data!.length;
-                                    if (lastIndex) {
-                                      return WalletEntryAdd();
-                                    }
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                        left: (index == 0 ? 8 : 0.0),
-                                      ),
-                                      child: WalletEntry(
-                                        selected: appStateSettings[
-                                                "selectedWallet"] ==
-                                            snapshot.data![index].walletPk,
-                                        wallet: snapshot.data![index],
-                                      ),
-                                    );
-                                  },
-                                );
+              ? SliverToBoxAdapter(
+                  child: Container(
+                    height: 85.0,
+                    child: StreamBuilder<List<TransactionWallet>>(
+                      stream: database.watchAllWallets(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data!.length + 1,
+                            itemBuilder: (context, index) {
+                              bool lastIndex = index == snapshot.data!.length;
+                              if (lastIndex) {
+                                return WalletEntryAdd();
                               }
-                              return Container();
-                            })),
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  left: (index == 0 ? 8 : 0.0),
+                                ),
+                                child: WalletEntry(
+                                  selected:
+                                      appStateSettings["selectedWallet"] ==
+                                          snapshot.data![index].walletPk,
+                                  wallet: snapshot.data![index],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
                   ),
                 )
               : SliverToBoxAdapter(),
+          SliverToBoxAdapter(
+            child: Container(height: 15),
+          ),
+          StreamBuilder<List<Budget>>(
+            stream: database.watchAllPinnedBudgets(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.length == 1) {
+                  return SliverToBoxAdapter(
+                    child: BudgetContainer(
+                      budget: snapshot.data![0],
+                    ),
+                  );
+                }
+                return SliverToBoxAdapter(
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 183,
+                      enableInfiniteScroll: false,
+                      enlargeCenterPage: true,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      viewportFraction: 0.93,
+                      clipBehavior: Clip.none,
+                    ),
+                    items: snapshot.data?.map((Budget budget) {
+                      return BudgetContainer(
+                        budget: budget,
+                      );
+                    }).toList(),
+                  ),
+                );
+              } else {
+                return SliverToBoxAdapter(child: SizedBox());
+              }
+            },
+          ),
+          SliverToBoxAdapter(
+            child: Container(height: 15),
+          ),
           StreamBuilder<List<Transaction>>(
             stream: database.getTransactionsInTimeRangeFromCategories(
               DateTime(
@@ -228,53 +267,6 @@ class HomePageState extends State<HomePage>
               }
               return SliverToBoxAdapter(child: SizedBox());
             },
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  EdgeInsets.only(left: 18, bottom: 22, right: 18, top: 10),
-              child: TextFont(
-                text: "Budgets",
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          StreamBuilder<List<Budget>>(
-            stream: database.watchAllPinnedBudgets(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return SliverPadding(
-                  padding: EdgeInsets.symmetric(vertical: 0),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 18.0),
-                          child: BudgetContainer(
-                            budget: snapshot.data![index],
-                          ),
-                        );
-                      },
-                      childCount: snapshot.data?.length, //snapshot.data?.length
-                    ),
-                  ),
-                );
-              } else {
-                return SliverToBoxAdapter(child: SizedBox());
-              }
-            },
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  EdgeInsets.only(left: 18, bottom: 10, right: 18, top: 10),
-              child: TextFont(
-                text: "Transactions",
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ),
           ...getTransactionsSlivers(
               DateTime(DateTime.now().year, DateTime.now().month - 1,

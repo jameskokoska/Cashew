@@ -14,9 +14,11 @@ import '../functions.dart';
 import '../struct/budget.dart';
 
 class BudgetContainer extends StatelessWidget {
-  BudgetContainer({Key? key, required this.budget}) : super(key: key);
+  BudgetContainer({Key? key, required this.budget, this.height = 183})
+      : super(key: key);
 
   final Budget budget;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -34,150 +36,171 @@ class BudgetContainer extends StatelessWidget {
           snapshot.data!.forEach((category) {
             totalSpent = totalSpent + category.total;
           });
-          return Column(
-            children: [
-              Container(
-                width: double.infinity,
-                child: TextFont(
-                  text: budget.name,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  textAlign: TextAlign.left,
-                ),
-              ),
-              Container(height: 2),
-              budget.amount - totalSpent >= 0
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          child: CountUp(
-                            count: budget.amount - totalSpent,
-                            prefix: getCurrencyString(),
-                            duration: Duration(milliseconds: 2500),
-                            fontSize: 18,
-                            textAlign: TextAlign.left,
-                            fontWeight: FontWeight.bold,
-                            decimals: moneyDecimals(budget.amount),
-                          ),
+          return Container(
+            height: height,
+            child: ClipRRect(
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Stack(
+                    children: [
+                      Positioned.fill(
+                        child: AnimatedGooBackground(
+                          randomOffset: budget.name.length,
+                          color: HexColor(budget.colour).withOpacity(0.8),
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 3.8),
-                          child: TextFont(
-                            text: " left of " + convertToMoney(budget.amount),
-                            fontSize: 13,
-                            textAlign: TextAlign.left,
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 23, right: 23, bottom: 14, top: 13),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              child: TextFont(
+                                text: budget.name,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            budget.amount - totalSpent >= 0
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        child: CountUp(
+                                          count: budget.amount - totalSpent,
+                                          prefix: getCurrencyString(),
+                                          duration:
+                                              Duration(milliseconds: 2500),
+                                          fontSize: 18,
+                                          textAlign: TextAlign.left,
+                                          fontWeight: FontWeight.bold,
+                                          decimals:
+                                              moneyDecimals(budget.amount),
+                                        ),
+                                      ),
+                                      Container(
+                                        child: TextFont(
+                                          text: " left of " +
+                                              convertToMoney(budget.amount),
+                                          fontSize: 13,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        child: CountUp(
+                                          count:
+                                              -1 * (budget.amount - totalSpent),
+                                          prefix: getCurrencyString(),
+                                          duration:
+                                              Duration(milliseconds: 2500),
+                                          fontSize: 18,
+                                          textAlign: TextAlign.left,
+                                          fontWeight: FontWeight.bold,
+                                          decimals:
+                                              moneyDecimals(budget.amount),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 1.5),
+                                        child: TextFont(
+                                          text: " overspent of " +
+                                              convertToMoney(budget.amount),
+                                          fontSize: 13,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ],
                         ),
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          child: CountUp(
-                            count: -1 * (budget.amount - totalSpent),
-                            prefix: getCurrencyString(),
-                            duration: Duration(milliseconds: 2500),
-                            fontSize: 18,
-                            textAlign: TextAlign.left,
-                            fontWeight: FontWeight.bold,
-                            decimals: moneyDecimals(budget.amount),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 3.8),
-                          child: TextFont(
-                            text: " overspent of " +
-                                convertToMoney(budget.amount),
-                            fontSize: 13,
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: BudgetTimeline(
+                      budget: budget,
+                      percent: totalSpent / budget.amount * 100,
+                      todayPercent:
+                          getPercentBetweenDates(budgetRange, DateTime.now()),
                     ),
-              BudgetTimeline(
-                budget: budget,
-                percent: totalSpent / budget.amount * 100,
-                todayPercent:
-                    getPercentBetweenDates(budgetRange, DateTime.now()),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 17),
+                    child: DaySpending(
+                      budget: budget,
+                      amount: (budget.amount - totalSpent) /
+                          daysBetween(DateTime.now(), budgetRange.end),
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                height: 14,
-              ),
-              DaySpending(
-                budget: budget,
-                amount: (budget.amount - totalSpent) /
-                    daysBetween(DateTime.now(), budgetRange.end),
-              ),
-            ],
+            ),
           );
         } else {
           return SizedBox();
         }
       },
     ));
-    return OpenContainer<bool>(
-      transitionType: ContainerTransitionType.fadeThrough,
-      openBuilder: (BuildContext context, VoidCallback _) {
-        return BudgetPage(budget: budget);
-      },
-      onClosed: () {}(),
-      closedColor: Theme.of(context).canvasColor,
-      tappable: false,
-      closedShape: const RoundedRectangleBorder(),
-      middleColor: Theme.of(context).colorScheme.white,
-      transitionDuration: Duration(milliseconds: 500),
-      closedElevation: 0.0,
-      openColor: Theme.of(context).canvasColor,
-      closedBuilder: (BuildContext _, VoidCallback openContainer) {
-        return Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(
-            horizontal: 10.0,
-            vertical: 0,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: HexColor(budget.colour).withOpacity(0.8),
-                offset: Offset(0, 2),
-                blurRadius: 10.0,
-                spreadRadius: -2,
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            clipBehavior: Clip.antiAlias,
-            borderRadius: BorderRadius.circular(15),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: AnimatedGooBackground(
-                      randomOffset: budget.name.length,
-                      color: HexColor(budget.colour).withOpacity(0.8)),
-                ),
-                Tappable(
-                  type: MaterialType.transparency,
-                  onTap: () {
-                    openContainer();
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 25.0,
-                      vertical: 20,
-                    ),
-                    child: widget,
-                  ),
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 5.0,
+        vertical: 0,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Theme.of(context).colorScheme.shadowColorLight.withAlpha(50)
+                  : Colors.transparent,
+              blurRadius: 20,
+              offset: Offset(0, 2),
+              spreadRadius: 8,
             ),
+          ],
+        ),
+        child: OpenContainer<bool>(
+          transitionType: ContainerTransitionType.fade,
+          openBuilder: (BuildContext context, VoidCallback _) {
+            return BudgetPage(budget: budget);
+          },
+          onClosed: () {}(),
+          closedColor: Theme.of(context).canvasColor,
+          tappable: false,
+          closedShape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
-        );
-      },
+          middleColor: Theme.of(context).colorScheme.white,
+          transitionDuration: Duration(milliseconds: 500),
+          closedElevation: 0.0,
+          openColor: Theme.of(context).canvasColor,
+          closedBuilder: (BuildContext _, VoidCallback openContainer) {
+            return Tappable(
+              onTap: () {
+                openContainer();
+              },
+              borderRadius: 20,
+              child: widget,
+              color: Theme.of(context).colorScheme.lightDarkAccent,
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -224,18 +247,19 @@ class AnimatedGooBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.white,
-        backgroundBlendMode: BlendMode.srcOver,
+        color: Colors.white.withAlpha(200),
       ),
       child: PlasmaRenderer(
         type: PlasmaType.infinity,
         particles: 10,
-        color: this.color.withOpacity(0.5),
+        color: Theme.of(context).brightness == Brightness.light
+            ? this.color.withOpacity(0.1)
+            : this.color.withOpacity(0.3),
         blur: 0.3,
         size: 1.3,
         speed: 3.3,
         offset: 0,
-        blendMode: BlendMode.srcOver,
+        blendMode: BlendMode.multiply,
         particleType: ParticleType.atlas,
         variation1: 0,
         variation2: 0,

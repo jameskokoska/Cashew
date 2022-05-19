@@ -342,7 +342,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       _selectCategoriesInputController =
           new TextEditingController(text: "All categories");
 
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
       });
     } else {

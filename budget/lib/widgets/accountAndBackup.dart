@@ -554,7 +554,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
         (_) => _importEntries(widget.assignedColumns, widget.fileContents));
   }
 

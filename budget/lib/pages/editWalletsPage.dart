@@ -5,6 +5,8 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -30,6 +32,14 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
     return PageFramework(
       title: widget.title,
       navbar: false,
+      floatingActionButton: AnimatedScaleDelayed(
+        child: FAB(
+          tooltip: "Add Wallet",
+          openPage: AddWalletPage(
+            title: "Add Wallet",
+          ),
+        ),
+      ),
       slivers: [
         StreamBuilder<List<TransactionWallet>>(
           stream: database.watchAllWallets(),

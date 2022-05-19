@@ -107,7 +107,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           new TextEditingController(text: widget.wallet!.name);
       _colorInputController =
           new TextEditingController(text: widget.wallet!.colour);
-      WidgetsBinding.instance?.addPostFrameCallback((_) {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {});
     } else {
       _nameInputController = new TextEditingController();
       _colorInputController = new TextEditingController();

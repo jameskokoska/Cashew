@@ -10,9 +10,14 @@ openBottomSheet(context, child, {bool maxHeight: true, bool handle: true}) {
       elevation: 8,
       isBackdropInteractable: true,
       dismissOnBackdropTap: true,
-      snapSpec: const SnapSpec(
+      snapSpec: SnapSpec(
         snap: true,
-        snappings: [0.6, 1.0],
+        snappings: [
+          0.6,
+          1 -
+              MediaQuery.of(context).padding.top /
+                  MediaQuery.of(context).size.height
+        ],
         positioning: SnapPositioning.relativeToAvailableSpace,
       ),
       color: Colors.transparent,

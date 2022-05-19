@@ -263,3 +263,41 @@ class _CountNumberState extends State<CountNumber> {
     return builtWidget;
   }
 }
+
+class AnimatedScaleDelayed extends StatefulWidget {
+  const AnimatedScaleDelayed({
+    Key? key,
+    required this.child,
+    this.delay = const Duration(milliseconds: 250),
+  }) : super(key: key);
+
+  final Widget child;
+  final Duration delay;
+
+  @override
+  State<AnimatedScaleDelayed> createState() => _AnimatedScaleDelayedState();
+}
+
+class _AnimatedScaleDelayedState extends State<AnimatedScaleDelayed> {
+  bool scaleIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(widget.delay, () {
+      setState(() {
+        scaleIn = true;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      duration: Duration(milliseconds: 1100),
+      scale: scaleIn ? 1 : 0,
+      curve: ElasticOutCurve(0.8),
+      child: widget.child,
+    );
+  }
+}

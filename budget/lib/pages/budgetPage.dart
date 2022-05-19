@@ -223,7 +223,7 @@ class WidgetSize extends StatefulWidget {
 class _WidgetSizeState extends State<WidgetSize> {
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance!.addPostFrameCallback(postFrameCallback);
+    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
     return Container(
       key: widgetKey,
       child: widget.child,

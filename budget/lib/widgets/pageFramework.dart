@@ -1,3 +1,4 @@
+import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -22,6 +23,7 @@ class PageFramework extends StatefulWidget {
     this.subtitleAlignment = Alignment.bottomCenter,
     this.customTitleBuilder,
     this.onScroll,
+    this.floatingActionButton,
   }) : super(key: key);
 
   final String title;
@@ -41,6 +43,7 @@ class PageFramework extends StatefulWidget {
   final Alignment subtitleAlignment;
   final Function(AnimationController _animationController)? customTitleBuilder;
   final Function(double position)? onScroll;
+  final Widget? floatingActionButton;
   @override
   State<PageFramework> createState() => _PageFrameworkState();
 }
@@ -109,7 +112,7 @@ class _PageFrameworkState extends State<PageFramework>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    Widget scaffold = Scaffold(
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -146,6 +149,22 @@ class _PageFrameworkState extends State<PageFramework>
         ],
       ),
     );
+    if (widget.floatingActionButton != null) {
+      return Stack(
+        children: [
+          scaffold,
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15, right: 15),
+              child: widget.floatingActionButton ?? Container(),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return scaffold;
+    }
   }
 }
 

@@ -32,7 +32,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration(milliseconds: 0), () {
       setState(() {
         loaded = true;
@@ -42,7 +42,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -71,7 +71,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         minY: widget.minPair.y,
         maxY: widget.maxPair.y,
         maxX: widget.maxPair.x + 1,
-        axisTitleData: axisTitleData,
+        // axisTitleData: axisTitleData,
         titlesData: titlesData,
         extraLinesData: extraLinesData,
         // clipData: FlClipData.all(),
@@ -79,10 +79,18 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   ExtraLinesData get extraLinesData => ExtraLinesData(
         horizontalLines: [
-          HorizontalLine(
-            y: 0,
-            color: widget.color.withAlpha(170),
-          ),
+          // HorizontalLine(
+          //   y: 0,
+          //   color: widget.color.withAlpha(170),
+          // ),
+        ],
+        verticalLines: [
+          VerticalLine(
+            x: 0,
+            dashArray: [2, 10],
+            strokeWidth: 2,
+            color: widget.color.withAlpha(40),
+          )
         ],
       );
 
@@ -90,6 +98,9 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
+          getTextStyles: (_, __) {
+            return TextStyle(color: widget.color.withAlpha(170));
+          },
           getTitles: (value) {
             DateTime currentDate = DateTime.now();
             return getWordedDateShort(
@@ -101,19 +112,23 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               showTodayTomorrow: false,
             );
           },
-          interval: widget.maxPair.x / 5,
+          interval: widget.maxPair.x / 4,
         ),
         leftTitles: SideTitles(
           showTitles: true,
+          getTextStyles: (_, __) {
+            return TextStyle(color: widget.color.withAlpha(70));
+          },
           getTitles: (value) {
             return getWordedNumber(value);
           },
           reservedSize: 30,
           interval:
-              ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 5.5) /
+              ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
                           5)
                       .ceil() *
                   5,
+          margin: 10,
         ),
         topTitles: SideTitles(
           showTitles: false,
@@ -123,17 +138,17 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         ),
       );
 
-  FlAxisTitleData get axisTitleData => FlAxisTitleData(
-        bottomTitle: AxisTitle(
-          showTitle: false,
-          titleText: "Monthly Spending",
-          margin: 10,
-          textStyle: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
+  // FlAxisTitleData get axisTitleData => FlAxisTitleData(
+  //       bottomTitle: AxisTitle(
+  //         showTitle: false,
+  //         titleText: "Monthly Spending",
+  //         margin: 10,
+  //         textStyle: TextStyle(
+  //           fontSize: 15,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //     );
 
   LineTouchData get lineTouchData => LineTouchData(
         handleBuiltInTouches: false,
@@ -146,21 +161,22 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   FlGridData get gridData => FlGridData(
         show: true,
         verticalInterval:
-            ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) / 5,
+            ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) / 4,
         horizontalInterval:
-            ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 6,
+            ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.5,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: widget.color.withAlpha(170),
-            strokeWidth: 1,
-            dashArray: [1, 5],
+            color: widget.color.withAlpha(40),
+            strokeWidth: 2,
+            dashArray: [2, 13],
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: widget.color.withAlpha(170),
-            strokeWidth: 1,
-            dashArray: [1, 5],
+            color: widget.color.withAlpha(40),
+            // color: Colors.transparent,
+            strokeWidth: 2,
+            dashArray: [2, 10],
           );
         },
       );
@@ -169,7 +185,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         show: true,
         border: Border(
           bottom: BorderSide(color: Colors.transparent),
-          left: BorderSide(color: widget.color.withAlpha(200), width: 3),
+          // left: BorderSide(color: widget.color.withAlpha(200), width: 3),
           right: BorderSide(color: Colors.transparent),
           top: BorderSide(color: Colors.transparent),
         ),

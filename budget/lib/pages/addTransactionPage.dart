@@ -179,7 +179,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       // }
       textAddTransaction = "Edit Transaction";
 
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
       });
     } else {

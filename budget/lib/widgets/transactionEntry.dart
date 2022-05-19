@@ -33,7 +33,8 @@ class TransactionEntry extends StatefulWidget {
   State<TransactionEntry> createState() => _TransactionEntryState();
 }
 
-Map<String, List<int>> globalSelectedID = {};
+ValueNotifier<Map<String, List<int>>> globalSelectedID =
+    ValueNotifier<Map<String, List<int>>>({});
 
 class _TransactionEntryState extends State<TransactionEntry> {
   final double fabSize = 50;
@@ -42,14 +43,14 @@ class _TransactionEntryState extends State<TransactionEntry> {
 
   @override
   Widget build(BuildContext context) {
-    if (globalSelectedID[widget.listID ?? "0"] == null) {
-      globalSelectedID[widget.listID ?? "0"] = [];
+    if (globalSelectedID.value[widget.listID ?? "0"] == null) {
+      globalSelectedID.value[widget.listID ?? "0"] = [];
     }
     if (selected !=
-        globalSelectedID[widget.listID ?? "0"]!
+        globalSelectedID.value[widget.listID ?? "0"]!
             .contains(widget.transaction.transactionPk))
       setState(() {
-        selected = globalSelectedID[widget.listID ?? "0"]!
+        selected = globalSelectedID.value[widget.listID ?? "0"]!
             .contains(widget.transaction.transactionPk);
       });
 
@@ -74,12 +75,13 @@ class _TransactionEntryState extends State<TransactionEntry> {
             borderRadius: 15,
             onLongPress: () {
               if (!selected) {
-                globalSelectedID[widget.listID ?? "0"]!
+                globalSelectedID.value[widget.listID ?? "0"]!
                     .add(widget.transaction.transactionPk);
               } else {
-                globalSelectedID[widget.listID ?? "0"]!
+                globalSelectedID.value[widget.listID ?? "0"]!
                     .remove(widget.transaction.transactionPk);
               }
+              globalSelectedID.notifyListeners();
               setState(() {
                 selected = !selected;
               });
@@ -100,7 +102,10 @@ class _TransactionEntryState extends State<TransactionEntry> {
               ),
               decoration: BoxDecoration(
                 color: selected
-                    ? Theme.of(context).colorScheme.accentColor.withAlpha(100)
+                    ? Theme.of(context)
+                        .colorScheme
+                        .lightDarkAccentHeavy
+                        .withAlpha(200)
                     : Colors.transparent,
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
