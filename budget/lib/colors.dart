@@ -1,5 +1,6 @@
 import 'package:budget/main.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 //import 'package:budget/colors.dart';
 //Theme.of(context).colorScheme.lightDarkAccent
@@ -11,11 +12,13 @@ extension ColorsDefined on ColorScheme {
       brightness == Brightness.light ? Colors.black : Colors.white;
   Color get textLight =>
       brightness == Brightness.light ? Color(0xFF888888) : Color(0xFF494949);
+  Color get textLightHeavy =>
+      brightness == Brightness.light ? Color(0xFF888888) : Color(0xFF1D1D1D);
   Color get lightDarkAccent => brightness == Brightness.light
       ? const Color(0xFFFAFAFA)
       : const Color(0xFF242424);
   Color get lightDarkAccentHeavy => brightness == Brightness.light
-      ? const Color(0xFFDBDBDB)
+      ? Color(0xFFEBEBEB)
       : const Color(0xFF444444);
   Color get shadowColor => brightness == Brightness.light
       ? const Color(0x655A5A5A)
@@ -34,8 +37,10 @@ extension ColorsDefined on ColorScheme {
       ? getSettingConstants(appStateSettings)["accentColor"]
       : getSettingConstants(appStateSettings)["accentColor"];
   Color get accentColorHeavy => brightness == Brightness.light
-      ? getSettingConstants(appStateSettings)["accentColor"]
-      : getSettingConstants(appStateSettings)["accentColor"];
+      ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
+          amount: 0)
+      : lightenPastel(getSettingConstants(appStateSettings)["accentColor"],
+          amount: 0.5);
 
   Color get selectableColorRed => brightness == Brightness.light
       ? Colors.red.shade400
@@ -96,6 +101,49 @@ Color lighten(Color color, [double amount = .1]) {
   final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
 
   return hslLight.toColor();
+}
+
+Color lightenPastel(Color color, {double amount = 0.1}) {
+  return Color.alphaBlend(
+    Colors.white.withOpacity(amount),
+    color,
+  );
+}
+
+Color darkenPastel(Color color, {double amount = 0.1}) {
+  return Color.alphaBlend(
+    Colors.black.withOpacity(amount),
+    color,
+  );
+}
+
+Color dynamicPastel(
+  BuildContext context,
+  Color color, {
+  double amount = 0.1,
+  bool inverse = false,
+  double? amountLight,
+  double? amountDark,
+}) {
+  if (amountLight == null) {
+    amountLight = amount;
+  }
+  if (amountDark == null) {
+    amountDark = amount;
+  }
+  if (inverse) {
+    if (Theme.of(context).brightness == Brightness.light) {
+      return darkenPastel(color, amount: amountDark);
+    } else {
+      return lightenPastel(color, amount: amountLight);
+    }
+  } else {
+    if (Theme.of(context).brightness == Brightness.light) {
+      return lightenPastel(color, amount: amountLight);
+    } else {
+      return darkenPastel(color, amount: amountDark);
+    }
+  }
 }
 
 class HexColor extends Color {

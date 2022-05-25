@@ -7,6 +7,7 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -66,14 +67,16 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
             children: pages,
             physics: NeverScrollableScrollPhysics(),
           ),
+          extendBody: true,
+          resizeToAvoidBottomInset: false,
+          bottomNavigationBar: BottomNavBar(onChanged: (index) {
+            changePage(index);
+          }),
         ),
         // IndexedStack(
         //   children: pages,
         //   index: currentPage,
         // ),
-        BottomNavBar(onChanged: (index) {
-          changePage(index);
-        }),
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
@@ -82,74 +85,15 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                ValueListenableBuilder(
-                  valueListenable: globalSelectedID,
-                  builder: (context, value, widget) {
-                    if (currentPage != 1) {
-                      return Container();
-                    }
-                    bool animateIn = (value as Map)["Transactions"] != null &&
-                        (value as Map)["Transactions"].length > 0;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: AnimatedScale(
-                        duration: animateIn
-                            ? Duration(milliseconds: 1100)
-                            : Duration(milliseconds: 500),
-                        scale: animateIn ? 1 : 0,
-                        curve: animateIn
-                            ? ElasticOutCurve(0.8)
-                            : Curves.easeInOutCubic,
-                        child: Tappable(
-                          color: Theme.of(context).colorScheme.accentColor,
-                          borderRadius: 50,
-                          child: Container(
-                            height: 45,
-                            width: 45,
-                            child: Center(
-                              child: Icon(
-                                Icons.delete,
-                                color: Theme.of(context).colorScheme.white,
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            openPopup(
-                              context,
-                              title: "Delete selected transactions?",
-                              description: "Are you sure you want to delete " +
-                                  (value as Map)["Transactions"]
-                                      .length
-                                      .toString() +
-                                  " transactions?",
-                              icon: Icons.delete_rounded,
-                              onCancel: () {
-                                Navigator.pop(context);
-                              },
-                              onCancelLabel: "Cancel",
-                              onSubmit: () {
-                                for (int transactionID
-                                    in (value as Map)["Transactions"]) {
-                                  database.deleteTransaction(transactionID);
-                                }
-                                openSnackbar(
-                                    context,
-                                    "Deleted " +
-                                        (value as Map)["Transactions"]
-                                            .length
-                                            .toString() +
-                                        " transactions");
-                                globalSelectedID.value["Transactions"] = [];
-                                globalSelectedID.notifyListeners();
-                                Navigator.pop(context);
-                              },
-                              onSubmitLabel: "Delete",
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
+                SelectedTransactionsButton(
+                  pageID: "Transactions",
+                  currentPage: currentPage,
+                  pageToShow: 1,
+                ),
+                SelectedTransactionsButton(
+                  pageID: "0",
+                  currentPage: currentPage,
+                  pageToShow: 0,
                 ),
                 Stack(
                   children: [
@@ -183,6 +127,85 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           ),
         ),
       ]),
+    );
+  }
+}
+
+class SelectedTransactionsButton extends StatelessWidget {
+  const SelectedTransactionsButton(
+      {Key? key,
+      required this.currentPage,
+      required this.pageID,
+      required this.pageToShow})
+      : super(key: key);
+
+  final int currentPage;
+  final String pageID;
+  final int pageToShow;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: globalSelectedID,
+      builder: (context, value, widget) {
+        if (currentPage != pageToShow) {
+          return Container();
+        }
+        bool animateIn =
+            (value as Map)[pageID] != null && (value as Map)[pageID].length > 0;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: AnimatedScale(
+            duration: animateIn
+                ? Duration(milliseconds: 1100)
+                : Duration(milliseconds: 500),
+            scale: animateIn ? 1 : 0,
+            curve: animateIn ? ElasticOutCurve(0.8) : Curves.easeInOutCubic,
+            child: Tappable(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: 50,
+              child: Container(
+                height: 45,
+                width: 45,
+                child: Center(
+                  child: Icon(
+                    Icons.delete,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ),
+              ),
+              onTap: () {
+                openPopup(
+                  context,
+                  title: "Delete selected transactions?",
+                  description: "Are you sure you want to delete " +
+                      (value as Map)["Transactions"].length.toString() +
+                      " transactions?",
+                  icon: Icons.delete_rounded,
+                  onCancel: () {
+                    Navigator.pop(context);
+                  },
+                  onCancelLabel: "Cancel",
+                  onSubmit: () {
+                    for (int transactionID in (value as Map)[pageID]) {
+                      database.deleteTransaction(transactionID);
+                    }
+                    openSnackbar(
+                        context,
+                        "Deleted " +
+                            (value as Map)[pageID].length.toString() +
+                            " transactions");
+                    globalSelectedID.value[pageID] = [];
+                    globalSelectedID.notifyListeners();
+                    Navigator.pop(context);
+                  },
+                  onSubmitLabel: "Delete",
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

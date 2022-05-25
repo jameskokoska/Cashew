@@ -188,46 +188,47 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       _noteInputController = new TextEditingController();
 
       Future.delayed(Duration(milliseconds: 0), () {
+        final next = PopupFramework(
+          title: "Select Category",
+          child: SelectCategory(
+            selectedCategory: selectedCategory,
+            setSelectedCategory: setSelectedCategory,
+            skipIfSet: true,
+            next: () {
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  title: "Enter Amount",
+                  child: SelectAmount(
+                    amountPassed: selectedAmountCalculation ?? "",
+                    setSelectedAmount: setSelectedAmount,
+                    next: () async {
+                      await addTransaction();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    nextLabel: textAddTransaction,
+                  ),
+                ),
+              );
+            },
+          ),
+        );
         openBottomSheet(
           context,
-          PopupFramework(
-            child: SelectTitle(
-                setSelectedTitle: setSelectedTitleController,
-                setSelectedTags: setSelectedTags,
-                selectedCategory: selectedCategory,
-                setSelectedCategory: setSelectedCategory,
-                next: () {
-                  openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "Select Category",
-                      child: SelectCategory(
-                        selectedCategory: selectedCategory,
-                        setSelectedCategory: setSelectedCategory,
-                        skipIfSet: true,
-                        next: () {
-                          openBottomSheet(
-                            context,
-                            PopupFramework(
-                              title: "Enter Amount",
-                              child: SelectAmount(
-                                amountPassed: selectedAmountCalculation ?? "",
-                                setSelectedAmount: setSelectedAmount,
-                                next: () async {
-                                  await addTransaction();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                nextLabel: textAddTransaction,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                }),
-          ),
+          appStateSettings["askForTransactionTitle"]
+              ? PopupFramework(
+                  child: SelectTitle(
+                    setSelectedTitle: setSelectedTitleController,
+                    setSelectedTags: setSelectedTags,
+                    selectedCategory: selectedCategory,
+                    setSelectedCategory: setSelectedCategory,
+                    next: () {
+                      openBottomSheet(context, next);
+                    },
+                  ),
+                )
+              : next,
         );
       });
     }
@@ -551,13 +552,14 @@ class _SelectTitleState extends State<SelectTitle> {
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
-                Container(height: 2),
+                Container(height: 14),
                 Container(
-                  width: MediaQuery.of(context).size.width - 130,
+                  width: MediaQuery.of(context).size.width - 36,
                   child: TextInput(
                     bubbly: true,
                     icon: Icons.title_rounded,
-                    backgroundColor: Theme.of(context).canvasColor,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.lightDarkAccentHeavy,
                     initialValue: widget.selectedTitle,
                     autoFocus: true,
                     onEditingComplete: () {
@@ -579,33 +581,33 @@ class _SelectTitleState extends State<SelectTitle> {
                 ),
               ],
             ),
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: CategoryIcon(
-                key: ValueKey(selectedCategory?.categoryPk ?? ""),
-                margin: EdgeInsets.zero,
-                categoryPk: selectedCategory?.categoryPk ?? 0,
-                size: 55,
-                onTap: () {
-                  openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "Select Category",
-                      child: SelectCategory(
-                        setSelectedCategory: (TransactionCategory category) {
-                          widget.setSelectedCategory(category);
-                          setState(() {
-                            selectedCategory = category;
-                          });
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            )
           ],
         ),
+        // AnimatedSwitcher(
+        //   duration: Duration(milliseconds: 300),
+        //   child: CategoryIcon(
+        //     key: ValueKey(selectedCategory?.categoryPk ?? ""),
+        //     margin: EdgeInsets.zero,
+        //     categoryPk: selectedCategory?.categoryPk ?? 0,
+        //     size: 55,
+        //     onTap: () {
+        //       openBottomSheet(
+        //         context,
+        //         PopupFramework(
+        //           title: "Select Category",
+        //           child: SelectCategory(
+        //             setSelectedCategory: (TransactionCategory category) {
+        //               widget.setSelectedCategory(category);
+        //               setState(() {
+        //                 selectedCategory = category;
+        //               });
+        //             },
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
         Container(height: 20),
         Button(
           label: selectedCategory == null ? "Select Category" : "Enter Amount",

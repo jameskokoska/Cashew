@@ -24,6 +24,7 @@ class PageFramework extends StatefulWidget {
     this.customTitleBuilder,
     this.onScroll,
     this.floatingActionButton,
+    this.textColor,
   }) : super(key: key);
 
   final String title;
@@ -44,6 +45,7 @@ class PageFramework extends StatefulWidget {
   final Function(AnimationController _animationController)? customTitleBuilder;
   final Function(double position)? onScroll;
   final Widget? floatingActionButton;
+  final Color? textColor;
   @override
   State<PageFramework> createState() => _PageFrameworkState();
 }
@@ -134,6 +136,7 @@ class _PageFrameworkState extends State<PageFramework>
             animationControllerOpacity: _animationControllerOpacity,
             animationControllerShift: _animationControllerShift,
             animationController0at50: _animationController0at50,
+            textColor: widget.textColor,
           ),
           ...widget.slivers,
           widget.listWidgets != null
@@ -189,6 +192,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.animationControllerShift,
     this.animationController0at50,
     this.actions,
+    this.textColor,
   }) : super(key: key);
 
   final String title;
@@ -209,10 +213,12 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final AnimationController? animationController0at50;
   final bool? showElevation;
   final List<Widget>? actions;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      shadowColor: Theme.of(context).shadowColor.withAlpha(130),
       leading: backButton == true && animationControllerOpacity != null
           ? Container(
               padding: EdgeInsets.only(top: 12.5),
@@ -231,7 +237,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
             )
           : Container(),
       backgroundColor: appBarBackgroundColor == null
-          ? Theme.of(context).canvasColor
+          ? Theme.of(context).colorScheme.secondaryContainer
           : appBarBackgroundColor,
       floating: false,
       pinned: pinned,
@@ -247,6 +253,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                   text: title,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
+                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 )
             : customTitleBuilder == null
                 ? AnimatedBuilder(
@@ -266,13 +273,20 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                           text: title,
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
+                          textColor: textColor == null
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
+                              : textColor,
                         ),
                   )
                 : customTitleBuilder!(animationControllerShift!),
         background: Stack(
           children: [
             Container(
-              color: appBarBackgroundColorStart,
+              color: appBarBackgroundColorStart == null
+                  ? Theme.of(context).canvasColor
+                  : appBarBackgroundColorStart,
             ),
             subtitle != null &&
                     animationControllerShift != null &&
@@ -281,13 +295,14 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     animation: animationControllerShift!,
                     builder: (_, child) {
                       return Transform.translate(
-                          offset: Offset(
-                            0,
-                            -(subtitleSize ?? 0) *
-                                (animationControllerShift!.value) *
-                                subtitleAnimationSpeed,
-                          ),
-                          child: child);
+                        offset: Offset(
+                          0,
+                          -(subtitleSize ?? 0) *
+                              (animationControllerShift!.value) *
+                              subtitleAnimationSpeed,
+                        ),
+                        child: child,
+                      );
                     },
                     child: Align(
                       alignment: subtitleAlignment,

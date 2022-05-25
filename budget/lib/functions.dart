@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultTags.dart';
 import 'package:budget/struct/transactionCategory.dart';
@@ -275,4 +278,41 @@ int daysBetween(DateTime from, DateTime to) {
   from = DateTime(from.year, from.month, from.day);
   to = DateTime(to.year, to.month, to.day);
   return (to.difference(from).inHours / 24).round();
+}
+
+String getWelcomeMessage() {
+  int h24 = DateTime.now().hour;
+  List<String> greetings = [
+    "Hello,",
+    "Hi there,",
+    "Hi,",
+    "How are you,",
+    "What's up",
+    "Hello there",
+    "Hope all is well",
+  ];
+  List<String> greetingsMorning = [
+    "Good morning",
+    "Good day",
+  ];
+  List<String> greetingsAfternoon = [
+    "Good afternoon",
+    "Good day",
+  ];
+  List<String> greetingsEvening = ["Good evening"];
+  List<String> greetingsLate = ["Good night", "Get some rest"];
+  if (random.nextBool() == true) {
+    if (h24 <= 12 && h24 >= 6)
+      return greetingsMorning[random.nextInt(greetingsMorning.length)];
+    else if (h24 <= 16 && h24 >= 13)
+      return greetingsAfternoon[random.nextInt(greetingsAfternoon.length)];
+    else if (h24 <= 22 && h24 >= 19)
+      return greetingsEvening[random.nextInt(greetingsEvening.length)];
+    else if (h24 >= 23 || h24 <= 5)
+      return greetingsLate[random.nextInt(greetingsLate.length)];
+    else
+      return greetings[random.nextInt(greetings.length)];
+  } else {
+    return greetings[random.nextInt(greetings.length)];
+  }
 }

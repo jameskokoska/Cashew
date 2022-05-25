@@ -24,19 +24,19 @@ class PopupFramework extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(height: 15),
+              Container(height: 17),
               title == null
                   ? Container()
                   : Padding(
                       padding: EdgeInsets.only(left: 18, right: 18, top: 5),
                       child: TextFont(
                         text: title ?? "",
-                        fontSize: 30,
+                        fontSize: 32,
                         fontWeight: FontWeight.bold,
                         maxLines: 5,
                       ),
                     ),
-              title == null ? Container() : Container(height: 10),
+              title == null ? Container() : Container(height: 13),
               Padding(
                 padding: padding
                     ? EdgeInsets.only(left: 18, right: 18, bottom: 10)

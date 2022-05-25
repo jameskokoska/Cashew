@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -35,9 +36,22 @@ class _BudgetPageState extends State<BudgetPage> {
   @override
   Widget build(BuildContext context) {
     DateTimeRange budgetRange = getBudgetDate(widget.budget, DateTime.now());
+    ColorScheme budgetColorScheme = ColorScheme.fromSeed(
+      seedColor: HexColor(widget.budget.colour),
+      brightness: getSettingConstants(appStateSettings)["theme"] ==
+              ThemeMode.system
+          ? MediaQuery.of(context).platformBrightness
+          : getSettingConstants(appStateSettings)["theme"] == ThemeMode.light
+              ? Brightness.light
+              : getSettingConstants(appStateSettings)["theme"] == ThemeMode.dark
+                  ? Brightness.dark
+                  : Brightness.light,
+    );
     return PageFramework(
       title: widget.budget.name,
-      appBarBackgroundColor: HexColor(widget.budget.colour),
+      appBarBackgroundColor: budgetColorScheme.secondaryContainer,
+      appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
+      textColor: Theme.of(context).colorScheme.black,
       navbar: false,
       showElevationAfterScrollPast: budgetHeaderHeight,
       slivers: [
@@ -78,7 +92,7 @@ class _BudgetPageState extends State<BudgetPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.vertical(
                               bottom: Radius.circular(10)),
-                          color: HexColor(widget.budget.colour),
+                          color: budgetColorScheme.secondaryContainer,
                         ),
                         child: Column(
                           children: [
@@ -99,6 +113,8 @@ class _BudgetPageState extends State<BudgetPage> {
                                           fontWeight: FontWeight.bold,
                                           decimals: moneyDecimals(
                                               widget.budget.amount),
+                                          textColor: budgetColorScheme
+                                              .onSecondaryContainer,
                                         ),
                                       ),
                                       Container(
@@ -110,6 +126,8 @@ class _BudgetPageState extends State<BudgetPage> {
                                                   widget.budget.amount),
                                           fontSize: 16,
                                           textAlign: TextAlign.left,
+                                          textColor: budgetColorScheme
+                                              .onSecondaryContainer,
                                         ),
                                       ),
                                     ],
@@ -131,6 +149,8 @@ class _BudgetPageState extends State<BudgetPage> {
                                           fontWeight: FontWeight.bold,
                                           decimals: moneyDecimals(
                                               widget.budget.amount),
+                                          textColor: budgetColorScheme
+                                              .onSecondaryContainer,
                                         ),
                                       ),
                                       Container(
@@ -142,6 +162,8 @@ class _BudgetPageState extends State<BudgetPage> {
                                                   widget.budget.amount),
                                           fontSize: 16,
                                           textAlign: TextAlign.left,
+                                          textColor: budgetColorScheme
+                                              .onSecondaryContainer,
                                         ),
                                       ),
                                     ],
@@ -167,37 +189,19 @@ class _BudgetPageState extends State<BudgetPage> {
                       ),
                     ),
                   ),
-                  Container(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: TextFont(
-                      text: "Categories",
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   Container(height: 20),
                   PieChartWrapper(
                     data: snapshot.data ?? [],
                     totalSpent: totalSpent,
                   ),
-                  Container(height: 45),
+                  Container(height: 35),
                   ...categoryEntries,
+                  Container(height: 15),
                 ]),
               );
             }
             return SliverToBoxAdapter(child: Container());
           },
-        ),
-        SliverPadding(
-          padding: EdgeInsets.only(top: 25, left: 18, right: 18, bottom: 8),
-          sliver: SliverToBoxAdapter(
-            child: TextFont(
-              text: "Transactions",
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
         ),
         ...getTransactionsSlivers(budgetRange.start, budgetRange.end,
             categoryFks: widget.budget.categoryFks ?? []),

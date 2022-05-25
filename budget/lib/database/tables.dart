@@ -23,6 +23,7 @@ const int DEFAULT_LIMIT = 50;
 const int DEFAULT_OFFSET = 0;
 
 enum BudgetReoccurence { custom, daily, weekly, monthly, yearly }
+
 enum ThemeSetting { dark, light }
 
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
@@ -390,7 +391,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         }
       }).watch();
     } else if (search == "") {
-      print("THIS ONE");
       final query = (select(transactions)
         ..where((tbl) {
           if (startDate != null && endDate != null) {

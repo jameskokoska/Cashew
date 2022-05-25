@@ -4,6 +4,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/struct/transactionTag.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -54,20 +55,9 @@ class _TransactionEntryState extends State<TransactionEntry> {
             .contains(widget.transaction.transactionPk);
       });
 
-    return OpenContainer<bool>(
-      transitionType: ContainerTransitionType.fade,
-      openBuilder: (BuildContext context, VoidCallback _) {
-        return widget.openPage;
-      },
-      onClosed: () {}(),
-      closedColor: Theme.of(context).canvasColor,
-      tappable: false,
-      closedShape: const RoundedRectangleBorder(),
-      middleColor: Theme.of(context).colorScheme.white,
-      transitionDuration: Duration(milliseconds: 500),
-      closedElevation: 0.0,
-      openColor: Theme.of(context).colorScheme.lightDarkAccent,
-      closedBuilder: (BuildContext _, VoidCallback openContainer) {
+    return OpenContainerNavigation(
+      borderRadius: 15,
+      button: (openContainer) {
         return Padding(
           padding:
               const EdgeInsets.only(left: 13, right: 13, top: 1, bottom: 2),
@@ -233,6 +223,8 @@ class _TransactionEntryState extends State<TransactionEntry> {
           ),
         );
       },
+      openPage: widget.openPage,
+      closedColor: Theme.of(context).canvasColor,
     );
   }
 }
@@ -288,12 +280,16 @@ class CategoryIcon extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(13)),
                 ),
           child: Tappable(
-            color: category != null
-                ? HexColor(category.colour,
-                        Theme.of(context).colorScheme.lightDarkAccent)
-                    .withOpacity(
-                        noBackground ? (category == null ? 0.55 : 0) : 0.55)
-                : Theme.of(context).colorScheme.lightDarkAccent,
+            color: noBackground
+                ? Colors.transparent
+                : category != null
+                    ? dynamicPastel(
+                        context,
+                        HexColor(category.colour,
+                            Theme.of(context).colorScheme.lightDarkAccent),
+                        amountLight: 0.55,
+                        amountDark: 0.35)
+                    : Theme.of(context).colorScheme.lightDarkAccent,
             onTap: onTap,
             borderRadius: 10,
             child: Center(

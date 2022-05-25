@@ -50,7 +50,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       title: widget.title,
       description: widget.description,
       afterWidget: CupertinoSwitch(
-        activeColor: Theme.of(context).colorScheme.accentColorHeavy,
+        activeColor: Theme.of(context).colorScheme.primary,
         value: value,
         onChanged: (_) {
           toggleSwitch();
@@ -90,7 +90,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
           afterWidget: Icon(
             Icons.chevron_right_rounded,
             size: 30,
-            color: Theme.of(context).colorScheme.accentColor,
+            color: Theme.of(context).colorScheme.secondary,
           ),
         );
       },
@@ -130,7 +130,7 @@ class SettingsContainerDropdown extends StatelessWidget {
           initial: initial,
           items: items,
           onChanged: onChanged,
-          backgroundColor: Theme.of(context).colorScheme.lightDarkAccent,
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         ),
       ),
     );
@@ -171,8 +171,7 @@ class SettingsContainer extends StatelessWidget {
                     Icon(
                       icon,
                       size: 30,
-                      color: lighten(
-                          Theme.of(context).colorScheme.accentColorHeavy),
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     Container(width: 16),
                     Expanded(
@@ -231,7 +230,7 @@ class SettingsHeader extends StatelessWidget {
         text: title,
         fontSize: 15,
         fontWeight: FontWeight.bold,
-        textColor: Theme.of(context).colorScheme.accentColor,
+        textColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }

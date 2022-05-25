@@ -158,7 +158,8 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       final radius = isTouched ? 110.0 : 100.0;
       final widgetScale = isTouched ? 1.4 : 1.0;
       return PieChartSectionData(
-        color: HexColor(widget.data[i].category.colour).withOpacity(0.8),
+        color: dynamicPastel(context, HexColor(widget.data[i].category.colour),
+            amountLight: 0.3, amountDark: 0.1),
         value: widget.data[i].total / widget.totalSpent,
         title: "",
         radius: radius,

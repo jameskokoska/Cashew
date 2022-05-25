@@ -28,7 +28,8 @@ void main() async {
   runApp(InitializeDatabase());
 }
 
-final int randomInt = Random().nextInt(100);
+final Random random = new Random();
+final int randomInt = random.nextInt(100);
 
 Future<bool> updateSettings(setting, value,
     {List<int> pagesNeedingRefresh: const []}) async {
@@ -73,6 +74,8 @@ Future<Map<String, dynamic>> getUserSettings() async {
     "accentColor": toHexString(Color(0xFF1B447A)),
     "showWalletSwitcher": true,
     "showCumulativeSpending": true,
+    "askForTransactionTitle": true,
+    "username": "",
   };
 
   final prefs = await SharedPreferences.getInstance();
@@ -198,27 +201,26 @@ class App extends StatelessWidget {
       key: ValueKey(1),
       title: 'Budget App',
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: getSettingConstants(appStateSettings)["accentColor"],
+          brightness: Brightness.light,
+        ),
+        useMaterial3: true,
+        applyElevationOverlayColor: false,
+        typography: Typography.material2014(),
         fontFamily: 'Avenir',
-        primaryColor: Colors.white,
-        primaryColorDark: Colors.grey[200],
-        primaryColorLight: Colors.grey[100],
-        primaryColorBrightness: Brightness.light,
-        brightness: Brightness.light,
-        canvasColor: Colors.grey[100],
-        accentColor: getSettingConstants(appStateSettings)["accentColor"],
         appBarTheme:
             AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
       ),
       darkTheme: ThemeData(
-        fontFamily: 'Avenir',
-        primaryColor: Colors.black,
-        primaryColorDark: Colors.grey[800],
-        primaryColorBrightness: Brightness.dark,
-        primaryColorLight: Colors.grey[850],
-        brightness: Brightness.dark,
-        indicatorColor: Colors.white,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: getSettingConstants(appStateSettings)["accentColor"],
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+        typography: Typography.material2014(),
         canvasColor: Colors.black,
-        accentColor: getSettingConstants(appStateSettings)["accentColor"],
+        fontFamily: 'Avenir',
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
       ),
       scrollBehavior: ScrollBehavior(),

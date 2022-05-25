@@ -48,7 +48,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   @override
   void didChangeMetrics() {
-    print(widget.spots);
+    // print(widget.spots);
   }
 
   getMaxPoint(spots) {}
@@ -210,6 +210,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           },
         ),
         isCurved: widget.isCurved,
+        curveSmoothness: 0.03,
         aboveBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,

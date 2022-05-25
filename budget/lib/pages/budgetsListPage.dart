@@ -35,15 +35,13 @@ class BudgetsListPageState extends State<BudgetsListPage>
     return PageFramework(
       title: "Budgets",
       backButton: false,
-      appBarBackgroundColor: Theme.of(context).colorScheme.accentColor,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       slivers: [
         StreamBuilder<List<Budget>>(
           stream: database.watchAllPinnedBudgets(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 0),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {

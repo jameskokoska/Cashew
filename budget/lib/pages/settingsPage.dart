@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/colorsPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
+import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -17,6 +20,7 @@ import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
@@ -64,10 +68,20 @@ class SettingsPageState extends State<SettingsPage>
       title: "Settings",
       backButton: false,
       navbar: true,
-      appBarBackgroundColor: Theme.of(context).colorScheme.accentColor,
+      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
         SettingsHeader(title: "Data"),
+        SettingsContainerOpenPage(
+          openPage: SubscriptionsPage(),
+          title: "Subscriptions",
+          icon: Icons.event_repeat_rounded,
+        ),
+        SettingsContainerOpenPage(
+          openPage: ColorsPage(),
+          title: "Colors",
+          icon: Icons.color_lens,
+        ),
         SettingsContainerOpenPage(
           openPage: EditCategoriesPage(title: "Edit Categories"),
           title: "Edit Categories",
@@ -84,7 +98,7 @@ class SettingsPageState extends State<SettingsPage>
           openPage: EditWalletsPage(title: "Edit Wallets"),
           title: "Edit Wallets",
           description: "Edit the order and wallet details",
-          icon: Icons.category_rounded,
+          icon: Icons.wallet_rounded,
         ),
         SettingsHeader(title: "Account and Backups"),
         AccountAndBackup(),
@@ -138,6 +152,7 @@ class SettingsPageState extends State<SettingsPage>
           title: "Select Icon",
           icon: Icons.portrait,
         ),
+        EnterName(),
         SettingsHeader(title: "Layout Customization"),
         SettingsContainerSwitch(
           title: "Show Wallet Switcher",
@@ -157,7 +172,77 @@ class SettingsPageState extends State<SettingsPage>
           },
           initialValue: appStateSettings["showCumulativeSpending"],
         ),
+        SettingsContainerSwitch(
+          title: "Ask for Transaction Title",
+          description: "When adding a transaction",
+          onSwitched: (value) {
+            updateSettings(
+              "askForTransactionTitle",
+              value,
+            );
+          },
+          initialValue: appStateSettings["askForTransactionTitle"],
+        ),
       ],
+    );
+  }
+}
+
+class EnterName extends StatelessWidget {
+  const EnterName({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String name = "";
+
+    return SettingsContainer(
+      title: "Username",
+      icon: Icons.edit,
+      onTap: () {
+        openBottomSheet(
+          context,
+          PopupFramework(
+            title: "Enter Name",
+            child: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width - 36,
+                  child: TextInput(
+                    bubbly: true,
+                    icon: Icons.title_rounded,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                    initialValue: appStateSettings["username"],
+                    autoFocus: true,
+                    onEditingComplete: () {
+                      Navigator.pop(context);
+                      updateSettings("username", name,
+                          pagesNeedingRefresh: [0]);
+                    },
+                    onChanged: (text) {
+                      name = text;
+                    },
+                    labelText: "Title",
+                    padding: EdgeInsets.zero,
+                  ),
+                ),
+                Container(height: 20),
+                Button(
+                  label: "Set Name",
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  onTap: () {
+                    Navigator.pop(context);
+                    updateSettings("username", name, pagesNeedingRefresh: [0]);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

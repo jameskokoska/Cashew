@@ -527,7 +527,7 @@ class CalculatorButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Material(
-        color: Theme.of(context).colorScheme.white,
+        color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
         borderRadius: BorderRadius.only(
           topRight: topRight ? Radius.circular(15) : Radius.circular(0),
           topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),

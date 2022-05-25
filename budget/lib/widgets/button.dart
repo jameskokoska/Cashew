@@ -55,7 +55,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       child: Tappable(
         color: widget.color != null
             ? widget.color!.withOpacity(0.8)
-            : Theme.of(context).colorScheme.accentColor,
+            : Theme.of(context).colorScheme.secondaryContainer,
         onHighlightChanged: (value) {
           setState(() {
             isTapped = value;
@@ -70,22 +70,11 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
           width: widget.width,
           height: widget.height,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: widget.color != null
-                    ? widget.color!.withOpacity(0.5)
-                    : Theme.of(context).colorScheme.accentColor,
-                blurRadius: 20,
-                offset: Offset(0, 2),
-                spreadRadius: -4,
-              ),
-            ],
-          ),
           child: Center(
             child: TextFont(
               text: widget.label,
               fontSize: widget.fontSize,
+              textColor: Theme.of(context).colorScheme.onSecondaryContainer,
             ),
           ),
         ),

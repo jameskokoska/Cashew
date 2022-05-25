@@ -90,7 +90,7 @@ Future<T?> openPopup<T extends Object?>(
             padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
             margin: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.lightDarkAccent,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -103,7 +103,7 @@ Future<T?> openPopup<T extends Object?>(
                   child: Icon(
                     icon,
                     size: 65,
-                    color: Theme.of(context).colorScheme.accentColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Padding(
@@ -115,6 +115,7 @@ Future<T?> openPopup<T extends Object?>(
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                     maxLines: 5,
+                    textColor: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                 ),
                 Padding(

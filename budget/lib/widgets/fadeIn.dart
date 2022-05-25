@@ -48,6 +48,7 @@ class SlideFadeTransition extends StatefulWidget {
     this.delayStart = const Duration(seconds: 0),
     this.animationDuration = const Duration(milliseconds: 500),
     this.reverse = false,
+    this.animate = true,
   });
 
   final Widget child;
@@ -57,6 +58,7 @@ class SlideFadeTransition extends StatefulWidget {
   final Duration delayStart;
   final Duration animationDuration;
   final bool reverse;
+  final bool animate;
 
   @override
   _SlideFadeTransitionState createState() => _SlideFadeTransitionState();
@@ -114,6 +116,9 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.animate == false) {
+      return widget.child;
+    }
     return FadeTransition(
       opacity: _animationFade,
       child: SlideTransition(
@@ -298,6 +303,44 @@ class _AnimatedScaleDelayedState extends State<AnimatedScaleDelayed> {
       scale: scaleIn ? 1 : 0,
       curve: ElasticOutCurve(0.8),
       child: widget.child,
+    );
+  }
+}
+
+class ShakeAnimation extends StatelessWidget {
+  const ShakeAnimation({
+    Key? key,
+    this.duration = const Duration(milliseconds: 2500),
+    this.deltaX = 20,
+    this.curve = const ElasticInOutCurve(0.19),
+    required this.child,
+    this.animate = true,
+  }) : super(key: key);
+
+  final Duration duration;
+  final double deltaX;
+  final Widget child;
+  final Curve curve;
+  final bool animate;
+
+  double shakeAnimation(double animation) =>
+      0.3 * (0.5 - (0.5 - curve.transform(animation)).abs());
+
+  @override
+  Widget build(BuildContext context) {
+    if (animate == false) {
+      return child;
+    }
+    return TweenAnimationBuilder<double>(
+      key: key,
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOut,
+      duration: duration,
+      builder: (context, animation, child) => Transform.translate(
+        offset: Offset(deltaX * shakeAnimation(animation), 0),
+        child: child,
+      ),
+      child: child,
     );
   }
 }

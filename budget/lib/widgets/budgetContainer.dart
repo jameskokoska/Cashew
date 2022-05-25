@@ -5,6 +5,7 @@ import 'package:animations/animations.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -174,22 +175,10 @@ class BudgetContainer extends StatelessWidget {
             ),
           ],
         ),
-        child: OpenContainer<bool>(
-          transitionType: ContainerTransitionType.fade,
-          openBuilder: (BuildContext context, VoidCallback _) {
-            return BudgetPage(budget: budget);
-          },
-          onClosed: () {}(),
+        child: OpenContainerNavigation(
+          borderRadius: 20,
           closedColor: Theme.of(context).canvasColor,
-          tappable: false,
-          closedShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-          ),
-          middleColor: Theme.of(context).colorScheme.white,
-          transitionDuration: Duration(milliseconds: 500),
-          closedElevation: 0.0,
-          openColor: Theme.of(context).canvasColor,
-          closedBuilder: (BuildContext _, VoidCallback openContainer) {
+          button: (openContainer) {
             return Tappable(
               onTap: () {
                 openContainer();
@@ -199,6 +188,7 @@ class BudgetContainer extends StatelessWidget {
               color: Theme.of(context).colorScheme.lightDarkAccent,
             );
           },
+          openPage: BudgetPage(budget: budget),
         ),
       ),
     );
@@ -223,6 +213,7 @@ class DaySpending extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.fitWidth,
         child: TextFont(
+          textColor: Theme.of(context).colorScheme.black.withAlpha(80),
           text:
               "You can keep spending " + convertToMoney(amount) + " each day.",
           fontSize: large ? 17 : 15,
@@ -353,8 +344,6 @@ class BudgetTimeline extends StatelessWidget {
   }
 }
 
-//put the today marker in
-//use proper date time objects
 class BudgetProgress extends StatelessWidget {
   BudgetProgress(
       {Key? key,
@@ -369,13 +358,12 @@ class BudgetProgress extends StatelessWidget {
   final double todayPercent;
   final bool large;
 
-  @override
-  Widget build(BuildContext context) {
-    var percentText = Container(
+  Widget getPercentText(Color color) {
+    return Container(
       child: Center(
         child: CountUp(
           count: percent,
-          textColor: Colors.black,
+          textColor: color,
           decimals: 0,
           suffix: "%",
           fontSize: large ? 16 : 14,
@@ -386,55 +374,85 @@ class BudgetProgress extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.bottomLeft,
       children: [
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: darken(color, 0.5)),
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          height: large ? 25 : 20,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: SlideFadeTransition(
-              animationDuration: Duration(milliseconds: 1400),
-              reverse: true,
-              direction: Direction.horizontal,
-              child: Container(
-                  child: FractionallySizedBox(
-                    heightFactor: 1,
-                    widthFactor: percent / 100,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color:
-                                  color), //can change this color to tint the progress bar
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.white.withOpacity(0.8),
+        ShakeAnimation(
+          animate: percent > 100,
+          child: Stack(
+            alignment: Alignment.centerLeft,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: large
+                      ? Theme.of(context).colorScheme.lightDarkAccent
+                      : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                ),
+                margin: EdgeInsets.symmetric(horizontal: 8),
+                height: large ? 24.2 : 19.2,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: ClipRRect(
+                  borderRadius: percent < 50
+                      ? BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          bottomLeft: Radius.circular(50),
+                        )
+                      : BorderRadius.circular(50),
+                  child: SlideFadeTransition(
+                    animate: percent <= 100,
+                    animationDuration: Duration(milliseconds: 1400),
+                    reverse: true,
+                    direction: Direction.horizontal,
+                    child: Container(
+                        child: FractionallySizedBox(
+                          heightFactor: 1,
+                          widthFactor: percent > 100 ? 1 : percent / 100,
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(50),
+                                    bottomRight: Radius.circular(50),
+                                  ),
+                                  color: large
+                                      ? dynamicPastel(context, color,
+                                          amount: 0.1)
+                                      : lightenPastel(color, amount: 0.6),
+                                ),
+                              ),
+                              percent > 30
+                                  ? getPercentText(Theme.of(context)
+                                      .colorScheme
+                                      .white
+                                      .withOpacity(0.7))
+                                  : Container(),
+                            ],
                           ),
                         ),
-                        percent > 30 ? percentText : Container(),
-                      ],
-                    ),
+                        height: large ? 25 : 20),
                   ),
-                  height: large ? 25 : 20),
-            ),
+                ),
+              ),
+              percent <= 40
+                  ? getPercentText(large
+                      ? Theme.of(context).colorScheme.textLight
+                      : Theme.of(context).colorScheme.textLightHeavy)
+                  : Container(),
+            ],
           ),
         ),
         TodayIndicator(
           percent: todayPercent,
           large: large,
         ),
-        percent <= 40 ? percentText : Container(),
       ],
     );
   }

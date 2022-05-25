@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -74,42 +75,66 @@ class HomePageState extends State<HomePage>
         controller: _scrollController,
         slivers: [
           SliverList(
-              delegate: SliverChildListDelegate([
-            Container(
-              height: 207 + MediaQuery.of(context).padding.top,
-              alignment: Alignment.bottomLeft,
-              padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
+            delegate: SliverChildListDelegate(
+              [
+                Container(
+                  height: 207 + MediaQuery.of(context).padding.top,
+                  alignment: Alignment.bottomLeft,
+                  padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AnimatedBuilder(
-                        animation: _animationControllerHeader,
-                        builder: (_, child) {
-                          return Transform.translate(
-                            offset: Offset(0,
-                                20 - 20 * (_animationControllerHeader.value)),
-                            child: child,
-                          );
-                        },
-                        child: FadeTransition(
-                          opacity: _animationControllerHeader2,
-                          child: TextFont(
-                            text: "Hello",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          AnimatedBuilder(
+                            animation: _animationControllerHeader,
+                            builder: (_, child) {
+                              return Transform.translate(
+                                offset: Offset(
+                                    0,
+                                    20 -
+                                        20 *
+                                            (_animationControllerHeader.value)),
+                                child: child,
+                              );
+                            },
+                            child: FadeTransition(
+                              opacity: _animationControllerHeader2,
+                              child: TextFont(
+                                text: getWelcomeMessage(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
-                        ),
+                          AnimatedBuilder(
+                            animation: _animationControllerHeader,
+                            builder: (_, child) {
+                              return Transform.scale(
+                                alignment: Alignment.bottomLeft,
+                                scale: _animationControllerHeader.value < 0.5
+                                    ? 0.25 + 0.5
+                                    : (_animationControllerHeader.value) * 0.5 +
+                                        0.5,
+                                child: child,
+                              );
+                            },
+                            child: TextFont(
+                              text: appStateSettings["username"],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 39,
+                            ),
+                          ),
+                        ],
                       ),
                       AnimatedBuilder(
                         animation: _animationControllerHeader,
                         builder: (_, child) {
                           return Transform.scale(
-                            alignment: Alignment.bottomLeft,
+                            alignment: Alignment.bottomRight,
                             scale: _animationControllerHeader.value < 0.5
                                 ? 0.25 + 0.5
                                 : (_animationControllerHeader.value) * 0.5 +
@@ -117,35 +142,18 @@ class HomePageState extends State<HomePage>
                             child: child,
                           );
                         },
-                        child: TextFont(
-                          text: "James",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 39,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          color: Colors.red,
                         ),
                       ),
                     ],
                   ),
-                  AnimatedBuilder(
-                    animation: _animationControllerHeader,
-                    builder: (_, child) {
-                      return Transform.scale(
-                        alignment: Alignment.bottomRight,
-                        scale: _animationControllerHeader.value < 0.5
-                            ? 0.25 + 0.5
-                            : (_animationControllerHeader.value) * 0.5 + 0.5,
-                        child: child,
-                      );
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ])),
+          ),
           appStateSettings["showWalletSwitcher"] == true
               ? SliverToBoxAdapter(
                   child: Container(
@@ -155,6 +163,8 @@ class HomePageState extends State<HomePage>
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
+                            addAutomaticKeepAlives: true,
+                            clipBehavior: Clip.none,
                             scrollDirection: Axis.horizontal,
                             itemCount: snapshot.data!.length + 1,
                             itemBuilder: (context, index) {
@@ -189,10 +199,16 @@ class HomePageState extends State<HomePage>
             stream: database.watchAllPinnedBudgets(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if (snapshot.data!.length == 0) {
+                  return SliverToBoxAdapter(child: SizedBox());
+                }
                 if (snapshot.data!.length == 1) {
                   return SliverToBoxAdapter(
-                    child: BudgetContainer(
-                      budget: snapshot.data![0],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: BudgetContainer(
+                        budget: snapshot.data![0],
+                      ),
                     ),
                   );
                 }
@@ -262,7 +278,7 @@ class HomePageState extends State<HomePage>
                       cumulative ? cumulativeTotal : totalForDay));
                 }
                 return SliverToBoxAdapter(
-                  child: LineChartWrapper(points: points, isCurved: false),
+                  child: LineChartWrapper(points: points, isCurved: true),
                 );
               }
               return SliverToBoxAdapter(child: SizedBox());
