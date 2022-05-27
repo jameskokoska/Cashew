@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -30,6 +33,14 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
     return PageFramework(
       title: widget.title,
       navbar: false,
+      floatingActionButton: AnimatedScaleDelayed(
+        child: FAB(
+          tooltip: "Add Category",
+          openPage: AddCategoryPage(
+            title: "Add Category",
+          ),
+        ),
+      ),
       slivers: [
         StreamBuilder<List<TransactionCategory>>(
           stream: database.watchAllCategories(),

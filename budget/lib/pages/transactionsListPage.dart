@@ -392,6 +392,17 @@ class TransactionsListPageState extends State<TransactionsListPage>
                             button: (openContainer) {
                               return FakeTextInput(
                                 onTap: openContainer,
+                                label: "Search...",
+                                icon: Icons.search_rounded,
+                                edgeInsetsVertical:
+                                    MediaQuery.of(context).padding.top - 21 <=
+                                            15
+                                        ? MediaQuery.of(context).padding.top -
+                                            21
+                                        : 15,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
                               );
                             },
                             openPage: TransactionsSearchPage(),
@@ -493,19 +504,29 @@ class TransactionsListPageState extends State<TransactionsListPage>
 }
 
 class FakeTextInput extends StatelessWidget {
-  const FakeTextInput({Key? key, required this.onTap}) : super(key: key);
+  const FakeTextInput({
+    Key? key,
+    required this.onTap,
+    required this.icon,
+    this.label = "",
+    this.edgeInsetsVertical = 13,
+    this.backgroundColor,
+    this.content,
+  }) : super(key: key);
 
   final VoidCallback onTap;
+  final String label;
+  final IconData icon;
+  final double edgeInsetsVertical;
+  final Color? backgroundColor;
+  final String? content;
 
   @override
   Widget build(BuildContext context) {
-    double edgeInsetsVertical = MediaQuery.of(context).padding.top - 21 <= 15
-        ? MediaQuery.of(context).padding.top - 21
-        : 15;
     return Tappable(
       onTap: onTap,
-      color: Theme.of(context).colorScheme.secondaryContainer,
-      borderRadius: 12,
+      color: backgroundColor ?? Theme.of(context).colorScheme.canvasContainer,
+      borderRadius: 15,
       child: Container(
         margin: EdgeInsets.only(
             left: 18,
@@ -515,14 +536,21 @@ class FakeTextInput extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextFont(
-              text: "Search...",
-              fontSize: 15,
-              textColor: Theme.of(context).colorScheme.black.withOpacity(0.5),
-            ),
+            content == null || content == ""
+                ? TextFont(
+                    text: label,
+                    fontSize: 15,
+                    textColor:
+                        Theme.of(context).colorScheme.black.withOpacity(0.6),
+                  )
+                : TextFont(
+                    text: content ?? "",
+                    fontSize: 15,
+                    textColor: Theme.of(context).colorScheme.black,
+                  ),
             Icon(
-              Icons.search_rounded,
-              color: Theme.of(context).colorScheme.accentColor,
+              icon,
+              color: Theme.of(context).colorScheme.accentColorHeavy,
               size: 20,
             )
           ],

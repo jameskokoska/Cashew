@@ -112,6 +112,8 @@ class _PageFrameworkState extends State<PageFramework>
     _scrollController.dispose();
   }
 
+  double keyboardOpenedPrevious = 0;
+
   @override
   Widget build(BuildContext context) {
     Widget scaffold = Scaffold(

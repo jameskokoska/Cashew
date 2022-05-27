@@ -16,8 +16,8 @@ class TextInput extends StatelessWidget {
   final TextEditingController? controller;
   final bool? showCursor;
   final bool readOnly;
-  final int minLines;
-  final int maxLines;
+  final int? minLines;
+  final int? maxLines;
   final bool numbersOnly;
   final String? prefix;
   final String? suffix;
@@ -25,6 +25,7 @@ class TextInput extends StatelessWidget {
   final FocusNode? focusNode;
   final bool? bubbly;
   final Color? backgroundColor;
+  final TextInputType? keyboardType;
 
   const TextInput({
     Key? key,
@@ -50,6 +51,7 @@ class TextInput extends StatelessWidget {
     this.focusNode,
     this.bubbly = false,
     this.backgroundColor,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -65,16 +67,18 @@ class TextInput extends StatelessWidget {
           color: bubbly == false
               ? Colors.transparent
               : backgroundColor ??
-                  Theme.of(context)
-                      .colorScheme
-                      .lightDarkAccent
-                      .withOpacity(0.2),
+                  Theme.of(context).colorScheme.canvasContainer,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
           child: TextFormField(
+            scrollPadding: EdgeInsets.only(bottom: 80),
             focusNode: focusNode,
-            keyboardType: numbersOnly ? TextInputType.number : null,
+            keyboardType: keyboardType != null
+                ? keyboardType
+                : numbersOnly
+                    ? TextInputType.number
+                    : null,
             maxLines: maxLines,
             minLines: minLines,
             onTap: onTap,
@@ -169,6 +173,149 @@ class TextInput extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TextInputTitle extends StatelessWidget {
+  final String labelText;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onTap;
+  final bool obscureText;
+  final IconData? icon;
+  final bool autoFocus;
+  final VoidCallback? onEditingComplete;
+  final String? initialValue;
+  final TextEditingController? controller;
+  final bool? showCursor;
+  final bool readOnly;
+  final int? minLines;
+  final int? maxLines;
+  final bool numbersOnly;
+  final String? prefix;
+  final String? suffix;
+  final FocusNode? focusNode;
+  final Color? backgroundColor;
+  final TextInputType? keyboardType;
+  final FontWeight fontWeight;
+  final double fontSize;
+
+  const TextInputTitle({
+    Key? key,
+    required this.labelText,
+    this.onChanged,
+    this.onSubmitted,
+    this.onTap,
+    this.obscureText = false,
+    this.icon,
+    this.autoFocus = false,
+    this.onEditingComplete,
+    this.initialValue,
+    this.controller,
+    this.showCursor,
+    this.readOnly = false,
+    this.minLines = 1,
+    this.maxLines = 1,
+    this.numbersOnly = false,
+    this.prefix,
+    this.suffix,
+    this.focusNode,
+    this.backgroundColor,
+    this.keyboardType,
+    this.fontWeight = FontWeight.normal,
+    this.fontSize = 18,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    bool _keyboardIsVisible() {
+      return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
+    }
+
+    return Center(
+      child: TextFormField(
+        focusNode: focusNode,
+        keyboardType: keyboardType != null
+            ? keyboardType
+            : numbersOnly
+                ? TextInputType.number
+                : null,
+        maxLines: maxLines,
+        minLines: minLines,
+        onTap: onTap,
+        showCursor: showCursor,
+        readOnly: readOnly,
+        controller: controller,
+        initialValue: initialValue,
+        autofocus: autoFocus,
+        onEditingComplete: onEditingComplete,
+        style: TextStyle(
+          fontSize: fontSize,
+          height: 1.7,
+          fontWeight: fontWeight,
+        ),
+        cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
+        decoration: new InputDecoration(
+          prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
+          suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
+          contentPadding:
+              EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+          hintText: labelText,
+          hintStyle: TextStyle(color: Theme.of(context).colorScheme.textLight),
+          filled: false,
+          isDense: true,
+          suffixIconConstraints: BoxConstraints(maxHeight: 20),
+          suffixIcon: icon == null
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.only(right: 13.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Icon(
+                        icon,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.accentColorHeavy,
+                      ),
+                    ],
+                  ),
+                ),
+          icon: icon != null
+              ? Icon(
+                  icon,
+                  size: 30,
+                  color: Theme.of(context).colorScheme.accentColorHeavy,
+                )
+              : null,
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+            borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.lightDarkAccentHeavy),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(5.0)),
+            borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.primary, width: 1.5),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+        ),
+        obscureText: obscureText,
+        onChanged: (text) {
+          if (onChanged != null) {
+            onChanged!(text);
+          }
+        },
+        onFieldSubmitted: (text) {
+          if (onSubmitted != null) {
+            onSubmitted!(text);
+          }
+        },
       ),
     );
   }

@@ -82,3 +82,26 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
     );
   }
 }
+
+class ButtonIcon extends StatelessWidget {
+  const ButtonIcon({Key? key, required this.onTap, required this.icon})
+      : super(key: key);
+  final VoidCallback onTap;
+  final IconData icon;
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      child: Container(
+        height: 44,
+        width: 44,
+        child: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.onSecondaryContainer,
+        ),
+      ),
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      borderRadius: 15,
+      onTap: onTap,
+    );
+  }
+}

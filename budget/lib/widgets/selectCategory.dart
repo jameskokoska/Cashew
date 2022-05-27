@@ -14,6 +14,7 @@ class SelectCategory extends StatefulWidget {
     this.next,
     this.skipIfSet,
     this.nextLabel,
+    this.horizontalList = false,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<TransactionCategory>)? setSelectedCategories;
@@ -22,6 +23,7 @@ class SelectCategory extends StatefulWidget {
   final VoidCallback? next;
   final bool? skipIfSet;
   final String? nextLabel;
+  final bool horizontalList;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -69,6 +71,55 @@ class _SelectCategoryState extends State<SelectCategory> {
         stream: database.watchAllCategories(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (widget.horizontalList) {
+              return ListView.builder(
+                addAutomaticKeepAlives: true,
+                clipBehavior: Clip.none,
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  TransactionCategory category = snapshot.data![index];
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        left: index == 0 ? 12 : 0,
+                        right: index == snapshot.data!.length - 1 ? 12 : 0),
+                    child: CategoryIcon(
+                      categoryPk: category.categoryPk,
+                      size: 50,
+                      label: true,
+                      onTap: () {
+                        if (widget.setSelectedCategory != null) {
+                          widget.setSelectedCategory!(category);
+                          setState(() {
+                            selectedCategories = [];
+                            selectedCategories.add(category);
+                          });
+                          Future.delayed(Duration(milliseconds: 70), () {
+                            Navigator.pop(context);
+                            if (widget.next != null) {
+                              widget.next!();
+                            }
+                          });
+                        } else if (widget.setSelectedCategories != null) {
+                          if (selectedCategories.contains(category)) {
+                            setState(() {
+                              selectedCategories.remove(category);
+                            });
+                            widget.setSelectedCategories!(selectedCategories);
+                          } else {
+                            setState(() {
+                              selectedCategories.add(category);
+                            });
+                            widget.setSelectedCategories!(selectedCategories);
+                          }
+                        }
+                      },
+                      outline: selectedCategories.contains(category),
+                    ),
+                  );
+                },
+              );
+            }
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Column(

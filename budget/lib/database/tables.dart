@@ -24,6 +24,8 @@ const int DEFAULT_OFFSET = 0;
 
 enum BudgetReoccurence { custom, daily, weekly, monthly, yearly }
 
+enum TransactionSpecialType { subscription, repetitive, transactionTab }
+
 enum ThemeSetting { dark, light }
 
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
@@ -84,6 +86,11 @@ class Transactions extends Table {
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
+  // Subscriptions and Repetitive payments
+  IntColumn get periodLength => integer().nullable()();
+  IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
+  IntColumn get type => intEnum<TransactionSpecialType>().nullable()();
+  BoolColumn get paid => boolean().withDefault(const Constant(false))();
 }
 
 @DataClassName('TransactionCategory')
@@ -132,6 +139,18 @@ class Budgets extends Table {
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
   IntColumn get order => integer()();
   IntColumn get walletFk => integer()();
+}
+
+@DataClassName('TransactionTabs')
+class TransactionTabs extends Table {
+  IntColumn get transactionTabsPk => integer().autoIncrement()();
+  TextColumn get name => text().withLength(max: NAME_LIMIT)();
+  RealColumn get amount => real()();
+  TextColumn get note => text().withLength(max: NOTE_LIMIT)();
+  TextColumn get transactionHistoryFks =>
+      text().map(const IntListInColumnConverter()).nullable()();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
 }
 
 class TransactionWithCategory {

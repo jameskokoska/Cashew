@@ -731,9 +731,9 @@ packages:
   sliding_sheet:
     dependency: "direct main"
     description:
-      name: sliding_sheet
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "sliding_sheet-0.5.2-modified"
+      relative: true
+    source: path
     version: "0.5.2"
   sliver_tools:
     dependency: "direct main"

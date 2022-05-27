@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
@@ -5,6 +7,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
@@ -12,6 +15,7 @@ import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -39,6 +43,20 @@ class AddBudgetPage extends StatefulWidget {
 }
 
 class _AddBudgetPageState extends State<AddBudgetPage> {
+  dynamic namesRecurrence = {
+    "Custom": "custom",
+    "Weekly": "weeks",
+    "Monthly": "months",
+    "Yearly": "years",
+  };
+
+  dynamic nameRecurrence = {
+    "Custom": "custom",
+    "Weekly": "week",
+    "Monthly": "month",
+    "Yearly": "year",
+  };
+
   bool? canAddBudget;
 
   List<TransactionCategory>? selectedCategories;
@@ -47,24 +65,33 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String? selectedTitle;
   String? selectedNote;
   bool selectedAllCategories = true;
+  String selectedCategoriesText = "All Categories";
   int selectedPeriodLength = 0;
   List<String> selectedTags = [];
-  DateTime? selectedStartDate;
+  DateTime selectedStartDate = DateTime.now();
   DateTime? selectedEndDate;
   Color? selectedColor;
-  String? selectedRecurrence;
+  String selectedRecurrence = "Weekly";
+  String selectedRecurrenceDisplay = "weeks";
 
   late TextEditingController _nameInputController;
-  late TextEditingController _startDateInputController;
-  late TextEditingController _customDateInputController;
-  late TextEditingController _amountInputController;
-  late TextEditingController _selectCategoriesInputController;
-  late TextEditingController _periodLengthInputController;
-  late TextEditingController _colorInputController;
-  late TextEditingController _recurrenceInputController;
-  late FocusNode _periodLengthFocusNode;
 
   String? textAddBudget = "Add Transaction";
+
+  Future<void> selectTitle() async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Enter Name",
+        child: SelectText(
+          setSelectedText: setSelectedTitle,
+          labelText: "Name",
+          selectedText: selectedTitle,
+        ),
+      ),
+      snap: false,
+    );
+  }
 
   Future<void> selectAmount(BuildContext context) async {
     openBottomSheet(
@@ -121,17 +148,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         title: "Select Period",
         child: RadioItems(
           items: ["Custom", "Weekly", "Monthly", "Yearly"],
-          initial: selectedRecurrence ?? "",
+          initial: selectedRecurrence,
           onChanged: (value) {
             if (value == "Custom") {
-              selectedStartDate = null;
               selectedEndDate = null;
             }
             setState(() {
               selectedRecurrence = value;
+              if (selectedPeriodLength == 1) {
+                selectedRecurrenceDisplay = nameRecurrence[value];
+              } else {
+                selectedRecurrenceDisplay = namesRecurrence[value];
+              }
             });
             determineBottomButton();
-            setTextInput(_recurrenceInputController, value);
           },
         ),
       ),
@@ -148,16 +178,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         return Theme(
           data: Theme.of(context).brightness == Brightness.light
               ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColor,
+                  primaryColor: Theme.of(context).colorScheme.primary,
                   colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.accentColor),
+                      primary: Theme.of(context).colorScheme.primary),
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 )
               : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
+                  primaryColor: Theme.of(context).colorScheme.secondary,
                   colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.accentColorHeavy),
+                      primary: Theme.of(context).colorScheme.secondary),
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 ),
@@ -170,9 +200,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   setSelectedStartDate(DateTime? date) {
     if (date != null && date != selectedStartDate) {
-      String dateString = getWordedDate(date);
-      setTextInput(_startDateInputController, dateString);
-      selectedStartDate = date;
+      setState(() {
+        selectedStartDate = date;
+      });
     }
     determineBottomButton();
   }
@@ -192,16 +222,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         return Theme(
           data: Theme.of(context).brightness == Brightness.light
               ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColor,
+                  primaryColor: Theme.of(context).colorScheme.primary,
                   colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.accentColor),
+                      primary: Theme.of(context).colorScheme.primary),
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 )
               : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
+                  primaryColor: Theme.of(context).colorScheme.secondary,
                   colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.accentColorHeavy),
+                      primary: Theme.of(context).colorScheme.secondary),
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 ),
@@ -210,14 +240,31 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       },
     );
     if (picked != null) {
-      String dateString =
-          getWordedDate(picked.start) + " - " + getWordedDate(picked.end);
-      setTextInput(_customDateInputController, dateString);
-      setTextInput(_startDateInputController, getWordedDate(picked.start));
-      selectedStartDate = picked.start;
-      selectedEndDate = picked.end;
       determineBottomButton();
+      setState(() {
+        selectedStartDate = picked.start;
+        selectedEndDate = picked.end;
+      });
     }
+  }
+
+  Future<void> selectPeriodLength(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Enter Period Length",
+        child: SelectAmountValue(
+          amountPassed: selectedPeriodLength.toString(),
+          setSelectedAmount: (amount, _) {
+            setSelectedPeriodLength(amount);
+          },
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "Set Amount",
+        ),
+      ),
+    );
   }
 
   void setSelectedCategories(List<TransactionCategory> categories) {
@@ -226,18 +273,24 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         selectedCategories = categories;
         selectedAllCategories = true;
       });
-      _selectCategoriesInputController.text = "All categories";
+      setState(() {
+        selectedCategoriesText = "All Categories";
+      });
     } else {
       setState(() {
         selectedCategories = categories;
         selectedAllCategories = false;
       });
       if (categories.length == 1) {
-        _selectCategoriesInputController.text =
-            categories.length.toString() + " " + "category";
+        setState(() {
+          selectedCategoriesText =
+              categories.length.toString() + " " + "Category";
+        });
       } else {
-        _selectCategoriesInputController.text =
-            categories.length.toString() + " " + "categories";
+        setState(() {
+          selectedCategoriesText =
+              categories.length.toString() + " " + "Categories";
+        });
       }
     }
     determineBottomButton();
@@ -245,35 +298,54 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 
   void setSelectedAmount(double amount, String amountCalculation) {
-    selectedAmount = amount;
-    selectedAmountCalculation = amountCalculation;
-    setTextInput(_amountInputController, convertToMoney(amount));
+    if (amount == selectedAmount) {
+      selectedAmountCalculation = amountCalculation;
+    } else {
+      setState(() {
+        selectedAmount = amount;
+        selectedAmountCalculation = amountCalculation;
+      });
+    }
     determineBottomButton();
     return;
   }
 
   void setSelectedTitle(String title) {
-    selectedTitle = title;
+    setState(() {
+      selectedTitle = title;
+    });
     determineBottomButton();
     return;
   }
 
-  void setSelectedPeriodLength(String period) {
+  void setSelectedPeriodLength(double period) {
     try {
-      selectedPeriodLength = int.parse(period);
-      setTextInput(
-          _periodLengthInputController, selectedPeriodLength.toString());
+      setState(() {
+        selectedPeriodLength = period.toInt();
+        if (selectedPeriodLength == 1) {
+          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+        } else {
+          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+        }
+      });
     } catch (e) {
-      selectedPeriodLength = 0;
-      setTextInput(_periodLengthInputController, "0");
+      setState(() {
+        selectedPeriodLength = 0;
+        if (selectedPeriodLength == 1) {
+          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+        } else {
+          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+        }
+      });
     }
     determineBottomButton();
     return;
   }
 
   void setSelectedColor(Color color) {
-    selectedColor = color;
-    setTextInput(_colorInputController, toHexString(color));
+    setState(() {
+      selectedColor = color;
+    });
     determineBottomButton();
     return;
   }
@@ -292,7 +364,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         name: selectedTitle ?? "",
         amount: selectedAmount ?? 0,
         colour: toHexString(selectedColor ?? Colors.green),
-        startDate: selectedStartDate ?? DateTime.now(),
+        startDate: selectedStartDate,
         endDate: selectedEndDate ?? DateTime.now(),
         categoryFks: categoryFks,
         allCategoryFks: selectedAllCategories,
@@ -311,8 +383,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   @override
   void initState() {
     super.initState();
-    _periodLengthFocusNode = FocusNode();
-
     if (widget.budget != null) {
       //We are editing a budget
       //Fill in the information from the passed in budget
@@ -320,13 +390,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           new TextEditingController(text: widget.budget!.name);
       selectedTitle = widget.budget!.name;
 
-      _startDateInputController = new TextEditingController(text: "Today");
-      _customDateInputController = new TextEditingController();
-
-      _amountInputController = new TextEditingController(
-          text: convertToMoney(widget.budget!.amount));
       selectedAllCategories = widget.budget!.allCategoryFks;
-      _periodLengthInputController = new TextEditingController(text: "0");
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {
         selectedAmountCalculation =
@@ -335,34 +399,17 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         selectedAmountCalculation = amountString;
       }
       textAddBudget = "Edit Transaction";
-      _colorInputController =
-          new TextEditingController(text: widget.budget!.colour);
-      _recurrenceInputController = new TextEditingController(
-          text: widget.budget!.reoccurrence.toString());
-      _selectCategoriesInputController =
-          new TextEditingController(text: "All categories");
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
       });
     } else {
       _nameInputController = new TextEditingController();
-      _startDateInputController = new TextEditingController();
-      _customDateInputController = new TextEditingController();
-
-      _amountInputController =
-          new TextEditingController(text: convertToMoney(0));
-      _selectCategoriesInputController =
-          new TextEditingController(text: "All categories");
-      _periodLengthInputController = new TextEditingController(text: "0");
-      _colorInputController = new TextEditingController();
-      _recurrenceInputController = new TextEditingController();
     }
   }
 
   @override
   void dispose() {
-    _periodLengthFocusNode.dispose();
     super.dispose();
   }
 
@@ -384,7 +431,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         selectedStartDate != null &&
         ((selectedRecurrence == "Custom" && selectedEndDate != null) ||
             (selectedRecurrence != "Custom" && selectedPeriodLength != 0))) {
-      print(selectedPeriodLength);
       if (canAddBudget != true)
         this.setState(() {
           canAddBudget = true;
@@ -400,6 +446,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
           //Minimize keyboard when tap non interactive widget
@@ -414,167 +461,312 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               title: widget.title,
               navbar: false,
               listWidgets: [
+                Container(height: 20),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Container(height: 20),
-                      TextInput(
-                        labelText: "Budget Name",
-                        icon: Icons.title_rounded,
-                        padding: EdgeInsets.zero,
-                        controller: _nameInputController,
-                        onChanged: (text) {
-                          setSelectedTitle(text);
-                        },
-                      ),
-                      Container(height: 14),
-                      TextInput(
-                        labelText: "Amount",
-                        icon: Icons.attach_money_rounded,
-                        padding: EdgeInsets.zero,
-                        controller: _amountInputController,
-                        onTap: () {
-                          selectAmount(context);
-                        },
-                        readOnly: true,
-                        showCursor: false,
-                      ),
-                      Container(height: 14),
-                      TextInput(
-                        labelText: "Select color",
-                        icon: Icons.color_lens_rounded,
-                        padding: EdgeInsets.zero,
-                        onTap: () {
-                          selectColor(context);
-                        },
-                        readOnly: true,
-                        showCursor: false,
-                        controller: _colorInputController,
-                      ),
-                      Container(height: 14),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: TextInput(
-                              labelText: "Select Categories",
-                              icon: Icons.category_rounded,
-                              padding: EdgeInsets.zero,
-                              controller: _selectCategoriesInputController,
-                              onChanged: (text) {
-                                setSelectedTitle(text);
-                              },
-                              onTap: () {
-                                selectCategories(context);
-                              },
-                              readOnly: true,
-                              showCursor: false,
-                            ),
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 1000),
+                        child: Tappable(
+                          key: ValueKey(selectedColor),
+                          color: lightenPastel(
+                              selectedColor ??
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .lightDarkAccentHeavy,
+                              amount: 0.3),
+                          borderRadius: 15,
+                          child: Container(
+                            width: 55,
+                            height: 55,
                           ),
-                          Column(
-                            children: [
-                              CupertinoSwitch(
-                                value: selectedAllCategories,
-                                onChanged: (value) {
-                                  if (value == false) {
-                                    selectCategories(context);
-                                  } else {
-                                    setState(() {
-                                      selectedAllCategories = value;
-                                      _selectCategoriesInputController.text =
-                                          "All categories";
-                                    });
-                                  }
-                                },
-                              ),
-                              Container(
+                          onTap: () {
+                            selectColor(context);
+                          },
+                        ),
+                      ),
+                      Container(width: 15),
+                      Expanded(
+                        child: Tappable(
+                          onTap: () {
+                            selectTitle();
+                          },
+                          color: Colors.transparent,
+                          borderRadius: 15,
+                          child: Container(
+                            height: 55,
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      width: 1.5,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .lightDarkAccentHeavy)),
+                            ),
+                            child: IntrinsicWidth(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
                                 child: TextFont(
-                                  text: "All Categories",
-                                  maxLines: 2,
-                                  fontSize: 8,
-                                  textAlign: TextAlign.center,
+                                  autoSizeText: true,
+                                  maxLines: 1,
+                                  minFontSize: 16,
+                                  textAlign: TextAlign.left,
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold,
+                                  text: selectedTitle == null ||
+                                          selectedTitle == ""
+                                      ? "Name"
+                                      : selectedTitle ?? "",
+                                  textColor: selectedTitle == null ||
+                                          selectedTitle == ""
+                                      ? Theme.of(context).colorScheme.textLight
+                                      : Theme.of(context).colorScheme.black,
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      Container(height: 14),
-                      TextInput(
-                        labelText: "Recurrence",
-                        icon: Icons.loop_rounded,
-                        padding: EdgeInsets.zero,
-                        controller: _recurrenceInputController,
-                        readOnly: true,
-                        showCursor: false,
-                        onTap: () {
-                          selectRecurrence(context);
-                        },
-                      ),
-                      selectedRecurrence != "Custom"
-                          ? Column(
-                              children: [
-                                Container(height: 14),
-                                TextInput(
-                                  labelText: "Start Date",
-                                  icon: Icons.calendar_today_rounded,
-                                  padding: EdgeInsets.zero,
-                                  onTap: () {
-                                    selectStartDate(context);
-                                  },
-                                  readOnly: true,
-                                  showCursor: false,
-                                  controller: _startDateInputController,
-                                ),
-                                Container(height: 14),
-                                GestureDetector(
-                                  onTap: () {
-                                    _periodLengthFocusNode.requestFocus();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Container(width: 55),
-                                      TextFont(text: "Repeat every "),
-                                      IntrinsicWidth(
-                                        child: TextInput(
-                                          focusNode: _periodLengthFocusNode,
-                                          labelText: "",
-                                          padding: EdgeInsets.zero,
-                                          onChanged: (text) {
-                                            setSelectedPeriodLength(text);
-                                          },
-                                          numbersOnly: true,
-                                          controller:
-                                              _periodLengthInputController,
-                                          paddingRight: 8,
-                                        ),
-                                      ),
-                                      TextFont(text: " weeks.")
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                Container(height: 14),
-                                TextInput(
-                                  labelText: "Custom Date Range",
-                                  icon: Icons.calendar_today_rounded,
-                                  padding: EdgeInsets.zero,
-                                  onTap: () {
-                                    selectDateRange(context);
-                                  },
-                                  readOnly: true,
-                                  showCursor: false,
-                                  controller: _customDateInputController,
-                                  maxLines: 3,
-                                ),
-                              ],
+                              ),
                             ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                )
+                ),
+                Container(height: 35),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFont(
+                    text: "Select Color",
+                    textColor: Theme.of(context).colorScheme.textLight,
+                    fontSize: 16,
+                  ),
+                ),
+                Container(height: 10),
+                Container(
+                  height: 65,
+                  child: SelectColor(
+                    horizontalList: true,
+                    selectedColor: selectedColor,
+                    setSelectedColor: setSelectedColor,
+                  ),
+                ),
+                Container(height: 25),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFont(
+                    text: "Select Categories",
+                    textColor: Theme.of(context).colorScheme.textLight,
+                    fontSize: 16,
+                  ),
+                ),
+                Container(height: 2),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFont(
+                    text: selectedCategoriesText + " Budget",
+                    textColor: Theme.of(context).colorScheme.secondaryContainer,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(height: 10),
+                Container(
+                  height: 100,
+                  child: SelectCategory(
+                    horizontalList: true,
+                    selectedCategories: selectedCategories,
+                    setSelectedCategories: setSelectedCategories,
+                  ),
+                ),
+                Container(height: 30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextFont(
+                        text: "Amount and Period",
+                        textColor: Theme.of(context).colorScheme.textLight,
+                        fontSize: 16,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.end,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      IntrinsicWidth(
+                        child: Tappable(
+                          onTap: () {
+                            selectAmount(context);
+                          },
+                          color: Colors.transparent,
+                          borderRadius: 15,
+                          child: Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: CountNumber(
+                                count: selectedAmount ?? 0,
+                                duration: Duration(milliseconds: 1000),
+                                dynamicDecimals: true,
+                                initialCount: selectedAmount ?? 0,
+                                textBuilder: (number) {
+                                  return TextFont(
+                                    textAlign: TextAlign.right,
+                                    text: convertToMoney(number),
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold,
+                                    maxLines: 1,
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      IntrinsicWidth(
+                        child: Row(
+                          children: [
+                            selectedRecurrence != "Custom"
+                                ? Tappable(
+                                    onTap: () {
+                                      selectPeriodLength(context);
+                                    },
+                                    color: Colors.transparent,
+                                    borderRadius: 15,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 13),
+                                      child: Center(
+                                        child: TextFont(
+                                          text: "/ " +
+                                              selectedPeriodLength.toString(),
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : TextFont(
+                                    text: "/ ",
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            Tappable(
+                              onTap: () {
+                                selectRecurrence(context);
+                              },
+                              color: Colors.transparent,
+                              borderRadius: 15,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 13),
+                                child: Center(
+                                  child: TextFont(
+                                    text: selectedRecurrenceDisplay,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Transform.translate(
+                  offset: Offset(
+                      0,
+                      selectedEndDate == null && selectedRecurrence == "Custom"
+                          ? 0
+                          : -15),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: selectedRecurrence != "Custom"
+                        ? Column(
+                            children: [
+                              Tappable(
+                                onTap: () {
+                                  selectStartDate(context);
+                                },
+                                color: Colors.transparent,
+                                borderRadius: 15,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 13),
+                                  child: Center(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 2.8),
+                                          child: TextFont(
+                                            text: "beginning  ",
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextFont(
+                                          text:
+                                              getWordedDate(selectedStartDate),
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Tappable(
+                            onTap: () {
+                              selectDateRange(context);
+                            },
+                            color: selectedEndDate == null
+                                ? Theme.of(context).colorScheme.lightDarkAccent
+                                : Colors.transparent,
+                            borderRadius: 15,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 13),
+                              child: Center(
+                                child: selectedEndDate == null
+                                    ? TextFont(
+                                        text: "Select Custom Period",
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .textLight,
+                                      )
+                                    : TextFont(
+                                        text: getWordedDateShort(
+                                                selectedStartDate) +
+                                            " - " +
+                                            getWordedDateShort(
+                                                selectedEndDate!),
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+                Container(height: 15),
               ],
             ),
             Align(
@@ -592,9 +784,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       label: "Add Budget",
                       width: MediaQuery.of(context).size.width,
                       height: 50,
-                      onTap: () {
-                        addBudget();
-                      },
+                      onTap: () {},
                       color: Colors.grey,
                     ),
             ),

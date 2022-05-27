@@ -208,6 +208,7 @@ class App extends StatelessWidget {
         useMaterial3: true,
         applyElevationOverlayColor: false,
         typography: Typography.material2014(),
+        canvasColor: Colors.white,
         fontFamily: 'Avenir',
         appBarTheme:
             AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),

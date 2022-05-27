@@ -98,16 +98,16 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         return Theme(
           data: Theme.of(context).brightness == Brightness.light
               ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColor,
+                  primaryColor: Theme.of(context).colorScheme.primary,
                   colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.accentColor),
+                      primary: Theme.of(context).colorScheme.primary),
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 )
               : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.accentColorHeavy,
+                  primaryColor: Theme.of(context).colorScheme.secondary,
                   colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.accentColorHeavy),
+                      primary: Theme.of(context).colorScheme.secondary),
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 ),
@@ -166,21 +166,11 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                     ),
                   ),
                   SizedBox(width: 10),
-                  Tappable(
-                    child: Container(
-                      height: 44,
-                      width: 44,
-                      child: Icon(
-                        Icons.calendar_month_rounded,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: 15,
-                    onTap: () {
-                      selectDateRange(context);
-                    },
-                  ),
+                  ButtonIcon(
+                      onTap: () {
+                        selectDateRange(context);
+                      },
+                      icon: Icons.calendar_month_rounded),
                   SizedBox(width: 20),
                 ],
               ),

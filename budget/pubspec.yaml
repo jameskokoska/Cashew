@@ -42,7 +42,8 @@ dependencies:
   auto_size_text: ^3.0.0
   shared_preferences: ^2.0.13
   csv: ^5.0.1
-  sliding_sheet: ^0.5.2
+  sliding_sheet: 
+    path: ./sliding_sheet-0.5.2-modified/
   sliver_tools: ^0.2.6
   shimmer: ^2.0.0
   carousel_slider: ^4.1.1

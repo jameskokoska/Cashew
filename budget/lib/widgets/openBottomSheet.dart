@@ -1,17 +1,21 @@
+import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:budget/colors.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 
-openBottomSheet(context, child, {bool maxHeight: true, bool handle: true}) {
+// Set snap to false if there is a keyboard
+openBottomSheet(context, child, {bool maxHeight: true, bool snap: true}) {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
-  showSlidingBottomSheet(context, builder: (context) {
+  showSlidingBottomSheet(context,
+      bottomPaddingColor: Theme.of(context).colorScheme.lightDarkAccent,
+      builder: (context) {
     return SlidingSheetDialog(
       elevation: 8,
       isBackdropInteractable: true,
       dismissOnBackdropTap: true,
       snapSpec: SnapSpec(
-        snap: true,
+        snap: snap,
         snappings: [
           0.6,
           1 -
@@ -53,3 +57,47 @@ openBottomSheet(context, child, {bool maxHeight: true, bool handle: true}) {
     );
   });
 }
+
+// openBottomSheetWithKeyboard(context, child,
+//     {bool maxHeight: true, bool handle: true}) {
+//   //minimize keyboard when open
+//   FocusScope.of(context).unfocus();
+//   showModalBottomSheet(
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(16),
+//     ),
+//     isScrollControlled: true,
+//     isDismissible: false,
+//     context: context,
+//     backgroundColor: Colors.transparent,
+//     builder: (contextBuilder) {
+//       return Padding(
+//         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+//         child: GestureDetector(
+//           behavior: HitTestBehavior.opaque,
+//           onTap: () {
+//             Navigator.pop(context);
+//           },
+//           child: Align(
+//             alignment: Alignment.bottomCenter,
+//             child: SingleChildScrollView(
+//               child: Container(
+//                 padding: EdgeInsets.only(
+//                   bottom: MediaQuery.of(contextBuilder).viewInsets.bottom,
+//                 ),
+//                 decoration: BoxDecoration(
+//                   color: Theme.of(context).colorScheme.lightDarkAccent,
+//                   borderRadius: BorderRadius.only(
+//                     topRight: Radius.circular(20),
+//                     topLeft: Radius.circular(20),
+//                   ),
+//                 ),
+//                 child: child,
+//               ),
+//             ),
+//           ),
+//         ),
+//       );
+//     },
+//   );
+// }

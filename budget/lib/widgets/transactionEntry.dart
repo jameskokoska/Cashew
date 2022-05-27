@@ -106,6 +106,7 @@ class _TransactionEntryState extends State<TransactionEntry> {
                     size: 33,
                     sizePadding: 15,
                     margin: EdgeInsets.zero,
+                    borderRadius: 13,
                   ),
                   Container(
                     width: 15,
@@ -242,6 +243,7 @@ class CategoryIcon extends StatelessWidget {
     this.outline = false,
     this.noBackground = false,
     this.category, //pass this in to not look it up again
+    this.borderRadius = 18,
   }) : super(key: key);
 
   final int categoryPk;
@@ -254,6 +256,7 @@ class CategoryIcon extends StatelessWidget {
   final bool outline;
   final bool noBackground;
   final TransactionCategory? category;
+  final double borderRadius;
 
   categoryIconWidget(context, TransactionCategory? category) {
     return Column(
@@ -267,20 +270,26 @@ class CategoryIcon extends StatelessWidget {
           decoration: outline
               ? BoxDecoration(
                   border: Border.all(
-                    color: Theme.of(context).colorScheme.accentColorHeavy,
+                    color: dynamicPastel(
+                        context,
+                        HexColor(category != null ? category.colour : "FFFFFFF",
+                            Theme.of(context).colorScheme.lightDarkAccent),
+                        amountLight: 0.5,
+                        amountDark: 0.4,
+                        inverse: true),
                     width: 3,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
                 )
               : BoxDecoration(
                   border: Border.all(
                     color: Colors.transparent,
                     width: 0,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
                 ),
           child: Tappable(
-            color: noBackground
+            color: noBackground && category != null
                 ? Colors.transparent
                 : category != null
                     ? dynamicPastel(
@@ -289,9 +298,9 @@ class CategoryIcon extends StatelessWidget {
                             Theme.of(context).colorScheme.lightDarkAccent),
                         amountLight: 0.55,
                         amountDark: 0.35)
-                    : Theme.of(context).colorScheme.lightDarkAccent,
+                    : Theme.of(context).colorScheme.canvasContainer,
             onTap: onTap,
-            borderRadius: 10,
+            borderRadius: borderRadius - 3,
             child: Center(
               child: (category != null
                   ? Image(

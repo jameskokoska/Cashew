@@ -12,10 +12,12 @@ class SelectColor extends StatefulWidget {
     this.setSelectedColor,
     this.selectedColor,
     this.next,
+    this.horizontalList = false,
   }) : super(key: key);
   final Function(Color)? setSelectedColor;
   final Color? selectedColor;
   final VoidCallback? next;
+  final bool horizontalList;
 
   @override
   _SelectColorState createState() => _SelectColorState();
@@ -37,6 +39,42 @@ class _SelectColorState extends State<SelectColor> {
   //find the selected category using selectedCategory
   @override
   Widget build(BuildContext context) {
+    List<Color> selectableColorsList = selectableColors(context);
+    if (widget.horizontalList) {
+      return ListView.builder(
+        addAutomaticKeepAlives: true,
+        clipBehavior: Clip.none,
+        scrollDirection: Axis.horizontal,
+        itemCount: selectableColorsList.length,
+        itemBuilder: (context, index) {
+          Color color = selectableColorsList[index];
+          return Padding(
+            padding: EdgeInsets.only(
+                left: index == 0 ? 12 : 0,
+                right: index == selectableColorsList.length - 1 ? 12 : 0),
+            child: ColorIcon(
+              margin: EdgeInsets.all(5),
+              color: color,
+              size: 55,
+              onTap: () {
+                if (widget.setSelectedColor != null) {
+                  widget.setSelectedColor!(color);
+                  setState(() {
+                    selectedColor = color;
+                  });
+                  Future.delayed(Duration(milliseconds: 70), () {
+                    if (widget.next != null) {
+                      widget.next!();
+                    }
+                  });
+                }
+              },
+              outline: selectedColor == color,
+            ),
+          );
+        },
+      );
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Column(
@@ -44,7 +82,7 @@ class _SelectColorState extends State<SelectColor> {
           Center(
             child: Wrap(
               alignment: WrapAlignment.center,
-              children: selectableColors(context)
+              children: selectableColorsList
                   .asMap()
                   .map(
                     (index, color) => MapEntry(
@@ -107,8 +145,8 @@ class ColorIcon extends StatelessWidget {
       decoration: outline
           ? BoxDecoration(
               border: Border.all(
-                color:
-                    darken(Theme.of(context).colorScheme.accentColorHeavy, 0.2),
+                color: dynamicPastel(context, color,
+                    amountLight: 0.5, amountDark: 0.4, inverse: true),
                 width: 3,
               ),
               borderRadius: BorderRadius.all(Radius.circular(500)),
