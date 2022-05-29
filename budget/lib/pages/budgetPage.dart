@@ -54,6 +54,8 @@ class _BudgetPageState extends State<BudgetPage> {
       textColor: Theme.of(context).colorScheme.black,
       navbar: false,
       showElevationAfterScrollPast: budgetHeaderHeight,
+      dragDownToDismiss: true,
+      dragDownToDissmissBackground: budgetColorScheme.secondaryContainer,
       slivers: [
         StreamBuilder<List<CategoryWithTotal>>(
           stream:

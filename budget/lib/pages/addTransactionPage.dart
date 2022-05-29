@@ -266,6 +266,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           children: [
             PageFramework(
               title: widget.title,
+              dragDownToDismiss: true,
               navbar: false,
               listWidgets: [
                 AnimatedContainer(

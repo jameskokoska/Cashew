@@ -177,7 +177,7 @@ class BudgetContainer extends StatelessWidget {
         ),
         child: OpenContainerNavigation(
           borderRadius: 20,
-          closedColor: Theme.of(context).canvasColor,
+          closedColor: Theme.of(context).colorScheme.lightDarkAccent,
           button: (openContainer) {
             return Tappable(
               onTap: () {

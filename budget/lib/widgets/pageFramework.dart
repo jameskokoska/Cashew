@@ -4,28 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class PageFramework extends StatefulWidget {
-  const PageFramework({
-    Key? key,
-    this.title = "",
-    this.titleWidget,
-    this.slivers = const [],
-    this.listWidgets,
-    this.navbar = true,
-    this.appBarBackgroundColor,
-    this.appBarBackgroundColorStart,
-    this.showElevationAfterScrollPast,
-    this.backButton = true,
-    this.subtitle = null,
-    this.subtitleSize = null,
-    this.subtitleAnimationSpeed = 5,
-    this.onBottomReached,
-    this.pinned = true,
-    this.subtitleAlignment = Alignment.bottomCenter,
-    this.customTitleBuilder,
-    this.onScroll,
-    this.floatingActionButton,
-    this.textColor,
-  }) : super(key: key);
+  const PageFramework(
+      {Key? key,
+      this.title = "",
+      this.titleWidget,
+      this.slivers = const [],
+      this.listWidgets,
+      this.navbar = true,
+      this.appBarBackgroundColor,
+      this.appBarBackgroundColorStart,
+      this.showElevationAfterScrollPast,
+      this.backButton = true,
+      this.subtitle = null,
+      this.subtitleSize = null,
+      this.subtitleAnimationSpeed = 5,
+      this.onBottomReached,
+      this.pinned = true,
+      this.subtitleAlignment = Alignment.bottomCenter,
+      this.customTitleBuilder,
+      this.onScroll,
+      this.floatingActionButton,
+      this.textColor,
+      this.dragDownToDismiss = false,
+      this.dragDownToDissmissBackground})
+      : super(key: key);
 
   final String title;
   final Widget? titleWidget;
@@ -46,6 +48,8 @@ class PageFramework extends StatefulWidget {
   final Function(double position)? onScroll;
   final Widget? floatingActionButton;
   final Color? textColor;
+  final bool dragDownToDismiss;
+  final Color? dragDownToDissmissBackground;
   @override
   State<PageFramework> createState() => _PageFrameworkState();
 }
@@ -57,12 +61,18 @@ class _PageFrameworkState extends State<PageFramework>
   late AnimationController _animationControllerShift;
   late AnimationController _animationControllerOpacity;
   late AnimationController _animationController0at50;
+  late AnimationController _animationControllerDragY;
+  late AnimationController _animationControllerDragX;
+
   void initState() {
     super.initState();
     _animationControllerShift = AnimationController(vsync: this);
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
     _animationController0at50 = AnimationController(vsync: this, value: 1);
-
+    _animationControllerDragY = AnimationController(vsync: this, value: 0);
+    _animationControllerDragY.duration = Duration(milliseconds: 1000);
+    _animationControllerDragX = AnimationController(vsync: this, value: 0.5);
+    _animationControllerDragX.duration = Duration(milliseconds: 1000);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
 
@@ -121,11 +131,49 @@ class _PageFrameworkState extends State<PageFramework>
     super.dispose();
     _animationControllerShift.dispose();
     _animationControllerOpacity.dispose();
+    _animationController0at50.dispose();
+    _animationControllerDragY.dispose();
+    _animationControllerDragX.dispose();
+
     _scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
 
   double keyboardOpenedPrevious = 0;
+
+  double totalDragY = 0;
+  double totalDragX = 0;
+  bool swipeDownToDismiss = false;
+
+  _onPointerMove(PointerMoveEvent ptr) {
+    if (swipeDownToDismiss) {
+      totalDragX = totalDragX + ptr.delta.dx;
+      totalDragY = totalDragY + ptr.delta.dy;
+      //How far you need to drag to track drags - for animation
+      _animationControllerDragY.value = totalDragY / 500;
+      _animationControllerDragX.value = 0.5 + totalDragX / 500;
+    }
+  }
+
+  _onPointerUp(PointerUpEvent event) {
+    //How far you need to drag to dismiss
+    if (totalDragY >= 125) {
+      Navigator.of(context).pop();
+      return;
+    }
+    totalDragX = 0;
+    totalDragY = 0;
+    _animationControllerDragY.reverse();
+    _animationControllerDragX.animateTo(0.5);
+  }
+
+  _onPointerDown(PointerDownEvent event) {
+    if (_scrollController.offset != 0) {
+      swipeDownToDismiss = false;
+    } else {
+      swipeDownToDismiss = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +215,46 @@ class _PageFrameworkState extends State<PageFramework>
         ],
       ),
     );
+    Widget? dragDownToDissmissScaffold = null;
+    if (widget.dragDownToDismiss) {
+      dragDownToDissmissScaffold = Scaffold(
+        body: Listener(
+          onPointerMove: (ptr) => {_onPointerMove(ptr)},
+          onPointerUp: (ptr) => {_onPointerUp(ptr)},
+          onPointerDown: (ptr) => {_onPointerDown(ptr)},
+          behavior: HitTestBehavior.opaque,
+          child: AnimatedBuilder(
+            animation: _animationControllerDragX,
+            builder: (_, child) {
+              return Transform.translate(
+                offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
+                child: Scaffold(
+                  backgroundColor: widget.dragDownToDissmissBackground,
+                  body: AnimatedBuilder(
+                    animation: _animationControllerDragY,
+                    builder: (_, child) {
+                      return Transform.translate(
+                        offset: Offset(
+                            0,
+                            _animationControllerDragY.value *
+                                ((1 + 1 - _animationControllerDragY.value) *
+                                    50)),
+                        child: scaffold,
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    }
+
     if (widget.floatingActionButton != null) {
       return Stack(
         children: [
-          scaffold,
+          dragDownToDissmissScaffold ?? scaffold,
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
@@ -181,7 +265,7 @@ class _PageFrameworkState extends State<PageFramework>
         ],
       );
     } else {
-      return scaffold;
+      return dragDownToDissmissScaffold ?? scaffold;
     }
   }
 }
