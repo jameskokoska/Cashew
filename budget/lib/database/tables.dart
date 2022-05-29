@@ -862,6 +862,16 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalCount)).watch();
   }
 
+  Stream<List<int?>> watchTotalCountOfTransactionsInWalletInCategory(
+      int walletPk, int categoryPk) {
+    final totalCount = transactions.transactionPk.count();
+    final query = selectOnly(transactions)
+      ..addColumns([totalCount])
+      ..where(transactions.walletFk.equals(walletPk) &
+          transactions.categoryFk.equals(categoryPk));
+    return query.map((row) => row.read(totalCount)).watch();
+  }
+
   Future<List<int?>> getTotalCountOfCategories() async {
     final totalCount = categories.categoryPk.count();
     final query = selectOnly(categories)..addColumns([totalCount]);

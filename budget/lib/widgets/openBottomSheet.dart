@@ -12,7 +12,7 @@ openBottomSheet(context, child, {bool maxHeight: true, bool snap: true}) {
       bottomPaddingColor: Theme.of(context).colorScheme.lightDarkAccent,
       builder: (context) {
     return SlidingSheetDialog(
-      elevation: 8,
+      elevation: 0,
       isBackdropInteractable: true,
       dismissOnBackdropTap: true,
       snapSpec: SnapSpec(

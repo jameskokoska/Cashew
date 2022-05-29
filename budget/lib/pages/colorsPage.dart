@@ -40,8 +40,8 @@ class ColorsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      dragDownToDismiss: true,
       title: "Colors",
-      backButton: false,
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,

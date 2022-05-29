@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
@@ -87,78 +88,135 @@ class BudgetRowEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTimeRange budgetRange = getBudgetDate(budget, DateTime.now());
+    Color backgroundColor = dynamicPastel(context,
+        HexColor(budget.colour, Theme.of(context).colorScheme.lightDarkAccent),
+        amountLight: 0.55, amountDark: 0.35);
     return Container(
-      height: 50,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: EdgeInsets.only(left: 20, right: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: HexColor(budget.colour),
+        borderRadius: BorderRadius.circular(18),
+        color: backgroundColor,
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextFont(text: budget.name + " - " + budget.order.toString()),
-          Row(
-            children: [
-              Tappable(
-                color: Colors.transparent,
-                borderRadius: 50,
-                child: Container(
-                    width: 40, height: 50, child: Icon(Icons.delete_rounded)),
-                onTap: () {
-                  openPopup(context,
-                      description: "Delete " + budget.name + "?",
-                      icon: Icons.delete_rounded,
-                      onCancel: () {
-                        Navigator.pop(context);
-                      },
-                      onCancelLabel: "Cancel",
-                      onSubmit: () {
-                        database.deleteBudget(budget.budgetPk);
-                        Navigator.pop(context);
-                        openSnackbar(context, "Deleted " + budget.name);
-                      },
-                      onSubmitLabel: "Delete");
-                },
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 25,
+                  right: 10,
+                  top: 15,
+                  bottom: 15,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFont(
+                      text: budget.name + " - " + budget.order.toString(),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 21,
+                    ),
+                    Container(height: 2),
+                    Row(
+                      children: [
+                        TextFont(
+                          text: convertToMoney(budget.amount),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                        TextFont(
+                          text: " / ",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                        budget.reoccurrence!.index != 0
+                            ? TextFont(
+                                text: budget.periodLength.toString() + " ",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              )
+                            : SizedBox(),
+                        TextFont(
+                          text: budget.periodLength == 1
+                              ? nameRecurrence[budget.reoccurrence!.index]
+                              : namesRecurrence[budget.reoccurrence!.index],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ],
+                    ),
+                    TextFont(
+                      text: getWordedDateShort(budgetRange.start) +
+                          " - " +
+                          getWordedDateShort(budgetRange.end),
+                      fontSize: 14,
+                    ),
+                  ],
+                ),
               ),
-              OpenContainerNavigation(
-                closedColor: HexColor(budget.colour),
-                button: (openContainer) {
-                  return Tappable(
-                    color: Colors.transparent,
-                    borderRadius: 50,
-                    child: Container(
-                        width: 40, height: 50, child: Icon(Icons.edit_rounded)),
-                    onTap: () {
-                      openContainer();
+            ),
+            Tappable(
+              color: backgroundColor,
+              borderRadius: 0,
+              child: Container(
+                  height: double.infinity,
+                  width: 40,
+                  child: Icon(Icons.delete_rounded)),
+              onTap: () {
+                openPopup(context,
+                    description: "Delete " + budget.name + "?",
+                    icon: Icons.delete_rounded,
+                    onCancel: () {
+                      Navigator.pop(context);
                     },
-                  );
-                },
-                openPage: AddBudgetPage(
-                  title: "Edit " + budget.name + " Budget",
-                  budget: budget,
-                ),
+                    onCancelLabel: "Cancel",
+                    onSubmit: () {
+                      database.deleteBudget(budget.budgetPk);
+                      Navigator.pop(context);
+                      openSnackbar(context, "Deleted " + budget.name);
+                    },
+                    onSubmitLabel: "Delete");
+              },
+            ),
+            OpenContainerNavigation(
+              closedColor: backgroundColor,
+              borderRadius: 0,
+              button: (openContainer) {
+                return Tappable(
+                  color: backgroundColor,
+                  borderRadius: 0,
+                  child: Container(
+                      width: 40,
+                      height: double.infinity,
+                      child: Icon(Icons.edit_rounded)),
+                  onTap: () {
+                    openContainer();
+                  },
+                );
+              },
+              openPage: AddBudgetPage(
+                title: "Edit " + budget.name + " Budget",
+                budget: budget,
               ),
-              Material(
+            ),
+            ReorderableDragStartListener(
+              index: index,
+              child: Tappable(
                 color: Colors.transparent,
-                child: ReorderableDragStartListener(
-                  index: index,
-                  child: Tappable(
-                    color: Colors.transparent,
-                    borderRadius: 50,
-                    child: Container(
-                        width: 40,
-                        height: 50,
-                        child: Icon(Icons.drag_handle_rounded)),
-                    onTap: () {},
-                  ),
-                ),
+                borderRadius: 0,
+                child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    width: 40,
+                    height: double.infinity,
+                    child: Icon(Icons.drag_handle_rounded)),
+                onTap: () {},
               ),
-            ],
-          )
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

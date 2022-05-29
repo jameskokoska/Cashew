@@ -165,8 +165,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
         radius: radius,
         badgeWidget: _Badge(
           scale: widgetScale,
-          borderColor:
-              HexColor(widget.data[i].category.colour).withOpacity(0.8),
+          color: dynamicPastel(
+              context, HexColor(widget.data[i].category.colour),
+              amountLight: 0.3, amountDark: 0.1),
           assetImage: AssetImage(
             "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),
@@ -183,14 +184,14 @@ class PieChartDisplayState extends State<PieChartDisplay> {
 
 class _Badge extends StatelessWidget {
   final double scale;
-  final Color borderColor;
+  final Color color;
   final AssetImage assetImage;
   final String percent;
 
   const _Badge({
     Key? key,
     required this.scale,
-    required this.borderColor,
+    required this.color,
     required this.assetImage,
     required this.percent,
   }) : super(key: key);
@@ -205,36 +206,54 @@ class _Badge extends StatelessWidget {
         width: 45,
         height: 45,
         decoration: BoxDecoration(
-          color: Colors.white,
           shape: BoxShape.circle,
           border: Border.all(
-            color: borderColor,
+            color: color,
             width: 2,
           ),
         ),
         child: Stack(
           children: [
-            Center(
-              child: Image(
-                image: assetImage,
-                width: 25,
-              ),
-            ),
             AnimatedOpacity(
               duration: Duration(milliseconds: 200),
               opacity: this.scale == 1 ? 0 : 1,
               child: Center(
                 child: Transform.translate(
-                  offset: Offset(0, 32),
-                  child: TextFont(
-                    text: percent,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    shadow: true,
+                  offset: Offset(0, 34),
+                  child: IntrinsicWidth(
+                    child: Container(
+                      height: 20,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: color,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Center(
+                        child: TextFont(
+                          text: percent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            )
+            ),
+            Container(
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              child: Center(
+                child: Image(
+                  image: assetImage,
+                  width: 25,
+                ),
+              ),
+            ),
           ],
         ),
       ),

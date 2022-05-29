@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -92,8 +93,13 @@ class CategoryRowEntry extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       padding: EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: HexColor(category.colour),
+        borderRadius: BorderRadius.circular(18),
+        color: dynamicPastel(
+            context,
+            HexColor(
+                category.colour, Theme.of(context).colorScheme.lightDarkAccent),
+            amountLight: 0.55,
+            amountDark: 0.35),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +112,41 @@ class CategoryRowEntry extends StatelessWidget {
                 size: 40,
                 category: category,
               ),
-              TextFont(text: category.name + " - " + category.order.toString()),
+              Container(width: 5),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFont(
+                    text: category.name + " - " + category.order.toString(),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 19,
+                  ),
+                  StreamBuilder<List<int?>>(
+                    stream: database
+                        .watchTotalCountOfTransactionsInWalletInCategory(
+                            appStateSettings["selectedWallet"],
+                            category.categoryPk),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data != null) {
+                        return TextFont(
+                          textAlign: TextAlign.left,
+                          text: snapshot.data![0] == 1
+                              ? (snapshot.data![0].toString() + " transaction")
+                              : (snapshot.data![0].toString() +
+                                  " transactions"),
+                          fontSize: 14,
+                          textColor: Theme.of(context)
+                              .colorScheme
+                              .black
+                              .withOpacity(0.65),
+                        );
+                      } else {
+                        return SizedBox();
+                      }
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
           Row(

@@ -54,6 +54,7 @@ class _RadioItemsState extends State<RadioItems> {
                   });
                   widget.onChanged(item);
                 },
+                activeColor: Theme.of(context).colorScheme.primary,
               ),
             ),
           )

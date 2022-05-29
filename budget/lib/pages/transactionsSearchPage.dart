@@ -134,6 +134,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         }
       },
       child: PageFramework(
+        dragDownToDismiss: true,
         onScroll: _scrollListener,
         title: "Search",
         slivers: [

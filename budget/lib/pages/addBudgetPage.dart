@@ -42,21 +42,33 @@ class AddBudgetPage extends StatefulWidget {
   _AddBudgetPageState createState() => _AddBudgetPageState();
 }
 
+dynamic namesRecurrence = {
+  "Custom": "custom",
+  "Daily": "days",
+  "Weekly": "weeks",
+  "Monthly": "months",
+  "Yearly": "years",
+  0: "custom",
+  1: "days",
+  2: "weeks",
+  3: "months",
+  4: "years",
+};
+
+dynamic nameRecurrence = {
+  "Custom": "custom",
+  "Daily": "day",
+  "Weekly": "week",
+  "Monthly": "month",
+  "Yearly": "year",
+  0: "custom",
+  1: "day",
+  2: "week",
+  3: "month",
+  4: "year",
+};
+
 class _AddBudgetPageState extends State<AddBudgetPage> {
-  dynamic namesRecurrence = {
-    "Custom": "custom",
-    "Weekly": "weeks",
-    "Monthly": "months",
-    "Yearly": "years",
-  };
-
-  dynamic nameRecurrence = {
-    "Custom": "custom",
-    "Weekly": "week",
-    "Monthly": "month",
-    "Yearly": "year",
-  };
-
   bool? canAddBudget;
 
   List<TransactionCategory>? selectedCategories;
@@ -147,7 +159,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       PopupFramework(
         title: "Select Period",
         child: RadioItems(
-          items: ["Custom", "Weekly", "Monthly", "Yearly"],
+          items: ["Custom", "Daily", "Weekly", "Monthly", "Yearly"],
           initial: selectedRecurrence,
           onChanged: (value) {
             if (value == "Custom") {

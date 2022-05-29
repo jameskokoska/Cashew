@@ -200,6 +200,8 @@ BudgetReoccurence mapRecurrence(String? recurrenceString) {
     return BudgetReoccurence.monthly;
   } else if (recurrenceString == "Custom") {
     return BudgetReoccurence.custom;
+  } else if (recurrenceString == "Daily") {
+    return BudgetReoccurence.daily;
   } else if (recurrenceString == "Weekly") {
     return BudgetReoccurence.weekly;
   } else if (recurrenceString == "Monthly") {
@@ -259,9 +261,9 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
 
 String getWordedNumber(double value) {
   if (value >= 1000) {
-    return (value / 1000).toStringAsFixed(1) + "K";
+    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
   } else {
-    return value.toInt().toString();
+    return getCurrencyString() + value.toInt().toString();
   }
 }
 

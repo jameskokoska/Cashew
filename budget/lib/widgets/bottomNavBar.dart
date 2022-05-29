@@ -34,10 +34,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Theme.of(context).colorScheme.lightDarkAccent,
-                  blurRadius: 15,
-                  offset: Offset(0, 5),
-                  spreadRadius: 0,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Theme.of(context)
+                          .colorScheme
+                          .shadowColorLight
+                          .withAlpha(50)
+                      : Colors.transparent,
+                  blurRadius: 20,
+                  offset: Offset(0, 4),
+                  spreadRadius: 9,
                 ),
               ],
             ),

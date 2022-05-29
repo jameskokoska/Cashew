@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -86,18 +87,82 @@ class WalletRowEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: EdgeInsets.only(left: 20, right: 10),
+      padding: EdgeInsets.only(
+        left: 25,
+        right: 10,
+        top: 15,
+        bottom: 15,
+      ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: HexColor(wallet.colour),
+        borderRadius: BorderRadius.circular(18),
+        color: dynamicPastel(
+            context,
+            HexColor(
+                wallet.colour, Theme.of(context).colorScheme.lightDarkAccent),
+            amountLight: 0.55,
+            amountDark: 0.35),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextFont(text: wallet.name + " - " + wallet.order.toString()),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFont(
+                  text: wallet.name + " - " + wallet.order.toString(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 21,
+                ),
+                Container(height: 2),
+                StreamBuilder<List<double?>>(
+                  stream: database.watchTotalOfWallet(wallet.walletPk),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return CountNumber(
+                        count: (snapshot.data![0] ?? 0 * -1),
+                        duration: Duration(milliseconds: 4000),
+                        dynamicDecimals: true,
+                        initialCount: (snapshot.data![0] ?? 0 * -1),
+                        textBuilder: (number) {
+                          return TextFont(
+                            textAlign: TextAlign.left,
+                            text: convertToMoney(number),
+                            fontSize: 15,
+                          );
+                        },
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
+                ),
+                StreamBuilder<List<int?>>(
+                  stream: database
+                      .watchTotalCountOfTransactionsInWallet(wallet.walletPk),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return TextFont(
+                        textAlign: TextAlign.left,
+                        text: snapshot.data![0] == 1
+                            ? (snapshot.data![0].toString() + " transaction")
+                            : (snapshot.data![0].toString() + " transactions"),
+                        fontSize: 14,
+                        textColor: Theme.of(context)
+                            .colorScheme
+                            .black
+                            .withOpacity(0.65),
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
           Row(
             children: [
               Tappable(
@@ -108,9 +173,9 @@ class WalletRowEntry extends StatelessWidget {
                 onTap: () {
                   openPopup(
                     context,
-                    description: "Delete " +
-                        wallet.name +
-                        "?\nThis will delete all transactions associated with this wallet.",
+                    title: "Delete " + wallet.name + " wallet?",
+                    description:
+                        "This will delete all transactions associated with this wallet.",
                     icon: Icons.delete_rounded,
                     onCancel: () {
                       Navigator.pop(context);

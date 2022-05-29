@@ -122,7 +122,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           getTitles: (value) {
             return getWordedNumber(value);
           },
-          reservedSize: 30,
+          reservedSize: 33,
           interval:
               ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
                           5)
