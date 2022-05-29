@@ -772,9 +772,7 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   void _pop(double velocity) {
     if (isDialog && !dismissUnderway && Navigator.canPop(context)) {
-      dismissUnderway = true;
-      Navigator.pop(context);
-      snapToExtent(0.0, velocity: velocity);
+      popDialog(velocity);
     } else if (!isDialog) {
       final num fractionCovered =
           ((currentExtent - minExtent) / (maxExtent - minExtent))
@@ -784,12 +782,32 @@ class _SlidingSheetState extends State<SlidingSheet>
     }
   }
 
+  Future<bool> popDialog(double velocity) async {
+    dismissUnderway = true;
+    final FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus ||
+        MediaQuery.of(context).viewInsets.bottom > 0) {
+      // Close the keyboard
+      currentFocus.unfocus();
+      // Wait for the keyboard to close
+      while ((MediaQuery.of(context).viewInsets.bottom > 0)) {
+        await Future.delayed(Duration(milliseconds: 1), () {});
+      }
+    }
+    snapToExtent(0.0, velocity: velocity);
+    Navigator.pop(context);
+    return true;
+  }
+
   // Ensure that the sheet sizes itself correctly when the
   // constraints change.
   void _adjustSnapForIncomingConstraints(double previousHeight) {
     if (previousHeight > 0.0 &&
-        previousHeight != availableHeight &&
-        state.isShown) {
+            previousHeight != availableHeight &&
+            state.isShown &&
+            dismissUnderway ==
+                false //Ensure this dismiss underway is false, if true could have unexpected behaviour when keyboard shrinks
+        ) {
       _updateSnappingsAndExtent();
 
       final num changeAdjustedExtent =

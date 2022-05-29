@@ -51,7 +51,7 @@ class PageFramework extends StatefulWidget {
 }
 
 class _PageFrameworkState extends State<PageFramework>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   bool showElevation = false;
   late ScrollController _scrollController;
   late AnimationController _animationControllerShift;
@@ -65,6 +65,18 @@ class _PageFrameworkState extends State<PageFramework>
 
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  double measurement = 0;
+  @override
+  void didChangeMetrics() {
+    if (MediaQuery.of(context).viewInsets.bottom < measurement) {
+      // keyboard closed
+      _scrollListener();
+    }
+    measurement = MediaQuery.of(context).viewInsets.bottom;
   }
 
   _scrollListener() {
@@ -110,6 +122,7 @@ class _PageFrameworkState extends State<PageFramework>
     _animationControllerShift.dispose();
     _animationControllerOpacity.dispose();
     _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   double keyboardOpenedPrevious = 0;

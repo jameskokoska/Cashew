@@ -420,7 +420,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   selectedText: selectedTitle,
                                 ),
                               ),
-                              snap: false,
                             );
                           },
                           borderRadius: 15,
@@ -676,7 +675,7 @@ class _SelectNotesState extends State<SelectNotes> {
                   width: MediaQuery.of(context).size.width - 36,
                   child: TextInput(
                     bubbly: true,
-                    icon: Icons.title_rounded,
+                    // icon: Icons.title_rounded,
                     backgroundColor:
                         Theme.of(context).colorScheme.lightDarkAccentHeavy,
                     initialValue: widget.selectedTitle,

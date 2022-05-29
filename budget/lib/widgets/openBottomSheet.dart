@@ -8,6 +8,7 @@ openBottomSheet(context, child, {bool maxHeight: true, bool snap: true}) {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
   showSlidingBottomSheet(context,
+      resizeToAvoidBottomInset: true,
       bottomPaddingColor: Theme.of(context).colorScheme.lightDarkAccent,
       builder: (context) {
     return SlidingSheetDialog(
@@ -24,7 +25,7 @@ openBottomSheet(context, child, {bool maxHeight: true, bool snap: true}) {
         ],
         positioning: SnapPositioning.relativeToAvailableSpace,
       ),
-      color: Colors.transparent,
+      color: Theme.of(context).colorScheme.lightDarkAccent,
       // headerBuilder: (context, _) {
       //   if (handle) {
       //     return Padding(
@@ -74,26 +75,23 @@ openBottomSheet(context, child, {bool maxHeight: true, bool snap: true}) {
 //       return Padding(
 //         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
 //         child: GestureDetector(
-//           behavior: HitTestBehavior.opaque,
 //           onTap: () {
 //             Navigator.pop(context);
 //           },
 //           child: Align(
 //             alignment: Alignment.bottomCenter,
-//             child: SingleChildScrollView(
-//               child: Container(
-//                 padding: EdgeInsets.only(
-//                   bottom: MediaQuery.of(contextBuilder).viewInsets.bottom,
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: Theme.of(context).colorScheme.lightDarkAccent,
-//                   borderRadius: BorderRadius.only(
-//                     topRight: Radius.circular(20),
-//                     topLeft: Radius.circular(20),
-//                   ),
-//                 ),
-//                 child: child,
+//             child: Container(
+//               padding: EdgeInsets.only(
+//                 bottom: MediaQuery.of(contextBuilder).viewInsets.bottom,
 //               ),
+//               decoration: BoxDecoration(
+//                 color: Theme.of(context).colorScheme.lightDarkAccent,
+//                 borderRadius: BorderRadius.only(
+//                   topRight: Radius.circular(20),
+//                   topLeft: Radius.circular(20),
+//                 ),
+//               ),
+//               child: child,
 //             ),
 //           ),
 //         ),

@@ -71,8 +71,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   DateTime selectedStartDate = DateTime.now();
   DateTime? selectedEndDate;
   Color? selectedColor;
-  String selectedRecurrence = "Weekly";
-  String selectedRecurrenceDisplay = "weeks";
+  String selectedRecurrence = "Monthly";
+  String selectedRecurrenceDisplay = "months";
 
   late TextEditingController _nameInputController;
 
@@ -464,77 +464,17 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 Container(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 1000),
-                        child: Tappable(
-                          key: ValueKey(selectedColor),
-                          color: lightenPastel(
-                              selectedColor ??
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .lightDarkAccentHeavy,
-                              amount: 0.3),
-                          borderRadius: 15,
-                          child: Container(
-                            width: 55,
-                            height: 55,
-                          ),
-                          onTap: () {
-                            selectColor(context);
-                          },
-                        ),
-                      ),
-                      Container(width: 15),
-                      Expanded(
-                        child: Tappable(
-                          onTap: () {
-                            selectTitle();
-                          },
-                          color: Colors.transparent,
-                          borderRadius: 15,
-                          child: Container(
-                            height: 55,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      width: 1.5,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .lightDarkAccentHeavy)),
-                            ),
-                            child: IntrinsicWidth(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: TextFont(
-                                  autoSizeText: true,
-                                  maxLines: 1,
-                                  minFontSize: 16,
-                                  textAlign: TextAlign.left,
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold,
-                                  text: selectedTitle == null ||
-                                          selectedTitle == ""
-                                      ? "Name"
-                                      : selectedTitle ?? "",
-                                  textColor: selectedTitle == null ||
-                                          selectedTitle == ""
-                                      ? Theme.of(context).colorScheme.textLight
-                                      : Theme.of(context).colorScheme.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: TappableTextEntry(
+                    title: selectedTitle,
+                    placeholder: "Name",
+                    onTap: () {
+                      selectTitle();
+                    },
+                    autoSizeText: true,
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   ),
                 ),
-                Container(height: 35),
+                Container(height: 17),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFont(
@@ -552,7 +492,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     setSelectedColor: setSelectedColor,
                   ),
                 ),
-                Container(height: 25),
+                Container(height: 17),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFont(
@@ -580,7 +520,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     setSelectedCategories: setSelectedCategories,
                   ),
                 ),
-                Container(height: 30),
+                Container(height: 23),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -601,80 +541,57 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     alignment: WrapAlignment.center,
                     children: [
                       IntrinsicWidth(
-                        child: Tappable(
+                        child: TappableTextEntry(
+                          title: convertToMoney(selectedAmount ?? 0),
+                          placeholder: convertToMoney(0),
+                          showPlaceHolderWhenTextEquals: convertToMoney(0),
                           onTap: () {
                             selectAmount(context);
                           },
-                          color: Colors.transparent,
-                          borderRadius: 15,
-                          child: Center(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: CountNumber(
-                                count: selectedAmount ?? 0,
-                                duration: Duration(milliseconds: 1000),
-                                dynamicDecimals: true,
-                                initialCount: selectedAmount ?? 0,
-                                textBuilder: (number) {
-                                  return TextFont(
-                                    textAlign: TextAlign.right,
-                                    text: convertToMoney(number),
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.bold,
-                                    maxLines: 1,
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                          internalPadding:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
                         ),
                       ),
                       IntrinsicWidth(
                         child: Row(
                           children: [
                             selectedRecurrence != "Custom"
-                                ? Tappable(
+                                ? TappableTextEntry(
+                                    title:
+                                        "/ " + selectedPeriodLength.toString(),
+                                    placeholder: "/ 0",
+                                    showPlaceHolderWhenTextEquals: "/ 0",
                                     onTap: () {
                                       selectPeriodLength(context);
                                     },
-                                    color: Colors.transparent,
-                                    borderRadius: 15,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 13),
-                                      child: Center(
-                                        child: TextFont(
-                                          text: "/ " +
-                                              selectedPeriodLength.toString(),
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    internalPadding: EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 4),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 3),
                                   )
                                 : TextFont(
-                                    text: "/ ",
+                                    text: " /",
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                   ),
-                            Tappable(
+                            TappableTextEntry(
+                              title: selectedRecurrenceDisplay,
+                              placeholder: "",
                               onTap: () {
                                 selectRecurrence(context);
                               },
-                              color: Colors.transparent,
-                              borderRadius: 15,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 13),
-                                child: Center(
-                                  child: TextFont(
-                                    text: selectedRecurrenceDisplay,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              internalPadding: EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 4),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 3),
                             ),
                           ],
                         ),
@@ -687,86 +604,94 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       0,
                       selectedEndDate == null && selectedRecurrence == "Custom"
                           ? 0
-                          : -15),
+                          : -5),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: selectedRecurrence != "Custom"
-                        ? Column(
-                            children: [
-                              Tappable(
-                                onTap: () {
-                                  selectStartDate(context);
-                                },
-                                color: Colors.transparent,
-                                borderRadius: 15,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 13),
-                                  child: Center(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 2.8),
-                                          child: TextFont(
-                                            text: "beginning  ",
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        TextFont(
-                                          text:
-                                              getWordedDate(selectedStartDate),
-                                          fontSize: 25,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: selectedRecurrence != "Custom"
+                          ? Tappable(
+                              onTap: () {
+                                selectStartDate(context);
+                              },
+                              color: Colors.transparent,
+                              borderRadius: 15,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 8),
+                                child: Center(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 5.8),
+                                        child: TextFont(
+                                          text: "beginning ",
+                                          fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      IgnorePointer(
+                                        child: TappableTextEntry(
+                                          title:
+                                              getWordedDate(selectedStartDate),
+                                          placeholder: "",
+                                          onTap: () {
+                                            selectAmount(context);
+                                          },
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          internalPadding: EdgeInsets.symmetric(
+                                              vertical: 2, horizontal: 4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 5),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            ],
-                          )
-                        : Tappable(
-                            onTap: () {
-                              selectDateRange(context);
-                            },
-                            color: selectedEndDate == null
-                                ? Theme.of(context).colorScheme.lightDarkAccent
-                                : Colors.transparent,
-                            borderRadius: 15,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 13),
-                              child: Center(
-                                child: selectedEndDate == null
-                                    ? TextFont(
-                                        text: "Select Custom Period",
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        textColor: Theme.of(context)
-                                            .colorScheme
-                                            .textLight,
-                                      )
-                                    : TextFont(
-                                        text: getWordedDateShort(
-                                                selectedStartDate) +
-                                            " - " +
-                                            getWordedDateShort(
-                                                selectedEndDate!),
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
+                            )
+                          : Tappable(
+                              onTap: () {
+                                selectDateRange(context);
+                              },
+                              color: Colors.transparent,
+                              borderRadius: 15,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 8),
+                                child: Center(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IgnorePointer(
+                                        child: TappableTextEntry(
+                                          title: selectedEndDate == null
+                                              ? null
+                                              : getWordedDateShort(
+                                                      selectedStartDate) +
+                                                  " - " +
+                                                  getWordedDateShort(
+                                                      selectedEndDate!),
+                                          placeholder: "Select Custom Period",
+                                          onTap: () {},
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          internalPadding: EdgeInsets.symmetric(
+                                              vertical: 2, horizontal: 4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 5),
+                                        ),
                                       ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                  ),
+                            )),
                 ),
-                Container(height: 15),
+                Container(height: 70),
               ],
             ),
             Align(
@@ -789,6 +714,76 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class TappableTextEntry extends StatelessWidget {
+  const TappableTextEntry({
+    Key? key,
+    required this.title,
+    required this.placeholder,
+    required this.onTap,
+    this.fontSize,
+    this.fontWeight,
+    this.padding = const EdgeInsets.symmetric(vertical: 0),
+    this.internalPadding =
+        const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+    this.autoSizeText = false,
+    this.showPlaceHolderWhenTextEquals,
+  }) : super(key: key);
+
+  final String? title;
+  final String placeholder;
+  final VoidCallback onTap;
+  final EdgeInsets padding;
+  final EdgeInsets internalPadding;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  final bool autoSizeText;
+  final String? showPlaceHolderWhenTextEquals;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      color: Colors.transparent,
+      borderRadius: 15,
+      child: Padding(
+        padding: padding,
+        child: Container(
+          padding: internalPadding,
+          decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    width: 1.5,
+                    color: Theme.of(context).colorScheme.lightDarkAccentHeavy)),
+          ),
+          child: IntrinsicWidth(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextFont(
+                autoSizeText: autoSizeText,
+                maxLines: 1,
+                minFontSize: 16,
+                textAlign: TextAlign.left,
+                fontSize: fontSize ?? 35,
+                fontWeight: fontWeight ?? FontWeight.bold,
+                text: title == null ||
+                        title == "" ||
+                        title == showPlaceHolderWhenTextEquals
+                    ? placeholder
+                    : title ?? "",
+                textColor: title == null ||
+                        title == "" ||
+                        title == showPlaceHolderWhenTextEquals
+                    ? Theme.of(context).colorScheme.textLight
+                    : Theme.of(context).colorScheme.black,
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -135,7 +135,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       },
       child: PageFramework(
         onScroll: _scrollListener,
-        title: "Transactions",
+        title: "Search",
         slivers: [
           SliverToBoxAdapter(
             child: AnimatedBuilder(
