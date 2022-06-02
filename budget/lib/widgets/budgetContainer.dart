@@ -32,7 +32,7 @@ class BudgetContainer extends StatelessWidget {
         budget.allCategoryFks,
       ),
       builder: (context, snapshot) {
-        if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+        if (snapshot.hasData) {
           double totalSpent = 0;
           snapshot.data!.forEach((category) {
             totalSpent = totalSpent + category.total;
@@ -140,20 +140,23 @@ class BudgetContainer extends StatelessWidget {
                           getPercentBetweenDates(budgetRange, DateTime.now()),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 17),
-                    child: DaySpending(
-                      budget: budget,
-                      amount: (budget.amount - totalSpent) /
-                          daysBetween(DateTime.now(), budgetRange.end),
-                    ),
-                  ),
+                  daysBetween(DateTime.now(), budgetRange.end) == 0
+                      ? Container()
+                      : Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, right: 10, bottom: 17),
+                          child: DaySpending(
+                            budget: budget,
+                            amount: (budget.amount - totalSpent) /
+                                daysBetween(DateTime.now(), budgetRange.end),
+                          ),
+                        ),
                 ],
               ),
             ),
           );
         } else {
-          return SizedBox();
+          return Container(color: Colors.red, height: 5, width: 5);
         }
       },
     ));
@@ -383,70 +386,72 @@ class BudgetProgress extends StatelessWidget {
       children: [
         ShakeAnimation(
           animate: percent > 100,
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: large
-                      ? Theme.of(context).colorScheme.lightDarkAccent
-                      : Theme.of(context).colorScheme.lightDarkAccentHeavy,
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                height: large ? 24.2 : 19.2,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: ClipRRect(
-                  borderRadius: percent < 50
-                      ? BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          bottomLeft: Radius.circular(50),
-                        )
-                      : BorderRadius.circular(50),
-                  child: SlideFadeTransition(
-                    animate: percent <= 100,
-                    animationDuration: Duration(milliseconds: 1400),
-                    reverse: true,
-                    direction: Direction.horizontal,
-                    child: Container(
-                        child: FractionallySizedBox(
-                          heightFactor: 1,
-                          widthFactor: percent > 100 ? 1 : percent / 100,
-                          child: Stack(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(50),
-                                    bottomRight: Radius.circular(50),
-                                  ),
-                                  color: large
-                                      ? dynamicPastel(context, color,
-                                          amount: 0.1)
-                                      : lightenPastel(color, amount: 0.6),
-                                ),
-                              ),
-                              percent > 30
-                                  ? getPercentText(Theme.of(context)
-                                      .colorScheme
-                                      .white
-                                      .withOpacity(0.7))
-                                  : Container(),
-                            ],
-                          ),
-                        ),
-                        height: large ? 25 : 20),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: large
+                          ? Theme.of(context).colorScheme.lightDarkAccent
+                          : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                    ),
+                    height: large ? 24.2 : 19.2,
                   ),
-                ),
+                  ClipRRect(
+                    borderRadius: percent < 50
+                        ? BorderRadius.only(
+                            topRight: Radius.circular(50),
+                            bottomRight: Radius.circular(50),
+                          )
+                        : BorderRadius.circular(50),
+                    child: SlideFadeTransition(
+                      animate: percent <= 100,
+                      animationDuration: Duration(milliseconds: 1400),
+                      reverse: true,
+                      direction: Direction.horizontal,
+                      child: Container(
+                          child: FractionallySizedBox(
+                            heightFactor: 1,
+                            widthFactor: percent > 100 ? 1 : percent / 100,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(50),
+                                      bottomRight: Radius.circular(50),
+                                    ),
+                                    color: large
+                                        ? dynamicPastel(context, color,
+                                            amount: 0.1)
+                                        : lightenPastel(color, amount: 0.6),
+                                  ),
+                                ),
+                                percent > 30
+                                    ? getPercentText(Theme.of(context)
+                                        .colorScheme
+                                        .white
+                                        .withOpacity(0.7))
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                          height: large ? 25 : 20),
+                    ),
+                  ),
+                  percent <= 40
+                      ? getPercentText(large
+                          ? Theme.of(context).colorScheme.textLight
+                          : Theme.of(context).colorScheme.textLightHeavy)
+                      : Container(),
+                ],
               ),
-              percent <= 40
-                  ? getPercentText(large
-                      ? Theme.of(context).colorScheme.textLight
-                      : Theme.of(context).colorScheme.textLightHeavy)
-                  : Container(),
-            ],
+            ),
           ),
         ),
         TodayIndicator(

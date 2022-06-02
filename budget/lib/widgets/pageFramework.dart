@@ -26,6 +26,7 @@ class PageFramework extends StatefulWidget {
       this.floatingActionButton,
       this.textColor,
       this.dragDownToDismiss = false,
+      this.dragDownToDismissEnabled = true,
       this.dragDownToDissmissBackground})
       : super(key: key);
 
@@ -49,6 +50,7 @@ class PageFramework extends StatefulWidget {
   final Widget? floatingActionButton;
   final Color? textColor;
   final bool dragDownToDismiss;
+  final bool dragDownToDismissEnabled;
   final Color? dragDownToDissmissBackground;
   @override
   State<PageFramework> createState() => _PageFrameworkState();
@@ -146,25 +148,29 @@ class _PageFrameworkState extends State<PageFramework>
   bool swipeDownToDismiss = false;
 
   _onPointerMove(PointerMoveEvent ptr) {
-    if (swipeDownToDismiss) {
-      totalDragX = totalDragX + ptr.delta.dx;
-      totalDragY = totalDragY + ptr.delta.dy;
-      //How far you need to drag to track drags - for animation
-      _animationControllerDragY.value = totalDragY / 500;
-      _animationControllerDragX.value = 0.5 + totalDragX / 500;
+    if (widget.dragDownToDismissEnabled) {
+      if (swipeDownToDismiss) {
+        totalDragX = totalDragX + ptr.delta.dx;
+        totalDragY = totalDragY + ptr.delta.dy;
+        //How far you need to drag to track drags - for animation
+        _animationControllerDragY.value = totalDragY / 500;
+        _animationControllerDragX.value = 0.5 + totalDragX / 500;
+      }
     }
   }
 
   _onPointerUp(PointerUpEvent event) {
     //How far you need to drag to dismiss
-    if (totalDragY >= 125) {
-      Navigator.of(context).pop();
-      return;
+    if (widget.dragDownToDismissEnabled) {
+      if (totalDragY >= 125) {
+        Navigator.of(context).pop();
+        return;
+      }
+      totalDragX = 0;
+      totalDragY = 0;
+      _animationControllerDragY.reverse();
+      _animationControllerDragX.animateTo(0.5);
     }
-    totalDragX = 0;
-    totalDragY = 0;
-    _animationControllerDragY.reverse();
-    _animationControllerDragX.animateTo(0.5);
   }
 
   _onPointerDown(PointerDownEvent event) {

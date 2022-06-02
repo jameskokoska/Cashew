@@ -22,6 +22,9 @@ import 'package:flutter/gestures.dart';
 /*
 adb tcpip 5555
 adb connect 192.168.0.22
+
+flutter channel master
+flutter upgrade
 */
 void main() async {
   database = await constructDb();
