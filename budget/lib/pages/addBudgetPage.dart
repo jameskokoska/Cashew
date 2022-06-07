@@ -48,11 +48,11 @@ dynamic namesRecurrence = {
   "Weekly": "weeks",
   "Monthly": "months",
   "Yearly": "years",
-  0: "custom",
-  1: "days",
-  2: "weeks",
-  3: "months",
-  4: "years",
+  BudgetReoccurence.custom: "custom",
+  BudgetReoccurence.daily: "days",
+  BudgetReoccurence.weekly: "weeks",
+  BudgetReoccurence.monthly: "months",
+  BudgetReoccurence.yearly: "years",
 };
 
 dynamic nameRecurrence = {
@@ -61,11 +61,11 @@ dynamic nameRecurrence = {
   "Weekly": "week",
   "Monthly": "month",
   "Yearly": "year",
-  0: "custom",
-  1: "day",
-  2: "week",
-  3: "month",
-  4: "year",
+  BudgetReoccurence.custom: "custom",
+  BudgetReoccurence.daily: "day",
+  BudgetReoccurence.weekly: "week",
+  BudgetReoccurence.monthly: "month",
+  BudgetReoccurence.yearly: "year",
 };
 
 class _AddBudgetPageState extends State<AddBudgetPage> {
@@ -225,7 +225,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime(DateTime.now().year + 2),
       initialDateRange: DateTimeRange(
-        start: selectedStartDate ?? DateTime.now(),
+        start: selectedStartDate,
         end: selectedEndDate ??
             DateTime(DateTime.now().year, DateTime.now().month,
                 DateTime.now().day, DateTime.now().hour + 5),

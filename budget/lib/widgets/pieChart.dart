@@ -234,7 +234,7 @@ class _Badge extends StatelessWidget {
                       child: Center(
                         child: TextFont(
                           text: percent,
-                          fontSize: 11,
+                          fontSize: 10,
                           fontWeight: FontWeight.bold,
                           textAlign: TextAlign.center,
                         ),

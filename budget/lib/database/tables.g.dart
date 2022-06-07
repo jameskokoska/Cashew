@@ -348,6 +348,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final List<int>? labelFks;
   final DateTime dateCreated;
   final bool income;
+  final int? periodLength;
+  final BudgetReoccurence? reoccurrence;
+  final TransactionSpecialType? type;
+  final bool paid;
   Transaction(
       {required this.transactionPk,
       required this.name,
@@ -357,7 +361,11 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.walletFk,
       this.labelFks,
       required this.dateCreated,
-      required this.income});
+      required this.income,
+      this.periodLength,
+      this.reoccurrence,
+      this.type,
+      required this.paid});
   factory Transaction.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Transaction(
@@ -379,6 +387,14 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
       income: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}income'])!,
+      periodLength: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}period_length']),
+      reoccurrence: $TransactionsTable.$converter1.mapToDart(const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}reoccurrence'])),
+      type: $TransactionsTable.$converter2.mapToDart(const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])),
+      paid: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}paid'])!,
     );
   }
   @override
@@ -396,6 +412,18 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
     map['income'] = Variable<bool>(income);
+    if (!nullToAbsent || periodLength != null) {
+      map['period_length'] = Variable<int?>(periodLength);
+    }
+    if (!nullToAbsent || reoccurrence != null) {
+      final converter = $TransactionsTable.$converter1;
+      map['reoccurrence'] = Variable<int?>(converter.mapToSql(reoccurrence));
+    }
+    if (!nullToAbsent || type != null) {
+      final converter = $TransactionsTable.$converter2;
+      map['type'] = Variable<int?>(converter.mapToSql(type));
+    }
+    map['paid'] = Variable<bool>(paid);
     return map;
   }
 
@@ -412,6 +440,14 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           : Value(labelFks),
       dateCreated: Value(dateCreated),
       income: Value(income),
+      periodLength: periodLength == null && nullToAbsent
+          ? const Value.absent()
+          : Value(periodLength),
+      reoccurrence: reoccurrence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reoccurrence),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      paid: Value(paid),
     );
   }
 
@@ -428,6 +464,11 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       labelFks: serializer.fromJson<List<int>?>(json['labelFks']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       income: serializer.fromJson<bool>(json['income']),
+      periodLength: serializer.fromJson<int?>(json['periodLength']),
+      reoccurrence:
+          serializer.fromJson<BudgetReoccurence?>(json['reoccurrence']),
+      type: serializer.fromJson<TransactionSpecialType?>(json['type']),
+      paid: serializer.fromJson<bool>(json['paid']),
     );
   }
   @override
@@ -443,6 +484,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'labelFks': serializer.toJson<List<int>?>(labelFks),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'income': serializer.toJson<bool>(income),
+      'periodLength': serializer.toJson<int?>(periodLength),
+      'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
+      'type': serializer.toJson<TransactionSpecialType?>(type),
+      'paid': serializer.toJson<bool>(paid),
     };
   }
 
@@ -455,7 +500,11 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           int? walletFk,
           List<int>? labelFks,
           DateTime? dateCreated,
-          bool? income}) =>
+          bool? income,
+          int? periodLength,
+          BudgetReoccurence? reoccurrence,
+          TransactionSpecialType? type,
+          bool? paid}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -466,6 +515,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         labelFks: labelFks ?? this.labelFks,
         dateCreated: dateCreated ?? this.dateCreated,
         income: income ?? this.income,
+        periodLength: periodLength ?? this.periodLength,
+        reoccurrence: reoccurrence ?? this.reoccurrence,
+        type: type ?? this.type,
+        paid: paid ?? this.paid,
       );
   @override
   String toString() {
@@ -478,14 +531,30 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('walletFk: $walletFk, ')
           ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
-          ..write('income: $income')
+          ..write('income: $income, ')
+          ..write('periodLength: $periodLength, ')
+          ..write('reoccurrence: $reoccurrence, ')
+          ..write('type: $type, ')
+          ..write('paid: $paid')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(transactionPk, name, amount, note, categoryFk,
-      walletFk, labelFks, dateCreated, income);
+  int get hashCode => Object.hash(
+      transactionPk,
+      name,
+      amount,
+      note,
+      categoryFk,
+      walletFk,
+      labelFks,
+      dateCreated,
+      income,
+      periodLength,
+      reoccurrence,
+      type,
+      paid);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -498,7 +567,11 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.walletFk == this.walletFk &&
           other.labelFks == this.labelFks &&
           other.dateCreated == this.dateCreated &&
-          other.income == this.income);
+          other.income == this.income &&
+          other.periodLength == this.periodLength &&
+          other.reoccurrence == this.reoccurrence &&
+          other.type == this.type &&
+          other.paid == this.paid);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -511,6 +584,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<List<int>?> labelFks;
   final Value<DateTime> dateCreated;
   final Value<bool> income;
+  final Value<int?> periodLength;
+  final Value<BudgetReoccurence?> reoccurrence;
+  final Value<TransactionSpecialType?> type;
+  final Value<bool> paid;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -521,6 +598,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.income = const Value.absent(),
+    this.periodLength = const Value.absent(),
+    this.reoccurrence = const Value.absent(),
+    this.type = const Value.absent(),
+    this.paid = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.transactionPk = const Value.absent(),
@@ -532,6 +613,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.income = const Value.absent(),
+    this.periodLength = const Value.absent(),
+    this.reoccurrence = const Value.absent(),
+    this.type = const Value.absent(),
+    this.paid = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         note = Value(note),
@@ -547,6 +632,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<List<int>?>? labelFks,
     Expression<DateTime>? dateCreated,
     Expression<bool>? income,
+    Expression<int?>? periodLength,
+    Expression<BudgetReoccurence?>? reoccurrence,
+    Expression<TransactionSpecialType?>? type,
+    Expression<bool>? paid,
   }) {
     return RawValuesInsertable({
       if (transactionPk != null) 'transaction_pk': transactionPk,
@@ -558,6 +647,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (labelFks != null) 'label_fks': labelFks,
       if (dateCreated != null) 'date_created': dateCreated,
       if (income != null) 'income': income,
+      if (periodLength != null) 'period_length': periodLength,
+      if (reoccurrence != null) 'reoccurrence': reoccurrence,
+      if (type != null) 'type': type,
+      if (paid != null) 'paid': paid,
     });
   }
 
@@ -570,7 +663,11 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<int>? walletFk,
       Value<List<int>?>? labelFks,
       Value<DateTime>? dateCreated,
-      Value<bool>? income}) {
+      Value<bool>? income,
+      Value<int?>? periodLength,
+      Value<BudgetReoccurence?>? reoccurrence,
+      Value<TransactionSpecialType?>? type,
+      Value<bool>? paid}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
       name: name ?? this.name,
@@ -581,6 +678,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       labelFks: labelFks ?? this.labelFks,
       dateCreated: dateCreated ?? this.dateCreated,
       income: income ?? this.income,
+      periodLength: periodLength ?? this.periodLength,
+      reoccurrence: reoccurrence ?? this.reoccurrence,
+      type: type ?? this.type,
+      paid: paid ?? this.paid,
     );
   }
 
@@ -615,6 +716,21 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
     }
+    if (periodLength.present) {
+      map['period_length'] = Variable<int?>(periodLength.value);
+    }
+    if (reoccurrence.present) {
+      final converter = $TransactionsTable.$converter1;
+      map['reoccurrence'] =
+          Variable<int?>(converter.mapToSql(reoccurrence.value));
+    }
+    if (type.present) {
+      final converter = $TransactionsTable.$converter2;
+      map['type'] = Variable<int?>(converter.mapToSql(type.value));
+    }
+    if (paid.present) {
+      map['paid'] = Variable<bool>(paid.value);
+    }
     return map;
   }
 
@@ -629,7 +745,11 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('walletFk: $walletFk, ')
           ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
-          ..write('income: $income')
+          ..write('income: $income, ')
+          ..write('periodLength: $periodLength, ')
+          ..write('reoccurrence: $reoccurrence, ')
+          ..write('type: $type, ')
+          ..write('paid: $paid')
           ..write(')'))
         .toString();
   }
@@ -699,6 +819,34 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (income IN (0, 1))',
       defaultValue: const Constant(false));
+  final VerificationMeta _periodLengthMeta =
+      const VerificationMeta('periodLength');
+  @override
+  late final GeneratedColumn<int?> periodLength = GeneratedColumn<int?>(
+      'period_length', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _reoccurrenceMeta =
+      const VerificationMeta('reoccurrence');
+  @override
+  late final GeneratedColumnWithTypeConverter<BudgetReoccurence?, int?>
+      reoccurrence = GeneratedColumn<int?>('reoccurrence', aliasedName, true,
+              type: const IntType(), requiredDuringInsert: false)
+          .withConverter<BudgetReoccurence?>($TransactionsTable.$converter1);
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<TransactionSpecialType?, int?>
+      type = GeneratedColumn<int?>('type', aliasedName, true,
+              type: const IntType(), requiredDuringInsert: false)
+          .withConverter<TransactionSpecialType?>(
+              $TransactionsTable.$converter2);
+  final VerificationMeta _paidMeta = const VerificationMeta('paid');
+  @override
+  late final GeneratedColumn<bool?> paid = GeneratedColumn<bool?>(
+      'paid', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (paid IN (0, 1))',
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -709,7 +857,11 @@ class $TransactionsTable extends Transactions
         walletFk,
         labelFks,
         dateCreated,
-        income
+        income,
+        periodLength,
+        reoccurrence,
+        type,
+        paid
       ];
   @override
   String get aliasedName => _alias ?? 'transactions';
@@ -769,6 +921,18 @@ class $TransactionsTable extends Transactions
       context.handle(_incomeMeta,
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
     }
+    if (data.containsKey('period_length')) {
+      context.handle(
+          _periodLengthMeta,
+          periodLength.isAcceptableOrUnknown(
+              data['period_length']!, _periodLengthMeta));
+    }
+    context.handle(_reoccurrenceMeta, const VerificationResult.success());
+    context.handle(_typeMeta, const VerificationResult.success());
+    if (data.containsKey('paid')) {
+      context.handle(
+          _paidMeta, paid.isAcceptableOrUnknown(data['paid']!, _paidMeta));
+    }
     return context;
   }
 
@@ -787,6 +951,11 @@ class $TransactionsTable extends Transactions
 
   static TypeConverter<List<int>, String> $converter0 =
       const IntListInColumnConverter();
+  static TypeConverter<BudgetReoccurence?, int> $converter1 =
+      const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
+  static TypeConverter<TransactionSpecialType?, int> $converter2 =
+      const EnumIndexConverter<TransactionSpecialType>(
+          TransactionSpecialType.values);
 }
 
 class TransactionCategory extends DataClass

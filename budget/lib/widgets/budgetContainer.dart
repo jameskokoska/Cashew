@@ -156,7 +156,7 @@ class BudgetContainer extends StatelessWidget {
             ),
           );
         } else {
-          return Container(color: Colors.red, height: 5, width: 5);
+          return Container(height: height, width: 100);
         }
       },
     ));

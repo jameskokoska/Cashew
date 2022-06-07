@@ -6,9 +6,11 @@ import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -25,6 +27,17 @@ import 'package:math_expressions/math_expressions.dart';
 //TODO
 //only show the tags that correspond to selected category
 //put recent used tags at the top? when no category selected
+
+dynamic transactionTypeDisplayToEnum = {
+  "Default": null,
+  "Upcoming": TransactionSpecialType.upcoming,
+  "Subscription": TransactionSpecialType.subscription,
+  "Repetitive": TransactionSpecialType.repetitive,
+  null: "Default",
+  TransactionSpecialType.upcoming: "Upcoming",
+  TransactionSpecialType.subscription: "Subscription",
+  TransactionSpecialType.repetitive: "Repetitive",
+};
 
 class AddTransactionPage extends StatefulWidget {
   AddTransactionPage({
@@ -47,6 +60,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   String? selectedAmountCalculation;
   String? selectedTitle;
   String? selectedNote;
+  String selectedTypeDisplay = "Default";
+  TransactionSpecialType? selectedType = null;
   List<String> selectedTags = [];
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -81,17 +96,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       },
     );
     if (picked != null && picked != selectedDate) {
-      String dateString = getWordedDate(picked);
-      _dateInputController.value = TextEditingValue(
-        text: dateString,
-        selection: TextSelection.fromPosition(
-          TextPosition(offset: dateString.length),
-        ),
-      );
       setState(() {
         selectedDate = picked;
       });
     }
+  }
+
+  void setSelectedDate(DateTime dateTime) {
+    setState(() {
+      selectedDate = dateTime;
+    });
   }
 
   void setSelectedCategory(TransactionCategory category) {
@@ -131,9 +145,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     });
   }
 
-  void setSelectedNoteController(String title) {
-    setTextInput(_noteInputController, title);
-    selectedTitle = title;
+  void setSelectedNoteController(String note) {
+    setTextInput(_noteInputController, note);
+    selectedNote = note;
+    return;
+  }
+
+  void setSelectedType(String type) {
+    setState(() {
+      selectedType = transactionTypeDisplayToEnum[type];
+      selectedTypeDisplay = type;
+    });
     return;
   }
 
@@ -152,6 +174,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         dateCreated: selectedDate,
         income: false,
         walletFk: appStateSettings["selectedWallet"],
+        paid: selectedType == null,
+        type: selectedType,
       ),
     );
   }
@@ -159,6 +183,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   late TextEditingController _titleInputController;
   late TextEditingController _dateInputController;
   late TextEditingController _noteInputController;
+  late TextEditingController _typeInputController;
 
   @override
   void initState() {
@@ -174,8 +199,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           text: getWordedDate(widget.transaction!.dateCreated));
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
-      selectedDate = widget.transaction!.dateCreated;
       selectedAmount = widget.transaction!.amount;
+      selectedType = widget.transaction!.type;
+      selectedTypeDisplay =
+          transactionTypeDisplayToEnum[widget.transaction!.type] ?? "Default";
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -190,7 +217,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       });
     } else {
       _titleInputController = new TextEditingController();
-      _dateInputController = new TextEditingController(text: "Today");
       _noteInputController = new TextEditingController();
 
       Future.delayed(Duration(milliseconds: 0), () {
@@ -399,13 +425,48 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   child: Column(
                     children: [
                       Container(height: 20),
-                      DateButton(
-                        onTap: () {
-                          selectDate(context);
-                        },
-                        selectedDate: selectedDate,
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        child: DateButton(
+                          key: ValueKey(selectedDate.toString()),
+                          onTap: () {
+                            selectDate(context);
+                          },
+                          selectedDate: selectedDate,
+                          setSelectedDate: setSelectedDate,
+                        ),
                       ),
-                      Container(height: 17),
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        child: TypeButton(
+                          key: ValueKey(selectedTypeDisplay.toString()),
+                          onTap: () => openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "Select Type",
+                              child: RadioItems(
+                                items: [
+                                  transactionTypeDisplayToEnum[null],
+                                  transactionTypeDisplayToEnum[
+                                      TransactionSpecialType.upcoming],
+                                  transactionTypeDisplayToEnum[
+                                      TransactionSpecialType.subscription],
+                                  transactionTypeDisplayToEnum[
+                                      TransactionSpecialType.repetitive]
+                                ],
+                                initial: selectedTypeDisplay,
+                                onChanged: (value) {
+                                  setSelectedType(value);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+                          ),
+                          selectedType: selectedType,
+                          selectedTypeDisplay: selectedTypeDisplay,
+                        ),
+                      ),
+                      Container(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 22),
                         child: Tappable(
@@ -447,10 +508,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               context,
                               PopupFramework(
                                 child: SelectNotes(
-                                  setSelectedTitle: setSelectedNoteController,
-                                  setSelectedTags: setSelectedTags,
-                                  selectedCategory: selectedCategory,
-                                  setSelectedCategory: setSelectedCategory,
+                                  setSelectedNote: setSelectedNoteController,
+                                  selectedNote: selectedNote,
                                 ),
                               ),
                               snap: false,
@@ -473,6 +532,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           ),
                         ),
                       ),
+
                       // Padding(
                       //   padding: EdgeInsets.symmetric(horizontal: 24),
                       //   child: Column(
@@ -592,28 +652,114 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 }
 
-class DateButton extends StatelessWidget {
-  const DateButton({Key? key, required this.onTap, required this.selectedDate})
+class TypeButton extends StatelessWidget {
+  const TypeButton(
+      {Key? key,
+      required this.onTap,
+      required this.selectedType,
+      required this.selectedTypeDisplay})
       : super(key: key);
   final VoidCallback onTap;
-  final DateTime selectedDate;
+  final TransactionSpecialType? selectedType;
+  final String selectedTypeDisplay;
   @override
   Widget build(BuildContext context) {
+    IconData iconData = Icons.repeat_rounded;
+    if (selectedType == null) {
+      iconData = Icons.payments_rounded;
+    } else if (selectedType == TransactionSpecialType.upcoming) {
+      iconData = Icons.savings_rounded;
+    } else if (selectedType == TransactionSpecialType.subscription) {
+      iconData = Icons.event_repeat_rounded;
+    } else if (selectedType == TransactionSpecialType.repetitive) {
+      iconData = Icons.repeat_rounded;
+    }
     return Tappable(
       onTap: onTap,
       borderRadius: 10,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
             Expanded(
               child: TextFont(
-                text: getWordedDate(selectedDate),
+                text: selectedType == null
+                    ? "Default transaction"
+                    : selectedTypeDisplay,
                 fontWeight: FontWeight.bold,
-                fontSize: 24,
+                fontSize: 26,
+                textColor: selectedType == null
+                    ? Theme.of(context).colorScheme.textLight
+                    : null,
               ),
             ),
-            ButtonIcon(onTap: onTap, icon: Icons.calendar_month_rounded),
+            ButtonIcon(
+              onTap: onTap,
+              icon: iconData,
+              size: 41,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DateButton extends StatelessWidget {
+  const DateButton(
+      {Key? key,
+      required this.onTap,
+      required this.selectedDate,
+      required this.setSelectedDate})
+      : super(key: key);
+  final VoidCallback onTap;
+  final DateTime selectedDate;
+  final Function(DateTime) setSelectedDate;
+  @override
+  Widget build(BuildContext context) {
+    String wordedDate = getWordedDateShortMore(selectedDate);
+
+    return Tappable(
+      onTap: onTap,
+      borderRadius: 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFont(
+                text: wordedDate,
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+              ),
+            ),
+            wordedDate == "Today"
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: Tappable(
+                      borderRadius: 10,
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 10),
+                        child: TextFont(
+                          text: "Yesterday?",
+                          fontSize: 15,
+                          textColor: Theme.of(context).colorScheme.textLight,
+                        ),
+                      ),
+                      onTap: () {
+                        setSelectedDate(DateTime(DateTime.now().year,
+                            DateTime.now().month, DateTime.now().day - 1));
+                      },
+                    ),
+                  )
+                : SizedBox(),
+            ButtonIcon(
+              onTap: onTap,
+              icon: Icons.calendar_month_rounded,
+              size: 41,
+            ),
           ],
         ),
       ),
@@ -624,18 +770,12 @@ class DateButton extends StatelessWidget {
 class SelectNotes extends StatefulWidget {
   SelectNotes({
     Key? key,
-    required this.setSelectedTitle,
-    this.selectedCategory,
-    required this.setSelectedCategory,
-    this.selectedTitle,
-    required this.setSelectedTags,
+    required this.setSelectedNote,
+    this.selectedNote,
     this.next,
   }) : super(key: key);
-  final Function(String) setSelectedTitle;
-  final TransactionCategory? selectedCategory;
-  final Function(TransactionCategory) setSelectedCategory;
-  final Function(List<String>) setSelectedTags;
-  final String? selectedTitle;
+  final Function(String) setSelectedNote;
+  final String? selectedNote;
   final VoidCallback? next;
 
   @override
@@ -643,15 +783,12 @@ class SelectNotes extends StatefulWidget {
 }
 
 class _SelectNotesState extends State<SelectNotes> {
-  int selectedIndex = 0;
   String? input = "";
-  TransactionCategory? selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    selectedCategory = widget.selectedCategory;
-    input = widget.selectedTitle;
+    input = widget.selectedNote;
   }
 
   @override
@@ -679,12 +816,12 @@ class _SelectNotesState extends State<SelectNotes> {
                     // icon: Icons.title_rounded,
                     backgroundColor:
                         Theme.of(context).colorScheme.lightDarkAccentHeavy,
-                    initialValue: widget.selectedTitle,
+                    initialValue: widget.selectedNote,
                     autoFocus: true,
                     onEditingComplete: () {
                       //if selected a tag and a category is set, then go to enter amount
                       //else enter amount
-                      widget.setSelectedTitle(input ?? "");
+                      widget.setSelectedNote(input ?? "");
                       Navigator.pop(context);
                       if (widget.next != null) {
                         widget.next!();
@@ -692,7 +829,7 @@ class _SelectNotesState extends State<SelectNotes> {
                     },
                     onChanged: (text) {
                       input = text;
-                      widget.setSelectedTitle(input!);
+                      widget.setSelectedNote(input!);
                     },
                     labelText: "Notes",
                     padding: EdgeInsets.zero,

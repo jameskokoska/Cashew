@@ -118,7 +118,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     );
     setState(() {
       selectedStartDate = picked!.start;
-      selectedEndDate = picked!.end;
+      selectedEndDate = picked.end;
     });
     searchTransaction("");
   }

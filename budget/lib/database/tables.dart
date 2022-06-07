@@ -24,7 +24,12 @@ const int DEFAULT_OFFSET = 0;
 
 enum BudgetReoccurence { custom, daily, weekly, monthly, yearly }
 
-enum TransactionSpecialType { subscription, repetitive, transactionTab }
+enum TransactionSpecialType {
+  upcoming,
+  subscription,
+  repetitive,
+  transactionTab
+}
 
 enum ThemeSetting { dark, light }
 
@@ -177,7 +182,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration =>

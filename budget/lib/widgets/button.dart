@@ -84,19 +84,25 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
 }
 
 class ButtonIcon extends StatelessWidget {
-  const ButtonIcon({Key? key, required this.onTap, required this.icon})
-      : super(key: key);
+  const ButtonIcon({
+    Key? key,
+    required this.onTap,
+    required this.icon,
+    this.size = 44,
+  }) : super(key: key);
   final VoidCallback onTap;
   final IconData icon;
+  final double size;
   @override
   Widget build(BuildContext context) {
     return Tappable(
       child: Container(
-        height: 44,
-        width: 44,
+        height: size,
+        width: size,
         child: Icon(
           icon,
           color: Theme.of(context).colorScheme.onSecondaryContainer,
+          size: size - 20,
         ),
       ),
       color: Theme.of(context).colorScheme.secondaryContainer,

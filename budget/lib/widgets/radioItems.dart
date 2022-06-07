@@ -1,3 +1,4 @@
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -32,7 +33,9 @@ class _RadioItemsState extends State<RadioItems> {
     return Column(
       children: <Widget>[
         for (var item in widget.items)
-          GestureDetector(
+          Tappable(
+            borderRadius: 20,
+            color: Colors.transparent,
             onTap: () {
               setState(() {
                 currentValue = item;
