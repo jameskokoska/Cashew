@@ -42,7 +42,7 @@ class AddCategoryPage extends StatefulWidget {
 
 class _AddCategoryPageState extends State<AddCategoryPage> {
   String? selectedTitle;
-  String? selectedImage;
+  String? selectedImage = "image.png";
   Color? selectedColor;
 
   String? textAddTransaction = "Add Transaction";
@@ -178,6 +178,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                             title: "Select Icon",
                             child: SelectCategoryImage(
                               setSelectedImage: setSelectedImage,
+                              selectedImage: "assets/categories/" +
+                                  selectedImage.toString(),
                             ),
                           ),
                         );
@@ -282,13 +284,16 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               ],
             ),
             Align(
-                alignment: Alignment.bottomCenter,
-                child: Button(
-                  label: "Add Category",
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  onTap: () {},
-                )),
+              alignment: Alignment.bottomCenter,
+              child: Button(
+                label: "Add Category",
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                onTap: () {
+                  addCategory();
+                },
+              ),
+            ),
           ],
         ),
       ),

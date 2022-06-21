@@ -55,8 +55,10 @@ Future<T?> openPopup<T extends Object?>(
   String? description,
   String? onSubmitLabel,
   String? onCancelLabel,
+  String? onExtraLabel,
   VoidCallback? onSubmit,
   VoidCallback? onCancel,
+  VoidCallback? onExtra,
   bool barrierDismissible = true,
 }) {
   return showGeneralDialog(
@@ -135,24 +137,44 @@ Future<T?> openPopup<T extends Object?>(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            onSubmitLabel != null
-                                ? Button(
-                                    label: onSubmitLabel,
-                                    width: 100,
-                                    height: 50,
-                                    onTap: onSubmit ?? () {})
-                                : SizedBox.shrink(),
-                            onSubmitLabel != null && onCancelLabel != null
-                                ? Container(
-                                    width: 15,
+                            onCancelLabel != null
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Button(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                        label: onCancelLabel,
+                                        height: 50,
+                                        onTap: onCancel ?? () {}),
                                   )
                                 : SizedBox.shrink(),
-                            onCancelLabel != null
-                                ? Button(
-                                    label: onCancelLabel,
-                                    width: 100,
-                                    height: 50,
-                                    onTap: onCancel ?? () {})
+                            onExtraLabel != null
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Button(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                        label: onExtraLabel,
+                                        height: 50,
+                                        onTap: onExtra ?? () {}),
+                                  )
+                                : SizedBox.shrink(),
+                            onSubmitLabel != null
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Button(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiaryContainer,
+                                        label: onSubmitLabel,
+                                        height: 50,
+                                        onTap: onSubmit ?? () {}),
+                                  )
                                 : SizedBox.shrink(),
                           ],
                         ),

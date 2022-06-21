@@ -68,6 +68,19 @@ dynamic nameRecurrence = {
   BudgetReoccurence.yearly: "year",
 };
 
+dynamic enumRecurrence = {
+  "Custom": BudgetReoccurence.custom,
+  "Daily": BudgetReoccurence.daily,
+  "Weekly": BudgetReoccurence.weekly,
+  "Monthly": BudgetReoccurence.monthly,
+  "Yearly": BudgetReoccurence.yearly,
+  BudgetReoccurence.custom: "Custom",
+  BudgetReoccurence.daily: "Daily",
+  BudgetReoccurence.weekly: "Weekly",
+  BudgetReoccurence.monthly: "Monthly",
+  BudgetReoccurence.yearly: "Yearly",
+};
+
 class _AddBudgetPageState extends State<AddBudgetPage> {
   bool? canAddBudget;
 

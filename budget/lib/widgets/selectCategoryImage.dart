@@ -69,6 +69,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                 if (widget.setSelectedImage != null) {
                   widget.setSelectedImage!(image);
                   setState(() {
+                    print(image);
                     selectedImage = image;
                   });
                   Future.delayed(Duration(milliseconds: 70), () {

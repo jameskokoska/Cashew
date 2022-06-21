@@ -65,6 +65,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   List<String> selectedTags = [];
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  int selectedPeriodLength = 0;
+  String selectedRecurrence = "Monthly";
+  String selectedRecurrenceDisplay = "months";
+  BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
 
   String? textAddTransaction = "Add Transaction";
 
@@ -159,6 +163,73 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     return;
   }
 
+  Future<void> selectPeriodLength(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Enter Period Length",
+        child: SelectAmountValue(
+          amountPassed: selectedPeriodLength.toString(),
+          setSelectedAmount: (amount, _) {
+            setSelectedPeriodLength(amount);
+          },
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "Set Amount",
+        ),
+      ),
+    );
+  }
+
+  void setSelectedPeriodLength(double period) {
+    try {
+      setState(() {
+        selectedPeriodLength = period.toInt();
+        if (selectedPeriodLength == 1) {
+          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+        } else {
+          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+        }
+      });
+    } catch (e) {
+      setState(() {
+        selectedPeriodLength = 0;
+        if (selectedPeriodLength == 1) {
+          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+        } else {
+          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+        }
+      });
+    }
+    return;
+  }
+
+  Future<void> selectRecurrence(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Select Period",
+        child: RadioItems(
+          items: ["Daily", "Weekly", "Monthly", "Yearly"],
+          initial: selectedRecurrence,
+          onChanged: (value) {
+            setState(() {
+              selectedRecurrence = value;
+              selectedRecurrenceEnum = enumRecurrence[value];
+              if (selectedPeriodLength == 1) {
+                selectedRecurrenceDisplay = nameRecurrence[value];
+              } else {
+                selectedRecurrenceDisplay = namesRecurrence[value];
+              }
+            });
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+    );
+  }
+
   Future addTransaction() async {
     print("Added transaction");
     print(selectedDate);
@@ -174,8 +245,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         dateCreated: selectedDate,
         income: false,
         walletFk: appStateSettings["selectedWallet"],
-        paid: selectedType == null,
+        paid: widget.transaction != null
+            ? widget.transaction!.paid
+            : selectedType == null,
+        skipPaid: widget.transaction != null
+            ? widget.transaction!.paid
+            : selectedType == null,
         type: selectedType,
+        reoccurrence: selectedRecurrenceEnum,
+        periodLength: selectedPeriodLength,
       ),
     );
   }
@@ -199,10 +277,20 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           text: getWordedDate(widget.transaction!.dateCreated));
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
+      selectedDate = widget.transaction!.dateCreated;
       selectedAmount = widget.transaction!.amount;
       selectedType = widget.transaction!.type;
       selectedTypeDisplay =
           transactionTypeDisplayToEnum[widget.transaction!.type] ?? "Default";
+      selectedPeriodLength = widget.transaction!.periodLength ?? 0;
+      selectedRecurrenceEnum =
+          widget.transaction!.reoccurrence ?? BudgetReoccurence.monthly;
+      selectedRecurrence = enumRecurrence[selectedRecurrenceEnum];
+      if (selectedPeriodLength == 1) {
+        selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+      } else {
+        selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+      }
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -466,6 +554,63 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           selectedTypeDisplay: selectedTypeDisplay,
                         ),
                       ),
+                      AnimatedSize(
+                        duration: Duration(milliseconds: 300),
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 300),
+                          child: selectedType ==
+                                      TransactionSpecialType.repetitive ||
+                                  selectedType ==
+                                      TransactionSpecialType.subscription
+                              ? Wrap(
+                                  key: ValueKey(1),
+                                  alignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    TextFont(
+                                      text: "Repeat every",
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TappableTextEntry(
+                                          title:
+                                              selectedPeriodLength.toString(),
+                                          placeholder: "0",
+                                          showPlaceHolderWhenTextEquals: "0",
+                                          onTap: () {
+                                            selectPeriodLength(context);
+                                          },
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold,
+                                          internalPadding: EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 3),
+                                        ),
+                                        TappableTextEntry(
+                                          title: selectedRecurrenceDisplay,
+                                          placeholder: "",
+                                          onTap: () {
+                                            selectRecurrence(context);
+                                          },
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold,
+                                          internalPadding: EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 3),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              : SizedBox(),
+                        ),
+                      ),
+
                       Container(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 22),
@@ -664,16 +809,7 @@ class TypeButton extends StatelessWidget {
   final String selectedTypeDisplay;
   @override
   Widget build(BuildContext context) {
-    IconData iconData = Icons.repeat_rounded;
-    if (selectedType == null) {
-      iconData = Icons.payments_rounded;
-    } else if (selectedType == TransactionSpecialType.upcoming) {
-      iconData = Icons.savings_rounded;
-    } else if (selectedType == TransactionSpecialType.subscription) {
-      iconData = Icons.event_repeat_rounded;
-    } else if (selectedType == TransactionSpecialType.repetitive) {
-      iconData = Icons.repeat_rounded;
-    }
+    IconData iconData = getTransactionTypeIcon(selectedType);
     return Tappable(
       onTap: onTap,
       borderRadius: 10,

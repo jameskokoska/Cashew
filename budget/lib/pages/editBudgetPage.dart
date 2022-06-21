@@ -123,8 +123,8 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                 : SizedBox(),
                             TextFont(
                               text: budget.periodLength == 1
-                                  ? nameRecurrence[budget.reoccurrence!.index]
-                                  : namesRecurrence[budget.reoccurrence!.index],
+                                  ? nameRecurrence[budget.reoccurrence]
+                                  : namesRecurrence[budget.reoccurrence],
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -134,6 +134,15 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                           text: getWordedDateShort(budgetRange.start) +
                               " - " +
                               getWordedDateShort(budgetRange.end),
+                          fontSize: 15,
+                        ),
+                        Container(height: 2),
+                        TextFont(
+                          text: budget.categoryFks == null ||
+                                  budget.categoryFks!.length == 0
+                              ? "All categories budget"
+                              : budget.categoryFks!.length.toString() +
+                                  " category budget",
                           fontSize: 14,
                         ),
                       ],

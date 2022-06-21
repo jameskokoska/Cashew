@@ -286,6 +286,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           walletFk: 0,
           labelFks: [],
           paid: true,
+          skipPaid: false,
         );
 
         Map<String, Map<String, dynamic>> assignedColumns = {
@@ -621,15 +622,17 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     await database.createOrUpdateTransaction(
       Transaction(
-          transactionPk: transactionPk,
-          name: name,
-          amount: amount,
-          note: note,
-          categoryFk: categoryFk,
-          walletFk: walletFk,
-          dateCreated: dateCreated,
-          income: income,
-          paid: true),
+        transactionPk: transactionPk,
+        name: name,
+        amount: amount,
+        note: note,
+        categoryFk: categoryFk,
+        walletFk: walletFk,
+        dateCreated: dateCreated,
+        income: income,
+        paid: true,
+        skipPaid: false,
+      ),
     );
 
     return;

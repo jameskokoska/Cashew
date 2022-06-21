@@ -96,6 +96,7 @@ class Transactions extends Table {
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
   IntColumn get type => intEnum<TransactionSpecialType>().nullable()();
   BoolColumn get paid => boolean().withDefault(const Constant(false))();
+  BoolColumn get skipPaid => boolean().withDefault(const Constant(false))();
 }
 
 @DataClassName('TransactionCategory')
@@ -491,6 +492,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<List<Transaction>> watchAllSubscriptions(
+      {int? limit, DateTime? startDate, DateTime? endDate}) {
+    final query = select(transactions)
+      ..where((transaction) =>
+          transactions.paid.equals(false) &
+          transactions.type.equals(TransactionSpecialType.subscription.index));
+    return query.watch();
+  }
+
   //get dates of all transactions in the month and year
   Stream<List<DateTime>> getTransactionDays(DateTime date) {
     final query = (select(transactions)
@@ -792,7 +802,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         ..where((tbl) {
           final dateCreated = tbl.dateCreated;
           return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-              dateCreated.isBetweenValues(startDate, endDate);
+              dateCreated.isBetweenValues(startDate, endDate) &
+              tbl.paid.equals(true);
         })
         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]));
       return (query.join([
@@ -846,7 +857,8 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..where((tbl) =>
               tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
               tbl.dateCreated.isBiggerOrEqualValue(startDate) &
-              tbl.dateCreated.isSmallerOrEqualValue(endDate))
+              tbl.dateCreated.isSmallerOrEqualValue(endDate) &
+              tbl.paid.equals(true))
           ..addColumns([totalAmt, date]).join([]).groupBy([date]))
         .watch();
   }
@@ -855,7 +867,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     final totalAmt = transactions.amount.sum();
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.walletFk.equals(walletPk));
+      ..where(transactions.walletFk.equals(walletPk) &
+          transactions.paid.equals(true));
+    return query.map((row) => row.read(totalAmt)).watch();
+  }
+
+  Stream<List<double?>> watchTotalOfSubscriptions() {
+    final totalAmt = transactions.amount.sum();
+    final query = selectOnly(transactions)
+      ..addColumns([totalAmt])
+      ..where(transactions.paid.equals(false) &
+          transactions.type.equals(TransactionSpecialType.subscription.index));
     return query.map((row) => row.read(totalAmt)).watch();
   }
 
@@ -894,7 +916,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     final date = transactions.dateCreated.date;
     return (select(transactions)
           ..where((tbl) {
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+            return tbl.walletFk.equals(
+                appStateSettings["selectedWallet"] & tbl.paid.equals(true));
           })
           ..addColumns([totalAmt, date]).join([]).groupBy([date])
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
@@ -903,15 +926,25 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // get all transactions that occurred in a given time period that belong to categories
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
-      DateTime start, DateTime end, List<int> categoryFks, bool allCategories) {
+      DateTime start,
+      DateTime end,
+      List<int> categoryFks,
+      bool allCategories,
+      bool isPaidOnly) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     if (allCategories) {
       return (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  dateCreated.isBetweenValues(startDate, endDate);
+              if (isPaidOnly) {
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.isBetweenValues(startDate, endDate) &
+                    tbl.paid.equals(true);
+              } else {
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.isBetweenValues(startDate, endDate);
+              }
             })
             ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
           .watch();

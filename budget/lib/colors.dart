@@ -35,6 +35,9 @@ extension ColorsDefined on ColorScheme {
   // Color get accentColorHeavy => brightness == Brightness.light
   //     ? const Color(0xFF29457A)
   //     : const Color(0xFF5586C5);
+  Color get unPaidYellow => brightness == Brightness.light
+      ? Color.fromARGB(255, 235, 219, 72)
+      : Color.fromARGB(255, 222, 213, 131);
 
   Color get accentColor => brightness == Brightness.light
       ? getSettingConstants(appStateSettings)["accentColor"]

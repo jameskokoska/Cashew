@@ -6,21 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class Button extends StatefulWidget {
-  Button(
-      {Key? key,
-      required this.label,
-      this.width,
-      this.height,
-      this.fontSize = 16,
-      required this.onTap,
-      this.color})
-      : super(key: key);
+  Button({
+    Key? key,
+    required this.label,
+    this.width,
+    this.height,
+    this.fontSize = 16,
+    required this.onTap,
+    this.color,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+  }) : super(key: key);
   final String label;
   final double? width;
   final double? height;
   final double fontSize;
   final VoidCallback onTap;
   final Color? color;
+  final EdgeInsets padding;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -69,7 +71,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
         child: Container(
           width: widget.width,
           height: widget.height,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: widget.padding,
           child: Center(
             child: TextFont(
               text: widget.label,

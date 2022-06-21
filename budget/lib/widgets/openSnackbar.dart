@@ -6,8 +6,8 @@ openSnackbar(context, text, {Color? textColor, Color? backgroundColor}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(bottom: 14, left: 20, right: 20),
-        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 22),
+        margin: EdgeInsets.only(bottom: 14, left: 20, right: 90),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),

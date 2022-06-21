@@ -6,6 +6,7 @@ import 'package:budget/struct/transactionTag.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
@@ -41,6 +42,40 @@ class _TransactionEntryState extends State<TransactionEntry> {
   final double fabSize = 50;
 
   bool selected = false;
+
+  createNewSubscriptionTransaction(Transaction transaction) {
+    if (widget.transaction.type == TransactionSpecialType.subscription ||
+        widget.transaction.type == TransactionSpecialType.repetitive) {
+      int yearOffset = 0;
+      int monthOffset = 0;
+      int dayOffset = 0;
+      if (transaction.reoccurrence == BudgetReoccurence.yearly) {
+        yearOffset = transaction.periodLength ?? 0;
+      } else if (transaction.reoccurrence == BudgetReoccurence.monthly) {
+        monthOffset = transaction.periodLength ?? 0;
+      } else if (transaction.reoccurrence == BudgetReoccurence.weekly) {
+        dayOffset = (transaction.periodLength ?? 0) * 7;
+      } else if (transaction.reoccurrence == BudgetReoccurence.daily) {
+        dayOffset = transaction.periodLength ?? 0;
+      }
+      DateTime newDate = DateTime(
+        transaction.dateCreated.year + yearOffset,
+        transaction.dateCreated.month + monthOffset,
+        transaction.dateCreated.day + dayOffset,
+      );
+      Transaction newTransaction = widget.transaction.copyWith(
+        paid: false,
+        transactionPk: DateTime.now().millisecond,
+        dateCreated: newDate,
+      );
+      database.createOrUpdateTransaction(newTransaction);
+      openSnackbar(
+        context,
+        "Created new subscription transaction on " +
+            getWordedDateShort(newDate),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +144,20 @@ class _TransactionEntryState extends State<TransactionEntry> {
                     borderRadius: 13,
                   ),
                   Container(
-                    width: 15,
+                    width: widget.transaction.type != null ? 12 : 15,
                   ),
+                  widget.transaction.type != null
+                      ? Padding(
+                          padding: EdgeInsets.only(right: 8),
+                          child: Icon(
+                            getTransactionTypeIcon(widget.transaction.type),
+                            color: dynamicPastel(
+                                context, Theme.of(context).colorScheme.tertiary,
+                                amount: 0.4),
+                            size: 20,
+                          ),
+                        )
+                      : SizedBox(),
                   Expanded(
                     child: widget.transaction.name != ""
                         ? TextFont(
@@ -204,6 +251,110 @@ class _TransactionEntryState extends State<TransactionEntry> {
                   //     ),
                   //   ),
                   // ),
+                  widget.transaction.type != null
+                      ? Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 3.0),
+                              child: Tappable(
+                                borderRadius: 10,
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14, horizontal: 10),
+                                  child: TextFont(
+                                    text: widget.transaction.paid
+                                        ? "Paid"
+                                        : widget.transaction.skipPaid
+                                            ? "Skipped"
+                                            : "Pay?",
+                                    fontSize: 14,
+                                    textColor:
+                                        Theme.of(context).colorScheme.textLight,
+                                  ),
+                                ),
+                                onTap: () {
+                                  if (widget.transaction.paid == true) {
+                                    openPopup(context,
+                                        icon: Icons.unpublished_rounded,
+                                        title: "Remove Payment?",
+                                        description:
+                                            "Remove the payment on this transaction?",
+                                        onCancelLabel: "Cancel",
+                                        onCancel: () {
+                                          Navigator.pop(context);
+                                        },
+                                        onSubmitLabel: "Remove",
+                                        onSubmit: () {
+                                          Transaction transaction = widget
+                                              .transaction
+                                              .copyWith(paid: false);
+                                          database.createOrUpdateTransaction(
+                                              transaction);
+                                          Navigator.pop(context);
+                                        });
+                                  } else if (widget.transaction.skipPaid ==
+                                      true) {
+                                    openPopup(context,
+                                        icon: Icons.unpublished_rounded,
+                                        title: "Remove Skip?",
+                                        description:
+                                            "Remove the skipped payment on this transaction?",
+                                        onCancelLabel: "Cancel",
+                                        onCancel: () {
+                                          Navigator.pop(context);
+                                        },
+                                        onSubmitLabel: "Remove",
+                                        onSubmit: () {
+                                          Transaction transaction = widget
+                                              .transaction
+                                              .copyWith(skipPaid: false);
+                                          database.createOrUpdateTransaction(
+                                              transaction);
+                                          Navigator.pop(context);
+                                        });
+                                  } else {
+                                    openPopup(
+                                      context,
+                                      icon: Icons.payments_rounded,
+                                      title: "Pay?",
+                                      description:
+                                          "Add payment on this transaction?",
+                                      onCancelLabel: "Cancel",
+                                      onCancel: () {
+                                        Navigator.pop(context);
+                                      },
+                                      onExtraLabel: "Skip",
+                                      onExtra: () {
+                                        Transaction transaction = widget
+                                            .transaction
+                                            .copyWith(skipPaid: true);
+                                        database.createOrUpdateTransaction(
+                                            transaction);
+                                        createNewSubscriptionTransaction(
+                                            transaction);
+                                        Navigator.pop(context);
+                                      },
+                                      onSubmitLabel: "Pay",
+                                      onSubmit: () {
+                                        Transaction transaction =
+                                            widget.transaction.copyWith(
+                                                paid: !widget.transaction.paid);
+                                        database.createOrUpdateTransaction(
+                                            transaction);
+                                        createNewSubscriptionTransaction(
+                                            transaction);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
+
                   CountNumber(
                     count: (widget.transaction.amount),
                     duration: Duration(milliseconds: 2000),
@@ -215,6 +366,11 @@ class _TransactionEntryState extends State<TransactionEntry> {
                         text: convertToMoney(number),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        textColor: widget.transaction.paid
+                            ? Theme.of(context).colorScheme.black
+                            : widget.transaction.skipPaid
+                                ? Theme.of(context).colorScheme.textLight
+                                : Theme.of(context).colorScheme.unPaidYellow,
                       );
                     },
                   ),
@@ -302,7 +458,7 @@ class CategoryIcon extends StatelessWidget {
             onTap: onTap,
             borderRadius: borderRadius - 3,
             child: Center(
-              child: (category != null
+              child: (category != null && category.iconName != null
                   ? Image(
                       image: AssetImage(
                           "assets/categories/" + (category.iconName ?? "")),

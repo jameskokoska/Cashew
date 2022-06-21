@@ -352,6 +352,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final BudgetReoccurence? reoccurrence;
   final TransactionSpecialType? type;
   final bool paid;
+  final bool skipPaid;
   Transaction(
       {required this.transactionPk,
       required this.name,
@@ -365,7 +366,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.periodLength,
       this.reoccurrence,
       this.type,
-      required this.paid});
+      required this.paid,
+      required this.skipPaid});
   factory Transaction.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Transaction(
@@ -395,6 +397,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           .mapFromDatabaseResponse(data['${effectivePrefix}type'])),
       paid: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}paid'])!,
+      skipPaid: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}skip_paid'])!,
     );
   }
   @override
@@ -424,6 +428,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       map['type'] = Variable<int?>(converter.mapToSql(type));
     }
     map['paid'] = Variable<bool>(paid);
+    map['skip_paid'] = Variable<bool>(skipPaid);
     return map;
   }
 
@@ -448,6 +453,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           : Value(reoccurrence),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       paid: Value(paid),
+      skipPaid: Value(skipPaid),
     );
   }
 
@@ -469,6 +475,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           serializer.fromJson<BudgetReoccurence?>(json['reoccurrence']),
       type: serializer.fromJson<TransactionSpecialType?>(json['type']),
       paid: serializer.fromJson<bool>(json['paid']),
+      skipPaid: serializer.fromJson<bool>(json['skipPaid']),
     );
   }
   @override
@@ -488,6 +495,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
       'type': serializer.toJson<TransactionSpecialType?>(type),
       'paid': serializer.toJson<bool>(paid),
+      'skipPaid': serializer.toJson<bool>(skipPaid),
     };
   }
 
@@ -504,7 +512,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           int? periodLength,
           BudgetReoccurence? reoccurrence,
           TransactionSpecialType? type,
-          bool? paid}) =>
+          bool? paid,
+          bool? skipPaid}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -519,6 +528,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         reoccurrence: reoccurrence ?? this.reoccurrence,
         type: type ?? this.type,
         paid: paid ?? this.paid,
+        skipPaid: skipPaid ?? this.skipPaid,
       );
   @override
   String toString() {
@@ -535,7 +545,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
           ..write('type: $type, ')
-          ..write('paid: $paid')
+          ..write('paid: $paid, ')
+          ..write('skipPaid: $skipPaid')
           ..write(')'))
         .toString();
   }
@@ -554,7 +565,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       periodLength,
       reoccurrence,
       type,
-      paid);
+      paid,
+      skipPaid);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -571,7 +583,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
           other.type == this.type &&
-          other.paid == this.paid);
+          other.paid == this.paid &&
+          other.skipPaid == this.skipPaid);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -588,6 +601,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<BudgetReoccurence?> reoccurrence;
   final Value<TransactionSpecialType?> type;
   final Value<bool> paid;
+  final Value<bool> skipPaid;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -602,6 +616,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.reoccurrence = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
+    this.skipPaid = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.transactionPk = const Value.absent(),
@@ -617,6 +632,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.reoccurrence = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
+    this.skipPaid = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         note = Value(note),
@@ -636,6 +652,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<BudgetReoccurence?>? reoccurrence,
     Expression<TransactionSpecialType?>? type,
     Expression<bool>? paid,
+    Expression<bool>? skipPaid,
   }) {
     return RawValuesInsertable({
       if (transactionPk != null) 'transaction_pk': transactionPk,
@@ -651,6 +668,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
       if (type != null) 'type': type,
       if (paid != null) 'paid': paid,
+      if (skipPaid != null) 'skip_paid': skipPaid,
     });
   }
 
@@ -667,7 +685,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<int?>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
       Value<TransactionSpecialType?>? type,
-      Value<bool>? paid}) {
+      Value<bool>? paid,
+      Value<bool>? skipPaid}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
       name: name ?? this.name,
@@ -682,6 +701,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       reoccurrence: reoccurrence ?? this.reoccurrence,
       type: type ?? this.type,
       paid: paid ?? this.paid,
+      skipPaid: skipPaid ?? this.skipPaid,
     );
   }
 
@@ -731,6 +751,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (paid.present) {
       map['paid'] = Variable<bool>(paid.value);
     }
+    if (skipPaid.present) {
+      map['skip_paid'] = Variable<bool>(skipPaid.value);
+    }
     return map;
   }
 
@@ -749,7 +772,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
           ..write('type: $type, ')
-          ..write('paid: $paid')
+          ..write('paid: $paid, ')
+          ..write('skipPaid: $skipPaid')
           ..write(')'))
         .toString();
   }
@@ -847,6 +871,14 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (paid IN (0, 1))',
       defaultValue: const Constant(false));
+  final VerificationMeta _skipPaidMeta = const VerificationMeta('skipPaid');
+  @override
+  late final GeneratedColumn<bool?> skipPaid = GeneratedColumn<bool?>(
+      'skip_paid', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (skip_paid IN (0, 1))',
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -861,7 +893,8 @@ class $TransactionsTable extends Transactions
         periodLength,
         reoccurrence,
         type,
-        paid
+        paid,
+        skipPaid
       ];
   @override
   String get aliasedName => _alias ?? 'transactions';
@@ -932,6 +965,10 @@ class $TransactionsTable extends Transactions
     if (data.containsKey('paid')) {
       context.handle(
           _paidMeta, paid.isAcceptableOrUnknown(data['paid']!, _paidMeta));
+    }
+    if (data.containsKey('skip_paid')) {
+      context.handle(_skipPaidMeta,
+          skipPaid.isAcceptableOrUnknown(data['skip_paid']!, _skipPaidMeta));
     }
     return context;
   }
