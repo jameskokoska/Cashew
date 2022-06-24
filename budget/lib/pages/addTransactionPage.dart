@@ -493,6 +493,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   duration: Duration(milliseconds: 350),
                                   child: Container(
                                     key: ValueKey(selectedCategory?.name ?? ""),
+                                    width: double.infinity,
                                     child: TextFont(
                                       textAlign: TextAlign.right,
                                       fontSize: 18,

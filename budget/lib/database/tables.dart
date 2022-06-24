@@ -501,6 +501,32 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.watch();
   }
 
+  Stream<List<Transaction>> watchAllUpcomingTransactions(
+      {int? limit, DateTime? startDate, DateTime? endDate}) {
+    final query = select(transactions)
+      ..where((transaction) =>
+          transactions.paid.equals(false) &
+              transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+              transactions.type
+                  .equals(TransactionSpecialType.subscription.index) |
+          transactions.type.equals(TransactionSpecialType.repetitive.index) |
+          transactions.type.equals(TransactionSpecialType.upcoming.index));
+    return query.watch();
+  }
+
+  Stream<List<Transaction>> watchAllOverdueTransactions(
+      {int? limit, DateTime? startDate, DateTime? endDate}) {
+    final query = select(transactions)
+      ..where((transaction) =>
+          transactions.paid.equals(false) &
+              transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+              transactions.type
+                  .equals(TransactionSpecialType.subscription.index) |
+          transactions.type.equals(TransactionSpecialType.repetitive.index) |
+          transactions.type.equals(TransactionSpecialType.upcoming.index));
+    return query.watch();
+  }
+
   //get dates of all transactions in the month and year
   Stream<List<DateTime>> getTransactionDays(DateTime date) {
     final query = (select(transactions)
@@ -879,6 +905,64 @@ class FinanceDatabase extends _$FinanceDatabase {
       ..where(transactions.paid.equals(false) &
           transactions.type.equals(TransactionSpecialType.subscription.index));
     return query.map((row) => row.read(totalAmt)).watch();
+  }
+
+  Stream<List<double?>> watchTotalOfUpcoming() {
+    final totalAmt = transactions.amount.sum();
+    final totalCount = transactions.transactionPk.count();
+
+    final query = selectOnly(transactions)
+      ..addColumns([totalAmt, totalCount])
+      ..where(transactions.paid.equals(false) &
+              transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+              transactions.type
+                  .equals(TransactionSpecialType.subscription.index) |
+          transactions.type.equals(TransactionSpecialType.repetitive.index) |
+          transactions.type.equals(TransactionSpecialType.upcoming.index));
+    return query.map((row) => row.read(totalAmt)).watch();
+  }
+
+  Stream<List<double?>> watchTotalOfOverdue() {
+    final totalAmt = transactions.amount.sum();
+    final totalCount = transactions.transactionPk.count();
+
+    final query = selectOnly(transactions)
+      ..addColumns([totalAmt, totalCount])
+      ..where(transactions.paid.equals(false) &
+              transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+              transactions.type
+                  .equals(TransactionSpecialType.subscription.index) |
+          transactions.type.equals(TransactionSpecialType.repetitive.index) |
+          transactions.type.equals(TransactionSpecialType.upcoming.index));
+    return query.map((row) => row.read(totalAmt)).watch();
+  }
+
+  Stream<List<int?>> watchCountOfUpcoming() {
+    final totalCount = transactions.transactionPk.count();
+
+    final query = selectOnly(transactions)
+      ..addColumns([totalCount])
+      ..where(transactions.paid.equals(false) &
+              transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+              transactions.type
+                  .equals(TransactionSpecialType.subscription.index) |
+          transactions.type.equals(TransactionSpecialType.repetitive.index) |
+          transactions.type.equals(TransactionSpecialType.upcoming.index));
+    return query.map((row) => row.read(totalCount)).watch();
+  }
+
+  Stream<List<int?>> watchCountOfOverdue() {
+    final totalCount = transactions.transactionPk.count();
+
+    final query = selectOnly(transactions)
+      ..addColumns([totalCount])
+      ..where(transactions.paid.equals(false) &
+              transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+              transactions.type
+                  .equals(TransactionSpecialType.subscription.index) |
+          transactions.type.equals(TransactionSpecialType.repetitive.index) |
+          transactions.type.equals(TransactionSpecialType.upcoming.index));
+    return query.map((row) => row.read(totalCount)).watch();
   }
 
   Stream<List<int?>> watchTotalCountOfTransactionsInWallet(int walletPk) {

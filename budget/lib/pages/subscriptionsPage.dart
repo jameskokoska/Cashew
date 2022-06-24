@@ -70,12 +70,13 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                StreamBuilder<List<double?>>(
-                  stream: database.watchTotalOfSubscriptions(),
+                StreamBuilder<List<Transaction>>(
+                  stream: database.watchAllSubscriptions(),
                   builder: (context, snapshot) {
+                    double total =
+                        getTotalSubscriptions(selectedType, snapshot.data);
                     return CountNumber(
-                      count:
-                          (snapshot.data == null ? 0 : snapshot.data![0] ?? 0),
+                      count: total,
                       duration: Duration(milliseconds: 2500),
                       dynamicDecimals: true,
                       initialCount: (0),
@@ -93,7 +94,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 Padding(
                   padding: EdgeInsets.only(top: 5),
                   child: TextFont(
-                    text: "Total subscriptions",
+                    text: selectedType == SelectedSubscriptionsType.yearly
+                        ? "Yearly subscriptions"
+                        : selectedType == SelectedSubscriptionsType.monthly
+                            ? "Monthly subscriptions"
+                            : "Total subscriptions",
                     fontSize: 16,
                   ),
                 ),

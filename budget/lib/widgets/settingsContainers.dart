@@ -175,32 +175,31 @@ class SettingsContainer extends StatelessWidget {
                     ),
                     Container(width: 16),
                     Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFont(
-                            fixParagraphMargin: true,
-                            text: title,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          description == null
-                              ? SizedBox.shrink()
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(height: 3),
-                                    TextFont(
-                                      text: description!,
-                                      fontSize: 15,
-                                      maxLines: 5,
-                                    ),
-                                  ],
+                      child: description == null
+                          ? TextFont(
+                              fixParagraphMargin: true,
+                              text: title,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFont(
+                                  fixParagraphMargin: true,
+                                  text: title,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                        ],
-                      ),
+                                Container(height: 3),
+                                TextFont(
+                                  text: description!,
+                                  fontSize: 15,
+                                  maxLines: 5,
+                                ),
+                              ],
+                            ),
                     ),
                   ],
                 ),

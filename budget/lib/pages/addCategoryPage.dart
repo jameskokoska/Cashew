@@ -263,23 +263,17 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 65,
-                        child: SelectColor(
-                          horizontalList: true,
-                          selectedColor: selectedColor,
-                          setSelectedColor: setSelectedColor,
-                        ),
+                Column(
+                  children: [
+                    Container(
+                      height: 65,
+                      child: SelectColor(
+                        horizontalList: true,
+                        selectedColor: selectedColor,
+                        setSelectedColor: setSelectedColor,
                       ),
-                      Container(height: 20),
-                      Container(height: 20),
-                      Container(height: 100),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),

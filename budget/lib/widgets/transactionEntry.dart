@@ -370,7 +370,13 @@ class _TransactionEntryState extends State<TransactionEntry> {
                             ? Theme.of(context).colorScheme.black
                             : widget.transaction.skipPaid
                                 ? Theme.of(context).colorScheme.textLight
-                                : Theme.of(context).colorScheme.unPaidYellow,
+                                : widget.transaction.dateCreated
+                                            .millisecondsSinceEpoch <=
+                                        DateTime.now().millisecondsSinceEpoch
+                                    ? Theme.of(context).colorScheme.unPaidRed
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .unPaidYellow,
                       );
                     },
                   ),

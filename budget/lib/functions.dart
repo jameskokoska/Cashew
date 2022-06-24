@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultTags.dart';
 import 'package:budget/struct/transactionCategory.dart';
@@ -330,4 +331,61 @@ IconData getTransactionTypeIcon(TransactionSpecialType? selectedType) {
     return Icons.repeat_rounded;
   }
   return Icons.event_repeat_rounded;
+}
+
+getTotalSubscriptions(
+    SelectedSubscriptionsType type, List<Transaction>? subscriptions) {
+  double total = 0;
+  DateTime today = DateTime.now();
+  if (subscriptions != null) {
+    for (Transaction subscription in subscriptions) {
+      if (subscription.periodLength == 0) {
+        continue;
+      }
+      if (type == SelectedSubscriptionsType.monthly) {
+        int numDays = DateTime(today.year, today.month + 1, 0).day;
+        double numWeeks = numDays / 7;
+        if (subscription.reoccurrence == BudgetReoccurence.daily) {
+          total +=
+              subscription.amount * numDays / (subscription.periodLength ?? 1);
+        } else if (subscription.reoccurrence == BudgetReoccurence.weekly) {
+          total +=
+              subscription.amount * numWeeks / (subscription.periodLength ?? 1);
+        } else if (subscription.reoccurrence == BudgetReoccurence.monthly) {
+          total += subscription.amount / (subscription.periodLength ?? 1);
+        } else if (subscription.reoccurrence == BudgetReoccurence.yearly) {
+          total += subscription.amount / 12 / (subscription.periodLength ?? 1);
+        }
+      }
+      if (type == SelectedSubscriptionsType.yearly) {
+        DateTime firstDay = DateTime(today.year, 1, 1);
+        DateTime lastDay = DateTime(today.year + 1, 1, 1);
+        int numDays = lastDay.difference(firstDay).inDays;
+        double numWeeks = numDays / 7;
+        if (subscription.reoccurrence == BudgetReoccurence.daily) {
+          total +=
+              subscription.amount * numDays / (subscription.periodLength ?? 1);
+        } else if (subscription.reoccurrence == BudgetReoccurence.weekly) {
+          total +=
+              subscription.amount * numWeeks / (subscription.periodLength ?? 1);
+        } else if (subscription.reoccurrence == BudgetReoccurence.monthly) {
+          total += subscription.amount * 12 / (subscription.periodLength ?? 1);
+        } else if (subscription.reoccurrence == BudgetReoccurence.yearly) {
+          total += subscription.amount / (subscription.periodLength ?? 1);
+        }
+      }
+      if (type == SelectedSubscriptionsType.total) {
+        if (subscription.reoccurrence == BudgetReoccurence.daily) {
+          total += subscription.amount;
+        } else if (subscription.reoccurrence == BudgetReoccurence.weekly) {
+          total += subscription.amount;
+        } else if (subscription.reoccurrence == BudgetReoccurence.monthly) {
+          total += subscription.amount;
+        } else if (subscription.reoccurrence == BudgetReoccurence.yearly) {
+          total += subscription.amount;
+        }
+      }
+    }
+  }
+  return total;
 }

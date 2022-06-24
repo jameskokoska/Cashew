@@ -8,6 +8,7 @@ import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -237,6 +238,25 @@ class HomePageState extends State<HomePage>
           SliverToBoxAdapter(
             child: Container(height: 15),
           ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(width: 15),
+                  Expanded(child: UpcomingTransactions()),
+                  SizedBox(width: 10),
+                  Expanded(
+                      child: UpcomingTransactions(
+                    overdueTransactions: true,
+                  )),
+                  SizedBox(width: 15),
+                ],
+              ),
+            ),
+          ),
           StreamBuilder<List<Transaction>>(
             stream: database.getTransactionsInTimeRangeFromCategories(
               DateTime(
@@ -279,7 +299,19 @@ class HomePageState extends State<HomePage>
                       cumulative ? cumulativeTotal : totalForDay));
                 }
                 return SliverToBoxAdapter(
-                  child: LineChartWrapper(points: points, isCurved: true),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, bottom: 10, top: 20),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          color: Theme.of(context).colorScheme.lightDarkAccent,
+                        ),
+                        child:
+                            LineChartWrapper(points: points, isCurved: true)),
+                  ),
                 );
               }
               return SliverToBoxAdapter(child: SizedBox());
@@ -292,6 +324,207 @@ class HomePageState extends State<HomePage>
           SliverToBoxAdapter(child: Container(height: 105)),
         ],
       ),
+    );
+  }
+}
+
+class UpcomingTransactions extends StatelessWidget {
+  const UpcomingTransactions({
+    Key? key,
+    bool this.overdueTransactions = false,
+  }) : super(key: key);
+  final overdueTransactions;
+
+  @override
+  Widget build(BuildContext context) {
+    return OpenContainerNavigation(
+      closedColor: Theme.of(context).colorScheme.lightDarkAccent,
+      openPage: PageFramework(
+        subtitle: Padding(
+          padding: const EdgeInsets.only(left: 20, bottom: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              StreamBuilder<List<double?>>(
+                stream: overdueTransactions
+                    ? database.watchTotalOfOverdue()
+                    : database.watchTotalOfUpcoming(),
+                builder: (context, snapshot) {
+                  return CountNumber(
+                    count:
+                        snapshot.hasData == false || snapshot.data![0] == null
+                            ? 0
+                            : snapshot.data![0] ?? 0,
+                    duration: Duration(milliseconds: 2500),
+                    dynamicDecimals: true,
+                    initialCount: (0),
+                    textBuilder: (number) {
+                      return TextFont(
+                        text: convertToMoney(number),
+                        fontSize: 25,
+                        textColor: overdueTransactions
+                            ? Theme.of(context).colorScheme.unPaidRed
+                            : Theme.of(context).colorScheme.unPaidYellow,
+                        fontWeight: FontWeight.bold,
+                      );
+                    },
+                  );
+                },
+              ),
+              SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4.0),
+                child: StreamBuilder<List<int?>>(
+                  stream: overdueTransactions
+                      ? database.watchCountOfOverdue()
+                      : database.watchCountOfUpcoming(),
+                  builder: (context, snapshot) {
+                    return TextFont(
+                      text:
+                          snapshot.hasData == false || snapshot.data![0] == null
+                              ? "/"
+                              : snapshot.data![0].toString() + " transactions",
+                      fontSize: 15,
+                      textColor: Theme.of(context).colorScheme.textLight,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        subtitleSize: 18,
+        title: overdueTransactions ? "Overdue" : "Upcoming",
+        dragDownToDismiss: true,
+        slivers: [
+          SliverToBoxAdapter(
+            child: SizedBox(height: 10),
+          ),
+          StreamBuilder<List<Transaction>>(
+            stream: overdueTransactions
+                ? database.watchAllOverdueTransactions()
+                : database.watchAllUpcomingTransactions(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.length <= 0) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(top: 85, right: 15, left: 15),
+                        child: TextFont(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            text: "No " +
+                                (overdueTransactions ? "overdue" : "upcoming") +
+                                " transactions."),
+                      ),
+                    ),
+                  );
+                }
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      Transaction transaction = snapshot.data![index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 20.0, bottom: 6),
+                            child: TextFont(
+                              text: getWordedDateShortMore(
+                                  transaction.dateCreated),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TransactionEntry(
+                            openPage: AddTransactionPage(
+                              title: "Edit Transaction",
+                              transaction: transaction,
+                            ),
+                            transaction: transaction,
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      );
+                    },
+                    childCount: snapshot.data?.length,
+                  ),
+                );
+              } else {
+                return SliverToBoxAdapter(child: SizedBox());
+              }
+            },
+          ),
+        ],
+      ),
+      borderRadius: 15,
+      button: (openContainer) {
+        return Tappable(
+          color: Theme.of(context).colorScheme.lightDarkAccent,
+          onTap: () {
+            openContainer();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFont(
+                  text: overdueTransactions ? "Overdue" : "Upcoming",
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(height: 6),
+                StreamBuilder<List<double?>>(
+                  stream: overdueTransactions
+                      ? database.watchTotalOfOverdue()
+                      : database.watchTotalOfUpcoming(),
+                  builder: (context, snapshot) {
+                    return CountNumber(
+                      count:
+                          snapshot.hasData == false || snapshot.data![0] == null
+                              ? 0
+                              : snapshot.data![0] ?? 0,
+                      duration: Duration(milliseconds: 2500),
+                      dynamicDecimals: true,
+                      initialCount: (0),
+                      textBuilder: (number) {
+                        return TextFont(
+                          text: convertToMoney(number),
+                          fontSize: 25,
+                          textColor: overdueTransactions
+                              ? Theme.of(context).colorScheme.unPaidRed
+                              : Theme.of(context).colorScheme.unPaidYellow,
+                          fontWeight: FontWeight.bold,
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(height: 5),
+                StreamBuilder<List<int?>>(
+                  stream: overdueTransactions
+                      ? database.watchCountOfOverdue()
+                      : database.watchCountOfUpcoming(),
+                  builder: (context, snapshot) {
+                    return TextFont(
+                      text:
+                          snapshot.hasData == false || snapshot.data![0] == null
+                              ? "/"
+                              : snapshot.data![0].toString() + " transactions",
+                      fontSize: 15,
+                      textColor: Theme.of(context).colorScheme.textLight,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

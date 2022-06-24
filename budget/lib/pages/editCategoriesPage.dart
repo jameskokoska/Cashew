@@ -52,6 +52,20 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         StreamBuilder<List<TransactionCategory>>(
           stream: database.watchAllCategories(),
           builder: (context, snapshot) {
+            if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 85, right: 15, left: 15),
+                    child: TextFont(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        text: "No categories created."),
+                  ),
+                ),
+              );
+            }
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverReorderableList(
                 onReorderStart: (_) {
@@ -136,19 +150,24 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                     ),
                     index: index,
                     onDelete: () {
-                      openPopup(context,
-                          description: "Delete " + category.name + "?",
-                          icon: Icons.delete_rounded,
-                          onCancel: () {
-                            Navigator.pop(context);
-                          },
-                          onCancelLabel: "Cancel",
-                          onSubmit: () {
-                            // database.deleteCategory(category.categoryPk);
-                            Navigator.pop(context);
-                            openSnackbar(context, "Deleted " + category.name);
-                          },
-                          onSubmitLabel: "Delete");
+                      openPopup(
+                        context,
+                        title: "Delete " + category.name + " category?",
+                        description:
+                            "This will delete all transactions associated with this category.",
+                        icon: Icons.delete_rounded,
+                        onCancel: () {
+                          Navigator.pop(context);
+                        },
+                        onCancelLabel: "Cancel",
+                        onSubmit: () {
+                          // database.deleteCategory(category.categoryPk);
+                          // database.deleteTransactionWithCategory(category.categoryPk);
+                          Navigator.pop(context);
+                          openSnackbar(context, "Deleted " + category.name);
+                        },
+                        onSubmitLabel: "Delete",
+                      );
                     },
                     openPage: AddCategoryPage(title: "Edit Category"),
                   );

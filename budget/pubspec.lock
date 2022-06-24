@@ -279,13 +279,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_lints:
-    dependency: transitive
-    description:
-      name: flutter_lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -429,13 +422,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
-  lints:
-    dependency: transitive
-    description:
-      name: lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   logging:
     dependency: transitive
     description:
@@ -597,6 +583,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  sa3_liquid:
+    dependency: "direct main"
+    description:
+      name: sa3_liquid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   share_plus:
     dependency: "direct main"
     description:
@@ -722,7 +715,7 @@ packages:
       name: simple_animations
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.0"
+    version: "4.1.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -967,5 +960,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
+  dart: ">=2.17.0 <3.0.0"
   flutter: ">=2.8.0"

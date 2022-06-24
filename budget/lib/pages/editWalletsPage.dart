@@ -51,6 +51,20 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         StreamBuilder<List<TransactionWallet>>(
           stream: database.watchAllWallets(),
           builder: (context, snapshot) {
+            if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 85, right: 15, left: 15),
+                    child: TextFont(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        text: "No wallets created."),
+                  ),
+                ),
+              );
+            }
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverReorderableList(
                 onReorderStart: (_) {
@@ -159,7 +173,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                       );
                     },
                     openPage: AddWalletPage(
-                      title: "Edit " + wallet.name + " Wallet",
+                      title: "Edit Wallet",
                       wallet: wallet,
                     ),
                     key: ValueKey(index),

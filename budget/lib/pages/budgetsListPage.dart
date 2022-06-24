@@ -39,6 +39,20 @@ class BudgetsListPageState extends State<BudgetsListPage>
         StreamBuilder<List<Budget>>(
           stream: database.watchAllPinnedBudgets(),
           builder: (context, snapshot) {
+            if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 85, right: 15, left: 15),
+                    child: TextFont(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        text: "No budgets created."),
+                  ),
+                ),
+              );
+            }
             if (snapshot.hasData) {
               return SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),

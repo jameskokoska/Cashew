@@ -49,6 +49,20 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         StreamBuilder<List<Budget>>(
           stream: database.watchAllBudgets(),
           builder: (context, snapshot) {
+            if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 85, right: 15, left: 15),
+                    child: TextFont(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        text: "No budgets created."),
+                  ),
+                ),
+              );
+            }
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverReorderableList(
                 onReorderStart: (_) {
@@ -76,7 +90,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                     backgroundColor: backgroundColor,
                     onDelete: () {
                       openPopup(context,
-                          description: "Delete " + budget.name + "?",
+                          title: "Delete " + budget.name + "?",
                           icon: Icons.delete_rounded,
                           onCancel: () {
                             Navigator.pop(context);

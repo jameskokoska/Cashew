@@ -87,9 +87,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         verticalLines: [
           VerticalLine(
             x: 0,
-            dashArray: [2, 10],
+            dashArray: [2, 5],
             strokeWidth: 2,
-            color: widget.color.withAlpha(40),
+            color: dynamicPastel(context, widget.color, amount: 0.3)
+                .withOpacity(0.2),
           )
         ],
       );
@@ -99,7 +100,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         bottomTitles: SideTitles(
           showTitles: true,
           getTextStyles: (_, __) {
-            return TextStyle(color: widget.color.withAlpha(170));
+            return TextStyle(
+                color: dynamicPastel(context, widget.color,
+                        amount: 0.8, inverse: true)
+                    .withOpacity(0.5),
+                fontFamily: 'Avenir');
           },
           getTitles: (value) {
             DateTime currentDate = DateTime.now();
@@ -117,7 +122,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         leftTitles: SideTitles(
           showTitles: true,
           getTextStyles: (_, __) {
-            return TextStyle(color: widget.color.withAlpha(70));
+            return TextStyle(
+                color: dynamicPastel(context, widget.color,
+                        amount: 0.5, inverse: true)
+                    .withOpacity(0.3),
+                fontFamily: 'Avenir');
           },
           getTitles: (value) {
             return getWordedNumber(value);
@@ -166,17 +175,19 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.5,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: widget.color.withAlpha(40),
+            color: dynamicPastel(context, widget.color, amount: 0.3)
+                .withOpacity(0.2),
             strokeWidth: 2,
-            dashArray: [2, 13],
+            dashArray: [2, 8],
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: widget.color.withAlpha(40),
+            color: dynamicPastel(context, widget.color, amount: 0.3)
+                .withOpacity(0.2),
             // color: Colors.transparent,
             strokeWidth: 2,
-            dashArray: [2, 10],
+            dashArray: [2, 8],
           );
         },
       );
@@ -193,9 +204,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   LineChartBarData get lineChartBarData2_2 => LineChartBarData(
         colors: [
-          MediaQuery.of(context).platformBrightness == Brightness.light
-              ? darken(widget.color, 0.2)
-              : lighten(widget.color, 0.2),
+          dynamicPastel(context, widget.color, amount: 0.7, inverse: true)
         ],
         barWidth: 3,
         isStrokeCapRound: true,
@@ -309,7 +318,7 @@ class LineChartWrapper extends StatelessWidget {
           spots: convertPoints(points),
           maxPair: getMaxPoint(points),
           minPair: getMinPoint(points),
-          color: Theme.of(context).colorScheme.accentColor,
+          color: Theme.of(context).colorScheme.primary,
           isCurved: isCurved,
         ),
       ),

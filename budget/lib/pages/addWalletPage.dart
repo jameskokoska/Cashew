@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -12,6 +13,7 @@ import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -44,8 +46,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
   String? selectedTitle;
   Color? selectedColor;
 
-  late TextEditingController _nameInputController;
-  late TextEditingController _colorInputController;
   late FocusNode _periodLengthFocusNode;
 
   String? textAddWallet = "Add Wallet";
@@ -63,6 +63,21 @@ class _AddWalletPageState extends State<AddWalletPage> {
     );
   }
 
+  Future<void> selectTitle() async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Enter Name",
+        child: SelectText(
+          setSelectedText: setSelectedTitle,
+          labelText: "Name",
+          selectedText: selectedTitle,
+        ),
+      ),
+      snap: false,
+    );
+  }
+
   void setSelectedTitle(String title) {
     selectedTitle = title;
     determineBottomButton();
@@ -71,7 +86,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   void setSelectedColor(Color color) {
     selectedColor = color;
-    setTextInput(_colorInputController, toHexString(color));
     determineBottomButton();
     return;
   }
@@ -87,7 +101,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
         name: selectedTitle ?? "",
         colour: toHexString(selectedColor ?? Colors.green),
         dateCreated: DateTime.now(),
-        order: numberOfWallets,
+        order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
       ),
     );
     Navigator.pop(context);
@@ -101,17 +115,12 @@ class _AddWalletPageState extends State<AddWalletPage> {
     if (widget.wallet != null) {
       //We are editing a wallet
       textAddWallet = "Edit Wallet";
-      selectedTitle = widget.wallet!.name;
       //Fill in the information from the passed in wallet
-      _nameInputController =
-          new TextEditingController(text: widget.wallet!.name);
-      _colorInputController =
-          new TextEditingController(text: widget.wallet!.colour);
-      WidgetsBinding.instance.addPostFrameCallback((_) {});
-    } else {
-      _nameInputController = new TextEditingController();
-      _colorInputController = new TextEditingController();
-    }
+      setState(() {
+        selectedColor = HexColor(widget.wallet!.colour);
+        selectedTitle = widget.wallet!.name;
+      });
+    } else {}
   }
 
   @override
@@ -152,34 +161,30 @@ class _AddWalletPageState extends State<AddWalletPage> {
               navbar: false,
               listWidgets: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: [
-                      Container(height: 20),
-                      TextInput(
-                        labelText: "Wallet Name",
-                        icon: Icons.title_rounded,
-                        padding: EdgeInsets.zero,
-                        controller: _nameInputController,
-                        onChanged: (text) {
-                          setSelectedTitle(text);
-                        },
-                      ),
-                      Container(height: 14),
-                      TextInput(
-                        labelText: "Select color",
-                        icon: Icons.color_lens_rounded,
-                        padding: EdgeInsets.zero,
-                        onTap: () {
-                          selectColor(context);
-                        },
-                        readOnly: true,
-                        showCursor: false,
-                        controller: _colorInputController,
-                      ),
-                    ],
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TappableTextEntry(
+                    title: selectedTitle,
+                    placeholder: "Name",
+                    onTap: () {
+                      selectTitle();
+                    },
+                    autoSizeText: true,
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   ),
-                )
+                ),
+                SizedBox(height: 14),
+                Column(
+                  children: [
+                    Container(
+                      height: 65,
+                      child: SelectColor(
+                        horizontalList: true,
+                        selectedColor: selectedColor,
+                        setSelectedColor: setSelectedColor,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
             Align(
