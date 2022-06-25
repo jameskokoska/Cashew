@@ -24,7 +24,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
+    required Function this.changePage,
   }) : super(key: key);
+
+  final changePage;
 
   @override
   State<HomePage> createState() => HomePageState();
@@ -131,24 +134,25 @@ class HomePageState extends State<HomePage>
                           ),
                         ],
                       ),
-                      AnimatedBuilder(
-                        animation: _animationControllerHeader,
-                        builder: (_, child) {
-                          return Transform.scale(
-                            alignment: Alignment.bottomRight,
-                            scale: _animationControllerHeader.value < 0.5
-                                ? 0.25 + 0.5
-                                : (_animationControllerHeader.value) * 0.5 +
-                                    0.5,
-                            child: child,
-                          );
-                        },
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          color: Colors.red,
-                        ),
-                      ),
+                      // Profile icon
+                      // AnimatedBuilder(
+                      //   animation: _animationControllerHeader,
+                      //   builder: (_, child) {
+                      //     return Transform.scale(
+                      //       alignment: Alignment.bottomRight,
+                      //       scale: _animationControllerHeader.value < 0.5
+                      //           ? 0.25 + 0.5
+                      //           : (_animationControllerHeader.value) * 0.5 +
+                      //               0.5,
+                      //       child: child,
+                      //     );
+                      //   },
+                      //   child: Container(
+                      //     width: 50,
+                      //     height: 50,
+                      //     color: Colors.red,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -157,56 +161,57 @@ class HomePageState extends State<HomePage>
           ),
           appStateSettings["showWalletSwitcher"] == true
               ? SliverToBoxAdapter(
-                  child: Container(
-                    height: 85.0,
-                    child: StreamBuilder<List<TransactionWallet>>(
-                      stream: database.watchAllWallets(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                            addAutomaticKeepAlives: true,
-                            clipBehavior: Clip.none,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapshot.data!.length + 1,
-                            itemBuilder: (context, index) {
-                              bool lastIndex = index == snapshot.data!.length;
-                              if (lastIndex) {
-                                return WalletEntryAdd();
-                              }
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  left: (index == 0 ? 8 : 0.0),
-                                ),
-                                child: WalletEntry(
-                                  selected:
-                                      appStateSettings["selectedWallet"] ==
-                                          snapshot.data![index].walletPk,
-                                  wallet: snapshot.data![index],
-                                ),
-                              );
-                            },
-                          );
-                        }
-                        return Container();
-                      },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 13.0),
+                    child: Container(
+                      height: 85.0,
+                      child: StreamBuilder<List<TransactionWallet>>(
+                        stream: database.watchAllWallets(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                              addAutomaticKeepAlives: true,
+                              clipBehavior: Clip.none,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data!.length + 1,
+                              itemBuilder: (context, index) {
+                                bool lastIndex = index == snapshot.data!.length;
+                                if (lastIndex) {
+                                  return WalletEntryAdd();
+                                }
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    left: (index == 0 ? 7 : 0.0),
+                                  ),
+                                  child: WalletEntry(
+                                    selected:
+                                        appStateSettings["selectedWallet"] ==
+                                            snapshot.data![index].walletPk,
+                                    wallet: snapshot.data![index],
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
                     ),
                   ),
                 )
               : SliverToBoxAdapter(),
-          SliverToBoxAdapter(
-            child: Container(height: 15),
-          ),
           StreamBuilder<List<Budget>>(
             stream: database.watchAllPinnedBudgets(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data!.length == 0) {
-                  return SliverToBoxAdapter(child: SizedBox());
+                  return SliverToBoxAdapter();
                 }
                 if (snapshot.data!.length == 1) {
                   return SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.only(
+                          left: 13, right: 13, bottom: 13),
                       child: BudgetContainer(
                         budget: snapshot.data![0],
                       ),
@@ -214,45 +219,47 @@ class HomePageState extends State<HomePage>
                   );
                 }
                 return SliverToBoxAdapter(
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      height: 183,
-                      enableInfiniteScroll: false,
-                      enlargeCenterPage: true,
-                      enlargeStrategy: CenterPageEnlargeStrategy.height,
-                      viewportFraction: 0.93,
-                      clipBehavior: Clip.none,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 13),
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        height: 183,
+                        enableInfiniteScroll: false,
+                        enlargeCenterPage: true,
+                        enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        viewportFraction: 0.95,
+                        clipBehavior: Clip.none,
+                      ),
+                      items: snapshot.data?.map((Budget budget) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
+                          child: BudgetContainer(
+                            budget: budget,
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    items: snapshot.data?.map((Budget budget) {
-                      return BudgetContainer(
-                        budget: budget,
-                      );
-                    }).toList(),
                   ),
                 );
               } else {
-                return SliverToBoxAdapter(child: SizedBox());
+                return SliverToBoxAdapter();
               }
             },
           ),
           SliverToBoxAdapter(
-            child: Container(height: 15),
-          ),
-          SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(width: 15),
                   Expanded(child: UpcomingTransactions()),
-                  SizedBox(width: 10),
+                  SizedBox(width: 13),
                   Expanded(
-                      child: UpcomingTransactions(
-                    overdueTransactions: true,
-                  )),
-                  SizedBox(width: 15),
+                    child: UpcomingTransactions(
+                      overdueTransactions: true,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -300,28 +307,57 @@ class HomePageState extends State<HomePage>
                 }
                 return SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15),
+                    padding: const EdgeInsets.only(bottom: 13),
                     child: Container(
                         padding: EdgeInsets.only(
                             left: 10, right: 10, bottom: 10, top: 20),
-                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        margin: EdgeInsets.symmetric(horizontal: 13),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
-                          color: Theme.of(context).colorScheme.lightDarkAccent,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .lightDarkAccentHeavyLight,
+                          boxShadow: boxShadow(context),
                         ),
                         child:
                             LineChartWrapper(points: points, isCurved: true)),
                   ),
                 );
               }
-              return SliverToBoxAdapter(child: SizedBox());
+              return SliverToBoxAdapter();
             },
+          ),
+          SliverToBoxAdapter(
+            child: Container(height: 13),
           ),
           ...getTransactionsSlivers(
               DateTime(DateTime.now().year, DateTime.now().month - 1,
                   DateTime.now().day),
               DateTime.now()),
-          SliverToBoxAdapter(child: Container(height: 105)),
+          SliverToBoxAdapter(
+            child: Container(height: 4),
+          ),
+          SliverToBoxAdapter(
+            child: Center(
+              child: Tappable(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                  child: TextFont(
+                    text: "View All",
+                    textAlign: TextAlign.center,
+                    fontSize: 16,
+                    textColor: Theme.of(context).colorScheme.textLight,
+                  ),
+                ),
+                onTap: () {
+                  widget.changePage(1);
+                },
+                borderRadius: 10,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(child: Container(height: 135)),
         ],
       ),
     );
@@ -337,147 +373,16 @@ class UpcomingTransactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OpenContainerNavigation(
-      closedColor: Theme.of(context).colorScheme.lightDarkAccent,
-      openPage: PageFramework(
-        subtitle: Padding(
-          padding: const EdgeInsets.only(left: 20, bottom: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              StreamBuilder<List<double?>>(
-                stream: overdueTransactions
-                    ? database.watchTotalOfOverdue()
-                    : database.watchTotalOfUpcoming(),
-                builder: (context, snapshot) {
-                  return CountNumber(
-                    count:
-                        snapshot.hasData == false || snapshot.data![0] == null
-                            ? 0
-                            : snapshot.data![0] ?? 0,
-                    duration: Duration(milliseconds: 2500),
-                    dynamicDecimals: true,
-                    initialCount: (0),
-                    textBuilder: (number) {
-                      return TextFont(
-                        text: convertToMoney(number),
-                        fontSize: 25,
-                        textColor: overdueTransactions
-                            ? Theme.of(context).colorScheme.unPaidRed
-                            : Theme.of(context).colorScheme.unPaidYellow,
-                        fontWeight: FontWeight.bold,
-                      );
-                    },
-                  );
-                },
-              ),
-              SizedBox(width: 8),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4.0),
-                child: StreamBuilder<List<int?>>(
-                  stream: overdueTransactions
-                      ? database.watchCountOfOverdue()
-                      : database.watchCountOfUpcoming(),
-                  builder: (context, snapshot) {
-                    return TextFont(
-                      text:
-                          snapshot.hasData == false || snapshot.data![0] == null
-                              ? "/"
-                              : snapshot.data![0].toString() + " transactions",
-                      fontSize: 15,
-                      textColor: Theme.of(context).colorScheme.textLight,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        subtitleSize: 18,
-        title: overdueTransactions ? "Overdue" : "Upcoming",
-        dragDownToDismiss: true,
-        slivers: [
-          SliverToBoxAdapter(
-            child: SizedBox(height: 10),
-          ),
-          StreamBuilder<List<Transaction>>(
-            stream: overdueTransactions
-                ? database.watchAllOverdueTransactions()
-                : database.watchAllUpcomingTransactions(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.length <= 0) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(top: 85, right: 15, left: 15),
-                        child: TextFont(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            text: "No " +
-                                (overdueTransactions ? "overdue" : "upcoming") +
-                                " transactions."),
-                      ),
-                    ),
-                  );
-                }
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      Transaction transaction = snapshot.data![index];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, bottom: 6),
-                            child: TextFont(
-                              text: getWordedDateShortMore(
-                                  transaction.dateCreated),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TransactionEntry(
-                            openPage: AddTransactionPage(
-                              title: "Edit Transaction",
-                              transaction: transaction,
-                            ),
-                            transaction: transaction,
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      );
-                    },
-                    childCount: snapshot.data?.length,
-                  ),
-                );
-              } else {
-                return SliverToBoxAdapter(child: SizedBox());
-              }
-            },
-          ),
-        ],
-      ),
-      borderRadius: 15,
-      button: (openContainer) {
-        return Tappable(
-          color: Theme.of(context).colorScheme.lightDarkAccent,
-          onTap: () {
-            openContainer();
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
+    return Container(
+      decoration: BoxDecoration(boxShadow: boxShadow(context)),
+      child: OpenContainerNavigation(
+        closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+        openPage: PageFramework(
+          subtitle: Padding(
+            padding: const EdgeInsets.only(left: 20, bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                TextFont(
-                  text: overdueTransactions ? "Overdue" : "Upcoming",
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(height: 6),
                 StreamBuilder<List<double?>>(
                   stream: overdueTransactions
                       ? database.watchTotalOfOverdue()
@@ -488,7 +393,7 @@ class UpcomingTransactions extends StatelessWidget {
                           snapshot.hasData == false || snapshot.data![0] == null
                               ? 0
                               : snapshot.data![0] ?? 0,
-                      duration: Duration(milliseconds: 2500),
+                      duration: Duration(milliseconds: 700),
                       dynamicDecimals: true,
                       initialCount: (0),
                       textBuilder: (number) {
@@ -504,27 +409,167 @@ class UpcomingTransactions extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 5),
-                StreamBuilder<List<int?>>(
-                  stream: overdueTransactions
-                      ? database.watchCountOfOverdue()
-                      : database.watchCountOfUpcoming(),
-                  builder: (context, snapshot) {
-                    return TextFont(
-                      text:
-                          snapshot.hasData == false || snapshot.data![0] == null
-                              ? "/"
-                              : snapshot.data![0].toString() + " transactions",
-                      fontSize: 15,
-                      textColor: Theme.of(context).colorScheme.textLight,
-                    );
-                  },
+                SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: StreamBuilder<List<int?>>(
+                    stream: overdueTransactions
+                        ? database.watchCountOfOverdue()
+                        : database.watchCountOfUpcoming(),
+                    builder: (context, snapshot) {
+                      return TextFont(
+                        text: snapshot.hasData == false ||
+                                snapshot.data![0] == null
+                            ? "/"
+                            : snapshot.data![0].toString() + " transactions",
+                        fontSize: 15,
+                        textColor: Theme.of(context).colorScheme.textLight,
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
           ),
-        );
-      },
+          subtitleSize: 18,
+          title: overdueTransactions ? "Overdue" : "Upcoming",
+          dragDownToDismiss: true,
+          slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(height: 10),
+            ),
+            StreamBuilder<List<Transaction>>(
+              stream: overdueTransactions
+                  ? database.watchAllOverdueTransactions()
+                  : database.watchAllUpcomingTransactions(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length <= 0) {
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 35, right: 30, left: 30),
+                          child: TextFont(
+                            maxLines: 4,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            text: "No " +
+                                (overdueTransactions ? "overdue" : "upcoming") +
+                                " transactions.",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        Transaction transaction = snapshot.data![index];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20.0, bottom: 6),
+                              child: TextFont(
+                                text: getWordedDateShortMore(
+                                    transaction.dateCreated),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TransactionEntry(
+                              openPage: AddTransactionPage(
+                                title: "Edit Transaction",
+                                transaction: transaction,
+                              ),
+                              transaction: transaction,
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        );
+                      },
+                      childCount: snapshot.data?.length,
+                    ),
+                  );
+                } else {
+                  return SliverToBoxAdapter();
+                }
+              },
+            ),
+          ],
+        ),
+        borderRadius: 15,
+        button: (openContainer) {
+          return Tappable(
+            color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+            onTap: () {
+              openContainer();
+            },
+            child: Container(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFont(
+                      text: overdueTransactions ? "Overdue" : "Upcoming",
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    SizedBox(height: 6),
+                    StreamBuilder<List<double?>>(
+                      stream: overdueTransactions
+                          ? database.watchTotalOfOverdue()
+                          : database.watchTotalOfUpcoming(),
+                      builder: (context, snapshot) {
+                        return CountNumber(
+                          count: snapshot.hasData == false ||
+                                  snapshot.data![0] == null
+                              ? 0
+                              : snapshot.data![0] ?? 0,
+                          duration: Duration(milliseconds: 2500),
+                          dynamicDecimals: true,
+                          initialCount: (0),
+                          textBuilder: (number) {
+                            return TextFont(
+                              text: convertToMoney(number),
+                              fontSize: 25,
+                              textColor: overdueTransactions
+                                  ? Theme.of(context).colorScheme.unPaidRed
+                                  : Theme.of(context).colorScheme.unPaidYellow,
+                              fontWeight: FontWeight.bold,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(height: 5),
+                    StreamBuilder<List<int?>>(
+                      stream: overdueTransactions
+                          ? database.watchCountOfOverdue()
+                          : database.watchCountOfUpcoming(),
+                      builder: (context, snapshot) {
+                        return TextFont(
+                          text: snapshot.hasData == false ||
+                                  snapshot.data![0] == null
+                              ? "/"
+                              : snapshot.data![0].toString() + " transactions",
+                          fontSize: 15,
+                          textColor: Theme.of(context).colorScheme.textLight,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

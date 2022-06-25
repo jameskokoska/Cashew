@@ -17,6 +17,8 @@ extension ColorsDefined on ColorScheme {
   Color get lightDarkAccent => brightness == Brightness.light
       ? const Color(0xFFFAFAFA)
       : const Color(0xFF242424);
+  Color get lightDarkAccentHeavyLight =>
+      brightness == Brightness.light ? Color(0xFFFFFFFF) : Color(0xFF242424);
   Color get canvasContainer => brightness == Brightness.light
       ? const Color(0xFFEBEBEB)
       : const Color(0xFF242424);

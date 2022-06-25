@@ -345,6 +345,66 @@ class TransactionsListPageState extends State<TransactionsListPage>
       openPage: TransactionsSearchPage(),
     );
 
+    // return Listener(
+    //   onPointerMove: (ptr) => {_onPointerMove(ptr)},
+    //   onPointerUp: (ptr) => {_onPointerUp(ptr)},
+    //   behavior: HitTestBehavior.opaque,
+    //   child: AnimatedBuilder(
+    //     animation: _animationControllerDragX,
+    //     builder: (_, child) {
+    //       return Transform.translate(
+    //         offset: Offset((-0.5 + _animationControllerDragX.value) * 100, 0),
+    //         child: PageFramework(
+    //           onScroll: _onScroll,
+    //           title: "Transactions",
+    //           backButton: false,
+    //           slivers: [
+    //             SliverToBoxAdapter(
+    //               child: Padding(
+    //                 padding:
+    //                     const EdgeInsets.only(left: 18, right: 18, bottom: 7),
+    //                 child: OpenContainerNavigation(
+    //                   borderRadius: 10,
+    //                   button: (openContainer) {
+    //                     return FakeTextInput(
+    //                       onTap: openContainer,
+    //                       label: "Search...",
+    //                       icon: Icons.search_rounded,
+    //                       edgeInsetsVertical:
+    //                           MediaQuery.of(context).padding.top - 21 <= 15
+    //                               ? MediaQuery.of(context).padding.top - 21
+    //                               : 15,
+    //                       backgroundColor:
+    //                           Theme.of(context).colorScheme.secondaryContainer,
+    //                     );
+    //                   },
+    //                   openPage: TransactionsSearchPage(),
+    //                 ),
+    //               ),
+    //             ),
+    //             SliverToBoxAdapter(
+    //               child: MonthSelector(
+    //                 key: monthSelectorStateKey,
+    //                 selectedDateStart: selectedDateStart,
+    //                 setSelectedDateStart: (DateTime currentDateTime) {
+    //                   setState(() {
+    //                     selectedDateStart = currentDateTime;
+    //                     _loadNewTransactions();
+    //                   });
+    //                 },
+    //               ),
+    //             ),
+    //             SliverToBoxAdapter(
+    //               child: SizedBox(height: 15),
+    //             ),
+    //             ...transactionWidgets,
+    //           ],
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
+
     return GestureDetector(
       onTap: () {
         //Minimize keyboard when tap non interactive widget
@@ -487,7 +547,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       //Needed in older version of flutter:
                       // SliverToBoxAdapter(),
                       ...transactionWidgets,
-                      // SliverToBoxAdapter(),
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: 175),
+                      ),
 
                       // SliverFillRemaining(),
                     ],

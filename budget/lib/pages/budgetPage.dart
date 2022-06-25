@@ -66,7 +66,7 @@ class _BudgetPageState extends State<BudgetPage> {
             widget.budget.allCategoryFks,
           ),
           builder: (context, snapshot) {
-            if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+            if (snapshot.hasData) {
               double totalSpent = 0;
               List<Widget> categoryEntries = [];
               snapshot.data!.forEach((category) {
@@ -108,8 +108,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                           count:
                                               widget.budget.amount - totalSpent,
                                           prefix: getCurrencyString(),
-                                          duration:
-                                              Duration(milliseconds: 2500),
+                                          duration: Duration(milliseconds: 700),
                                           fontSize: 25,
                                           textAlign: TextAlign.left,
                                           fontWeight: FontWeight.bold,
@@ -144,8 +143,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                               (widget.budget.amount -
                                                   totalSpent),
                                           prefix: getCurrencyString(),
-                                          duration:
-                                              Duration(milliseconds: 2500),
+                                          duration: Duration(milliseconds: 700),
                                           fontSize: 25,
                                           textAlign: TextAlign.left,
                                           fontWeight: FontWeight.bold,
@@ -192,10 +190,24 @@ class _BudgetPageState extends State<BudgetPage> {
                     ),
                   ),
                   Container(height: 20),
-                  PieChartWrapper(
-                    data: snapshot.data ?? [],
-                    totalSpent: totalSpent,
-                  ),
+                  snapshot.data!.length > 0
+                      ? PieChartWrapper(
+                          data: snapshot.data ?? [],
+                          totalSpent: totalSpent,
+                        )
+                      : Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 35, right: 30, left: 30),
+                            child: TextFont(
+                              maxLines: 4,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              text: "No transactions for this budget.",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                   Container(height: 35),
                   ...categoryEntries,
                   Container(height: 15),

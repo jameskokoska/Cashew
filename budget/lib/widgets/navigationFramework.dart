@@ -31,12 +31,7 @@ GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
 GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
 
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
-  List<Widget> pages = [
-    HomePage(key: homePageStateKey),
-    TransactionsListPage(key: transactionsListPageStateKey),
-    BudgetsListPage(key: budgetsListPageStateKey),
-    SettingsPage(key: settingsPageStateKey)
-  ];
+  late List<Widget> pages;
 
   int currentPage = 0;
 
@@ -49,6 +44,17 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     // pageController.animateToPage(page,
     //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
     pageController.jumpToPage(page);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pages = [
+      HomePage(key: homePageStateKey, changePage: changePage),
+      TransactionsListPage(key: transactionsListPageStateKey),
+      BudgetsListPage(key: budgetsListPageStateKey),
+      SettingsPage(key: settingsPageStateKey)
+    ];
   }
 
   @override

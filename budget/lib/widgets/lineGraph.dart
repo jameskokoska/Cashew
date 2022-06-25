@@ -29,6 +29,7 @@ class _LineChart extends StatefulWidget {
 
 class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   bool loaded = false;
+  double extraHorizontalPadding = 10;
   @override
   void initState() {
     super.initState();
@@ -55,10 +56,14 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return LineChart(
-      sampleData2,
-      swapAnimationDuration: const Duration(milliseconds: 4500),
-      swapAnimationCurve: Curves.easeInOutCubic,
+    return Padding(
+      padding: EdgeInsets.only(
+          right: 10 + extraHorizontalPadding, top: 8, bottom: 0),
+      child: LineChart(
+        sampleData2,
+        swapAnimationDuration: const Duration(milliseconds: 4500),
+        swapAnimationCurve: Curves.easeInOutCubic,
+      ),
     );
   }
 
@@ -118,6 +123,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             );
           },
           interval: widget.maxPair.x / 4,
+          margin: 13,
         ),
         leftTitles: SideTitles(
           showTitles: true,
@@ -131,7 +137,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           getTitles: (value) {
             return getWordedNumber(value);
           },
-          reservedSize: 33,
+          reservedSize: (widget.maxPair.y >= 100
+                  ? (widget.maxPair.y >= 1000 ? 37 : 33)
+                  : 25) +
+              extraHorizontalPadding,
           interval:
               ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
                           5)
@@ -203,9 +212,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       );
 
   LineChartBarData get lineChartBarData2_2 => LineChartBarData(
-        colors: [
-          dynamicPastel(context, widget.color, amount: 0.7, inverse: true)
-        ],
+        colors: [lightenPastel(widget.color, amount: 0.3)],
         barWidth: 3,
         isStrokeCapRound: true,
         dotData: FlDotData(
@@ -219,14 +226,16 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           },
         ),
         isCurved: widget.isCurved,
-        curveSmoothness: 0.03,
+        curveSmoothness: 0.83,
+        preventCurveOverShooting: true,
+        preventCurveOvershootingThreshold: 0,
         aboveBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,
           show: true,
           colors: [
-            widget.color.withAlpha(10),
-            widget.color,
+            widget.color.withAlpha(0),
+            widget.color.withAlpha(100),
           ],
           gradientColorStops: [0, 1],
           gradientFrom: Offset(
@@ -240,8 +249,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           cutOffY: 0,
           show: true,
           colors: [
-            widget.color,
-            widget.color.withAlpha(10),
+            widget.color.withAlpha(100),
+            widget.color.withAlpha(0),
           ],
           gradientColorStops: [0, 1],
           gradientFrom: const Offset(0, 0),
@@ -312,15 +321,12 @@ class LineChartWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 175,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 16.0, left: 6.0),
-        child: _LineChart(
-          spots: convertPoints(points),
-          maxPair: getMaxPoint(points),
-          minPair: getMinPoint(points),
-          color: Theme.of(context).colorScheme.primary,
-          isCurved: isCurved,
-        ),
+      child: _LineChart(
+        spots: convertPoints(points),
+        maxPair: getMaxPoint(points),
+        minPair: getMinPoint(points),
+        color: Theme.of(context).colorScheme.primary,
+        isCurved: isCurved,
       ),
     );
   }

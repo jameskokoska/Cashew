@@ -78,8 +78,7 @@ class BudgetContainer extends StatelessWidget {
                                         child: CountUp(
                                           count: budget.amount - totalSpent,
                                           prefix: getCurrencyString(),
-                                          duration:
-                                              Duration(milliseconds: 2500),
+                                          duration: Duration(milliseconds: 700),
                                           fontSize: 18,
                                           textAlign: TextAlign.left,
                                           fontWeight: FontWeight.bold,
@@ -106,8 +105,7 @@ class BudgetContainer extends StatelessWidget {
                                           count:
                                               -1 * (budget.amount - totalSpent),
                                           prefix: getCurrencyString(),
-                                          duration:
-                                              Duration(milliseconds: 2500),
+                                          duration: Duration(milliseconds: 700),
                                           fontSize: 18,
                                           textAlign: TextAlign.left,
                                           fontWeight: FontWeight.bold,
@@ -161,39 +159,24 @@ class BudgetContainer extends StatelessWidget {
         }
       },
     ));
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 5.0,
-        vertical: 0,
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: boxShadow(context),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Theme.of(context).colorScheme.shadowColorLight.withAlpha(50)
-                  : Colors.transparent,
-              blurRadius: 20,
-              offset: Offset(0, 2),
-              spreadRadius: 8,
-            ),
-          ],
-        ),
-        child: OpenContainerNavigation(
-          borderRadius: 20,
-          closedColor: Theme.of(context).colorScheme.lightDarkAccent,
-          button: (openContainer) {
-            return Tappable(
-              onTap: () {
-                openContainer();
-              },
-              borderRadius: 20,
-              child: widget,
-              color: Theme.of(context).colorScheme.lightDarkAccent,
-            );
-          },
-          openPage: BudgetPage(budget: budget),
-        ),
+      child: OpenContainerNavigation(
+        borderRadius: 20,
+        closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+        button: (openContainer) {
+          return Tappable(
+            onTap: () {
+              openContainer();
+            },
+            borderRadius: 20,
+            child: widget,
+            color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+          );
+        },
+        openPage: BudgetPage(budget: budget),
       ),
     );
   }
@@ -374,7 +357,7 @@ class BudgetProgress extends StatelessWidget {
           textAlign: TextAlign.center,
           fontWeight: FontWeight.bold,
           curve: Curves.decelerate,
-          duration: Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 700),
         ),
       ),
     );
@@ -412,7 +395,7 @@ class BudgetProgress extends StatelessWidget {
                         : BorderRadius.circular(50),
                     child: SlideFadeTransition(
                       animate: percent <= 100,
-                      animationDuration: Duration(milliseconds: 1400),
+                      animationDuration: Duration(milliseconds: 1700),
                       reverse: true,
                       direction: Direction.horizontal,
                       child: Container(

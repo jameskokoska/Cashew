@@ -389,3 +389,14 @@ getTotalSubscriptions(
   }
   return total;
 }
+
+List<BoxShadow> boxShadow(context) {
+  return [
+    BoxShadow(
+      color: Theme.of(context).colorScheme.shadowColorLight.withAlpha(30),
+      blurRadius: 20,
+      offset: Offset(0, 0),
+      spreadRadius: 8,
+    ),
+  ];
+}

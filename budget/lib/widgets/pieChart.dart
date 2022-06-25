@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math';
 
 import 'package:budget/colors.dart';
@@ -120,8 +121,10 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       curve: ElasticOutCurve(0.8),
       child: PieChart(
         PieChartData(
+          startDegreeOffset: -45,
           pieTouchData: PieTouchData(
               touchCallback: (FlTouchEvent event, pieTouchResponse) {
+            print(event.runtimeType);
             setState(() {
               if (!event.isInterestedForInteractions ||
                   pieTouchResponse == null ||
@@ -135,6 +138,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                     pieTouchResponse.touchedSection!.touchedSectionIndex;
               } else if (event.runtimeType == FlTapDownEvent) {
                 touchedIndex = -1;
+              } else if (event.runtimeType == FlLongPressMoveUpdate) {
+                touchedIndex =
+                    pieTouchResponse.touchedSection!.touchedSectionIndex;
               }
             });
           }),

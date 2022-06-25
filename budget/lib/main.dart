@@ -74,6 +74,7 @@ Future<Map<String, dynamic>> getUserSettings() async {
   Map<String, dynamic> userPreferencesDefault = {
     "theme": "system",
     "selectedWallet": 0,
+    "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "showWalletSwitcher": true,
     "showCumulativeSpending": true,

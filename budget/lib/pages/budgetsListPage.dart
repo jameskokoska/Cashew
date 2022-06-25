@@ -55,12 +55,12 @@ class BudgetsListPageState extends State<BudgetsListPage>
             }
             if (snapshot.hasData) {
               return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 13),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 18.0),
+                        padding: const EdgeInsets.only(bottom: 16.0),
                         child: BudgetContainer(
                           budget: snapshot.data![index],
                         ),
@@ -71,9 +71,12 @@ class BudgetsListPageState extends State<BudgetsListPage>
                 ),
               );
             } else {
-              return SliverToBoxAdapter(child: SizedBox());
+              return SliverToBoxAdapter();
             }
           },
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 55),
         ),
       ],
     );

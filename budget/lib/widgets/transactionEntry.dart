@@ -90,6 +90,20 @@ class _TransactionEntryState extends State<TransactionEntry> {
             .contains(widget.transaction.transactionPk);
       });
 
+    Color textColor = widget.transaction.paid
+        ? Theme.of(context).colorScheme.black
+        : widget.transaction.skipPaid
+            ? Theme.of(context).colorScheme.textLight
+            : widget.transaction.dateCreated.millisecondsSinceEpoch <=
+                    DateTime.now().millisecondsSinceEpoch
+                ? Theme.of(context).colorScheme.unPaidRed
+                : Theme.of(context).colorScheme.unPaidYellow;
+    Color iconColor = dynamicPastel(
+        context, Theme.of(context).colorScheme.tertiary,
+        amount: 0.4);
+
+    Color textColorLight = Theme.of(context).colorScheme.textLight;
+
     return OpenContainerNavigation(
       borderRadius: 15,
       button: (openContainer) {
@@ -151,9 +165,7 @@ class _TransactionEntryState extends State<TransactionEntry> {
                           padding: EdgeInsets.only(right: 8),
                           child: Icon(
                             getTransactionTypeIcon(widget.transaction.type),
-                            color: dynamicPastel(
-                                context, Theme.of(context).colorScheme.tertiary,
-                                amount: 0.4),
+                            color: iconColor,
                             size: 20,
                           ),
                         )
@@ -269,8 +281,7 @@ class _TransactionEntryState extends State<TransactionEntry> {
                                             ? "Skipped"
                                             : "Pay?",
                                     fontSize: 14,
-                                    textColor:
-                                        Theme.of(context).colorScheme.textLight,
+                                    textColor: textColorLight,
                                   ),
                                 ),
                                 onTap: () {
@@ -366,17 +377,7 @@ class _TransactionEntryState extends State<TransactionEntry> {
                         text: convertToMoney(number),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        textColor: widget.transaction.paid
-                            ? Theme.of(context).colorScheme.black
-                            : widget.transaction.skipPaid
-                                ? Theme.of(context).colorScheme.textLight
-                                : widget.transaction.dateCreated
-                                            .millisecondsSinceEpoch <=
-                                        DateTime.now().millisecondsSinceEpoch
-                                    ? Theme.of(context).colorScheme.unPaidRed
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .unPaidYellow,
+                        textColor: textColor,
                       );
                     },
                   ),

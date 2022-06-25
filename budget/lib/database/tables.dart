@@ -505,12 +505,13 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
       ..where((transaction) =>
+          transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
-              transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+          transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
-                  .equals(TransactionSpecialType.subscription.index) |
-          transactions.type.equals(TransactionSpecialType.repetitive.index) |
-          transactions.type.equals(TransactionSpecialType.upcoming.index));
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
     return query.watch();
   }
 
@@ -518,12 +519,13 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
       ..where((transaction) =>
+          transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
-              transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+          transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
-                  .equals(TransactionSpecialType.subscription.index) |
-          transactions.type.equals(TransactionSpecialType.repetitive.index) |
-          transactions.type.equals(TransactionSpecialType.upcoming.index));
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
     return query.watch();
   }
 
@@ -902,38 +904,39 @@ class FinanceDatabase extends _$FinanceDatabase {
     final totalAmt = transactions.amount.sum();
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.paid.equals(false) &
+      ..where(transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
           transactions.type.equals(TransactionSpecialType.subscription.index));
     return query.map((row) => row.read(totalAmt)).watch();
   }
 
   Stream<List<double?>> watchTotalOfUpcoming() {
     final totalAmt = transactions.amount.sum();
-    final totalCount = transactions.transactionPk.count();
 
     final query = selectOnly(transactions)
-      ..addColumns([totalAmt, totalCount])
-      ..where(transactions.paid.equals(false) &
-              transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+      ..addColumns([totalAmt])
+      ..where(transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
+          transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
-                  .equals(TransactionSpecialType.subscription.index) |
-          transactions.type.equals(TransactionSpecialType.repetitive.index) |
-          transactions.type.equals(TransactionSpecialType.upcoming.index));
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
     return query.map((row) => row.read(totalAmt)).watch();
   }
 
   Stream<List<double?>> watchTotalOfOverdue() {
     final totalAmt = transactions.amount.sum();
-    final totalCount = transactions.transactionPk.count();
 
     final query = selectOnly(transactions)
-      ..addColumns([totalAmt, totalCount])
-      ..where(transactions.paid.equals(false) &
-              transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+      ..addColumns([totalAmt])
+      ..where(transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
+          transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
-                  .equals(TransactionSpecialType.subscription.index) |
-          transactions.type.equals(TransactionSpecialType.repetitive.index) |
-          transactions.type.equals(TransactionSpecialType.upcoming.index));
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
     return query.map((row) => row.read(totalAmt)).watch();
   }
 
@@ -942,12 +945,13 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
-      ..where(transactions.paid.equals(false) &
-              transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+      ..where(transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
+          transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
-                  .equals(TransactionSpecialType.subscription.index) |
-          transactions.type.equals(TransactionSpecialType.repetitive.index) |
-          transactions.type.equals(TransactionSpecialType.upcoming.index));
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
     return query.map((row) => row.read(totalCount)).watch();
   }
 
@@ -956,12 +960,13 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
-      ..where(transactions.paid.equals(false) &
-              transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+      ..where(transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
+          transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
-                  .equals(TransactionSpecialType.subscription.index) |
-          transactions.type.equals(TransactionSpecialType.repetitive.index) |
-          transactions.type.equals(TransactionSpecialType.upcoming.index));
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
     return query.map((row) => row.read(totalCount)).watch();
   }
 

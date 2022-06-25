@@ -53,7 +53,8 @@ enum SelectedSubscriptionsType {
 }
 
 class _SubscriptionsPageState extends State<SubscriptionsPage> {
-  SelectedSubscriptionsType selectedType = SelectedSubscriptionsType.monthly;
+  SelectedSubscriptionsType selectedType = SelectedSubscriptionsType
+      .values[appStateSettings["selectedSubscriptionType"]];
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         getTotalSubscriptions(selectedType, snapshot.data);
                     return CountNumber(
                       count: total,
-                      duration: Duration(milliseconds: 2500),
+                      duration: Duration(milliseconds: 700),
                       dynamicDecimals: true,
                       initialCount: (0),
                       textBuilder: (number) {
@@ -119,6 +120,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         label: "Monthly",
                         onTap: () => setState(() {
                           selectedType = SelectedSubscriptionsType.monthly;
+                          updateSettings("selectedSubscriptionType", 0);
                         }),
                         fontSize: 12,
                         padding:
@@ -137,6 +139,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         label: "Yearly",
                         onTap: () => setState(() {
                           selectedType = SelectedSubscriptionsType.yearly;
+                          updateSettings("selectedSubscriptionType", 1);
                         }),
                         fontSize: 12,
                         padding:
@@ -155,6 +158,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         label: "Total",
                         onTap: () => setState(() {
                           selectedType = SelectedSubscriptionsType.total;
+                          updateSettings("selectedSubscriptionType", 2);
                         }),
                         fontSize: 12,
                         padding:
