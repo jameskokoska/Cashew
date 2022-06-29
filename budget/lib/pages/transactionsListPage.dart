@@ -176,7 +176,6 @@ List<Widget> getTransactionsSlivers(
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
-  DateTime indexDay;
   for (DateTime indexDay = startDay;
       indexDay.millisecondsSinceEpoch <= endDay.millisecondsSinceEpoch;
       indexDay = indexDay.add(Duration(days: 1))) {

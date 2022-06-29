@@ -33,6 +33,8 @@ enum TransactionSpecialType {
 
 enum ThemeSetting { dark, light }
 
+enum MethodAdded { email }
+
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
   @override
@@ -97,6 +99,7 @@ class Transactions extends Table {
   IntColumn get type => intEnum<TransactionSpecialType>().nullable()();
   BoolColumn get paid => boolean().withDefault(const Constant(false))();
   BoolColumn get skipPaid => boolean().withDefault(const Constant(false))();
+  IntColumn get methodAdded => intEnum<MethodAdded>().nullable()();
 }
 
 @DataClassName('TransactionCategory')
@@ -254,7 +257,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   tbl.categoryFk.isIn(categoryFks);
             }))
           .join([
-        leftOuterJoin(categories,
+        innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ]);
     } else if (search == "") {
@@ -267,7 +270,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   dateCreated.day.equals(date.day);
             }))
           .join([
-        leftOuterJoin(categories,
+        innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ]);
     } else {
@@ -697,6 +700,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     return into(categories).insertOnConflictUpdate(category);
   }
 
+  Future<List<Transaction>> get allTransactions => select(transactions).get();
+
   // create or update a label
   Future<int> createOrUpdateLabel(TransactionLabel label) {
     return into(labels).insertOnConflictUpdate(label);
@@ -1048,6 +1053,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Future<Transaction> getTransactionFromPk(int transactionPk) {
+    return (select(transactions)
+          ..where((t) => t.transactionPk.equals(transactionPk)))
+        .getSingle();
+  }
   // TODO: total spent in each month
   // Stream<List<Transaction>> watchTotalSpentEachMonth() {
   //   final totalAmt = transactions.amount.sum();

@@ -7,6 +7,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
@@ -159,6 +160,48 @@ class _AddWalletPageState extends State<AddWalletPage> {
             PageFramework(
               title: widget.title,
               navbar: false,
+              onBackButton: () async {
+                if (widget.wallet != null)
+                  await openPopup(
+                    context,
+                    title: "Discard Changes?",
+                    description:
+                        "Are you sure you want to discard your changes.",
+                    icon: Icons.warning_rounded,
+                    onSubmitLabel: "Yes",
+                    onSubmit: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    onCancelLabel: "No",
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                else
+                  Navigator.pop(context);
+              },
+              onDragDownToDissmiss: () async {
+                if (widget.wallet != null)
+                  await openPopup(
+                    context,
+                    title: "Discard Changes?",
+                    description:
+                        "Are you sure you want to discard your changes.",
+                    icon: Icons.warning_rounded,
+                    onSubmitLabel: "Yes",
+                    onSubmit: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    onCancelLabel: "No",
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                else
+                  Navigator.pop(context);
+              },
               listWidgets: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -24,6 +24,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:http/http.dart' as http;
 import 'package:universal_html/html.dart' as html;
@@ -48,39 +49,44 @@ class AccountAndBackup extends StatefulWidget {
   State<AccountAndBackup> createState() => _AccountAndBackupState();
 }
 
-class _AccountAndBackupState extends State<AccountAndBackup> {
-  signIn.GoogleSignInAccount? user;
-  late signIn.GoogleSignIn googleSignIn;
+signIn.GoogleSignInAccount? user;
+late signIn.GoogleSignIn googleSignIn;
 
-  Future<void> _signIn() async {
-    try {
-      openLoadingPopup(context);
-      if (user == null) {
-        googleSignIn = signIn.GoogleSignIn.standard(scopes: [
-          drive.DriveApi.driveAppdataScope,
-        ]);
-        final signIn.GoogleSignInAccount? account = await googleSignIn.signIn();
-        if (account != null) {
-          setState(() {
-            user = account;
-          });
-        } else {
-          throw ("Login failed");
-        }
+Future<bool> signInGoogle(context,
+    {bool? waitForCompletion,
+    bool? drivePermissions,
+    bool? gMailPermissions}) async {
+  try {
+    if (waitForCompletion == true) openLoadingPopup(context);
+    if (user == null) {
+      googleSignIn = signIn.GoogleSignIn.standard(scopes: [
+        ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
+        ...(gMailPermissions == true ? [gMail.GmailApi.gmailReadonlyScope] : [])
+      ]);
+      final signIn.GoogleSignInAccount? account = await googleSignIn.signIn();
+      if (account != null) {
+        user = account;
       } else {
-        await googleSignIn.signOut();
-        setState(() {
-          user = null;
-        });
-        print("Signedout");
+        throw ("Login failed");
       }
-      Navigator.of(context).pop();
-    } catch (e) {
-      Navigator.of(context).pop();
-      openSnackbar(context, e.toString());
     }
+    if (waitForCompletion == true) Navigator.of(context).pop();
+    return true;
+  } catch (e) {
+    if (waitForCompletion == true) Navigator.of(context).pop();
+    openSnackbar(context, e.toString());
+    return false;
   }
+}
 
+Future<bool> signOutGoogle() async {
+  await googleSignIn.signOut();
+  user = null;
+  print("Signedout");
+  return true;
+}
+
+class _AccountAndBackupState extends State<AccountAndBackup> {
   Future<void> _createBackup() async {
     try {
       openLoadingPopup(context);
@@ -502,7 +508,13 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
       children: [
         SettingsContainer(
           onTap: () async {
-            await _signIn();
+            if (user == null) {
+              await signInGoogle(context,
+                  waitForCompletion: true, drivePermissions: true);
+            } else {
+              await signOutGoogle();
+            }
+            setState(() {});
           },
           title: user == null ? "Sign-In" : user!.displayName ?? "",
           icon: Icons.account_circle,

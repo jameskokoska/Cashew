@@ -4,31 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class PageFramework extends StatefulWidget {
-  const PageFramework(
-      {Key? key,
-      this.title = "",
-      this.titleWidget,
-      this.slivers = const [],
-      this.listWidgets,
-      this.navbar = true,
-      this.appBarBackgroundColor,
-      this.appBarBackgroundColorStart,
-      this.showElevationAfterScrollPast,
-      this.backButton = true,
-      this.subtitle = null,
-      this.subtitleSize = null,
-      this.subtitleAnimationSpeed = 5,
-      this.onBottomReached,
-      this.pinned = true,
-      this.subtitleAlignment = Alignment.bottomCenter,
-      this.customTitleBuilder,
-      this.onScroll,
-      this.floatingActionButton,
-      this.textColor,
-      this.dragDownToDismiss = false,
-      this.dragDownToDismissEnabled = true,
-      this.dragDownToDissmissBackground})
-      : super(key: key);
+  const PageFramework({
+    Key? key,
+    this.title = "",
+    this.titleWidget,
+    this.slivers = const [],
+    this.listWidgets,
+    this.navbar = true,
+    this.appBarBackgroundColor,
+    this.appBarBackgroundColorStart,
+    this.showElevationAfterScrollPast,
+    this.backButton = true,
+    this.subtitle = null,
+    this.subtitleSize = null,
+    this.subtitleAnimationSpeed = 5,
+    this.onBottomReached,
+    this.pinned = true,
+    this.subtitleAlignment = Alignment.bottomCenter,
+    this.customTitleBuilder,
+    this.onScroll,
+    this.floatingActionButton,
+    this.textColor,
+    this.dragDownToDismiss = false,
+    this.dragDownToDismissEnabled = true,
+    this.dragDownToDissmissBackground,
+    this.onBackButton,
+    this.onDragDownToDissmiss,
+  }) : super(key: key);
 
   final String title;
   final Widget? titleWidget;
@@ -52,6 +54,9 @@ class PageFramework extends StatefulWidget {
   final bool dragDownToDismiss;
   final bool dragDownToDismissEnabled;
   final Color? dragDownToDissmissBackground;
+  final VoidCallback? onBackButton;
+  final VoidCallback? onDragDownToDissmiss;
+
   @override
   State<PageFramework> createState() => _PageFrameworkState();
 }
@@ -64,7 +69,7 @@ class _PageFrameworkState extends State<PageFramework>
   late AnimationController _animationControllerOpacity;
   late AnimationController _animationController0at50;
   late AnimationController _animationControllerDragY;
-  late AnimationController _animationControllerDragX;
+  // late AnimationController _animationControllerDragX;
 
   void initState() {
     super.initState();
@@ -73,8 +78,8 @@ class _PageFrameworkState extends State<PageFramework>
     _animationController0at50 = AnimationController(vsync: this, value: 1);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
     _animationControllerDragY.duration = Duration(milliseconds: 1000);
-    _animationControllerDragX = AnimationController(vsync: this, value: 0.5);
-    _animationControllerDragX.duration = Duration(milliseconds: 1000);
+    // _animationControllerDragX = AnimationController(vsync: this, value: 0.5);
+    // _animationControllerDragX.duration = Duration(milliseconds: 1000);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
 
@@ -135,7 +140,7 @@ class _PageFrameworkState extends State<PageFramework>
     _animationControllerOpacity.dispose();
     _animationController0at50.dispose();
     _animationControllerDragY.dispose();
-    _animationControllerDragX.dispose();
+    // _animationControllerDragX.dispose();
 
     _scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -154,7 +159,7 @@ class _PageFrameworkState extends State<PageFramework>
         totalDragY = totalDragY + ptr.delta.dy;
         //How far you need to drag to track drags - for animation
         _animationControllerDragY.value = totalDragY / 500;
-        _animationControllerDragX.value = 0.5 + totalDragX / 500;
+        // _animationControllerDragX.value = 0.5 + totalDragX / 500;
       }
     }
   }
@@ -163,13 +168,17 @@ class _PageFrameworkState extends State<PageFramework>
     //How far you need to drag to dismiss
     if (widget.dragDownToDismissEnabled) {
       if (totalDragY >= 125) {
-        Navigator.of(context).pop();
-        return;
+        if (widget.onDragDownToDissmiss != null) {
+          widget.onDragDownToDissmiss!();
+        } else {
+          Navigator.of(context).pop();
+          return;
+        }
       }
       totalDragX = 0;
       totalDragY = 0;
       _animationControllerDragY.reverse();
-      _animationControllerDragX.animateTo(0.5);
+      // _animationControllerDragX.animateTo(0.5);
     }
   }
 
@@ -206,17 +215,18 @@ class _PageFrameworkState extends State<PageFramework>
             animationControllerShift: _animationControllerShift,
             animationController0at50: _animationController0at50,
             textColor: widget.textColor,
+            onBackButton: widget.onBackButton,
           ),
           ...widget.slivers,
           widget.listWidgets != null
               ? SliverList(
                   delegate: SliverChildListDelegate([
                     ...widget.listWidgets!,
-                    widget.navbar ? Container(height: 67) : Container(),
+                    widget.navbar ? Container(height: 87) : Container(),
                   ]),
                 )
               : SliverToBoxAdapter(
-                  child: widget.navbar ? Container(height: 67) : Container(),
+                  child: widget.navbar ? Container(height: 87) : Container(),
                 ),
         ],
       ),
@@ -230,30 +240,29 @@ class _PageFrameworkState extends State<PageFramework>
           onPointerDown: (ptr) => {_onPointerDown(ptr)},
           behavior: HitTestBehavior.opaque,
           child: AnimatedBuilder(
-            animation: _animationControllerDragX,
+            // animation: _animationControllerDragX,
+            // builder: (_, child) {
+            //   return Transform.translate(
+            //     offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
+            //     child: Scaffold(
+            //       backgroundColor: widget.dragDownToDissmissBackground,
+            //       body: AnimatedBuilder(
+            animation: _animationControllerDragY,
             builder: (_, child) {
               return Transform.translate(
-                offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
-                child: Scaffold(
-                  backgroundColor: widget.dragDownToDissmissBackground,
-                  body: AnimatedBuilder(
-                    animation: _animationControllerDragY,
-                    builder: (_, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                            0,
-                            _animationControllerDragY.value *
-                                ((1 + 1 - _animationControllerDragY.value) *
-                                    50)),
-                        child: scaffold,
-                      );
-                    },
-                  ),
-                ),
+                offset: Offset(
+                    0,
+                    _animationControllerDragY.value *
+                        ((1 + 1 - _animationControllerDragY.value) * 50)),
+                child: scaffold,
               );
             },
           ),
         ),
+        //       );
+        //     },
+        //   ),
+        // ),
       );
     }
 
@@ -298,6 +307,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.animationController0at50,
     this.actions,
     this.textColor,
+    this.onBackButton,
   }) : super(key: key);
 
   final String title;
@@ -319,6 +329,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final bool? showElevation;
   final List<Widget>? actions;
   final Color? textColor;
+  final VoidCallback? onBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +342,10 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 opacity: animationControllerOpacity!,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (onBackButton != null)
+                      onBackButton!();
+                    else
+                      Navigator.of(context).pop();
                   },
                   icon: Icon(
                     Icons.arrow_back_rounded,

@@ -14,6 +14,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.initialValue = false,
     this.icon,
     required this.onSwitched,
+    this.verticalPadding,
     Key? key,
   }) : super(key: key);
 
@@ -22,6 +23,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final bool initialValue;
   final IconData? icon;
   final Function(bool) onSwitched;
+  final double? verticalPadding;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -30,6 +32,7 @@ class SettingsContainerSwitch extends StatefulWidget {
 
 class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
   bool value = true;
+  bool waiting = false;
 
   @override
   void initState() {
@@ -37,24 +40,39 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
     value = widget.initialValue;
   }
 
-  void toggleSwitch() {
-    widget.onSwitched(!value);
+  void toggleSwitch() async {
     setState(() {
-      value = !value;
+      waiting = true;
     });
+    if (await widget.onSwitched(!value) != false) {
+      setState(() {
+        value = !value;
+        waiting = false;
+      });
+    } else {
+      setState(() {
+        waiting = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SettingsContainer(
-      title: widget.title,
-      description: widget.description,
-      afterWidget: CupertinoSwitch(
-        activeColor: Theme.of(context).colorScheme.primary,
-        value: value,
-        onChanged: (_) {
-          toggleSwitch();
-        },
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 300),
+      opacity: waiting ? 0.5 : 1,
+      child: SettingsContainer(
+        title: widget.title,
+        description: widget.description,
+        afterWidget: CupertinoSwitch(
+          activeColor: Theme.of(context).colorScheme.primary,
+          value: value,
+          onChanged: (_) {
+            toggleSwitch();
+          },
+        ),
+        icon: widget.icon,
+        verticalPadding: widget.verticalPadding,
       ),
     );
   }
@@ -145,6 +163,7 @@ class SettingsContainer extends StatelessWidget {
     this.icon,
     this.afterWidget,
     this.onTap,
+    this.verticalPadding,
   }) : super(key: key);
 
   final String title;
@@ -152,6 +171,7 @@ class SettingsContainer extends StatelessWidget {
   final IconData? icon;
   final Widget? afterWidget;
   final VoidCallback? onTap;
+  final double? verticalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +180,8 @@ class SettingsContainer extends StatelessWidget {
       child: Tappable(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          padding: EdgeInsets.symmetric(
+              horizontal: 18, vertical: verticalPadding ?? 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -181,6 +202,7 @@ class SettingsContainer extends StatelessWidget {
                               text: title,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              maxLines: 5,
                             )
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -191,6 +213,7 @@ class SettingsContainer extends StatelessWidget {
                                   text: title,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
+                                  maxLines: 5,
                                 ),
                                 Container(height: 3),
                                 TextFont(

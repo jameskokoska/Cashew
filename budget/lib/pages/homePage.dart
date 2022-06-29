@@ -344,14 +344,14 @@ class HomePageState extends State<HomePage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFont(
-                    text: "View All",
+                    text: "View All Transactions",
                     textAlign: TextAlign.center,
                     fontSize: 16,
                     textColor: Theme.of(context).colorScheme.textLight,
                   ),
                 ),
                 onTap: () {
-                  widget.changePage(1);
+                  widget.changePage(1, switchNavbar: true);
                 },
                 borderRadius: 10,
               ),

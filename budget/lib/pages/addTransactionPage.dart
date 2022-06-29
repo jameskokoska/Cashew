@@ -8,6 +8,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
@@ -44,11 +45,13 @@ class AddTransactionPage extends StatefulWidget {
     Key? key,
     required this.title,
     this.transaction,
+    this.subscription,
   }) : super(key: key);
   final String title;
 
   //When a transaction is passed in, we are editing that transaction
   final Transaction? transaction;
+  final bool? subscription;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -233,13 +236,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   Future addTransaction() async {
     print("Added transaction");
     print(selectedDate);
+    bool income = false;
     await database.createOrUpdateTransaction(
       Transaction(
         transactionPk: widget.transaction != null
             ? widget.transaction!.transactionPk
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
-        amount: selectedAmount ?? 10,
+        amount: (income ? (selectedAmount ?? 0) : (selectedAmount ?? 0) * -1),
         note: selectedNote ?? "",
         categoryFk: selectedCategory?.categoryPk ?? 0,
         dateCreated: selectedDate,
@@ -304,6 +308,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         updateInitial();
       });
     } else {
+      if (widget.subscription != null) {
+        selectedTypeDisplay = "Subscription";
+        selectedType = TransactionSpecialType.subscription;
+      }
+
       _titleInputController = new TextEditingController();
       _noteInputController = new TextEditingController();
 
@@ -382,6 +391,48 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               title: widget.title,
               dragDownToDismiss: true,
               navbar: false,
+              onBackButton: () async {
+                if (widget.transaction != null)
+                  await openPopup(
+                    context,
+                    title: "Discard Changes?",
+                    description:
+                        "Are you sure you want to discard your changes.",
+                    icon: Icons.warning_rounded,
+                    onSubmitLabel: "Yes",
+                    onSubmit: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    onCancelLabel: "No",
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                else
+                  Navigator.pop(context);
+              },
+              onDragDownToDissmiss: () async {
+                if (widget.transaction != null)
+                  await openPopup(
+                    context,
+                    title: "Discard Changes?",
+                    description:
+                        "Are you sure you want to discard your changes.",
+                    icon: Icons.warning_rounded,
+                    onSubmitLabel: "Yes",
+                    onSubmit: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    onCancelLabel: "No",
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                else
+                  Navigator.pop(context);
+              },
               listWidgets: [
                 AnimatedContainer(
                   duration: Duration(milliseconds: 300),
@@ -1152,11 +1203,13 @@ class SelectText extends StatefulWidget {
     this.selectedText,
     this.labelText = "",
     this.next,
+    this.placeholder,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
   final VoidCallback? next;
   final String labelText;
+  final String? placeholder;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -1195,12 +1248,85 @@ class _SelectTextState extends State<SelectText> {
               input = text;
               widget.setSelectedText(input!);
             },
-            labelText: widget.labelText,
+            labelText: widget.placeholder ?? widget.labelText,
             padding: EdgeInsets.zero,
           ),
         ),
         Container(height: 14),
       ],
+    );
+  }
+}
+
+
+
+class EnterTextButton extends StatefulWidget {
+  const EnterTextButton({
+    Key? key,
+    required this.title,
+    required this.placeholder,
+    this.defaultValue,
+    required this.setSelectedText,
+    this.icon,
+  }) : super(key: key);
+
+  final String title;
+  final String placeholder;
+  final String? defaultValue;
+  final Function(String) setSelectedText;
+  final IconData? icon;
+
+  @override
+  State<EnterTextButton> createState() => _EnterTextButtonState();
+}
+
+class _EnterTextButtonState extends State<EnterTextButton> {
+  late TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.defaultValue != null) {
+      _textController = new TextEditingController(text: widget.defaultValue);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 19),
+      child: Tappable(
+        color: Theme.of(context).colorScheme.canvasContainer,
+        onTap: () {
+          openBottomSheet(
+            context,
+            PopupFramework(
+              title: widget.title,
+              child: SelectText(
+                setSelectedText: (text) {
+                  setTextInput(_textController, text);
+                  widget.setSelectedText(text);
+                },
+                labelText: widget.title,
+                selectedText: _textController.text,
+                placeholder: widget.placeholder,
+              ),
+            ),
+          );
+        },
+        borderRadius: 15,
+        child: IgnorePointer(
+          child: TextInput(
+            backgroundColor: Colors.transparent,
+            padding: EdgeInsets.zero,
+            readOnly: true,
+            bubbly: true,
+            labelText: widget.placeholder,
+            icon: widget.icon,
+            controller: _textController,
+          ),
+        ),
+      ),
     );
   }
 }

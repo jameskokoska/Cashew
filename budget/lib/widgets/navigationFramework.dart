@@ -1,5 +1,7 @@
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/budgetsListPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage.dart';
@@ -29,6 +31,7 @@ GlobalKey<HomePageState> homePageStateKey = GlobalKey();
 GlobalKey<TransactionsListPageState> transactionsListPageStateKey = GlobalKey();
 GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
 GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
+GlobalKey<BottomNavBarState> navbarStateKey = GlobalKey();
 
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pages;
@@ -37,13 +40,16 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
   final pageController = PageController();
 
-  void changePage(int page) {
+  void changePage(int page, {bool switchNavbar = false}) {
     setState(() {
       currentPage = page;
     });
     // pageController.animateToPage(page,
     //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
     pageController.jumpToPage(page);
+    if (switchNavbar) {
+      navbarStateKey.currentState!.setSelectedIndex(page);
+    }
   }
 
   @override
@@ -55,6 +61,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       BudgetsListPage(key: budgetsListPageStateKey),
       SettingsPage(key: settingsPageStateKey)
     ];
+    // Functions to run after entire UI loaded
+    parseEmailsInBackground(context);
+    entireAppLoaded = true;
   }
 
   @override
@@ -75,9 +84,11 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           ),
           extendBody: true,
           resizeToAvoidBottomInset: false,
-          bottomNavigationBar: BottomNavBar(onChanged: (index) {
-            changePage(index);
-          }),
+          bottomNavigationBar: BottomNavBar(
+              key: navbarStateKey,
+              onChanged: (index) {
+                changePage(index);
+              }),
         ),
         // IndexedStack(
         //   children: pages,
@@ -185,7 +196,7 @@ class SelectedTransactionsButton extends StatelessWidget {
                   context,
                   title: "Delete selected transactions?",
                   description: "Are you sure you want to delete " +
-                      (value as Map)["Transactions"].length.toString() +
+                      (value as Map)[pageID].length.toString() +
                       " transactions?",
                   icon: Icons.delete_rounded,
                   onCancel: () {

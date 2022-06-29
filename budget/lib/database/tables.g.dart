@@ -353,6 +353,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final TransactionSpecialType? type;
   final bool paid;
   final bool skipPaid;
+  final MethodAdded? methodAdded;
   Transaction(
       {required this.transactionPk,
       required this.name,
@@ -367,7 +368,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.reoccurrence,
       this.type,
       required this.paid,
-      required this.skipPaid});
+      required this.skipPaid,
+      this.methodAdded});
   factory Transaction.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Transaction(
@@ -399,6 +401,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           .mapFromDatabaseResponse(data['${effectivePrefix}paid'])!,
       skipPaid: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}skip_paid'])!,
+      methodAdded: $TransactionsTable.$converter3.mapToDart(const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}method_added'])),
     );
   }
   @override
@@ -429,6 +433,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     }
     map['paid'] = Variable<bool>(paid);
     map['skip_paid'] = Variable<bool>(skipPaid);
+    if (!nullToAbsent || methodAdded != null) {
+      final converter = $TransactionsTable.$converter3;
+      map['method_added'] = Variable<int?>(converter.mapToSql(methodAdded));
+    }
     return map;
   }
 
@@ -454,6 +462,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       paid: Value(paid),
       skipPaid: Value(skipPaid),
+      methodAdded: methodAdded == null && nullToAbsent
+          ? const Value.absent()
+          : Value(methodAdded),
     );
   }
 
@@ -476,6 +487,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       type: serializer.fromJson<TransactionSpecialType?>(json['type']),
       paid: serializer.fromJson<bool>(json['paid']),
       skipPaid: serializer.fromJson<bool>(json['skipPaid']),
+      methodAdded: serializer.fromJson<MethodAdded?>(json['methodAdded']),
     );
   }
   @override
@@ -496,6 +508,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'type': serializer.toJson<TransactionSpecialType?>(type),
       'paid': serializer.toJson<bool>(paid),
       'skipPaid': serializer.toJson<bool>(skipPaid),
+      'methodAdded': serializer.toJson<MethodAdded?>(methodAdded),
     };
   }
 
@@ -513,7 +526,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           BudgetReoccurence? reoccurrence,
           TransactionSpecialType? type,
           bool? paid,
-          bool? skipPaid}) =>
+          bool? skipPaid,
+          MethodAdded? methodAdded}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -529,6 +543,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         type: type ?? this.type,
         paid: paid ?? this.paid,
         skipPaid: skipPaid ?? this.skipPaid,
+        methodAdded: methodAdded ?? this.methodAdded,
       );
   @override
   String toString() {
@@ -546,7 +561,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('reoccurrence: $reoccurrence, ')
           ..write('type: $type, ')
           ..write('paid: $paid, ')
-          ..write('skipPaid: $skipPaid')
+          ..write('skipPaid: $skipPaid, ')
+          ..write('methodAdded: $methodAdded')
           ..write(')'))
         .toString();
   }
@@ -566,7 +582,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       reoccurrence,
       type,
       paid,
-      skipPaid);
+      skipPaid,
+      methodAdded);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -584,7 +601,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.reoccurrence == this.reoccurrence &&
           other.type == this.type &&
           other.paid == this.paid &&
-          other.skipPaid == this.skipPaid);
+          other.skipPaid == this.skipPaid &&
+          other.methodAdded == this.methodAdded);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -602,6 +620,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<TransactionSpecialType?> type;
   final Value<bool> paid;
   final Value<bool> skipPaid;
+  final Value<MethodAdded?> methodAdded;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -617,6 +636,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
     this.skipPaid = const Value.absent(),
+    this.methodAdded = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.transactionPk = const Value.absent(),
@@ -633,6 +653,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
     this.skipPaid = const Value.absent(),
+    this.methodAdded = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         note = Value(note),
@@ -653,6 +674,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<TransactionSpecialType?>? type,
     Expression<bool>? paid,
     Expression<bool>? skipPaid,
+    Expression<MethodAdded?>? methodAdded,
   }) {
     return RawValuesInsertable({
       if (transactionPk != null) 'transaction_pk': transactionPk,
@@ -669,6 +691,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (type != null) 'type': type,
       if (paid != null) 'paid': paid,
       if (skipPaid != null) 'skip_paid': skipPaid,
+      if (methodAdded != null) 'method_added': methodAdded,
     });
   }
 
@@ -686,7 +709,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<BudgetReoccurence?>? reoccurrence,
       Value<TransactionSpecialType?>? type,
       Value<bool>? paid,
-      Value<bool>? skipPaid}) {
+      Value<bool>? skipPaid,
+      Value<MethodAdded?>? methodAdded}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
       name: name ?? this.name,
@@ -702,6 +726,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       type: type ?? this.type,
       paid: paid ?? this.paid,
       skipPaid: skipPaid ?? this.skipPaid,
+      methodAdded: methodAdded ?? this.methodAdded,
     );
   }
 
@@ -754,6 +779,11 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (skipPaid.present) {
       map['skip_paid'] = Variable<bool>(skipPaid.value);
     }
+    if (methodAdded.present) {
+      final converter = $TransactionsTable.$converter3;
+      map['method_added'] =
+          Variable<int?>(converter.mapToSql(methodAdded.value));
+    }
     return map;
   }
 
@@ -773,7 +803,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('reoccurrence: $reoccurrence, ')
           ..write('type: $type, ')
           ..write('paid: $paid, ')
-          ..write('skipPaid: $skipPaid')
+          ..write('skipPaid: $skipPaid, ')
+          ..write('methodAdded: $methodAdded')
           ..write(')'))
         .toString();
   }
@@ -879,6 +910,13 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (skip_paid IN (0, 1))',
       defaultValue: const Constant(false));
+  final VerificationMeta _methodAddedMeta =
+      const VerificationMeta('methodAdded');
+  @override
+  late final GeneratedColumnWithTypeConverter<MethodAdded?, int?> methodAdded =
+      GeneratedColumn<int?>('method_added', aliasedName, true,
+              type: const IntType(), requiredDuringInsert: false)
+          .withConverter<MethodAdded?>($TransactionsTable.$converter3);
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -894,7 +932,8 @@ class $TransactionsTable extends Transactions
         reoccurrence,
         type,
         paid,
-        skipPaid
+        skipPaid,
+        methodAdded
       ];
   @override
   String get aliasedName => _alias ?? 'transactions';
@@ -970,6 +1009,7 @@ class $TransactionsTable extends Transactions
       context.handle(_skipPaidMeta,
           skipPaid.isAcceptableOrUnknown(data['skip_paid']!, _skipPaidMeta));
     }
+    context.handle(_methodAddedMeta, const VerificationResult.success());
     return context;
   }
 
@@ -993,6 +1033,8 @@ class $TransactionsTable extends Transactions
   static TypeConverter<TransactionSpecialType?, int> $converter2 =
       const EnumIndexConverter<TransactionSpecialType>(
           TransactionSpecialType.values);
+  static TypeConverter<MethodAdded?, int> $converter3 =
+      const EnumIndexConverter<MethodAdded>(MethodAdded.values);
 }
 
 class TransactionCategory extends DataClass

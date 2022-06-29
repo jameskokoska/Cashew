@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/autoTransactionsPage.dart';
+import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/colorsPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
@@ -73,14 +75,14 @@ class SettingsPageState extends State<SettingsPage>
       listWidgets: [
         SettingsHeader(title: "Data"),
         SettingsContainerOpenPage(
-          openPage: SubscriptionsPage(),
-          title: "Subscriptions",
-          icon: Icons.event_repeat_rounded,
-        ),
-        SettingsContainerOpenPage(
           openPage: ColorsPage(),
           title: "Colors",
           icon: Icons.color_lens,
+        ),
+        SettingsContainerOpenPage(
+          openPage: SubscriptionsPage(),
+          title: "Subscriptions",
+          icon: Icons.event_repeat_rounded,
         ),
         SettingsContainerOpenPage(
           openPage: EditCategoriesPage(title: "Edit Categories"),
@@ -153,24 +155,26 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.portrait,
         ),
         EnterName(),
-        SettingsHeader(title: "Layout Customization"),
+        SettingsHeader(title: "Preferences"),
         SettingsContainerSwitch(
           title: "Show Wallet Switcher",
-          description: "On home page",
+          description: "Home page",
           onSwitched: (value) {
             updateSettings("showWalletSwitcher", value,
                 pagesNeedingRefresh: [0]);
           },
           initialValue: appStateSettings["showWalletSwitcher"],
+          icon: Icons.wallet_rounded,
         ),
         SettingsContainerSwitch(
           title: "Show Cumulative Spending",
-          description: "On home page spending graph",
+          description: "Home page spending graph",
           onSwitched: (value) {
             updateSettings("showCumulativeSpending", value,
                 pagesNeedingRefresh: [0]);
           },
           initialValue: appStateSettings["showCumulativeSpending"],
+          icon: Icons.show_chart_rounded,
         ),
         SettingsContainerSwitch(
           title: "Ask for Transaction Title",
@@ -182,6 +186,18 @@ class SettingsPageState extends State<SettingsPage>
             );
           },
           initialValue: appStateSettings["askForTransactionTitle"],
+          icon: Icons.text_fields_rounded,
+        ),
+        SettingsHeader(title: "Automations"),
+        // SettingsContainerOpenPage(
+        //   openPage: AutoTransactionsPage(),
+        //   title: "Auto Transactions",
+        //   icon: Icons.auto_fix_high_rounded,
+        // ),
+        SettingsContainerOpenPage(
+          openPage: AutoTransactionsPageEmail(),
+          title: "Auto Email Transactions",
+          icon: Icons.outgoing_mail,
         ),
       ],
     );

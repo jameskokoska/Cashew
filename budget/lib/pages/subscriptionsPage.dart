@@ -11,6 +11,7 @@ import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -59,6 +60,15 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      floatingActionButton: AnimatedScaleDelayed(
+        child: FAB(
+          tooltip: "Add Subscription",
+          openPage: AddTransactionPage(
+            title: "Add Transaction",
+            subscription: true,
+          ),
+        ),
+      ),
       dragDownToDismiss: true,
       title: "Subscriptions",
       navbar: true,
@@ -178,6 +188,20 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           stream: database.watchAllSubscriptions(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              if (snapshot.data!.length <= 0) {
+                return SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(top: 85, right: 15, left: 15),
+                      child: TextFont(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          text: "No subscription transactions."),
+                    ),
+                  ),
+                );
+              }
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
@@ -208,7 +232,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 ),
               );
             } else {
-              return SliverToBoxAdapter(child: SizedBox());
+              return SliverToBoxAdapter();
             }
           },
         )

@@ -263,6 +263,8 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
 String getWordedNumber(double value) {
   if (value >= 1000) {
     return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
+  } else if (value <= -1000) {
+    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
   } else {
     return getCurrencyString() + value.toInt().toString();
   }

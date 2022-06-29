@@ -4,6 +4,8 @@ import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/autoTransactionsPage.dart';
+import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -12,12 +14,13 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:googleapis/books/v1.dart';
 import './pages/homePage.dart';
 import 'package:budget/colors.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
+
+// Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
 /*
 adb tcpip 5555
@@ -26,21 +29,26 @@ adb connect 192.168.0.22
 flutter channel master
 flutter upgrade
 */
+
 void main() async {
   database = await constructDb();
+  entireAppLoaded = false;
   runApp(InitializeDatabase());
+  // initNotificationListener();
 }
 
 final Random random = new Random();
 final int randomInt = random.nextInt(100);
+late bool entireAppLoaded;
 
 Future<bool> updateSettings(setting, value,
-    {List<int> pagesNeedingRefresh: const []}) async {
+    {List<int> pagesNeedingRefresh: const [],
+    bool updateGlobalState = true}) async {
   final prefs = await SharedPreferences.getInstance();
   appStateSettings[setting] = value;
   await prefs.setString('userSettings', json.encode(appStateSettings));
 
-  appStateKey.currentState?.refreshAppState();
+  if (updateGlobalState == true) appStateKey.currentState?.refreshAppState();
   //Refresh any pages listed
   for (int page in pagesNeedingRefresh) {
     if (page == 0) {
@@ -80,6 +88,7 @@ Future<Map<String, dynamic>> getUserSettings() async {
     "showCumulativeSpending": true,
     "askForTransactionTitle": true,
     "username": "",
+    "AutoTransactions-canReadNotifs": false,
   };
 
   final prefs = await SharedPreferences.getInstance();

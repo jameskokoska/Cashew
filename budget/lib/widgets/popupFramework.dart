@@ -31,7 +31,7 @@ class PopupFramework extends StatelessWidget {
                       padding: EdgeInsets.only(left: 18, right: 18, top: 5),
                       child: TextFont(
                         text: title ?? "",
-                        fontSize: 32,
+                        fontSize: title!.length > 16 ? 24 : 32,
                         fontWeight: FontWeight.bold,
                         maxLines: 5,
                       ),

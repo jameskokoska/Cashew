@@ -84,10 +84,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   ExtraLinesData get extraLinesData => ExtraLinesData(
         horizontalLines: [
-          // HorizontalLine(
-          //   y: 0,
-          //   color: widget.color.withAlpha(170),
-          // ),
+          HorizontalLine(
+            y: 0,
+            color: dynamicPastel(context, widget.color, amount: 0.3)
+                .withOpacity(0.4),
+          ),
         ],
         verticalLines: [
           VerticalLine(
@@ -137,16 +138,36 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           getTitles: (value) {
             return getWordedNumber(value);
           },
-          reservedSize: (widget.maxPair.y >= 100
-                  ? (widget.maxPair.y >= 1000 ? 37 : 33)
-                  : 25) +
-              extraHorizontalPadding,
+          reservedSize: widget.minPair.y <= -10000
+              ? 55
+              : widget.minPair.y <= -1000
+                  ? 45
+                  : widget.minPair.y <= -100
+                      ? 40
+                      : (widget.maxPair.y >= 100
+                              ? (widget.maxPair.y >= 1000 ? 37 : 33)
+                              : 25) +
+                          extraHorizontalPadding,
           interval:
               ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
                           5)
                       .ceil() *
                   5,
           margin: 10,
+          checkToShowTitle:
+              (minValue, maxValue, sideTitles, appliedInterval, value) {
+            if (value == 0) {
+              return true;
+            } else if (value % appliedInterval != 0) {
+              return false;
+            } else if (value < widget.maxPair.y && value > 1) {
+              return true;
+            } else if (value > widget.minPair.y && value < 1) {
+              return true;
+            } else {
+              return false;
+            }
+          },
         ),
         topTitles: SideTitles(
           showTitles: false,

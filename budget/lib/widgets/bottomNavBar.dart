@@ -6,10 +6,10 @@ class BottomNavBar extends StatefulWidget {
   final Function(int) onChanged;
 
   @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
+  State<BottomNavBar> createState() => BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class BottomNavBarState extends State<BottomNavBar> {
   int selectedIndex = 0;
 
   void onItemTapped(int index) {
@@ -18,6 +18,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
       selectedIndex = index;
     });
     FocusScope.of(context).unfocus(); //remove keyboard focus on any input boxes
+  }
+
+  void setSelectedIndex(index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    FocusScope.of(context).unfocus();
   }
 
   @override

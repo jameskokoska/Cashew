@@ -8,6 +8,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
@@ -29,12 +30,12 @@ class AddCategoryPage extends StatefulWidget {
   AddCategoryPage({
     Key? key,
     required this.title,
-    this.transaction,
+    this.category,
   }) : super(key: key);
   final String title;
 
   //When a transaction is passed in, we are editing that transaction
-  final Transaction? transaction;
+  final TransactionCategory? category;
 
   @override
   _AddCategoryPageState createState() => _AddCategoryPageState();
@@ -93,8 +94,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     print("Added category");
     await database.createOrUpdateCategory(
       TransactionCategory(
-        categoryPk: widget.transaction != null
-            ? widget.transaction!.transactionPk
+        categoryPk: widget.category != null
+            ? widget.category!.categoryPk
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
         dateCreated: DateTime.now(),
@@ -113,16 +114,15 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.transaction != null) {
+    if (widget.category != null) {
       //We are editing a transaction
       //Fill in the information from the passed in transaction
       _titleInputController =
-          new TextEditingController(text: widget.transaction!.name);
-      _noteInputController =
-          new TextEditingController(text: widget.transaction!.note);
+          new TextEditingController(text: widget.category!.name);
+
       _dateInputController = new TextEditingController(
-          text: getWordedDate(widget.transaction!.dateCreated));
-      selectedTitle = widget.transaction!.name;
+          text: getWordedDate(widget.category!.dateCreated));
+      selectedTitle = widget.category!.name;
 
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
@@ -144,7 +144,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   }
 
   updateInitial() async {
-    if (widget.transaction != null) {
+    if (widget.category != null) {
       setState(() {});
     }
   }
@@ -166,6 +166,48 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             PageFramework(
               title: widget.title,
               navbar: false,
+              onBackButton: () async {
+                if (widget.category != null)
+                  await openPopup(
+                    context,
+                    title: "Discard Changes?",
+                    description:
+                        "Are you sure you want to discard your changes.",
+                    icon: Icons.warning_rounded,
+                    onSubmitLabel: "Yes",
+                    onSubmit: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    onCancelLabel: "No",
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                else
+                  Navigator.pop(context);
+              },
+              onDragDownToDissmiss: () async {
+                if (widget.category != null)
+                  await openPopup(
+                    context,
+                    title: "Discard Changes?",
+                    description:
+                        "Are you sure you want to discard your changes.",
+                    icon: Icons.warning_rounded,
+                    onSubmitLabel: "Yes",
+                    onSubmit: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    onCancelLabel: "No",
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                else
+                  Navigator.pop(context);
+              },
               listWidgets: [
                 Row(
                   mainAxisSize: MainAxisSize.max,

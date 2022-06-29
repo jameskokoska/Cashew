@@ -30,7 +30,7 @@ extension ColorsDefined on ColorScheme {
       : const Color(0x69BDBDBD);
   Color get shadowColorLight => brightness == Brightness.light
       ? const Color(0x2D5A5A5A)
-      : const Color(0x4BBDBDBD);
+      : Color(0x28747474);
   // Color get accentColor => brightness == Brightness.light
   //     ? const Color(0xFF4668A8)
   //     : const Color(0xFF1B447A);
