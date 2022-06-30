@@ -55,10 +55,16 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage>
     with AutomaticKeepAliveClientMixin {
+  GlobalKey<PageFrameworkState> pageState = GlobalKey();
+
   late Color selectedColor = Colors.red;
   void refreshState() {
     print("refresh settings");
     setState(() {});
+  }
+
+  void scrollToTop() {
+    pageState.currentState!.scrollToTop();
   }
 
   @override
@@ -67,6 +73,7 @@ class SettingsPageState extends State<SettingsPage>
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      key: pageState,
       title: "Settings",
       backButton: false,
       navbar: true,

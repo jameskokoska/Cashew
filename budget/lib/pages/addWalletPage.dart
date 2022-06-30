@@ -147,6 +147,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
           //Minimize keyboard when tap non interactive widget
@@ -162,43 +163,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
               navbar: false,
               onBackButton: () async {
                 if (widget.wallet != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },
               onDragDownToDissmiss: () async {
                 if (widget.wallet != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },

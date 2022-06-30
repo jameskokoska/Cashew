@@ -91,7 +91,9 @@ class _TransactionEntryState extends State<TransactionEntry> {
       });
 
     Color textColor = widget.transaction.paid
-        ? Theme.of(context).colorScheme.black
+        ? widget.transaction.income == true
+            ? Theme.of(context).colorScheme.incomeGreen
+            : Theme.of(context).colorScheme.black
         : widget.transaction.skipPaid
             ? Theme.of(context).colorScheme.textLight
             : widget.transaction.dateCreated.millisecondsSinceEpoch <=
@@ -99,8 +101,8 @@ class _TransactionEntryState extends State<TransactionEntry> {
                 ? Theme.of(context).colorScheme.unPaidRed
                 : Theme.of(context).colorScheme.unPaidYellow;
     Color iconColor = dynamicPastel(
-        context, Theme.of(context).colorScheme.tertiary,
-        amount: 0.4);
+        context, Theme.of(context).colorScheme.primary,
+        amount: 0.3);
 
     Color textColorLight = Theme.of(context).colorScheme.textLight;
 
@@ -275,11 +277,17 @@ class _TransactionEntryState extends State<TransactionEntry> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 14, horizontal: 10),
                                   child: TextFont(
-                                    text: widget.transaction.paid
-                                        ? "Paid"
-                                        : widget.transaction.skipPaid
-                                            ? "Skipped"
-                                            : "Pay?",
+                                    text: widget.transaction.income
+                                        ? (widget.transaction.paid
+                                            ? "Desposited"
+                                            : widget.transaction.skipPaid
+                                                ? "Skipped"
+                                                : "Desposit?")
+                                        : (widget.transaction.paid
+                                            ? "Paid"
+                                            : widget.transaction.skipPaid
+                                                ? "Skipped"
+                                                : "Pay?"),
                                     fontSize: 14,
                                     textColor: textColorLight,
                                   ),
@@ -328,9 +336,12 @@ class _TransactionEntryState extends State<TransactionEntry> {
                                     openPopup(
                                       context,
                                       icon: Icons.payments_rounded,
-                                      title: "Pay?",
-                                      description:
-                                          "Add payment on this transaction?",
+                                      title: widget.transaction.income
+                                          ? "Desposit?"
+                                          : "Pay?",
+                                      description: widget.transaction.income
+                                          ? "Desposit this amount?"
+                                          : "Add payment on this transaction?",
                                       onCancelLabel: "Cancel",
                                       onCancel: () {
                                         Navigator.pop(context);
@@ -346,7 +357,9 @@ class _TransactionEntryState extends State<TransactionEntry> {
                                             transaction);
                                         Navigator.pop(context);
                                       },
-                                      onSubmitLabel: "Pay",
+                                      onSubmitLabel: widget.transaction.income
+                                          ? "Desposit"
+                                          : "Pay",
                                       onSubmit: () {
                                         Transaction transaction =
                                             widget.transaction.copyWith(
@@ -367,10 +380,10 @@ class _TransactionEntryState extends State<TransactionEntry> {
                       : SizedBox(),
 
                   CountNumber(
-                    count: (widget.transaction.amount),
+                    count: (widget.transaction.amount.abs()),
                     duration: Duration(milliseconds: 2000),
                     dynamicDecimals: true,
-                    initialCount: (widget.transaction.amount),
+                    initialCount: (widget.transaction.amount.abs()),
                     textBuilder: (number) {
                       return TextFont(
                         textAlign: TextAlign.left,

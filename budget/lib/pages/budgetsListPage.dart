@@ -22,9 +22,15 @@ class BudgetsListPage extends StatefulWidget {
 
 class BudgetsListPageState extends State<BudgetsListPage>
     with AutomaticKeepAliveClientMixin {
+  GlobalKey<PageFrameworkState> pageState = GlobalKey();
+
   late Color selectedColor = Colors.red;
   void refreshState() {
     setState(() {});
+  }
+
+  void scrollToTop() {
+    pageState.currentState!.scrollToTop();
   }
 
   @override
@@ -33,6 +39,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      key: pageState,
       title: "Budgets",
       backButton: false,
       slivers: [

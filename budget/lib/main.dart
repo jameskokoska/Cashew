@@ -38,8 +38,8 @@ void main() async {
   // initNotificationListener();
 }
 
-late Random random;
-late int randomInt;
+Random random = new Random();
+int randomInt = random.nextInt(100);
 late bool entireAppLoaded;
 
 Future<bool> updateSettings(setting, value,

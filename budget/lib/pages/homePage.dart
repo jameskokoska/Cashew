@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
@@ -37,6 +38,11 @@ class HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   void refreshState() {
     setState(() {});
+  }
+
+  void scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 1200), curve: Curves.elasticOut);
   }
 
   @override
@@ -78,11 +84,16 @@ class HomePageState extends State<HomePage>
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
+          // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+          SliverToBoxAdapter(
+            child: Container(height: 1, color: Theme.of(context).canvasColor),
+          ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
                 Container(
-                  height: 207 + MediaQuery.of(context).padding.top,
+                  // Subtract one (1) here because of the thickness of the wiper above
+                  height: 207 - 1 + MediaQuery.of(context).padding.top,
                   alignment: Alignment.bottomLeft,
                   padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
                   child: Row(
@@ -358,6 +369,10 @@ class HomePageState extends State<HomePage>
             ),
           ),
           SliverToBoxAdapter(child: Container(height: 135)),
+          // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+          SliverToBoxAdapter(
+            child: Container(height: 1, color: Theme.of(context).canvasColor),
+          ),
         ],
       ),
     );
@@ -378,65 +393,67 @@ class UpcomingTransactions extends StatelessWidget {
       child: OpenContainerNavigation(
         closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
         openPage: PageFramework(
-          subtitle: Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                StreamBuilder<List<double?>>(
-                  stream: overdueTransactions
-                      ? database.watchTotalOfOverdue()
-                      : database.watchTotalOfUpcoming(),
-                  builder: (context, snapshot) {
-                    return CountNumber(
-                      count:
-                          snapshot.hasData == false || snapshot.data![0] == null
-                              ? 0
-                              : snapshot.data![0] ?? 0,
-                      duration: Duration(milliseconds: 700),
-                      dynamicDecimals: true,
-                      initialCount: (0),
-                      textBuilder: (number) {
-                        return TextFont(
-                          text: convertToMoney(number),
-                          fontSize: 25,
-                          textColor: overdueTransactions
-                              ? Theme.of(context).colorScheme.unPaidRed
-                              : Theme.of(context).colorScheme.unPaidYellow,
-                          fontWeight: FontWeight.bold,
-                        );
-                      },
-                    );
-                  },
-                ),
-                SizedBox(width: 8),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 4.0),
-                  child: StreamBuilder<List<int?>>(
-                    stream: overdueTransactions
-                        ? database.watchCountOfOverdue()
-                        : database.watchCountOfUpcoming(),
-                    builder: (context, snapshot) {
-                      return TextFont(
-                        text: snapshot.hasData == false ||
-                                snapshot.data![0] == null
-                            ? "/"
-                            : snapshot.data![0].toString() + " transactions",
-                        fontSize: 15,
-                        textColor: Theme.of(context).colorScheme.textLight,
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          subtitleSize: 18,
           title: overdueTransactions ? "Overdue" : "Upcoming",
           dragDownToDismiss: true,
           slivers: [
             SliverToBoxAdapter(
-              child: SizedBox(height: 10),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    StreamBuilder<List<double?>>(
+                      stream: overdueTransactions
+                          ? database.watchTotalOfOverdue()
+                          : database.watchTotalOfUpcoming(),
+                      builder: (context, snapshot) {
+                        return CountNumber(
+                          count: snapshot.hasData == false ||
+                                  snapshot.data![0] == null
+                              ? 0
+                              : (snapshot.data![0] ?? 0).abs(),
+                          duration: Duration(milliseconds: 700),
+                          dynamicDecimals: true,
+                          initialCount: (0),
+                          textBuilder: (number) {
+                            return TextFont(
+                              text: convertToMoney(number),
+                              fontSize: 25,
+                              textColor: overdueTransactions
+                                  ? Theme.of(context).colorScheme.unPaidRed
+                                  : Theme.of(context).colorScheme.unPaidYellow,
+                              fontWeight: FontWeight.bold,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(width: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4.0),
+                      child: StreamBuilder<List<int?>>(
+                        stream: overdueTransactions
+                            ? database.watchCountOfOverdue()
+                            : database.watchCountOfUpcoming(),
+                        builder: (context, snapshot) {
+                          return TextFont(
+                            text: snapshot.hasData == false ||
+                                    snapshot.data![0] == null
+                                ? "/"
+                                : snapshot.data![0].toString() +
+                                    " transactions",
+                            fontSize: 15,
+                            textColor: Theme.of(context).colorScheme.textLight,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 20),
             ),
             StreamBuilder<List<Transaction>>(
               stream: overdueTransactions
@@ -470,15 +487,8 @@ class UpcomingTransactions extends StatelessWidget {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20.0, bottom: 6),
-                              child: TextFont(
-                                text: getWordedDateShortMore(
-                                    transaction.dateCreated),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            UpcomingTransactionDateHeader(
+                                transaction: transaction),
                             TransactionEntry(
                               openPage: AddTransactionPage(
                                 title: "Edit Transaction",
@@ -486,7 +496,7 @@ class UpcomingTransactions extends StatelessWidget {
                               ),
                               transaction: transaction,
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 12),
                           ],
                         );
                       },
@@ -530,7 +540,7 @@ class UpcomingTransactions extends StatelessWidget {
                           count: snapshot.hasData == false ||
                                   snapshot.data![0] == null
                               ? 0
-                              : snapshot.data![0] ?? 0,
+                              : (snapshot.data![0] ?? 0).abs(),
                           duration: Duration(milliseconds: 2500),
                           dynamicDecimals: true,
                           initialCount: (0),

@@ -236,18 +236,22 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   Future addTransaction() async {
     print("Added transaction");
     print(selectedDate);
-    bool income = false;
+    bool income = selectedCategory!.income;
+    print(selectedCategory);
+
     await database.createOrUpdateTransaction(
       Transaction(
         transactionPk: widget.transaction != null
             ? widget.transaction!.transactionPk
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
-        amount: (income ? (selectedAmount ?? 0) : (selectedAmount ?? 0) * -1),
+        amount: (income
+            ? (selectedAmount ?? 0).abs()
+            : (selectedAmount ?? 0).abs() * -1),
         note: selectedNote ?? "",
         categoryFk: selectedCategory?.categoryPk ?? 0,
         dateCreated: selectedDate,
-        income: false,
+        income: income,
         walletFk: appStateSettings["selectedWallet"],
         paid: widget.transaction != null
             ? widget.transaction!.paid
@@ -282,7 +286,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
-      selectedAmount = widget.transaction!.amount;
+      selectedAmount = widget.transaction!.amount.abs();
       selectedType = widget.transaction!.type;
       selectedTypeDisplay =
           transactionTypeDisplayToEnum[widget.transaction!.type] ?? "Default";
@@ -393,43 +397,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               navbar: false,
               onBackButton: () async {
                 if (widget.transaction != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },
               onDragDownToDissmiss: () async {
                 if (widget.transaction != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },
@@ -608,6 +582,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                       ),
                       AnimatedSize(
                         duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
                         child: AnimatedSwitcher(
                           duration: Duration(milliseconds: 300),
                           child: selectedType ==
@@ -659,7 +634,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     )
                                   ],
                                 )
-                              : SizedBox(),
+                              : Container(),
                         ),
                       ),
 
@@ -1203,11 +1178,13 @@ class SelectText extends StatefulWidget {
     this.selectedText,
     this.labelText = "",
     this.next,
+    this.nextWithInput,
     this.placeholder,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
   final VoidCallback? next;
+  final Function(String)? nextWithInput;
   final String labelText;
   final String? placeholder;
 
@@ -1243,6 +1220,9 @@ class _SelectTextState extends State<SelectText> {
               if (widget.next != null) {
                 widget.next!();
               }
+              if (widget.nextWithInput != null) {
+                widget.nextWithInput!(input ?? "");
+              }
             },
             onChanged: (text) {
               input = text;
@@ -1257,8 +1237,6 @@ class _SelectTextState extends State<SelectText> {
     );
   }
 }
-
-
 
 class EnterTextButton extends StatefulWidget {
   const EnterTextButton({

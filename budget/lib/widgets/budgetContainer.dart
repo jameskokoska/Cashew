@@ -228,6 +228,7 @@ class AnimatedGooBackground extends StatelessWidget {
         color: Colors.white.withAlpha(200),
       ),
       child: PlasmaRenderer(
+        key: ValueKey(key),
         type: PlasmaType.infinity,
         particles: 10,
         color: Theme.of(context).brightness == Brightness.light

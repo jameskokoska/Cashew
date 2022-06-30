@@ -32,6 +32,7 @@ import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class GoogleAuthClient extends http.BaseClient {
   final Map<String, String> _headers;
@@ -56,6 +57,28 @@ Future<bool> signInGoogle(context,
     {bool? waitForCompletion,
     bool? drivePermissions,
     bool? gMailPermissions}) async {
+  bool isConnected = false;
+
+  if (!kIsWeb) {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnected = true;
+      }
+    } on SocketException catch (_) {
+      isConnected = false;
+    }
+  } else {
+    isConnected = true;
+  }
+  if (isConnected == false) {
+    if (context != null) {
+      openSnackbar(context, "Could not connect to network",
+          backgroundColor:
+              Theme.of(context).colorScheme.error.withOpacity(0.5));
+    }
+    return false;
+  }
   try {
     if (waitForCompletion == true) openLoadingPopup(context);
     if (user == null) {

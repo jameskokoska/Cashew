@@ -318,7 +318,7 @@ String getWelcomeMessage() {
     else
       return greetings[randomInt % (greetings.length)];
   } else {
-    return greetings[random.nextInt(greetings.length)];
+    return greetings[randomInt % (greetings.length)];
   }
 }
 

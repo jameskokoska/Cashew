@@ -89,19 +89,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
-  String? selectedNote;
   bool selectedAllCategories = true;
   String selectedCategoriesText = "All Categories";
   int selectedPeriodLength = 0;
-  List<String> selectedTags = [];
   DateTime selectedStartDate = DateTime.now();
   DateTime? selectedEndDate;
   Color? selectedColor;
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "months";
-
-  late TextEditingController _nameInputController;
-
   String? textAddBudget = "Add Transaction";
 
   Future<void> selectTitle() async {
@@ -398,7 +393,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         reoccurrence: mapRecurrence(selectedRecurrence),
         dateCreated: DateTime.now(),
         pinned: true,
-        order: await database.getAmountOfBudgets(),
+        order: widget.budget != null ? widget.budget!.order : await database.getAmountOfBudgets(),
         walletFk: 0,
       ),
     );
@@ -412,11 +407,21 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     if (widget.budget != null) {
       //We are editing a budget
       //Fill in the information from the passed in budget
-      _nameInputController =
-          new TextEditingController(text: widget.budget!.name);
       selectedTitle = widget.budget!.name;
 
       selectedAllCategories = widget.budget!.allCategoryFks;
+      selectedAmount = widget.budget!.amount;
+      setSelectedColor(HexColor(widget.budget!.colour));
+      selectedPeriodLength = widget.budget!.periodLength;
+      selectedRecurrence = enumRecurrence[widget.budget!.reoccurrence];
+      if (selectedPeriodLength == 1) {
+        selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+      } else {
+        selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+      }
+      selectedStartDate = widget.budget!.startDate;
+      selectedEndDate = widget.budget!.endDate;
+
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {
         selectedAmountCalculation =
@@ -429,8 +434,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
       });
-    } else {
-      _nameInputController = new TextEditingController();
     }
   }
 
@@ -441,11 +444,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   updateInitial() async {
     if (widget.budget != null) {
-      // TransactionCategory? getSelectedCategory =
-      //     await database.getCategoryInstance(widget.budget!.categoryFk);
-      // setState(() {
-      //   selectedCategory = getSelectedCategory;
-      // });
+      List<TransactionCategory> categories = [];
+      for (int categoryPk in widget.budget!.categoryFks ?? []) {
+        categories.add(await database.getCategoryInstance(categoryPk));
+      }
+      setSelectedCategories(categories);
     }
   }
 
@@ -488,43 +491,13 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               navbar: false,
               onBackButton: () async {
                 if (widget.budget != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },
               onDragDownToDissmiss: () async {
                 if (widget.budget != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },

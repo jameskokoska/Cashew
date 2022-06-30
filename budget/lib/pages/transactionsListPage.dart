@@ -254,6 +254,11 @@ class TransactionsListPageState extends State<TransactionsListPage>
     });
   }
 
+  void scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 1200), curve: Curves.elasticOut);
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -546,11 +551,12 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       //Needed in older version of flutter:
                       // SliverToBoxAdapter(),
                       ...transactionWidgets,
-                      SliverToBoxAdapter(
-                        child: SizedBox(height: 175),
-                      ),
 
-                      // SliverFillRemaining(),
+                      // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+                      SliverToBoxAdapter(
+                        child: Container(
+                            height: 200, color: Theme.of(context).canvasColor),
+                      ),
                     ],
                   ),
                   LoadingShimmer(),

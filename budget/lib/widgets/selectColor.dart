@@ -69,7 +69,7 @@ class _SelectColorState extends State<SelectColor> {
                   });
                 }
               },
-              outline: selectedColor == color,
+              outline: selectedColor.toString() == color.toString(),
             ),
           );
         },

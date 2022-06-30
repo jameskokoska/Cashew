@@ -31,6 +31,7 @@ class SelectCategory extends StatefulWidget {
 
 class _SelectCategoryState extends State<SelectCategory> {
   List<TransactionCategory> selectedCategories = [];
+  bool updatedInitial = false;
 
   @override
   void initState() {
@@ -43,7 +44,10 @@ class _SelectCategoryState extends State<SelectCategory> {
         }
       }
     });
+    setInitialCategories();
+  }
 
+  setInitialCategories() {
     if (widget.selectedCategories != null) {
       setState(() {
         selectedCategories = widget.selectedCategories ?? [];
@@ -67,6 +71,14 @@ class _SelectCategoryState extends State<SelectCategory> {
   //find the selected category using selectedCategory
   @override
   Widget build(BuildContext context) {
+    if (updatedInitial == false &&
+        (widget.selectedCategory != null ||
+            widget.selectedCategories != null)) {
+      setInitialCategories();
+      setState(() {
+        updatedInitial = true;
+      });
+    }
     return StreamBuilder<List<TransactionCategory>>(
         stream: database.watchAllCategories(),
         builder: (context, snapshot) {

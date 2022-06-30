@@ -39,6 +39,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pages;
 
   int currentPage = 0;
+  bool refresh = false;
 
   final pageController = PageController();
 
@@ -49,6 +50,14 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     // pageController.animateToPage(page,
     //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
     pageController.jumpToPage(page);
+    setState(() {
+      refresh = false;
+    });
+    Future.delayed(Duration(milliseconds: 50), () {
+      setState(() {
+        refresh = true;
+      });
+    });
     if (switchNavbar) {
       navbarStateKey.currentState!.setSelectedIndex(page);
     }
@@ -57,6 +66,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   @override
   void initState() {
     super.initState();
+
+    // Functions to run after entire UI loaded
+    parseEmailsInBackground(context);
+
     pages = [
       HomePage(key: homePageStateKey, changePage: changePage),
       TransactionsListPage(key: transactionsListPageStateKey),
@@ -64,97 +77,92 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       SettingsPage(key: settingsPageStateKey)
     ];
 
-    // Functions to run after entire UI loaded
-
-    parseEmailsInBackground(context);
-
-    //Only generate random numbers once
-    if (entireAppLoaded == false) {
-      random = new Random();
-      randomInt = random.nextInt(100);
-    }
-
     entireAppLoaded = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        //Handle global back button
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        return false;
-      },
-      child: Stack(children: [
-        Scaffold(
-          body: PageView(
-            controller: pageController,
-            onPageChanged: (int index) {},
-            children: pages,
-            physics: NeverScrollableScrollPhysics(),
+    // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 25),
+      opacity: refresh ? 1 : 0.99,
+      child: WillPopScope(
+        onWillPop: () async {
+          //Handle global back button
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          return false;
+        },
+        child: Stack(children: [
+          Scaffold(
+            body: PageView(
+              controller: pageController,
+              onPageChanged: (int index) {},
+              children: pages,
+              physics: NeverScrollableScrollPhysics(),
+            ),
+            extendBody: true,
+            resizeToAvoidBottomInset: false,
+            bottomNavigationBar: BottomNavBar(
+                key: navbarStateKey,
+                onChanged: (index) {
+                  changePage(index);
+                }),
           ),
-          extendBody: true,
-          resizeToAvoidBottomInset: false,
-          bottomNavigationBar: BottomNavBar(
-              key: navbarStateKey,
-              onChanged: (index) {
-                changePage(index);
-              }),
-        ),
-        // IndexedStack(
-        //   children: pages,
-        //   index: currentPage,
-        // ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 75, right: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                SelectedTransactionsButton(
-                  pageID: "Transactions",
-                  currentPage: currentPage,
-                  pageToShow: 1,
-                ),
-                SelectedTransactionsButton(
-                  pageID: "0",
-                  currentPage: currentPage,
-                  pageToShow: 0,
-                ),
-                Stack(
-                  children: [
-                    AnimatedScale(
-                      duration: currentPage == 0 || currentPage == 1
-                          ? Duration(milliseconds: 1100)
-                          : Duration(milliseconds: 0),
-                      scale: currentPage == 0 || currentPage == 1 ? 1 : 0,
-                      curve: ElasticOutCurve(0.8),
-                      child: FAB(
-                        tooltip: "Add Transaction",
-                        openPage: AddTransactionPage(
-                          title: "Add Transaction",
+          // IndexedStack(
+          //   children: pages,
+          //   index: currentPage,
+          // ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 75, right: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SelectedTransactionsButton(
+                    pageID: "Transactions",
+                    currentPage: currentPage,
+                    pageToShow: 1,
+                  ),
+                  SelectedTransactionsButton(
+                    pageID: "0",
+                    currentPage: currentPage,
+                    pageToShow: 0,
+                  ),
+                  Stack(
+                    children: [
+                      AnimatedScale(
+                        duration: currentPage == 0 || currentPage == 1
+                            ? Duration(milliseconds: 1100)
+                            : Duration(milliseconds: 0),
+                        scale: currentPage == 0 || currentPage == 1 ? 1 : 0,
+                        curve: ElasticOutCurve(0.8),
+                        child: FAB(
+                          tooltip: "Add Transaction",
+                          openPage: AddTransactionPage(
+                            title: "Add Transaction",
+                          ),
                         ),
                       ),
-                    ),
-                    AnimatedScale(
-                      duration: currentPage == 2
-                          ? Duration(milliseconds: 1100)
-                          : Duration(milliseconds: 0),
-                      scale: currentPage == 2 ? 1 : 0,
-                      curve: ElasticOutCurve(0.8),
-                      child: FAB(
-                        openPage: AddBudgetPage(title: "Add Budget"),
+                      AnimatedScale(
+                        duration: currentPage == 2
+                            ? Duration(milliseconds: 1100)
+                            : Duration(milliseconds: 0),
+                        scale: currentPage == 2 ? 1 : 0,
+                        curve: ElasticOutCurve(0.8),
+                        child: FAB(
+                          openPage: AddBudgetPage(title: "Add Budget"),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }
@@ -203,32 +211,7 @@ class SelectedTransactionsButton extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                openPopup(
-                  context,
-                  title: "Delete selected transactions?",
-                  description: "Are you sure you want to delete " +
-                      (value as Map)[pageID].length.toString() +
-                      " transactions?",
-                  icon: Icons.delete_rounded,
-                  onCancel: () {
-                    Navigator.pop(context);
-                  },
-                  onCancelLabel: "Cancel",
-                  onSubmit: () {
-                    for (int transactionID in (value as Map)[pageID]) {
-                      database.deleteTransaction(transactionID);
-                    }
-                    openSnackbar(
-                        context,
-                        "Deleted " +
-                            (value as Map)[pageID].length.toString() +
-                            " transactions");
-                    globalSelectedID.value[pageID] = [];
-                    globalSelectedID.notifyListeners();
-                    Navigator.pop(context);
-                  },
-                  onSubmitLabel: "Delete",
-                );
+                discardChangesPopup(context);
               },
             ),
           ),

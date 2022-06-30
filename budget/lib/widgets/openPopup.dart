@@ -133,49 +133,67 @@ Future<T?> openPopup<T extends Object?>(
                 onSubmitLabel != null || onCancelLabel != null
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          runSpacing: 10,
                           children: [
-                            onCancelLabel != null
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Button(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer,
-                                        label: onCancelLabel,
-                                        height: 50,
-                                        onTap: onCancel ?? () {}),
-                                  )
-                                : SizedBox.shrink(),
-                            onExtraLabel != null
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Button(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer,
-                                        label: onExtraLabel,
-                                        height: 50,
-                                        onTap: onExtra ?? () {}),
-                                  )
-                                : SizedBox.shrink(),
-                            onSubmitLabel != null
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Button(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiaryContainer,
-                                        label: onSubmitLabel,
-                                        height: 50,
-                                        onTap: onSubmit ?? () {}),
-                                  )
-                                : SizedBox.shrink(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                onCancelLabel != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Button(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            label: onCancelLabel,
+                                            height: 50,
+                                            onTap: onCancel ?? () {}),
+                                      )
+                                    : SizedBox.shrink(),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                onExtraLabel != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Button(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            label: onExtraLabel,
+                                            height: 50,
+                                            onTap: onExtra ?? () {}),
+                                      )
+                                    : SizedBox.shrink(),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                onSubmitLabel != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Button(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiaryContainer,
+                                            label: onSubmitLabel,
+                                            height: 50,
+                                            onTap: onSubmit ?? () {}),
+                                      )
+                                    : SizedBox.shrink(),
+                              ],
+                            ),
                           ],
                         ),
                       )
@@ -293,6 +311,24 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
           ),
         ),
       );
+    },
+  );
+}
+
+void discardChangesPopup(context) async {
+  await openPopup(
+    context,
+    title: "Discard Changes?",
+    description: "Are you sure you want to discard your changes.",
+    icon: Icons.warning_rounded,
+    onSubmitLabel: "Yes",
+    onSubmit: () {
+      Navigator.pop(context);
+      Navigator.pop(context);
+    },
+    onCancelLabel: "No",
+    onCancel: () {
+      Navigator.pop(context);
     },
   );
 }

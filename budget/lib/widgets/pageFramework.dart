@@ -58,10 +58,10 @@ class PageFramework extends StatefulWidget {
   final VoidCallback? onDragDownToDissmiss;
 
   @override
-  State<PageFramework> createState() => _PageFrameworkState();
+  State<PageFramework> createState() => PageFrameworkState();
 }
 
-class _PageFrameworkState extends State<PageFramework>
+class PageFrameworkState extends State<PageFramework>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   bool showElevation = false;
   late ScrollController _scrollController;
@@ -70,6 +70,11 @@ class _PageFrameworkState extends State<PageFramework>
   late AnimationController _animationController0at50;
   late AnimationController _animationControllerDragY;
   // late AnimationController _animationControllerDragX;
+
+  void scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 1200), curve: Curves.elasticOut);
+  }
 
   void initState() {
     super.initState();

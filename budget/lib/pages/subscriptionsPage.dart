@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
@@ -29,6 +30,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:intl/intl.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
@@ -87,7 +89,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                     double total =
                         getTotalSubscriptions(selectedType, snapshot.data);
                     return CountNumber(
-                      count: total,
+                      count: total.abs(),
                       duration: Duration(milliseconds: 700),
                       dynamicDecimals: true,
                       initialCount: (0),
@@ -182,7 +184,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           ),
         ),
         SliverToBoxAdapter(
-          child: SizedBox(height: 20),
+          child: SizedBox(height: 45),
         ),
         StreamBuilder<List<Transaction>>(
           stream: database.watchAllSubscriptions(),
@@ -209,13 +211,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0, bottom: 6),
-                          child: TextFont(
-                            text:
-                                getWordedDateShortMore(transaction.dateCreated),
-                            fontWeight: FontWeight.bold,
-                          ),
+                        UpcomingTransactionDateHeader(
+                          transaction: transaction,
                         ),
                         TransactionEntry(
                           openPage: AddTransactionPage(
@@ -224,7 +221,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                           ),
                           transaction: transaction,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 12),
                       ],
                     );
                   },
@@ -241,22 +238,71 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   }
 }
 
-class ColorBox extends StatelessWidget {
-  const ColorBox({Key? key, required this.color, required this.name})
+class UpcomingTransactionDateHeader extends StatelessWidget {
+  const UpcomingTransactionDateHeader({Key? key, required this.transaction})
       : super(key: key);
 
-  final Color color;
-  final String name;
+  final Transaction transaction;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    int daysDifference =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .difference(transaction.dateCreated)
+            .inDays;
+    return Padding(
+      padding: const EdgeInsets.only(left: 19, bottom: 3, right: 19),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(width: 20),
-          Container(width: 50, height: 50, color: color),
-          Container(width: 20),
-          TextFont(text: name)
+          Row(
+            children: [
+              TextFont(
+                text: getWordedDateShortMore(transaction.dateCreated),
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+              daysDifference != 0
+                  ? TextFont(
+                      fontSize: 16,
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      text: " • " +
+                          daysDifference.abs().toString() +
+                          " " +
+                          (daysDifference.abs() == 1 ? "day" : "days") +
+                          (daysDifference > 0 ? " overdue" : ""),
+                      fontWeight: FontWeight.bold,
+                    )
+                  : SizedBox(),
+            ],
+          ),
+          transaction.type == TransactionSpecialType.repetitive ||
+                  transaction.type == TransactionSpecialType.subscription
+              ? Row(
+                  children: [
+                    Icon(
+                      Icons.loop_rounded,
+                      color: dynamicPastel(
+                          context, Theme.of(context).colorScheme.primary,
+                          amount: 0.4),
+                      size: 16,
+                    ),
+                    SizedBox(width: 3),
+                    TextFont(
+                      text: transaction.periodLength.toString() +
+                          " " +
+                          (transaction.periodLength == 1
+                              ? nameRecurrence[transaction.reoccurrence]
+                              : namesRecurrence[transaction.reoccurrence]),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      textColor: dynamicPastel(
+                          context, Theme.of(context).colorScheme.primary,
+                          amount: 0.4),
+                    ),
+                  ],
+                )
+              : SizedBox(),
         ],
       ),
     );

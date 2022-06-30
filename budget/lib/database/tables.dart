@@ -836,7 +836,8 @@ class FinanceDatabase extends _$FinanceDatabase {
           final dateCreated = tbl.dateCreated;
           return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
               dateCreated.isBetweenValues(startDate, endDate) &
-              tbl.paid.equals(true);
+              tbl.paid.equals(true) &
+              tbl.income.equals(false);
         })
         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]));
       return (query.join([
@@ -860,7 +861,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           final dateCreated = tbl.dateCreated;
           return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
               dateCreated.isBetweenValues(startDate, endDate) &
-              tbl.categoryFk.isIn(categoryFks);
+              tbl.categoryFk.isIn(categoryFks) &
+              tbl.paid.equals(true) &
+              tbl.income.equals(false);
         }));
       return (query.join([
         leftOuterJoin(categories,

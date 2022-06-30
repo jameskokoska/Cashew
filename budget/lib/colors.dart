@@ -41,6 +41,8 @@ extension ColorsDefined on ColorScheme {
       brightness == Brightness.light ? Color(0xFFEBDB48) : Color(0xFFDED583);
   Color get unPaidRed =>
       brightness == Brightness.light ? Color(0xFFEB4848) : Color(0xFFDE8383);
+  Color get incomeGreen =>
+      brightness == Brightness.light ? Color(0xFF55A246) : Color(0xFF50BC65);
 
   Color get accentColor => brightness == Brightness.light
       ? getSettingConstants(appStateSettings)["accentColor"]

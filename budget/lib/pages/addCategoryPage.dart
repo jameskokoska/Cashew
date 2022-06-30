@@ -45,8 +45,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   String? selectedTitle;
   String? selectedImage = "image.png";
   Color? selectedColor;
-
-  String? textAddTransaction = "Add Transaction";
+  List<String> associatedTitles = [];
+  bool selectedIncome = false;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -84,9 +84,24 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return;
   }
 
-  void setSelectedTitleController(String title) {
-    setTextInput(_titleInputController, title);
-    selectedTitle = title;
+  void addAssociatedTitle(String title) {
+    setState(() {
+      associatedTitles.add(title.toLowerCase());
+    });
+    return;
+  }
+
+  void removeAssociatedTitle(int index) {
+    setState(() {
+      associatedTitles.removeAt(index);
+    });
+    return;
+  }
+
+  void setSelectedIncome(bool income) {
+    setState(() {
+      selectedIncome = income;
+    });
     return;
   }
 
@@ -99,17 +114,17 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
         dateCreated: DateTime.now(),
-        income: false,
-        order: await database.getAmountOfCategories(),
+        income: selectedIncome,
+        order: widget.category != null
+            ? widget.category!.order
+            : await database.getAmountOfCategories(),
         colour: toHexString(selectedColor ?? Colors.white),
         iconName: selectedImage,
+        smartLabels: associatedTitles,
       ),
     );
+    Navigator.pop(context);
   }
-
-  late TextEditingController _titleInputController;
-  late TextEditingController _dateInputController;
-  late TextEditingController _noteInputController;
 
   @override
   void initState() {
@@ -117,40 +132,38 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     if (widget.category != null) {
       //We are editing a transaction
       //Fill in the information from the passed in transaction
-      _titleInputController =
-          new TextEditingController(text: widget.category!.name);
-
-      _dateInputController = new TextEditingController(
-          text: getWordedDate(widget.category!.dateCreated));
-      selectedTitle = widget.category!.name;
-
-      // var amountString = widget.transaction!.amount.toStringAsFixed(2);
-      // if (amountString.substring(amountString.length - 2) == "00") {
-      //   selectedAmountCalculation =
-      //       amountString.substring(0, amountString.length - 3);
-      // } else {
-      //   selectedAmountCalculation = amountString;
-      // }
-      textAddTransaction = "Edit Transaction";
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        updateInitial();
+      setState(() {
+        selectedTitle = widget.category!.name;
+        selectedColor = HexColor(widget.category!.colour);
+        selectedImage = widget.category!.iconName;
+        associatedTitles = widget.category!.smartLabels ?? [];
+        selectedIncome = widget.category!.income;
       });
-    } else {
-      _titleInputController = new TextEditingController();
-      _dateInputController = new TextEditingController(text: "Today");
-      _noteInputController = new TextEditingController();
-    }
-  }
-
-  updateInitial() async {
-    if (widget.category != null) {
-      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> associatedTitleWidgets = [];
+    for (int i = 0; i < associatedTitles.length; i++) {
+      String title = associatedTitles[i];
+      associatedTitleWidgets.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: AssociatedTitleContainer(
+            title: title,
+            setTitle: (text) {
+              print("SETTING TITLE");
+              associatedTitles[i] = text;
+              print(associatedTitles);
+            },
+            onDelete: () {
+              removeAssociatedTitle(i);
+            },
+          ),
+        ),
+      );
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
@@ -168,43 +181,13 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               navbar: false,
               onBackButton: () async {
                 if (widget.category != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },
               onDragDownToDissmiss: () async {
                 if (widget.category != null)
-                  await openPopup(
-                    context,
-                    title: "Discard Changes?",
-                    description:
-                        "Are you sure you want to discard your changes.",
-                    icon: Icons.warning_rounded,
-                    onSubmitLabel: "Yes",
-                    onSubmit: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    onCancelLabel: "No",
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
+                  discardChangesPopup(context);
                 else
                   Navigator.pop(context);
               },
@@ -305,18 +288,66 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     ),
                   ],
                 ),
-                Column(
-                  children: [
-                    Container(
-                      height: 65,
-                      child: SelectColor(
-                        horizontalList: true,
-                        selectedColor: selectedColor,
-                        setSelectedColor: setSelectedColor,
+                Container(
+                  height: 65,
+                  child: SelectColor(
+                    horizontalList: true,
+                    selectedColor: selectedColor,
+                    setSelectedColor: setSelectedColor,
+                  ),
+                ),
+                SizedBox(height: 13),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 400),
+                    child: CategoryTypeButton(
+                      key: ValueKey(selectedIncome),
+                      onTap: () {
+                        setSelectedIncome(!selectedIncome);
+                      },
+                      selectedIncome: selectedIncome,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 13),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFont(
+                    text: "Associated Titles",
+                    textColor: Theme.of(context).colorScheme.textLight,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFont(
+                    text:
+                        "If a transaction title contains any of the phrases listed, it will be added to this category",
+                    textColor: Theme.of(context).colorScheme.textLight,
+                    fontSize: 13,
+                    maxLines: 10,
+                  ),
+                ),
+                SizedBox(height: 10),
+                AssociatedTitleEntryAdd(onTap: () {
+                  openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "Set Title",
+                      child: SelectText(
+                        setSelectedText: (_) {},
+                        labelText: "Set Title",
+                        placeholder: "Title",
+                        nextWithInput: (text) {
+                          addAssociatedTitle(text);
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  );
+                }),
+                ...associatedTitleWidgets
               ],
             ),
             Align(
@@ -337,28 +368,175 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   }
 }
 
-class DateButton extends StatelessWidget {
-  const DateButton({Key? key, required this.onTap, required this.selectedDate})
+class AssociatedTitleContainer extends StatefulWidget {
+  const AssociatedTitleContainer(
+      {Key? key,
+      required this.title,
+      required this.setTitle,
+      required this.onDelete})
+      : super(key: key);
+
+  final String title;
+  final Function(String) setTitle;
+  final VoidCallback onDelete;
+
+  @override
+  State<AssociatedTitleContainer> createState() =>
+      _AssociatedTitleContainerState();
+}
+
+class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
+  String title = "";
+
+  @override
+  void initState() {
+    super.initState();
+    title = widget.title;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Tappable(
+        onTap: () {
+          openBottomSheet(
+            context,
+            PopupFramework(
+              title: "Set Title",
+              child: SelectText(
+                setSelectedText: (text) {
+                  title = text;
+                  widget.setTitle(text);
+                },
+                labelText: "Set Title",
+                selectedText: title,
+                placeholder: "Title",
+              ),
+            ),
+          );
+        },
+        borderRadius: 15,
+        color: Theme.of(context).colorScheme.lightDarkAccent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+              child: TextFont(
+                text: widget.title,
+                fontSize: 18,
+              ),
+            ),
+            Tappable(
+              onTap: () async {
+                await openPopup(
+                  context,
+                  title: "Delete Title?",
+                  description: "Are you sure you want to delete this title?",
+                  icon: Icons.delete_rounded,
+                  onSubmitLabel: "Yes",
+                  onSubmit: () {
+                    Navigator.pop(context);
+                    widget.onDelete();
+                  },
+                  onCancelLabel: "No",
+                  onCancel: () {
+                    Navigator.pop(context);
+                  },
+                );
+              },
+              borderRadius: 15,
+              color: Theme.of(context).colorScheme.lightDarkAccent,
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Icon(
+                  Icons.close_rounded,
+                  size: 25,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AssociatedTitleEntryAdd extends StatelessWidget {
+  const AssociatedTitleEntryAdd({Key? key, required this.onTap})
+      : super(key: key);
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 15,
+        right: 15,
+        bottom: 9,
+        top: 4,
+      ),
+      child: Tappable(
+        color: Theme.of(context).canvasColor,
+        borderRadius: 15,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1.5,
+              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+            ),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          width: 110,
+          height: 52,
+          child: Center(
+            child: TextFont(
+              text: "+",
+              fontWeight: FontWeight.bold,
+              textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+            ),
+          ),
+        ),
+        onTap: () {
+          onTap();
+        },
+      ),
+    );
+  }
+}
+
+class CategoryTypeButton extends StatelessWidget {
+  const CategoryTypeButton(
+      {Key? key, required this.onTap, required this.selectedIncome})
       : super(key: key);
   final VoidCallback onTap;
-  final DateTime selectedDate;
+  final bool selectedIncome;
   @override
   Widget build(BuildContext context) {
     return Tappable(
       onTap: onTap,
       borderRadius: 10,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
             Expanded(
               child: TextFont(
-                text: getWordedDate(selectedDate),
+                text: selectedIncome == false ? "Expense" : "Income",
                 fontWeight: FontWeight.bold,
-                fontSize: 24,
+                fontSize: 26,
               ),
             ),
-            ButtonIcon(onTap: onTap, icon: Icons.calendar_month_rounded),
+            ButtonIcon(
+              onTap: onTap,
+              icon: selectedIncome
+                  ? Icons.move_to_inbox_rounded
+                  : Icons.payments_rounded,
+              size: 41,
+            ),
           ],
         ),
       ),

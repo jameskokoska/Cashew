@@ -169,7 +169,10 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         onSubmitLabel: "Delete",
                       );
                     },
-                    openPage: AddCategoryPage(title: "Edit Category"),
+                    openPage: AddCategoryPage(
+                      title: "Edit Category",
+                      category: category,
+                    ),
                   );
                 },
                 itemCount: snapshot.data!.length,

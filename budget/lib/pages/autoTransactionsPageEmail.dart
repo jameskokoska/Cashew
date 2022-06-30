@@ -137,9 +137,13 @@ void parseEmailsInBackground(context) async {
     if (appStateSettings["AutoTransactions-canReadEmails"] == true) {
       print("Scanning emails");
 
+      bool hasSignedIn = false;
       if (user == null) {
-        await signInGoogle("",
+        hasSignedIn = await signInGoogle(context,
             gMailPermissions: true, waitForCompletion: false);
+      }
+      if (hasSignedIn == false) {
+        return;
       }
 
       List<dynamic> emailsParsed =
@@ -330,7 +334,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
         // print(DateTime.fromMillisecondsSinceEpoch(
         //     int.parse(messageData.internalDate ?? "")));
         messagesList.add(messageData);
-        setState(() {});
+        if (mounted) setState(() {});
       }
     }
     loading = false;
@@ -641,7 +645,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 onSelectionChanged: (selection, changeCause) {
                   emailContains = messageString.substring(
                       selection.baseOffset, selection.extentOffset);
-                  print(emailContains);
                 },
               ),
             ),
@@ -711,9 +714,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                         selection.extentOffset,
                         selection.extentOffset + characterPadding);
                   }
-
-                  print(amountTransactionBefore);
-                  print(amountTransactionAfter);
                 },
               ),
             ),
@@ -783,9 +783,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                         selection.extentOffset,
                         selection.extentOffset + characterPadding);
                   }
-
-                  print(titleTransactionBefore);
-                  print(titleTransactionAfter);
                 },
               ),
             ),

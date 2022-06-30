@@ -1,3 +1,4 @@
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
@@ -13,10 +14,17 @@ class BottomNavBarState extends State<BottomNavBar> {
   int selectedIndex = 0;
 
   void onItemTapped(int index) {
-    widget.onChanged(index);
-    setState(() {
-      selectedIndex = index;
-    });
+    if (index == selectedIndex) {
+      if (index == 0) homePageStateKey.currentState!.scrollToTop();
+      if (index == 1) transactionsListPageStateKey.currentState!.scrollToTop();
+      if (index == 2) budgetsListPageStateKey.currentState!.scrollToTop();
+      if (index == 3) settingsPageStateKey.currentState!.scrollToTop();
+    } else {
+      widget.onChanged(index);
+      setState(() {
+        selectedIndex = index;
+      });
+    }
     FocusScope.of(context).unfocus(); //remove keyboard focus on any input boxes
   }
 
@@ -45,8 +53,8 @@ class BottomNavBarState extends State<BottomNavBar> {
                       ? Theme.of(context)
                           .colorScheme
                           .shadowColorLight
-                          .withAlpha(50)
-                      : Colors.transparent,
+                          .withOpacity(0.35)
+                      : Colors.black.withOpacity(0.8),
                   blurRadius: 20,
                   offset: Offset(0, 4),
                   spreadRadius: 9,
@@ -57,8 +65,9 @@ class BottomNavBarState extends State<BottomNavBar> {
               borderRadius: BorderRadius.circular(15),
               child: NavigationBarTheme(
                 data: NavigationBarThemeData(
-                  // backgroundColor:
+                  // backgroundColor: darkenPastel(
                   //     Theme.of(context).colorScheme.secondaryContainer,
+                  //     amount: 0.2),
                   // indicatorColor: Theme.of(context)
                   //     .colorScheme
                   //     .secondary
