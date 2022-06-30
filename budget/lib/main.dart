@@ -10,6 +10,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,8 @@ void main() async {
   // initNotificationListener();
 }
 
-final Random random = new Random();
-final int randomInt = random.nextInt(100);
+late Random random;
+late int randomInt;
 late bool entireAppLoaded;
 
 Future<bool> updateSettings(setting, value,
@@ -111,6 +112,17 @@ Future<Map<String, dynamic>> getUserSettings() async {
 Future<bool> initializeSettings() async {
   Map<String, dynamic> userSettings = await getUserSettings();
   appStateSettings = userSettings;
+
+  //Sign in user before app launches to prepare for reading emails
+  if (entireAppLoaded == false) {
+    if (appStateSettings["AutoTransactions-canReadEmails"] == true) {
+      if (user == null) {
+        print("Signing in user for reading emails");
+        await signInGoogle("",
+            gMailPermissions: true, waitForCompletion: false);
+      }
+    }
+  }
   return true;
 }
 

@@ -239,24 +239,27 @@ class _PageFrameworkState extends State<PageFramework>
           onPointerUp: (ptr) => {_onPointerUp(ptr)},
           onPointerDown: (ptr) => {_onPointerDown(ptr)},
           behavior: HitTestBehavior.opaque,
-          child: AnimatedBuilder(
-            // animation: _animationControllerDragX,
-            // builder: (_, child) {
-            //   return Transform.translate(
-            //     offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
-            //     child: Scaffold(
-            //       backgroundColor: widget.dragDownToDissmissBackground,
-            //       body: AnimatedBuilder(
-            animation: _animationControllerDragY,
-            builder: (_, child) {
-              return Transform.translate(
-                offset: Offset(
-                    0,
-                    _animationControllerDragY.value *
-                        ((1 + 1 - _animationControllerDragY.value) * 50)),
-                child: scaffold,
-              );
-            },
+          child: Scaffold(
+            backgroundColor: widget.dragDownToDissmissBackground,
+            body: AnimatedBuilder(
+              // animation: _animationControllerDragX,
+              // builder: (_, child) {
+              //   return Transform.translate(
+              //     offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
+              //     child: Scaffold(
+              //       backgroundColor: widget.dragDownToDissmissBackground,
+              //       body: AnimatedBuilder(
+              animation: _animationControllerDragY,
+              builder: (_, child) {
+                return Transform.translate(
+                  offset: Offset(
+                      0,
+                      _animationControllerDragY.value *
+                          ((1 + 1 - _animationControllerDragY.value) * 50)),
+                  child: scaffold,
+                );
+              },
+            ),
           ),
         ),
         //       );

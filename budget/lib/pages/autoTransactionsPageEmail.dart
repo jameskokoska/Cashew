@@ -32,7 +32,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
-import 'package:installed_apps/app_info.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -44,8 +43,6 @@ import 'package:universal_html/html.dart' as html;
 import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
 import '../functions.dart';
-import 'package:flutter_notification_listener/flutter_notification_listener.dart';
-import 'package:installed_apps/installed_apps.dart';
 import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'dart:convert';
 import 'package:html/parser.dart';
@@ -115,7 +112,8 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
             }
           },
           title: "Read Emails",
-          description: "Enable or disable the Gmail email listener",
+          description:
+              "Parse Gmail emails on app launch. Every email is only scanned once.",
           initialValue: canReadEmails,
           icon: Icons.mark_unread_chat_alt_rounded,
         ),
@@ -193,39 +191,34 @@ void parseEmailsInBackground(context) async {
         String titleTransactionAfter =
             appStateSettings["EmailAutoTransactions-titleTransactionAfter"] ??
                 "";
-        String title;
-        String amountString;
-        double amountDouble;
+        String? title;
+        double? amountDouble;
 
+        if (emailContains == "" ||
+            (amountTransactionBefore == "" && amountTransactionAfter == "") ||
+            (titleTransactionBefore == "" && titleTransactionAfter == "")) {
+          openSnackbar(context,
+              "You have not setup the email scanning configuration in settings.");
+          break;
+        }
         if (messageString.contains(emailContains) == false) {
+          emailsParsed.add(message.id!);
           continue;
         }
-        try {
-          int startIndex = messageString.indexOf(titleTransactionBefore) +
-              titleTransactionBefore.length;
-          int endIndex =
-              messageString.indexOf(titleTransactionAfter, startIndex);
-          title = messageString.substring(startIndex, endIndex);
-        } catch (e) {
-          openSnackbar(
-              context,
-              "There was an error adding a transaction from email: " +
-                  e.toString());
+        title = getTransactionTitleFromEmail(context, messageString,
+            titleTransactionBefore, titleTransactionAfter);
+        amountDouble = getTransactionAmountFromEmail(context, messageString,
+            amountTransactionBefore, amountTransactionAfter);
+
+        if (title == null) {
+          openSnackbar(context,
+              "Couldn't find title in email. Check the email settings page for more information.");
+          emailsParsed.add(message.id!);
           continue;
-        }
-        try {
-          int startIndex = messageString.indexOf(amountTransactionBefore) +
-              amountTransactionBefore.length;
-          int endIndex =
-              messageString.indexOf(amountTransactionAfter, startIndex);
-          amountString = messageString.substring(startIndex, endIndex);
-          amountDouble =
-              double.parse(amountString.replaceAll(RegExp('[^0-9.]'), ''));
-        } catch (e) {
-          openSnackbar(
-              context,
-              "There was an error adding a transaction from email: " +
-                  e.toString());
+        } else if (amountDouble == null) {
+          openSnackbar(context,
+              "Couldn't find amount in email. Check the email settings page for more information.");
+          emailsParsed.add(message.id!);
           continue;
         }
 
@@ -261,6 +254,34 @@ void parseEmailsInBackground(context) async {
       );
     }
   }
+}
+
+String? getTransactionTitleFromEmail(context, String messageString,
+    String titleTransactionBefore, String titleTransactionAfter) {
+  String? title;
+  try {
+    int startIndex = messageString.indexOf(titleTransactionBefore) +
+        titleTransactionBefore.length;
+    int endIndex = messageString.indexOf(titleTransactionAfter, startIndex);
+    title = messageString.substring(startIndex, endIndex);
+    title = title.replaceAll("\n", "");
+    title = title.toLowerCase();
+    title = title.capitalizeFirst;
+  } catch (e) {}
+  return title;
+}
+
+double? getTransactionAmountFromEmail(context, String messageString,
+    String amountTransactionBefore, String amountTransactionAfter) {
+  double? amountDouble;
+  try {
+    int startIndex = messageString.indexOf(amountTransactionBefore) +
+        amountTransactionBefore.length;
+    int endIndex = messageString.indexOf(amountTransactionAfter, startIndex);
+    String amountString = messageString.substring(startIndex, endIndex);
+    amountDouble = double.parse(amountString.replaceAll(RegExp('[^0-9.]'), ''));
+  } catch (e) {}
+  return amountDouble;
 }
 
 class GmailApiScreen extends StatefulWidget {
@@ -337,12 +358,33 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
           messageString =
               parseHtmlString(utf8.decode(base64.decode(messageEncoded)));
         }
+        bool doesEmailContain = false;
+        String? title;
+        double? amountDouble;
+        if (messageString.contains(emailContains)) {
+          doesEmailContain = true;
+          title = getTransactionTitleFromEmail(context, messageString,
+              titleTransactionBefore, titleTransactionAfter);
+          amountDouble = getTransactionAmountFromEmail(context, messageString,
+              amountTransactionBefore, amountTransactionAfter);
+        }
+
         messageTxt.add(
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: Tappable(
               borderRadius: 15,
-              color: Theme.of(context).colorScheme.lightDarkAccent,
+              color: doesEmailContain && (title == null || amountDouble == null)
+                  ? Theme.of(context)
+                      .colorScheme
+                      .selectableColorRed
+                      .withOpacity(0.5)
+                  : doesEmailContain
+                      ? Theme.of(context)
+                          .colorScheme
+                          .selectableColorGreen
+                          .withOpacity(0.5)
+                      : Theme.of(context).colorScheme.lightDarkAccent,
               onTap: () {
                 openBottomSheet(
                   context,
@@ -365,11 +407,63 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
               },
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                child: TextFont(
-                  fontSize: 13,
-                  text: messageShort,
-                  maxLines: 10,
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    doesEmailContain && (title == null || amountDouble == null)
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: TextFont(
+                              text: "Email parsing failed.",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                          )
+                        : SizedBox(),
+                    doesEmailContain
+                        ? title == null
+                            ? TextFont(
+                                fontSize: 15,
+                                text: "Title: Not found.",
+                                maxLines: 10,
+                                fontWeight: FontWeight.bold,
+                              )
+                            : TextFont(
+                                fontSize: 15,
+                                text: "Title: " + title,
+                                maxLines: 10,
+                                fontWeight: FontWeight.bold,
+                              )
+                        : SizedBox(),
+                    doesEmailContain
+                        ? amountDouble == null
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: TextFont(
+                                  fontSize: 15,
+                                  text: "Amount: Not found / invalid number.",
+                                  maxLines: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: TextFont(
+                                  fontSize: 15,
+                                  text:
+                                      "Amount: " + convertToMoney(amountDouble),
+                                  maxLines: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                        : SizedBox(),
+                    TextFont(
+                      fontSize: 13,
+                      text: messageShort,
+                      maxLines: 10,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -506,8 +600,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
         ],
       );
     } else {
-      print("LOADING");
-      // Otherwise, display a loading indicator.
       return Center(child: CircularProgressIndicator());
     }
   }

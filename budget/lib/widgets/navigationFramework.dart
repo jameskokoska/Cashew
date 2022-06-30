@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
@@ -61,8 +63,17 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       BudgetsListPage(key: budgetsListPageStateKey),
       SettingsPage(key: settingsPageStateKey)
     ];
+
     // Functions to run after entire UI loaded
+
     parseEmailsInBackground(context);
+
+    //Only generate random numbers once
+    if (entireAppLoaded == false) {
+      random = new Random();
+      randomInt = random.nextInt(100);
+    }
+
     entireAppLoaded = true;
   }
 

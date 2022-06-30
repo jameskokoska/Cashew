@@ -306,17 +306,17 @@ String getWelcomeMessage() {
   ];
   List<String> greetingsEvening = ["Good evening"];
   List<String> greetingsLate = ["Good night", "Get some rest"];
-  if (random.nextBool() == true) {
+  if (randomInt % 2 == 0) {
     if (h24 <= 12 && h24 >= 6)
-      return greetingsMorning[random.nextInt(greetingsMorning.length)];
+      return greetingsMorning[randomInt % (greetingsMorning.length)];
     else if (h24 <= 16 && h24 >= 13)
-      return greetingsAfternoon[random.nextInt(greetingsAfternoon.length)];
+      return greetingsAfternoon[randomInt % (greetingsAfternoon.length)];
     else if (h24 <= 22 && h24 >= 19)
-      return greetingsEvening[random.nextInt(greetingsEvening.length)];
+      return greetingsEvening[randomInt % (greetingsEvening.length)];
     else if (h24 >= 23 || h24 <= 5)
-      return greetingsLate[random.nextInt(greetingsLate.length)];
+      return greetingsLate[randomInt % (greetingsLate.length)];
     else
-      return greetings[random.nextInt(greetings.length)];
+      return greetings[randomInt % (greetings.length)];
   } else {
     return greetings[random.nextInt(greetings.length)];
   }

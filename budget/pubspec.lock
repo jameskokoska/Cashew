@@ -279,13 +279,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_notification_listener:
-    dependency: "direct main"
-    description:
-      name: flutter_notification_listener
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -401,13 +394,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  installed_apps:
-    dependency: "direct main"
-    description:
-      name: installed_apps
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.1"
   intl:
     dependency: "direct main"
     description:
