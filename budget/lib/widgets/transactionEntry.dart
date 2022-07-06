@@ -271,25 +271,35 @@ class _TransactionEntryState extends State<TransactionEntry> {
                             Padding(
                               padding: const EdgeInsets.only(right: 3.0),
                               child: Tappable(
-                                borderRadius: 10,
                                 color: Colors.transparent,
+                                borderRadius: 10,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 14, horizontal: 10),
-                                  child: TextFont(
-                                    text: widget.transaction.income
-                                        ? (widget.transaction.paid
-                                            ? "Desposited"
-                                            : widget.transaction.skipPaid
-                                                ? "Skipped"
-                                                : "Desposit?")
-                                        : (widget.transaction.paid
-                                            ? "Paid"
-                                            : widget.transaction.skipPaid
-                                                ? "Skipped"
-                                                : "Pay?"),
-                                    fontSize: 14,
-                                    textColor: textColorLight,
+                                      vertical: 8, horizontal: 3),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 6, horizontal: 7),
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .lightDarkAccent,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: TextFont(
+                                      text: widget.transaction.income
+                                          ? (widget.transaction.paid
+                                              ? "Desposited"
+                                              : widget.transaction.skipPaid
+                                                  ? "Skipped"
+                                                  : "Desposit?")
+                                          : (widget.transaction.paid
+                                              ? "Paid"
+                                              : widget.transaction.skipPaid
+                                                  ? "Skipped"
+                                                  : "Pay?"),
+                                      fontSize: 14,
+                                      textColor: textColorLight,
+                                    ),
                                   ),
                                 ),
                                 onTap: () {

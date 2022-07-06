@@ -36,7 +36,8 @@ class BudgetContainer extends StatelessWidget {
         if (snapshot.hasData) {
           double totalSpent = 0;
           snapshot.data!.forEach((category) {
-            totalSpent = totalSpent + category.total;
+            totalSpent = totalSpent + category.total.abs();
+            totalSpent = totalSpent.abs();
           });
           return Container(
             height: height,
@@ -134,7 +135,7 @@ class BudgetContainer extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     child: BudgetTimeline(
                       budget: budget,
-                      percent: totalSpent / budget.amount * 100,
+                      percent: (totalSpent / budget.amount * 100).abs(),
                       todayPercent:
                           getPercentBetweenDates(budgetRange, DateTime.now()),
                     ),
@@ -201,8 +202,11 @@ class DaySpending extends StatelessWidget {
         fit: BoxFit.fitWidth,
         child: TextFont(
           textColor: Theme.of(context).colorScheme.black.withAlpha(80),
-          text:
-              "You can keep spending " + convertToMoney(amount) + " each day.",
+          text: amount < 0
+              ? "You should save " + convertToMoney(amount.abs()) + " each day."
+              : "You can keep spending " +
+                  convertToMoney(amount) +
+                  " each day.",
           fontSize: large ? 17 : 15,
           textAlign: TextAlign.center,
         ),
@@ -223,28 +227,32 @@ class AnimatedGooBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withAlpha(200),
-      ),
-      child: PlasmaRenderer(
-        key: ValueKey(key),
-        type: PlasmaType.infinity,
-        particles: 10,
-        color: Theme.of(context).brightness == Brightness.light
-            ? this.color.withOpacity(0.1)
-            : this.color.withOpacity(0.3),
-        blur: 0.3,
-        size: 1.3,
-        speed: 3.3,
-        offset: 0,
-        blendMode: BlendMode.multiply,
-        particleType: ParticleType.atlas,
-        variation1: 0,
-        variation2: 0,
-        variation3: 0,
-        rotation:
-            (randomInt % (randomOffset > 0 ? randomOffset : 1)).toDouble(),
+    // Transform slightly to remove graphic artifacts
+    return Transform(
+      transform: Matrix4.skewX(0.001),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(200),
+        ),
+        child: PlasmaRenderer(
+          key: ValueKey(key),
+          type: PlasmaType.infinity,
+          particles: 10,
+          color: Theme.of(context).brightness == Brightness.light
+              ? this.color.withOpacity(0.1)
+              : this.color.withOpacity(0.3),
+          blur: 0.3,
+          size: 1.3,
+          speed: 3.3,
+          offset: 0,
+          blendMode: BlendMode.multiply,
+          particleType: ParticleType.atlas,
+          variation1: 0,
+          variation2: 0,
+          variation3: 0,
+          rotation:
+              (randomInt % (randomOffset > 0 ? randomOffset : 1)).toDouble(),
+        ),
       ),
     );
   }

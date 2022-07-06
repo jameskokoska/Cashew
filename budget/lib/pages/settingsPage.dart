@@ -81,11 +81,11 @@ class SettingsPageState extends State<SettingsPage>
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
         SettingsHeader(title: "Data"),
-        SettingsContainerOpenPage(
-          openPage: ColorsPage(),
-          title: "Colors",
-          icon: Icons.color_lens,
-        ),
+        // SettingsContainerOpenPage(
+        //   openPage: ColorsPage(),
+        //   title: "Colors",
+        //   icon: Icons.color_lens,
+        // ),
         SettingsContainerOpenPage(
           openPage: SubscriptionsPage(),
           title: "Subscriptions",
@@ -145,21 +145,6 @@ class SettingsPageState extends State<SettingsPage>
               updateSettings("theme", "system");
             }
           },
-        ),
-        SettingsContainer(
-          onTap: () {
-            openBottomSheet(
-              context,
-              PopupFramework(
-                title: "Select Icon",
-                child: SelectCategoryImage(
-                  setSelectedImage: (_) {},
-                ),
-              ),
-            );
-          },
-          title: "Select Icon",
-          icon: Icons.portrait,
         ),
         EnterName(),
         SettingsHeader(title: "Preferences"),

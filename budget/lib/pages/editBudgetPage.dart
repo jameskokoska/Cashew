@@ -30,6 +30,7 @@ class EditBudgetPage extends StatefulWidget {
 
 class _EditBudgetPageState extends State<EditBudgetPage> {
   bool dragDownToDismissEnabled = true;
+  int currentReorder = -1;
   @override
   Widget build(BuildContext context) {
     return PageFramework(
@@ -65,15 +66,17 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
             }
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverReorderableList(
-                onReorderStart: (_) {
+                onReorderStart: (index) {
                   HapticFeedback.heavyImpact();
                   setState(() {
                     dragDownToDismissEnabled = false;
+                    currentReorder = index;
                   });
                 },
                 onReorderEnd: (_) {
                   setState(() {
                     dragDownToDismissEnabled = true;
+                    currentReorder = -1;
                   });
                 },
                 itemBuilder: (context, index) {
@@ -87,21 +90,25 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(
+                    currentReorder:
+                        currentReorder != -1 && currentReorder != index,
                     backgroundColor: backgroundColor,
                     onDelete: () {
-                      openPopup(context,
-                          title: "Delete " + budget.name + "?",
-                          icon: Icons.delete_rounded,
-                          onCancel: () {
-                            Navigator.pop(context);
-                          },
-                          onCancelLabel: "Cancel",
-                          onSubmit: () {
-                            database.deleteBudget(budget.budgetPk);
-                            Navigator.pop(context);
-                            openSnackbar(context, "Deleted " + budget.name);
-                          },
-                          onSubmitLabel: "Delete");
+                      openPopup(
+                        context,
+                        title: "Delete " + budget.name + "?",
+                        icon: Icons.delete_rounded,
+                        onCancel: () {
+                          Navigator.pop(context);
+                        },
+                        onCancelLabel: "Cancel",
+                        onSubmit: () {
+                          database.deleteBudget(budget.budgetPk);
+                          Navigator.pop(context);
+                          openSnackbar(context, "Deleted " + budget.name);
+                        },
+                        onSubmitLabel: "Delete",
+                      );
                     },
                     openPage: AddBudgetPage(
                       title: "Edit Budget",
@@ -159,6 +166,46 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                   " category budget",
                           fontSize: 14,
                         ),
+                        Wrap(
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: [
+                            ...budget.categoryFks!
+                                .asMap()
+                                .entries
+                                .map((categoryFk) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 1.4),
+                                child: FutureBuilder(
+                                    future: database
+                                        .getCategoryInstance(categoryFk.value),
+                                    builder: (context,
+                                        AsyncSnapshot<TransactionCategory>
+                                            snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Opacity(
+                                          opacity: 0.4,
+                                          child: TextFont(
+                                            text: (snapshot.data?.name ?? "") +
+                                                (budget.categoryFks!.length -
+                                                            1 ==
+                                                        categoryFk.key.toInt()
+                                                    ? ""
+                                                    : ", "),
+                                            fontSize: 13,
+                                          ),
+                                        );
+                                      } else {
+                                        return TextFont(
+                                          text: " ",
+                                          fontSize: 13,
+                                        );
+                                      }
+                                    }),
+                              );
+                            }).toList(),
+                          ],
+                        ),
                       ],
                     ),
                     index: index,
@@ -200,6 +247,7 @@ class EditRowEntry extends StatelessWidget {
       required this.openPage,
       required this.onDelete,
       this.padding,
+      this.currentReorder = false,
       Key? key})
       : super(key: key);
   final int index;
@@ -208,68 +256,74 @@ class EditRowEntry extends StatelessWidget {
   final Widget openPage;
   final VoidCallback onDelete;
   final EdgeInsets? padding;
+  final bool currentReorder;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: ReorderableDelayedDragStartListener(
-        index: index,
-        child: OpenContainerNavigation(
-          openPage: openPage,
-          closedColor: backgroundColor,
-          borderRadius: 18,
-          button: (openContainer) {
-            return Tappable(
-              borderRadius: 18,
-              color: backgroundColor,
-              onTap: () {
-                openContainer();
-              },
-              child: IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: padding ??
-                            EdgeInsets.only(
-                              left: 25,
-                              right: 10,
-                              top: 15,
-                              bottom: 15,
-                            ),
-                        child: content,
+    return AnimatedScale(
+      duration: Duration(milliseconds: 800),
+      curve: Curves.elasticOut,
+      scale: currentReorder ? 0.95 : 1,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: ReorderableDelayedDragStartListener(
+          index: index,
+          child: OpenContainerNavigation(
+            openPage: openPage,
+            closedColor: backgroundColor,
+            borderRadius: 18,
+            button: (openContainer) {
+              return Tappable(
+                borderRadius: 18,
+                color: backgroundColor,
+                onTap: () {
+                  openContainer();
+                },
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: padding ??
+                              EdgeInsets.only(
+                                left: 25,
+                                right: 10,
+                                top: 15,
+                                bottom: 15,
+                              ),
+                          child: content,
+                        ),
                       ),
-                    ),
-                    Tappable(
-                      color: Colors.transparent,
-                      borderRadius: 18,
-                      child: Container(
-                          height: double.infinity,
-                          width: 40,
-                          child: Icon(Icons.delete_rounded)),
-                      onTap: onDelete,
-                    ),
-                    ReorderableDragStartListener(
-                      index: index,
-                      child: Tappable(
+                      Tappable(
                         color: Colors.transparent,
                         borderRadius: 18,
                         child: Container(
-                            margin: EdgeInsets.only(right: 10),
-                            width: 40,
                             height: double.infinity,
-                            child: Icon(Icons.drag_handle_rounded)),
-                        onTap: () {},
+                            width: 40,
+                            child: Icon(Icons.delete_rounded)),
+                        onTap: onDelete,
                       ),
-                    ),
-                  ],
+                      ReorderableDragStartListener(
+                        index: index,
+                        child: Tappable(
+                          color: Colors.transparent,
+                          borderRadius: 18,
+                          child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              width: 40,
+                              height: double.infinity,
+                              child: Icon(Icons.drag_handle_rounded)),
+                          onTap: () {},
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

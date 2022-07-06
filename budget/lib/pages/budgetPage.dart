@@ -32,6 +32,7 @@ class BudgetPage extends StatefulWidget {
 
 class _BudgetPageState extends State<BudgetPage> {
   double budgetHeaderHeight = 0;
+  int selectedCategoryPk = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +71,36 @@ class _BudgetPageState extends State<BudgetPage> {
               double totalSpent = 0;
               List<Widget> categoryEntries = [];
               snapshot.data!.forEach((category) {
-                totalSpent = totalSpent + category.total;
+                totalSpent = totalSpent + category.total.abs();
+                totalSpent = totalSpent.abs();
               });
-              snapshot.data!.forEach((category) {
-                categoryEntries.add(CategoryEntry(
-                  category: category.category,
-                  totalSpent: totalSpent,
-                  transactionCount: category.transactionCount,
-                  categorySpent: category.total,
-                ));
+              snapshot.data!.asMap().forEach((index, category) {
+                categoryEntries.add(
+                  CategoryEntry(
+                    category: category.category,
+                    totalSpent: totalSpent,
+                    transactionCount: category.transactionCount,
+                    categorySpent: category.total.abs(),
+                    onTap: () {
+                      if (selectedCategoryPk == category.category.categoryPk) {
+                        setState(() {
+                          selectedCategoryPk = -1;
+                        });
+                        pieChartDisplayStateKey.currentState!
+                            .setTouchedIndex(-1);
+                      } else {
+                        setState(() {
+                          selectedCategoryPk = category.category.categoryPk;
+                        });
+                        pieChartDisplayStateKey.currentState!
+                            .setTouchedIndex(index);
+                      }
+                    },
+                    selected:
+                        selectedCategoryPk == category.category.categoryPk,
+                    allSelected: selectedCategoryPk == -1,
+                  ),
+                );
               });
               return SliverList(
                 delegate: SliverChildListDelegate([
@@ -194,7 +216,11 @@ class _BudgetPageState extends State<BudgetPage> {
                       ? PieChartWrapper(
                           data: snapshot.data ?? [],
                           totalSpent: totalSpent,
-                        )
+                          setSelectedCategory: (categoryPk) {
+                            setState(() {
+                              selectedCategoryPk = categoryPk;
+                            });
+                          })
                       : Center(
                           child: Padding(
                             padding: const EdgeInsets.only(
@@ -217,8 +243,29 @@ class _BudgetPageState extends State<BudgetPage> {
             return SliverToBoxAdapter(child: Container());
           },
         ),
+        SliverToBoxAdapter(
+          child: selectedCategoryPk != -1
+              ? Padding(
+                  padding: const EdgeInsets.only(
+                      left: 13, right: 15, top: 5, bottom: 15),
+                  child: Center(
+                    child: TextFont(
+                      text: "Showing transactions from selected category",
+                      maxLines: 10,
+                      textAlign: TextAlign.center,
+                      fontSize: 14,
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : SizedBox(),
+        ),
         ...getTransactionsSlivers(budgetRange.start, budgetRange.end,
-            categoryFks: widget.budget.categoryFks ?? []),
+            categoryFks: selectedCategoryPk != -1
+                ? [selectedCategoryPk]
+                : widget.budget.categoryFks ?? []),
+        SliverToBoxAdapter(child: SizedBox(height: 100))
       ],
     );
   }

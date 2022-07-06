@@ -301,7 +301,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 400),
-                    child: CategoryTypeButton(
+                    child: IncomeTypeButton(
                       key: ValueKey(selectedIncome),
                       onTap: () {
                         setSelectedIncome(!selectedIncome);
@@ -508,8 +508,8 @@ class AssociatedTitleEntryAdd extends StatelessWidget {
   }
 }
 
-class CategoryTypeButton extends StatelessWidget {
-  const CategoryTypeButton(
+class IncomeTypeButton extends StatelessWidget {
+  const IncomeTypeButton(
       {Key? key, required this.onTap, required this.selectedIncome})
       : super(key: key);
   final VoidCallback onTap;
@@ -534,7 +534,7 @@ class CategoryTypeButton extends StatelessWidget {
               onTap: onTap,
               icon: selectedIncome
                   ? Icons.move_to_inbox_rounded
-                  : Icons.payments_rounded,
+                  : Icons.exit_to_app_rounded,
               size: 41,
             ),
           ],

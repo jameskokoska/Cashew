@@ -34,6 +34,23 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+Future<bool> checkConnection() async {
+  late bool isConnected;
+  if (!kIsWeb) {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnected = true;
+      }
+    } on SocketException catch (_) {
+      isConnected = false;
+    }
+  } else {
+    isConnected = true;
+  }
+  return isConnected;
+}
+
 class GoogleAuthClient extends http.BaseClient {
   final Map<String, String> _headers;
   final http.Client _client = new http.Client();
@@ -59,27 +76,21 @@ Future<bool> signInGoogle(context,
     bool? gMailPermissions}) async {
   bool isConnected = false;
 
-  if (!kIsWeb) {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        isConnected = true;
-      }
-    } on SocketException catch (_) {
-      isConnected = false;
-    }
-  } else {
-    isConnected = true;
-  }
-  if (isConnected == false) {
-    if (context != null) {
-      openSnackbar(context, "Could not connect to network",
-          backgroundColor:
-              Theme.of(context).colorScheme.error.withOpacity(0.5));
-    }
-    return false;
-  }
   try {
+    //Check connection
+    isConnected = await checkConnection().timeout(Duration(milliseconds: 2500),
+        onTimeout: () {
+      throw ("There was an error checking your connection");
+    });
+    if (isConnected == false) {
+      if (context != null) {
+        openSnackbar(context, "Could not connect to network",
+            backgroundColor: lightenPastel(Theme.of(context).colorScheme.error,
+                amount: 0.6));
+      }
+      return false;
+    }
+
     if (waitForCompletion == true) openLoadingPopup(context);
     if (user == null) {
       googleSignIn = signIn.GoogleSignIn.standard(scopes: [
@@ -97,7 +108,10 @@ Future<bool> signInGoogle(context,
     return true;
   } catch (e) {
     if (waitForCompletion == true) Navigator.of(context).pop();
-    openSnackbar(context, e.toString());
+    openSnackbar(context, e.toString(),
+        backgroundColor: dynamicPastel(
+            context, Theme.of(context).colorScheme.error,
+            amountLight: 0.5));
     return false;
   }
 }

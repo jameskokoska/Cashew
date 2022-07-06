@@ -104,27 +104,30 @@ class HomePageState extends State<HomePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          AnimatedBuilder(
-                            animation: _animationControllerHeader,
-                            builder: (_, child) {
-                              return Transform.translate(
-                                offset: Offset(
-                                    0,
-                                    20 -
-                                        20 *
-                                            (_animationControllerHeader.value)),
-                                child: child,
-                              );
-                            },
-                            child: FadeTransition(
-                              opacity: _animationControllerHeader2,
-                              child: TextFont(
-                                text: getWelcomeMessage(),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
+                          appStateSettings["username"] == ""
+                              ? SizedBox()
+                              : AnimatedBuilder(
+                                  animation: _animationControllerHeader,
+                                  builder: (_, child) {
+                                    return Transform.translate(
+                                      offset: Offset(
+                                          0,
+                                          20 -
+                                              20 *
+                                                  (_animationControllerHeader
+                                                      .value)),
+                                      child: child,
+                                    );
+                                  },
+                                  child: FadeTransition(
+                                    opacity: _animationControllerHeader2,
+                                    child: TextFont(
+                                      text: getWelcomeMessage(),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
                           AnimatedBuilder(
                             animation: _animationControllerHeader,
                             builder: (_, child) {
@@ -138,9 +141,14 @@ class HomePageState extends State<HomePage>
                               );
                             },
                             child: TextFont(
-                              text: appStateSettings["username"],
+                              text: appStateSettings["username"] == ""
+                                  ? "Home"
+                                  : appStateSettings["username"],
                               fontWeight: FontWeight.bold,
                               fontSize: 39,
+                              textColor: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                             ),
                           ),
                         ],
@@ -351,6 +359,7 @@ class HomePageState extends State<HomePage>
           SliverToBoxAdapter(
             child: Center(
               child: Tappable(
+                color: Theme.of(context).colorScheme.lightDarkAccent,
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),

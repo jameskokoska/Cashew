@@ -32,7 +32,7 @@ class EditCategoriesPage extends StatefulWidget {
 
 class _EditCategoriesPageState extends State<EditCategoriesPage> {
   bool dragDownToDismissEnabled = true;
-
+  int currentReorder = -1;
   @override
   Widget build(BuildContext context) {
     return PageFramework(
@@ -68,15 +68,17 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
             }
             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
               return SliverReorderableList(
-                onReorderStart: (_) {
+                onReorderStart: (index) {
                   HapticFeedback.heavyImpact();
                   setState(() {
                     dragDownToDismissEnabled = false;
+                    currentReorder = index;
                   });
                 },
                 onReorderEnd: (_) {
                   setState(() {
                     dragDownToDismissEnabled = true;
+                    currentReorder = -1;
                   });
                 },
                 itemBuilder: (context, index) {
@@ -88,6 +90,8 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(
+                    currentReorder:
+                        currentReorder != -1 && currentReorder != index,
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     key: ValueKey(index),
                     backgroundColor: backgroundColor,

@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -72,6 +75,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "months";
   BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
+  bool selectedIncome = false;
 
   String? textAddTransaction = "Add Transaction";
 
@@ -118,6 +122,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   void setSelectedCategory(TransactionCategory category) {
     setState(() {
       selectedCategory = category;
+      selectedIncome = category.income;
     });
     return;
   }
@@ -233,25 +238,27 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     );
   }
 
+  void setSelectedIncome(bool value) {
+    setState(() {
+      selectedIncome = value;
+    });
+  }
+
   Future addTransaction() async {
     print("Added transaction");
-    print(selectedDate);
-    bool income = selectedCategory!.income;
-    print(selectedCategory);
-
     await database.createOrUpdateTransaction(
       Transaction(
         transactionPk: widget.transaction != null
             ? widget.transaction!.transactionPk
             : DateTime.now().millisecondsSinceEpoch,
         name: selectedTitle ?? "",
-        amount: (income
+        amount: (selectedIncome
             ? (selectedAmount ?? 0).abs()
             : (selectedAmount ?? 0).abs() * -1),
         note: selectedNote ?? "",
         categoryFk: selectedCategory?.categoryPk ?? 0,
         dateCreated: selectedDate,
-        income: income,
+        income: selectedIncome,
         walletFk: appStateSettings["selectedWallet"],
         paid: widget.transaction != null
             ? widget.transaction!.paid
@@ -267,9 +274,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   late TextEditingController _titleInputController;
-  late TextEditingController _dateInputController;
   late TextEditingController _noteInputController;
-  late TextEditingController _typeInputController;
 
   @override
   void initState() {
@@ -281,8 +286,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           new TextEditingController(text: widget.transaction!.name);
       _noteInputController =
           new TextEditingController(text: widget.transaction!.note);
-      _dateInputController = new TextEditingController(
-          text: getWordedDate(widget.transaction!.dateCreated));
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
@@ -299,6 +302,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       } else {
         selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
       }
+      selectedIncome = widget.transaction!.income;
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -637,7 +641,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               : Container(),
                         ),
                       ),
-
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 400),
+                        child: IncomeTypeButton(
+                          key: ValueKey(selectedIncome),
+                          onTap: () {
+                            setSelectedIncome(!selectedIncome);
+                          },
+                          selectedIncome: selectedIncome,
+                        ),
+                      ),
                       Container(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 22),

@@ -190,14 +190,17 @@ List<Widget> getTransactionsSlivers(
           if (snapshot.data != null &&
               snapshot.hasData &&
               (snapshot.data ?? []).length > 0) {
+            List<TransactionWithCategory> transactionList =
+                snapshot.data!.reversed.toList();
             double totalSpentForDay = 0;
-            snapshot.data!.forEach((transaction) {
-              totalSpentForDay += transaction.transaction.amount;
+            transactionList.forEach((transaction) {
+              if (transaction.transaction.paid)
+                totalSpentForDay += transaction.transaction.amount;
             });
             return SliverStickyHeader(
               header: DateDivider(
                   date: date,
-                  info: snapshot.data!.length > 1
+                  info: transactionList.length > 1
                       ? convertToMoney(totalSpentForDay)
                       : ""),
               sticky: true,
@@ -206,13 +209,13 @@ List<Widget> getTransactionsSlivers(
                   (BuildContext context, int index) {
                     return TransactionEntry(
                       key: ValueKey(
-                          snapshot.data![index].transaction.transactionPk),
-                      category: snapshot.data![index].category,
+                          transactionList[index].transaction.transactionPk),
+                      category: transactionList[index].category,
                       openPage: AddTransactionPage(
                         title: "Edit Transaction",
-                        transaction: snapshot.data![index].transaction,
+                        transaction: transactionList[index].transaction,
                       ),
-                      transaction: snapshot.data![index].transaction,
+                      transaction: transactionList[index].transaction,
                       onSelected: (Transaction transaction, bool selected) {
                         if (onSelected != null)
                           onSelected(transaction, selected);
@@ -220,7 +223,7 @@ List<Widget> getTransactionsSlivers(
                       listID: listID,
                     );
                   },
-                  childCount: snapshot.data?.length,
+                  childCount: transactionList.length,
                 ),
               ),
             );

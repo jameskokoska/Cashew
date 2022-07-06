@@ -923,7 +923,8 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.skipPaid.equals(false) &
+      ..where(transactions.income.equals(false) &
+          transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
           (transactions.type.equals(TransactionSpecialType.subscription.index) |
@@ -938,7 +939,8 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.skipPaid.equals(false) &
+      ..where(transactions.income.equals(false) &
+          transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
           (transactions.type.equals(TransactionSpecialType.subscription.index) |

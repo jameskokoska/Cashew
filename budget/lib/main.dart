@@ -118,8 +118,10 @@ Future<bool> initializeSettings() async {
     if (appStateSettings["AutoTransactions-canReadEmails"] == true) {
       if (user == null) {
         print("Signing in user for reading emails");
-        await signInGoogle("",
-            gMailPermissions: true, waitForCompletion: false);
+        await signInGoogle("", gMailPermissions: true, waitForCompletion: false)
+            .timeout(Duration(milliseconds: 5000), onTimeout: () {
+          return false;
+        });
       }
     }
   }

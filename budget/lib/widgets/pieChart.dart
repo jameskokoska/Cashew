@@ -45,10 +45,14 @@ Future<List<CategoryTotalDetailed>> getCategoryDetails(
 
 class PieChartWrapper extends StatelessWidget {
   const PieChartWrapper(
-      {Key? key, required this.data, required this.totalSpent})
+      {Key? key,
+      required this.data,
+      required this.totalSpent,
+      required this.setSelectedCategory})
       : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
+  final Function(int) setSelectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +64,8 @@ class PieChartWrapper extends StatelessWidget {
           PieChartDisplay(
             data: data,
             totalSpent: totalSpent,
+            setSelectedCategory: setSelectedCategory,
+            key: pieChartDisplayStateKey,
           ),
           IgnorePointer(
             child: Center(
@@ -90,11 +96,18 @@ class PieChartWrapper extends StatelessWidget {
   }
 }
 
+GlobalKey<PieChartDisplayState> pieChartDisplayStateKey = GlobalKey();
+
 class PieChartDisplay extends StatefulWidget {
-  PieChartDisplay({Key? key, required this.data, required this.totalSpent})
+  PieChartDisplay(
+      {Key? key,
+      required this.data,
+      required this.totalSpent,
+      required this.setSelectedCategory})
       : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
+  final Function(int) setSelectedCategory;
 
   @override
   State<StatefulWidget> createState() => PieChartDisplayState();
@@ -113,6 +126,12 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     });
   }
 
+  void setTouchedIndex(index) {
+    setState(() {
+      touchedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedScale(
@@ -124,7 +143,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           startDegreeOffset: -45,
           pieTouchData: PieTouchData(
               touchCallback: (FlTouchEvent event, pieTouchResponse) {
-            print(event.runtimeType);
+            // print(event.runtimeType);
             setState(() {
               if (!event.isInterestedForInteractions ||
                   pieTouchResponse == null ||
@@ -136,11 +155,16 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                       pieTouchResponse.touchedSection!.touchedSectionIndex) {
                 touchedIndex =
                     pieTouchResponse.touchedSection!.touchedSectionIndex;
+                widget.setSelectedCategory(
+                    widget.data[touchedIndex].category.categoryPk);
               } else if (event.runtimeType == FlTapDownEvent) {
                 touchedIndex = -1;
+                widget.setSelectedCategory(-1);
               } else if (event.runtimeType == FlLongPressMoveUpdate) {
                 touchedIndex =
                     pieTouchResponse.touchedSection!.touchedSectionIndex;
+                widget.setSelectedCategory(
+                    widget.data[touchedIndex].category.categoryPk);
               }
             });
           }),
@@ -151,8 +175,8 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           centerSpaceRadius: 0,
           sections: showingSections(),
         ),
-        swapAnimationDuration: Duration(milliseconds: 200),
-        swapAnimationCurve: Curves.decelerate,
+        swapAnimationDuration: Duration(milliseconds: 1300),
+        swapAnimationCurve: ElasticOutCurve(0.6),
       ),
     );
   }
@@ -161,12 +185,12 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     return List.generate(widget.data.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 110.0 : 100.0;
-      final widgetScale = isTouched ? 1.4 : 1.0;
+      final radius = isTouched ? 106.0 : 100.0;
+      final widgetScale = isTouched ? 1.3 : 1.0;
       return PieChartSectionData(
         color: dynamicPastel(context, HexColor(widget.data[i].category.colour),
             amountLight: 0.3, amountDark: 0.1),
-        value: widget.data[i].total / widget.totalSpent,
+        value: (widget.data[i].total / widget.totalSpent).abs(),
         title: "",
         radius: radius,
         badgeWidget: _Badge(
@@ -178,6 +202,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
             "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),
           percent: (widget.data[i].total / widget.totalSpent * 100)
+                  .abs()
                   .toStringAsFixed(0) +
               '%',
         ),
@@ -205,8 +230,8 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedScale(
-      curve: Curves.decelerate,
-      duration: Duration(milliseconds: 200),
+      curve: ElasticOutCurve(0.6),
+      duration: Duration(milliseconds: 1300),
       scale: scale,
       child: Container(
         width: 45,
@@ -236,6 +261,7 @@ class _Badge extends StatelessWidget {
                           color: color,
                           width: 1.5,
                         ),
+                        color: Theme.of(context).canvasColor,
                       ),
                       child: Center(
                         child: TextFont(
