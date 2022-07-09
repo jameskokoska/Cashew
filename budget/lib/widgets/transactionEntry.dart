@@ -71,7 +71,7 @@ class _TransactionEntryState extends State<TransactionEntry> {
       database.createOrUpdateTransaction(newTransaction);
       openSnackbar(
         context,
-        "Created new subscription transaction on " +
+        "Created new subscription transaction for " +
             getWordedDateShort(newDate),
       );
     }

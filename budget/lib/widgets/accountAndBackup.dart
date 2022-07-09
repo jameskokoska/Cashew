@@ -42,7 +42,8 @@ Future<bool> checkConnection() async {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         isConnected = true;
       }
-    } on SocketException catch (_) {
+    } on SocketException catch (e) {
+      print(e.toString());
       isConnected = false;
     }
   } else {
@@ -646,7 +647,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
               toHexString(getSettingConstants(appStateSettings)["accentColor"]),
           income: amount > 0,
           iconName: "image.png",
-          smartLabels: [],
+          // smartLabels: [],
         ),
       );
       categoryFk = (await database.getCategoryInstanceGivenName(

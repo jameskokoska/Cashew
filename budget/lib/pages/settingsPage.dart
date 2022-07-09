@@ -7,6 +7,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/autoTransactionsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/colorsPage.dart';
+import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
@@ -91,11 +92,12 @@ class SettingsPageState extends State<SettingsPage>
           title: "Subscriptions",
           icon: Icons.event_repeat_rounded,
         ),
+
         SettingsContainerOpenPage(
-          openPage: EditCategoriesPage(title: "Edit Categories"),
-          title: "Edit Categories",
-          description: "Add and edit the order of categories",
-          icon: Icons.category_rounded,
+          openPage: EditWalletsPage(title: "Edit Wallets"),
+          title: "Edit Wallets",
+          description: "Edit the order and wallet details",
+          icon: Icons.wallet_rounded,
         ),
         SettingsContainerOpenPage(
           openPage: EditBudgetPage(title: "Edit Budgets"),
@@ -104,10 +106,16 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.price_change_rounded,
         ),
         SettingsContainerOpenPage(
-          openPage: EditWalletsPage(title: "Edit Wallets"),
-          title: "Edit Wallets",
-          description: "Edit the order and wallet details",
-          icon: Icons.wallet_rounded,
+          openPage: EditCategoriesPage(title: "Edit Categories"),
+          title: "Edit Categories",
+          description: "Add and edit the order of categories",
+          icon: Icons.category_rounded,
+        ),
+        SettingsContainerOpenPage(
+          openPage: EditAssociatedTitlesPage(title: "Edit Titles"),
+          title: "Edit Associated Titles",
+          description: "Add and edit associated category titles",
+          icon: Icons.text_fields_rounded,
         ),
         SettingsHeader(title: "Account and Backups"),
         AccountAndBackup(),

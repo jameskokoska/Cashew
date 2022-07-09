@@ -18,6 +18,7 @@ class CategoryEntry extends StatelessWidget {
     required this.onTap,
     required this.selected,
     required this.allSelected,
+    required this.budgetColorScheme,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -27,6 +28,7 @@ class CategoryEntry extends StatelessWidget {
   final VoidCallback onTap;
   final bool selected;
   final bool allSelected;
+  final ColorScheme budgetColorScheme;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +54,7 @@ class CategoryEntry extends StatelessWidget {
             curve: Curves.easeInOut,
             duration: Duration(milliseconds: 500),
             color: selected
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
+                ? dynamicPastel(context, budgetColorScheme.secondaryContainer,
                     amount: 0.5)
                 : Colors.transparent,
             padding: EdgeInsets.only(left: 20, right: 25, top: 11, bottom: 11),

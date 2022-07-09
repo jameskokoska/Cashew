@@ -77,6 +77,7 @@ class _BudgetPageState extends State<BudgetPage> {
               snapshot.data!.asMap().forEach((index, category) {
                 categoryEntries.add(
                   CategoryEntry(
+                    budgetColorScheme: budgetColorScheme,
                     category: category.category,
                     totalSpent: totalSpent,
                     transactionCount: category.transactionCount,

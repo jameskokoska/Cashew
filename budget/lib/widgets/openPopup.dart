@@ -120,16 +120,18 @@ Future<T?> openPopup<T extends Object?>(
                     textColor: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: TextFont(
-                    textAlign: TextAlign.center,
-                    text: description ?? "",
-                    fontSize: 17,
-                    maxLines: 100,
-                  ),
-                ),
+                description != "" && description != null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 10),
+                        child: TextFont(
+                          textAlign: TextAlign.center,
+                          text: description,
+                          fontSize: 17,
+                          maxLines: 100,
+                        ),
+                      )
+                    : SizedBox.shrink(),
                 onSubmitLabel != null || onCancelLabel != null
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),

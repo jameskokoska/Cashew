@@ -120,7 +120,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             : await database.getAmountOfCategories(),
         colour: toHexString(selectedColor ?? Colors.white),
         iconName: selectedImage,
-        smartLabels: associatedTitles,
+        // smartLabels: associatedTitles,
       ),
     );
     Navigator.pop(context);
@@ -136,7 +136,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         selectedTitle = widget.category!.name;
         selectedColor = HexColor(widget.category!.colour);
         selectedImage = widget.category!.iconName;
-        associatedTitles = widget.category!.smartLabels ?? [];
+        // associatedTitles = widget.category!.smartLabels ?? [];
         selectedIncome = widget.category!.income;
       });
     }

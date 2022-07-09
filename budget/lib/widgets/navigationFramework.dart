@@ -211,7 +211,32 @@ class SelectedTransactionsButton extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                discardChangesPopup(context);
+                openPopup(
+                  context,
+                  title: "Delete selected transactions?",
+                  description: "Are you sure you want to delete " +
+                      (value as Map)[pageID].length.toString() +
+                      " transactions?",
+                  icon: Icons.delete_rounded,
+                  onCancel: () {
+                    Navigator.pop(context);
+                  },
+                  onCancelLabel: "Cancel",
+                  onSubmit: () {
+                    for (int transactionID in (value as Map)[pageID]) {
+                      database.deleteTransaction(transactionID);
+                    }
+                    openSnackbar(
+                        context,
+                        "Deleted " +
+                            (value as Map)[pageID].length.toString() +
+                            " transactions");
+                    globalSelectedID.value[pageID] = [];
+                    globalSelectedID.notifyListeners();
+                    Navigator.pop(context);
+                  },
+                  onSubmitLabel: "Delete",
+                );
               },
             ),
           ),

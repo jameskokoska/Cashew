@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import "../struct/budget.dart";
 import 'package:budget/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -347,14 +348,17 @@ class HomePageState extends State<HomePage>
             },
           ),
           SliverToBoxAdapter(
-            child: Container(height: 13),
+            child: SlidingSelector(),
+          ),
+          SliverToBoxAdapter(
+            child: Container(height: 4),
           ),
           ...getTransactionsSlivers(
               DateTime(DateTime.now().year, DateTime.now().month - 1,
                   DateTime.now().day),
               DateTime.now()),
           SliverToBoxAdapter(
-            child: Container(height: 4),
+            child: Container(height: 7),
           ),
           SliverToBoxAdapter(
             child: Center(
@@ -383,6 +387,121 @@ class HomePageState extends State<HomePage>
             child: Container(height: 1, color: Theme.of(context).canvasColor),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SlidingSelector extends StatefulWidget {
+  const SlidingSelector({Key? key}) : super(key: key);
+
+  @override
+  State<SlidingSelector> createState() => _SlidingSelectorState();
+}
+
+class _SlidingSelectorState extends State<SlidingSelector> {
+  int selectedTab = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: CustomSlidingSegmentedControl<int>(
+        innerPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        initialValue: 1,
+        isStretch: true,
+        height: 45,
+        // splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
+        // splashColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+        children: {
+          1: SlidingSelectorChip(
+            icon: Icons.all_inbox_rounded,
+            name: "All",
+            selected: selectedTab == 1,
+          ),
+          2: SlidingSelectorChip(
+            icon: Icons.exit_to_app_rounded,
+            name: "Expense",
+            selected: selectedTab == 2,
+          ),
+          3: SlidingSelectorChip(
+            icon: Icons.move_to_inbox_rounded,
+            name: "Income",
+            selected: selectedTab == 3,
+          ),
+        },
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.lightDarkAccent,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        thumbDecoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.white,
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 5,
+              spreadRadius: 2,
+              offset: Offset(
+                0.0,
+                2.0,
+              ),
+            ),
+          ],
+        ),
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+        onValueChanged: (index) {
+          setState(() {
+            selectedTab = index;
+          });
+        },
+      ),
+    );
+  }
+}
+
+class SlidingSelectorChip extends StatelessWidget {
+  const SlidingSelectorChip(
+      {Key? key,
+      required this.selected,
+      required this.icon,
+      required this.name})
+      : super(key: key);
+
+  final bool selected;
+  final IconData icon;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 400),
+      child: AnimatedScale(
+        duration: Duration(milliseconds: 1200),
+        curve: ElasticOutCurve(0.3),
+        scale: selected ? 1.03 : 0.95,
+        child: Row(
+          key: ValueKey(selected),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 20,
+              color: selected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.black,
+            ),
+            SizedBox(width: 5),
+            TextFont(
+              text: name,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              textColor: selected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.black,
+            ),
+          ],
+        ),
       ),
     );
   }

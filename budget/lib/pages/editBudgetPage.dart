@@ -246,6 +246,7 @@ class EditRowEntry extends StatelessWidget {
       required this.backgroundColor,
       required this.openPage,
       required this.onDelete,
+      this.onTap,
       this.padding,
       this.currentReorder = false,
       Key? key})
@@ -257,6 +258,7 @@ class EditRowEntry extends StatelessWidget {
   final VoidCallback onDelete;
   final EdgeInsets? padding;
   final bool currentReorder;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +279,10 @@ class EditRowEntry extends StatelessWidget {
                 borderRadius: 18,
                 color: backgroundColor,
                 onTap: () {
-                  openContainer();
+                  if (onTap != null)
+                    onTap!();
+                  else
+                    openContainer();
                 },
                 child: IntrinsicHeight(
                   child: Row(

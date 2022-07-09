@@ -112,12 +112,21 @@ class Categories extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
-  //If a title is in a smart label, automatically choose this category
-  // For e.g. for Food category
-  // smartLabels = ["apple", "pear"]
-  // Then when user sets title to pineapple, it will set the category to Food. Because "apple" is in "pineapple".
-  TextColumn get smartLabels =>
-      text().map(const StringListInColumnConverter()).nullable()();
+}
+
+//If a title is in a smart label, automatically choose this category
+// For e.g. for Food category
+// smartLabels = ["apple", "pear"]
+// Then when user sets title to pineapple, it will set the category to Food. Because "apple" is in "pineapple".
+@DataClassName('TransactionAssociatedTitle')
+class AssociatedTitles extends Table {
+  IntColumn get associatedTitlePk => integer().autoIncrement()();
+  TextColumn get title => text().withLength(max: NAME_LIMIT)();
+  IntColumn get categoryFk => integer()();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+  IntColumn get order => integer()();
+  BoolColumn get isExactMatch => boolean().withDefault(const Constant(false))();
 }
 
 @DataClassName('TransactionLabel')
@@ -179,14 +188,21 @@ class CategoryWithTotal {
   });
 }
 
-@DriftDatabase(tables: [Wallets, Transactions, Categories, Labels, Budgets])
+@DriftDatabase(tables: [
+  Wallets,
+  Transactions,
+  Categories,
+  Labels,
+  AssociatedTitles,
+  Budgets,
+])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
   FinanceDatabase(QueryExecutor e) : super(e);
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration =>
@@ -690,6 +706,70 @@ class FinanceDatabase extends _$FinanceDatabase {
     return into(wallets).insertOnConflictUpdate(wallet);
   }
 
+  Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(
+      {int? limit, int? offset}) {
+    return (select(associatedTitles)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch();
+  }
+
+  //create or update a new associatedTitle
+  Future<int> createOrUpdateAssociatedTitle(
+      TransactionAssociatedTitle associatedTitle) {
+    return into(associatedTitles).insertOnConflictUpdate(associatedTitle);
+  }
+
+  Future moveAssociatedTitle(
+      int associatedTitlePk, int newPosition, int oldPosition) async {
+    List<TransactionAssociatedTitle> associatedTitlesList =
+        await (select(associatedTitles)
+              ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+            .get();
+    if (newPosition > oldPosition) {
+      for (TransactionAssociatedTitle associatedTitle in associatedTitlesList) {
+        await (update(associatedTitles)
+              ..where(
+                (t) =>
+                    t.associatedTitlePk
+                        .equals(associatedTitle.associatedTitlePk) &
+                    t.order.isBiggerOrEqualValue(oldPosition) &
+                    t.order.isSmallerOrEqualValue(newPosition),
+              ))
+            .write(
+          AssociatedTitlesCompanion(order: Value(associatedTitle.order - 1)),
+        );
+      }
+    } else {
+      for (TransactionAssociatedTitle associatedTitle in associatedTitlesList) {
+        await (update(associatedTitles)
+              ..where(
+                (t) =>
+                    t.associatedTitlePk
+                        .equals(associatedTitle.associatedTitlePk) &
+                    t.order.isBiggerOrEqualValue(newPosition) &
+                    t.order.isSmallerOrEqualValue(oldPosition),
+              ))
+            .write(
+          AssociatedTitlesCompanion(order: Value(associatedTitle.order + 1)),
+        );
+      }
+    }
+    await (update(associatedTitles)
+          ..where(
+            (t) => t.associatedTitlePk.equals(associatedTitlePk),
+          ))
+        .write(
+      AssociatedTitlesCompanion(order: Value(newPosition)),
+    );
+  }
+
+  Future<List<int?>> getTotalCountOfAssociatedTitles() async {
+    final totalCount = associatedTitles.associatedTitlePk.count();
+    final query = selectOnly(associatedTitles)..addColumns([totalCount]);
+    return query.map((row) => row.read(totalCount)).get();
+  }
+
   // create or update a new transaction
   Future<int> createOrUpdateTransaction(Transaction transaction) {
     return into(transactions).insertOnConflictUpdate(transaction);
@@ -806,6 +886,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   //delete transactions that belong to specific wallet key
   Future deleteWalletsTransactions(int walletPk) {
     return (delete(transactions)..where((t) => t.walletFk.equals(walletPk)))
+        .go();
+  }
+
+  //delete wallet given key
+  Future deleteAssociatedTitle(int associatedTitlePk) {
+    return (delete(associatedTitles)
+          ..where((t) => t.associatedTitlePk.equals(associatedTitlePk)))
         .go();
   }
 
