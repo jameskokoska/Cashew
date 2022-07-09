@@ -49,6 +49,15 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
           openPage: AddAssociatedTitlePage(
             title: "Add Title",
           ),
+          onTap: () {
+            openBottomSheet(
+              context,
+              AddAssociatedTitlePage(
+                title: "Add Title",
+              ),
+              resizeForKeyboard: false,
+            );
+          },
         ),
       ),
       slivers: [
@@ -96,6 +105,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                           title: "Add Title",
                           associatedTitle: associatedTitle,
                         ),
+                        resizeForKeyboard: false,
                       );
                     },
                     padding: EdgeInsets.symmetric(vertical: 7, horizontal: 7),

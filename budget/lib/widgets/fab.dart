@@ -5,10 +5,12 @@ import 'package:animations/animations.dart';
 import 'package:budget/colors.dart';
 
 class FAB extends StatelessWidget {
-  FAB({Key? key, required this.openPage, this.tooltip = ""}) : super(key: key);
+  FAB({Key? key, required this.openPage, this.onTap, this.tooltip = ""})
+      : super(key: key);
 
   final Widget openPage;
   final String tooltip;
+  final Function()? onTap;
 
   final double fabSize = 60;
   @override
@@ -22,7 +24,10 @@ class FAB extends StatelessWidget {
           child: Tappable(
             color: Theme.of(context).colorScheme.secondary,
             onTap: () {
-              openContainer();
+              if (onTap != null)
+                onTap!();
+              else
+                openContainer();
             },
             child: SizedBox(
               height: fabSize,

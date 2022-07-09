@@ -714,6 +714,17 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
+      int categoryFk,
+      {int? limit,
+      int? offset}) {
+    return (select(associatedTitles)
+          ..where((t) => t.categoryFk.equals(categoryFk))
+          ..orderBy([(t) => OrderingTerm.asc(t.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch();
+  }
+
   //create or update a new associatedTitle
   Future<int> createOrUpdateAssociatedTitle(
       TransactionAssociatedTitle associatedTitle) {

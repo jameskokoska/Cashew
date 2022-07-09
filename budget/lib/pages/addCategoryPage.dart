@@ -45,8 +45,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   String? selectedTitle;
   String? selectedImage = "image.png";
   Color? selectedColor;
-  List<String> associatedTitles = [];
   bool selectedIncome = false;
+  int setCategoryPk = DateTime.now().millisecondsSinceEpoch;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -84,20 +84,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return;
   }
 
-  void addAssociatedTitle(String title) {
-    setState(() {
-      associatedTitles.add(title.toLowerCase());
-    });
-    return;
-  }
-
-  void removeAssociatedTitle(int index) {
-    setState(() {
-      associatedTitles.removeAt(index);
-    });
-    return;
-  }
-
   void setSelectedIncome(bool income) {
     setState(() {
       selectedIncome = income;
@@ -111,7 +97,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       TransactionCategory(
         categoryPk: widget.category != null
             ? widget.category!.categoryPk
-            : DateTime.now().millisecondsSinceEpoch,
+            : setCategoryPk,
         name: selectedTitle ?? "",
         dateCreated: DateTime.now(),
         income: selectedIncome,
@@ -120,7 +106,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             : await database.getAmountOfCategories(),
         colour: toHexString(selectedColor ?? Colors.white),
         iconName: selectedImage,
-        // smartLabels: associatedTitles,
       ),
     );
     Navigator.pop(context);
@@ -136,7 +121,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         selectedTitle = widget.category!.name;
         selectedColor = HexColor(widget.category!.colour);
         selectedImage = widget.category!.iconName;
-        // associatedTitles = widget.category!.smartLabels ?? [];
         selectedIncome = widget.category!.income;
       });
     }
@@ -144,26 +128,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> associatedTitleWidgets = [];
-    for (int i = 0; i < associatedTitles.length; i++) {
-      String title = associatedTitles[i];
-      associatedTitleWidgets.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: AssociatedTitleContainer(
-            title: title,
-            setTitle: (text) {
-              print("SETTING TITLE");
-              associatedTitles[i] = text;
-              print(associatedTitles);
-            },
-            onDelete: () {
-              removeAssociatedTitle(i);
-            },
-          ),
-        ),
-      );
-    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
@@ -340,14 +304,78 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         setSelectedText: (_) {},
                         labelText: "Set Title",
                         placeholder: "Title",
-                        nextWithInput: (text) {
-                          addAssociatedTitle(text);
+                        nextWithInput: (text) async {
+                          // addAssociatedTitle(text);
+                          int numberOfAssociatedTitles = (await database
+                                  .getTotalCountOfAssociatedTitles())[0] ??
+                              0;
+                          await database.createOrUpdateAssociatedTitle(
+                            TransactionAssociatedTitle(
+                              associatedTitlePk:
+                                  DateTime.now().millisecondsSinceEpoch,
+                              categoryFk: widget.category == null
+                                  ? setCategoryPk
+                                  : widget.category!.categoryPk,
+                              isExactMatch: false,
+                              title: text,
+                              dateCreated: DateTime.now(),
+                              order: numberOfAssociatedTitles,
+                            ),
+                          );
                         },
                       ),
                     ),
                   );
                 }),
-                ...associatedTitleWidgets
+                StreamBuilder<List<TransactionAssociatedTitle>>(
+                    stream: database.watchAllAssociatedTitlesInCategory(
+                      widget.category == null
+                          ? setCategoryPk
+                          : widget.category!.categoryPk,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          (snapshot.data ?? []).length > 0) {
+                        List<Widget> associatedTitleWidgets = [];
+                        for (int i = 0; i < snapshot.data!.length; i++) {
+                          TransactionAssociatedTitle associatedTitle =
+                              snapshot.data![i];
+                          associatedTitleWidgets.add(
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: AssociatedTitleContainer(
+                                title: associatedTitle.title,
+                                setTitle: (text) async {
+                                  await database.createOrUpdateAssociatedTitle(
+                                    TransactionAssociatedTitle(
+                                      associatedTitlePk:
+                                          associatedTitle.associatedTitlePk,
+                                      categoryFk: widget.category == null
+                                          ? setCategoryPk
+                                          : widget.category!.categoryPk,
+                                      isExactMatch:
+                                          associatedTitle.isExactMatch,
+                                      title: text,
+                                      dateCreated: DateTime.now(),
+                                      order: associatedTitle.order,
+                                    ),
+                                  );
+                                },
+                                onDelete: () async {
+                                  await database.deleteAssociatedTitle(
+                                      snapshot.data![i].associatedTitlePk);
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                        return Column(
+                          children: [...associatedTitleWidgets],
+                        );
+                      }
+                      return SizedBox();
+                    }),
               ],
             ),
             Align(

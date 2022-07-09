@@ -74,6 +74,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
     setState(() {
       selectedCategory = category;
     });
+    determineBottomButton();
     return;
   }
 
@@ -105,9 +106,19 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
       //Fill in the information from the passed in Title
       setState(() {
         // selectedColor = HexColor(widget.Title!.colour);
-        // selectedTitle = widget.Title!.name;
+        selectedTitle = widget.associatedTitle!.title;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        updateInitial();
       });
     } else {}
+  }
+
+  updateInitial() async {
+    if (widget.associatedTitle != null) {
+      setSelectedCategory(await database
+          .getCategoryInstance(widget.associatedTitle!.categoryFk));
+    }
   }
 
   @override
@@ -116,7 +127,9 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
   }
 
   determineBottomButton() {
-    if (selectedTitle != null && selectedCategory != null) {
+    if (selectedTitle != null &&
+        selectedTitle != "" &&
+        selectedCategory != null) {
       if (canAddTitle != true)
         this.setState(() {
           canAddTitle = true;
@@ -131,11 +144,11 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
+    return PopupFramework(
+      title: widget.title,
+      child: Column(
+        children: [
+          Row(
             children: [
               Tappable(
                 borderRadius: 15,
@@ -152,18 +165,22 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   );
                 },
                 color: Colors.transparent,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AnimatedSwitcher(
-                      duration: Duration(milliseconds: 300),
-                      child: CategoryIcon(
-                        key: ValueKey(selectedCategory?.categoryPk ?? ""),
-                        categoryPk: selectedCategory?.categoryPk ?? 0,
-                        size: 40,
+                child: CategoryIcon(
+                  categoryPk: selectedCategory?.categoryPk ?? 0,
+                  category: selectedCategory,
+                  size: 40,
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "Select Category",
+                        child: SelectCategory(
+                          selectedCategory: selectedCategory,
+                          setSelectedCategory: setSelectedCategory,
+                        ),
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
               Expanded(
@@ -179,10 +196,10 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
               ),
             ],
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: canAddTitle ?? false
+          SizedBox(
+            height: 15,
+          ),
+          canAddTitle ?? false
               ? Button(
                   label: "Add Title",
                   width: MediaQuery.of(context).size.width,
@@ -195,13 +212,11 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   label: "Add Title",
                   width: MediaQuery.of(context).size.width,
                   height: 50,
-                  onTap: () {
-                    addTitle();
-                  },
+                  onTap: () {},
                   color: Colors.grey,
                 ),
-        ),
-      ],
+        ],
+      ),
     );
     return Scaffold(
       resizeToAvoidBottomInset: false,
