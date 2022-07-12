@@ -260,17 +260,26 @@ class FinanceDatabase extends _$FinanceDatabase {
     String search = "",
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
+    bool? income,
   }) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
     if (categoryFks.length > 0) {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day) &
-                  tbl.categoryFk.isIn(categoryFks);
+              if (income == null)
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.year.equals(date.year) &
+                    dateCreated.month.equals(date.month) &
+                    dateCreated.day.equals(date.day) &
+                    tbl.categoryFk.isIn(categoryFks);
+              else
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.year.equals(date.year) &
+                    dateCreated.month.equals(date.month) &
+                    dateCreated.day.equals(date.day) &
+                    tbl.categoryFk.isIn(categoryFks) &
+                    tbl.income.equals(income);
             }))
           .join([
         innerJoin(categories,
@@ -280,10 +289,17 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day);
+              if (income == null)
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.year.equals(date.year) &
+                    dateCreated.month.equals(date.month) &
+                    dateCreated.day.equals(date.day);
+              else
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.year.equals(date.year) &
+                    dateCreated.month.equals(date.month) &
+                    dateCreated.day.equals(date.day) &
+                    tbl.income.equals(income);
             }))
           .join([
         innerJoin(categories,
@@ -293,10 +309,17 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = ((select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day);
+              if (income == null)
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.year.equals(date.year) &
+                    dateCreated.month.equals(date.month) &
+                    dateCreated.day.equals(date.day);
+              else
+                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                    dateCreated.year.equals(date.year) &
+                    dateCreated.month.equals(date.month) &
+                    dateCreated.day.equals(date.day) &
+                    tbl.income.equals(income);
             }))
           .join([
         innerJoin(categories,
@@ -1127,7 +1150,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       DateTime end,
       List<int> categoryFks,
       bool allCategories,
-      bool isPaidOnly) {
+      bool isPaidOnly,
+      bool? isIncome) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     if (allCategories) {
@@ -1135,12 +1159,40 @@ class FinanceDatabase extends _$FinanceDatabase {
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
               if (isPaidOnly) {
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                    dateCreated.isBetweenValues(startDate, endDate) &
-                    tbl.paid.equals(true);
+                if (isIncome == true) {
+                  return tbl.walletFk
+                          .equals(appStateSettings["selectedWallet"]) &
+                      dateCreated.isBetweenValues(startDate, endDate) &
+                      tbl.paid.equals(true) &
+                      tbl.income.equals(true);
+                } else if (isIncome == false) {
+                  return tbl.walletFk
+                          .equals(appStateSettings["selectedWallet"]) &
+                      dateCreated.isBetweenValues(startDate, endDate) &
+                      tbl.paid.equals(true) &
+                      tbl.income.equals(false);
+                } else {
+                  return tbl.walletFk
+                          .equals(appStateSettings["selectedWallet"]) &
+                      dateCreated.isBetweenValues(startDate, endDate) &
+                      tbl.paid.equals(true);
+                }
               } else {
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                    dateCreated.isBetweenValues(startDate, endDate);
+                if (isIncome == true) {
+                  return tbl.walletFk
+                          .equals(appStateSettings["selectedWallet"]) &
+                      dateCreated.isBetweenValues(startDate, endDate) &
+                      tbl.income.equals(true);
+                } else if (isIncome == false) {
+                  return tbl.walletFk
+                          .equals(appStateSettings["selectedWallet"]) &
+                      dateCreated.isBetweenValues(startDate, endDate) &
+                      tbl.income.equals(false);
+                } else {
+                  return tbl.walletFk
+                          .equals(appStateSettings["selectedWallet"]) &
+                      dateCreated.isBetweenValues(startDate, endDate);
+                }
               }
             })
             ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))

@@ -832,7 +832,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.12"
+    version: "0.4.11"
   timing:
     dependency: transitive
     description:

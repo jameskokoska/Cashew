@@ -173,6 +173,7 @@ List<Widget> getTransactionsSlivers(
   List<int> categoryFks = const [],
   Function(Transaction, bool)? onSelected,
   String? listID,
+  bool? income,
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
@@ -185,7 +186,7 @@ List<Widget> getTransactionsSlivers(
     transactionsWidgets.add(
       StreamBuilder<List<TransactionWithCategory>>(
         stream: database.getTransactionCategoryWithDay(date,
-            search: search, categoryFks: categoryFks),
+            search: search, categoryFks: categoryFks, income: income),
         builder: (context, snapshot) {
           if (snapshot.data != null &&
               snapshot.hasData &&

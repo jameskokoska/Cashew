@@ -14,6 +14,8 @@ class _LineChart extends StatefulWidget {
     required this.minPair,
     required this.color,
     this.isCurved = false,
+    this.endDate,
+    this.verticalLineAt,
     Key? key,
   }) : super(key: key);
 
@@ -22,6 +24,8 @@ class _LineChart extends StatefulWidget {
   final Pair minPair;
   final Color color;
   final bool isCurved;
+  final DateTime? endDate;
+  final double? verticalLineAt;
 
   @override
   State<_LineChart> createState() => _LineChartState();
@@ -60,14 +64,14 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       padding: EdgeInsets.only(
           right: 10 + extraHorizontalPadding, top: 8, bottom: 0),
       child: LineChart(
-        sampleData2,
-        swapAnimationDuration: const Duration(milliseconds: 4500),
+        data,
+        swapAnimationDuration: const Duration(milliseconds: 2500),
         swapAnimationCurve: Curves.easeInOutCubic,
       ),
     );
   }
 
-  LineChartData get sampleData2 => LineChartData(
+  LineChartData get data => LineChartData(
         lineTouchData: lineTouchData,
         gridData: gridData,
         borderData: borderData,
@@ -97,7 +101,18 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             strokeWidth: 2,
             color: dynamicPastel(context, widget.color, amount: 0.3)
                 .withOpacity(0.2),
-          )
+          ),
+          ...(widget.verticalLineAt != null
+              ? [
+                  VerticalLine(
+                    x: widget.maxPair.x - widget.verticalLineAt!,
+                    dashArray: [2, 2],
+                    strokeWidth: 2,
+                    color: dynamicPastel(context, widget.color, amount: 0.3)
+                        .withOpacity(0.7),
+                  )
+                ]
+              : [])
         ],
       );
 
@@ -113,7 +128,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                 fontFamily: 'Avenir');
           },
           getTitles: (value) {
-            DateTime currentDate = DateTime.now();
+            DateTime currentDate =
+                widget.endDate == null ? DateTime.now() : widget.endDate!;
             return getWordedDateShort(
               DateTime(
                 currentDate.year,
@@ -194,7 +210,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       );
 
   List<LineChartBarData> get lineBarsData => [
-        lineChartBarData2_2,
+        lineChartBarData,
       ];
 
   FlGridData get gridData => FlGridData(
@@ -232,7 +248,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         ),
       );
 
-  LineChartBarData get lineChartBarData2_2 => LineChartBarData(
+  LineChartBarData get lineChartBarData => LineChartBarData(
         colors: [lightenPastel(widget.color, amount: 0.3)],
         barWidth: 3,
         isStrokeCapRound: true,
@@ -295,11 +311,17 @@ class LineChartWrapper extends StatelessWidget {
   const LineChartWrapper({
     required this.points,
     this.isCurved = false,
+    this.color,
+    this.endDate,
+    this.verticalLineAt,
     Key? key,
   }) : super(key: key);
 
   final List<Pair> points;
   final bool isCurved;
+  final Color? color;
+  final DateTime? endDate;
+  final double? verticalLineAt;
 
   List<FlSpot> convertPoints(points) {
     List<FlSpot> pointsOut = [];
@@ -346,8 +368,10 @@ class LineChartWrapper extends StatelessWidget {
         spots: convertPoints(points),
         maxPair: getMaxPoint(points),
         minPair: getMinPoint(points),
-        color: Theme.of(context).colorScheme.primary,
+        color: color == null ? Theme.of(context).colorScheme.primary : color!,
         isCurved: isCurved,
+        endDate: endDate,
+        verticalLineAt: verticalLineAt,
       ),
     );
   }

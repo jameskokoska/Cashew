@@ -11,6 +11,7 @@ import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
@@ -103,8 +104,8 @@ class _BudgetPageState extends State<BudgetPage> {
                   ),
                 );
               });
-              return SliverList(
-                delegate: SliverChildListDelegate([
+              return SliverToBoxAdapter(
+                child: Column(children: [
                   Transform.translate(
                     offset: Offset(0, -20),
                     child: WidgetSize(
@@ -245,27 +246,102 @@ class _BudgetPageState extends State<BudgetPage> {
           },
         ),
         SliverToBoxAdapter(
-          child: selectedCategoryPk != -1
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                      left: 13, right: 15, top: 5, bottom: 15),
-                  child: Center(
-                    child: TextFont(
-                      text: "Showing transactions from selected category",
-                      maxLines: 10,
-                      textAlign: TextAlign.center,
-                      fontSize: 14,
-                      textColor: Theme.of(context).colorScheme.textLight,
-                      // fontWeight: FontWeight.bold,
+          child: AnimatedSize(
+            duration: Duration(milliseconds: 300),
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: selectedCategoryPk != -1
+                  ? Padding(
+                      key: ValueKey(1),
+                      padding: const EdgeInsets.only(
+                          left: 13, right: 15, top: 5, bottom: 15),
+                      child: Center(
+                        child: TextFont(
+                          text: "Showing transactions from selected category",
+                          maxLines: 10,
+                          textAlign: TextAlign.center,
+                          fontSize: 14,
+                          textColor: Theme.of(context).colorScheme.textLight,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      key: ValueKey(0),
+                    ),
+            ),
+          ),
+        ),
+        StreamBuilder<List<Transaction>>(
+          stream: database.getTransactionsInTimeRangeFromCategories(
+            budgetRange.start,
+            budgetRange.end,
+            [],
+            true,
+            true,
+            false,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              bool cumulative = appStateSettings["showCumulativeSpending"];
+              double cumulativeTotal = 0;
+              List<Pair> points = [];
+              for (DateTime indexDay = budgetRange.start;
+                  indexDay.compareTo(budgetRange.end) <= 0;
+                  indexDay = indexDay.add(Duration(days: 1))) {
+                //can be optimized...
+                double totalForDay = 0;
+                for (Transaction transaction in snapshot.data!) {
+                  // if (selectedSlidingSelector == 3 &&
+                  //     transaction.income == false) {
+                  //   continue;
+                  // }
+                  // if (selectedSlidingSelector == 2 &&
+                  //     transaction.income == true) {
+                  //   continue;
+                  // }
+                  if (selectedCategoryPk == -1 ||
+                      transaction.categoryFk == selectedCategoryPk) if (indexDay
+                              .year ==
+                          transaction.dateCreated.year &&
+                      indexDay.month == transaction.dateCreated.month &&
+                      indexDay.day == transaction.dateCreated.day) {
+                    totalForDay += transaction.amount;
+                  }
+                }
+                cumulativeTotal += totalForDay;
+                points.add(Pair(points.length.toDouble(),
+                    cumulative ? cumulativeTotal : totalForDay));
+              }
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 13),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10, right: 5),
+                    child: LineChartWrapper(
+                      endDate: budgetRange.end,
+                      points: points,
+                      isCurved: true,
+                      color: budgetColorScheme.primary,
+                      verticalLineAt:
+                          (budgetRange.end.difference(DateTime.now()).inDays)
+                              .toDouble(),
                     ),
                   ),
-                )
-              : SizedBox(),
+                ),
+              );
+            }
+            return SliverToBoxAdapter();
+          },
         ),
-        ...getTransactionsSlivers(budgetRange.start, budgetRange.end,
-            categoryFks: selectedCategoryPk != -1
-                ? [selectedCategoryPk]
-                : widget.budget.categoryFks ?? []),
+        ...getTransactionsSlivers(
+          budgetRange.start,
+          budgetRange.end,
+          categoryFks: selectedCategoryPk != -1
+              ? [selectedCategoryPk]
+              : widget.budget.categoryFks ?? [],
+          income: false,
+        ),
         SliverToBoxAdapter(child: SizedBox(height: 100))
       ],
     );

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/autoTransactionsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/colorsPage.dart';
@@ -81,6 +82,11 @@ class SettingsPageState extends State<SettingsPage>
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
+        SettingsContainerOpenPage(
+          openPage: AboutPage(),
+          title: "About Budget App",
+          icon: Icons.info_outline_rounded,
+        ),
         SettingsHeader(title: "Data"),
         // SettingsContainerOpenPage(
         //   openPage: ColorsPage(),

@@ -52,6 +52,7 @@ class HomePageState extends State<HomePage>
   late ScrollController _scrollController;
   late AnimationController _animationControllerHeader;
   late AnimationController _animationControllerHeader2;
+  int selectedSlidingSelector = 1;
 
   void initState() {
     super.initState();
@@ -286,20 +287,24 @@ class HomePageState extends State<HomePage>
           ),
           StreamBuilder<List<Transaction>>(
             stream: database.getTransactionsInTimeRangeFromCategories(
-              DateTime(
-                DateTime.now().year,
-                DateTime.now().month - 1,
-                DateTime.now().day,
-              ),
-              DateTime(
-                DateTime.now().year,
-                DateTime.now().month,
-                DateTime.now().day,
-              ),
-              [],
-              true,
-              true,
-            ),
+                DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month - 1,
+                  DateTime.now().day,
+                ),
+                DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                ),
+                [],
+                true,
+                true,
+                selectedSlidingSelector == 2
+                    ? false
+                    : selectedSlidingSelector == 3
+                        ? true
+                        : null),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 bool cumulative = appStateSettings["showCumulativeSpending"];
@@ -314,13 +319,13 @@ class HomePageState extends State<HomePage>
                     indexDay = indexDay.add(Duration(days: 1))) {
                   //can be optimized...
                   double totalForDay = 0;
-                  snapshot.data!.forEach((transaction) {
+                  for (Transaction transaction in snapshot.data!) {
                     if (indexDay.year == transaction.dateCreated.year &&
                         indexDay.month == transaction.dateCreated.month &&
                         indexDay.day == transaction.dateCreated.day) {
                       totalForDay += transaction.amount;
                     }
-                  });
+                  }
                   cumulativeTotal += totalForDay;
                   points.add(Pair(points.length.toDouble(),
                       cumulative ? cumulativeTotal : totalForDay));
@@ -348,15 +353,27 @@ class HomePageState extends State<HomePage>
             },
           ),
           SliverToBoxAdapter(
-            child: SlidingSelector(),
+            child: SlidingSelector(onSelected: (index) {
+              setState(() {
+                selectedSlidingSelector = index;
+              });
+            }),
           ),
           SliverToBoxAdapter(
             child: Container(height: 4),
           ),
           ...getTransactionsSlivers(
-              DateTime(DateTime.now().year, DateTime.now().month - 1,
-                  DateTime.now().day),
-              DateTime.now()),
+              DateTime(
+                DateTime.now().year,
+                DateTime.now().month - 1,
+                DateTime.now().day,
+              ),
+              DateTime.now(),
+              income: selectedSlidingSelector == 1
+                  ? null
+                  : selectedSlidingSelector == 2
+                      ? false
+                      : true),
           SliverToBoxAdapter(
             child: Container(height: 7),
           ),
@@ -393,18 +410,23 @@ class HomePageState extends State<HomePage>
 }
 
 class SlidingSelector extends StatefulWidget {
-  const SlidingSelector({Key? key}) : super(key: key);
+  const SlidingSelector({
+    Key? key,
+    required this.onSelected,
+  }) : super(key: key);
+
+  final Function(int) onSelected;
 
   @override
   State<SlidingSelector> createState() => _SlidingSelectorState();
 }
 
 class _SlidingSelectorState extends State<SlidingSelector> {
-  int selectedTab = 0;
+  int selectedTab = 1;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 13),
       child: CustomSlidingSegmentedControl<int>(
         innerPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         initialValue: 1,
@@ -431,11 +453,11 @@ class _SlidingSelectorState extends State<SlidingSelector> {
         },
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.lightDarkAccent,
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(15),
         ),
         thumbDecoration: BoxDecoration(
           color: Theme.of(context).colorScheme.white,
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -451,6 +473,7 @@ class _SlidingSelectorState extends State<SlidingSelector> {
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOut,
         onValueChanged: (index) {
+          widget.onSelected(index);
           setState(() {
             selectedTab = index;
           });
