@@ -325,9 +325,32 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       _noteInputController = new TextEditingController();
 
       Future.delayed(Duration(milliseconds: 0), () {
-        final next = PopupFramework(
-          title: "Select Category",
-          child: SelectCategory(
+        openBottomSheet(
+            context,
+            appStateSettings["askForTransactionTitle"]
+                ? PopupFramework(
+                    child: SelectTitle(
+                      setSelectedTitle: setSelectedTitleController,
+                      setSelectedTags: setSelectedTags,
+                      selectedCategory: selectedCategory,
+                      setSelectedCategory: setSelectedCategory,
+                      next: () {
+                        openBottomSheet(context, afterSetTitle());
+                      },
+                    ),
+                  )
+                : afterSetTitle(),
+            snap: appStateSettings["askForTransactionTitle"] != true);
+      });
+    }
+  }
+
+  Widget afterSetTitle() {
+    return PopupFramework(
+      title: "Select Category",
+      child: Column(
+        children: [
+          SelectCategory(
             selectedCategory: selectedCategory,
             setSelectedCategory: setSelectedCategory,
             skipIfSet: true,
@@ -350,25 +373,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               );
             },
           ),
-        );
-        openBottomSheet(
-            context,
-            appStateSettings["askForTransactionTitle"]
-                ? PopupFramework(
-                    child: SelectTitle(
-                      setSelectedTitle: setSelectedTitleController,
-                      setSelectedTags: setSelectedTags,
-                      selectedCategory: selectedCategory,
-                      setSelectedCategory: setSelectedCategory,
-                      next: () {
-                        openBottomSheet(context, next);
-                      },
-                    ),
-                  )
-                : next,
-            snap: appStateSettings["askForTransactionTitle"] != true);
-      });
-    }
+          selectedCategory != null
+              ? CategoryIcon(
+                  categoryPk: 0,
+                  size: 50,
+                  category: selectedCategory,
+                )
+              : Container()
+        ],
+      ),
+    );
   }
 
   updateInitial() async {
@@ -806,6 +820,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             openBottomSheet(
                               context,
                               PopupFramework(
+                                title: "Enter Amount",
                                 child: SelectAmount(
                                   amountPassed: selectedAmountCalculation ?? "",
                                   setSelectedAmount: setSelectedAmount,
@@ -1092,14 +1107,79 @@ class _SelectTitleState extends State<SelectTitle> {
                         widget.next!();
                       }
                     },
-                    onChanged: (text) {
+                    onChanged: (text) async {
                       input = text;
                       widget.setSelectedTitle(input!);
+
+                      List<TransactionAssociatedTitle> foundTitles =
+                          (await database.getAssociatedTitles(text));
+
+                      int categoryFk = -1;
+                      for (TransactionAssociatedTitle title in foundTitles) {
+                        if (text.contains(title.title)) {
+                          categoryFk = title.categoryFk;
+                          break;
+                        }
+                      }
+
+                      if (categoryFk != -1 && categoryFk != 0) {
+                        TransactionCategory? foundCategory =
+                            await database.getCategoryInstance(categoryFk);
+                        Future.delayed(Duration(milliseconds: 70), () {
+                          bottomSheetControllerGlobal.snapToExtent(0);
+                        });
+                        setState(() {
+                          selectedCategory = foundCategory;
+                        });
+                      } else {
+                        setState(() {
+                          selectedCategory = null;
+                        });
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          bottomSheetControllerGlobal.snapToExtent(0);
+                        });
+                      }
                     },
                     labelText: "Title",
                     padding: EdgeInsets.zero,
                   ),
                 ),
+                AnimatedSize(
+                  duration: Duration(milliseconds: 200),
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200),
+                    child: selectedCategory == null
+                        ? Container(
+                            key: ValueKey(0),
+                            width: MediaQuery.of(context).size.width - 36,
+                          )
+                        : Container(
+                            key: ValueKey(1),
+                            width: MediaQuery.of(context).size.width - 36,
+                            child: Row(
+                              children: [
+                                Tappable(
+                                  color: Colors.transparent,
+                                  onTap: () {
+                                    widget
+                                        .setSelectedCategory(selectedCategory!);
+                                  },
+                                  child: CategoryIcon(
+                                    categoryPk: 0,
+                                    size: 40,
+                                    category: selectedCategory,
+                                  ),
+                                ),
+                                TextFont(
+                                  text: selectedCategory!.name,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                )
+                              ],
+                            ),
+                          ),
+                  ),
+                )
               ],
             ),
           ],

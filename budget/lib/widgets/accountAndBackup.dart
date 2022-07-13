@@ -229,7 +229,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           Navigator.of(context).pop();
           openPopup(
             context,
-            description: "Please Restart the Application",
+            title: "Please Restart the Application",
             barrierDismissible: false,
             icon: Icons.restart_alt_rounded,
           );

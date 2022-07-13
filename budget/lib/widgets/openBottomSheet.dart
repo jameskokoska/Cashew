@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
+late SheetController bottomSheetControllerGlobal;
 // Set snap to false if there is a keyboard
 openBottomSheet(context, child,
     {bool maxHeight: true, bool snap: true, bool resizeForKeyboard: true}) {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
+  bottomSheetControllerGlobal = new SheetController();
   showSlidingBottomSheet(context,
       resizeToAvoidBottomInset: resizeForKeyboard,
       bottomPaddingColor: Theme.of(context).colorScheme.lightDarkAccent,
       builder: (context) {
     return SlidingSheetDialog(
+      controller: bottomSheetControllerGlobal,
       elevation: 0,
       isBackdropInteractable: true,
       dismissOnBackdropTap: true,

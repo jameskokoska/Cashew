@@ -737,6 +737,14 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Future<List<TransactionAssociatedTitle>> getAssociatedTitles(String search,
+      {int? limit, int? offset}) {
+    return (select(associatedTitles)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .get();
+  }
+
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
       int categoryFk,
       {int? limit,

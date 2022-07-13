@@ -72,6 +72,8 @@ class TextInput extends StatelessWidget {
         ),
         child: Center(
           child: TextFormField(
+            //incognito keyboard
+            enableIMEPersonalizedLearning: false,
             scrollPadding: EdgeInsets.only(bottom: 80),
             focusNode: focusNode,
             keyboardType: keyboardType != null
