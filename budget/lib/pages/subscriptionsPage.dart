@@ -73,7 +73,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
       ),
       dragDownToDismiss: true,
       title: "Subscriptions",
-      navbar: true,
+      navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       slivers: [
@@ -232,7 +232,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
               return SliverToBoxAdapter();
             }
           },
-        )
+        ),
+        // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+        SliverToBoxAdapter(
+          child: Container(height: 70, color: Theme.of(context).canvasColor),
+        ),
       ],
     );
   }

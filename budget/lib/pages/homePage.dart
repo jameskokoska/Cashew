@@ -548,6 +548,7 @@ class UpcomingTransactions extends StatelessWidget {
       child: OpenContainerNavigation(
         closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
         openPage: PageFramework(
+          navbar: false,
           title: overdueTransactions ? "Overdue" : "Upcoming",
           dragDownToDismiss: true,
           slivers: [

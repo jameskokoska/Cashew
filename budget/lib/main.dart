@@ -7,6 +7,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
@@ -254,7 +255,9 @@ class App extends StatelessWidget {
       ),
       scrollBehavior: ScrollBehavior(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
-      home: PageNavigationFramework(key: pageNavigationFrameworkKey),
+      home: true
+          ? OnBoardingPage()
+          : PageNavigationFramework(key: pageNavigationFrameworkKey),
     );
   }
 }

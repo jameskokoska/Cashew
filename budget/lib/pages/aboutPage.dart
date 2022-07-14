@@ -15,7 +15,7 @@ class AboutPage extends StatelessWidget {
     return PageFramework(
       dragDownToDismiss: true,
       title: "About",
-      navbar: true,
+      navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
@@ -96,7 +96,26 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        Container(height: 5),
+        Container(height: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          child: Center(
+            child: TextFont(
+              text: "Graphics",
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        AboutInfoBox(
+          title: "Icons from FlatIcon by FreePik",
+          link: "https://www.flaticon.com/",
+        ),
+        AboutInfoBox(
+          title: "Landing graphics by pch-vector",
+          link: "https://www.freepik.com/author/pch-vector",
+        ),
+        Container(height: 15),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
           child: Center(
@@ -148,6 +167,7 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(height: 30),
       ],
     );
   }
