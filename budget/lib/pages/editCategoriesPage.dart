@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
@@ -124,11 +125,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                 if (snapshot.hasData && snapshot.data != null) {
                                   return TextFont(
                                     textAlign: TextAlign.left,
-                                    text: snapshot.data![0] == 1
-                                        ? (snapshot.data![0].toString() +
-                                            " transaction")
-                                        : (snapshot.data![0].toString() +
-                                            " transactions"),
+                                    text: snapshot.data![0].toString() +
+                                        pluralString(snapshot.data![0] == 1,
+                                            " transaction"),
                                     fontSize: 14,
                                     textColor: Theme.of(context)
                                         .colorScheme

@@ -112,9 +112,8 @@ class CategoryEntry extends StatelessWidget {
                       height: 1,
                     ),
                     TextFont(
-                      text: transactionCount == 1
-                          ? transactionCount.toString() + " transaction"
-                          : transactionCount.toString() + " transactions",
+                      text: transactionCount.toString() +
+                          pluralString(transactionCount == 1, " transaction"),
                       fontSize: 15,
                       textColor: Theme.of(context).colorScheme.textLight,
                     )

@@ -130,11 +130,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                             if (snapshot.hasData && snapshot.data != null) {
                               return TextFont(
                                 textAlign: TextAlign.left,
-                                text: snapshot.data![0] == 1
-                                    ? (snapshot.data![0].toString() +
-                                        " transaction")
-                                    : (snapshot.data![0].toString() +
-                                        " transactions"),
+                                text: snapshot.data![0].toString() +
+                                    pluralString(
+                                        snapshot.data![0] == 1, " transaction"),
                                 fontSize: 14,
                                 textColor: Theme.of(context)
                                     .colorScheme

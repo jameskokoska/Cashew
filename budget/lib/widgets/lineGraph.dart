@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';

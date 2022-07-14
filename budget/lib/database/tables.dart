@@ -9,6 +9,8 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
+int schemaVersionGlobal = 9;
+
 // Generate database code
 // flutter packages pub run build_runner build
 
@@ -202,7 +204,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // you should bump this number whenever you change or add a table definition
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => schemaVersionGlobal;
 
   @override
   MigrationStrategy get migration =>
@@ -737,7 +739,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  Future<List<TransactionAssociatedTitle>> getAssociatedTitles(String search,
+  Future<List<TransactionAssociatedTitle>> getAllAssociatedTitles(
       {int? limit, int? offset}) {
     return (select(associatedTitles)
           ..orderBy([(t) => OrderingTerm.asc(t.order)])
@@ -857,6 +859,14 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Future<List<TransactionCategory>> getAllCategories(
+      {int? limit, int? offset}) {
+    return (select(categories)
+          ..orderBy([(c) => OrderingTerm.asc(c.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .get();
   }
 
   Future getAmountOfCategories() async {

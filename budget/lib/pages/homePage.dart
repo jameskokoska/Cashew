@@ -323,7 +323,11 @@ class HomePageState extends State<HomePage>
                     if (indexDay.year == transaction.dateCreated.year &&
                         indexDay.month == transaction.dateCreated.month &&
                         indexDay.day == transaction.dateCreated.day) {
-                      totalForDay += transaction.amount;
+                      if (transaction.income) {
+                        totalForDay += transaction.amount.abs();
+                      } else {
+                        totalForDay -= transaction.amount.abs();
+                      }
                     }
                   }
                   cumulativeTotal += totalForDay;
@@ -592,7 +596,8 @@ class UpcomingTransactions extends StatelessWidget {
                                     snapshot.data![0] == null
                                 ? "/"
                                 : snapshot.data![0].toString() +
-                                    " transactions",
+                                    pluralString(
+                                        snapshot.data![0] == 1, " transaction"),
                             fontSize: 15,
                             textColor: Theme.of(context).colorScheme.textLight,
                           );
@@ -718,7 +723,9 @@ class UpcomingTransactions extends StatelessWidget {
                           text: snapshot.hasData == false ||
                                   snapshot.data![0] == null
                               ? "/"
-                              : snapshot.data![0].toString() + " transactions",
+                              : snapshot.data![0].toString() +
+                                  pluralString(
+                                      snapshot.data![0] == 1, " transaction"),
                           fontSize: 15,
                           textColor: Theme.of(context).colorScheme.textLight,
                         );

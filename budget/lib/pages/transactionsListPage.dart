@@ -8,6 +8,7 @@ import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -23,148 +24,9 @@ import 'package:budget/main.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'dart:math';
-import 'package:sliver_tools/sliver_tools.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-// List<Widget> getTransactionsSlivers({
-//   search = "",
-//   List<int> categoryFks = const [],
-//   DateTime? startDay,
-//   DateTime? endDay,
-// }) {
-//   List<Widget> transactionsWidgets = [];
-
-// database.getDatesOfTransaction(search: "").listen((data) {
-//   data.forEach((DateTime? date) {
-//     if (date != null) {
-//       transactionsWidgets.insert(
-//         0,
-//         StreamBuilder<List<TransactionWithCategory>>(
-//           stream: database.getTransactionCategoryWithDay(date,
-//               search: search, categoryFks: categoryFks),
-//           builder: (context, snapshot) {
-//             if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-//               double totalSpentForDay = 0;
-//               snapshot.data!.forEach((transaction) {
-//                 totalSpentForDay += transaction.transaction.amount;
-//               });
-//               return SliverStickyHeader(
-//                 header: DateDivider(
-//                     date: date,
-//                     info: snapshot.data!.length > 1
-//                         ? convertToMoney(totalSpentForDay)
-//                         : ""),
-//                 sticky: true,
-//                 sliver: SliverList(
-//                   delegate: SliverChildBuilderDelegate(
-//                     (BuildContext context, int index) {
-//                       return TransactionEntry(
-//                         category: snapshot.data![index].category,
-//                         openPage: AddTransactionPage(
-//                           title: "Edit Transaction",
-//                           transaction: snapshot.data![index].transaction,
-//                         ),
-//                         transaction: snapshot.data![index].transaction,
-//                       );
-//                     },
-//                     childCount: snapshot.data?.length,
-//                   ),
-//                 ),
-//               );
-//             }
-//             return SliverToBoxAdapter(child: SizedBox());
-//           },
-//         ),
-//       );
-//     }
-//   });
-// });
-// List<Widget> transactionsWidgets = [];
-// return [
-//   StreamBuilder<List<Transaction>>(
-//     stream: database.watchAllTransactions(),
-//     builder: (context, snapshot) {
-//       if (snapshot.hasData) {
-//         List<Widget> transactionsWidgets = [];
-//         if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-//           for (int index = 0; index < snapshot.data!.length; index++) {
-//             Transaction transaction = snapshot.data![index];
-//             DateTime currentDay = DateTime(transaction.dateCreated.year,
-//                 transaction.dateCreated.month, transaction.dateCreated.day);
-//           }
-//         }
-//         return SliverToBoxAdapter(child: SizedBox());
-//         snapshot.data!.forEach((Transaction transaction) {
-//           {
-//             double totalSpentForDay = 0;
-//             snapshot.data!.forEach((transaction) {
-//               totalSpentForDay += transaction.transaction.amount;
-//             });
-//           }
-//         });
-//       }
-//       return SliverToBoxAdapter(child: SizedBox());
-//     },
-//   ),
-// ];
-// return [
-//   StreamBuilder<List<DateTime?>>(
-//     stream: database.getDatesOfTransaction(search: ""),
-//     builder: (context, snapshot) {
-//       if (snapshot.hasData) {
-//         List<Widget> transactionsWidgets = [];
-//         snapshot.data!.forEach((DateTime? date) {
-//           if (date != null) {
-//             transactionsWidgets.add(
-//               StreamBuilder<List<TransactionWithCategory>>(
-//                 stream: database.getTransactionCategoryWithDay(date,
-//                     search: search, categoryFks: categoryFks),
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-//                     double totalSpentForDay = 0;
-//                     snapshot.data!.forEach((transaction) {
-//                       totalSpentForDay += transaction.transaction.amount;
-//                     });
-//                     return SliverStickyHeader(
-//                       header: DateDivider(
-//                           date: date,
-//                           info: snapshot.data!.length > 1
-//                               ? convertToMoney(totalSpentForDay)
-//                               : ""),
-//                       sticky: true,
-//                       sliver: SliverList(
-//                         delegate: SliverChildBuilderDelegate(
-//                           (BuildContext context, int index) {
-//                             return TransactionEntry(
-//                               category: snapshot.data![index].category,
-//                               openPage: AddTransactionPage(
-//                                 title: "Edit Transaction",
-//                                 transaction:
-//                                     snapshot.data![index].transaction,
-//                               ),
-//                               transaction: snapshot.data![index].transaction,
-//                             );
-//                           },
-//                           childCount: snapshot.data?.length,
-//                         ),
-//                       ),
-//                     );
-//                   }
-//                   return SliverToBoxAdapter(child: SizedBox());
-//                 },
-//               ),
-//             );
-//           }
-//         });
-//       }
-//       return SliverToBoxAdapter(child: SizedBox());
-//     },
-//   ),
-// ];
-
-//   return transactionsWidgets;
-// }
 
 List<Widget> getTransactionsSlivers(
   DateTime startDay,
@@ -353,66 +215,6 @@ class TransactionsListPageState extends State<TransactionsListPage>
       openPage: TransactionsSearchPage(),
     );
 
-    // return Listener(
-    //   onPointerMove: (ptr) => {_onPointerMove(ptr)},
-    //   onPointerUp: (ptr) => {_onPointerUp(ptr)},
-    //   behavior: HitTestBehavior.opaque,
-    //   child: AnimatedBuilder(
-    //     animation: _animationControllerDragX,
-    //     builder: (_, child) {
-    //       return Transform.translate(
-    //         offset: Offset((-0.5 + _animationControllerDragX.value) * 100, 0),
-    //         child: PageFramework(
-    //           onScroll: _onScroll,
-    //           title: "Transactions",
-    //           backButton: false,
-    //           slivers: [
-    //             SliverToBoxAdapter(
-    //               child: Padding(
-    //                 padding:
-    //                     const EdgeInsets.only(left: 18, right: 18, bottom: 7),
-    //                 child: OpenContainerNavigation(
-    //                   borderRadius: 10,
-    //                   button: (openContainer) {
-    //                     return FakeTextInput(
-    //                       onTap: openContainer,
-    //                       label: "Search...",
-    //                       icon: Icons.search_rounded,
-    //                       edgeInsetsVertical:
-    //                           MediaQuery.of(context).padding.top - 21 <= 15
-    //                               ? MediaQuery.of(context).padding.top - 21
-    //                               : 15,
-    //                       backgroundColor:
-    //                           Theme.of(context).colorScheme.secondaryContainer,
-    //                     );
-    //                   },
-    //                   openPage: TransactionsSearchPage(),
-    //                 ),
-    //               ),
-    //             ),
-    //             SliverToBoxAdapter(
-    //               child: MonthSelector(
-    //                 key: monthSelectorStateKey,
-    //                 selectedDateStart: selectedDateStart,
-    //                 setSelectedDateStart: (DateTime currentDateTime) {
-    //                   setState(() {
-    //                     selectedDateStart = currentDateTime;
-    //                     _loadNewTransactions();
-    //                   });
-    //                 },
-    //               ),
-    //             ),
-    //             SliverToBoxAdapter(
-    //               child: SizedBox(height: 15),
-    //             ),
-    //             ...transactionWidgets,
-    //           ],
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
-
     return GestureDetector(
       onTap: () {
         //Minimize keyboard when tap non interactive widget
@@ -492,6 +294,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
                             selectedDateStart = currentDateTime;
                             _loadNewTransactions();
                           });
+                          transactionsListPageStateKey.currentState!
+                              .scrollToTop();
                         },
                       ),
                       SizedBox(
@@ -533,29 +337,14 @@ class TransactionsListPageState extends State<TransactionsListPage>
                             1;
                     monthSelectorStateKey.currentState!
                         .scrollTo(middle - difference * 100 + 100);
+                    transactionsListPageStateKey.currentState!.scrollToTop();
                   }
                 },
                 children: <Widget>[
                   LoadingShimmer(),
-                  // Container(),
                   CustomScrollView(
-                    // controller: _scrollController,
                     slivers: [
-                      // SliverOverlapInjector(
-                      //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                      //       context2),
-                      // ),
-                      // SliverAppBar(
-                      //   title: Text("hello"),
-                      //   pinned: true,
-                      //   expandedHeight: 100,
-                      //   toolbarHeight: 100,
-                      // ),
-
-                      //Needed in older version of flutter:
-                      // SliverToBoxAdapter(),
                       ...transactionWidgets,
-
                       // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                       SliverToBoxAdapter(
                         child: Container(

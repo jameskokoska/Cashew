@@ -27,6 +27,9 @@ extension CapExtension on String {
 }
 
 String convertToMoney(double amount) {
+  if (amount == -0.0) {
+    amount = amount.abs();
+  }
   final currency = new NumberFormat("#,##0.00", "en_US");
   String formatOutput = currency.format(amount);
   if (formatOutput.substring(formatOutput.length - 2) == "00") {
@@ -401,4 +404,11 @@ List<BoxShadow> boxShadow(context) {
       spreadRadius: 8,
     ),
   ];
+}
+
+String pluralString(bool condition, String string) {
+  if (condition)
+    return string + "s";
+  else
+    return string;
 }

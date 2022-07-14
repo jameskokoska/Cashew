@@ -1062,7 +1062,9 @@ class SelectTitle extends StatefulWidget {
 class _SelectTitleState extends State<SelectTitle> {
   int selectedIndex = 0;
   String? input = "";
+  bool foundFromCategory = false;
   TransactionCategory? selectedCategory;
+  TransactionAssociatedTitle? selectedAssociatedTitle;
 
   @override
   void initState() {
@@ -1102,6 +1104,9 @@ class _SelectTitleState extends State<SelectTitle> {
                       //if selected a tag and a category is set, then go to enter amount
                       //else enter amount
                       widget.setSelectedTitle(input ?? "");
+                      if (selectedCategory != null) {
+                        widget.setSelectedCategory(selectedCategory!);
+                      }
                       Navigator.pop(context);
                       if (widget.next != null) {
                         widget.next!();
@@ -1111,31 +1116,63 @@ class _SelectTitleState extends State<SelectTitle> {
                       input = text;
                       widget.setSelectedTitle(input!);
 
-                      List<TransactionAssociatedTitle> foundTitles =
-                          (await database.getAssociatedTitles(text));
+                      List<TransactionAssociatedTitle> allTitles =
+                          (await database.getAllAssociatedTitles());
 
                       int categoryFk = -1;
-                      for (TransactionAssociatedTitle title in foundTitles) {
-                        if (text.contains(title.title)) {
+                      late TransactionAssociatedTitle selectedTitleLocal;
+                      for (TransactionAssociatedTitle title in allTitles) {
+                        if (text
+                            .toLowerCase()
+                            .contains(title.title.toLowerCase())) {
                           categoryFk = title.categoryFk;
+                          selectedTitleLocal = title;
                           break;
+                        }
+                      }
+
+                      bool foundFromCategoryLocal = false;
+                      if (categoryFk == -1) {
+                        List<TransactionCategory> allCategories =
+                            (await database.getAllCategories());
+                        for (TransactionCategory category in allCategories) {
+                          if (text
+                              .toLowerCase()
+                              .contains(category.name.toLowerCase())) {
+                            categoryFk = category.categoryPk;
+                            selectedTitleLocal = TransactionAssociatedTitle(
+                              associatedTitlePk: 0,
+                              title: category.name,
+                              categoryFk: category.categoryPk,
+                              dateCreated: category.dateCreated,
+                              order: category.order,
+                              isExactMatch: false,
+                            );
+                            foundFromCategoryLocal = true;
+
+                            break;
+                          }
                         }
                       }
 
                       if (categoryFk != -1 && categoryFk != 0) {
                         TransactionCategory? foundCategory =
                             await database.getCategoryInstance(categoryFk);
-                        Future.delayed(Duration(milliseconds: 70), () {
+                        Future.delayed(Duration(milliseconds: 0), () {
                           bottomSheetControllerGlobal.snapToExtent(0);
                         });
                         setState(() {
                           selectedCategory = foundCategory;
+                          selectedAssociatedTitle = selectedTitleLocal;
+                          foundFromCategory = foundFromCategoryLocal;
                         });
                       } else {
                         setState(() {
                           selectedCategory = null;
+                          selectedAssociatedTitle = null;
+                          foundFromCategory = foundFromCategoryLocal;
                         });
-                        Future.delayed(Duration(milliseconds: 300), () {
+                        Future.delayed(Duration(milliseconds: 100), () {
                           bottomSheetControllerGlobal.snapToExtent(0);
                         });
                       }
@@ -1145,37 +1182,57 @@ class _SelectTitleState extends State<SelectTitle> {
                   ),
                 ),
                 AnimatedSize(
-                  duration: Duration(milliseconds: 200),
+                  duration: Duration(milliseconds: 150),
                   child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200),
+                    duration: Duration(milliseconds: 250),
                     child: selectedCategory == null
                         ? Container(
                             key: ValueKey(0),
                             width: MediaQuery.of(context).size.width - 36,
                           )
                         : Container(
-                            key: ValueKey(1),
+                            key: ValueKey(selectedCategory!.categoryPk),
                             width: MediaQuery.of(context).size.width - 36,
-                            child: Row(
-                              children: [
-                                Tappable(
-                                  color: Colors.transparent,
-                                  onTap: () {
-                                    widget
-                                        .setSelectedCategory(selectedCategory!);
-                                  },
-                                  child: CategoryIcon(
+                            padding: EdgeInsets.only(top: 13),
+                            child: Tappable(
+                              borderRadius: 15,
+                              color: Colors.transparent,
+                              onTap: () {
+                                widget.setSelectedCategory(selectedCategory!);
+                                Navigator.pop(context);
+                                if (widget.next != null) {
+                                  widget.next!();
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  CategoryIcon(
                                     categoryPk: 0,
                                     size: 40,
                                     category: selectedCategory,
+                                    margin: EdgeInsets.zero,
                                   ),
-                                ),
-                                TextFont(
-                                  text: selectedCategory!.name,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                )
-                              ],
+                                  SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextFont(
+                                        text: selectedCategory!.name,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      !foundFromCategory
+                                          ? TextFont(
+                                              text: selectedAssociatedTitle!
+                                                  .title,
+                                              fontSize: 16,
+                                            )
+                                          : Container(),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                   ),
@@ -1211,7 +1268,7 @@ class _SelectTitleState extends State<SelectTitle> {
         // ),
         Container(height: 20),
         Button(
-          label: selectedCategory == null ? "Select Category" : "Enter Amount",
+          label: "Select Category",
           width: MediaQuery.of(context).size.width,
           height: 50,
           onTap: () {

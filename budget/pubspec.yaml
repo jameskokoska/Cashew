@@ -45,12 +45,12 @@ dependencies:
   csv: ^5.0.1
   sliding_sheet: 
     path: ./sliding_sheet-0.5.2-modified/
-  sliver_tools: ^0.2.6
   shimmer: ^2.0.0
   carousel_slider: ^4.1.1
   # flutter_notification_listener: ^1.3.2
   # installed_apps: ^1.3.1
   custom_sliding_segmented_control: ^1.7.1
+  url_launcher: ^6.1.5
 
 
 dev_dependencies:

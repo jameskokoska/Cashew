@@ -41,6 +41,7 @@ void main() async {
 Random random = new Random();
 int randomInt = random.nextInt(100);
 late bool entireAppLoaded;
+String versionGlobal = "1.0";
 
 Future<bool> updateSettings(setting, value,
     {List<int> pagesNeedingRefresh: const [],

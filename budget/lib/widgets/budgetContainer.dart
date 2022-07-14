@@ -425,11 +425,10 @@ class BudgetProgress extends StatelessWidget {
                                         : lightenPastel(color, amount: 0.6),
                                   ),
                                 ),
-                                percent > 30
-                                    ? getPercentText(Theme.of(context)
-                                        .colorScheme
-                                        .white
-                                        .withOpacity(0.7))
+                                percent > 40
+                                    ? getPercentText(
+                                        darkenPastel(color, amount: 0.6),
+                                      )
                                     : Container(),
                               ],
                             ),
@@ -438,9 +437,12 @@ class BudgetProgress extends StatelessWidget {
                     ),
                   ),
                   percent <= 40
-                      ? getPercentText(large
-                          ? Theme.of(context).colorScheme.textLight
-                          : Theme.of(context).colorScheme.textLightHeavy)
+                      ? getPercentText(
+                          lightenPastel(
+                              dynamicPastel(context, color,
+                                  inverse: true, amount: 0.7),
+                              amount: 0.3),
+                        )
                       : Container(),
                 ],
               ),
