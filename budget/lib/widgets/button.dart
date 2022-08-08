@@ -91,10 +91,14 @@ class ButtonIcon extends StatelessWidget {
     required this.onTap,
     required this.icon,
     this.size = 44,
+    this.color,
+    this.iconColor,
   }) : super(key: key);
   final VoidCallback onTap;
   final IconData icon;
   final double size;
+  final Color? color;
+  final Color? iconColor;
   @override
   Widget build(BuildContext context) {
     return Tappable(
@@ -103,11 +107,15 @@ class ButtonIcon extends StatelessWidget {
         width: size,
         child: Icon(
           icon,
-          color: Theme.of(context).colorScheme.onSecondaryContainer,
+          color: iconColor == null
+              ? Theme.of(context).colorScheme.onSecondaryContainer
+              : iconColor,
           size: size - 20,
         ),
       ),
-      color: Theme.of(context).colorScheme.secondaryContainer,
+      color: color == null
+          ? Theme.of(context).colorScheme.secondaryContainer
+          : color,
       borderRadius: 15,
       onTap: onTap,
     );

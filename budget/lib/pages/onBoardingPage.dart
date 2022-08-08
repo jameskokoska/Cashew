@@ -38,16 +38,22 @@ import 'package:file_picker/file_picker.dart';
 import '../functions.dart';
 
 class OnBoardingPage extends StatelessWidget {
-  const OnBoardingPage({Key? key}) : super(key: key);
+  const OnBoardingPage({Key? key, this.popNavigationWhenDone = false})
+      : super(key: key);
+
+  final bool popNavigationWhenDone;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: OnBoardingPageBody());
+    return Scaffold(
+        body: OnBoardingPageBody(popNavigationWhenDone: popNavigationWhenDone));
   }
 }
 
 class OnBoardingPageBody extends StatefulWidget {
-  const OnBoardingPageBody({Key? key}) : super(key: key);
+  const OnBoardingPageBody({Key? key, this.popNavigationWhenDone = false})
+      : super(key: key);
+  final bool popNavigationWhenDone;
 
   @override
   State<OnBoardingPageBody> createState() => OnBoardingPageBodyState();
@@ -56,10 +62,157 @@ class OnBoardingPageBody extends StatefulWidget {
 class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
   int currentIndex = 0;
 
+  nextNavigation() {
+    if (widget.popNavigationWhenDone) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PageNavigationFramework(
+            key: pageNavigationFrameworkKey,
+          ),
+        ),
+      );
+    }
+    updateSettings("hasOnboarded", true, pagesNeedingRefresh: []);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updateSettings("hasOnboarded", false, pagesNeedingRefresh: []);
+  }
+
   @override
   Widget build(BuildContext context) {
     final PageController controller = PageController();
-    final amountOfPages = 3;
+
+    final List<Widget> children = [
+      OnBoardPage(
+        widgets: [
+          Image(
+            image: AssetImage("assets/landing/DepressedMan.png"),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text: "Losing track of your transactions?",
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              fontSize: 25,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text: "It's important to be mindful of your purchases.",
+              textAlign: TextAlign.center,
+              fontSize: 16,
+              maxLines: 5,
+            ),
+          ),
+        ],
+      ),
+      OnBoardPage(
+        widgets: [
+          Image(
+            image: AssetImage("assets/landing/BankOrPig.png"),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text: "Save money by knowing where your money is going.",
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              fontSize: 25,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text:
+                  "Identify and remove unnecessary spending habits from your life.",
+              textAlign: TextAlign.center,
+              fontSize: 16,
+              maxLines: 5,
+            ),
+          ),
+        ],
+      ),
+      OnBoardPage(
+        widgets: [
+          Image(
+            image: AssetImage("assets/landing/Graph.png"),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text: "Track your spending habits with Budget App!",
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              fontSize: 25,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text: "Create budgets to understand your spending habits.",
+              textAlign: TextAlign.center,
+              fontSize: 16,
+              maxLines: 5,
+            ),
+          ),
+        ],
+      ),
+      OnBoardPage(
+        widgets: [
+          Image(
+            image: AssetImage("assets/landing/PigBank.png"),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text: "Start getting on top of your transactions!",
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              fontSize: 25,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: TextFont(
+              text:
+                  "Track your income, expenses, recurring scubscription transactions, and more!",
+              textAlign: TextAlign.center,
+              fontSize: 16,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 20),
+          IntrinsicWidth(
+            child: Button(
+              label: "Let's go!",
+              onTap: () {
+                nextNavigation();
+              },
+            ),
+          ),
+        ],
+      ),
+    ];
 
     return Stack(
       children: [
@@ -71,15 +224,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
             print(currentIndex);
           },
           controller: controller,
-          children: const <Widget>[
-            OnBoardPage(),
-            Center(
-              child: Text('First Page'),
-            ),
-            Center(
-              child: Text('Second Page'),
-            ),
-          ],
+          children: children,
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -94,37 +239,72 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                 children: [
                   AnimatedOpacity(
                     opacity: currentIndex <= 0 ? 0 : 1,
-                    duration: Duration(milliseconds: 300),
+                    duration: Duration(milliseconds: 200),
                     child: ButtonIcon(
                       onTap: () {
                         controller.previousPage(
-                          duration: Duration(milliseconds: 1500),
-                          curve: ElasticOutCurve(0.9),
+                          duration: Duration(milliseconds: 1100),
+                          curve: ElasticOutCurve(1.3),
                         );
                       },
                       icon: Icons.arrow_back_rounded,
                       size: 45,
                     ),
                   ),
-                  ButtonIcon(
-                    onTap: () {
-                      controller.nextPage(
-                        duration: Duration(milliseconds: 1500),
-                        curve: ElasticOutCurve(0.9),
-                      );
-                      if (currentIndex + 1 == amountOfPages) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PageNavigationFramework(
-                              key: pageNavigationFrameworkKey,
+                  Row(
+                    children: [
+                      ...List<int>.generate(children.length, (i) => i + 1)
+                          .map(
+                            (
+                              index,
+                            ) =>
+                                Builder(
+                              builder: (BuildContext context) => AnimatedScale(
+                                duration: Duration(milliseconds: 900),
+                                scale: index - 1 == currentIndex ? 1.3 : 1,
+                                curve: ElasticOutCurve(0.2),
+                                child: AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 400),
+                                  child: Container(
+                                    key: ValueKey(index - 1 == currentIndex),
+                                    width: 6,
+                                    height: 6,
+                                    margin: EdgeInsets.symmetric(horizontal: 3),
+                                    decoration: BoxDecoration(
+                                      color: index - 1 == currentIndex
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                              .withOpacity(0.7)
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .primaryContainer,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          )
+                          .toList(),
+                    ],
+                  ),
+                  AnimatedOpacity(
+                    opacity: currentIndex >= children.length - 1 ? 0 : 1,
+                    duration: Duration(milliseconds: 200),
+                    child: ButtonIcon(
+                      onTap: () {
+                        controller.nextPage(
+                          duration: Duration(milliseconds: 1100),
+                          curve: ElasticOutCurve(1.3),
                         );
-                      }
-                    },
-                    icon: Icons.arrow_forward_rounded,
-                    size: 45,
+                        if (currentIndex + 1 == children.length) {
+                          nextNavigation();
+                        }
+                      },
+                      icon: Icons.arrow_forward_rounded,
+                      size: 45,
+                    ),
                   ),
                 ],
               ),
@@ -137,27 +317,15 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
 }
 
 class OnBoardPage extends StatelessWidget {
-  const OnBoardPage({Key? key}) : super(key: key);
-
+  const OnBoardPage({Key? key, required this.widgets}) : super(key: key);
+  final List<Widget> widgets;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.3),
-        IntrinsicWidth(
-          child: Button(
-            label: "Launch App!",
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PageNavigationFramework(
-                    key: pageNavigationFrameworkKey,
-                  ),
-                ),
-              );
-            },
-          ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+        Column(
+          children: widgets,
         )
       ],
     );

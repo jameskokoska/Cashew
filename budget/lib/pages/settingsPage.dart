@@ -12,6 +12,7 @@ import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
+import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
@@ -204,6 +205,11 @@ class SettingsPageState extends State<SettingsPage>
           openPage: AutoTransactionsPageEmail(),
           title: "Auto Email Transactions",
           icon: Icons.outgoing_mail,
+        ),
+        SettingsContainerOpenPage(
+          openPage: OnBoardingPage(popNavigationWhenDone: true),
+          title: "View App Intro",
+          icon: Icons.flag_rounded,
         ),
       ],
     );

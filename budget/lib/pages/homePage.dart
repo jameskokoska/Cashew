@@ -417,9 +417,11 @@ class SlidingSelector extends StatefulWidget {
   const SlidingSelector({
     Key? key,
     required this.onSelected,
+    this.alternateTheme = false,
   }) : super(key: key);
 
   final Function(int) onSelected;
+  final bool alternateTheme;
 
   @override
   State<SlidingSelector> createState() => _SlidingSelectorState();
@@ -430,12 +432,14 @@ class _SlidingSelectorState extends State<SlidingSelector> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 13),
+      padding: widget.alternateTheme
+          ? const EdgeInsets.symmetric(horizontal: 20)
+          : const EdgeInsets.symmetric(horizontal: 13),
       child: CustomSlidingSegmentedControl<int>(
         innerPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         initialValue: 1,
         isStretch: true,
-        height: 45,
+        height: widget.alternateTheme ? 33 : 45,
         // splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
         // splashColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
         children: {
@@ -456,12 +460,19 @@ class _SlidingSelectorState extends State<SlidingSelector> {
           ),
         },
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.lightDarkAccent,
+          color: widget.alternateTheme
+              ? Theme.of(context).colorScheme.secondaryContainer
+              : Theme.of(context).colorScheme.lightDarkAccent,
           borderRadius: BorderRadius.circular(15),
         ),
         thumbDecoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.white,
-          borderRadius: BorderRadius.circular(15),
+          color: widget.alternateTheme
+              ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
+                  amountLight: 0.9, amountDark: 0.5)
+              : Theme.of(context).colorScheme.white,
+          borderRadius: widget.alternateTheme
+              ? BorderRadius.circular(10)
+              : BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),

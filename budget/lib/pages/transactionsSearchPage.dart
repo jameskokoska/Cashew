@@ -4,6 +4,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
@@ -47,6 +48,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
   late List<Widget> transactionWidgets = [];
   late AnimationController _animationControllerSearch;
   late List<int> selectedTransactionIDs = [];
+  bool? selectedIncome;
+  String selectedSearch = "";
 
   onSelected(Transaction transaction, bool selected) {
     // print(transaction.transactionPk.toString() + " selected!");
@@ -65,14 +68,17 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     _animationControllerSearch = AnimationController(vsync: this, value: 1);
   }
 
-  searchTransaction(String? search) {
+  searchTransaction(String? search, {bool? income}) {
     setState(() {
+      selectedSearch = search ?? "";
+      selectedIncome = income;
       transactionWidgets = getTransactionsSlivers(
         selectedStartDate,
         selectedEndDate,
         search: search,
         onSelected: onSelected,
         listID: "TransactionsSearch",
+        income: income,
       );
     });
   }
@@ -119,7 +125,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       selectedStartDate = picked!.start;
       selectedEndDate = picked.end;
     });
-    searchTransaction("");
+    searchTransaction("", income: selectedIncome);
   }
 
   @override
@@ -133,6 +139,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         }
       },
       child: PageFramework(
+        navbar: false,
         dragDownToDismiss: true,
         onScroll: _scrollListener,
         title: "Search",
@@ -143,7 +150,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               builder: (_, child) {
                 return Transform.translate(
                   offset:
-                      Offset(0, 10 - 10 * (_animationControllerSearch.value)),
+                      Offset(0, 6.5 - 6.5 * (_animationControllerSearch.value)),
                   child: child,
                 );
               },
@@ -158,9 +165,10 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       bubbly: true,
                       icon: Icons.search_rounded,
                       onSubmitted: (value) {
-                        searchTransaction(value);
+                        searchTransaction(value, income: selectedIncome);
                       },
-                      onChanged: (value) => searchTransaction(value),
+                      onChanged: (value) =>
+                          searchTransaction(value, income: selectedIncome),
                       padding: EdgeInsets.all(0),
                       autoFocus: true,
                     ),
@@ -178,6 +186,23 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
           ),
           SliverToBoxAdapter(
             child: SizedBox(height: 13),
+          ),
+          SliverToBoxAdapter(
+            child: SlidingSelector(
+                onSelected: (index) {
+                  setState(() {
+                    selectedIncome = index == 1
+                        ? null
+                        : index == 2
+                            ? false
+                            : true;
+                  });
+                  searchTransaction(selectedSearch, income: selectedIncome);
+                },
+                alternateTheme: true),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 11),
           ),
           ...transactionWidgets,
         ],

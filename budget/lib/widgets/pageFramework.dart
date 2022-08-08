@@ -30,6 +30,7 @@ class PageFramework extends StatefulWidget {
     this.dragDownToDissmissBackground,
     this.onBackButton,
     this.onDragDownToDissmiss,
+    this.actions,
   }) : super(key: key);
 
   final String title;
@@ -56,6 +57,7 @@ class PageFramework extends StatefulWidget {
   final Color? dragDownToDissmissBackground;
   final VoidCallback? onBackButton;
   final VoidCallback? onDragDownToDissmiss;
+  final List<Widget>? actions;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -221,6 +223,7 @@ class PageFrameworkState extends State<PageFramework>
             animationController0at50: _animationController0at50,
             textColor: widget.textColor,
             onBackButton: widget.onBackButton,
+            actions: widget.actions,
           ),
           ...widget.slivers,
           widget.listWidgets != null

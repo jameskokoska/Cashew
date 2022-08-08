@@ -30,6 +30,9 @@ String convertToMoney(double amount) {
   if (amount == -0.0) {
     amount = amount.abs();
   }
+  if (amount == double.infinity) {
+    return "Infinity";
+  }
   final currency = new NumberFormat("#,##0.00", "en_US");
   String formatOutput = currency.format(amount);
   if (formatOutput.substring(formatOutput.length - 2) == "00") {
@@ -152,12 +155,15 @@ getWordedDateShort(
   DateTime date, {
   includeYear = false,
   showTodayTomorrow = true,
+  newLineYear = false,
 }) {
   if (showTodayTomorrow && checkYesterdayTodayTomorrow(date) != false) {
     return checkYesterdayTodayTomorrow(date);
   }
-  if (includeYear) {
+  if (includeYear && newLineYear) {
     return DateFormat('MMM d\nyyyy').format(date);
+  } else if (includeYear) {
+    return DateFormat('MMM d, yyyy').format(date);
   } else {
     return DateFormat('MMM d').format(date);
   }
@@ -275,7 +281,8 @@ String getWordedNumber(double value) {
 
 double getPercentBetweenDates(DateTimeRange timeRange, DateTime currentTime) {
   int millisecondDifference = timeRange.end.millisecondsSinceEpoch -
-      timeRange.start.millisecondsSinceEpoch;
+      timeRange.start.millisecondsSinceEpoch +
+      Duration(days: 1).inMilliseconds;
   double percent = (currentTime.millisecondsSinceEpoch -
           timeRange.start.millisecondsSinceEpoch) /
       millisecondDifference;
@@ -284,7 +291,7 @@ double getPercentBetweenDates(DateTimeRange timeRange, DateTime currentTime) {
 
 int daysBetween(DateTime from, DateTime to) {
   from = DateTime(from.year, from.month, from.day);
-  to = DateTime(to.year, to.month, to.day);
+  to = DateTime(to.year, to.month, to.day + 1);
   return (to.difference(from).inHours / 24).round();
 }
 

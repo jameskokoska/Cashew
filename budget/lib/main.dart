@@ -92,6 +92,7 @@ Future<Map<String, dynamic>> getUserSettings() async {
     "askForTransactionTitle": true,
     "username": "",
     "AutoTransactions-canReadNotifs": false,
+    "hasOnboarded": false,
   };
 
   final prefs = await SharedPreferences.getInstance();
@@ -255,7 +256,7 @@ class App extends StatelessWidget {
       ),
       scrollBehavior: ScrollBehavior(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
-      home: true
+      home: appStateSettings["hasOnboarded"] != true
           ? OnBoardingPage()
           : PageNavigationFramework(key: pageNavigationFrameworkKey),
     );

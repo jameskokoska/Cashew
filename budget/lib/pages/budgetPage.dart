@@ -3,11 +3,13 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/widgets/budgetContainer.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -15,6 +17,7 @@ import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +26,14 @@ import 'package:flutter/scheduler.dart';
 import 'dart:developer';
 
 class BudgetPage extends StatefulWidget {
-  const BudgetPage({Key? key, required Budget this.budget}) : super(key: key);
+  const BudgetPage({
+    Key? key,
+    required Budget this.budget,
+    this.dateForRange,
+  }) : super(key: key);
 
   final Budget budget;
+  final DateTime? dateForRange;
 
   @override
   State<BudgetPage> createState() => _BudgetPageState();
@@ -37,7 +45,9 @@ class _BudgetPageState extends State<BudgetPage> {
 
   @override
   Widget build(BuildContext context) {
-    DateTimeRange budgetRange = getBudgetDate(widget.budget, DateTime.now());
+    DateTime dateForRange =
+        widget.dateForRange == null ? DateTime.now() : widget.dateForRange!;
+    DateTimeRange budgetRange = getBudgetDate(widget.budget, dateForRange);
     ColorScheme budgetColorScheme = ColorScheme.fromSeed(
       seedColor: HexColor(widget.budget.colour),
       brightness: getSettingConstants(appStateSettings)["theme"] ==
@@ -50,6 +60,22 @@ class _BudgetPageState extends State<BudgetPage> {
                   : Brightness.light,
     );
     return PageFramework(
+      actions: [
+        Container(
+          padding: EdgeInsets.only(top: 12.5, right: 5),
+          child: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PastBudgetsPage(budget: widget.budget),
+                ),
+              );
+            },
+            icon: Icon(Icons.history_rounded),
+          ),
+        ),
+      ],
       title: widget.budget.name,
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
       appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
@@ -124,36 +150,45 @@ class _BudgetPageState extends State<BudgetPage> {
                           children: [
                             widget.budget.amount - totalSpent >= 0
                                 ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                        child: CountUp(
-                                          count:
-                                              widget.budget.amount - totalSpent,
-                                          prefix: getCurrencyString(),
-                                          duration: Duration(milliseconds: 700),
-                                          fontSize: 25,
-                                          textAlign: TextAlign.left,
-                                          fontWeight: FontWeight.bold,
-                                          decimals: moneyDecimals(
-                                              widget.budget.amount),
-                                          textColor: budgetColorScheme
-                                              .onSecondaryContainer,
-                                        ),
-                                      ),
-                                      Container(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 3.8),
-                                        child: TextFont(
-                                          text: " left of " +
-                                              convertToMoney(
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            child: CountUp(
+                                              count: widget.budget.amount -
+                                                  totalSpent,
+                                              prefix: getCurrencyString(),
+                                              duration:
+                                                  Duration(milliseconds: 700),
+                                              fontSize: 25,
+                                              textAlign: TextAlign.left,
+                                              fontWeight: FontWeight.bold,
+                                              decimals: moneyDecimals(
                                                   widget.budget.amount),
-                                          fontSize: 16,
-                                          textAlign: TextAlign.left,
-                                          textColor: budgetColorScheme
-                                              .onSecondaryContainer,
-                                        ),
+                                              textColor: budgetColorScheme
+                                                  .onSecondaryContainer,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 3.8),
+                                            child: TextFont(
+                                              text: " left of " +
+                                                  convertToMoney(
+                                                      widget.budget.amount),
+                                              fontSize: 16,
+                                              textAlign: TextAlign.left,
+                                              textColor: budgetColorScheme
+                                                  .onSecondaryContainer,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   )
@@ -198,13 +233,13 @@ class _BudgetPageState extends State<BudgetPage> {
                               large: true,
                               percent: totalSpent / widget.budget.amount * 100,
                               todayPercent: getPercentBetweenDates(
-                                  budgetRange, DateTime.now()),
+                                  budgetRange, dateForRange),
                             ),
                             Container(height: 15),
                             DaySpending(
                               budget: widget.budget,
                               amount: (widget.budget.amount - totalSpent) /
-                                  daysBetween(DateTime.now(), budgetRange.end),
+                                  daysBetween(dateForRange, budgetRange.end),
                               large: true,
                             ),
                             Container(height: 10),
@@ -324,7 +359,7 @@ class _BudgetPageState extends State<BudgetPage> {
                       isCurved: true,
                       color: budgetColorScheme.primary,
                       verticalLineAt:
-                          (budgetRange.end.difference(DateTime.now()).inDays)
+                          (budgetRange.end.difference(dateForRange).inDays)
                               .toDouble(),
                     ),
                   ),
@@ -342,7 +377,7 @@ class _BudgetPageState extends State<BudgetPage> {
               : widget.budget.categoryFks ?? [],
           income: false,
         ),
-        SliverToBoxAdapter(child: SizedBox(height: 100))
+        SliverToBoxAdapter(child: SizedBox(height: 10))
       ],
     );
   }
