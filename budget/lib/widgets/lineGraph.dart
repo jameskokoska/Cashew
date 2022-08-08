@@ -36,13 +36,29 @@ class _LineChart extends StatefulWidget {
 class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   bool loaded = false;
   double extraHorizontalPadding = 10;
+  List<FlSpot> spots = [];
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration(milliseconds: 0), () {
+      List<FlSpot> initialSpots = [];
+      for (FlSpot spot in widget.spots) {
+        FlSpot currentSpot = FlSpot(
+          spot.x,
+          0,
+        );
+        initialSpots.add(currentSpot);
+      }
       setState(() {
+        spots = initialSpots;
         loaded = true;
+      });
+    });
+    Future.delayed(Duration(milliseconds: 10), () {
+      setState(() {
+        spots = widget.spots;
       });
     });
   }
@@ -265,9 +281,9 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           },
         ),
         isCurved: widget.isCurved,
-        curveSmoothness: 0.83,
+        curveSmoothness: 0.2,
         preventCurveOverShooting: true,
-        preventCurveOvershootingThreshold: 0,
+        preventCurveOvershootingThreshold: 10,
         aboveBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,
@@ -298,7 +314,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               ((widget.maxPair.y).abs()) /
                   ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
-        spots: loaded ? widget.spots : [],
+        spots: loaded ? spots : [],
       );
 }
 

@@ -79,18 +79,18 @@ Future<bool> signInGoogle(context,
 
   try {
     //Check connection
-    isConnected = await checkConnection().timeout(Duration(milliseconds: 2500),
-        onTimeout: () {
-      throw ("There was an error checking your connection");
-    });
-    if (isConnected == false) {
-      if (context != null) {
-        openSnackbar(context, "Could not connect to network",
-            backgroundColor: lightenPastel(Theme.of(context).colorScheme.error,
-                amount: 0.6));
-      }
-      return false;
-    }
+    // isConnected = await checkConnection().timeout(Duration(milliseconds: 2500),
+    //     onTimeout: () {
+    //   throw ("There was an error checking your connection");
+    // });
+    // if (isConnected == false) {
+    //   if (context != null) {
+    //     openSnackbar(context, "Could not connect to network",
+    //         backgroundColor: lightenPastel(Theme.of(context).colorScheme.error,
+    //             amount: 0.6));
+    //   }
+    //   return false;
+    // }
 
     if (waitForCompletion == true) openLoadingPopup(context);
     if (user == null) {
@@ -557,28 +557,34 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           title: user == null ? "Sign-In" : user!.displayName ?? "",
           icon: Icons.account_circle,
         ),
-        SettingsContainer(
-          onTap: () async {
-            await _deleteRecentBackups(10);
-            await _createBackup();
-          },
-          title: "Export Database",
-          icon: Icons.upload_rounded,
-        ),
-        SettingsContainer(
-          onTap: () async {
-            await _chooseBackup();
-          },
-          title: "Import Database",
-          icon: Icons.download_rounded,
-        ),
-        SettingsContainer(
-          onTap: () async {
-            await _chooseBackupFile();
-          },
-          title: "Import From File",
-          icon: Icons.download_rounded,
-        ),
+        user == null
+            ? SizedBox.shrink()
+            : SettingsContainer(
+                onTap: () async {
+                  await _deleteRecentBackups(10);
+                  await _createBackup();
+                },
+                title: "Export Database",
+                icon: Icons.upload_rounded,
+              ),
+        user == null
+            ? SizedBox.shrink()
+            : SettingsContainer(
+                onTap: () async {
+                  await _chooseBackup();
+                },
+                title: "Import Database",
+                icon: Icons.download_rounded,
+              ),
+        user == null
+            ? SizedBox.shrink()
+            : SettingsContainer(
+                onTap: () async {
+                  await _chooseBackupFile();
+                },
+                title: "Import From File",
+                icon: Icons.download_rounded,
+              ),
       ],
     );
   }

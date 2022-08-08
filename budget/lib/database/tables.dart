@@ -930,6 +930,18 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
+  //delete ategory given key
+  Future deleteCategory(int categoryPk) {
+    return (delete(categories)..where((c) => c.categoryPk.equals(categoryPk)))
+        .go();
+  }
+
+  //delete transactions that belong to specific category key
+  Future deleteCategoryTransactions(int categoryPk) {
+    return (delete(transactions)..where((t) => t.categoryFk.equals(categoryPk)))
+        .go();
+  }
+
   //delete wallet given key
   Future deleteWallet(int walletPk) {
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();

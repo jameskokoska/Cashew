@@ -164,8 +164,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         },
                         onCancelLabel: "Cancel",
                         onSubmit: () {
-                          // database.deleteCategory(category.categoryPk);
-                          // database.deleteTransactionWithCategory(category.categoryPk);
+                          database.deleteCategory(category.categoryPk);
+                          database
+                              .deleteCategoryTransactions(category.categoryPk);
                           Navigator.pop(context);
                           openSnackbar(context, "Deleted " + category.name);
                         },

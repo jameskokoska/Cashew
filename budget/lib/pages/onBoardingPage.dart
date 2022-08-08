@@ -66,22 +66,14 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
     if (widget.popNavigationWhenDone) {
       Navigator.pop(context);
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PageNavigationFramework(
-            key: pageNavigationFrameworkKey,
-          ),
-        ),
-      );
+      updateSettings("hasOnboarded", true,
+          pagesNeedingRefresh: [], updateGlobalState: true);
     }
-    updateSettings("hasOnboarded", true, pagesNeedingRefresh: []);
   }
 
   @override
   void initState() {
     super.initState();
-    updateSettings("hasOnboarded", false, pagesNeedingRefresh: []);
   }
 
   @override
@@ -91,12 +83,19 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
     final List<Widget> children = [
       OnBoardPage(
         widgets: [
-          Image(
-            image: AssetImage("assets/landing/DepressedMan.png"),
+          Container(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.height <=
+                        MediaQuery.of(context).size.width
+                    ? MediaQuery.of(context).size.height * 0.5
+                    : 300),
+            child: Image(
+              image: AssetImage("assets/landing/DepressedMan.png"),
+            ),
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text: "Losing track of your transactions?",
               fontWeight: FontWeight.bold,
@@ -107,7 +106,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text: "It's important to be mindful of your purchases.",
               textAlign: TextAlign.center,
@@ -119,12 +118,19 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       ),
       OnBoardPage(
         widgets: [
-          Image(
-            image: AssetImage("assets/landing/BankOrPig.png"),
+          Container(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.height <=
+                        MediaQuery.of(context).size.width
+                    ? MediaQuery.of(context).size.height * 0.5
+                    : 300),
+            child: Image(
+              image: AssetImage("assets/landing/BankOrPig.png"),
+            ),
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text: "Save money by knowing where your money is going.",
               fontWeight: FontWeight.bold,
@@ -135,7 +141,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text:
                   "Identify and remove unnecessary spending habits from your life.",
@@ -148,12 +154,19 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       ),
       OnBoardPage(
         widgets: [
-          Image(
-            image: AssetImage("assets/landing/Graph.png"),
+          Container(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.height <=
+                        MediaQuery.of(context).size.width
+                    ? MediaQuery.of(context).size.height * 0.5
+                    : 300),
+            child: Image(
+              image: AssetImage("assets/landing/Graph.png"),
+            ),
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text: "Track your spending habits with Budget App!",
               fontWeight: FontWeight.bold,
@@ -164,7 +177,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text: "Create budgets to understand your spending habits.",
               textAlign: TextAlign.center,
@@ -176,12 +189,19 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       ),
       OnBoardPage(
         widgets: [
-          Image(
-            image: AssetImage("assets/landing/PigBank.png"),
+          Container(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.height <=
+                        MediaQuery.of(context).size.width
+                    ? MediaQuery.of(context).size.height * 0.5
+                    : 300),
+            child: Image(
+              image: AssetImage("assets/landing/PigBank.png"),
+            ),
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text: "Start getting on top of your transactions!",
               fontWeight: FontWeight.bold,
@@ -192,7 +212,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 15),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text:
                   "Track your income, expenses, recurring scubscription transactions, and more!",

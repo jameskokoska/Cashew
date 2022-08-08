@@ -205,11 +205,7 @@ class SettingsPageState extends State<SettingsPage>
           openPage: AutoTransactionsPageEmail(),
           title: "Auto Email Transactions",
           icon: Icons.outgoing_mail,
-        ),
-        SettingsContainerOpenPage(
-          openPage: OnBoardingPage(popNavigationWhenDone: true),
-          title: "View App Intro",
-          icon: Icons.flag_rounded,
+          description: "(Beta)",
         ),
       ],
     );

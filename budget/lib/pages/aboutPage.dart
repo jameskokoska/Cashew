@@ -1,7 +1,9 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +46,22 @@ class AboutPage extends StatelessWidget {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23),
+          child: Button(
+            label: "View App Intro",
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      OnBoardingPage(popNavigationWhenDone: true),
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
           child: Tappable(
