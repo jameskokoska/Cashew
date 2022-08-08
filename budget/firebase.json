@@ -1,0 +1,18 @@
+{
+  "hosting": {
+    "public": "build/web",
+    "predeploy": "flutter build web",
+    "site":"budget-track",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

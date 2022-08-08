@@ -36,29 +36,13 @@ class _LineChart extends StatefulWidget {
 class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   bool loaded = false;
   double extraHorizontalPadding = 10;
-  List<FlSpot> spots = [];
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration(milliseconds: 0), () {
-      List<FlSpot> initialSpots = [];
-      for (FlSpot spot in widget.spots) {
-        FlSpot currentSpot = FlSpot(
-          spot.x,
-          0,
-        );
-        initialSpots.add(currentSpot);
-      }
       setState(() {
-        spots = initialSpots;
         loaded = true;
-      });
-    });
-    Future.delayed(Duration(milliseconds: 10), () {
-      setState(() {
-        spots = widget.spots;
       });
     });
   }
@@ -314,7 +298,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               ((widget.maxPair.y).abs()) /
                   ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
-        spots: loaded ? spots : [],
+        spots: loaded ? widget.spots : [],
       );
 }
 
