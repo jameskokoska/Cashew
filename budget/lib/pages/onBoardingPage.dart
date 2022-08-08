@@ -298,7 +298,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                                               .withOpacity(0.7)
                                           : Theme.of(context)
                                               .colorScheme
-                                              .primaryContainer,
+                                              .secondary
+                                              .withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),

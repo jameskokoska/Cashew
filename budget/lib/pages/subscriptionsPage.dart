@@ -132,7 +132,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         label: "Monthly",
                         onTap: () => setState(() {
                           selectedType = SelectedSubscriptionsType.monthly;
-                          updateSettings("selectedSubscriptionType", 0);
+                          updateSettings("selectedSubscriptionType", 0,
+                              pagesNeedingRefresh: [],
+                              updateGlobalState: false);
                         }),
                         fontSize: 12,
                         padding:
@@ -151,7 +153,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         label: "Yearly",
                         onTap: () => setState(() {
                           selectedType = SelectedSubscriptionsType.yearly;
-                          updateSettings("selectedSubscriptionType", 1);
+                          updateSettings("selectedSubscriptionType", 1,
+                              pagesNeedingRefresh: [],
+                              updateGlobalState: false);
                         }),
                         fontSize: 12,
                         padding:
@@ -170,7 +174,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         label: "Total",
                         onTap: () => setState(() {
                           selectedType = SelectedSubscriptionsType.total;
-                          updateSettings("selectedSubscriptionType", 2);
+                          updateSettings("selectedSubscriptionType", 2,
+                              pagesNeedingRefresh: [],
+                              updateGlobalState: false);
                         }),
                         fontSize: 12,
                         padding:

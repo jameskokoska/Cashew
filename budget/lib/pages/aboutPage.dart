@@ -9,11 +9,14 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    String version = packageInfoGlobal.version;
+    String buildNumber = packageInfoGlobal.buildNumber;
     return PageFramework(
       dragDownToDismiss: true,
       title: "About",
@@ -35,7 +38,9 @@ class AboutPage extends StatelessWidget {
               SizedBox(height: 5),
               TextFont(
                 text: "v" +
-                    versionGlobal +
+                    version +
+                    "+" +
+                    buildNumber +
                     ", db-v" +
                     schemaVersionGlobal.toString(),
                 fontSize: 14,
@@ -186,7 +191,9 @@ class AboutPage extends StatelessWidget {
               showLicensePage(
                   context: context,
                   applicationVersion: "v" +
-                      versionGlobal +
+                      version +
+                      "+" +
+                      buildNumber +
                       ", db-v" +
                       schemaVersionGlobal.toString(),
                   applicationLegalese:

@@ -21,6 +21,7 @@ import 'package:budget/colors.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
@@ -42,7 +43,7 @@ void main() async {
 Random random = new Random();
 int randomInt = random.nextInt(100);
 late bool entireAppLoaded;
-String versionGlobal = "1.0";
+late PackageInfo packageInfoGlobal;
 
 Future<bool> updateSettings(setting, value,
     {List<int> pagesNeedingRefresh: const [],
@@ -116,6 +117,7 @@ Future<bool> initializeSettings() async {
   Map<String, dynamic> userSettings = await getUserSettings();
   appStateSettings = userSettings;
 
+  packageInfoGlobal = await PackageInfo.fromPlatform();
   //Sign in user before app launches to prepare for reading emails
   // if (entireAppLoaded == false) {
   //   if (appStateSettings["AutoTransactions-canReadEmails"] == true) {
@@ -162,12 +164,13 @@ class InitializeDatabase extends StatelessWidget {
       future: initializeDatabase(),
       builder: (context, snapshot) {
         debugPrint("Initialized Database");
-        Widget child = Container(
-          key: ValueKey(0),
-          width: 50,
-          height: 50,
-          color: Color(0xFF912937),
-        );
+        Widget child = SizedBox(
+            height: 50,
+            width: 50,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).colorScheme.secondary),
+            ));
         if (snapshot.hasData) {
           child = InitializeApp(
             key: appStateKey,
@@ -203,12 +206,13 @@ class _InitializeAppState extends State<InitializeApp> {
       future: initializeSettings(),
       builder: (context, snapshot) {
         debugPrint("Initialized Settings");
-        Widget child = Container(
-          key: ValueKey(0),
-          width: 50,
-          height: 50,
-          color: Colors.blueGrey,
-        );
+        Widget child = SizedBox(
+            height: 50,
+            width: 50,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).colorScheme.secondary),
+            ));
         if (snapshot.hasData) {
           child = App();
         }
