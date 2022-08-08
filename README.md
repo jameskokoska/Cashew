@@ -15,7 +15,7 @@ Note to self: Write a more invigorating description here in the future.
 * Run `flutter packages pub run build_runner build`
 * Don't forget to bump schema version
 
-# Generate Builds
+## Generate Builds
 * Remove old build: `flutter clean`
 * For web: `flutter build web`
-* For Android: `flutter build appbundle`
+* For Android: `flutter build appbundle --release`

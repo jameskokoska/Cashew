@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:267621253497:android:e490a30d3f7208e6842fa8",
         "android_client_info": {
-          "package_name": "com.example.budget"
+          "package_name": "com.budget.tracker_app"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "267621253497-qr0vit1n0l5f2k5h0qnumkrgm6td1fsu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.budget",
+            "package_name": "com.budget.tracker_app",
             "certificate_hash": "1066b81467dc8c595807e67062163d24efe8c3b5"
           }
         },
