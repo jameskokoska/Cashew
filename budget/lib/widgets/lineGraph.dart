@@ -406,6 +406,7 @@ class LineChartWrapper extends StatelessWidget {
       return Container(
         height: 175,
         child: LinePage(
+          key: ValueKey(DateTime.now().millisecondsSinceEpoch),
           spots: points,
           maxPair: getMaxPoint(points),
           minPair: getMinPoint(points),
@@ -452,6 +453,11 @@ class LinePage extends StatefulWidget {
 
 class _LinePageState extends State<LinePage> {
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
@@ -462,7 +468,7 @@ class _LinePageState extends State<LinePage> {
         ),
         child: Chart(
           layers: layers(),
-          duration: Duration(milliseconds: 2000),
+          duration: Duration.zero,
           padding: EdgeInsets.only(bottom: 5),
         ),
       ),
@@ -481,7 +487,7 @@ class _LinePageState extends State<LinePage> {
                 items: List.generate(
                   2,
                   (index) => ChartLineDataItem(
-                    x: widget.verticalLineAt!,
+                    x: widget.maxPair.x - widget.verticalLineAt!,
                     value: index == 0 ? minYToKeep : widget.maxPair.y,
                   ),
                 ),

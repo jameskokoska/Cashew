@@ -1,7 +1,7 @@
 {
   "hosting": {
     "public": "build/web",
-    "predeploy": "flutter build web --release --web-renderer canvaskit",
+    "predeploy": "flutter build web --release --web-renderer canvaskit --dart-define=FLUTTER_WEB_USE_SKIA=true",
     "site":"budget-track",
     "ignore": [
       "firebase.json",

@@ -149,7 +149,7 @@ class BudgetContainer extends StatelessWidget {
                                     )
                                   : Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
