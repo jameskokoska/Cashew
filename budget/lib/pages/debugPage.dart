@@ -35,17 +35,22 @@ import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
 import '../functions.dart';
 
-class ColorsPage extends StatelessWidget {
-  const ColorsPage({Key? key}) : super(key: key);
+class DebugPage extends StatelessWidget {
+  const DebugPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return PageFramework(
       dragDownToDismiss: true,
-      title: "Colors",
+      title: "Debug",
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
+        TextFont(
+            maxLines: 10,
+            text: kIsWeb
+                ? html.window.navigator.userAgent.toString().toLowerCase()
+                : ""),
         ColorBox(color: Theme.of(context).colorScheme.surface, name: "surface"),
         ColorBox(
             color: Theme.of(context).colorScheme.onSurface, name: "onSurface"),

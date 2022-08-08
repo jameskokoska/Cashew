@@ -165,12 +165,13 @@ class InitializeDatabase extends StatelessWidget {
       builder: (context, snapshot) {
         debugPrint("Initialized Database");
         Widget child = SizedBox(
-            height: 50,
-            width: 50,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).colorScheme.secondary),
-            ));
+          height: 50,
+          width: 50,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).colorScheme.secondary),
+          ),
+        );
         if (snapshot.hasData) {
           child = InitializeApp(
             key: appStateKey,
@@ -207,12 +208,13 @@ class _InitializeAppState extends State<InitializeApp> {
       builder: (context, snapshot) {
         debugPrint("Initialized Settings");
         Widget child = SizedBox(
-            height: 50,
-            width: 50,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).colorScheme.secondary),
-            ));
+          height: 50,
+          width: 50,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).colorScheme.secondary),
+          ),
+        );
         if (snapshot.hasData) {
           child = App();
         }

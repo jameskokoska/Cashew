@@ -10,6 +10,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
@@ -425,6 +426,14 @@ class AnimatedGooBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return Container(
+        decoration: BoxDecoration(
+          color:
+              dynamicPastel(context, color, amountLight: 0.6, amountDark: 0.5),
+        ),
+      );
+    }
     // Transform slightly to remove graphic artifacts
     return Transform(
       transform: Matrix4.skewX(0.001),

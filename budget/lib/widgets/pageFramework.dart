@@ -376,6 +376,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       elevation: showElevation == true ? 0 : 5,
       actions: actions,
       flexibleSpace: FlexibleSpaceBar(
+        centerTitle: false,
         titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
         title: animationControllerShift == null
             ? titleWidget ??
@@ -384,6 +385,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                  textAlign: TextAlign.left,
                 )
             : customTitleBuilder == null
                 ? AnimatedBuilder(
@@ -408,6 +410,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                                   .colorScheme
                                   .onSecondaryContainer
                               : textColor,
+                          textAlign: TextAlign.left,
                         ),
                   )
                 : customTitleBuilder!(animationControllerShift!),

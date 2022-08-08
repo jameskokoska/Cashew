@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:budget/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:mrx_charts/mrx_charts.dart';
 
 class _LineChart extends StatefulWidget {
   _LineChart({
@@ -67,7 +67,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           right: 10 + extraHorizontalPadding, top: 8, bottom: 0),
       child: LineChart(
         data,
-        swapAnimationDuration: const Duration(milliseconds: 2500),
+        swapAnimationDuration: const Duration(milliseconds: kIsWeb ? 0 : 2500),
         swapAnimationCurve: Curves.easeInOutCubic,
       ),
     );
@@ -79,7 +79,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
-        minY: widget.minPair.y,
+        minY: (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
+                (widget.maxPair.y < 0 && widget.minPair.y < 0)
+            ? 0
+            : widget.minPair.y,
         maxY: widget.maxPair.y,
         maxX: widget.maxPair.x + 1,
         // axisTitleData: axisTitleData,
@@ -90,11 +93,17 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   ExtraLinesData get extraLinesData => ExtraLinesData(
         horizontalLines: [
-          HorizontalLine(
-            y: 0,
-            color: dynamicPastel(context, widget.color, amount: 0.3)
-                .withOpacity(0.4),
-          ),
+          ...(((widget.minPair.y > 0 && widget.maxPair.y > 0) ||
+                  (widget.minPair.y < 0 && widget.maxPair.y < 0))
+              ? []
+              : [
+                  HorizontalLine(
+                    strokeWidth: 2,
+                    y: 0,
+                    color: dynamicPastel(context, widget.color, amount: 0.3)
+                        .withOpacity(0.4),
+                  ),
+                ])
         ],
         verticalLines: [
           VerticalLine(
@@ -120,78 +129,93 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   FlTitlesData get titlesData => FlTitlesData(
         show: true,
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (_, __) {
-            return TextStyle(
-                color: dynamicPastel(context, widget.color,
-                        amount: 0.8, inverse: true)
-                    .withOpacity(0.5),
-                fontFamily: 'Avenir');
-          },
-          getTitles: (value) {
-            DateTime currentDate =
-                widget.endDate == null ? DateTime.now() : widget.endDate!;
-            return getWordedDateShort(
-              DateTime(
-                currentDate.year,
-                currentDate.month,
-                currentDate.day - widget.maxPair.x.toInt() + value.toInt(),
-              ),
-              showTodayTomorrow: false,
-            );
-          },
-          interval: widget.maxPair.x / 4,
-          margin: 13,
+        bottomTitles: AxisTitles(
+          axisNameSize: 25,
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, titleMeta) {
+              if (value == widget.maxPair.x + 1) {
+                return SizedBox.shrink();
+              }
+              DateTime currentDate =
+                  widget.endDate == null ? DateTime.now() : widget.endDate!;
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: TextFont(
+                  textAlign: TextAlign.center,
+                  fontSize: 13,
+                  text: getWordedDateShort(
+                    DateTime(
+                      currentDate.year,
+                      currentDate.month,
+                      currentDate.day -
+                          widget.maxPair.x.toInt() +
+                          value.toInt(),
+                    ),
+                    showTodayTomorrow: false,
+                  ),
+                  textColor: dynamicPastel(context, widget.color,
+                          amount: 0.8, inverse: true)
+                      .withOpacity(0.5),
+                ),
+              );
+            },
+            reservedSize: 28,
+            interval: widget.maxPair.x / 4,
+          ),
         ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (_, __) {
-            return TextStyle(
-                color: dynamicPastel(context, widget.color,
-                        amount: 0.5, inverse: true)
-                    .withOpacity(0.3),
-                fontFamily: 'Avenir');
-          },
-          getTitles: (value) {
-            return getWordedNumber(value);
-          },
-          reservedSize: widget.minPair.y <= -10000
-              ? 55
-              : widget.minPair.y <= -1000
-                  ? 45
-                  : widget.minPair.y <= -100
-                      ? 40
-                      : (widget.maxPair.y >= 100
-                              ? (widget.maxPair.y >= 1000 ? 37 : 33)
-                              : 25) +
-                          extraHorizontalPadding,
-          interval:
-              ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
-                          5)
-                      .ceil() *
-                  5,
-          margin: 10,
-          checkToShowTitle:
-              (minValue, maxValue, sideTitles, appliedInterval, value) {
-            if (value == 0) {
-              return true;
-            } else if (value % appliedInterval != 0) {
-              return false;
-            } else if (value < widget.maxPair.y && value > 1) {
-              return true;
-            } else if (value > widget.minPair.y && value < 1) {
-              return true;
-            } else {
-              return false;
-            }
-          },
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (
+              value,
+              titleMeta,
+            ) {
+              bool show = false;
+              if (value == 0) {
+                show = true;
+              } else if (value < widget.maxPair.y && value > 1) {
+                show = true;
+              } else if (value > widget.minPair.y && value < 1) {
+                show = true;
+              } else {
+                return SizedBox.shrink();
+              }
+              return Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: TextFont(
+                  textAlign: TextAlign.right,
+                  text: getWordedNumber(value),
+                  textColor: dynamicPastel(context, widget.color,
+                          amount: 0.5, inverse: true)
+                      .withOpacity(0.3),
+                  fontSize: 13,
+                ),
+              );
+            },
+            reservedSize: (widget.minPair.y <= -10000
+                    ? 55
+                    : widget.minPair.y <= -1000
+                        ? 45
+                        : widget.minPair.y <= -100
+                            ? 40
+                            : (widget.maxPair.y >= 100
+                                    ? (widget.maxPair.y >= 1000 ? 37 : 33)
+                                    : 25) +
+                                extraHorizontalPadding) +
+                10,
+            interval:
+                ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
+                            5)
+                        .ceil() *
+                    5,
+          ),
         ),
-        topTitles: SideTitles(
-          showTitles: false,
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
         ),
-        rightTitles: SideTitles(
-          showTitles: false,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
         ),
       );
 
@@ -230,6 +254,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           );
         },
         getDrawingVerticalLine: (value) {
+          print((widget.maxPair.y) /
+              ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
+          print(((widget.minPair.y)) /
+              ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
           return FlLine(
             color: dynamicPastel(context, widget.color, amount: 0.3)
                 .withOpacity(0.2),
@@ -251,7 +279,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       );
 
   LineChartBarData get lineChartBarData => LineChartBarData(
-        colors: [lightenPastel(widget.color, amount: 0.3)],
+        color: lightenPastel(widget.color, amount: 0.3),
         barWidth: 3,
         isStrokeCapRound: true,
         dotData: FlDotData(
@@ -272,31 +300,41 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           applyCutOffY: true,
           cutOffY: 0,
           show: true,
-          colors: [
-            widget.color.withAlpha(0),
-            widget.color.withAlpha(100),
-          ],
-          gradientColorStops: [0, 1],
-          gradientFrom: Offset(
-              0,
-              ((widget.maxPair.y).abs()) /
-                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
-          gradientTo: const Offset(0, 1),
+          gradient: LinearGradient(
+            colors: [
+              widget.color.withAlpha(100),
+              widget.color.withAlpha(0),
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment(
+                0,
+                (widget.minPair.y) /
+                    ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+          ),
+          // gradientFrom: Offset(
+          //     0,
+          //     ((widget.maxPair.y).abs()) /
+          //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
         belowBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,
           show: true,
-          colors: [
-            widget.color.withAlpha(100),
-            widget.color.withAlpha(0),
-          ],
-          gradientColorStops: [0, 1],
-          gradientFrom: const Offset(0, 0),
-          gradientTo: Offset(
-              0,
-              ((widget.maxPair.y).abs()) /
-                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+          gradient: LinearGradient(
+            colors: [
+              widget.color.withAlpha(100),
+              widget.color.withAlpha(0),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment(
+                0,
+                (widget.maxPair.y) /
+                    ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+          ),
+          // gradientTo: Offset(
+          //     0,
+          //     ((widget.maxPair.y).abs()) /
+          //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
         spots: loaded ? widget.spots : [],
       );
@@ -364,6 +402,19 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return Container(
+        height: 175,
+        child: LinePage(
+          spots: points,
+          maxPair: getMaxPoint(points),
+          minPair: getMinPoint(points),
+          color: color == null ? Theme.of(context).colorScheme.primary : color!,
+          endDate: endDate,
+          verticalLineAt: verticalLineAt,
+        ),
+      );
+    }
     return Container(
       height: 175,
       child: _LineChart(
@@ -376,5 +427,160 @@ class LineChartWrapper extends StatelessWidget {
         verticalLineAt: verticalLineAt,
       ),
     );
+  }
+}
+
+class LinePage extends StatefulWidget {
+  const LinePage({
+    Key? key,
+    required this.spots,
+    required this.maxPair,
+    required this.minPair,
+    required this.color,
+    required this.endDate,
+    required this.verticalLineAt,
+  }) : super(key: key);
+  final List<Pair> spots;
+  final Pair maxPair;
+  final Pair minPair;
+  final Color color;
+  final DateTime? endDate;
+  final double? verticalLineAt;
+  @override
+  State<LinePage> createState() => _LinePageState();
+}
+
+class _LinePageState extends State<LinePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          bottom: 5,
+        ),
+        child: Chart(
+          layers: layers(),
+          duration: Duration(milliseconds: 2000),
+          padding: EdgeInsets.only(bottom: 5),
+        ),
+      ),
+    );
+  }
+
+  List<ChartLayer> layers() {
+    final double minYToKeep = (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
+            (widget.maxPair.y < 0 && widget.minPair.y < 0)
+        ? 0
+        : widget.minPair.y;
+    return [
+      ...(widget.verticalLineAt != null
+          ? [
+              ChartLineLayer(
+                items: List.generate(
+                  2,
+                  (index) => ChartLineDataItem(
+                    x: widget.verticalLineAt!,
+                    value: index == 0 ? minYToKeep : widget.maxPair.y,
+                  ),
+                ),
+                settings: ChartLineSettings(
+                  color: dynamicPastel(context, widget.color, amount: 0.3)
+                      .withOpacity(0.6),
+                  thickness: 2.0,
+                ),
+              ),
+            ]
+          : []),
+      ChartLineLayer(
+        items: List.generate(
+          2,
+          (index) => ChartLineDataItem(
+            x: index * widget.maxPair.x,
+            value: 0,
+          ),
+        ),
+        settings: ChartLineSettings(
+          color: dynamicPastel(context, widget.color, amount: 0.3)
+              .withOpacity(0.6),
+          thickness: 2.0,
+        ),
+      ),
+      ChartGridLayer(
+        settings: ChartGridSettings(
+          x: ChartGridSettingsAxis(
+            color: dynamicPastel(context, widget.color, amount: 0.5)
+                .withOpacity(0.4),
+            frequency: (widget.maxPair.x - widget.minPair.x) / 4,
+            max: widget.maxPair.x,
+            min: widget.minPair.x,
+          ),
+          y: ChartGridSettingsAxis(
+            color: dynamicPastel(context, widget.color, amount: 0.5)
+                .withOpacity(0.4),
+            frequency: (widget.maxPair.y - minYToKeep) / 3,
+            max: widget.maxPair.y,
+            min: minYToKeep,
+          ),
+        ),
+      ),
+      ChartAxisLayer(
+        settings: ChartAxisSettings(
+          x: ChartAxisSettingsAxis(
+            frequency: (widget.maxPair.x - widget.minPair.x) / 4,
+            max: widget.maxPair.x,
+            min: widget.minPair.x,
+            textStyle: TextStyle(
+              color: dynamicPastel(context, widget.color,
+                      amount: 0.5, inverse: true)
+                  .withOpacity(0.3),
+              fontSize: 13,
+              fontFamily: 'Avenir',
+            ),
+          ),
+          y: ChartAxisSettingsAxis(
+            frequency: (widget.maxPair.y - minYToKeep) / 3,
+            max: widget.maxPair.y,
+            min: minYToKeep,
+            textStyle: TextStyle(
+              color: dynamicPastel(context, widget.color,
+                      amount: 0.5, inverse: true)
+                  .withOpacity(0.3),
+              fontSize: 13,
+              fontFamily: 'Avenir',
+            ),
+          ),
+        ),
+        labelX: (value) {
+          DateTime currentDate =
+              widget.endDate == null ? DateTime.now() : widget.endDate!;
+          return getWordedDateShort(
+            DateTime(
+              currentDate.year,
+              currentDate.month,
+              currentDate.day - widget.maxPair.x.toInt() + value.toInt(),
+            ),
+            showTodayTomorrow: false,
+          );
+        },
+        labelY: (value) {
+          return (value == 1 ? getWordedNumber(0.0) : getWordedNumber(value));
+        },
+      ),
+      ChartLineLayer(
+        items: List.generate(
+          widget.spots.length,
+          (index) => ChartLineDataItem(
+            x: widget.spots[index].x,
+            value: widget.spots[index].y,
+          ),
+        ),
+        settings: ChartLineSettings(
+          color: dynamicPastel(context, widget.color, amount: 0.2),
+          thickness: 3.0,
+        ),
+      ),
+    ];
   }
 }

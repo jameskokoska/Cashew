@@ -1,7 +1,10 @@
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:io' show Platform;
 
 late SheetController bottomSheetControllerGlobal;
 // Set snap to false if there is a keyboard
@@ -11,7 +14,8 @@ openBottomSheet(context, child,
   FocusScope.of(context).unfocus();
   bottomSheetControllerGlobal = new SheetController();
   showSlidingBottomSheet(context,
-      resizeToAvoidBottomInset: resizeForKeyboard,
+      resizeToAvoidBottomInset:
+          getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
       bottomPaddingColor: Theme.of(context).colorScheme.lightDarkAccent,
       builder: (context) {
     return SlidingSheetDialog(

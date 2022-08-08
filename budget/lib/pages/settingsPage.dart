@@ -7,7 +7,6 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/autoTransactionsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
-import 'package:budget/pages/colorsPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';

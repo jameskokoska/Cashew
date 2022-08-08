@@ -18,7 +18,9 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PageNavigationFramework extends StatefulWidget {
   const PageNavigationFramework({Key? key}) : super(key: key);
@@ -93,20 +95,24 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           return false;
         },
         child: Stack(children: [
-          Scaffold(
-            body: PageView(
-              controller: pageController,
-              onPageChanged: (int index) {},
-              children: pages,
-              physics: NeverScrollableScrollPhysics(),
+          AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle.light.copyWith(
+                statusBarColor: kIsWeb ? Colors.black : Colors.transparent),
+            child: Scaffold(
+              body: PageView(
+                controller: pageController,
+                onPageChanged: (int index) {},
+                children: pages,
+                physics: NeverScrollableScrollPhysics(),
+              ),
+              extendBody: true,
+              resizeToAvoidBottomInset: false,
+              bottomNavigationBar: BottomNavBar(
+                  key: navbarStateKey,
+                  onChanged: (index) {
+                    changePage(index);
+                  }),
             ),
-            extendBody: true,
-            resizeToAvoidBottomInset: false,
-            bottomNavigationBar: BottomNavBar(
-                key: navbarStateKey,
-                onChanged: (index) {
-                  changePage(index);
-                }),
           ),
           // IndexedStack(
           //   children: pages,

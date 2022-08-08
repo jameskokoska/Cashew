@@ -9,6 +9,7 @@ import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/struct/transactionTag.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
+import 'package:universal_html/html.dart';
 
 import './colors.dart';
 import './widgets/textWidgets.dart';
@@ -418,4 +419,16 @@ String pluralString(bool condition, String string) {
     return string + "s";
   else
     return string;
+}
+
+String? getOSInsideWeb() {
+  if (kIsWeb) {
+    final userAgent = window.navigator.userAgent.toString().toLowerCase();
+    if (userAgent.contains("(macintosh")) return "iOS";
+    if (userAgent.contains("(iphone")) return "iOS";
+    if (userAgent.contains("(linux")) return "Android";
+    return "web";
+  } else {
+    return null;
+  }
 }

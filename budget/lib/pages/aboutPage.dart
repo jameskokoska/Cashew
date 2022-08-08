@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/debugPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -28,12 +29,22 @@ class AboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
           child: Column(
             children: [
-              TextFont(
-                text: "Budget App",
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-                textAlign: TextAlign.center,
-                maxLines: 5,
+              Tappable(
+                onLongPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DebugPage(),
+                    ),
+                  );
+                },
+                child: TextFont(
+                  text: "Budget App",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                ),
               ),
               SizedBox(height: 5),
               TextFont(
