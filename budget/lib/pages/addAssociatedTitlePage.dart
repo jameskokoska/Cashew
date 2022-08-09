@@ -201,7 +201,9 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
           ),
           canAddTitle ?? false
               ? Button(
-                  label: "Add Title",
+                  label: widget.associatedTitle == null
+                      ? "Add Title"
+                      : "Save Changes",
                   width: MediaQuery.of(context).size.width,
                   height: 50,
                   onTap: () {
@@ -209,117 +211,15 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   },
                 )
               : Button(
-                  label: "Add Title",
+                  label: widget.associatedTitle == null
+                      ? "Add Title"
+                      : "Save Changes",
                   width: MediaQuery.of(context).size.width,
                   height: 50,
                   onTap: () {},
                   color: Colors.grey,
                 ),
         ],
-      ),
-    );
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        onTap: () {
-          //Minimize keyboard when tap non interactive widget
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Stack(
-          children: [
-            PageFramework(
-              title: widget.title,
-              navbar: false,
-              onBackButton: () async {
-                if (widget.associatedTitle != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              onDragDownToDissmiss: () async {
-                if (widget.associatedTitle != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              listWidgets: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    children: [
-                      Tappable(
-                        borderRadius: 15,
-                        onTap: () {
-                          openBottomSheet(
-                            context,
-                            PopupFramework(
-                              title: "Select Category",
-                              child: SelectCategory(
-                                selectedCategory: selectedCategory,
-                                setSelectedCategory: setSelectedCategory,
-                              ),
-                            ),
-                          );
-                        },
-                        color: Colors.transparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 300),
-                              child: CategoryIcon(
-                                key: ValueKey(
-                                    selectedCategory?.categoryPk ?? ""),
-                                categoryPk: selectedCategory?.categoryPk ?? 0,
-                                size: 40,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: TappableTextEntry(
-                          title: selectedTitle,
-                          placeholder: "Title",
-                          onTap: () {
-                            selectTitle();
-                          },
-                          autoSizeText: true,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: canAddTitle ?? false
-                  ? Button(
-                      label: "Add Title",
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      onTap: () {
-                        addTitle();
-                      },
-                    )
-                  : Button(
-                      label: "Add Title",
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      onTap: () {
-                        addTitle();
-                      },
-                      color: Colors.grey,
-                    ),
-            ),
-          ],
-        ),
       ),
     );
   }

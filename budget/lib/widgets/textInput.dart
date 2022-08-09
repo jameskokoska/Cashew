@@ -126,8 +126,7 @@ class TextInput extends StatelessWidget {
                           Icon(
                             icon,
                             size: 20,
-                            color:
-                                Theme.of(context).colorScheme.accentColorHeavy,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ],
                       ),
@@ -137,7 +136,7 @@ class TextInput extends StatelessWidget {
                       ? Icon(
                           icon,
                           size: 30,
-                          color: Theme.of(context).colorScheme.accentColorHeavy,
+                          color: Theme.of(context).colorScheme.secondary,
                         )
                       : null
                   : null,

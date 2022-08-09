@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:animations/animations.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -317,20 +319,34 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
   );
 }
 
-void discardChangesPopup(context) async {
-  await openPopup(
-    context,
-    title: "Discard Changes?",
-    description: "Are you sure you want to discard your changes.",
-    icon: Icons.warning_rounded,
-    onSubmitLabel: "Yes",
-    onSubmit: () {
-      Navigator.pop(context);
-      Navigator.pop(context);
-    },
-    onCancelLabel: "No",
-    onCancel: () {
-      Navigator.pop(context);
-    },
-  );
+void discardChangesPopup(context, {previousObject, currentObject}) async {
+  if (previousObject == currentObject &&
+      previousObject != null &&
+      currentObject != null) {
+    Navigator.pop(context);
+  } else if (previousObject != currentObject &&
+      previousObject != null &&
+      currentObject != null &&
+      previousObject.toString() == currentObject.toString()) {
+    print(previousObject.toString());
+    print(currentObject.toString());
+
+    Navigator.pop(context);
+  } else {
+    await openPopup(
+      context,
+      title: "Discard Changes?",
+      description: "Are you sure you want to discard your changes.",
+      icon: Icons.warning_rounded,
+      onSubmitLabel: "Yes",
+      onSubmit: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+      onCancelLabel: "No",
+      onCancel: () {
+        Navigator.pop(context);
+      },
+    );
+  }
 }

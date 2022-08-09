@@ -47,6 +47,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   Color? selectedColor;
   bool selectedIncome = false;
   int setCategoryPk = DateTime.now().millisecondsSinceEpoch;
+  bool? canAddCategory;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -67,6 +68,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     setState(() {
       selectedColor = color;
     });
+    determineBottomButton();
     return;
   }
 
@@ -74,6 +76,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     setState(() {
       selectedImage = image.replaceFirst("assets/categories/", "");
     });
+    determineBottomButton();
     return;
   }
 
@@ -81,6 +84,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     setState(() {
       selectedTitle = title;
     });
+    determineBottomButton();
     return;
   }
 
@@ -88,27 +92,43 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     setState(() {
       selectedIncome = income;
     });
+    determineBottomButton();
     return;
+  }
+
+  determineBottomButton() {
+    if (selectedTitle != null && selectedColor != null) {
+      if (canAddCategory != true)
+        this.setState(() {
+          canAddCategory = true;
+        });
+    } else {
+      if (canAddCategory != false)
+        this.setState(() {
+          canAddCategory = false;
+        });
+    }
   }
 
   Future addCategory() async {
     print("Added category");
-    await database.createOrUpdateCategory(
-      TransactionCategory(
-        categoryPk: widget.category != null
-            ? widget.category!.categoryPk
-            : setCategoryPk,
-        name: selectedTitle ?? "",
-        dateCreated: DateTime.now(),
-        income: selectedIncome,
-        order: widget.category != null
-            ? widget.category!.order
-            : await database.getAmountOfCategories(),
-        colour: toHexString(selectedColor ?? Colors.white),
-        iconName: selectedImage,
-      ),
-    );
+    await database.createOrUpdateCategory(await createTransactionCategory());
     Navigator.pop(context);
+  }
+
+  Future<TransactionCategory> createTransactionCategory() async {
+    return TransactionCategory(
+      categoryPk:
+          widget.category != null ? widget.category!.categoryPk : setCategoryPk,
+      name: selectedTitle ?? "",
+      dateCreated: widget.category!.dateCreated,
+      income: selectedIncome,
+      order: widget.category != null
+          ? widget.category!.order
+          : await database.getAmountOfCategories(),
+      colour: toHexString(selectedColor ?? Colors.white),
+      iconName: selectedImage,
+    );
   }
 
   @override
@@ -124,272 +144,315 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         selectedIncome = widget.category!.income;
       });
     }
+    //Set to false because we can't save until we made some changes
+    setState(() {
+      canAddCategory = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        onTap: () {
-          //Minimize keyboard when tap non interactive widget
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Stack(
-          children: [
-            PageFramework(
-              title: widget.title,
-              navbar: false,
-              onBackButton: () async {
-                if (widget.category != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              onDragDownToDissmiss: () async {
-                if (widget.category != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              listWidgets: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Tappable(
-                      onTap: () {
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "Select Icon",
-                            child: SelectCategoryImage(
-                              setSelectedImage: setSelectedImage,
-                              selectedImage: "assets/categories/" +
-                                  selectedImage.toString(),
-                            ),
-                          ),
-                        );
-                      },
-                      color: Colors.transparent,
-                      child: Container(
-                        height: 136,
-                        padding: const EdgeInsets.only(left: 17, right: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 300),
-                              child: CategoryIcon(
-                                key: ValueKey((selectedImage ?? "") +
-                                    selectedColor.toString()),
-                                categoryPk: 0,
-                                category: TransactionCategory(
-                                  categoryPk: 0,
-                                  name: "",
-                                  dateCreated: DateTime.now(),
-                                  order: 0,
-                                  income: false,
-                                  iconName: selectedImage,
-                                  colour:
-                                      toHexString(selectedColor ?? Colors.red),
-                                ),
-                                size: 60,
-                                sizePadding: 25,
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.category != null) {
+          discardChangesPopup(
+            context,
+            previousObject: widget.category,
+            currentObject: await createTransactionCategory(),
+          );
+        } else {
+          discardChangesPopup(context);
+        }
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
+          onTap: () {
+            //Minimize keyboard when tap non interactive widget
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: Stack(
+            children: [
+              PageFramework(
+                title: widget.title,
+                navbar: false,
+                onBackButton: () async {
+                  if (widget.category != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.category,
+                      currentObject: await createTransactionCategory(),
+                    );
+                  } else {
+                    discardChangesPopup(context);
+                  }
+                },
+                onDragDownToDissmiss: () async {
+                  if (widget.category != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.category,
+                      currentObject: await createTransactionCategory(),
+                    );
+                  } else {
+                    discardChangesPopup(context);
+                  }
+                },
+                listWidgets: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Tappable(
+                        onTap: () {
+                          openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "Select Icon",
+                              child: SelectCategoryImage(
+                                setSelectedImage: setSelectedImage,
+                                selectedImage: "assets/categories/" +
+                                    selectedImage.toString(),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Tappable(
-                        onTap: () {
-                          selectTitle();
+                          );
                         },
                         color: Colors.transparent,
                         child: Container(
                           height: 136,
-                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(left: 17, right: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AnimatedSwitcher(
+                                duration: Duration(milliseconds: 300),
+                                child: CategoryIcon(
+                                  key: ValueKey((selectedImage ?? "") +
+                                      selectedColor.toString()),
+                                  categoryPk: 0,
+                                  category: TransactionCategory(
+                                    categoryPk: 0,
+                                    name: "",
+                                    dateCreated: DateTime.now(),
+                                    order: 0,
+                                    income: false,
+                                    iconName: selectedImage,
+                                    colour: toHexString(
+                                        selectedColor ?? Colors.red),
+                                  ),
+                                  size: 60,
+                                  sizePadding: 25,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Tappable(
+                          onTap: () {
+                            selectTitle();
+                          },
+                          color: Colors.transparent,
                           child: Container(
-                            height: 55,
-                            width: MediaQuery.of(context).size.width - 150,
-                            padding: EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      width: 1.5,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .lightDarkAccentHeavy)),
-                            ),
-                            child: IntrinsicWidth(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: TextFont(
-                                  autoSizeText: true,
-                                  maxLines: 1,
-                                  minFontSize: 16,
-                                  textAlign: TextAlign.left,
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold,
-                                  text: selectedTitle == null ||
-                                          selectedTitle == ""
-                                      ? "Name"
-                                      : selectedTitle ?? "",
-                                  textColor: selectedTitle == null ||
-                                          selectedTitle == ""
-                                      ? Theme.of(context).colorScheme.textLight
-                                      : Theme.of(context).colorScheme.black,
+                            height: 136,
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              height: 55,
+                              width: MediaQuery.of(context).size.width - 150,
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 1.5,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .lightDarkAccentHeavy)),
+                              ),
+                              child: IntrinsicWidth(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextFont(
+                                    autoSizeText: true,
+                                    maxLines: 1,
+                                    minFontSize: 16,
+                                    textAlign: TextAlign.left,
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold,
+                                    text: selectedTitle == null ||
+                                            selectedTitle == ""
+                                        ? "Name"
+                                        : selectedTitle ?? "",
+                                    textColor: selectedTitle == null ||
+                                            selectedTitle == ""
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .textLight
+                                        : Theme.of(context).colorScheme.black,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 65,
-                  child: SelectColor(
-                    horizontalList: true,
-                    selectedColor: selectedColor,
-                    setSelectedColor: setSelectedColor,
+                    ],
                   ),
-                ),
-                SizedBox(height: 13),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 400),
-                    child: IncomeTypeButton(
-                      key: ValueKey(selectedIncome),
-                      onTap: () {
-                        setSelectedIncome(!selectedIncome);
-                      },
-                      selectedIncome: selectedIncome,
+                  Container(
+                    height: 65,
+                    child: SelectColor(
+                      horizontalList: true,
+                      selectedColor: selectedColor,
+                      setSelectedColor: setSelectedColor,
                     ),
                   ),
-                ),
-                SizedBox(height: 13),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFont(
-                    text: "Associated Titles",
-                    textColor: Theme.of(context).colorScheme.textLight,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFont(
-                    text:
-                        "If a transaction title contains any of the phrases listed, it will be added to this category",
-                    textColor: Theme.of(context).colorScheme.textLight,
-                    fontSize: 13,
-                    maxLines: 10,
-                  ),
-                ),
-                SizedBox(height: 10),
-                AssociatedTitleEntryAdd(onTap: () {
-                  openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "Set Title",
-                      child: SelectText(
-                        setSelectedText: (_) {},
-                        labelText: "Set Title",
-                        placeholder: "Title",
-                        nextWithInput: (text) async {
-                          // addAssociatedTitle(text);
-                          int numberOfAssociatedTitles = (await database
-                                  .getTotalCountOfAssociatedTitles())[0] ??
-                              0;
-                          await database.createOrUpdateAssociatedTitle(
-                            TransactionAssociatedTitle(
-                              associatedTitlePk:
-                                  DateTime.now().millisecondsSinceEpoch,
-                              categoryFk: widget.category == null
-                                  ? setCategoryPk
-                                  : widget.category!.categoryPk,
-                              isExactMatch: false,
-                              title: text,
-                              dateCreated: DateTime.now(),
-                              order: numberOfAssociatedTitles,
-                            ),
-                          );
+                  SizedBox(height: 13),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 400),
+                      child: IncomeTypeButton(
+                        key: ValueKey(selectedIncome),
+                        onTap: () {
+                          setSelectedIncome(!selectedIncome);
                         },
+                        selectedIncome: selectedIncome,
                       ),
                     ),
-                  );
-                }),
-                StreamBuilder<List<TransactionAssociatedTitle>>(
-                    stream: database.watchAllAssociatedTitlesInCategory(
-                      widget.category == null
-                          ? setCategoryPk
-                          : widget.category!.categoryPk,
+                  ),
+                  SizedBox(height: 13),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text: "Associated Titles",
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      fontSize: 16,
                     ),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData &&
-                          (snapshot.data ?? []).length > 0) {
-                        List<Widget> associatedTitleWidgets = [];
-                        for (int i = 0; i < snapshot.data!.length; i++) {
-                          TransactionAssociatedTitle associatedTitle =
-                              snapshot.data![i];
-                          associatedTitleWidgets.add(
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: AssociatedTitleContainer(
-                                title: associatedTitle.title,
-                                setTitle: (text) async {
-                                  await database.createOrUpdateAssociatedTitle(
-                                    TransactionAssociatedTitle(
-                                      associatedTitlePk:
-                                          associatedTitle.associatedTitlePk,
-                                      categoryFk: widget.category == null
-                                          ? setCategoryPk
-                                          : widget.category!.categoryPk,
-                                      isExactMatch:
-                                          associatedTitle.isExactMatch,
-                                      title: text,
-                                      dateCreated: DateTime.now(),
-                                      order: associatedTitle.order,
-                                    ),
-                                  );
-                                },
-                                onDelete: () async {
-                                  await database.deleteAssociatedTitle(
-                                      snapshot.data![i].associatedTitlePk);
-                                },
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text:
+                          "If a transaction title contains any of the phrases listed, it will be added to this category",
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      fontSize: 13,
+                      maxLines: 10,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  AssociatedTitleEntryAdd(onTap: () {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "Set Title",
+                        child: SelectText(
+                          setSelectedText: (_) {},
+                          labelText: "Set Title",
+                          placeholder: "Title",
+                          nextWithInput: (text) async {
+                            // addAssociatedTitle(text);
+                            int numberOfAssociatedTitles = (await database
+                                    .getTotalCountOfAssociatedTitles())[0] ??
+                                0;
+                            await database.createOrUpdateAssociatedTitle(
+                              TransactionAssociatedTitle(
+                                associatedTitlePk:
+                                    DateTime.now().millisecondsSinceEpoch,
+                                categoryFk: widget.category == null
+                                    ? setCategoryPk
+                                    : widget.category!.categoryPk,
+                                isExactMatch: false,
+                                title: text,
+                                dateCreated: DateTime.now(),
+                                order: numberOfAssociatedTitles,
                               ),
-                            ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  }),
+                  StreamBuilder<List<TransactionAssociatedTitle>>(
+                      stream: database.watchAllAssociatedTitlesInCategory(
+                        widget.category == null
+                            ? setCategoryPk
+                            : widget.category!.categoryPk,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData &&
+                            (snapshot.data ?? []).length > 0) {
+                          List<Widget> associatedTitleWidgets = [];
+                          for (int i = 0; i < snapshot.data!.length; i++) {
+                            TransactionAssociatedTitle associatedTitle =
+                                snapshot.data![i];
+                            associatedTitleWidgets.add(
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: AssociatedTitleContainer(
+                                  title: associatedTitle.title,
+                                  setTitle: (text) async {
+                                    await database
+                                        .createOrUpdateAssociatedTitle(
+                                      TransactionAssociatedTitle(
+                                        associatedTitlePk:
+                                            associatedTitle.associatedTitlePk,
+                                        categoryFk: widget.category == null
+                                            ? setCategoryPk
+                                            : widget.category!.categoryPk,
+                                        isExactMatch:
+                                            associatedTitle.isExactMatch,
+                                        title: text,
+                                        dateCreated: DateTime.now(),
+                                        order: associatedTitle.order,
+                                      ),
+                                    );
+                                  },
+                                  onDelete: () async {
+                                    await database.deleteAssociatedTitle(
+                                        snapshot.data![i].associatedTitlePk);
+                                  },
+                                ),
+                              ),
+                            );
+                          }
+                          return Column(
+                            children: [...associatedTitleWidgets],
                           );
                         }
-                        return Column(
-                          children: [...associatedTitleWidgets],
-                        );
-                      }
-                      return SizedBox();
-                    }),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Button(
-                label: "Add Category",
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                onTap: () {
-                  addCategory();
-                },
+                        return SizedBox();
+                      }),
+                ],
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: canAddCategory ?? false
+                    ? Button(
+                        label: widget.category == null
+                            ? "Add Category"
+                            : "Save Changes",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        onTap: () {
+                          addCategory();
+                        },
+                      )
+                    : Button(
+                        label: widget.category == null
+                            ? "Add Category"
+                            : "Save Changes",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        onTap: () {},
+                        color: Colors.grey,
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

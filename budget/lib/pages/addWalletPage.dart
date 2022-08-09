@@ -93,19 +93,22 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   Future addWallet() async {
     print("Added wallet");
-    int numberOfWallets = (await database.getTotalCountOfWallets())[0] ?? 0;
-    await database.createOrUpdateWallet(
-      TransactionWallet(
-        walletPk: widget.wallet != null
-            ? widget.wallet!.walletPk
-            : DateTime.now().millisecondsSinceEpoch,
-        name: selectedTitle ?? "",
-        colour: toHexString(selectedColor ?? Colors.green),
-        dateCreated: DateTime.now(),
-        order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
-      ),
-    );
+    await database.createOrUpdateWallet(await createTransactionWallet());
     Navigator.pop(context);
+  }
+
+  Future<TransactionWallet> createTransactionWallet() async {
+    int numberOfWallets = (await database.getTotalCountOfWallets())[0] ?? 0;
+    return TransactionWallet(
+      walletPk: widget.wallet != null
+          ? widget.wallet!.walletPk
+          : DateTime.now().millisecondsSinceEpoch,
+      name: selectedTitle ?? "",
+      colour: toHexString(selectedColor ?? Colors.green),
+      dateCreated:
+          widget.wallet != null ? widget.wallet!.dateCreated : DateTime.now(),
+      order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
+    );
   }
 
   @override
@@ -120,6 +123,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
       setState(() {
         selectedColor = HexColor(widget.wallet!.colour);
         selectedTitle = widget.wallet!.name;
+        //Set to false because we can't save until we made some changes
+        canAddWallet = false;
       });
     } else {}
   }
@@ -146,83 +151,110 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        onTap: () {
-          //Minimize keyboard when tap non interactive widget
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Stack(
-          children: [
-            PageFramework(
-              title: widget.title,
-              navbar: false,
-              onBackButton: () async {
-                if (widget.wallet != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              onDragDownToDissmiss: () async {
-                if (widget.wallet != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              listWidgets: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TappableTextEntry(
-                    title: selectedTitle,
-                    placeholder: "Name",
-                    onTap: () {
-                      selectTitle();
-                    },
-                    autoSizeText: true,
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.wallet != null) {
+          discardChangesPopup(
+            context,
+            previousObject: widget.wallet,
+            currentObject: await createTransactionWallet(),
+          );
+        } else {
+          discardChangesPopup(context);
+        }
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
+          onTap: () {
+            //Minimize keyboard when tap non interactive widget
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: Stack(
+            children: [
+              PageFramework(
+                title: widget.title,
+                navbar: false,
+                onBackButton: () async {
+                  if (widget.wallet != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.wallet,
+                      currentObject: await createTransactionWallet(),
+                    );
+                  } else {
+                    discardChangesPopup(context);
+                  }
+                },
+                onDragDownToDissmiss: () async {
+                  if (widget.wallet != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.wallet,
+                      currentObject: await createTransactionWallet(),
+                    );
+                  } else {
+                    discardChangesPopup(context);
+                  }
+                },
+                listWidgets: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TappableTextEntry(
+                      title: selectedTitle,
+                      placeholder: "Name",
+                      onTap: () {
+                        selectTitle();
+                      },
+                      autoSizeText: true,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    ),
                   ),
-                ),
-                SizedBox(height: 14),
-                Column(
-                  children: [
-                    Container(
-                      height: 65,
-                      child: SelectColor(
-                        horizontalList: true,
-                        selectedColor: selectedColor,
-                        setSelectedColor: setSelectedColor,
+                  SizedBox(height: 14),
+                  Column(
+                    children: [
+                      Container(
+                        height: 65,
+                        child: SelectColor(
+                          horizontalList: true,
+                          selectedColor: selectedColor,
+                          setSelectedColor: setSelectedColor,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: canAddWallet ?? false
-                  ? Button(
-                      label: "Add Wallet",
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      onTap: () {
-                        addWallet();
-                      },
-                    )
-                  : Button(
-                      label: "Add Wallet",
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      onTap: () {
-                        addWallet();
-                      },
-                      color: Colors.grey,
-                    ),
-            ),
-          ],
+                    ],
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: canAddWallet ?? false
+                    ? Button(
+                        label: widget.wallet == null
+                            ? "Add Wallet"
+                            : "Save Changes",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        onTap: () {
+                          addWallet();
+                        },
+                      )
+                    : Button(
+                        label: widget.wallet == null
+                            ? "Add Wallet"
+                            : "Save Changes",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        onTap: () {},
+                        color: Colors.grey,
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

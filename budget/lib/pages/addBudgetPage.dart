@@ -97,7 +97,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   Color? selectedColor;
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "months";
-  String? textAddBudget = "Add Transaction";
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -182,6 +181,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 selectedRecurrenceDisplay = namesRecurrence[value];
               }
             });
+            Navigator.of(context).pop();
             determineBottomButton();
           },
         ),
@@ -373,32 +373,37 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   Future addBudget() async {
     print("Added budget");
+    await database.createOrUpdateBudget(await createBudget());
+    print(await database.getAmountOfBudgets());
+    Navigator.pop(context);
+  }
+
+  Future<Budget> createBudget() async {
     List<int> categoryFks = [];
     for (TransactionCategory category in selectedCategories ?? []) {
       categoryFks.add(category.categoryPk);
     }
-    await database.createOrUpdateBudget(
-      Budget(
-        budgetPk: widget.budget != null
-            ? widget.budget!.budgetPk
-            : DateTime.now().millisecondsSinceEpoch,
-        name: selectedTitle ?? "",
-        amount: selectedAmount ?? 0,
-        colour: toHexString(selectedColor ?? Colors.green),
-        startDate: selectedStartDate,
-        endDate: selectedEndDate ?? DateTime.now(),
-        categoryFks: categoryFks,
-        allCategoryFks: selectedAllCategories,
-        periodLength: selectedPeriodLength,
-        reoccurrence: mapRecurrence(selectedRecurrence),
-        dateCreated: DateTime.now(),
-        pinned: true,
-        order: widget.budget != null ? widget.budget!.order : await database.getAmountOfBudgets(),
-        walletFk: 0,
-      ),
+    return await Budget(
+      budgetPk: widget.budget != null
+          ? widget.budget!.budgetPk
+          : DateTime.now().millisecondsSinceEpoch,
+      name: selectedTitle ?? "",
+      amount: selectedAmount ?? 0,
+      colour: toHexString(selectedColor ?? Colors.green),
+      startDate: selectedStartDate,
+      endDate: selectedEndDate ?? DateTime.now(),
+      categoryFks: categoryFks,
+      allCategoryFks: selectedAllCategories,
+      periodLength: selectedPeriodLength,
+      reoccurrence: mapRecurrence(selectedRecurrence),
+      dateCreated:
+          widget.budget != null ? widget.budget!.dateCreated : DateTime.now(),
+      pinned: true,
+      order: widget.budget != null
+          ? widget.budget!.order
+          : await database.getAmountOfBudgets(),
+      walletFk: 0,
     );
-    print(await database.getAmountOfBudgets());
-    Navigator.pop(context);
   }
 
   @override
@@ -429,7 +434,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       } else {
         selectedAmountCalculation = amountString;
       }
-      textAddBudget = "Edit Transaction";
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
@@ -450,6 +454,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       }
       setSelectedCategories(categories);
     }
+    //Set to false because we can't save until we made some changes
+    setState(() {
+      canAddBudget = false;
+    });
   }
 
   determineBottomButton() {
@@ -460,301 +468,342 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         selectedStartDate != null &&
         ((selectedRecurrence == "Custom" && selectedEndDate != null) ||
             (selectedRecurrence != "Custom" && selectedPeriodLength != 0))) {
-      if (canAddBudget != true)
+      if (canAddBudget != true) {
         this.setState(() {
           canAddBudget = true;
         });
+        return true;
+      }
     } else {
-      if (canAddBudget != false)
+      if (canAddBudget != false) {
         this.setState(() {
           canAddBudget = false;
         });
+        return false;
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        onTap: () {
-          //Minimize keyboard when tap non interactive widget
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Stack(
-          children: [
-            PageFramework(
-              title: widget.title,
-              navbar: false,
-              onBackButton: () async {
-                if (widget.budget != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              onDragDownToDissmiss: () async {
-                if (widget.budget != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              listWidgets: [
-                Container(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TappableTextEntry(
-                    title: selectedTitle,
-                    placeholder: "Name",
-                    onTap: () {
-                      selectTitle();
-                    },
-                    autoSizeText: true,
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  ),
-                ),
-                Container(height: 17),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFont(
-                    text: "Select Color",
-                    textColor: Theme.of(context).colorScheme.textLight,
-                    fontSize: 16,
-                  ),
-                ),
-                Container(height: 10),
-                Container(
-                  height: 65,
-                  child: SelectColor(
-                    horizontalList: true,
-                    selectedColor: selectedColor,
-                    setSelectedColor: setSelectedColor,
-                  ),
-                ),
-                Container(height: 17),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFont(
-                    text: "Select Categories",
-                    textColor: Theme.of(context).colorScheme.textLight,
-                    fontSize: 16,
-                  ),
-                ),
-                Container(height: 2),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFont(
-                    text: selectedCategoriesText + " Budget",
-                    textColor: Theme.of(context).colorScheme.secondaryContainer,
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(height: 10),
-                Container(
-                  height: 100,
-                  child: SelectCategory(
-                    horizontalList: true,
-                    selectedCategories: selectedCategories,
-                    setSelectedCategories: setSelectedCategories,
-                  ),
-                ),
-                Container(height: 23),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextFont(
-                        text: "Amount and Period",
-                        textColor: Theme.of(context).colorScheme.textLight,
-                        fontSize: 16,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.end,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      IntrinsicWidth(
-                        child: TappableTextEntry(
-                          title: convertToMoney(selectedAmount ?? 0),
-                          placeholder: convertToMoney(0),
-                          showPlaceHolderWhenTextEquals: convertToMoney(0),
-                          onTap: () {
-                            selectAmount(context);
-                          },
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          internalPadding:
-                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
-                        ),
-                      ),
-                      IntrinsicWidth(
-                        child: Row(
-                          children: [
-                            selectedRecurrence != "Custom"
-                                ? TappableTextEntry(
-                                    title:
-                                        "/ " + selectedPeriodLength.toString(),
-                                    placeholder: "/ 0",
-                                    showPlaceHolderWhenTextEquals: "/ 0",
-                                    onTap: () {
-                                      selectPeriodLength(context);
-                                    },
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    internalPadding: EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 4),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 3),
-                                  )
-                                : TextFont(
-                                    text: " /",
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            TappableTextEntry(
-                              title: selectedRecurrenceDisplay,
-                              placeholder: "",
-                              onTap: () {
-                                selectRecurrence(context);
-                              },
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              internalPadding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 4),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 3),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Transform.translate(
-                  offset: Offset(
-                      0,
-                      selectedEndDate == null && selectedRecurrence == "Custom"
-                          ? 0
-                          : -5),
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: selectedRecurrence != "Custom"
-                          ? Tappable(
-                              onTap: () {
-                                selectStartDate(context);
-                              },
-                              color: Colors.transparent,
-                              borderRadius: 15,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 8),
-                                child: Center(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 5.8),
-                                        child: TextFont(
-                                          text: "beginning ",
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      IgnorePointer(
-                                        child: TappableTextEntry(
-                                          title:
-                                              getWordedDate(selectedStartDate),
-                                          placeholder: "",
-                                          onTap: () {
-                                            selectAmount(context);
-                                          },
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 0, horizontal: 5),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Tappable(
-                              onTap: () {
-                                selectDateRange(context);
-                              },
-                              color: Colors.transparent,
-                              borderRadius: 15,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 8),
-                                child: Center(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IgnorePointer(
-                                        child: TappableTextEntry(
-                                          title: selectedEndDate == null
-                                              ? null
-                                              : getWordedDateShort(
-                                                      selectedStartDate) +
-                                                  " - " +
-                                                  getWordedDateShort(
-                                                      selectedEndDate!),
-                                          placeholder: "Select Custom Period",
-                                          onTap: () {},
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 0, horizontal: 5),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )),
-                ),
-                Container(height: 70),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: canAddBudget ?? false
-                  ? Button(
-                      label: "Add Budget",
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.budget != null) {
+          discardChangesPopup(
+            context,
+            previousObject: widget.budget,
+            currentObject: await createBudget(),
+          );
+        } else {
+          discardChangesPopup(context);
+        }
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
+          onTap: () {
+            //Minimize keyboard when tap non interactive widget
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: Stack(
+            children: [
+              PageFramework(
+                title: widget.title,
+                navbar: false,
+                onBackButton: () async {
+                  if (widget.budget != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.budget,
+                      currentObject: await createBudget(),
+                    );
+                  } else {
+                    discardChangesPopup(context);
+                  }
+                },
+                onDragDownToDissmiss: () async {
+                  if (widget.budget != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.budget,
+                      currentObject: await createBudget(),
+                    );
+                  } else {
+                    discardChangesPopup(context);
+                  }
+                },
+                listWidgets: [
+                  Container(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TappableTextEntry(
+                      title: selectedTitle,
+                      placeholder: "Name",
                       onTap: () {
-                        addBudget();
+                        selectTitle();
                       },
-                    )
-                  : Button(
-                      label: "Add Budget",
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      onTap: () {},
-                      color: Colors.grey,
+                      autoSizeText: true,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     ),
-            ),
-          ],
+                  ),
+                  Container(height: 17),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text: "Select Color",
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(height: 10),
+                  Container(
+                    height: 65,
+                    child: SelectColor(
+                      horizontalList: true,
+                      selectedColor: selectedColor,
+                      setSelectedColor: setSelectedColor,
+                    ),
+                  ),
+                  Container(height: 17),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text: "Select Categories",
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(height: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text: selectedCategoriesText + " Budget",
+                      textColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(height: 10),
+                  Container(
+                    height: 100,
+                    child: SelectCategory(
+                      horizontalList: true,
+                      selectedCategories: selectedCategories,
+                      setSelectedCategories: setSelectedCategories,
+                    ),
+                  ),
+                  Container(height: 23),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextFont(
+                          text: "Amount and Period",
+                          textColor: Theme.of(context).colorScheme.textLight,
+                          fontSize: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.end,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        IntrinsicWidth(
+                          child: TappableTextEntry(
+                            title: convertToMoney(selectedAmount ?? 0),
+                            placeholder: convertToMoney(0),
+                            showPlaceHolderWhenTextEquals: convertToMoney(0),
+                            onTap: () {
+                              selectAmount(context);
+                            },
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            internalPadding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 3),
+                          ),
+                        ),
+                        IntrinsicWidth(
+                          child: Row(
+                            children: [
+                              selectedRecurrence != "Custom"
+                                  ? TappableTextEntry(
+                                      title: "/ " +
+                                          selectedPeriodLength.toString(),
+                                      placeholder: "/ 0",
+                                      showPlaceHolderWhenTextEquals: "/ 0",
+                                      onTap: () {
+                                        selectPeriodLength(context);
+                                      },
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      internalPadding: EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 4),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 3),
+                                    )
+                                  : TextFont(
+                                      text: " /",
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              TappableTextEntry(
+                                title: selectedRecurrenceDisplay,
+                                placeholder: "",
+                                onTap: () {
+                                  selectRecurrence(context);
+                                },
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                internalPadding: EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 4),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 3),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Transform.translate(
+                    offset: Offset(
+                        0,
+                        selectedEndDate == null &&
+                                selectedRecurrence == "Custom"
+                            ? 0
+                            : -5),
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: selectedRecurrence != "Custom"
+                            ? Tappable(
+                                onTap: () {
+                                  selectStartDate(context);
+                                },
+                                color: Colors.transparent,
+                                borderRadius: 15,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 8),
+                                  child: Center(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 5.8),
+                                          child: TextFont(
+                                            text: "beginning ",
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        IgnorePointer(
+                                          child: TappableTextEntry(
+                                            title: getWordedDate(
+                                                selectedStartDate),
+                                            placeholder: "",
+                                            onTap: () {
+                                              selectAmount(context);
+                                            },
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            internalPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 2, horizontal: 4),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 5),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Tappable(
+                                onTap: () {
+                                  selectDateRange(context);
+                                },
+                                color: Colors.transparent,
+                                borderRadius: 15,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 8),
+                                  child: Center(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        IgnorePointer(
+                                          child: TappableTextEntry(
+                                            title: selectedEndDate == null
+                                                ? null
+                                                : getWordedDateShort(
+                                                        selectedStartDate) +
+                                                    " - " +
+                                                    getWordedDateShort(
+                                                        selectedEndDate!),
+                                            placeholder: "Select Custom Period",
+                                            onTap: () {},
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            internalPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 2, horizontal: 4),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 5),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )),
+                  ),
+                  Container(height: 70),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: canAddBudget ?? false
+                    ? Button(
+                        label: widget.budget == null
+                            ? "Add Budget"
+                            : "Save Changes",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        onTap: () {
+                          addBudget();
+                        },
+                      )
+                    : Button(
+                        label: widget.budget == null
+                            ? "Add Budget"
+                            : "Save Changes",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        onTap: () {},
+                        color: Colors.grey,
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

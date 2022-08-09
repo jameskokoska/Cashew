@@ -246,30 +246,32 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   Future addTransaction() async {
     print("Added transaction");
-    await database.createOrUpdateTransaction(
-      Transaction(
-        transactionPk: widget.transaction != null
-            ? widget.transaction!.transactionPk
-            : DateTime.now().millisecondsSinceEpoch,
-        name: selectedTitle ?? "",
-        amount: (selectedIncome
-            ? (selectedAmount ?? 0).abs()
-            : (selectedAmount ?? 0).abs() * -1),
-        note: selectedNote ?? "",
-        categoryFk: selectedCategory?.categoryPk ?? 0,
-        dateCreated: selectedDate,
-        income: selectedIncome,
-        walletFk: appStateSettings["selectedWallet"],
-        paid: widget.transaction != null
-            ? widget.transaction!.paid
-            : selectedType == null,
-        skipPaid: widget.transaction != null
-            ? widget.transaction!.paid
-            : selectedType == null,
-        type: selectedType,
-        reoccurrence: selectedRecurrenceEnum,
-        periodLength: selectedPeriodLength,
-      ),
+    await database.createOrUpdateTransaction(await createTransaction());
+  }
+
+  Future<Transaction> createTransaction() async {
+    return Transaction(
+      transactionPk: widget.transaction != null
+          ? widget.transaction!.transactionPk
+          : DateTime.now().millisecondsSinceEpoch,
+      name: selectedTitle ?? "",
+      amount: (selectedIncome
+          ? (selectedAmount ?? 0).abs()
+          : (selectedAmount ?? 0).abs() * -1),
+      note: selectedNote ?? "",
+      categoryFk: selectedCategory?.categoryPk ?? 0,
+      dateCreated: selectedDate,
+      income: selectedIncome,
+      walletFk: appStateSettings["selectedWallet"],
+      paid: widget.transaction != null
+          ? widget.transaction!.paid
+          : selectedType == null,
+      skipPaid: widget.transaction != null
+          ? widget.transaction!.paid
+          : selectedType == null,
+      type: selectedType,
+      reoccurrence: selectedRecurrenceEnum,
+      periodLength: selectedPeriodLength,
     );
   }
 
@@ -397,43 +399,419 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        onTap: () {
-          //Minimize keyboard when tap non interactive widget
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Stack(
-          children: [
-            PageFramework(
-              title: widget.title,
-              dragDownToDismiss: true,
-              navbar: false,
-              onBackButton: () async {
-                if (widget.transaction != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              onDragDownToDissmiss: () async {
-                if (widget.transaction != null)
-                  discardChangesPopup(context);
-                else
-                  Navigator.pop(context);
-              },
-              listWidgets: [
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  color: HexColor(selectedCategory?.colour,
-                          Theme.of(context).canvasColor)
-                      .withOpacity(0.55),
-                  child: Row(
-                    children: [
-                      Tappable(
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.transaction != null) {
+          discardChangesPopup(
+            context,
+            previousObject: widget.transaction,
+            currentObject: await createTransaction(),
+          );
+        } else {
+          return true;
+        }
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
+          onTap: () {
+            //Minimize keyboard when tap non interactive widget
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: Stack(
+            children: [
+              PageFramework(
+                title: widget.title,
+                dragDownToDismiss: true,
+                navbar: false,
+                onBackButton: () async {
+                  if (widget.transaction != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.transaction,
+                      currentObject: await createTransaction(),
+                    );
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                onDragDownToDissmiss: () async {
+                  if (widget.transaction != null) {
+                    discardChangesPopup(
+                      context,
+                      previousObject: widget.transaction,
+                      currentObject: await createTransaction(),
+                    );
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                listWidgets: [
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    color: HexColor(selectedCategory?.colour,
+                            Theme.of(context).canvasColor)
+                        .withOpacity(0.55),
+                    child: Row(
+                      children: [
+                        Tappable(
+                          onTap: () {
+                            openBottomSheet(
+                              context,
+                              PopupFramework(
+                                title: "Select Category",
+                                child: SelectCategory(
+                                  selectedCategory: selectedCategory,
+                                  setSelectedCategory: setSelectedCategory,
+                                ),
+                              ),
+                            );
+                          },
+                          color: Colors.transparent,
+                          child: Container(
+                            height: 136,
+                            padding: const EdgeInsets.only(left: 17, right: 20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 300),
+                                  child: CategoryIcon(
+                                    noBackground: true,
+                                    key: ValueKey(
+                                        selectedCategory?.categoryPk ?? ""),
+                                    categoryPk:
+                                        selectedCategory?.categoryPk ?? 0,
+                                    size: 60,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Tappable(
+                            color: Colors.transparent,
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Enter Amount",
+                                  child: SelectAmount(
+                                    amountPassed:
+                                        selectedAmountCalculation ?? "",
+                                    setSelectedAmount: setSelectedAmount,
+                                    next: () async {
+                                      if (selectedCategory == null) {
+                                        Navigator.pop(context);
+                                        openBottomSheet(
+                                          context,
+                                          PopupFramework(
+                                            title: "Select Category",
+                                            child: SelectCategory(
+                                              selectedCategory:
+                                                  selectedCategory,
+                                              setSelectedCategory:
+                                                  setSelectedCategory,
+                                              next: () async {
+                                                // await addTransaction();
+                                                // Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        await addTransaction();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    nextLabel: selectedCategory == null
+                                        ? "Select Category"
+                                        : textAddTransaction,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(right: 37),
+                              height: 136,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(height: 5),
+                                  CountNumber(
+                                    count: selectedAmount ?? 0,
+                                    duration: Duration(milliseconds: 1000),
+                                    dynamicDecimals: true,
+                                    initialCount: selectedAmount ?? 0,
+                                    textBuilder: (number) {
+                                      return TextFont(
+                                        textAlign: TextAlign.right,
+                                        text: convertToMoney(number),
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                        maxLines: 1,
+                                      );
+                                    },
+                                  ),
+                                  AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 350),
+                                    child: Container(
+                                      key: ValueKey(
+                                          selectedCategory?.name ?? ""),
+                                      width: double.infinity,
+                                      child: TextFont(
+                                        textAlign: TextAlign.right,
+                                        fontSize: 18,
+                                        text: selectedCategory?.name ?? "",
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      children: [
+                        Container(height: 20),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 300),
+                          child: DateButton(
+                            key: ValueKey(selectedDate.toString()),
+                            onTap: () {
+                              selectDate(context);
+                            },
+                            selectedDate: selectedDate,
+                            setSelectedDate: setSelectedDate,
+                          ),
+                        ),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 300),
+                          child: TypeButton(
+                            key: ValueKey(selectedTypeDisplay.toString()),
+                            onTap: () => openBottomSheet(
+                              context,
+                              PopupFramework(
+                                title: "Select Type",
+                                child: RadioItems(
+                                  items: [
+                                    transactionTypeDisplayToEnum[null],
+                                    transactionTypeDisplayToEnum[
+                                        TransactionSpecialType.upcoming],
+                                    transactionTypeDisplayToEnum[
+                                        TransactionSpecialType.subscription],
+                                    transactionTypeDisplayToEnum[
+                                        TransactionSpecialType.repetitive]
+                                  ],
+                                  initial: selectedTypeDisplay,
+                                  onChanged: (value) {
+                                    setSelectedType(value);
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                            ),
+                            selectedType: selectedType,
+                            selectedTypeDisplay: selectedTypeDisplay,
+                          ),
+                        ),
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: selectedType ==
+                                        TransactionSpecialType.repetitive ||
+                                    selectedType ==
+                                        TransactionSpecialType.subscription
+                                ? Wrap(
+                                    key: ValueKey(1),
+                                    alignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      TextFont(
+                                        text: "Repeat every",
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TappableTextEntry(
+                                            title:
+                                                selectedPeriodLength.toString(),
+                                            placeholder: "0",
+                                            showPlaceHolderWhenTextEquals: "0",
+                                            onTap: () {
+                                              selectPeriodLength(context);
+                                            },
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
+                                            internalPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 4),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 3),
+                                          ),
+                                          TappableTextEntry(
+                                            title: selectedRecurrenceDisplay,
+                                            placeholder: "",
+                                            onTap: () {
+                                              selectRecurrence(context);
+                                            },
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
+                                            internalPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 4),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 3),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                : Container(),
+                          ),
+                        ),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 400),
+                          child: IncomeTypeButton(
+                            key: ValueKey(selectedIncome),
+                            onTap: () {
+                              setSelectedIncome(!selectedIncome);
+                            },
+                            selectedIncome: selectedIncome,
+                          ),
+                        ),
+                        Container(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          child: Tappable(
+                            color:
+                                Theme.of(context).colorScheme.canvasContainer,
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Enter Title",
+                                  child: SelectText(
+                                    setSelectedText: setSelectedTitle,
+                                    labelText: "Title",
+                                    selectedText: selectedTitle,
+                                  ),
+                                ),
+                              );
+                            },
+                            borderRadius: 15,
+                            child: IgnorePointer(
+                              child: TextInput(
+                                backgroundColor: Colors.transparent,
+                                padding: EdgeInsets.zero,
+                                readOnly: true,
+                                bubbly: true,
+                                labelText: "Title",
+                                icon: Icons.title_rounded,
+                                controller: _titleInputController,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(height: 14),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          child: Tappable(
+                            color:
+                                Theme.of(context).colorScheme.canvasContainer,
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  child: SelectNotes(
+                                    setSelectedNote: setSelectedNoteController,
+                                    selectedNote: selectedNote,
+                                  ),
+                                ),
+                                snap: false,
+                              );
+                            },
+                            borderRadius: 15,
+                            child: IgnorePointer(
+                              child: TextInput(
+                                backgroundColor: Colors.transparent,
+                                padding: EdgeInsets.zero,
+                                readOnly: true,
+                                bubbly: true,
+                                labelText: "Notes",
+                                icon: Icons.edit,
+                                controller: _noteInputController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                minLines: 3,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 24),
+                        //   child: Column(
+                        //     children: [
+                        //       Container(height: 20),
+                        //       TextInput(
+                        //         backgroundColor:
+                        //             Theme.of(context).colorScheme.canvasContainer,
+                        //         padding: EdgeInsets.zero,
+                        //         bubbly: true,
+                        //         labelText: "Title",
+                        //         icon: Icons.title_rounded,
+                        //         controller: _titleInputController,
+                        //       ),
+                        //       Container(height: 14),
+                        //       TextInput(
+                        //         backgroundColor:
+                        //             Theme.of(context).colorScheme.canvasContainer,
+                        //         padding: EdgeInsets.zero,
+                        //         bubbly: true,
+                        //         labelText: "Notes",
+                        //         icon: Icons.edit,
+                        //         controller: _noteInputController,
+                        //         keyboardType: TextInputType.multiline,
+                        //         maxLines: null,
+                        //         minLines: 3,
+                        //       ),
+                        //       Container(height: 20),
+                        //     ],
+                        //   ),
+                        // ),
+                        Container(height: 20),
+                        Container(height: 100),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              //This align causes a state update when keyboard pushes it up... optimize in the future?
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: selectedCategory == null
+                    ? Button(
+                        label: "Select Category",
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
                         onTap: () {
                           openBottomSheet(
                             context,
@@ -442,410 +820,70 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               child: SelectCategory(
                                 selectedCategory: selectedCategory,
                                 setSelectedCategory: setSelectedCategory,
+                                skipIfSet: true,
+                                next: () {
+                                  openBottomSheet(
+                                    context,
+                                    PopupFramework(
+                                      title: "Enter Amount",
+                                      child: SelectAmount(
+                                        amountPassed:
+                                            selectedAmountCalculation ?? "",
+                                        setSelectedAmount: setSelectedAmount,
+                                        next: () async {
+                                          await addTransaction;
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        },
+                                        nextLabel: textAddTransaction,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           );
                         },
-                        color: Colors.transparent,
-                        child: Container(
-                          height: 136,
-                          padding: const EdgeInsets.only(left: 17, right: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AnimatedSwitcher(
-                                duration: Duration(milliseconds: 300),
-                                child: CategoryIcon(
-                                  noBackground: true,
-                                  key: ValueKey(
-                                      selectedCategory?.categoryPk ?? ""),
-                                  categoryPk: selectedCategory?.categoryPk ?? 0,
-                                  size: 60,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Tappable(
-                          color: Colors.transparent,
-                          onTap: () {
-                            openBottomSheet(
-                              context,
-                              PopupFramework(
-                                title: "Enter Amount",
-                                child: SelectAmount(
-                                  amountPassed: selectedAmountCalculation ?? "",
-                                  setSelectedAmount: setSelectedAmount,
-                                  next: () async {
-                                    if (selectedCategory == null) {
-                                      Navigator.pop(context);
-                                      openBottomSheet(
-                                        context,
-                                        PopupFramework(
-                                          title: "Select Category",
-                                          child: SelectCategory(
-                                            selectedCategory: selectedCategory,
-                                            setSelectedCategory:
-                                                setSelectedCategory,
-                                            next: () async {
-                                              // await addTransaction();
-                                              // Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-                                      );
-                                    } else {
+                      )
+                    : selectedAmount == null
+                        ? Button(
+                            label: "Enter Amount",
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Enter Amount",
+                                  child: SelectAmount(
+                                    amountPassed:
+                                        selectedAmountCalculation ?? "",
+                                    setSelectedAmount: setSelectedAmount,
+                                    next: () async {
                                       await addTransaction();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
-                                    }
-                                  },
-                                  nextLabel: selectedCategory == null
-                                      ? "Select Category"
-                                      : textAddTransaction,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.only(right: 37),
-                            height: 136,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(height: 5),
-                                CountNumber(
-                                  count: selectedAmount ?? 0,
-                                  duration: Duration(milliseconds: 1000),
-                                  dynamicDecimals: true,
-                                  initialCount: selectedAmount ?? 0,
-                                  textBuilder: (number) {
-                                    return TextFont(
-                                      textAlign: TextAlign.right,
-                                      text: convertToMoney(number),
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold,
-                                      maxLines: 1,
-                                    );
-                                  },
-                                ),
-                                AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 350),
-                                  child: Container(
-                                    key: ValueKey(selectedCategory?.name ?? ""),
-                                    width: double.infinity,
-                                    child: TextFont(
-                                      textAlign: TextAlign.right,
-                                      fontSize: 18,
-                                      text: selectedCategory?.name ?? "",
-                                    ),
+                                    },
+                                    nextLabel: textAddTransaction,
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
+                          )
+                        : Button(
+                            label: widget.transaction != null
+                                ? "Save Changes"
+                                : textAddTransaction ?? "",
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            onTap: () async {
+                              await addTransaction();
+                              Navigator.of(context).pop();
+                            },
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      Container(height: 20),
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: DateButton(
-                          key: ValueKey(selectedDate.toString()),
-                          onTap: () {
-                            selectDate(context);
-                          },
-                          selectedDate: selectedDate,
-                          setSelectedDate: setSelectedDate,
-                        ),
-                      ),
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: TypeButton(
-                          key: ValueKey(selectedTypeDisplay.toString()),
-                          onTap: () => openBottomSheet(
-                            context,
-                            PopupFramework(
-                              title: "Select Type",
-                              child: RadioItems(
-                                items: [
-                                  transactionTypeDisplayToEnum[null],
-                                  transactionTypeDisplayToEnum[
-                                      TransactionSpecialType.upcoming],
-                                  transactionTypeDisplayToEnum[
-                                      TransactionSpecialType.subscription],
-                                  transactionTypeDisplayToEnum[
-                                      TransactionSpecialType.repetitive]
-                                ],
-                                initial: selectedTypeDisplay,
-                                onChanged: (value) {
-                                  setSelectedType(value);
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ),
-                          ),
-                          selectedType: selectedType,
-                          selectedTypeDisplay: selectedTypeDisplay,
-                        ),
-                      ),
-                      AnimatedSize(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
-                          child: selectedType ==
-                                      TransactionSpecialType.repetitive ||
-                                  selectedType ==
-                                      TransactionSpecialType.subscription
-                              ? Wrap(
-                                  key: ValueKey(1),
-                                  alignment: WrapAlignment.center,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    TextFont(
-                                      text: "Repeat every",
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        TappableTextEntry(
-                                          title:
-                                              selectedPeriodLength.toString(),
-                                          placeholder: "0",
-                                          showPlaceHolderWhenTextEquals: "0",
-                                          onTap: () {
-                                            selectPeriodLength(context);
-                                          },
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 3),
-                                        ),
-                                        TappableTextEntry(
-                                          title: selectedRecurrenceDisplay,
-                                          placeholder: "",
-                                          onTap: () {
-                                            selectRecurrence(context);
-                                          },
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 3),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              : Container(),
-                        ),
-                      ),
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 400),
-                        child: IncomeTypeButton(
-                          key: ValueKey(selectedIncome),
-                          onTap: () {
-                            setSelectedIncome(!selectedIncome);
-                          },
-                          selectedIncome: selectedIncome,
-                        ),
-                      ),
-                      Container(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 22),
-                        child: Tappable(
-                          color: Theme.of(context).colorScheme.canvasContainer,
-                          onTap: () {
-                            openBottomSheet(
-                              context,
-                              PopupFramework(
-                                title: "Enter Title",
-                                child: SelectText(
-                                  setSelectedText: setSelectedTitle,
-                                  labelText: "Title",
-                                  selectedText: selectedTitle,
-                                ),
-                              ),
-                            );
-                          },
-                          borderRadius: 15,
-                          child: IgnorePointer(
-                            child: TextInput(
-                              backgroundColor: Colors.transparent,
-                              padding: EdgeInsets.zero,
-                              readOnly: true,
-                              bubbly: true,
-                              labelText: "Title",
-                              icon: Icons.title_rounded,
-                              controller: _titleInputController,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(height: 14),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 22),
-                        child: Tappable(
-                          color: Theme.of(context).colorScheme.canvasContainer,
-                          onTap: () {
-                            openBottomSheet(
-                              context,
-                              PopupFramework(
-                                child: SelectNotes(
-                                  setSelectedNote: setSelectedNoteController,
-                                  selectedNote: selectedNote,
-                                ),
-                              ),
-                              snap: false,
-                            );
-                          },
-                          borderRadius: 15,
-                          child: IgnorePointer(
-                            child: TextInput(
-                              backgroundColor: Colors.transparent,
-                              padding: EdgeInsets.zero,
-                              readOnly: true,
-                              bubbly: true,
-                              labelText: "Notes",
-                              icon: Icons.edit,
-                              controller: _noteInputController,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              minLines: 3,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // Padding(
-                      //   padding: EdgeInsets.symmetric(horizontal: 24),
-                      //   child: Column(
-                      //     children: [
-                      //       Container(height: 20),
-                      //       TextInput(
-                      //         backgroundColor:
-                      //             Theme.of(context).colorScheme.canvasContainer,
-                      //         padding: EdgeInsets.zero,
-                      //         bubbly: true,
-                      //         labelText: "Title",
-                      //         icon: Icons.title_rounded,
-                      //         controller: _titleInputController,
-                      //       ),
-                      //       Container(height: 14),
-                      //       TextInput(
-                      //         backgroundColor:
-                      //             Theme.of(context).colorScheme.canvasContainer,
-                      //         padding: EdgeInsets.zero,
-                      //         bubbly: true,
-                      //         labelText: "Notes",
-                      //         icon: Icons.edit,
-                      //         controller: _noteInputController,
-                      //         keyboardType: TextInputType.multiline,
-                      //         maxLines: null,
-                      //         minLines: 3,
-                      //       ),
-                      //       Container(height: 20),
-                      //     ],
-                      //   ),
-                      // ),
-                      Container(height: 20),
-                      Container(height: 100),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            //This align causes a state update when keyboard pushes it up... optimize in the future?
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: selectedCategory == null
-                  ? Button(
-                      label: "Select Category",
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      onTap: () {
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "Select Category",
-                            child: SelectCategory(
-                              selectedCategory: selectedCategory,
-                              setSelectedCategory: setSelectedCategory,
-                              skipIfSet: true,
-                              next: () {
-                                openBottomSheet(
-                                  context,
-                                  PopupFramework(
-                                    title: "Enter Amount",
-                                    child: SelectAmount(
-                                      amountPassed:
-                                          selectedAmountCalculation ?? "",
-                                      setSelectedAmount: setSelectedAmount,
-                                      next: () async {
-                                        await addTransaction;
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      },
-                                      nextLabel: textAddTransaction,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  : selectedAmount == null
-                      ? Button(
-                          label: "Enter Amount",
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          onTap: () {
-                            openBottomSheet(
-                              context,
-                              PopupFramework(
-                                title: "Enter Amount",
-                                child: SelectAmount(
-                                  amountPassed: selectedAmountCalculation ?? "",
-                                  setSelectedAmount: setSelectedAmount,
-                                  next: () async {
-                                    await addTransaction();
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                  nextLabel: textAddTransaction,
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : Button(
-                          label: textAddTransaction ?? "",
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          onTap: () async {
-                            await addTransaction();
-                            Navigator.of(context).pop();
-                          },
-                        ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
