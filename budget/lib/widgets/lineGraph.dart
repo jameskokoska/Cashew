@@ -67,7 +67,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           right: 10 + extraHorizontalPadding, top: 8, bottom: 0),
       child: LineChart(
         data,
-        swapAnimationDuration: const Duration(milliseconds: kIsWeb ? 0 : 2500),
+        swapAnimationDuration: const Duration(milliseconds: 2500),
         swapAnimationCurve: Curves.easeInOutCubic,
       ),
     );
@@ -402,20 +402,19 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return Container(
-        height: 175,
-        child: LinePage(
-          key: ValueKey(DateTime.now().millisecondsSinceEpoch),
-          spots: points,
-          maxPair: getMaxPoint(points),
-          minPair: getMinPoint(points),
-          color: color == null ? Theme.of(context).colorScheme.primary : color!,
-          endDate: endDate,
-          verticalLineAt: verticalLineAt,
-        ),
-      );
-    }
+    // if (kIsWeb) {
+    //   return Container(
+    //     height: 175,
+    //     child: LinePage(
+    //       spots: points,
+    //       maxPair: getMaxPoint(points),
+    //       minPair: getMinPoint(points),
+    //       color: color == null ? Theme.of(context).colorScheme.primary : color!,
+    //       endDate: endDate,
+    //       verticalLineAt: verticalLineAt,
+    //     ),
+    //   );
+    // }
     return Container(
       height: 175,
       child: _LineChart(
@@ -468,7 +467,7 @@ class _LinePageState extends State<LinePage> {
         ),
         child: Chart(
           layers: layers(),
-          duration: Duration.zero,
+          duration: Duration(milliseconds: 1500),
           padding: EdgeInsets.only(bottom: 5),
         ),
       ),
