@@ -167,7 +167,9 @@ class _CountUpState extends State<CountUp> {
   Widget build(BuildContext context) {
     if (kIsWeb) {
       return TextFont(
-        text: widget.prefix + widget.count.toString() + widget.suffix,
+        text: widget.prefix +
+            ((widget.count * pow(10, widget.decimals)).toInt()).toString() +
+            widget.suffix,
         fontSize: widget.fontSize,
         fontWeight: widget.fontWeight,
         textAlign: widget.textAlign,
@@ -248,7 +250,7 @@ class _CountNumberState extends State<CountNumber> {
   Widget build(BuildContext context) {
     if (kIsWeb) {
       return widget.textBuilder(
-        widget.initialCount,
+        (widget.count * pow(10, decimals)).toInt().toDouble(),
       );
     }
 
