@@ -254,10 +254,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           );
         },
         getDrawingVerticalLine: (value) {
-          print((widget.maxPair.y) /
-              ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
-          print(((widget.minPair.y)) /
-              ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
+          // print((widget.maxPair.y) /
+          //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
+          // print(((widget.minPair.y)) /
+          //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
           return FlLine(
             color: dynamicPastel(context, widget.color, amount: 0.3)
                 .withOpacity(0.2),

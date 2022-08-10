@@ -1,4 +1,5 @@
 import 'package:budget/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
@@ -17,8 +18,9 @@ extension ColorsDefined on ColorScheme {
   Color get lightDarkAccent => brightness == Brightness.light
       ? const Color(0xFFFAFAFA)
       : Color(0xFF161616);
-  Color get lightDarkAccentHeavyLight =>
-      brightness == Brightness.light ? Color(0xFFFFFFFF) : Color(0xFF242424);
+  Color get lightDarkAccentHeavyLight => brightness == Brightness.light
+      ? (kIsWeb ? Color(0xFFFAFAFA) : Color(0xFFFFFFFF))
+      : Color(0xFF242424);
   Color get canvasContainer => brightness == Brightness.light
       ? const Color(0xFFEBEBEB)
       : const Color(0xFF242424);

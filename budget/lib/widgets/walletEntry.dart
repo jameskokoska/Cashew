@@ -38,7 +38,7 @@ class _WalletEntryState extends State<WalletEntry>
       padding: const EdgeInsets.only(left: 6, right: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        boxShadow: boxShadow(context),
+        boxShadow: boxShadowCheck(boxShadowGeneral(context)),
       ),
       child: OpenContainerNavigation(
         borderRadius: 15,

@@ -361,7 +361,7 @@ class BudgetContainer extends StatelessWidget {
     ));
     return Container(
       decoration: BoxDecoration(
-        boxShadow: boxShadow(context),
+        boxShadow: boxShadowCheck(boxShadowGeneral(context)),
       ),
       child: OpenContainerNavigation(
         borderRadius: 20,

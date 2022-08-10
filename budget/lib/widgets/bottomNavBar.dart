@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -47,19 +48,21 @@ class BottomNavBarState extends State<BottomNavBar> {
         children: [
           Container(
             decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? Theme.of(context)
-                          .colorScheme
-                          .shadowColorLight
-                          .withOpacity(0.35)
-                      : Colors.black.withOpacity(0.8),
-                  blurRadius: 20,
-                  offset: Offset(0, 4),
-                  spreadRadius: 9,
-                ),
-              ],
+              boxShadow: boxShadowCheck(
+                [
+                  BoxShadow(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context)
+                            .colorScheme
+                            .shadowColorLight
+                            .withOpacity(0.35)
+                        : Colors.black.withOpacity(0.8),
+                    blurRadius: 20,
+                    offset: Offset(0, 4),
+                    spreadRadius: 9,
+                  ),
+                ],
+              ),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),

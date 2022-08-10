@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -164,6 +165,16 @@ class CountUp extends StatefulWidget {
 class _CountUpState extends State<CountUp> {
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return TextFont(
+        text: widget.prefix + widget.count.toString() + widget.suffix,
+        fontSize: widget.fontSize,
+        fontWeight: widget.fontWeight,
+        textAlign: widget.textAlign,
+        textColor: widget.textColor,
+        maxLines: widget.maxLines,
+      );
+    }
     return TweenAnimationBuilder<int>(
       tween: IntTween(
           begin: 0, end: (widget.count * pow(10, widget.decimals)).toInt()),
@@ -235,6 +246,12 @@ class _CountNumberState extends State<CountNumber> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return widget.textBuilder(
+        widget.initialCount,
+      );
+    }
+
     if (lazyFirstRender && widget.initialCount == widget.count) {
       lazyFirstRender = false;
       return widget.textBuilder(

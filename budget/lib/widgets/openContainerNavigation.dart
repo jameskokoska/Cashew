@@ -1,4 +1,5 @@
 import 'package:budget/widgets/tappable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 
@@ -18,6 +19,23 @@ class OpenContainerNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      Widget child = button(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => openPage,
+          ),
+        );
+      });
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Container(
+          color: closedColor ?? Colors.transparent,
+          child: child,
+        ),
+      );
+    }
     return OpenContainer(
       transitionType: ContainerTransitionType.fade,
       openBuilder: (BuildContext context, VoidCallback _) {

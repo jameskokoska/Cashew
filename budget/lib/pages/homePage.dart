@@ -348,7 +348,7 @@ class HomePageState extends State<HomePage>
                           color: Theme.of(context)
                               .colorScheme
                               .lightDarkAccentHeavyLight,
-                          boxShadow: boxShadow(context),
+                          boxShadow: boxShadowCheck(boxShadowGeneral(context)),
                         ),
                         child:
                             LineChartWrapper(points: points, isCurved: true)),
@@ -475,17 +475,19 @@ class _SlidingSelectorState extends State<SlidingSelector> {
           borderRadius: widget.alternateTheme
               ? BorderRadius.circular(10)
               : BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 5,
-              spreadRadius: 2,
-              offset: Offset(
-                0.0,
-                2.0,
+          boxShadow: boxShadowCheck(
+            [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 5,
+                spreadRadius: 2,
+                offset: Offset(
+                  0.0,
+                  2.0,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOut,
@@ -557,7 +559,8 @@ class UpcomingTransactions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(boxShadow: boxShadow(context)),
+      decoration:
+          BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
       child: OpenContainerNavigation(
         closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
         openPage: PageFramework(

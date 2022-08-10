@@ -403,7 +403,7 @@ getTotalSubscriptions(
   return total;
 }
 
-List<BoxShadow> boxShadow(context) {
+List<BoxShadow> boxShadowGeneral(context) {
   return [
     BoxShadow(
       color: Theme.of(context).colorScheme.shadowColorLight.withAlpha(30),
@@ -412,6 +412,11 @@ List<BoxShadow> boxShadow(context) {
       spreadRadius: 8,
     ),
   ];
+}
+
+List<BoxShadow>? boxShadowCheck(list) {
+  if (kIsWeb) return null;
+  return list;
 }
 
 String pluralString(bool condition, String string) {

@@ -12,6 +12,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
@@ -831,7 +832,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                             selectedAmountCalculation ?? "",
                                         setSelectedAmount: setSelectedAmount,
                                         next: () async {
-                                          await addTransaction;
+                                          print("HELLO");
+                                          await addTransaction();
                                           Navigator.pop(context);
                                           Navigator.pop(context);
                                         },
