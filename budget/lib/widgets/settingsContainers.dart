@@ -85,12 +85,14 @@ class SettingsContainerOpenPage extends StatelessWidget {
     required this.title,
     this.description,
     this.icon,
+    this.iconSize,
   }) : super(key: key);
 
   final Widget openPage;
   final String title;
   final String? description;
   final IconData? icon;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +104,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
           title: title,
           description: description,
           icon: icon,
+          iconSize: iconSize,
           onTap: () {
             openContainer();
           },
@@ -164,6 +167,7 @@ class SettingsContainer extends StatelessWidget {
     this.afterWidget,
     this.onTap,
     this.verticalPadding,
+    this.iconSize,
   }) : super(key: key);
 
   final String title;
@@ -172,6 +176,7 @@ class SettingsContainer extends StatelessWidget {
   final Widget? afterWidget;
   final VoidCallback? onTap;
   final double? verticalPadding;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +196,7 @@ class SettingsContainer extends StatelessWidget {
                   children: [
                     Icon(
                       icon,
-                      size: 30,
+                      size: iconSize ?? 30,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
                     Container(width: 16),

@@ -19,7 +19,9 @@ extension ColorsDefined on ColorScheme {
       ? const Color(0xFFFAFAFA)
       : Color(0xFF161616);
   Color get lightDarkAccentHeavyLight => brightness == Brightness.light
-      ? (kIsWeb ? Color(0xFFFAFAFA) : Color(0xFFFFFFFF))
+      ? (appStateSettings["batterySaver"]
+          ? Color(0xFFFAFAFA)
+          : Color(0xFFFFFFFF))
       : Color(0xFF242424);
   Color get canvasContainer => brightness == Brightness.light
       ? const Color(0xFFEBEBEB)

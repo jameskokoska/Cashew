@@ -54,7 +54,7 @@ int moneyDecimals(double amount) {
 }
 
 String getCurrencyString() {
-  return "\$";
+  return appStateSettings["currencyIcon"];
 }
 
 //TODO
@@ -171,13 +171,22 @@ getWordedDateShort(
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
-getWordedDateShortMore(DateTime date, {includeYear = false}) {
+getWordedDateShortMore(DateTime date,
+    {includeYear = false, includeTime = false, includeTimeIfToday = true}) {
   if (checkYesterdayTodayTomorrow(date) != false) {
-    return checkYesterdayTodayTomorrow(date);
+    if (includeTimeIfToday) {
+      return checkYesterdayTodayTomorrow(date) +
+          DateFormat(' - h:mm aaa').format(date);
+    } else {
+      return checkYesterdayTodayTomorrow(date);
+    }
   }
   if (includeYear) {
     return DateFormat('MMMM d, yyyy').format(date);
-  } else {
+  } else if (includeTime) {
+    return DateFormat('MMMM d, yyyy - h:mm aaa').format(date);
+  }
+  {
     return DateFormat('MMMM d').format(date);
   }
 }
@@ -415,7 +424,7 @@ List<BoxShadow> boxShadowGeneral(context) {
 }
 
 List<BoxShadow>? boxShadowCheck(list) {
-  if (kIsWeb) return null;
+  if (appStateSettings["batterySaver"]) return null;
   return list;
 }
 

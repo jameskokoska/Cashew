@@ -426,7 +426,7 @@ class AnimatedGooBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
+    if (appStateSettings["batterySaver"]) {
       return Container(
         decoration: BoxDecoration(
           color:

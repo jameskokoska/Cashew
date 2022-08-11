@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/textWidgets.dart';
 
-openSnackbar(context, text, {Color? textColor, Color? backgroundColor}) {
+openSnackbar(context, text,
+    {Color? textColor, Color? backgroundColor, bool? isErrorColor}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -16,9 +17,12 @@ openSnackbar(context, text, {Color? textColor, Color? backgroundColor}) {
           text: text,
           fontSize: 14,
           maxLines: 3,
-          textColor: textColor == null
-              ? Theme.of(context).colorScheme.black
-              : textColor,
+          textColor: isErrorColor == true
+              ? dynamicPastel(context, Theme.of(context).colorScheme.error,
+                  amountLight: 0.5)
+              : (textColor == null
+                  ? Theme.of(context).colorScheme.black
+                  : textColor),
         ),
         backgroundColor: backgroundColor == null
             ? Theme.of(context).colorScheme.lightDarkAccentHeavy

@@ -305,7 +305,7 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
         onWillPop: () async => false,
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             margin: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.lightDarkAccent,
@@ -338,7 +338,7 @@ void discardChangesPopup(context, {previousObject, currentObject}) async {
       title: "Discard Changes?",
       description: "Are you sure you want to discard your changes.",
       icon: Icons.warning_rounded,
-      onSubmitLabel: "Yes",
+      onSubmitLabel: "Discard",
       onSubmit: () {
         Navigator.pop(context);
         Navigator.pop(context);

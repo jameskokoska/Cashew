@@ -4,7 +4,6 @@ import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/autoTransactionsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
@@ -14,6 +13,7 @@ import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import './pages/homePage.dart';
@@ -89,11 +89,18 @@ Future<Map<String, dynamic>> getUserSettings() async {
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "showWalletSwitcher": true,
+    "roundedGraphLines": true,
     "showCumulativeSpending": true,
+    "removeZeroTransactionEntries": false,
     "askForTransactionTitle": true,
+    "batterySaver": kIsWeb,
     "username": "",
-    "AutoTransactions-canReadNotifs": false,
     "hasOnboarded": false,
+    "autoAddAssociatedTitles": true,
+    "AutoTransactions-canReadEmails": false,
+    "currencyIcon": "\$",
+    "EmailAutoTransactions-setWallet": 0,
+    "EmailAutoTransactions-defaultCategory": 0,
   };
 
   final prefs = await SharedPreferences.getInstance();

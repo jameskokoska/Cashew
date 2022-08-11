@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addAssociatedTitlePage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
@@ -15,6 +16,7 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -61,6 +63,18 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         ),
       ),
       slivers: [
+        SliverToBoxAdapter(
+          child: SettingsContainerSwitch(
+            title: "Automatically Add Titles",
+            description: "When a transaction is created",
+            onSwitched: (value) {
+              updateSettings("autoAddAssociatedTitles", value,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+            },
+            initialValue: appStateSettings["autoAddAssociatedTitles"],
+            icon: Icons.add_box_rounded,
+          ),
+        ),
         StreamBuilder<List<TransactionAssociatedTitle>>(
           stream: database.watchAllAssociatedTitles(),
           builder: (context, snapshot) {
@@ -126,12 +140,13 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                           borderRadius: 15,
                         ),
                         SizedBox(width: 15),
-                        TextFont(
-                          text: associatedTitle.title +
-                              " - " +
-                              associatedTitle.order.toString(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 21,
+                        Expanded(
+                          child: TextFont(
+                            text: associatedTitle.title,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 21,
+                            maxLines: 10,
+                          ),
                         ),
                       ],
                     ),
@@ -144,10 +159,10 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                           Navigator.pop(context);
                         },
                         onCancelLabel: "Cancel",
-                        onSubmit: () {
-                          //TODO this also needs to reorder the wallets below
-                          database.deleteAssociatedTitle(
-                              associatedTitle.associatedTitlePk);
+                        onSubmit: () async {
+                          await database.deleteAssociatedTitle(
+                              associatedTitle.associatedTitlePk,
+                              associatedTitle.order);
                           Navigator.pop(context);
                           openSnackbar(
                               context, "Deleted " + associatedTitle.title);

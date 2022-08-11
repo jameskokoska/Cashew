@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
@@ -293,9 +294,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           },
         ),
         isCurved: widget.isCurved,
-        curveSmoothness: 0.2,
+        curveSmoothness:
+            appStateSettings["removeZeroTransactionEntries"] ? 0.1 : 0.3,
         preventCurveOverShooting: true,
-        preventCurveOvershootingThreshold: 10,
+        preventCurveOvershootingThreshold: 8,
         aboveBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,
@@ -363,6 +365,23 @@ class LineChartWrapper extends StatelessWidget {
   final DateTime? endDate;
   final double? verticalLineAt;
 
+  List<Pair> filterPoints(points) {
+    List<Pair> pointsOut = [];
+    if (appStateSettings["removeZeroTransactionEntries"]) {
+      for (Pair point in points) {
+        if (point.y != 0) {
+          pointsOut.add(Pair(point.x, point.y));
+        }
+      }
+      pointsOut.last.x != points.last.x
+          ? pointsOut.add(Pair(points.last.x, 0))
+          : 0;
+
+      return pointsOut;
+    }
+    return points;
+  }
+
   List<FlSpot> convertPoints(points) {
     List<FlSpot> pointsOut = [];
     for (Pair pair in points) {
@@ -402,23 +421,23 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (kIsWeb) {
-    //   return Container(
-    //     height: 175,
-    //     child: LinePage(
-    //       spots: points,
-    //       maxPair: getMaxPoint(points),
-    //       minPair: getMinPoint(points),
-    //       color: color == null ? Theme.of(context).colorScheme.primary : color!,
-    //       endDate: endDate,
-    //       verticalLineAt: verticalLineAt,
-    //     ),
-    //   );
-    // }
+    if (appStateSettings["batterySaver"]) {
+      return Container(
+        height: 175,
+        child: LinePage(
+          spots: filterPoints(points),
+          maxPair: getMaxPoint(points),
+          minPair: getMinPoint(points),
+          color: color == null ? Theme.of(context).colorScheme.primary : color!,
+          endDate: endDate,
+          verticalLineAt: verticalLineAt,
+        ),
+      );
+    }
     return Container(
       height: 175,
       child: _LineChart(
-        spots: convertPoints(points),
+        spots: convertPoints(filterPoints(points)),
         maxPair: getMaxPoint(points),
         minPair: getMinPoint(points),
         color: color == null ? Theme.of(context).colorScheme.primary : color!,

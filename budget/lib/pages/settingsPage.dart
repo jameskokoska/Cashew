@@ -5,7 +5,6 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
-import 'package:budget/pages/autoTransactionsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
@@ -16,6 +15,7 @@ import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -109,7 +109,8 @@ class SettingsPageState extends State<SettingsPage>
           openPage: EditBudgetPage(title: "Edit Budgets"),
           title: "Edit Budgets",
           description: "Edit the order and budget details",
-          icon: Icons.price_change_rounded,
+          icon: MoreIcons.chart_pie,
+          iconSize: 25,
         ),
         SettingsContainerOpenPage(
           openPage: EditCategoriesPage(title: "Edit Categories"),
@@ -162,25 +163,62 @@ class SettingsPageState extends State<SettingsPage>
         ),
         EnterName(),
         SettingsHeader(title: "Preferences"),
+        SettingsContainerDropdown(
+          title: "Currency Icon",
+          icon: Icons.emoji_symbols_rounded,
+          initial: appStateSettings["currencyIcon"],
+          items: ["\$", "£", "¥", "€", "₩", "₹"],
+          onChanged: (value) {
+            updateSettings(
+              "currencyIcon",
+              value,
+              pagesNeedingRefresh: [0, 1, 2, 3],
+              updateGlobalState: true,
+            );
+          },
+        ),
         SettingsContainerSwitch(
           title: "Show Wallet Switcher",
           description: "Home page",
           onSwitched: (value) {
             updateSettings("showWalletSwitcher", value,
-                pagesNeedingRefresh: [0]);
+                pagesNeedingRefresh: [0], updateGlobalState: false);
           },
           initialValue: appStateSettings["showWalletSwitcher"],
           icon: Icons.wallet_rounded,
         ),
         SettingsContainerSwitch(
           title: "Show Cumulative Spending",
-          description: "Home page spending graph",
+          description: "For spending line graphs",
           onSwitched: (value) {
             updateSettings("showCumulativeSpending", value,
-                pagesNeedingRefresh: [0]);
+                pagesNeedingRefresh: [0, 3], updateGlobalState: false);
+            if (value == true) {
+              updateSettings("removeZeroTransactionEntries", false,
+                  pagesNeedingRefresh: [0], updateGlobalState: false);
+            }
           },
           initialValue: appStateSettings["showCumulativeSpending"],
           icon: Icons.show_chart_rounded,
+        ),
+        AnimatedSize(
+          duration: Duration(milliseconds: 300),
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: !appStateSettings["showCumulativeSpending"]
+                ? SettingsContainerSwitch(
+                    title: "Hide Zero Transactions",
+                    description: "On the home page spending graph",
+                    onSwitched: (value) {
+                      updateSettings("removeZeroTransactionEntries", value,
+                          pagesNeedingRefresh: [0], updateGlobalState: false);
+                    },
+                    initialValue:
+                        appStateSettings["removeZeroTransactionEntries"],
+                    icon: Icons.money_off_rounded,
+                  )
+                : SizedBox.shrink(),
+          ),
         ),
         SettingsContainerSwitch(
           title: "Ask for Transaction Title",
@@ -193,6 +231,16 @@ class SettingsPageState extends State<SettingsPage>
           },
           initialValue: appStateSettings["askForTransactionTitle"],
           icon: Icons.text_fields_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "Battery Saver",
+          description: "Optimize the UI and increase performance",
+          onSwitched: (value) {
+            updateSettings("batterySaver", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          initialValue: appStateSettings["batterySaver"],
+          icon: Icons.battery_charging_full_rounded,
         ),
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(
@@ -218,54 +266,56 @@ class EnterName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String name = "";
-
     return SettingsContainer(
       title: "Username",
       icon: Icons.edit,
       onTap: () {
-        openBottomSheet(
-          context,
-          PopupFramework(
-            title: "Enter Name",
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width - 36,
-                  child: TextInput(
-                    bubbly: true,
-                    icon: Icons.title_rounded,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.lightDarkAccentHeavy,
-                    initialValue: appStateSettings["username"],
-                    autoFocus: true,
-                    onEditingComplete: () {
-                      Navigator.pop(context);
-                      updateSettings("username", name,
-                          pagesNeedingRefresh: [0]);
-                    },
-                    onChanged: (text) {
-                      name = text;
-                    },
-                    labelText: "Title",
-                    padding: EdgeInsets.zero,
-                  ),
-                ),
-                Container(height: 20),
-                Button(
-                  label: "Set Name",
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  onTap: () {
-                    Navigator.pop(context);
-                    updateSettings("username", name, pagesNeedingRefresh: [0]);
-                  },
-                )
-              ],
-            ),
-          ),
-        );
+        enterNameBottomSheet(context);
       },
     );
   }
+}
+
+Function enterNameBottomSheet(context) {
+  String name = "";
+  return openBottomSheet(
+    context,
+    PopupFramework(
+      title: "Enter Name",
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width - 36,
+            child: TextInput(
+              bubbly: true,
+              icon: Icons.title_rounded,
+              backgroundColor:
+                  Theme.of(context).colorScheme.lightDarkAccentHeavy,
+              initialValue: appStateSettings["username"],
+              autoFocus: true,
+              onSubmitted: (value) {
+                Navigator.pop(context);
+                updateSettings("username", value, pagesNeedingRefresh: [0]);
+              },
+              onChanged: (text) {
+                name = text;
+              },
+              labelText: "Title",
+              padding: EdgeInsets.zero,
+            ),
+          ),
+          Container(height: 20),
+          Button(
+            label: "Set Name",
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            onTap: () {
+              Navigator.pop(context);
+              updateSettings("username", name, pagesNeedingRefresh: [0]);
+            },
+          )
+        ],
+      ),
+    ),
+  );
 }

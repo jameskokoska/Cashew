@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,15 +22,20 @@ class _FadeInState extends State<FadeIn> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 0), () {
-      setState(() {
-        widgetOpacity = 1;
+    if (!appStateSettings["batterySaver"]) {
+      Future.delayed(Duration(milliseconds: 0), () {
+        setState(() {
+          widgetOpacity = 1;
+        });
       });
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["batterySaver"]) {
+      return widget.child;
+    }
     return AnimatedOpacity(
       opacity: widgetOpacity,
       duration: Duration(milliseconds: 500),
@@ -78,35 +84,39 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
       vsync: this,
       duration: widget.animationDuration,
     );
+    if (!appStateSettings["batterySaver"]) {
+      if (widget.reverse == true) {}
 
-    if (widget.reverse == true) {}
+      if (widget.direction == Direction.vertical) {
+        _animationSlide = Tween<Offset>(
+                begin:
+                    Offset(0, widget.reverse ? -widget.offset : widget.offset),
+                end: Offset(0, 0))
+            .animate(CurvedAnimation(
+          curve: widget.curve,
+          parent: _animationController,
+        ));
+      } else {
+        _animationSlide = Tween<Offset>(
+                begin:
+                    Offset(widget.reverse ? -widget.offset : widget.offset, 0),
+                end: Offset(0, 0))
+            .animate(CurvedAnimation(
+          curve: widget.curve,
+          parent: _animationController,
+        ));
+      }
 
-    if (widget.direction == Direction.vertical) {
-      _animationSlide = Tween<Offset>(
-              begin: Offset(0, widget.reverse ? -widget.offset : widget.offset),
-              end: Offset(0, 0))
-          .animate(CurvedAnimation(
+      _animationFade =
+          Tween<double>(begin: 0, end: 1.0).animate(CurvedAnimation(
         curve: widget.curve,
         parent: _animationController,
       ));
-    } else {
-      _animationSlide = Tween<Offset>(
-              begin: Offset(widget.reverse ? -widget.offset : widget.offset, 0),
-              end: Offset(0, 0))
-          .animate(CurvedAnimation(
-        curve: widget.curve,
-        parent: _animationController,
-      ));
+
+      Timer(widget.delayStart, () {
+        _animationController.forward();
+      });
     }
-
-    _animationFade = Tween<double>(begin: 0, end: 1.0).animate(CurvedAnimation(
-      curve: widget.curve,
-      parent: _animationController,
-    ));
-
-    Timer(widget.delayStart, () {
-      _animationController.forward();
-    });
   }
 
   @override
@@ -117,7 +127,7 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.animate == false) {
+    if (appStateSettings["batterySaver"] || widget.animate == false) {
       return widget.child;
     }
     return FadeTransition(
@@ -165,10 +175,10 @@ class CountUp extends StatefulWidget {
 class _CountUpState extends State<CountUp> {
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
+    if (appStateSettings["batterySaver"]) {
       return TextFont(
         text: widget.prefix +
-            ((widget.count * pow(10, widget.decimals)).toInt()).toString() +
+            (widget.count).toStringAsFixed(widget.decimals) +
             widget.suffix,
         fontSize: widget.fontSize,
         fontWeight: widget.fontWeight,
@@ -248,9 +258,17 @@ class _CountNumberState extends State<CountNumber> {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
+    if (widget.dynamicDecimals) {
+      if (widget.count % 1 == 0) {
+        decimals = 0;
+      } else {
+        decimals = widget.decimals;
+      }
+    }
+
+    if (appStateSettings["batterySaver"]) {
       return widget.textBuilder(
-        (widget.count * pow(10, decimals)).toInt().toDouble(),
+        double.parse((widget.count).toStringAsFixed(widget.decimals)),
       );
     }
 
@@ -259,14 +277,6 @@ class _CountNumberState extends State<CountNumber> {
       return widget.textBuilder(
         widget.initialCount,
       );
-    }
-
-    if (widget.dynamicDecimals) {
-      if (widget.count % 1 == 0) {
-        decimals = 0;
-      } else {
-        decimals = widget.decimals;
-      }
     }
 
     Widget builtWidget = TweenAnimationBuilder<int>(

@@ -31,6 +31,7 @@ class PageFramework extends StatefulWidget {
     this.onBackButton,
     this.onDragDownToDissmiss,
     this.actions,
+    this.expandedHeight = 200,
   }) : super(key: key);
 
   final String title;
@@ -58,6 +59,7 @@ class PageFramework extends StatefulWidget {
   final VoidCallback? onBackButton;
   final VoidCallback? onDragDownToDissmiss;
   final List<Widget>? actions;
+  final double expandedHeight;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -80,7 +82,8 @@ class PageFrameworkState extends State<PageFramework>
 
   void initState() {
     super.initState();
-    _animationControllerShift = AnimationController(vsync: this);
+    _animationControllerShift = AnimationController(
+        vsync: this, value: widget.expandedHeight - 65 == 0 ? 1 : 0);
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
     _animationController0at50 = AnimationController(vsync: this, value: 1);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
@@ -112,28 +115,34 @@ class PageFrameworkState extends State<PageFramework>
             _scrollController.position.maxScrollExtent) {
       widget.onBottomReached!();
     }
-    double percent = _scrollController.offset / (200 - 65);
+    double percent;
+    if (widget.expandedHeight - 65 == 0) {
+      percent = 100;
+    } else {
+      percent = _scrollController.offset / (widget.expandedHeight - 65);
+    }
     if (widget.backButton == true ||
         widget.subtitle != null && percent >= 0 && percent <= 1) {
-      _animationControllerShift.value = (_scrollController.offset / (200 - 65));
+      _animationControllerShift.value =
+          (_scrollController.offset / (widget.expandedHeight - 65));
       _animationControllerOpacity.value =
-          0.5 + (_scrollController.offset / (200 - 65) / 2);
+          0.5 + (_scrollController.offset / (widget.expandedHeight - 65) / 2);
     }
     if (widget.subtitle != null && percent <= 0.75 && percent >= 0) {
       _animationController0at50.value =
-          1 - (_scrollController.offset / (200 - 65)) * 1.75;
+          1 - (_scrollController.offset / (widget.expandedHeight - 65)) * 1.75;
     }
     if (widget.showElevationAfterScrollPast != null &&
         showElevation == false &&
         _scrollController.offset <
-            widget.showElevationAfterScrollPast! + 200 - 65) {
+            widget.showElevationAfterScrollPast! + widget.expandedHeight - 65) {
       setState(() {
         showElevation = true;
       });
     } else if (widget.showElevationAfterScrollPast != null &&
         showElevation == true &&
         _scrollController.offset >
-            widget.showElevationAfterScrollPast! + 200 - 65) {
+            widget.showElevationAfterScrollPast! + widget.expandedHeight - 65) {
       setState(() {
         showElevation = false;
       });
@@ -224,6 +233,7 @@ class PageFrameworkState extends State<PageFramework>
             textColor: widget.textColor,
             onBackButton: widget.onBackButton,
             actions: widget.actions,
+            expandedHeight: widget.expandedHeight,
           ),
           ...widget.slivers,
           widget.listWidgets != null
@@ -319,6 +329,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.actions,
     this.textColor,
     this.onBackButton,
+    this.expandedHeight,
   }) : super(key: key);
 
   final String title;
@@ -341,6 +352,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final List<Widget>? actions;
   final Color? textColor;
   final VoidCallback? onBackButton;
+  final double? expandedHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -371,7 +383,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           : appBarBackgroundColor,
       floating: false,
       pinned: pinned,
-      expandedHeight: 200.0,
+      expandedHeight: expandedHeight ?? 200,
       collapsedHeight: 65,
       elevation: showElevation == true ? 0 : 5,
       actions: actions,

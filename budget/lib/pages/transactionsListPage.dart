@@ -342,7 +342,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                   }
                 },
                 children: <Widget>[
-                  kIsWeb ? SizedBox.shrink() : LoadingShimmer(),
+                  appStateSettings["batterySaver"]
+                      ? SizedBox.shrink()
+                      : LoadingShimmer(),
                   CustomScrollView(
                     slivers: [
                       ...transactionWidgets,
@@ -353,7 +355,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       ),
                     ],
                   ),
-                  kIsWeb ? SizedBox.shrink() : LoadingShimmer(),
+                  appStateSettings["batterySaver"]
+                      ? SizedBox.shrink()
+                      : LoadingShimmer(),
                 ],
               ),
             );

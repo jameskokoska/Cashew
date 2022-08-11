@@ -414,7 +414,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                   },
                                   onDelete: () async {
                                     await database.deleteAssociatedTitle(
-                                        snapshot.data![i].associatedTitlePk);
+                                        snapshot.data![i].associatedTitlePk,
+                                        snapshot.data![i].order);
                                   },
                                 ),
                               ),

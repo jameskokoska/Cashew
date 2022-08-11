@@ -65,7 +65,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
   }
 
   void setSelectedTitle(String title) {
-    selectedTitle = title;
+    selectedTitle = title.trim();
     determineBottomButton();
     return;
   }
@@ -80,8 +80,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
 
   Future addTitle() async {
     print("Added Title");
-    int numberOfAssociatedTitles =
-        (await database.getTotalCountOfAssociatedTitles())[0] ?? 0;
+    await database.shiftAssociatedTitles(1, 0);
     await database.createOrUpdateAssociatedTitle(
       TransactionAssociatedTitle(
         associatedTitlePk: widget.associatedTitle != null
@@ -91,7 +90,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
         isExactMatch: false,
         title: selectedTitle ?? "",
         dateCreated: DateTime.now(),
-        order: numberOfAssociatedTitles,
+        order: 0,
       ),
     );
     Navigator.pop(context);

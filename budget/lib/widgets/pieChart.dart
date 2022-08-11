@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -119,11 +120,13 @@ class PieChartDisplayState extends State<PieChartDisplay> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 0), () {
-      setState(() {
-        scaleIn = true;
+    if (!appStateSettings["batterySaver"]) {
+      Future.delayed(Duration(milliseconds: 0), () {
+        setState(() {
+          scaleIn = true;
+        });
       });
-    });
+    }
   }
 
   void setTouchedIndex(index) {
@@ -135,7 +138,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
   @override
   Widget build(BuildContext context) {
     return AnimatedScale(
-      scale: scaleIn ? 1 : 0,
+      scale: appStateSettings["batterySaver"] ? 1 : (scaleIn ? 1 : 0),
       duration: Duration(milliseconds: 2500),
       curve: ElasticOutCurve(0.8),
       child: PieChart(

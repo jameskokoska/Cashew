@@ -162,6 +162,10 @@ class AboutPage extends StatelessWidget {
           link: "https://www.flaticon.com/",
         ),
         AboutInfoBox(
+          title: "Icons from Font Awesome",
+          link: "http://fortawesome.github.com/Font-Awesome/",
+        ),
+        AboutInfoBox(
           title: "Landing graphics by pch-vector",
           link: "https://www.freepik.com/author/pch-vector",
         ),

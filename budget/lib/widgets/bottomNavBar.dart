@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -90,7 +91,7 @@ class BottomNavBarState extends State<BottomNavBar> {
                       label: "Transactions",
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.pie_chart_rounded),
+                      icon: Icon(MoreIcons.chart_pie, size: 20),
                       label: "Budgets",
                     ),
                     NavigationDestination(

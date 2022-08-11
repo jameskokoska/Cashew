@@ -4,17 +4,22 @@ import 'dart:developer';
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/accountsPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:drift/drift.dart' hide Column hide Table;
 import 'package:flutter/foundation.dart';
@@ -74,7 +79,8 @@ late signIn.GoogleSignIn googleSignIn;
 Future<bool> signInGoogle(context,
     {bool? waitForCompletion,
     bool? drivePermissions,
-    bool? gMailPermissions}) async {
+    bool? gMailPermissions,
+    Function()? next}) async {
   bool isConnected = false;
 
   try {
@@ -106,13 +112,11 @@ Future<bool> signInGoogle(context,
       }
     }
     if (waitForCompletion == true) Navigator.of(context).pop();
+    next != null ? next() : 0;
     return true;
   } catch (e) {
     if (waitForCompletion == true) Navigator.of(context).pop();
-    openSnackbar(context, e.toString(),
-        backgroundColor: dynamicPastel(
-            context, Theme.of(context).colorScheme.error,
-            amountLight: 0.5));
+    openSnackbar(context, e.toString(), isErrorColor: true);
     return false;
   }
 }
@@ -271,12 +275,43 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           child: Column(
             children: files
                 .map(
-                  (file) => SettingsContainer(
-                    icon: Icons.file_copy,
-                    title: file.name ?? "No name",
-                    onTap: () {
-                      _loadBackup(driveApi, file.id ?? "");
-                    },
+                  (file) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Tappable(
+                      onTap: () {
+                        _loadBackup(driveApi, file.id ?? "");
+                      },
+                      borderRadius: 15,
+                      color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.description_rounded,
+                                color: Theme.of(context).colorScheme.secondary,
+                                size: 30,
+                              ),
+                              SizedBox(width: 13),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextFont(
+                                    text: getWordedDateShortMore(
+                                        file.modifiedTime ?? DateTime.now(),
+                                        includeTimeIfToday: true),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  TextFont(
+                                      text: file.name ?? "No name",
+                                      fontSize: 15),
+                                ],
+                              ),
+                            ],
+                          )),
+                    ),
                   ),
                 )
                 .toList(),
@@ -319,20 +354,6 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
 
         Navigator.of(context).pop();
 
-        Transaction(
-          amount: 0,
-          categoryFk: 0,
-          dateCreated: DateTime.now(),
-          income: false,
-          name: "test",
-          note: "hello",
-          transactionPk: 0,
-          walletFk: 0,
-          labelFks: [],
-          paid: true,
-          skipPaid: false,
-        );
-
         Map<String, Map<String, dynamic>> assignedColumns = {
           "date": {
             "displayName": "Date",
@@ -359,7 +380,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
             "setHeaderIndex": -1,
           },
           "name": {
-            "displayName": "Transaction Name",
+            "displayName": "Title",
             "headerValues": ["title", "name"],
             "required": false,
             "setHeaderValue": "",
@@ -378,14 +399,15 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
             "required": true,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
+            "canSelectCurrentWallet": true,
           },
-          //In the future make it so users can select a default wallet already made
         };
         for (dynamic key in assignedColumns.keys) {
           String setHeaderValue = determineInitialValue(
               assignedColumns[key]!["headerValues"],
               headers,
-              assignedColumns[key]!["required"]);
+              assignedColumns[key]!["required"],
+              assignedColumns[key]!["canSelectCurrentWallet"]);
           assignedColumns[key]!["setHeaderValue"] = setHeaderValue;
           assignedColumns[key]!["setHeaderIndex"] =
               _getHeaderIndex(headers, setHeaderValue);
@@ -397,84 +419,113 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
             title: "Assign Columns",
             child: Column(
               children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Table(
-                      border: TableBorder.all(),
-                      defaultColumnWidth: IntrinsicColumnWidth(),
-                      defaultVerticalAlignment:
-                          TableCellVerticalAlignment.middle,
-                      children: <TableRow>[
-                        TableRow(
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
+                    scrollDirection: Axis.vertical,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Table(
+                        defaultColumnWidth: IntrinsicColumnWidth(),
+                        defaultVerticalAlignment:
+                            TableCellVerticalAlignment.middle,
+                        children: <TableRow>[
+                          TableRow(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                            ),
+                            children: <Widget>[
+                              for (dynamic header in headers)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 11.0, vertical: 5),
+                                  child: TextFont(
+                                    text: header.toString(),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                            ],
                           ),
-                          children: <Widget>[
-                            for (dynamic header in headers)
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFont(
-                                  text: header.toString(),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                          ],
-                        ),
-                        TableRow(
-                          children: <Widget>[
-                            for (dynamic entry in firstEntry)
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFont(text: entry.toString()),
-                              )
-                          ],
-                        ),
-                      ],
+                          TableRow(
+                            decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .lightDarkAccentHeavy),
+                            children: <Widget>[
+                              for (dynamic entry in firstEntry)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 11.0, vertical: 5),
+                                  child: TextFont(
+                                    text: entry.toString(),
+                                    fontSize: 18,
+                                  ),
+                                )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    for (dynamic key in assignedColumns.keys)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFont(
-                              text: assignedColumns[key]!["displayName"]
-                                  .toString()),
-                          DropdownSelect(
-                            compact: true,
-                            initial: assignedColumns[key]!["setHeaderValue"],
-                            items: assignedColumns[key]!["required"]
-                                ? [
-                                    ...(assignedColumns[key]![
-                                                "setHeaderValue"] ==
-                                            ""
-                                        ? [""]
-                                        : []),
-                                    ...headers
-                                  ]
-                                : ["None", ...headers],
-                            onChanged: (String setHeaderValue) {
-                              assignedColumns[key]!["setHeaderValue"] =
-                                  setHeaderValue;
-                              assignedColumns[key]!["setHeaderIndex"] =
-                                  _getHeaderIndex(headers, setHeaderValue);
-                            },
-                            backgroundColor: Theme.of(context).canvasColor,
-                            checkInitialValue: true,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                  child: Column(
+                    children: [
+                      for (dynamic key in assignedColumns.keys)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFont(
+                                text: assignedColumns[key]!["displayName"]
+                                    .toString(),
+                                fontSize: 15,
+                              ),
+                              DropdownSelect(
+                                compact: true,
+                                initial:
+                                    assignedColumns[key]!["setHeaderValue"],
+                                items: assignedColumns[key]![
+                                            "canSelectCurrentWallet"] ==
+                                        true
+                                    ? ["~Current Wallet~", ...headers]
+                                    : assignedColumns[key]!["required"]
+                                        ? [
+                                            ...(assignedColumns[key]![
+                                                        "setHeaderValue"] ==
+                                                    ""
+                                                ? [""]
+                                                : []),
+                                            ...headers
+                                          ]
+                                        : ["~None~", ...headers],
+                                boldedValues: ["~Current Wallet~", "~None~"],
+                                onChanged: (String setHeaderValue) {
+                                  assignedColumns[key]!["setHeaderValue"] =
+                                      setHeaderValue;
+                                  assignedColumns[key]!["setHeaderIndex"] =
+                                      _getHeaderIndex(headers, setHeaderValue);
+                                },
+                                backgroundColor: Theme.of(context).canvasColor,
+                                checkInitialValue: true,
+                              ),
+                            ],
                           ),
-                        ],
-                      )
-                  ],
+                        )
+                    ],
+                  ),
                 ),
                 Button(
-                    label: "label",
-                    onTap: () async {
-                      _importEntries(assignedColumns, fileContents);
-                    })
+                  label: "Import",
+                  onTap: () async {
+                    _importEntries(assignedColumns, fileContents);
+                  },
+                )
               ],
             ),
           ),
@@ -499,15 +550,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
         print(assignedColumns[key]!["setHeaderIndex"]);
       }
     } catch (e) {
-      openPopup(
-        context,
-        description: e.toString(),
-        icon: Icons.error_rounded,
-        onSubmitLabel: "OK",
-        onSubmit: () {
-          Navigator.of(context).pop();
-        },
-      );
+      throw (e.toString());
     }
     Navigator.of(context).pop();
     // Open the progress bar
@@ -520,6 +563,19 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
         fileContents: fileContents,
         next: () {
           Navigator.of(context).pop();
+          openPopup(
+            context,
+            icon: Icons.check_circle_outline_rounded,
+            title: "Done!",
+            description: "Successfully imported " +
+                fileContents.length.toString() +
+                " transactions.",
+            onSubmitLabel: "OK",
+            onSubmit: () {
+              Navigator.pop(context);
+            },
+            barrierDismissible: false,
+          );
         },
       ),
       barrierDismissible: false,
@@ -527,64 +583,67 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
     return;
   }
 
-  String determineInitialValue(
-      List<String> headerValues, List<String> headers, bool required) {
+  String determineInitialValue(List<String> headerValues, List<String> headers,
+      bool required, bool? canSelectCurrentWallet) {
     for (String header in headers) {
       if (headerValues.contains(header.toLowerCase())) {
         return header;
       }
     }
+    if (canSelectCurrentWallet == true) {
+      return "~Current Wallet~";
+    }
     if (!required) {
-      return "None";
+      return "~None~";
     }
     return "";
   }
 
   @override
   Widget build(BuildContext context) {
+    final Widget accountsPage = AccountsPage(
+      exportData: () async {
+        await _deleteRecentBackups(10);
+        await _createBackup();
+      },
+      importData: () async {
+        await _chooseBackup();
+      },
+      logout: () async {
+        final result = await signOutGoogle();
+        if (result) Navigator.pop(context);
+        setState(() {});
+      },
+    );
     return Column(
       children: [
+        user == null
+            ? SettingsContainer(
+                onTap: () async {
+                  await signInGoogle(context,
+                      waitForCompletion: true,
+                      drivePermissions: true, next: () {
+                    setState(() {});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => accountsPage),
+                    );
+                  });
+                },
+                title: "Login",
+                icon: MoreIcons.google,
+              )
+            : SettingsContainerOpenPage(
+                openPage: accountsPage,
+                title: user!.displayName ?? "",
+                icon: Icons.account_circle),
         SettingsContainer(
           onTap: () async {
-            if (user == null) {
-              await signInGoogle(context,
-                  waitForCompletion: true, drivePermissions: true);
-            } else {
-              await signOutGoogle();
-            }
-            setState(() {});
+            await _chooseBackupFile();
           },
-          title: user == null ? "Sign-In" : user!.displayName ?? "",
-          icon: Icons.account_circle,
+          title: "Import CSV File",
+          icon: Icons.file_open_rounded,
         ),
-        user == null
-            ? SizedBox.shrink()
-            : SettingsContainer(
-                onTap: () async {
-                  await _deleteRecentBackups(10);
-                  await _createBackup();
-                },
-                title: "Export Database",
-                icon: Icons.upload_rounded,
-              ),
-        user == null
-            ? SizedBox.shrink()
-            : SettingsContainer(
-                onTap: () async {
-                  await _chooseBackup();
-                },
-                title: "Import Database",
-                icon: Icons.download_rounded,
-              ),
-        user == null
-            ? SizedBox.shrink()
-            : SettingsContainer(
-                onTap: () async {
-                  await _chooseBackupFile();
-                },
-                title: "Import From File",
-                icon: Icons.download_rounded,
-              ),
       ],
     );
   }
@@ -635,44 +694,74 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     }
 
     int categoryFk = 0;
+    TransactionCategory selectedCategory;
     try {
-      categoryFk = (await database.getCategoryInstanceGivenName(
-              row[assignedColumns["category"]!["setHeaderIndex"]]))
-          .categoryPk;
+      selectedCategory = await database.getCategoryInstanceGivenName(
+          row[assignedColumns["category"]!["setHeaderIndex"]]);
     } catch (_) {
-      print("category not found");
-      int numberOfCategories =
-          (await database.getTotalCountOfCategories())[0] ?? 0;
-      await database.createOrUpdateCategory(
-        TransactionCategory(
-          categoryPk: DateTime.now().millisecondsSinceEpoch,
-          name: row[assignedColumns["category"]!["setHeaderIndex"]],
-          dateCreated: DateTime.now(),
-          order: numberOfCategories,
-          colour:
-              toHexString(getSettingConstants(appStateSettings)["accentColor"]),
-          income: amount > 0,
-          iconName: "image.png",
-          // smartLabels: [],
-        ),
-      );
-      categoryFk = (await database.getCategoryInstanceGivenName(
-              row[assignedColumns["category"]!["setHeaderIndex"]]))
-          .categoryPk;
+      // category not found, check titles
+      try {
+        if (name != "") {
+          List result = await getRelatingAssociatedTitle(name);
+          TransactionAssociatedTitle? associatedTitle = result[0];
+          if (associatedTitle == null) {
+            throw ("Can't find a category that matched this title: " + name);
+          }
+          selectedCategory =
+              await database.getCategoryInstance(associatedTitle.categoryFk);
+        } else {
+          throw ("error, just make a new category");
+        }
+      } catch (e) {
+        // print(e.toString());
+        // just create a category
+        int numberOfCategories =
+            (await database.getTotalCountOfCategories())[0] ?? 0;
+        await database.createOrUpdateCategory(
+          TransactionCategory(
+            categoryPk: DateTime.now().millisecondsSinceEpoch,
+            name: row[assignedColumns["category"]!["setHeaderIndex"]],
+            dateCreated: DateTime.now(),
+            order: numberOfCategories,
+            colour: toHexString(
+                getSettingConstants(appStateSettings)["accentColor"]),
+            income: amount > 0,
+            iconName: "image.png",
+            // smartLabels: [],
+          ),
+        );
+        selectedCategory = await database.getCategoryInstanceGivenName(
+            row[assignedColumns["category"]!["setHeaderIndex"]]);
+      }
+    }
+    categoryFk = selectedCategory.categoryPk;
+
+    if (name != "") {
+      // print("attempting to add " + name);
+      await addAssociatedTitles(name, selectedCategory);
     }
 
     int walletFk = 0;
-    try {
-      walletFk = (await database.getWalletInstanceGivenName(
-              row[assignedColumns["wallet"]!["setHeaderIndex"]]))
-          .walletPk;
-    } catch (_) {
-      print("wallet not found");
-      throw "Wallet not found!";
+    if (assignedColumns["wallet"]!["setHeaderIndex"] == -1) {
+      walletFk = appStateSettings["selectedWallet"];
+    } else {
+      try {
+        walletFk = (await database.getWalletInstanceGivenName(
+                row[assignedColumns["wallet"]!["setHeaderIndex"]]))
+            .walletPk;
+      } catch (e) {
+        throw "Wallet not found! If you want to import to the current wallet, please select '~Current Wallet~'. Details: " +
+            e.toString();
+      }
     }
 
-    DateTime dateCreated =
-        DateTime.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
+    DateTime dateCreated;
+    try {
+      dateCreated =
+          DateTime.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
+    } catch (e) {
+      throw "Failed to parse time! Details: " + e.toString();
+    }
 
     bool income = amount > 0;
 
@@ -696,7 +785,6 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
   Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
       List<List<String>> fileContents) async {
-    List<String> categoriesCreated = [];
     try {
       for (int i = 0; i < fileContents.length; i++) {
         if (i == 0) {
@@ -714,12 +802,15 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     } catch (e) {
       openPopup(
         context,
+        title: "There was an error importing the CSV",
         description: e.toString(),
         icon: Icons.error_rounded,
         onSubmitLabel: "OK",
         onSubmit: () {
           Navigator.of(context).pop();
+          Navigator.of(context).pop();
         },
+        barrierDismissible: false,
       );
     }
   }

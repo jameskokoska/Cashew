@@ -103,7 +103,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                         },
                         onCancelLabel: "Cancel",
                         onSubmit: () {
-                          database.deleteBudget(budget.budgetPk);
+                          database.deleteBudget(budget.budgetPk, budget.order);
                           Navigator.pop(context);
                           openSnackbar(context, "Deleted " + budget.name);
                         },
@@ -118,7 +118,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFont(
-                          text: budget.name + " - " + budget.order.toString(),
+                          text: budget.name,
                           fontWeight: FontWeight.bold,
                           fontSize: 21,
                         ),

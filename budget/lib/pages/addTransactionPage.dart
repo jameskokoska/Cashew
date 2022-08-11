@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -142,7 +143,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   void setSelectedTitle(String title) {
     setTextInput(_titleInputController, title);
-    selectedTitle = title;
+    selectedTitle = title.trim();
     return;
   }
 
@@ -247,6 +248,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   Future addTransaction() async {
     print("Added transaction");
+    if (selectedTitle != null && selectedCategory != null)
+      await addAssociatedTitles(selectedTitle!, selectedCategory!);
     await database.createOrUpdateTransaction(await createTransaction());
   }
 
@@ -708,11 +711,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               openBottomSheet(
                                 context,
                                 PopupFramework(
-                                  title: "Enter Title",
-                                  child: SelectText(
-                                    setSelectedText: setSelectedTitle,
-                                    labelText: "Title",
-                                    selectedText: selectedTitle,
+                                  child: SelectTitle(
+                                    setSelectedTitle: setSelectedTitle,
+                                    setSelectedCategory: setSelectedCategory,
+                                    setSelectedTags: setSelectedTags,
                                   ),
                                 ),
                               );
@@ -1156,46 +1158,15 @@ class _SelectTitleState extends State<SelectTitle> {
                       input = text;
                       widget.setSelectedTitle(input!);
 
-                      List<TransactionAssociatedTitle> allTitles =
-                          (await database.getAllAssociatedTitles());
+                      List result = await getRelatingAssociatedTitle(text);
+                      TransactionAssociatedTitle? selectedTitleLocal =
+                          result[0];
+                      int categoryFk = result[1];
+                      bool foundFromCategoryLocal = result[2];
 
-                      int categoryFk = -1;
-                      late TransactionAssociatedTitle selectedTitleLocal;
-                      for (TransactionAssociatedTitle title in allTitles) {
-                        if (text
-                            .toLowerCase()
-                            .contains(title.title.toLowerCase())) {
-                          categoryFk = title.categoryFk;
-                          selectedTitleLocal = title;
-                          break;
-                        }
-                      }
-
-                      bool foundFromCategoryLocal = false;
-                      if (categoryFk == -1) {
-                        List<TransactionCategory> allCategories =
-                            (await database.getAllCategories());
-                        for (TransactionCategory category in allCategories) {
-                          if (text
-                              .toLowerCase()
-                              .contains(category.name.toLowerCase())) {
-                            categoryFk = category.categoryPk;
-                            selectedTitleLocal = TransactionAssociatedTitle(
-                              associatedTitlePk: 0,
-                              title: category.name,
-                              categoryFk: category.categoryPk,
-                              dateCreated: category.dateCreated,
-                              order: category.order,
-                              isExactMatch: false,
-                            );
-                            foundFromCategoryLocal = true;
-
-                            break;
-                          }
-                        }
-                      }
-
-                      if (categoryFk != -1 && categoryFk != 0) {
+                      if (categoryFk != -1 &&
+                          categoryFk != 0 &&
+                          selectedTitleLocal != null) {
                         TransactionCategory? foundCategory =
                             await database.getCategoryInstance(categoryFk);
                         Future.delayed(Duration(milliseconds: 0), () {
@@ -1307,17 +1278,19 @@ class _SelectTitleState extends State<SelectTitle> {
         //   ),
         // ),
         Container(height: 20),
-        Button(
-          label: "Select Category",
-          width: MediaQuery.of(context).size.width,
-          height: 50,
-          onTap: () {
-            Navigator.pop(context);
-            if (widget.next != null) {
-              widget.next!();
-            }
-          },
-        )
+        widget.next != null
+            ? Button(
+                label: "Select Category",
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                onTap: () {
+                  Navigator.pop(context);
+                  if (widget.next != null) {
+                    widget.next!();
+                  }
+                },
+              )
+            : SizedBox.shrink()
       ],
     );
   }
@@ -1496,5 +1469,74 @@ class _EnterTextButtonState extends State<EnterTextButton> {
         ),
       ),
     );
+  }
+}
+
+getRelatingAssociatedTitle(String text) async {
+  List<TransactionAssociatedTitle> allTitles =
+      (await database.getAllAssociatedTitles());
+
+  int categoryFk = -1;
+  TransactionAssociatedTitle? selectedTitleLocal;
+  for (TransactionAssociatedTitle title in allTitles) {
+    if (text.toLowerCase().contains(title.title.toLowerCase())) {
+      categoryFk = title.categoryFk;
+      selectedTitleLocal = title;
+      break;
+    }
+  }
+
+  bool foundFromCategoryLocal = false;
+  if (categoryFk == -1) {
+    List<TransactionCategory> allCategories =
+        (await database.getAllCategories());
+    for (TransactionCategory category in allCategories) {
+      if (text.toLowerCase().contains(category.name.toLowerCase())) {
+        categoryFk = category.categoryPk;
+        selectedTitleLocal = TransactionAssociatedTitle(
+          associatedTitlePk: 0,
+          title: category.name,
+          categoryFk: category.categoryPk,
+          dateCreated: category.dateCreated,
+          order: category.order,
+          isExactMatch: false,
+        );
+        foundFromCategoryLocal = true;
+
+        break;
+      }
+    }
+  }
+  return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
+}
+
+addAssociatedTitles(
+    String selectedTitle, TransactionCategory selectedCategory) async {
+  if (appStateSettings["autoAddAssociatedTitles"]) {
+    List result = await getRelatingAssociatedTitle(selectedTitle);
+    TransactionAssociatedTitle? foundTitle = result[0];
+    if (foundTitle == null ||
+        (foundTitle.categoryFk != selectedCategory.categoryPk ||
+                foundTitle.title != selectedTitle) &&
+            !(foundTitle.categoryFk == selectedCategory.categoryPk &&
+                foundTitle.title == selectedTitle)) {
+      //Should just add to the end but be sorted in opposite direction on edit titles page
+      //Also when it loops through getRelatingAssociatedTitle it should reverse the order
+      // It's way faster to avoid pushing elements all down by 1 spot
+      // I think it also fixes race conditions when writing quickly to the db
+      await database.shiftAssociatedTitles(1, 0);
+      // print("successfully added title " + selectedTitle);
+      //it makes sense to add a new title if the exisitng one is from a different category, it will bump this one down and take priority
+      await database.createOrUpdateAssociatedTitle(
+        TransactionAssociatedTitle(
+          associatedTitlePk: DateTime.now().millisecondsSinceEpoch,
+          categoryFk: selectedCategory.categoryPk,
+          isExactMatch: false,
+          title: selectedTitle,
+          dateCreated: DateTime.now(),
+          order: 0,
+        ),
+      );
+    }
   }
 }

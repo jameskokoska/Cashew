@@ -110,9 +110,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextFont(
-                              text: category.name +
-                                  " - " +
-                                  category.order.toString(),
+                              text: category.name,
                               fontWeight: FontWeight.bold,
                               fontSize: 19,
                             ),
@@ -164,7 +162,8 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         },
                         onCancelLabel: "Cancel",
                         onSubmit: () {
-                          database.deleteCategory(category.categoryPk);
+                          database.deleteCategory(
+                              category.categoryPk, category.order);
                           database
                               .deleteCategoryTransactions(category.categoryPk);
                           Navigator.pop(context);

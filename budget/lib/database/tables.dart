@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:budget/main.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
@@ -668,6 +669,28 @@ class FinanceDatabase extends _$FinanceDatabase {
     );
   }
 
+  Future<bool> shiftBudgets(int direction, int pastIndexIncluding) async {
+    List<Budget> budgetsList = await (select(budgets)
+          ..orderBy([(b) => OrderingTerm.asc(b.order)]))
+        .get();
+    if (direction == -1 || direction == 1) {
+      for (Budget budget in budgetsList) {
+        await (update(budgets)
+              ..where(
+                (b) =>
+                    b.order.isBiggerOrEqualValue(pastIndexIncluding) &
+                    b.budgetPk.equals(budget.budgetPk),
+              ))
+            .write(
+          BudgetsCompanion(order: Value(budget.order + direction)),
+        );
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
+
   Stream<List<TransactionWallet>> watchAllWallets({int? limit, int? offset}) {
     return (select(wallets)
           ..orderBy([(w) => OrderingTerm.asc(w.order)])
@@ -726,6 +749,28 @@ class FinanceDatabase extends _$FinanceDatabase {
     );
   }
 
+  Future<bool> shiftWallets(int direction, int pastIndexIncluding) async {
+    List<TransactionWallet> walletsList = await (select(wallets)
+          ..orderBy([(b) => OrderingTerm.asc(b.order)]))
+        .get();
+    if (direction == -1 || direction == 1) {
+      for (TransactionWallet wallet in walletsList) {
+        await (update(wallets)
+              ..where(
+                (w) =>
+                    w.order.isBiggerOrEqualValue(pastIndexIncluding) &
+                    w.walletPk.equals(wallet.walletPk),
+              ))
+            .write(
+          WalletsCompanion(order: Value(wallet.order + direction)),
+        );
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
+
   //create or update a new wallet
   Future<int> createOrUpdateWallet(TransactionWallet wallet) {
     return into(wallets).insertOnConflictUpdate(wallet);
@@ -761,6 +806,16 @@ class FinanceDatabase extends _$FinanceDatabase {
   //create or update a new associatedTitle
   Future<int> createOrUpdateAssociatedTitle(
       TransactionAssociatedTitle associatedTitle) {
+    return into(associatedTitles).insertOnConflictUpdate(associatedTitle);
+  }
+
+  //create or update a new associatedTitle
+  Future<int> createOrUpdateAssociatedTitleIfNew(
+      TransactionAssociatedTitle associatedTitle) async {
+    List<TransactionAssociatedTitle> associatedTitlesList =
+        await (select(associatedTitles)
+              ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+            .get();
     return into(associatedTitles).insertOnConflictUpdate(associatedTitle);
   }
 
@@ -806,6 +861,32 @@ class FinanceDatabase extends _$FinanceDatabase {
         .write(
       AssociatedTitlesCompanion(order: Value(newPosition)),
     );
+  }
+
+  Future<bool> shiftAssociatedTitles(
+      int direction, int pastIndexIncluding) async {
+    List<TransactionAssociatedTitle> associatedTitlesList =
+        await (select(associatedTitles)
+              ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+            .get();
+    if (direction == -1 || direction == 1) {
+      for (TransactionAssociatedTitle associatedTitle in associatedTitlesList) {
+        await (update(associatedTitles)
+              ..where(
+                (t) =>
+                    t.order.isBiggerOrEqualValue(pastIndexIncluding) &
+                    t.associatedTitlePk
+                        .equals(associatedTitle.associatedTitlePk),
+              ))
+            .write(
+          AssociatedTitlesCompanion(
+              order: Value(associatedTitle.order + direction)),
+        );
+      }
+    } else {
+      return false;
+    }
+    return true;
   }
 
   Future<List<int?>> getTotalCountOfAssociatedTitles() async {
@@ -913,14 +994,43 @@ class FinanceDatabase extends _$FinanceDatabase {
     );
   }
 
+  Future<bool> shiftCategories(int direction, int pastIndexIncluding) async {
+    List<TransactionCategory> categoryList = await (select(categories)
+          ..orderBy([(c) => OrderingTerm.asc(c.order)]))
+        .get();
+    if (direction == -1 || direction == 1) {
+      for (TransactionCategory category in categoryList) {
+        await (update(categories)
+              ..where(
+                (c) =>
+                    c.order.isBiggerOrEqualValue(pastIndexIncluding) &
+                    c.categoryPk.equals(category.categoryPk),
+              ))
+            .write(
+          CategoriesCompanion(order: Value(category.order + direction)),
+        );
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
+
   // get wallet given name
   Future<TransactionWallet> getWalletInstanceGivenName(String name) {
-    return (select(wallets)..where((t) => t.name.equals(name))).getSingle();
+    return (select(wallets)..where((w) => w.name.equals(name))).getSingle();
+  }
+
+  // get wallet given id
+  Future<TransactionWallet> getWalletInstance(int walletPk) {
+    return (select(wallets)..where((w) => w.walletPk.equals(walletPk)))
+        .getSingle();
   }
 
   // delete budget given key
-  Future deleteBudget(int budgetPk) {
-    return (delete(budgets)..where((t) => t.budgetPk.equals(budgetPk))).go();
+  Future deleteBudget(int budgetPk, int order) async {
+    await shiftBudgets(-1, order);
+    return (delete(budgets)..where((b) => b.budgetPk.equals(budgetPk))).go();
   }
 
   //delete transaction given key
@@ -931,7 +1041,15 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete ategory given key
-  Future deleteCategory(int categoryPk) {
+  Future deleteCategory(int categoryPk, int order) async {
+    List<TransactionAssociatedTitle> allAssociatedTitles =
+        await getAllAssociatedTitles();
+    for (TransactionAssociatedTitle associatedTitle in allAssociatedTitles) {
+      if (associatedTitle.categoryFk == categoryPk)
+        await deleteAssociatedTitle(
+            associatedTitle.associatedTitlePk, associatedTitle.order);
+    }
+    await shiftCategories(-1, order);
     return (delete(categories)..where((c) => c.categoryPk.equals(categoryPk)))
         .go();
   }
@@ -943,7 +1061,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete wallet given key
-  Future deleteWallet(int walletPk) {
+  Future deleteWallet(int walletPk, int order) async {
+    await database.shiftWallets(-1, order);
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
   }
 
@@ -953,8 +1072,9 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
-  //delete wallet given key
-  Future deleteAssociatedTitle(int associatedTitlePk) {
+  //delete associated title given key
+  Future deleteAssociatedTitle(int associatedTitlePk, int order) async {
+    await database.shiftAssociatedTitles(-1, order);
     return (delete(associatedTitles)
           ..where((t) => t.associatedTitlePk.equals(associatedTitlePk)))
         .go();

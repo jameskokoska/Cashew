@@ -161,6 +161,7 @@ void parseEmailsInBackground(context) async {
           .list(user!.id.toString(), maxResults: amountOfEmails);
 
       for (gMail.Message message in results.messages!) {
+        // Remove this to always parse emails
         if (emailsParsed.contains(message.id)) {
           print("Already checked this email!");
           continue;
@@ -218,7 +219,8 @@ void parseEmailsInBackground(context) async {
 
         if (title == null) {
           openSnackbar(context,
-              "Couldn't find title in email. Check the email settings page for more information.");
+              "Couldn't find title in email. Check the email settings page for more information.",
+              backgroundColor: Theme.of(context).colorScheme.unPaidRed);
           emailsParsed.add(message.id!);
           continue;
         } else if (amountDouble == null) {
@@ -228,14 +230,57 @@ void parseEmailsInBackground(context) async {
           continue;
         }
 
+        List result = await getRelatingAssociatedTitle(title);
+        TransactionAssociatedTitle? foundTitle = result[0];
+        int categoryId;
+
+        if (foundTitle != null) {
+          print("FOUND TITLE");
+          categoryId =
+              (await database.getCategoryInstance(foundTitle.categoryFk))
+                  .categoryPk;
+        } else {
+          print("NO FOUND TITLE");
+          categoryId =
+              appStateSettings["EmailAutoTransactions-defaultCategory"];
+        }
+        print("NEXT");
+
+        try {
+          // Check if the wallet exists
+          await database.getWalletInstance(
+              appStateSettings["EmailAutoTransactions-setWallet"]);
+        } catch (e) {
+          print(
+              "This wallet has been deleted or is missing. Defaulting to selected.");
+          updateSettings(
+            "EmailAutoTransactions-setWallet",
+            appStateSettings["selectedWallet"],
+          );
+        }
+
+        TransactionCategory selectedCategory;
+        try {
+          // Check if the set category exists
+          selectedCategory = await database.getCategoryInstance(categoryId);
+        } catch (e) {
+          openSnackbar(
+              context,
+              "The transaction category cannot be found for this email! " +
+                  e.toString());
+          continue;
+        }
+
+        await addAssociatedTitles(title, selectedCategory);
+
         await database.createOrUpdateTransaction(
           Transaction(
             transactionPk: messageDate.millisecondsSinceEpoch,
             name: title,
             amount: amountDouble,
             note: "note",
-            categoryFk: 1,
-            walletFk: appStateSettings["selectedWallet"],
+            categoryFk: categoryId,
+            walletFk: appStateSettings["EmailAutoTransactions-setWallet"],
             dateCreated: DateTime(
                 DateTime.now().year, DateTime.now().month, DateTime.now().day),
             income: false,
@@ -244,6 +289,7 @@ void parseEmailsInBackground(context) async {
             methodAdded: MethodAdded.email,
           ),
         );
+
         openSnackbar(context, "Added a transaction from email: " + title);
         emailsParsed.add(message.id!);
       }
@@ -512,22 +558,67 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<String> walletNames = [];
+                    List<int> walletKeys = [];
                     for (TransactionWallet wallet in snapshot.data!) {
                       walletNames.add(wallet.name);
+                      walletKeys.add(wallet.walletPk);
                     }
                     return SettingsContainerDropdown(
                       title: "Wallet",
                       description:
                           "Select the wallet transactions will be added to.",
-                      initial: walletNames[0],
+                      initial: walletKeys.contains(appStateSettings[
+                              "EmailAutoTransactions-setWallet"])
+                          ? walletNames[walletKeys.indexOf(appStateSettings[
+                              "EmailAutoTransactions-setWallet"])]
+                          : walletNames[0],
                       items: walletNames,
-                      onChanged: (value) {
+                      onChanged: (value) async {
+                        TransactionWallet wallet =
+                            await database.getWalletInstanceGivenName(value);
                         updateSettings(
                           "EmailAutoTransactions-setWallet",
-                          int.parse(value),
+                          wallet.walletPk,
                         );
                       },
                       icon: Icons.wallet_rounded,
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
+          ),
+          Opacity(
+            opacity: 0.4,
+            child: StreamBuilder<List<TransactionCategory>>(
+                stream: database.watchAllCategories(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<String> categoryNames = [];
+                    List<int> categoryKeys = [];
+                    for (TransactionCategory category in snapshot.data!) {
+                      categoryNames.add(category.name);
+                      categoryKeys.add(category.categoryPk);
+                    }
+                    return SettingsContainerDropdown(
+                      title: "Default Category",
+                      description:
+                          "If an associated title is found, it will get added to that category.",
+                      initial: categoryKeys.contains(appStateSettings[
+                              "EmailAutoTransactions-defaultCategory"])
+                          ? categoryNames[categoryKeys.indexOf(appStateSettings[
+                              "EmailAutoTransactions-defaultCategory"])]
+                          : categoryNames[0],
+                      items: categoryNames,
+                      onChanged: (value) async {
+                        TransactionCategory category =
+                            await database.getCategoryInstanceGivenName(value);
+                        updateSettings(
+                          "EmailAutoTransactions-defaultCategory",
+                          category.categoryPk,
+                        );
+                      },
+                      icon: Icons.category_rounded,
                     );
                   } else {
                     return Container();
