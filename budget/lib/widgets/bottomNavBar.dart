@@ -107,7 +107,7 @@ class BottomNavBarState extends State<BottomNavBar> {
           ),
           AbsorbPointer(
             child: Container(
-              height: 10,
+              height: 10 + bottomPaddingSafeArea,
             ),
           ),
         ],

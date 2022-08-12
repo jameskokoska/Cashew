@@ -20,7 +20,6 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -791,6 +790,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         onTap: () {
                           addBudget();
                         },
+                        hasBottomExtraSafeArea: true,
                       )
                     : Button(
                         label: widget.budget == null
@@ -800,6 +800,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         height: 50,
                         onTap: () {},
                         color: Colors.grey,
+                        hasBottomExtraSafeArea: true,
                       ),
               ),
             ],

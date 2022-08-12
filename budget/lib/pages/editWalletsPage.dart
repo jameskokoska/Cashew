@@ -40,10 +40,13 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
       title: widget.title,
       navbar: false,
       floatingActionButton: AnimatedScaleDelayed(
-        child: FAB(
-          tooltip: "Add Wallet",
-          openPage: AddWalletPage(
-            title: "Add Wallet",
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+          child: FAB(
+            tooltip: "Add Wallet",
+            openPage: AddWalletPage(
+              title: "Add Wallet",
+            ),
           ),
         ),
       ),

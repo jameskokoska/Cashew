@@ -103,7 +103,7 @@ class SettingsPageState extends State<SettingsPage>
           openPage: EditWalletsPage(title: "Edit Wallets"),
           title: "Edit Wallets",
           description: "Edit the order and wallet details",
-          icon: Icons.wallet_rounded,
+          icon: Icons.account_balance_wallet_rounded,
         ),
         SettingsContainerOpenPage(
           openPage: EditBudgetPage(title: "Edit Budgets"),
@@ -185,7 +185,7 @@ class SettingsPageState extends State<SettingsPage>
                 pagesNeedingRefresh: [0], updateGlobalState: false);
           },
           initialValue: appStateSettings["showWalletSwitcher"],
-          icon: Icons.wallet_rounded,
+          icon: Icons.account_balance_wallet_rounded,
         ),
         SettingsContainerSwitch(
           title: "Show Cumulative Spending",

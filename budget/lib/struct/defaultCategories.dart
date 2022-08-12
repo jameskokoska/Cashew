@@ -1,54 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/material.dart';
-
-List<TransactionCategoryOld> defaultCategoriesOld() {
-  return [
-    TransactionCategoryOld(
-        title: "Food", icon: "cutlery.png", id: "food", color: Colors.blueGrey),
-    TransactionCategoryOld(
-        title: "Groceries",
-        icon: "groceries.png",
-        id: "groceries",
-        color: Colors.green),
-    TransactionCategoryOld(
-        title: "Shopping",
-        icon: "shopping.png",
-        id: "shopping",
-        color: Colors.pink),
-    TransactionCategoryOld(
-        title: "Transit", icon: "tram.png", id: "id", color: Colors.yellow),
-    TransactionCategoryOld(
-        title: "Entertainment",
-        icon: "popcorn.png",
-        id: "entertainment",
-        color: Colors.blue),
-    TransactionCategoryOld(
-        title: "Bills & Fees",
-        icon: "bills.png",
-        id: "bills & fees",
-        color: Colors.green),
-    TransactionCategoryOld(
-        title: "Education",
-        icon: "graduation.png",
-        id: "education",
-        color: Colors.blue),
-    TransactionCategoryOld(
-        title: "Gifts", icon: "gift.png", id: "gifts", color: Colors.red),
-    TransactionCategoryOld(
-        title: "Sports", icon: "sports.png", id: "sports", color: Colors.cyan),
-    TransactionCategoryOld(
-        title: "Beauty",
-        icon: "flower.png",
-        id: "beauty",
-        color: Colors.purple),
-    TransactionCategoryOld(
-        title: "Work", icon: "briefcase.png", id: "work", color: Colors.brown),
-    TransactionCategoryOld(
-        title: "Travel", icon: "plane.png", id: "travel", color: Colors.orange),
-  ];
-}
 
 List<TransactionCategory> defaultCategories() {
   return [

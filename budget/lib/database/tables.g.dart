@@ -2694,6 +2694,226 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
 }
 
+class AppSetting extends DataClass implements Insertable<AppSetting> {
+  final int settingsPk;
+  final String settingsJSON;
+  final DateTime dateUpdated;
+  AppSetting(
+      {required this.settingsPk,
+      required this.settingsJSON,
+      required this.dateUpdated});
+  factory AppSetting.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return AppSetting(
+      settingsPk: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings_pk'])!,
+      settingsJSON: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings_j_s_o_n'])!,
+      dateUpdated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date_updated'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['settings_pk'] = Variable<int>(settingsPk);
+    map['settings_j_s_o_n'] = Variable<String>(settingsJSON);
+    map['date_updated'] = Variable<DateTime>(dateUpdated);
+    return map;
+  }
+
+  AppSettingsCompanion toCompanion(bool nullToAbsent) {
+    return AppSettingsCompanion(
+      settingsPk: Value(settingsPk),
+      settingsJSON: Value(settingsJSON),
+      dateUpdated: Value(dateUpdated),
+    );
+  }
+
+  factory AppSetting.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AppSetting(
+      settingsPk: serializer.fromJson<int>(json['settingsPk']),
+      settingsJSON: serializer.fromJson<String>(json['settingsJSON']),
+      dateUpdated: serializer.fromJson<DateTime>(json['dateUpdated']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'settingsPk': serializer.toJson<int>(settingsPk),
+      'settingsJSON': serializer.toJson<String>(settingsJSON),
+      'dateUpdated': serializer.toJson<DateTime>(dateUpdated),
+    };
+  }
+
+  AppSetting copyWith(
+          {int? settingsPk, String? settingsJSON, DateTime? dateUpdated}) =>
+      AppSetting(
+        settingsPk: settingsPk ?? this.settingsPk,
+        settingsJSON: settingsJSON ?? this.settingsJSON,
+        dateUpdated: dateUpdated ?? this.dateUpdated,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('AppSetting(')
+          ..write('settingsPk: $settingsPk, ')
+          ..write('settingsJSON: $settingsJSON, ')
+          ..write('dateUpdated: $dateUpdated')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(settingsPk, settingsJSON, dateUpdated);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AppSetting &&
+          other.settingsPk == this.settingsPk &&
+          other.settingsJSON == this.settingsJSON &&
+          other.dateUpdated == this.dateUpdated);
+}
+
+class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
+  final Value<int> settingsPk;
+  final Value<String> settingsJSON;
+  final Value<DateTime> dateUpdated;
+  const AppSettingsCompanion({
+    this.settingsPk = const Value.absent(),
+    this.settingsJSON = const Value.absent(),
+    this.dateUpdated = const Value.absent(),
+  });
+  AppSettingsCompanion.insert({
+    this.settingsPk = const Value.absent(),
+    required String settingsJSON,
+    this.dateUpdated = const Value.absent(),
+  }) : settingsJSON = Value(settingsJSON);
+  static Insertable<AppSetting> custom({
+    Expression<int>? settingsPk,
+    Expression<String>? settingsJSON,
+    Expression<DateTime>? dateUpdated,
+  }) {
+    return RawValuesInsertable({
+      if (settingsPk != null) 'settings_pk': settingsPk,
+      if (settingsJSON != null) 'settings_j_s_o_n': settingsJSON,
+      if (dateUpdated != null) 'date_updated': dateUpdated,
+    });
+  }
+
+  AppSettingsCompanion copyWith(
+      {Value<int>? settingsPk,
+      Value<String>? settingsJSON,
+      Value<DateTime>? dateUpdated}) {
+    return AppSettingsCompanion(
+      settingsPk: settingsPk ?? this.settingsPk,
+      settingsJSON: settingsJSON ?? this.settingsJSON,
+      dateUpdated: dateUpdated ?? this.dateUpdated,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (settingsPk.present) {
+      map['settings_pk'] = Variable<int>(settingsPk.value);
+    }
+    if (settingsJSON.present) {
+      map['settings_j_s_o_n'] = Variable<String>(settingsJSON.value);
+    }
+    if (dateUpdated.present) {
+      map['date_updated'] = Variable<DateTime>(dateUpdated.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppSettingsCompanion(')
+          ..write('settingsPk: $settingsPk, ')
+          ..write('settingsJSON: $settingsJSON, ')
+          ..write('dateUpdated: $dateUpdated')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AppSettingsTable extends AppSettings
+    with TableInfo<$AppSettingsTable, AppSetting> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $AppSettingsTable(this._db, [this._alias]);
+  final VerificationMeta _settingsPkMeta = const VerificationMeta('settingsPk');
+  @override
+  late final GeneratedColumn<int?> settingsPk = GeneratedColumn<int?>(
+      'settings_pk', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _settingsJSONMeta =
+      const VerificationMeta('settingsJSON');
+  @override
+  late final GeneratedColumn<String?> settingsJSON = GeneratedColumn<String?>(
+      'settings_j_s_o_n', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _dateUpdatedMeta =
+      const VerificationMeta('dateUpdated');
+  @override
+  late final GeneratedColumn<DateTime?> dateUpdated =
+      GeneratedColumn<DateTime?>('date_updated', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          clientDefault: () => new DateTime.now());
+  @override
+  List<GeneratedColumn> get $columns => [settingsPk, settingsJSON, dateUpdated];
+  @override
+  String get aliasedName => _alias ?? 'app_settings';
+  @override
+  String get actualTableName => 'app_settings';
+  @override
+  VerificationContext validateIntegrity(Insertable<AppSetting> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('settings_pk')) {
+      context.handle(
+          _settingsPkMeta,
+          settingsPk.isAcceptableOrUnknown(
+              data['settings_pk']!, _settingsPkMeta));
+    }
+    if (data.containsKey('settings_j_s_o_n')) {
+      context.handle(
+          _settingsJSONMeta,
+          settingsJSON.isAcceptableOrUnknown(
+              data['settings_j_s_o_n']!, _settingsJSONMeta));
+    } else if (isInserting) {
+      context.missing(_settingsJSONMeta);
+    }
+    if (data.containsKey('date_updated')) {
+      context.handle(
+          _dateUpdatedMeta,
+          dateUpdated.isAcceptableOrUnknown(
+              data['date_updated']!, _dateUpdatedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {settingsPk};
+  @override
+  AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return AppSetting.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $AppSettingsTable createAlias(String alias) {
+    return $AppSettingsTable(_db, alias);
+  }
+}
+
 abstract class _$FinanceDatabase extends GeneratedDatabase {
   _$FinanceDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $WalletsTable wallets = $WalletsTable(this);
@@ -2703,9 +2923,17 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
   late final $AssociatedTitlesTable associatedTitles =
       $AssociatedTitlesTable(this);
   late final $BudgetsTable budgets = $BudgetsTable(this);
+  late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [wallets, transactions, categories, labels, associatedTitles, budgets];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        wallets,
+        transactions,
+        categories,
+        labels,
+        associatedTitles,
+        budgets,
+        appSettings
+      ];
 }

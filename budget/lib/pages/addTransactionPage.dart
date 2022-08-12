@@ -23,7 +23,6 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -336,6 +335,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             appStateSettings["askForTransactionTitle"]
                 ? PopupFramework(
                     child: SelectTitle(
+                      selectedTitle: selectedTitle,
                       setSelectedTitle: setSelectedTitleController,
                       setSelectedTags: setSelectedTags,
                       selectedCategory: selectedCategory,
@@ -715,6 +715,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     setSelectedTitle: setSelectedTitle,
                                     setSelectedCategory: setSelectedCategory,
                                     setSelectedTags: setSelectedTags,
+                                    selectedTitle: selectedTitle,
                                   ),
                                 ),
                               );
@@ -848,6 +849,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             ),
                           );
                         },
+                        hasBottomExtraSafeArea: true,
                       )
                     : selectedAmount == null
                         ? Button(
@@ -873,6 +875,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 ),
                               );
                             },
+                            hasBottomExtraSafeArea: true,
                           )
                         : Button(
                             label: widget.transaction != null
@@ -884,6 +887,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               await addTransaction();
                               Navigator.of(context).pop();
                             },
+                            hasBottomExtraSafeArea: true,
                           ),
               ),
             ],
@@ -1296,43 +1300,43 @@ class _SelectTitleState extends State<SelectTitle> {
   }
 }
 
-class SelectTag extends StatefulWidget {
-  SelectTag({Key? key, this.setSelectedCategory}) : super(key: key);
-  final Function(TransactionCategoryOld)? setSelectedCategory;
+// class SelectTag extends StatefulWidget {
+//   SelectTag({Key? key, this.setSelectedCategory}) : super(key: key);
+//   final Function(TransactionCategoryOld)? setSelectedCategory;
 
-  @override
-  _SelectTagState createState() => _SelectTagState();
-}
+//   @override
+//   _SelectTagState createState() => _SelectTagState();
+// }
 
-class _SelectTagState extends State<SelectTag> {
-  int selectedIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 10,
-          children: listTag()
-              .asMap()
-              .map(
-                (index, tag) => MapEntry(
-                  index,
-                  TagIcon(
-                    tag: tag,
-                    size: 17,
-                    onTap: () {},
-                  ),
-                ),
-              )
-              .values
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
+// class _SelectTagState extends State<SelectTag> {
+//   int selectedIndex = 0;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 8.0),
+//       child: Center(
+//         child: Wrap(
+//           alignment: WrapAlignment.center,
+//           spacing: 10,
+//           children: listTag()
+//               .asMap()
+//               .map(
+//                 (index, tag) => MapEntry(
+//                   index,
+//                   TagIcon(
+//                     tag: tag,
+//                     size: 17,
+//                     onTap: () {},
+//                   ),
+//                 ),
+//               )
+//               .values
+//               .toList(),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class SelectText extends StatefulWidget {
   SelectText({

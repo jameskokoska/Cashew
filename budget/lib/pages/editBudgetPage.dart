@@ -39,10 +39,13 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
       title: widget.title,
       navbar: false,
       floatingActionButton: AnimatedScaleDelayed(
-        child: FAB(
-          tooltip: "Add Budget",
-          openPage: AddBudgetPage(
-            title: "Add Budget",
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+          child: FAB(
+            tooltip: "Add Budget",
+            openPage: AddBudgetPage(
+              title: "Add Budget",
+            ),
           ),
         ),
       ),

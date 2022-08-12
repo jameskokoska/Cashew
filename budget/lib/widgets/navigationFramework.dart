@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
@@ -121,7 +122,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 75, right: 15),
+              padding: EdgeInsets.only(
+                  bottom: 75 + bottomPaddingSafeArea, right: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,

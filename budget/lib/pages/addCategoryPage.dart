@@ -19,7 +19,6 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -121,7 +120,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       categoryPk:
           widget.category != null ? widget.category!.categoryPk : setCategoryPk,
       name: selectedTitle ?? "",
-      dateCreated: widget.category!.dateCreated,
+      dateCreated: widget.category != null
+          ? widget.category!.dateCreated
+          : DateTime.now(),
       income: selectedIncome,
       order: widget.category != null
           ? widget.category!.order
@@ -441,6 +442,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         onTap: () {
                           addCategory();
                         },
+                        hasBottomExtraSafeArea: true,
                       )
                     : Button(
                         label: widget.category == null
@@ -450,6 +452,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         height: 50,
                         onTap: () {},
                         color: Colors.grey,
+                        hasBottomExtraSafeArea: true,
                       ),
               ),
             ],

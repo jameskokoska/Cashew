@@ -421,29 +421,31 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appStateSettings["batterySaver"]) {
-      return Container(
+    // if (appStateSettings["batterySaver"]) {
+    //   return Container(
+    //     height: 175,
+    //     child: LinePage(
+    //       spots: filterPoints(points),
+    //       maxPair: getMaxPoint(points),
+    //       minPair: getMinPoint(points),
+    //       color: color == null ? Theme.of(context).colorScheme.primary : color!,
+    //       endDate: endDate,
+    //       verticalLineAt: verticalLineAt,
+    //     ),
+    //   );
+    // }
+    return ClipRect(
+      child: Container(
         height: 175,
-        child: LinePage(
-          spots: filterPoints(points),
+        child: _LineChart(
+          spots: convertPoints(filterPoints(points)),
           maxPair: getMaxPoint(points),
           minPair: getMinPoint(points),
           color: color == null ? Theme.of(context).colorScheme.primary : color!,
+          isCurved: isCurved,
           endDate: endDate,
           verticalLineAt: verticalLineAt,
         ),
-      );
-    }
-    return Container(
-      height: 175,
-      child: _LineChart(
-        spots: convertPoints(filterPoints(points)),
-        maxPair: getMaxPoint(points),
-        minPair: getMinPoint(points),
-        color: color == null ? Theme.of(context).colorScheme.primary : color!,
-        isCurved: isCurved,
-        endDate: endDate,
-        verticalLineAt: verticalLineAt,
       ),
     );
   }

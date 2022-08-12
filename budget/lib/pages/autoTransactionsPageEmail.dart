@@ -140,7 +140,9 @@ void parseEmailsInBackground(context) async {
       bool hasSignedIn = false;
       if (user == null) {
         hasSignedIn = await signInGoogle(context,
-            gMailPermissions: true, waitForCompletion: false);
+            gMailPermissions: true,
+            waitForCompletion: false,
+            silentSignIn: true);
       } else {
         hasSignedIn = true;
       }

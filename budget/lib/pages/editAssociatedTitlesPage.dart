@@ -46,20 +46,23 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
       title: widget.title,
       navbar: false,
       floatingActionButton: AnimatedScaleDelayed(
-        child: FAB(
-          tooltip: "Add Title",
-          openPage: AddAssociatedTitlePage(
-            title: "Add Title",
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+          child: FAB(
+            tooltip: "Add Title",
+            openPage: AddAssociatedTitlePage(
+              title: "Add Title",
+            ),
+            onTap: () {
+              openBottomSheet(
+                context,
+                AddAssociatedTitlePage(
+                  title: "Add Title",
+                ),
+                resizeForKeyboard: false,
+              );
+            },
           ),
-          onTap: () {
-            openBottomSheet(
-              context,
-              AddAssociatedTitlePage(
-                title: "Add Title",
-              ),
-              resizeForKeyboard: false,
-            );
-          },
         ),
       ),
       slivers: [

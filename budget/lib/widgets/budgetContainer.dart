@@ -16,7 +16,6 @@ import 'package:simple_animations/simple_animations.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
 import '../colors.dart';
 import '../functions.dart';
-import '../struct/budget.dart';
 
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({

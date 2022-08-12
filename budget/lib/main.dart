@@ -31,6 +31,8 @@ adb connect 192.168.0.22
 
 flutter channel master
 flutter upgrade
+
+flutter build appbundle --release
 */
 
 void main() async {
@@ -84,6 +86,7 @@ Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
 
 Future<Map<String, dynamic>> getUserSettings() async {
   Map<String, dynamic> userPreferencesDefault = {
+    "databaseJustImported": false,
     "theme": "system",
     "selectedWallet": 0,
     "selectedSubscriptionType": 0,
@@ -105,10 +108,13 @@ Future<Map<String, dynamic>> getUserSettings() async {
 
   final prefs = await SharedPreferences.getInstance();
   String? userSettings = prefs.getString('userSettings');
-  if (userSettings == null) {
-    await prefs.setString('userSettings', json.encode(userPreferencesDefault));
-    return userPreferencesDefault;
-  } else {
+
+  try {
+    if (userSettings == null) {
+      throw ("no settings on file");
+    }
+    print("Found user settings on file");
+
     var userSettingsJSON = json.decode(userSettings);
     //Set to defaults if a new setting is added, but no entry saved
     userPreferencesDefault.forEach((key, value) {
@@ -117,26 +123,33 @@ Future<Map<String, dynamic>> getUserSettings() async {
       }
     });
     return userSettingsJSON;
+  } catch (e) {
+    print("There was an error, settings corrupted");
+    await prefs.setString('userSettings', json.encode(userPreferencesDefault));
+    return userPreferencesDefault;
   }
 }
 
 Future<bool> initializeSettings() async {
   Map<String, dynamic> userSettings = await getUserSettings();
+  if (userSettings["databaseJustImported"] == true) {
+    try {
+      print("Settings were loaded from backup, trying to restore");
+      String storedSettings = (await database.getSettings()).settingsJSON;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userSettings', storedSettings);
+      print(storedSettings);
+      userSettings = json.decode(storedSettings);
+      updateSettings("databaseJustImported", false);
+      print("Settings were restored");
+    } catch (e) {
+      print("Error restoring imported settings " + e.toString());
+    }
+  }
+
   appStateSettings = userSettings;
 
   packageInfoGlobal = await PackageInfo.fromPlatform();
-  //Sign in user before app launches to prepare for reading emails
-  // if (entireAppLoaded == false) {
-  //   if (appStateSettings["AutoTransactions-canReadEmails"] == true) {
-  //     if (user == null) {
-  //       print("Signing in user for reading emails");
-  //       await signInGoogle("", gMailPermissions: true, waitForCompletion: false)
-  //           .timeout(Duration(milliseconds: 5000), onTimeout: () {
-  //         return false;
-  //       });
-  //     }
-  //   }
-  // }
   return true;
 }
 
@@ -179,7 +192,7 @@ class InitializeDatabase extends StatelessWidget {
                 Theme.of(context).colorScheme.secondary),
           ),
         );
-        if (snapshot.hasData) {
+        if (snapshot.hasData || entireAppLoaded == true) {
           child = InitializeApp(
             key: appStateKey,
           );
@@ -213,7 +226,7 @@ class _InitializeAppState extends State<InitializeApp> {
     return FutureBuilder(
       future: initializeSettings(),
       builder: (context, snapshot) {
-        debugPrint("Initialized Settings");
+        debugPrint("Initializing Settings");
         Widget child = SizedBox(
           height: 50,
           width: 50,
@@ -222,7 +235,8 @@ class _InitializeAppState extends State<InitializeApp> {
                 Theme.of(context).colorScheme.secondary),
           ),
         );
-        if (snapshot.hasData) {
+        if (snapshot.hasData || entireAppLoaded == true) {
+          debugPrint("Initialized Settings");
           child = App();
         }
         return AnimatedSwitcher(
@@ -273,9 +287,12 @@ class App extends StatelessWidget {
       ),
       scrollBehavior: ScrollBehavior(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
-      home: appStateSettings["hasOnboarded"] != true
-          ? OnBoardingPage()
-          : PageNavigationFramework(key: pageNavigationFrameworkKey),
+      home: SafeArea(
+        top: false,
+        child: appStateSettings["hasOnboarded"] != true
+            ? OnBoardingPage()
+            : PageNavigationFramework(key: pageNavigationFrameworkKey),
+      ),
     );
   }
 }

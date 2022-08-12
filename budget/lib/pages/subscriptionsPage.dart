@@ -63,11 +63,14 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   Widget build(BuildContext context) {
     return PageFramework(
       floatingActionButton: AnimatedScaleDelayed(
-        child: FAB(
-          tooltip: "Add Subscription",
-          openPage: AddTransactionPage(
-            title: "Add Transaction",
-            subscription: true,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+          child: FAB(
+            tooltip: "Add Subscription",
+            openPage: AddTransactionPage(
+              title: "Add Transaction",
+              subscription: true,
+            ),
           ),
         ),
       ),

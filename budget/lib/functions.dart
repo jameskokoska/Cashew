@@ -4,9 +4,6 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/defaultCategories.dart';
-import 'package:budget/struct/defaultTags.dart';
-import 'package:budget/struct/transactionCategory.dart';
-import 'package:budget/struct/transactionTag.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:universal_html/html.dart';
@@ -15,6 +12,9 @@ import './colors.dart';
 import './widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+// Add bottom padding for web Safari browsers
+double bottomPaddingSafeArea = getOSInsideWeb() == "iOS" ? 20 : 0;
 
 extension CapExtension on String {
   String get capitalizeFirst =>
@@ -55,24 +55,6 @@ int moneyDecimals(double amount) {
 
 String getCurrencyString() {
   return appStateSettings["currencyIcon"];
-}
-
-//TODO
-TransactionCategoryOld findCategory(String id) {
-  return TransactionCategoryOld(
-    title: "Groceries",
-    icon: "groceries.png",
-    id: "id",
-    color: Colors.orange,
-  );
-}
-
-List<TransactionCategoryOld> listCategory() {
-  return defaultCategoriesOld();
-}
-
-List<TransactionTag> listTag() {
-  return defaultTags();
 }
 
 getMonth(int currentMonth) {
@@ -172,7 +154,7 @@ getWordedDateShort(
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
 getWordedDateShortMore(DateTime date,
-    {includeYear = false, includeTime = false, includeTimeIfToday = true}) {
+    {includeYear = false, includeTime = false, includeTimeIfToday = false}) {
   if (checkYesterdayTodayTomorrow(date) != false) {
     if (includeTimeIfToday) {
       return checkYesterdayTodayTomorrow(date) +

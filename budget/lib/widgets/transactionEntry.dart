@@ -1,8 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/struct/transactionCategory.dart';
-import 'package:budget/struct/transactionTag.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -532,116 +530,116 @@ class CategoryIcon extends StatelessWidget {
   }
 }
 
-class TagIcon extends StatefulWidget {
-  TagIcon(
-      {Key? key,
-      required this.tag,
-      required this.size,
-      this.onTap,
-      this.selected = false})
-      : super(key: key);
+// class TagIcon extends StatefulWidget {
+//   TagIcon(
+//       {Key? key,
+//       required this.tag,
+//       required this.size,
+//       this.onTap,
+//       this.selected = false})
+//       : super(key: key);
 
-  final TransactionTag tag;
-  final double size;
-  final VoidCallback? onTap;
-  final bool selected;
+//   final TransactionTag tag;
+//   final double size;
+//   final VoidCallback? onTap;
+//   final bool selected;
 
-  @override
-  _TagIconState createState() => _TagIconState();
-}
+//   @override
+//   _TagIconState createState() => _TagIconState();
+// }
 
-class _TagIconState extends State<TagIcon> {
-  bool selected = false;
+// class _TagIconState extends State<TagIcon> {
+//   bool selected = false;
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      selected = widget.selected;
-    });
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     setState(() {
+//       selected = widget.selected;
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Tappable(
-      onTap: widget.onTap == null
-          ? null
-          : () {
-              setState(() {
-                selected = !selected;
-              });
-              widget.onTap;
-            },
-      borderRadius: widget.size * 0.8,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.size * 0.8),
-          color: selected
-              ? Theme.of(context).colorScheme.accentColor.withOpacity(0.8)
-              : Theme.of(context)
-                  .colorScheme
-                  .lightDarkAccentHeavy
-                  .withOpacity(0.6),
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: widget.onTap == null
-                ? 9 * widget.size / 14
-                : 8 * widget.size / 14,
-            left: widget.onTap == null
-                ? 9 * widget.size / 14
-                : 6 * widget.size / 14,
-          ),
-          child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                widget.onTap != null
-                    ? Padding(
-                        padding: EdgeInsets.only(right: 2 * widget.size / 14),
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 700),
-                          width:
-                              selected ? widget.size * 0.9 : widget.size * 0.75,
-                          height:
-                              selected ? widget.size * 0.9 : widget.size * 0.75,
-                          margin: EdgeInsets.symmetric(
-                              horizontal: selected
-                                  ? widget.size * 0.1 / 2
-                                  : widget.size * 0.25 / 2),
-                          curve: Curves.elasticOut,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(widget.size),
-                            color: selected
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .accentColorHeavy
-                                    .withOpacity(0.8)
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .lightDarkAccentHeavy
-                                    .withOpacity(0.9),
-                          ),
-                        ),
-                      )
-                    : Container(),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 4 * widget.size / 14,
-                    bottom: 4 * widget.size / 14,
-                  ),
-                  child: TextFont(
-                    text: widget.tag.title,
-                    fontSize: widget.size,
-                  ),
-                ),
-              ]),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Tappable(
+//       onTap: widget.onTap == null
+//           ? null
+//           : () {
+//               setState(() {
+//                 selected = !selected;
+//               });
+//               widget.onTap;
+//             },
+//       borderRadius: widget.size * 0.8,
+//       child: AnimatedContainer(
+//         duration: Duration(milliseconds: 200),
+//         decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(widget.size * 0.8),
+//           color: selected
+//               ? Theme.of(context).colorScheme.accentColor.withOpacity(0.8)
+//               : Theme.of(context)
+//                   .colorScheme
+//                   .lightDarkAccentHeavy
+//                   .withOpacity(0.6),
+//         ),
+//         child: Padding(
+//           padding: EdgeInsets.only(
+//             right: widget.onTap == null
+//                 ? 9 * widget.size / 14
+//                 : 8 * widget.size / 14,
+//             left: widget.onTap == null
+//                 ? 9 * widget.size / 14
+//                 : 6 * widget.size / 14,
+//           ),
+//           child: Row(
+//               mainAxisSize: MainAxisSize.min,
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 widget.onTap != null
+//                     ? Padding(
+//                         padding: EdgeInsets.only(right: 2 * widget.size / 14),
+//                         child: AnimatedContainer(
+//                           duration: Duration(milliseconds: 700),
+//                           width:
+//                               selected ? widget.size * 0.9 : widget.size * 0.75,
+//                           height:
+//                               selected ? widget.size * 0.9 : widget.size * 0.75,
+//                           margin: EdgeInsets.symmetric(
+//                               horizontal: selected
+//                                   ? widget.size * 0.1 / 2
+//                                   : widget.size * 0.25 / 2),
+//                           curve: Curves.elasticOut,
+//                           decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(widget.size),
+//                             color: selected
+//                                 ? Theme.of(context)
+//                                     .colorScheme
+//                                     .accentColorHeavy
+//                                     .withOpacity(0.8)
+//                                 : Theme.of(context)
+//                                     .colorScheme
+//                                     .lightDarkAccentHeavy
+//                                     .withOpacity(0.9),
+//                           ),
+//                         ),
+//                       )
+//                     : Container(),
+//                 Padding(
+//                   padding: EdgeInsets.only(
+//                     top: 4 * widget.size / 14,
+//                     bottom: 4 * widget.size / 14,
+//                   ),
+//                   child: TextFont(
+//                     text: widget.tag.title,
+//                     fontSize: widget.size,
+//                   ),
+//                 ),
+//               ]),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class DateDivider extends StatelessWidget {
   DateDivider({

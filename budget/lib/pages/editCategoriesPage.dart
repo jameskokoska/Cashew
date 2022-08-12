@@ -42,10 +42,13 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
       title: widget.title,
       navbar: false,
       floatingActionButton: AnimatedScaleDelayed(
-        child: FAB(
-          tooltip: "Add Category",
-          openPage: AddCategoryPage(
-            title: "Add Category",
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+          child: FAB(
+            tooltip: "Add Category",
+            openPage: AddCategoryPage(
+              title: "Add Category",
+            ),
           ),
         ),
       ),

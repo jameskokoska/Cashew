@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -240,11 +241,15 @@ class PageFrameworkState extends State<PageFramework>
               ? SliverList(
                   delegate: SliverChildListDelegate([
                     ...widget.listWidgets!,
-                    widget.navbar ? Container(height: 87) : Container(),
+                    widget.navbar
+                        ? SizedBox(height: 87 + bottomPaddingSafeArea)
+                        : SizedBox(height: bottomPaddingSafeArea),
                   ]),
                 )
               : SliverToBoxAdapter(
-                  child: widget.navbar ? Container(height: 87) : Container(),
+                  child: widget.navbar
+                      ? SizedBox(height: 87 + bottomPaddingSafeArea)
+                      : SizedBox.shrink(),
                 ),
         ],
       ),

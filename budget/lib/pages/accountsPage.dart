@@ -81,12 +81,33 @@ class _AccountsPageState extends State<AccountsPage> {
                 SizedBox(height: 15),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(50),
-                  child: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: user!.photoUrl.toString(),
-                    height: 100,
-                    width: 100,
-                  ),
+                  child: user!.photoUrl == null
+                      ? Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: dynamicPastel(
+                                context, Theme.of(context).colorScheme.primary,
+                                amount: 0.2),
+                          ),
+                          child: Center(
+                            child: TextFont(
+                                text: user!.displayName![0],
+                                fontSize: 60,
+                                textAlign: TextAlign.center,
+                                fontWeight: FontWeight.bold,
+                                textColor: dynamicPastel(context,
+                                    Theme.of(context).colorScheme.primary,
+                                    amount: 0.85, inverse: false)),
+                          ),
+                        )
+                      : FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: user!.photoUrl.toString(),
+                          height: 100,
+                          width: 100,
+                        ),
                 ),
                 SizedBox(height: 10),
                 TextFont(

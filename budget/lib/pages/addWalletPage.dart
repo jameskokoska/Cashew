@@ -18,7 +18,6 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/struct/transactionCategory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -242,6 +241,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         onTap: () {
                           addWallet();
                         },
+                        hasBottomExtraSafeArea: true,
                       )
                     : Button(
                         label: widget.wallet == null
@@ -251,6 +251,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         height: 50,
                         onTap: () {},
                         color: Colors.grey,
+                        hasBottomExtraSafeArea: true,
                       ),
               ),
             ],

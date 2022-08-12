@@ -249,85 +249,90 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: 15,
-            ),
-            child: IntrinsicHeight(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  AnimatedOpacity(
-                    opacity: currentIndex <= 0 ? 0 : 1,
-                    duration: Duration(milliseconds: 200),
-                    child: ButtonIcon(
-                      onTap: () {
-                        controller.previousPage(
-                          duration: Duration(milliseconds: 1100),
-                          curve: ElasticOutCurve(1.3),
-                        );
-                      },
-                      icon: Icons.arrow_back_rounded,
-                      size: 45,
+            padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 15,
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AnimatedOpacity(
+                      opacity: currentIndex <= 0 ? 0 : 1,
+                      duration: Duration(milliseconds: 200),
+                      child: ButtonIcon(
+                        onTap: () {
+                          controller.previousPage(
+                            duration: Duration(milliseconds: 1100),
+                            curve: ElasticOutCurve(1.3),
+                          );
+                        },
+                        icon: Icons.arrow_back_rounded,
+                        size: 45,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      ...List<int>.generate(children.length, (i) => i + 1)
-                          .map(
-                            (
-                              index,
-                            ) =>
-                                Builder(
-                              builder: (BuildContext context) => AnimatedScale(
-                                duration: Duration(milliseconds: 900),
-                                scale: index - 1 == currentIndex ? 1.3 : 1,
-                                curve: ElasticOutCurve(0.2),
-                                child: AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 400),
-                                  child: Container(
-                                    key: ValueKey(index - 1 == currentIndex),
-                                    width: 6,
-                                    height: 6,
-                                    margin: EdgeInsets.symmetric(horizontal: 3),
-                                    decoration: BoxDecoration(
-                                      color: index - 1 == currentIndex
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .secondary
-                                              .withOpacity(0.7)
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .secondary
-                                              .withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(10),
+                    Row(
+                      children: [
+                        ...List<int>.generate(children.length, (i) => i + 1)
+                            .map(
+                              (
+                                index,
+                              ) =>
+                                  Builder(
+                                builder: (BuildContext context) =>
+                                    AnimatedScale(
+                                  duration: Duration(milliseconds: 900),
+                                  scale: index - 1 == currentIndex ? 1.3 : 1,
+                                  curve: ElasticOutCurve(0.2),
+                                  child: AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 400),
+                                    child: Container(
+                                      key: ValueKey(index - 1 == currentIndex),
+                                      width: 6,
+                                      height: 6,
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 3),
+                                      decoration: BoxDecoration(
+                                        color: index - 1 == currentIndex
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .secondary
+                                                .withOpacity(0.7)
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .secondary
+                                                .withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                          .toList(),
-                    ],
-                  ),
-                  AnimatedOpacity(
-                    opacity: currentIndex >= children.length - 1 ? 0 : 1,
-                    duration: Duration(milliseconds: 200),
-                    child: ButtonIcon(
-                      onTap: () {
-                        controller.nextPage(
-                          duration: Duration(milliseconds: 1100),
-                          curve: ElasticOutCurve(1.3),
-                        );
-                        if (currentIndex + 1 == children.length) {
-                          nextNavigation();
-                        }
-                      },
-                      icon: Icons.arrow_forward_rounded,
-                      size: 45,
+                            )
+                            .toList(),
+                      ],
                     ),
-                  ),
-                ],
+                    AnimatedOpacity(
+                      opacity: currentIndex >= children.length - 1 ? 0 : 1,
+                      duration: Duration(milliseconds: 200),
+                      child: ButtonIcon(
+                        onTap: () {
+                          controller.nextPage(
+                            duration: Duration(milliseconds: 1100),
+                            curve: ElasticOutCurve(1.3),
+                          );
+                          if (currentIndex + 1 == children.length) {
+                            nextNavigation();
+                          }
+                        },
+                        icon: Icons.arrow_forward_rounded,
+                        size: 45,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

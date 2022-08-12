@@ -10,7 +10,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 9;
+int schemaVersionGlobal = 10;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -174,6 +174,15 @@ class TransactionTabs extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
 }
 
+@DataClassName('AppSetting')
+class AppSettings extends Table {
+  IntColumn get settingsPk => integer().autoIncrement()();
+  TextColumn get settingsJSON =>
+      text()(); // This is the JSON stored as a string for shared prefs 'userSettings'
+  DateTimeColumn get dateUpdated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+}
+
 class TransactionWithCategory {
   final TransactionCategory category;
   final Transaction transaction;
@@ -198,6 +207,7 @@ class CategoryWithTotal {
   Labels,
   AssociatedTitles,
   Budgets,
+  AppSettings,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -208,8 +218,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   int get schemaVersion => schemaVersionGlobal;
 
   @override
-  MigrationStrategy get migration =>
-      MigrationStrategy(onUpgrade: (migrator, from, to) async {});
+  MigrationStrategy get migration => MigrationStrategy(
+        onUpgrade: (migrator, from, to) async {
+          if (from == 9) {
+            await migrator.createTable($AppSettingsTable(database));
+          }
+        },
+      );
 
   // get all filtered transactions from earliest to oldest date created, paginated
   Stream<List<Transaction>> watchAllTransactionsFiltered(
@@ -769,6 +784,17 @@ class FinanceDatabase extends _$FinanceDatabase {
       return false;
     }
     return true;
+  }
+
+  //Overwrite settings entry, it will always have id 0
+  Future<int> createOrUpdateSettings(AppSetting setting) {
+    return into(appSettings).insertOnConflictUpdate(setting);
+  }
+
+  //Overwrite settings entry, it will always have id 0
+  Future<AppSetting> getSettings() {
+    return (select(appSettings)..where((s) => s.settingsPk.equals(0)))
+        .getSingle();
   }
 
   //create or update a new wallet

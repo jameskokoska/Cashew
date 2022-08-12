@@ -5,9 +5,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
-import 'package:budget/struct/budget.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/struct/transactionCategory.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -376,6 +374,10 @@ class _BudgetPageState extends State<BudgetPage> {
               ? [selectedCategoryPk]
               : widget.budget.categoryFks ?? [],
           income: false,
+        ),
+        // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+        SliverToBoxAdapter(
+          child: Container(height: 1, color: Theme.of(context).canvasColor),
         ),
         SliverToBoxAdapter(child: SizedBox(height: 10))
       ],

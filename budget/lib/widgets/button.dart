@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class Button extends StatefulWidget {
     required this.onTap,
     this.color,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+    this.hasBottomExtraSafeArea = false,
   }) : super(key: key);
   final String label;
   final double? width;
@@ -23,6 +25,7 @@ class Button extends StatefulWidget {
   final VoidCallback onTap;
   final Color? color;
   final EdgeInsets padding;
+  final bool hasBottomExtraSafeArea;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -50,33 +53,39 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedScale(
-      duration: Duration(milliseconds: 200),
-      curve: Curves.easeOutCubic,
-      scale: isTapped ? 0.95 : 1,
-      child: Tappable(
-        color: widget.color != null
-            ? widget.color!.withOpacity(0.8)
-            : Theme.of(context).colorScheme.secondaryContainer,
-        onHighlightChanged: (value) {
-          setState(() {
-            isTapped = value;
-          });
-        },
-        onTap: () {
-          _shrink();
-          widget.onTap();
-        },
-        borderRadius: 20,
-        child: Container(
-          width: widget.width,
-          height: widget.height,
-          padding: widget.padding,
-          child: Center(
-            child: TextFont(
-              text: widget.label,
-              fontSize: widget.fontSize,
-              textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+    return Padding(
+      padding: EdgeInsets.only(
+          bottom: widget.hasBottomExtraSafeArea == true
+              ? bottomPaddingSafeArea
+              : 0),
+      child: AnimatedScale(
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeOutCubic,
+        scale: isTapped ? 0.95 : 1,
+        child: Tappable(
+          color: widget.color != null
+              ? widget.color!.withOpacity(0.8)
+              : Theme.of(context).colorScheme.secondaryContainer,
+          onHighlightChanged: (value) {
+            setState(() {
+              isTapped = value;
+            });
+          },
+          onTap: () {
+            _shrink();
+            widget.onTap();
+          },
+          borderRadius: 20,
+          child: Container(
+            width: widget.width,
+            height: widget.height,
+            padding: widget.padding,
+            child: Center(
+              child: TextFont(
+                text: widget.label,
+                fontSize: widget.fontSize,
+                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
             ),
           ),
         ),

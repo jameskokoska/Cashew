@@ -32,6 +32,7 @@ import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
@@ -80,6 +81,7 @@ Future<bool> signInGoogle(context,
     {bool? waitForCompletion,
     bool? drivePermissions,
     bool? gMailPermissions,
+    bool? silentSignIn,
     Function()? next}) async {
   bool isConnected = false;
 
@@ -104,7 +106,9 @@ Future<bool> signInGoogle(context,
         ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
         ...(gMailPermissions == true ? [gMail.GmailApi.gmailReadonlyScope] : [])
       ]);
-      final signIn.GoogleSignInAccount? account = await googleSignIn.signIn();
+      final signIn.GoogleSignInAccount? account = silentSignIn == true
+          ? await googleSignIn.signInSilently()
+          : await googleSignIn.signIn();
       if (account != null) {
         user = account;
       } else {
@@ -130,6 +134,21 @@ Future<bool> signOutGoogle() async {
 
 class _AccountAndBackupState extends State<AccountAndBackup> {
   Future<void> _createBackup() async {
+    // Backup user settings
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String userSettings = prefs.getString('userSettings') ?? "";
+      if (userSettings == "") throw ("No settings stored");
+      await database.createOrUpdateSettings(
+        AppSetting(
+          settingsPk: 0,
+          settingsJSON: userSettings,
+          dateUpdated: DateTime.now(),
+        ),
+      );
+      print("successfully created settings entry");
+    } catch (_) {}
+
     try {
       openLoadingPopup(context);
       var dbFileBytes;
@@ -231,6 +250,11 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           }
 
           Navigator.of(context).pop();
+
+          await updateSettings("databaseJustImported", true,
+              pagesNeedingRefresh: [], updateGlobalState: false);
+          print(appStateSettings);
+
           openPopup(
             context,
             title: "Please Restart the Application",
