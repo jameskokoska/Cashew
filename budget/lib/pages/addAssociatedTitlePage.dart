@@ -79,7 +79,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
 
   Future addTitle() async {
     print("Added Title");
-    await database.shiftAssociatedTitles(1, 0);
+    int length = await database.getAmountOfAssociatedTitles();
     await database.createOrUpdateAssociatedTitle(
       TransactionAssociatedTitle(
         associatedTitlePk: widget.associatedTitle != null
@@ -89,7 +89,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
         isExactMatch: false,
         title: selectedTitle ?? "",
         dateCreated: DateTime.now(),
-        order: 0,
+        order: length,
       ),
     );
     Navigator.pop(context);

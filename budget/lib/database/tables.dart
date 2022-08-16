@@ -805,7 +805,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(
       {int? limit, int? offset}) {
     return (select(associatedTitles)
-          ..orderBy([(t) => OrderingTerm.asc(t.order)])
+          ..orderBy([(t) => OrderingTerm.desc(t.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
   }
@@ -816,6 +816,24 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(t) => OrderingTerm.asc(t.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .get();
+  }
+
+  Future<TransactionAssociatedTitle> getRelatingAssociatedTitle(
+      String searchFor,
+      {int? limit,
+      int? offset}) {
+    return (select(associatedTitles)
+          ..where((t) => t.title.lower().like(searchFor.toLowerCase().trim()))
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .getSingle();
+  }
+
+  Future<TransactionCategory> getRelatingCategory(String searchFor,
+      {int? limit, int? offset}) {
+    return (select(categories)
+          ..where((c) => c.name.lower().like(searchFor.toLowerCase().trim()))
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .getSingle();
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
@@ -978,6 +996,10 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Future getAmountOfCategories() async {
     return (await select(categories).get()).length;
+  }
+
+  Future getAmountOfAssociatedTitles() async {
+    return (await select(associatedTitles).get()).length;
   }
 
   Future moveCategory(int categoryPk, int newPosition, int oldPosition) async {

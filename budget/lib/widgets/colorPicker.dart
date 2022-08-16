@@ -33,12 +33,16 @@ class ColorPicker extends StatefulWidget {
   final double width;
   final Color ringColor;
   final double ringSize;
-  final Function(Color) onChange;
+  final double? colorSliderPosition;
+  final double? shadeSliderPosition;
+  final Function(Color, double, double) onChange;
   ColorPicker({
     required this.width,
     required this.ringColor,
     required this.ringSize,
     required this.onChange,
+    this.colorSliderPosition,
+    this.shadeSliderPosition,
   });
   @override
   _ColorPickerState createState() => _ColorPickerState();
@@ -71,11 +75,14 @@ class _ColorPickerState extends State<ColorPicker> {
   @override
   initState() {
     super.initState();
-    _colorSliderPosition = widget.width * 0.5;
+    print(widget.colorSliderPosition);
+    _colorSliderPosition = widget.colorSliderPosition ?? widget.width * 0.5;
+    _shadeSliderPosition = widget.shadeSliderPosition ?? widget.width * 0.75;
     _currentColor = _calculateSelectedColor(_colorSliderPosition);
-    _shadeSliderPosition = widget.width * 0.75;
     _shadedColor = _calculateShadedColor(_shadeSliderPosition);
-    widget.onChange(_shadedColor);
+    Future.delayed(Duration.zero, () {
+      widget.onChange(_shadedColor, _colorSliderPosition, _shadeSliderPosition);
+    });
   }
 
   _colorChangeHandler(double position) {
@@ -86,14 +93,14 @@ class _ColorPickerState extends State<ColorPicker> {
     if (position < 0) {
       position = 0;
     }
-    print("New pos: $position");
+    // print("New pos: $position");
     setState(() {
       _colorSliderPosition = position;
       _currentColor = _calculateSelectedColor(_colorSliderPosition);
       _shadedColor = _calculateShadedColor(_shadeSliderPosition);
       _tapDownColor = true;
     });
-    widget.onChange(_shadedColor);
+    widget.onChange(_shadedColor, _colorSliderPosition, _shadeSliderPosition);
   }
 
   _shadeChangeHandler(double position) {
@@ -106,10 +113,10 @@ class _ColorPickerState extends State<ColorPicker> {
       _shadeSliderPosition = position;
       _shadedColor = _calculateShadedColor(_shadeSliderPosition);
       _tapDownShade = true;
-      print(
-          "r: ${_shadedColor.red}, g: ${_shadedColor.green}, b: ${_shadedColor.blue}");
+      // print(
+      //     "r: ${_shadedColor.red}, g: ${_shadedColor.green}, b: ${_shadedColor.blue}");
     });
-    widget.onChange(_shadedColor);
+    widget.onChange(_shadedColor, _colorSliderPosition, _shadeSliderPosition);
   }
 
   Color _calculateShadedColor(double position) {
@@ -154,9 +161,9 @@ class _ColorPickerState extends State<ColorPicker> {
     //determine color
     double positionInColorArray =
         (position / widget.width * (_colors.length - 1));
-    print(positionInColorArray);
+    // print(positionInColorArray);
     int index = positionInColorArray.truncate();
-    print(index);
+    // print(index);
     double remainder = positionInColorArray - index;
     if (remainder == 0.0) {
       _currentColor = _colors[index];
@@ -199,7 +206,6 @@ class _ColorPickerState extends State<ColorPicker> {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onHorizontalDragStart: (DragStartDetails details) {
-              print("_-------------------------STARTED DRAG");
               _colorChangeHandler(
                   details.localPosition.dx - widget.ringSize * 2);
             },
@@ -257,7 +263,6 @@ class _ColorPickerState extends State<ColorPicker> {
             onHorizontalDragUpdate: (DragUpdateDetails details) {
               _shadeChangeHandler(
                   details.localPosition.dx - widget.ringSize * 2);
-              print(_shadeSliderPosition / widget.width * 2 - 1);
             },
             onTapDown: (TapDownDetails details) {
               _shadeChangeHandler(

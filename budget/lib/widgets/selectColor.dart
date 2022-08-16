@@ -32,7 +32,6 @@ class SelectColor extends StatefulWidget {
 class _SelectColorState extends State<SelectColor> {
   Color? selectedColor;
   int? selectedIndex;
-  bool selectedCustomColor = false;
 
   @override
   void initState() {
@@ -65,48 +64,46 @@ class _SelectColorState extends State<SelectColor> {
             padding: EdgeInsets.only(
                 left: index == 0 ? 12 : 0,
                 right: index + 1 == selectableColorsList.length ? 12 : 0),
-            child: ColorIcon(
-              customColor: widget.supportCustomColors &&
-                  index + 1 == selectableColorsList.length,
-              onSelectCustomColor: (color) {
-                widget.setSelectedColor!(color);
-                setState(() {
-                  selectedColor = color;
-                  selectedCustomColor = true;
-                  selectedIndex = index;
-                });
-                Future.delayed(Duration(milliseconds: 70), () {
-                  if (widget.next != null) {
-                    widget.next!();
-                  }
-                });
-              },
-              margin: EdgeInsets.all(5),
-              color: (widget.supportCustomColors &&
-                      index + 1 == selectableColorsList.length)
-                  ? (selectedColor ?? Colors.transparent)
-                  : color,
-              size: 55,
-              onTap: () {
-                if (widget.setSelectedColor != null) {
-                  widget.setSelectedColor!(color);
-                  setState(() {
-                    selectedColor = color;
-                    selectedIndex = index;
-                  });
-                  Future.delayed(Duration(milliseconds: 70), () {
-                    Navigator.pop(context);
-                    if (widget.next != null) {
-                      widget.next!();
-                    }
-                  });
-                }
-              },
-              outline: (selectedIndex != null &&
-                      selectedIndex == selectableColorsList.length - 1 &&
-                      index == selectedIndex) ||
-                  selectedColor.toString() == color.toString(),
-            ),
+            child: widget.supportCustomColors &&
+                    index + 1 == selectableColorsList.length
+                ? ColorIconCustom(
+                    outline: selectedIndex == selectableColorsList.length - 1,
+                    margin: EdgeInsets.all(5),
+                    size: 55,
+                    onTap: (colorPassed) {
+                      widget.setSelectedColor!(colorPassed);
+                      setState(() {
+                        selectedColor = color;
+                        selectedIndex = index;
+                      });
+                    },
+                  )
+                : ColorIcon(
+                    margin: EdgeInsets.all(5),
+                    color: (widget.supportCustomColors &&
+                            index + 1 == selectableColorsList.length)
+                        ? (selectedColor ?? Colors.transparent)
+                        : color,
+                    size: 55,
+                    onTap: () {
+                      if (widget.setSelectedColor != null) {
+                        widget.setSelectedColor!(color);
+                        setState(() {
+                          selectedColor = color;
+                          selectedIndex = index;
+                        });
+                        Future.delayed(Duration(milliseconds: 70), () {
+                          if (widget.next != null) {
+                            widget.next!();
+                          }
+                        });
+                      }
+                    },
+                    outline: (selectedIndex != null &&
+                            selectedIndex == selectableColorsList.length - 1 &&
+                            index == selectedIndex) ||
+                        selectedColor.toString() == color.toString(),
+                  ),
           );
         },
       );
@@ -123,37 +120,48 @@ class _SelectColorState extends State<SelectColor> {
                   .map(
                     (index, color) => MapEntry(
                       index,
-                      ColorIcon(
-                        customColor: widget.supportCustomColors &&
-                            index + 1 == selectableColorsList.length,
-                        onSelectCustomColor: (color) {
-                          widget.setSelectedColor!(color);
-                          Future.delayed(Duration(milliseconds: 70), () {
-                            Navigator.pop(context);
-                            if (widget.next != null) {
-                              widget.next!();
-                            }
-                          });
-                        },
-                        margin: EdgeInsets.all(5),
-                        color: color,
-                        size: 55,
-                        onTap: () {
-                          if (widget.setSelectedColor != null) {
-                            widget.setSelectedColor!(color);
-                            setState(() {
-                              selectedColor = color;
-                            });
-                            Future.delayed(Duration(milliseconds: 70), () {
-                              Navigator.pop(context);
-                              if (widget.next != null) {
-                                widget.next!();
-                              }
-                            });
-                          }
-                        },
-                        outline: selectedColor == color,
-                      ),
+                      widget.supportCustomColors &&
+                              index + 1 == selectableColorsList.length
+                          ? ColorIconCustom(
+                              margin: EdgeInsets.all(5),
+                              size: 55,
+                              onTap: (colorPassed) {
+                                widget.setSelectedColor!(colorPassed);
+                                setState(() {
+                                  selectedColor = color;
+                                  selectedIndex = index;
+                                });
+                                Future.delayed(Duration(milliseconds: 70), () {
+                                  Navigator.pop(context);
+                                  if (widget.next != null) {
+                                    widget.next!();
+                                  }
+                                });
+                              },
+                              outline: selectedIndex ==
+                                  selectableColorsList.length - 1,
+                            )
+                          : ColorIcon(
+                              margin: EdgeInsets.all(5),
+                              color: color,
+                              size: 55,
+                              onTap: () {
+                                if (widget.setSelectedColor != null) {
+                                  widget.setSelectedColor!(color);
+                                  setState(() {
+                                    selectedColor = color;
+                                  });
+                                  Future.delayed(Duration(milliseconds: 70),
+                                      () {
+                                    Navigator.pop(context);
+                                    if (widget.next != null) {
+                                      widget.next!();
+                                    }
+                                  });
+                                }
+                              },
+                              outline: selectedColor == color,
+                            ),
                     ),
                   )
                   .values
@@ -172,21 +180,72 @@ class ColorIcon extends StatelessWidget {
     required this.color,
     required this.size,
     this.onTap,
-    this.onSelectCustomColor,
     this.margin,
     this.outline = false,
-    this.customColor = false,
   }) : super(key: key);
 
   final Color color;
   final double size;
   final VoidCallback? onTap;
-  final Function(Color)? onSelectCustomColor;
   final EdgeInsets? margin;
   final bool outline;
-  final bool customColor;
 
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 250),
+      margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+      height: size,
+      width: size,
+      decoration: outline
+          ? BoxDecoration(
+              border: Border.all(
+                color: dynamicPastel(context, color,
+                    amountLight: 0.5, amountDark: 0.4, inverse: true),
+                width: 3,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(500)),
+            )
+          : BoxDecoration(
+              border: Border.all(
+                color: Colors.transparent,
+                width: 0,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(500)),
+            ),
+      child: Tappable(
+        color: color,
+        onTap: onTap,
+        borderRadius: 500,
+        child: Container(),
+      ),
+    );
+  }
+}
+
+class ColorIconCustom extends StatefulWidget {
+  ColorIconCustom({
+    Key? key,
+    required this.size,
+    required this.onTap,
+    this.margin,
+    required this.outline,
+  }) : super(key: key);
+
+  final double size;
+  final Function(Color) onTap;
+  final EdgeInsets? margin;
+  final bool outline;
+
+  @override
+  State<ColorIconCustom> createState() => _ColorIconCustomState();
+}
+
+class _ColorIconCustomState extends State<ColorIconCustom> {
   Color selectedColor = Colors.transparent;
+  double? colorSliderPosition;
+  double? shadeSliderPosition;
+
   @override
   Widget build(BuildContext context) {
     Widget colorPickerPopup = PopupFramework(
@@ -195,11 +254,18 @@ class ColorIcon extends StatelessWidget {
         children: [
           Center(
             child: ColorPicker(
+              colorSliderPosition: colorSliderPosition,
+              shadeSliderPosition: shadeSliderPosition,
               ringColor: Theme.of(context).colorScheme.black,
               ringSize: 10,
               width: MediaQuery.of(context).size.width - 100,
-              onChange: (color) {
-                selectedColor = color;
+              onChange: (color, colorSliderPositionPassed,
+                  shadeSliderPositionPassed) {
+                setState(() {
+                  selectedColor = color;
+                  colorSliderPosition = colorSliderPositionPassed;
+                  shadeSliderPosition = shadeSliderPositionPassed;
+                });
               },
             ),
           ),
@@ -210,7 +276,7 @@ class ColorIcon extends StatelessWidget {
             label: "Select",
             onTap: () {
               Navigator.pop(context);
-              onSelectCustomColor!(selectedColor);
+              widget.onTap(selectedColor);
             },
           )
         ],
@@ -218,47 +284,36 @@ class ColorIcon extends StatelessWidget {
     );
     return AnimatedContainer(
       duration: Duration(milliseconds: 250),
-      margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
-      height: size,
-      width: size,
-      decoration: outline && customColor == false
+      margin: widget.margin ??
+          EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+      height: widget.size,
+      width: widget.size,
+      decoration: widget.outline
           ? BoxDecoration(
               border: Border.all(
-                color: dynamicPastel(context, color,
+                color: dynamicPastel(context, selectedColor,
                     amountLight: 0.5, amountDark: 0.4, inverse: true),
                 width: 3,
               ),
               borderRadius: BorderRadius.all(Radius.circular(500)),
             )
-          : outline == true && customColor
-              ? BoxDecoration(
-                  border: Border.all(
-                    color: color,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(500)),
-                )
-              : BoxDecoration(
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(500)),
-                ),
+          : BoxDecoration(
+              border: Border.all(
+                color: Colors.transparent,
+                width: 0,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(500)),
+            ),
       child: Tappable(
-        color: customColor == true ? Colors.transparent : color,
-        onTap: customColor
-            ? () async {
-                await openBottomSheet(context, colorPickerPopup);
-              }
-            : onTap,
+        color: Colors.transparent,
+        onTap: () async {
+          await openBottomSheet(context, colorPickerPopup);
+        },
         borderRadius: 500,
-        child: customColor
-            ? Icon(
-                Icons.colorize_rounded,
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
-              )
-            : SizedBox.shrink(),
+        child: Icon(
+          Icons.colorize_rounded,
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+        ),
       ),
     );
   }

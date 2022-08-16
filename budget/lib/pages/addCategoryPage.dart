@@ -355,10 +355,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                           labelText: "Set Title",
                           placeholder: "Title",
                           nextWithInput: (text) async {
-                            // addAssociatedTitle(text);
-                            int numberOfAssociatedTitles = (await database
-                                    .getTotalCountOfAssociatedTitles())[0] ??
-                                0;
+                            int length =
+                                await database.getAmountOfAssociatedTitles();
+
                             await database.createOrUpdateAssociatedTitle(
                               TransactionAssociatedTitle(
                                 associatedTitlePk:
@@ -369,7 +368,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                 isExactMatch: false,
                                 title: text,
                                 dateCreated: DateTime.now(),
-                                order: numberOfAssociatedTitles,
+                                order: length,
                               ),
                             );
                           },

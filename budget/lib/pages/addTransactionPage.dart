@@ -1476,6 +1476,44 @@ class _EnterTextButtonState extends State<EnterTextButton> {
   }
 }
 
+getRelatingAssociatedTitleLimited(String text) async {
+  int categoryFk = -1;
+  bool foundFromCategoryLocal = false;
+  TransactionAssociatedTitle? selectedTitleLocal;
+
+  TransactionAssociatedTitle relatingTitle;
+  try {
+    relatingTitle = await database.getRelatingAssociatedTitle(text);
+    categoryFk = relatingTitle.categoryFk;
+    selectedTitleLocal = relatingTitle;
+  } catch (e) {
+    print("No relating titles found!");
+  }
+
+  if (categoryFk == -1) {
+    TransactionCategory relatingCategory;
+    try {
+      relatingCategory = await database.getRelatingCategory(text);
+    } catch (e) {
+      print("No category names found!");
+      return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
+    }
+
+    TransactionCategory category = relatingCategory;
+    categoryFk = category.categoryPk;
+    selectedTitleLocal = TransactionAssociatedTitle(
+      associatedTitlePk: 0,
+      title: category.name,
+      categoryFk: category.categoryPk,
+      dateCreated: category.dateCreated,
+      order: category.order,
+      isExactMatch: false,
+    );
+    foundFromCategoryLocal = true;
+  }
+  return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
+}
+
 getRelatingAssociatedTitle(String text) async {
   List<TransactionAssociatedTitle> allTitles =
       (await database.getAllAssociatedTitles());
@@ -1528,9 +1566,10 @@ addAssociatedTitles(
       //Also when it loops through getRelatingAssociatedTitle it should reverse the order
       // It's way faster to avoid pushing elements all down by 1 spot
       // I think it also fixes race conditions when writing quickly to the db
-      await database.shiftAssociatedTitles(1, 0);
       // print("successfully added title " + selectedTitle);
       //it makes sense to add a new title if the exisitng one is from a different category, it will bump this one down and take priority
+      int length = await database.getAmountOfAssociatedTitles();
+
       await database.createOrUpdateAssociatedTitle(
         TransactionAssociatedTitle(
           associatedTitlePk: DateTime.now().millisecondsSinceEpoch,
@@ -1538,7 +1577,7 @@ addAssociatedTitles(
           isExactMatch: false,
           title: selectedTitle,
           dateCreated: DateTime.now(),
-          order: 0,
+          order: length,
         ),
       );
     }
