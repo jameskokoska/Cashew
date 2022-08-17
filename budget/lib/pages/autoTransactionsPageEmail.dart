@@ -130,7 +130,7 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
   }
 }
 
-void parseEmailsInBackground(context) async {
+Future<void> parseEmailsInBackground(context) async {
   print(entireAppLoaded);
   //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
   if (entireAppLoaded == false) {

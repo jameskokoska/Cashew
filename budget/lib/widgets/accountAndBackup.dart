@@ -132,98 +132,147 @@ Future<bool> signOutGoogle() async {
   return true;
 }
 
-class _AccountAndBackupState extends State<AccountAndBackup> {
-  Future<void> _createBackup() async {
-    // Backup user settings
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      String userSettings = prefs.getString('userSettings') ?? "";
-      if (userSettings == "") throw ("No settings stored");
-      await database.createOrUpdateSettings(
-        AppSetting(
-          settingsPk: 0,
-          settingsJSON: userSettings,
-          dateUpdated: DateTime.now(),
-        ),
-      );
-      print("successfully created settings entry");
-    } catch (_) {}
+Future<void> createBackupInBackground(context) async {
+  print(entireAppLoaded);
+  //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
+  if (entireAppLoaded == false) {
+    if (appStateSettings["autoBackups"] == true) {
+      DateTime lastUpdate = DateTime.parse(appStateSettings["lastBackup"]);
+      if (lastUpdate.day != DateTime.now().day &&
+          lastUpdate.month != DateTime.now().month &&
+          lastUpdate.year != DateTime.now().year) {
+        print("auto backing up");
 
-    try {
-      openLoadingPopup(context);
-      var dbFileBytes;
-      late Stream<List<int>> mediaStream;
-      if (kIsWeb) {
-        final html.Storage localStorage = html.window.localStorage;
-        dbFileBytes = bin2str.decode(localStorage["moor_db_str_db"] ?? "");
-        mediaStream = Stream.value(dbFileBytes);
-      } else {
-        final dbFolder = await getApplicationDocumentsDirectory();
-        final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-        // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
-        //     text: 'Database');
-        // await file.readAsBytes();
-        dbFileBytes = await dbFile.readAsBytes();
-        mediaStream = Stream.value(List<int>.from(dbFileBytes));
-      }
-      final authHeaders = await user!.authHeaders;
-      final authenticateClient = GoogleAuthClient(authHeaders);
-      final driveApi = drive.DriveApi(authenticateClient);
-
-      var media = new drive.Media(mediaStream, dbFileBytes.length);
-
-      var driveFile = new drive.File();
-      final timestamp = DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now());
-      driveFile.name = "db-$timestamp.sqlite";
-      driveFile.modifiedTime = DateTime.now().toUtc();
-      driveFile.parents = ["appDataFolder"];
-
-      await driveApi.files.create(driveFile, uploadMedia: media);
-      Navigator.of(context).pop();
-      openSnackbar(context, "Backup created: " + (driveFile.name ?? ""));
-    } catch (e) {
-      Navigator.of(context).pop();
-      openSnackbar(context, e.toString());
-    }
-  }
-
-  Future<void> _deleteRecentBackups(amountToKeep) async {
-    try {
-      openLoadingPopup(context);
-
-      final authHeaders = await user!.authHeaders;
-      final authenticateClient = GoogleAuthClient(authHeaders);
-      final driveApi = drive.DriveApi(authenticateClient);
-      if (driveApi == null) {
-        throw "Failed to login to Google Drive";
-      }
-
-      final fileList = await driveApi.files.list(
-          spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
-      final files = fileList.files;
-      if (files == null) {
-        throw "No backups found.";
-      }
-
-      int index = 0;
-      files.forEach((file) {
-        if (index >= amountToKeep) {
-          _deleteBackup(driveApi, file.id ?? "");
+        bool hasSignedIn = false;
+        if (user == null) {
+          hasSignedIn = await signInGoogle(context,
+              gMailPermissions: true,
+              waitForCompletion: false,
+              silentSignIn: true);
+        } else {
+          hasSignedIn = true;
         }
-        index++;
-      });
-
-      Navigator.of(context).pop();
-    } catch (e) {
-      Navigator.of(context).pop();
-      openSnackbar(context, e.toString());
+        if (hasSignedIn == false) {
+          return;
+        }
+        await deleteRecentBackups(context, 10, silentDelete: true);
+        await createBackup(context, silentBackup: true);
+      } else {
+        print("backup already made today");
+      }
     }
   }
+  return;
+}
 
-  Future<void> _deleteBackup(drive.DriveApi driveApi, String fileId) async {
-    await driveApi.files.delete(fileId);
+Future<void> createBackup(context, {bool? silentBackup}) async {
+  // Backup user settings
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    String userSettings = prefs.getString('userSettings') ?? "";
+    if (userSettings == "") throw ("No settings stored");
+    await database.createOrUpdateSettings(
+      AppSetting(
+        settingsPk: 0,
+        settingsJSON: userSettings,
+        dateUpdated: DateTime.now(),
+      ),
+    );
+    print("successfully created settings entry");
+  } catch (_) {}
+
+  try {
+    if (silentBackup == false || silentBackup == null) {
+      openLoadingPopup(context);
+    }
+    var dbFileBytes;
+    late Stream<List<int>> mediaStream;
+    if (kIsWeb) {
+      final html.Storage localStorage = html.window.localStorage;
+      dbFileBytes = bin2str.decode(localStorage["moor_db_str_db"] ?? "");
+      mediaStream = Stream.value(dbFileBytes);
+    } else {
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
+      // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
+      //     text: 'Database');
+      // await file.readAsBytes();
+      dbFileBytes = await dbFile.readAsBytes();
+      mediaStream = Stream.value(List<int>.from(dbFileBytes));
+    }
+    final authHeaders = await user!.authHeaders;
+    final authenticateClient = GoogleAuthClient(authHeaders);
+    final driveApi = drive.DriveApi(authenticateClient);
+
+    var media = new drive.Media(mediaStream, dbFileBytes.length);
+
+    var driveFile = new drive.File();
+    final timestamp =
+        DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
+    driveFile.name = "db-$timestamp.sqlite";
+    driveFile.modifiedTime = DateTime.now().toUtc();
+    driveFile.parents = ["appDataFolder"];
+
+    await driveApi.files.create(driveFile, uploadMedia: media);
+    if (silentBackup == false || silentBackup == null) {
+      Navigator.of(context).pop();
+    }
+    openSnackbar(context, "Backup created: " + (driveFile.name ?? ""));
+
+    updateSettings("lastBackup", DateTime.now().toString(),
+        pagesNeedingRefresh: [], updateGlobalState: false);
+  } catch (e) {
+    if (silentBackup == false || silentBackup == null) {
+      Navigator.of(context).pop();
+    }
+    openSnackbar(context, e.toString());
   }
+}
 
+Future<void> deleteRecentBackups(context, amountToKeep,
+    {bool? silentDelete}) async {
+  try {
+    if (silentDelete == false || silentDelete == null) {
+      openLoadingPopup(context);
+    }
+
+    final authHeaders = await user!.authHeaders;
+    final authenticateClient = GoogleAuthClient(authHeaders);
+    final driveApi = drive.DriveApi(authenticateClient);
+    if (driveApi == null) {
+      throw "Failed to login to Google Drive";
+    }
+
+    final fileList = await driveApi.files.list(
+        spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+    final files = fileList.files;
+    if (files == null) {
+      throw "No backups found.";
+    }
+
+    int index = 0;
+    files.forEach((file) {
+      if (index >= amountToKeep) {
+        deleteBackup(driveApi, file.id ?? "");
+      }
+      index++;
+    });
+    if (silentDelete == false || silentDelete == null) {
+      Navigator.of(context).pop();
+    }
+  } catch (e) {
+    if (silentDelete == false || silentDelete == null) {
+      Navigator.of(context).pop();
+    }
+    openSnackbar(context, e.toString());
+  }
+}
+
+Future<void> deleteBackup(drive.DriveApi driveApi, String fileId) async {
+  await driveApi.files.delete(fileId);
+}
+
+class _AccountAndBackupState extends State<AccountAndBackup> {
   Future<void> _loadBackup(drive.DriveApi driveApi, String fileId) async {
     try {
       openLoadingPopup(context);
@@ -323,7 +372,8 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                                 children: [
                                   TextFont(
                                     text: getWordedDateShortMore(
-                                        file.modifiedTime ?? DateTime.now(),
+                                        (file.modifiedTime ?? DateTime.now())
+                                            .toLocal(),
                                         includeTimeIfToday: true),
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -627,8 +677,8 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
   Widget build(BuildContext context) {
     final Widget accountsPage = AccountsPage(
       exportData: () async {
-        await _deleteRecentBackups(10);
-        await _createBackup();
+        await deleteRecentBackups(context, 10);
+        await createBackup(context);
       },
       importData: () async {
         await _chooseBackup();
@@ -661,6 +711,24 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                 openPage: accountsPage,
                 title: user!.displayName ?? "",
                 icon: Icons.account_circle),
+        AnimatedSize(
+          duration: Duration(milliseconds: 300),
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: user == null
+                ? SizedBox.shrink()
+                : SettingsContainerSwitch(
+                    onSwitched: (value) {
+                      updateSettings("autoBackups", value,
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                    },
+                    initialValue: appStateSettings["autoBackups"],
+                    title: "Auto Backups",
+                    description: "Backup data daily when opened",
+                    icon: Icons.backup_rounded,
+                  ),
+          ),
+        ),
         SettingsContainer(
           onTap: () async {
             await _chooseBackupFile();

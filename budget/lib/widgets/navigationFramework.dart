@@ -11,6 +11,7 @@ import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
@@ -71,7 +72,12 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     super.initState();
 
     // Functions to run after entire UI loaded
-    parseEmailsInBackground(context);
+    Future.delayed(Duration.zero, () async {
+      await parseEmailsInBackground(context);
+      await createBackupInBackground(context);
+
+      entireAppLoaded = true;
+    });
 
     pages = [
       HomePage(key: homePageStateKey, changePage: changePage),
@@ -79,8 +85,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       BudgetsListPage(key: budgetsListPageStateKey),
       SettingsPage(key: settingsPageStateKey)
     ];
-
-    entireAppLoaded = true;
   }
 
   @override

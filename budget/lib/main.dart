@@ -104,6 +104,8 @@ Future<Map<String, dynamic>> getUserSettings() async {
     "currencyIcon": "\$",
     "EmailAutoTransactions-setWallet": 0,
     "EmailAutoTransactions-defaultCategory": 0,
+    "autoBackups": true,
+    "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),
   };
 
   final prefs = await SharedPreferences.getInstance();

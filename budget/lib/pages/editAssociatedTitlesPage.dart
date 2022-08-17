@@ -184,6 +184,9 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                   TransactionAssociatedTitle oldTitle =
                       snapshot.data![_intPrevious];
 
+                  _intNew = snapshot.data!.length - _intNew;
+                  _intPrevious = snapshot.data!.length - _intPrevious;
+
                   if (_intNew > _intPrevious) {
                     await database.moveAssociatedTitle(
                         oldTitle.associatedTitlePk,
