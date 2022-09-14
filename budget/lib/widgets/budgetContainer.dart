@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
@@ -121,7 +122,10 @@ class BudgetContainer extends StatelessWidget {
                                       children: [
                                         Container(
                                           child: CountUp(
-                                            count: budget.amount - totalSpent,
+                                            count: appStateSettings[
+                                                    "showTotalSpentForBudget"]
+                                                ? totalSpent
+                                                : budget.amount - totalSpent,
                                             prefix: getCurrencyString(),
                                             duration:
                                                 Duration(milliseconds: 700),
@@ -137,7 +141,10 @@ class BudgetContainer extends StatelessWidget {
                                               bottom: 1.7),
                                           child: Container(
                                             child: TextFont(
-                                              text: " left of " +
+                                              text: (appStateSettings[
+                                                          "showTotalSpentForBudget"]
+                                                      ? " spent of "
+                                                      : " left of ") +
                                                   convertToMoney(budget.amount),
                                               fontSize: 14,
                                               textAlign: TextAlign.left,
@@ -154,8 +161,12 @@ class BudgetContainer extends StatelessWidget {
                                       children: [
                                         Container(
                                           child: CountUp(
-                                            count: -1 *
-                                                (budget.amount - totalSpent),
+                                            count: appStateSettings[
+                                                    "showTotalSpentForBudget"]
+                                                ? totalSpent
+                                                : -1 *
+                                                    (budget.amount -
+                                                        totalSpent),
                                             prefix: getCurrencyString(),
                                             duration:
                                                 Duration(milliseconds: 700),
@@ -170,7 +181,10 @@ class BudgetContainer extends StatelessWidget {
                                           padding: const EdgeInsets.only(
                                               bottom: 1.5),
                                           child: TextFont(
-                                            text: " overspent of " +
+                                            text: (appStateSettings[
+                                                        "showTotalSpentForBudget"]
+                                                    ? " spent of "
+                                                    : " overspent of ") +
                                                 convertToMoney(budget.amount),
                                             fontSize: 13,
                                             textAlign: TextAlign.left,
@@ -241,7 +255,10 @@ class BudgetContainer extends StatelessWidget {
                                     children: [
                                       Container(
                                         child: CountUp(
-                                          count: budget.amount - totalSpent,
+                                          count: appStateSettings[
+                                                  "showTotalSpentForBudget"]
+                                              ? totalSpent
+                                              : budget.amount - totalSpent,
                                           prefix: getCurrencyString(),
                                           duration: Duration(milliseconds: 700),
                                           fontSize: 18,
@@ -256,7 +273,10 @@ class BudgetContainer extends StatelessWidget {
                                             const EdgeInsets.only(bottom: 1.7),
                                         child: Container(
                                           child: TextFont(
-                                            text: " left of " +
+                                            text: (appStateSettings[
+                                                        "showTotalSpentForBudget"]
+                                                    ? " spent of "
+                                                    : " left of ") +
                                                 convertToMoney(budget.amount),
                                             fontSize: 13,
                                             textAlign: TextAlign.left,
@@ -271,8 +291,11 @@ class BudgetContainer extends StatelessWidget {
                                     children: [
                                       Container(
                                         child: CountUp(
-                                          count:
-                                              -1 * (budget.amount - totalSpent),
+                                          count: appStateSettings[
+                                                  "showTotalSpentForBudget"]
+                                              ? totalSpent
+                                              : -1 *
+                                                  (budget.amount - totalSpent),
                                           prefix: getCurrencyString(),
                                           duration: Duration(milliseconds: 700),
                                           fontSize: 18,
@@ -286,7 +309,10 @@ class BudgetContainer extends StatelessWidget {
                                         padding:
                                             const EdgeInsets.only(bottom: 1.5),
                                         child: TextFont(
-                                          text: " overspent of " +
+                                          text: (appStateSettings[
+                                                      "showTotalSpentForBudget"]
+                                                  ? " spent of "
+                                                  : " overspent of ") +
                                               convertToMoney(budget.amount),
                                           fontSize: 13,
                                           textAlign: TextAlign.left,
@@ -369,6 +395,17 @@ class BudgetContainer extends StatelessWidget {
           return Tappable(
             onTap: () {
               openContainer();
+            },
+            onLongPress: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddBudgetPage(
+                    title: "Edit Budget",
+                    budget: budget,
+                  ),
+                ),
+              );
             },
             borderRadius: 20,
             child: widget,

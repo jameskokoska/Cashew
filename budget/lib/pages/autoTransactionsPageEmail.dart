@@ -162,7 +162,13 @@ Future<void> parseEmailsInBackground(context) async {
       gMail.ListMessagesResponse results = await gmailApi.users.messages
           .list(user!.id.toString(), maxResults: amountOfEmails);
 
+      int currentEmailIndex = 0;
       for (gMail.Message message in results.messages!) {
+        currentEmailIndex++;
+        loadingProgressKey.currentState!
+            .setProgressPercentage(currentEmailIndex / amountOfEmails);
+        // await Future.delayed(Duration(milliseconds: 1000));
+
         // Remove this to always parse emails
         if (emailsParsed.contains(message.id)) {
           print("Already checked this email!");
@@ -275,12 +281,16 @@ Future<void> parseEmailsInBackground(context) async {
 
         await addAssociatedTitles(title, selectedCategory);
 
+        // Remove store number (everything past the last '#' symbol)
+        int position = title.lastIndexOf('#');
+        title = (position != -1) ? title.substring(0, position) : title;
+
         await database.createOrUpdateTransaction(
           Transaction(
             transactionPk: messageDate.millisecondsSinceEpoch,
             name: title,
-            amount: amountDouble,
-            note: "note",
+            amount: (amountDouble).abs() * -1,
+            note: "",
             categoryFk: categoryId,
             walletFk: appStateSettings["EmailAutoTransactions-setWallet"],
             dateCreated: DateTime(

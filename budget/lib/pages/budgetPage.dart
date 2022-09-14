@@ -159,8 +159,11 @@ class _BudgetPageState extends State<BudgetPage> {
                                         children: [
                                           Container(
                                             child: CountUp(
-                                              count: widget.budget.amount -
-                                                  totalSpent,
+                                              count: appStateSettings[
+                                                      "showTotalSpentForBudget"]
+                                                  ? totalSpent
+                                                  : widget.budget.amount -
+                                                      totalSpent,
                                               prefix: getCurrencyString(),
                                               duration:
                                                   Duration(milliseconds: 700),
@@ -177,7 +180,10 @@ class _BudgetPageState extends State<BudgetPage> {
                                             padding: const EdgeInsets.only(
                                                 bottom: 3.8),
                                             child: TextFont(
-                                              text: " left of " +
+                                              text: (appStateSettings[
+                                                          "showTotalSpentForBudget"]
+                                                      ? " spent of "
+                                                      : " left of ") +
                                                   convertToMoney(
                                                       widget.budget.amount),
                                               fontSize: 16,
@@ -196,9 +202,12 @@ class _BudgetPageState extends State<BudgetPage> {
                                     children: [
                                       Container(
                                         child: CountUp(
-                                          count: -1 *
-                                              (widget.budget.amount -
-                                                  totalSpent),
+                                          count: appStateSettings[
+                                                  "showTotalSpentForBudget"]
+                                              ? totalSpent
+                                              : -1 *
+                                                  (widget.budget.amount -
+                                                      totalSpent),
                                           prefix: getCurrencyString(),
                                           duration: Duration(milliseconds: 700),
                                           fontSize: 25,
@@ -214,7 +223,10 @@ class _BudgetPageState extends State<BudgetPage> {
                                         padding:
                                             const EdgeInsets.only(bottom: 3.8),
                                         child: TextFont(
-                                          text: " overspent of " +
+                                          text: (appStateSettings[
+                                                      "showTotalSpentForBudget"]
+                                                  ? " spent of "
+                                                  : " overspent of ") +
                                               convertToMoney(
                                                   widget.budget.amount),
                                           fontSize: 16,
@@ -280,7 +292,8 @@ class _BudgetPageState extends State<BudgetPage> {
         ),
         SliverToBoxAdapter(
           child: AnimatedSize(
-            duration: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 300),
               child: selectedCategoryPk != -1

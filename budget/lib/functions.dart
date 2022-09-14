@@ -237,7 +237,8 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
     if (startDate.isBefore(currentDate)) {
       return DateTimeRange(start: startDate, end: endDate);
     }
-    startDate = new DateTime(currentDate.year, currentDate.month - 1, 0);
+    startDate = new DateTime(
+        currentDate.year, currentDate.month - 1, budget.startDate.day);
     endDate = new DateTime(
         currentDate.year, currentDate.month, budget.startDate.day - 1);
     return DateTimeRange(start: startDate, end: endDate);
@@ -412,9 +413,9 @@ List<BoxShadow>? boxShadowCheck(list) {
 
 String pluralString(bool condition, String string) {
   if (condition)
-    return string + "s";
-  else
     return string;
+  else
+    return string + "s";
 }
 
 String? getOSInsideWeb() {

@@ -163,6 +163,7 @@ class SettingsPageState extends State<SettingsPage>
         ),
         EnterName(),
         SettingsHeader(title: "Preferences"),
+        // In the future, each wallet will have its own currency
         SettingsContainerDropdown(
           title: "Currency Icon",
           icon: Icons.emoji_symbols_rounded,
@@ -179,13 +180,23 @@ class SettingsPageState extends State<SettingsPage>
         ),
         SettingsContainerSwitch(
           title: "Show Wallet Switcher",
-          description: "Home page",
+          description: "At the top of the home page",
           onSwitched: (value) {
             updateSettings("showWalletSwitcher", value,
                 pagesNeedingRefresh: [0], updateGlobalState: false);
           },
           initialValue: appStateSettings["showWalletSwitcher"],
           icon: Icons.account_balance_wallet_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "Total spent label",
+          description: "For budgets instead of the remaining amount",
+          onSwitched: (value) {
+            updateSettings("showTotalSpentForBudget", value,
+                pagesNeedingRefresh: [0, 2], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["showTotalSpentForBudget"],
+          icon: Icons.data_array_rounded,
         ),
         SettingsContainerSwitch(
           title: "Show Cumulative Spending",
@@ -202,7 +213,8 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.show_chart_rounded,
         ),
         AnimatedSize(
-          duration: Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
           child: AnimatedSwitcher(
             duration: Duration(milliseconds: 300),
             child: !appStateSettings["showCumulativeSpending"]

@@ -30,6 +30,8 @@ class PastBudgetsPage extends StatefulWidget {
   State<PastBudgetsPage> createState() => _PastBudgetsPageState();
 }
 
+GlobalKey<PageFrameworkState> budgetHistoryKey = GlobalKey();
+
 class _PastBudgetsPageState extends State<PastBudgetsPage> {
   int amountLoaded = 3;
 
@@ -47,24 +49,28 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                   ? Brightness.dark
                   : Brightness.light,
     );
+
     return PageFramework(
+      key: budgetHistoryKey,
       title: "Budget History",
+      subtitle: Padding(
+        padding: const EdgeInsets.only(left: 20, bottom: 6),
+        child: TextFont(
+          text: widget.budget.name,
+          fontSize: 20,
+          maxLines: 5,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitleSize: 10,
+      subtitleAnimationSpeed: 9.8,
+      subtitleAlignment: Alignment.bottomLeft,
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
       textColor: Theme.of(context).colorScheme.black,
       navbar: false,
       dragDownToDismiss: true,
       dragDownToDissmissBackground: Theme.of(context).canvasColor,
       slivers: [
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-            child: TextFont(
-              text: "Historic ranges for " + widget.budget.name + " budget",
-              fontSize: 15,
-              maxLines: 5,
-            ),
-          ),
-        ),
         SliverPadding(
           padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
           sliver: SliverList(
@@ -106,6 +112,9 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
               onTap: () {
                 setState(() {
                   amountLoaded += 3;
+                });
+                Future.delayed(Duration(milliseconds: 150), () {
+                  budgetHistoryKey.currentState!.scrollToBottom(duration: 4000);
                 });
               },
               borderRadius: 10,

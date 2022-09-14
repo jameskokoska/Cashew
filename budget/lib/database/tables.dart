@@ -1158,13 +1158,14 @@ class FinanceDatabase extends _$FinanceDatabase {
               tbl.paid.equals(true) &
               tbl.income.equals(false);
         })
-        ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]));
+        ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
       return (query.join([
         leftOuterJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ])
             ..addColumns([totalAmt, totalCount])
-            ..groupBy([categories.categoryPk]))
+            ..groupBy([categories.categoryPk])
+            ..orderBy([OrderingTerm.asc(totalAmt)]))
           .map((row) {
         final category = row.readTable(categories);
         final total = row.read(totalAmt);
@@ -1189,7 +1190,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ])
             ..addColumns([totalAmt, totalCount])
-            ..groupBy([categories.categoryPk]))
+            ..groupBy([categories.categoryPk])
+            ..orderBy([OrderingTerm.asc(totalAmt)]))
           .map((row) {
         final category = row.readTable(categories);
         final total = row.read(totalAmt);

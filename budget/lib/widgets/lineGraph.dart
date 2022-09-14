@@ -373,10 +373,12 @@ class LineChartWrapper extends StatelessWidget {
           pointsOut.add(Pair(point.x, point.y));
         }
       }
+      if (pointsOut.length <= 0) {
+        return [Pair(0, 0)];
+      }
       pointsOut.last.x != points.last.x
           ? pointsOut.add(Pair(points.last.x, 0))
           : 0;
-
       return pointsOut;
     }
     return points;

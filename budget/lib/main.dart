@@ -92,6 +92,7 @@ Future<Map<String, dynamic>> getUserSettings() async {
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "showWalletSwitcher": true,
+    "showTotalSpentForBudget": false,
     "roundedGraphLines": true,
     "showCumulativeSpending": true,
     "removeZeroTransactionEntries": false,

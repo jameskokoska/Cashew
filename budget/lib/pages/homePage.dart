@@ -370,8 +370,8 @@ class HomePageState extends State<HomePage>
           ...getTransactionsSlivers(
               DateTime(
                 DateTime.now().year,
-                DateTime.now().month - 1,
-                DateTime.now().day,
+                DateTime.now().month,
+                DateTime.now().day - 7,
               ),
               DateTime.now(),
               income: selectedSlidingSelector == 1

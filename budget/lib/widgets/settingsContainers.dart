@@ -64,12 +64,15 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       child: SettingsContainer(
         title: widget.title,
         description: widget.description,
-        afterWidget: CupertinoSwitch(
-          activeColor: Theme.of(context).colorScheme.primary,
-          value: value,
-          onChanged: (_) {
-            toggleSwitch();
-          },
+        afterWidget: Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: CupertinoSwitch(
+            activeColor: Theme.of(context).colorScheme.primary,
+            value: value,
+            onChanged: (_) {
+              toggleSwitch();
+            },
+          ),
         ),
         icon: widget.icon,
         verticalPadding: widget.verticalPadding,

@@ -123,8 +123,8 @@ class _ExampleState extends State<Example> {
               width: 16,
               height: 4,
               borderRadius: 2,
-              color:
-                  Colors.grey.withOpacity(.5 * (1 - interval(0.7, 1.0, state.progress))),
+              color: Colors.grey
+                  .withOpacity(.5 * (1 - interval(0.7, 1.0, state.progress))),
             ),
           ),
           const SizedBox(height: 8),
@@ -227,7 +227,8 @@ class _ExampleState extends State<Example> {
           ),
           const SizedBox(width: 8),
           SheetListenerBuilder(
-            buildWhen: (oldState, newState) => oldState.isExpanded != newState.isExpanded,
+            buildWhen: (oldState, newState) =>
+                oldState.isExpanded != newState.isExpanded,
             builder: (context, state) {
               final isExpanded = state.isExpanded;
 
@@ -366,8 +367,8 @@ class _ExampleState extends State<Example> {
   Widget buildSteps(BuildContext context) {
     final steps = [
       Step('Go to your pubspec.yaml file.', '2 seconds'),
-      Step(
-          "Add the newest version of 'sliding_sheet' to your dependencies.", '5 seconds'),
+      Step("Add the newest version of 'sliding_sheet' to your dependencies.",
+          '5 seconds'),
       Step("Run 'flutter packages get' in the terminal.", '4 seconds'),
       Step("Happy coding!", 'Forever'),
     ];
@@ -431,7 +432,8 @@ class _ExampleState extends State<Example> {
           Traffic(0.6, '16:30'),
         ],
         colorFn: (traffic, __) {
-          if (traffic.time == '14:30') return charts.Color.fromHex(code: '#F0BA64');
+          if (traffic.time == '14:30')
+            return charts.Color.fromHex(code: '#F0BA64');
           return charts.MaterialPalette.gray.shade300;
         },
         domainFn: (Traffic traffic, _) => traffic.time,
@@ -506,7 +508,8 @@ class _ExampleState extends State<Example> {
 
             if (backButton || backDrop) {
               const duration = Duration(milliseconds: 300);
-              await controller.snapToExtent(0.2, duration: duration, clamp: false);
+              await controller.snapToExtent(0.2,
+                  duration: duration, clamp: false);
               await controller.snapToExtent(0.4, duration: duration);
               // or Navigator.pop(context);
             }
@@ -606,8 +609,8 @@ class _ExampleState extends State<Example> {
         Align(
           alignment: Alignment.topRight,
           child: Padding(
-            padding:
-                EdgeInsets.fromLTRB(0, MediaQuery.of(context).padding.top + 16, 16, 0),
+            padding: EdgeInsets.fromLTRB(
+                0, MediaQuery.of(context).padding.top + 16, 16, 0),
             child: FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () async {

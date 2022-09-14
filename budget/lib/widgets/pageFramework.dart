@@ -76,9 +76,14 @@ class PageFrameworkState extends State<PageFramework>
   late AnimationController _animationControllerDragY;
   // late AnimationController _animationControllerDragX;
 
-  void scrollToTop() {
+  void scrollToTop({duration: 1200}) {
     _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 1200), curve: Curves.elasticOut);
+        duration: Duration(milliseconds: duration), curve: Curves.elasticOut);
+  }
+
+  void scrollToBottom({duration: 1200}) {
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: duration), curve: Curves.elasticOut);
   }
 
   void initState() {

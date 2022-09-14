@@ -456,6 +456,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                 },
                 listWidgets: [
                   AnimatedContainer(
+                    curve: Curves.easeInOut,
                     duration: Duration(milliseconds: 300),
                     color: HexColor(selectedCategory?.colour,
                             Theme.of(context).canvasColor)
@@ -632,7 +633,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           ),
                         ),
                         AnimatedSize(
-                          duration: Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
                           child: AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
@@ -1197,7 +1198,8 @@ class _SelectTitleState extends State<SelectTitle> {
                   ),
                 ),
                 AnimatedSize(
-                  duration: Duration(milliseconds: 150),
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.easeInOut,
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 250),
                     child: selectedCategory == null

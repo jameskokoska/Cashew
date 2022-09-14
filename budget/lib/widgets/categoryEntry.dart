@@ -30,97 +30,113 @@ class CategoryEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tappable(
-      onTap: onTap,
-      color: Colors.transparent,
-      child: AnimatedScale(
-        curve: ElasticOutCurve(0.6),
-        duration: Duration(milliseconds: 1300),
-        scale: allSelected
-            ? 1
-            : selected
-                ? 1
-                : 0.95,
-        child: AnimatedOpacity(
-          duration: Duration(milliseconds: 300),
-          opacity: allSelected
-              ? 1
-              : selected
-                  ? 1
-                  : 0.3,
-          child: AnimatedContainer(
-            curve: Curves.easeInOut,
-            duration: Duration(milliseconds: 500),
-            color: selected
-                ? dynamicPastel(context, budgetColorScheme.secondaryContainer,
-                    amount: 0.5)
-                : Colors.transparent,
-            padding: EdgeInsets.only(left: 20, right: 25, top: 11, bottom: 11),
-            child: Row(
-              children: [
-                // CategoryIcon(
-                //   category: category,
-                //   size: 30,
-                //   margin: EdgeInsets.zero,
-                // ),
-                CategoryIconPercent(
-                  category: category,
-                  percent: categorySpent / totalSpent * 100,
-                  progressBackgroundColor: selected
-                      ? Theme.of(context).colorScheme.white
-                      : Theme.of(context).colorScheme.lightDarkAccentHeavy,
-                ),
-                Container(
-                  width: 15,
-                ),
-                Expanded(
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextFont(
-                          text: category.name,
-                          fontSize: 20,
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        TextFont(
-                          text: (categorySpent / totalSpent * 100)
-                                  .toStringAsFixed(0) +
-                              "% of budget",
-                          fontSize: 15,
-                          textColor: Theme.of(context).colorScheme.textLight,
-                        )
-                      ],
+    return AnimatedSize(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: !selected && !allSelected
+            ? Container()
+            : Tappable(
+                onTap: onTap,
+                color: Colors.transparent,
+                child: AnimatedScale(
+                  curve: ElasticOutCurve(0.6),
+                  duration: Duration(milliseconds: 1300),
+                  scale: allSelected
+                      ? 1
+                      : selected
+                          ? 1
+                          : 0.95,
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 300),
+                    opacity: allSelected
+                        ? 1
+                        : selected
+                            ? 1
+                            : 0.3,
+                    child: AnimatedContainer(
+                      curve: Curves.easeInOut,
+                      duration: Duration(milliseconds: 500),
+                      color: selected
+                          ? dynamicPastel(
+                              context, budgetColorScheme.secondaryContainer,
+                              amount: 0.5)
+                          : Colors.transparent,
+                      padding: EdgeInsets.only(
+                          left: 20, right: 25, top: 11, bottom: 11),
+                      child: Row(
+                        children: [
+                          // CategoryIcon(
+                          //   category: category,
+                          //   size: 30,
+                          //   margin: EdgeInsets.zero,
+                          // ),
+                          CategoryIconPercent(
+                            category: category,
+                            percent: categorySpent / totalSpent * 100,
+                            progressBackgroundColor: selected
+                                ? Theme.of(context).colorScheme.white
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .lightDarkAccentHeavy,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextFont(
+                                    text: category.name,
+                                    fontSize: 20,
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  TextFont(
+                                    text: (categorySpent / totalSpent * 100)
+                                            .toStringAsFixed(0) +
+                                        "% of budget",
+                                    fontSize: 15,
+                                    textColor:
+                                        Theme.of(context).colorScheme.textLight,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextFont(
+                                fontWeight: FontWeight.bold,
+                                text: convertToMoney(categorySpent),
+                                fontSize: 23,
+                              ),
+                              SizedBox(
+                                height: 1,
+                              ),
+                              TextFont(
+                                text: transactionCount.toString() +
+                                    pluralString(
+                                        transactionCount == 1, " transaction"),
+                                fontSize: 15,
+                                textColor:
+                                    Theme.of(context).colorScheme.textLight,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextFont(
-                      fontWeight: FontWeight.bold,
-                      text: convertToMoney(categorySpent),
-                      fontSize: 23,
-                    ),
-                    SizedBox(
-                      height: 1,
-                    ),
-                    TextFont(
-                      text: transactionCount.toString() +
-                          pluralString(transactionCount == 1, " transaction"),
-                      fontSize: 15,
-                      textColor: Theme.of(context).colorScheme.textLight,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }

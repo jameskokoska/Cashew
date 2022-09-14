@@ -138,8 +138,9 @@ Future<void> createBackupInBackground(context) async {
   if (entireAppLoaded == false) {
     if (appStateSettings["autoBackups"] == true) {
       DateTime lastUpdate = DateTime.parse(appStateSettings["lastBackup"]);
-      if (lastUpdate.day != DateTime.now().day &&
-          lastUpdate.month != DateTime.now().month &&
+
+      if (lastUpdate.day != DateTime.now().day ||
+          lastUpdate.month != DateTime.now().month ||
           lastUpdate.year != DateTime.now().year) {
         print("auto backing up");
 
@@ -712,7 +713,8 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                 title: user!.displayName ?? "",
                 icon: Icons.account_circle),
         AnimatedSize(
-          duration: Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
           child: AnimatedSwitcher(
             duration: Duration(milliseconds: 300),
             child: user == null
