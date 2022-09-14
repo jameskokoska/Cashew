@@ -71,7 +71,10 @@ class BudgetContainer extends StatelessWidget {
                                 budgetRange.start.day +
                                 budgetRange.end.month +
                                 budgetRange.end.day,
-                            color: HexColor(budget.colour).withOpacity(0.8),
+                            color: HexColor(budget.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary)
+                                .withOpacity(0.8),
                           ),
                         ),
                         Padding(
@@ -230,7 +233,10 @@ class BudgetContainer extends StatelessWidget {
                       Positioned.fill(
                         child: AnimatedGooBackground(
                           randomOffset: budget.name.length,
-                          color: HexColor(budget.colour).withOpacity(0.8),
+                          color: HexColor(budget.colour,
+                                  defaultColor:
+                                      Theme.of(context).colorScheme.primary)
+                              .withOpacity(0.8),
                         ),
                       ),
                       Padding(
@@ -339,11 +345,18 @@ class BudgetContainer extends StatelessWidget {
                             },
                             icon: Icons.history_rounded,
                             color: dynamicPastel(
-                                context, HexColor(budget.colour),
+                                context,
+                                HexColor(budget.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary),
                                 amount: 0.5),
                             iconColor: dynamicPastel(
-                                context, HexColor(budget.colour),
-                                amount: 0.7, inverse: true),
+                                context,
+                                HexColor(budget.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary),
+                                amount: 0.7,
+                                inverse: true),
                             size: 38,
                           ),
                         ),
@@ -538,7 +551,8 @@ class BudgetTimeline extends StatelessWidget {
                   ),
             Expanded(
               child: BudgetProgress(
-                color: HexColor(budget.colour),
+                color: HexColor(budget.colour,
+                    defaultColor: Theme.of(context).colorScheme.primary),
                 percent: percent,
                 todayPercent: todayPercent,
                 large: large,

@@ -90,7 +90,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                   Color backgroundColor = dynamicPastel(
                       context,
                       HexColor(category.colour,
-                          Theme.of(context).colorScheme.lightDarkAccent),
+                          defaultColor: Theme.of(context).colorScheme.primary),
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(

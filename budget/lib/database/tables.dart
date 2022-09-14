@@ -10,7 +10,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 10;
+int schemaVersionGlobal = 11;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -147,7 +147,9 @@ class Budgets extends Table {
   IntColumn get budgetPk => integer().autoIncrement()();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   RealColumn get amount => real()();
-  TextColumn get colour => text().withLength(max: COLOUR_LIMIT)();
+  TextColumn get colour => text()
+      .withLength(max: COLOUR_LIMIT)
+      .nullable()(); // if null we are using the themes color
   DateTimeColumn get startDate => dateTime()();
   DateTimeColumn get endDate => dateTime()();
   TextColumn get categoryFks =>
@@ -222,6 +224,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         onUpgrade: (migrator, from, to) async {
           if (from == 9) {
             await migrator.createTable($AppSettingsTable(database));
+          }
+          if (from == 10) {
+            await migrator.alterTable(TableMigration(budgets));
+            await migrator.alterTable(TableMigration(categories));
+            await migrator.alterTable(TableMigration(wallets));
           }
         },
       );
@@ -799,6 +806,10 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //create or update a new wallet
   Future<int> createOrUpdateWallet(TransactionWallet wallet) {
+    if (wallet.colour == null) {
+      return into(wallets).insert(wallet, mode: InsertMode.insertOrReplace);
+    }
+
     return into(wallets).insertOnConflictUpdate(wallet);
   }
 
@@ -946,6 +957,12 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // create or update a category
   Future<int> createOrUpdateCategory(TransactionCategory category) {
+    // We need to ensure the value is set back to null, so insert/replace
+    if (category.colour == null) {
+      return into(categories)
+          .insert(category, mode: InsertMode.insertOrReplace);
+    }
+
     return into(categories).insertOnConflictUpdate(category);
   }
 
@@ -958,6 +975,10 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // create or update a budget
   Future<int> createOrUpdateBudget(Budget budget) {
+    if (budget.colour == null) {
+      return into(budgets).insert(budget, mode: InsertMode.replace);
+    }
+
     return into(budgets).insertOnConflictUpdate(budget);
   }
 

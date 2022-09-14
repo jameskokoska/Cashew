@@ -362,7 +362,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     return;
   }
 
-  void setSelectedColor(Color color) {
+  void setSelectedColor(Color? color) {
     setState(() {
       selectedColor = color;
     });
@@ -388,7 +388,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : DateTime.now().millisecondsSinceEpoch,
       name: selectedTitle ?? "",
       amount: selectedAmount ?? 0,
-      colour: toHexString(selectedColor ?? Colors.green),
+      colour: toHexString(selectedColor),
       startDate: selectedStartDate,
       endDate: selectedEndDate ?? DateTime.now(),
       categoryFks: categoryFks,
@@ -415,7 +415,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
       selectedAllCategories = widget.budget!.allCategoryFks;
       selectedAmount = widget.budget!.amount;
-      setSelectedColor(HexColor(widget.budget!.colour));
+      Future.delayed(Duration.zero, () {
+        setSelectedColor(HexColor(widget.budget!.colour,
+            defaultColor: Theme.of(context).colorScheme.primary));
+      });
       selectedPeriodLength = widget.budget!.periodLength;
       selectedRecurrence = enumRecurrence[widget.budget!.reoccurrence];
       if (selectedPeriodLength == 1) {
@@ -463,7 +466,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     if (selectedTitle != null &&
         (selectedAmount ?? 0) >= 0 &&
         selectedAmount != null &&
-        selectedColor != null &&
         selectedStartDate != null &&
         ((selectedRecurrence == "Custom" && selectedEndDate != null) ||
             (selectedRecurrence != "Custom" && selectedPeriodLength != 0))) {

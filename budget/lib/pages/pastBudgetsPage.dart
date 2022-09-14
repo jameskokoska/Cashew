@@ -39,7 +39,8 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
   Widget build(BuildContext context) {
     DateTimeRange budgetRange = getBudgetDate(widget.budget, DateTime.now());
     ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-      seedColor: HexColor(widget.budget.colour),
+      seedColor: HexColor(widget.budget.colour,
+          defaultColor: Theme.of(context).colorScheme.primary),
       brightness: getSettingConstants(appStateSettings)["theme"] ==
               ThemeMode.system
           ? MediaQuery.of(context).platformBrightness

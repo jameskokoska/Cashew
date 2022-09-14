@@ -84,7 +84,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
     return;
   }
 
-  void setSelectedColor(Color color) {
+  void setSelectedColor(Color? color) {
     selectedColor = color;
     determineBottomButton();
     return;
@@ -103,7 +103,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           ? widget.wallet!.walletPk
           : DateTime.now().millisecondsSinceEpoch,
       name: selectedTitle ?? "",
-      colour: toHexString(selectedColor ?? Colors.green),
+      colour: toHexString(selectedColor),
       dateCreated:
           widget.wallet != null ? widget.wallet!.dateCreated : DateTime.now(),
       order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
@@ -119,11 +119,14 @@ class _AddWalletPageState extends State<AddWalletPage> {
       //We are editing a wallet
       textAddWallet = "Edit Wallet";
       //Fill in the information from the passed in wallet
-      setState(() {
-        selectedColor = HexColor(widget.wallet!.colour);
-        selectedTitle = widget.wallet!.name;
-        //Set to false because we can't save until we made some changes
-        canAddWallet = false;
+      Future.delayed(Duration.zero, () {
+        setState(() {
+          selectedColor = HexColor(widget.wallet!.colour,
+              defaultColor: Theme.of(context).colorScheme.primary);
+          selectedTitle = widget.wallet!.name;
+          //Set to false because we can't save until we made some changes
+          canAddWallet = false;
+        });
       });
     } else {}
   }
@@ -135,7 +138,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   }
 
   determineBottomButton() {
-    if (selectedTitle != null && selectedColor != null) {
+    if (selectedTitle != null) {
       if (canAddWallet != true)
         this.setState(() {
           canAddWallet = true;

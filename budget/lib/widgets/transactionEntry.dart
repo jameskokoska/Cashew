@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -457,7 +459,8 @@ class CategoryIcon extends StatelessWidget {
                     color: dynamicPastel(
                         context,
                         HexColor(category != null ? category.colour : "FFFFFFF",
-                            Theme.of(context).colorScheme.lightDarkAccent),
+                            defaultColor:
+                                Theme.of(context).colorScheme.primary),
                         amountLight: 0.5,
                         amountDark: 0.4,
                         inverse: true),
@@ -479,7 +482,8 @@ class CategoryIcon extends StatelessWidget {
                     ? dynamicPastel(
                         context,
                         HexColor(category.colour,
-                            Theme.of(context).colorScheme.lightDarkAccent),
+                            defaultColor:
+                                Theme.of(context).colorScheme.primary),
                         amountLight: 0.55,
                         amountDark: 0.35)
                     : Theme.of(context).colorScheme.canvasContainer,

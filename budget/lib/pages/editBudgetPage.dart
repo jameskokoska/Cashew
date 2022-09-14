@@ -89,7 +89,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                   Color backgroundColor = dynamicPastel(
                       context,
                       HexColor(budget.colour,
-                          Theme.of(context).colorScheme.lightDarkAccent),
+                          defaultColor: Theme.of(context).colorScheme.primary),
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(

@@ -459,7 +459,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     curve: Curves.easeInOut,
                     duration: Duration(milliseconds: 300),
                     color: HexColor(selectedCategory?.colour,
-                            Theme.of(context).canvasColor)
+                            defaultColor: Theme.of(context).colorScheme.primary)
                         .withOpacity(0.55),
                     child: Row(
                       children: [

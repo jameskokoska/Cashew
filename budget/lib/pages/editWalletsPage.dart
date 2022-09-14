@@ -88,7 +88,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                   Color backgroundColor = dynamicPastel(
                       context,
                       HexColor(wallet.colour,
-                          Theme.of(context).colorScheme.lightDarkAccent),
+                          defaultColor: Theme.of(context).colorScheme.primary),
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(

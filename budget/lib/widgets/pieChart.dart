@@ -191,16 +191,23 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       final radius = isTouched ? 106.0 : 100.0;
       final widgetScale = isTouched ? 1.3 : 1.0;
       return PieChartSectionData(
-        color: dynamicPastel(context, HexColor(widget.data[i].category.colour),
-            amountLight: 0.3, amountDark: 0.1),
+        color: dynamicPastel(
+            context,
+            HexColor(widget.data[i].category.colour,
+                defaultColor: Theme.of(context).colorScheme.primary),
+            amountLight: 0.3,
+            amountDark: 0.1),
         value: (widget.data[i].total / widget.totalSpent).abs(),
         title: "",
         radius: radius,
         badgeWidget: _Badge(
           scale: widgetScale,
           color: dynamicPastel(
-              context, HexColor(widget.data[i].category.colour),
-              amountLight: 0.3, amountDark: 0.1),
+              context,
+              HexColor(widget.data[i].category.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              amountLight: 0.3,
+              amountDark: 0.1),
           assetImage: AssetImage(
             "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),

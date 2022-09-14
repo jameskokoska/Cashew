@@ -162,7 +162,7 @@ Color dynamicPastel(
 }
 
 class HexColor extends Color {
-  static int _getColorFromHex(String? hexColor, Color? defaultColor) {
+  static int _getColorFromHex(String? hexColor, Color? defaultColor, context) {
     if (hexColor == null) {
       if (defaultColor == null) {
         return Colors.blue.value;
@@ -178,11 +178,14 @@ class HexColor extends Color {
     return int.parse(hexColor, radix: 16);
   }
 
-  HexColor(final String? hexColor, [final Color? defaultColor])
-      : super(_getColorFromHex(hexColor, defaultColor));
+  HexColor(final String? hexColor, {final Color? defaultColor})
+      : super(_getColorFromHex(hexColor, defaultColor, context));
 }
 
-String toHexString(Color color) {
+String? toHexString(Color? color) {
+  if (color == null) {
+    return null;
+  }
   String valueString = color.value.toRadixString(16);
   return "0x" + valueString;
 }

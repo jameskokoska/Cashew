@@ -2044,7 +2044,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final int budgetPk;
   final String name;
   final double amount;
-  final String colour;
+  final String? colour;
   final DateTime startDate;
   final DateTime endDate;
   final List<int>? categoryFks;
@@ -2059,7 +2059,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       {required this.budgetPk,
       required this.name,
       required this.amount,
-      required this.colour,
+      this.colour,
       required this.startDate,
       required this.endDate,
       this.categoryFks,
@@ -2080,7 +2080,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       amount: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}amount'])!,
       colour: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}colour'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}colour']),
       startDate: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}start_date'])!,
       endDate: const DateTimeType()
@@ -2109,7 +2109,9 @@ class Budget extends DataClass implements Insertable<Budget> {
     map['budget_pk'] = Variable<int>(budgetPk);
     map['name'] = Variable<String>(name);
     map['amount'] = Variable<double>(amount);
-    map['colour'] = Variable<String>(colour);
+    if (!nullToAbsent || colour != null) {
+      map['colour'] = Variable<String?>(colour);
+    }
     map['start_date'] = Variable<DateTime>(startDate);
     map['end_date'] = Variable<DateTime>(endDate);
     if (!nullToAbsent || categoryFks != null) {
@@ -2134,7 +2136,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       budgetPk: Value(budgetPk),
       name: Value(name),
       amount: Value(amount),
-      colour: Value(colour),
+      colour:
+          colour == null && nullToAbsent ? const Value.absent() : Value(colour),
       startDate: Value(startDate),
       endDate: Value(endDate),
       categoryFks: categoryFks == null && nullToAbsent
@@ -2159,7 +2162,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       budgetPk: serializer.fromJson<int>(json['budgetPk']),
       name: serializer.fromJson<String>(json['name']),
       amount: serializer.fromJson<double>(json['amount']),
-      colour: serializer.fromJson<String>(json['colour']),
+      colour: serializer.fromJson<String?>(json['colour']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime>(json['endDate']),
       categoryFks: serializer.fromJson<List<int>?>(json['categoryFks']),
@@ -2180,7 +2183,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       'budgetPk': serializer.toJson<int>(budgetPk),
       'name': serializer.toJson<String>(name),
       'amount': serializer.toJson<double>(amount),
-      'colour': serializer.toJson<String>(colour),
+      'colour': serializer.toJson<String?>(colour),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime>(endDate),
       'categoryFks': serializer.toJson<List<int>?>(categoryFks),
@@ -2286,7 +2289,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<int> budgetPk;
   final Value<String> name;
   final Value<double> amount;
-  final Value<String> colour;
+  final Value<String?> colour;
   final Value<DateTime> startDate;
   final Value<DateTime> endDate;
   final Value<List<int>?> categoryFks;
@@ -2317,7 +2320,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.budgetPk = const Value.absent(),
     required String name,
     required double amount,
-    required String colour,
+    this.colour = const Value.absent(),
     required DateTime startDate,
     required DateTime endDate,
     this.categoryFks = const Value.absent(),
@@ -2330,7 +2333,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     required int walletFk,
   })  : name = Value(name),
         amount = Value(amount),
-        colour = Value(colour),
         startDate = Value(startDate),
         endDate = Value(endDate),
         allCategoryFks = Value(allCategoryFks),
@@ -2341,7 +2343,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<int>? budgetPk,
     Expression<String>? name,
     Expression<double>? amount,
-    Expression<String>? colour,
+    Expression<String?>? colour,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
     Expression<List<int>?>? categoryFks,
@@ -2375,7 +2377,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       {Value<int>? budgetPk,
       Value<String>? name,
       Value<double>? amount,
-      Value<String>? colour,
+      Value<String?>? colour,
       Value<DateTime>? startDate,
       Value<DateTime>? endDate,
       Value<List<int>?>? categoryFks,
@@ -2417,7 +2419,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['amount'] = Variable<double>(amount.value);
     }
     if (colour.present) {
-      map['colour'] = Variable<String>(colour.value);
+      map['colour'] = Variable<String?>(colour.value);
     }
     if (startDate.present) {
       map['start_date'] = Variable<DateTime>(startDate.value);
@@ -2504,10 +2506,10 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   final VerificationMeta _colourMeta = const VerificationMeta('colour');
   @override
   late final GeneratedColumn<String?> colour = GeneratedColumn<String?>(
-      'colour', aliasedName, false,
+      'colour', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(),
       type: const StringType(),
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _startDateMeta = const VerificationMeta('startDate');
   @override
   late final GeneratedColumn<DateTime?> startDate = GeneratedColumn<DateTime?>(
@@ -2617,8 +2619,6 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     if (data.containsKey('colour')) {
       context.handle(_colourMeta,
           colour.isAcceptableOrUnknown(data['colour']!, _colourMeta));
-    } else if (isInserting) {
-      context.missing(_colourMeta);
     }
     if (data.containsKey('start_date')) {
       context.handle(_startDateMeta,

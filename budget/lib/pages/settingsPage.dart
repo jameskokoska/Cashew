@@ -59,7 +59,7 @@ class SettingsPageState extends State<SettingsPage>
     with AutomaticKeepAliveClientMixin {
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
 
-  late Color selectedColor = Colors.red;
+  late Color? selectedColor = Colors.red;
   void refreshState() {
     print("refresh settings");
     setState(() {});
@@ -134,6 +134,7 @@ class SettingsPageState extends State<SettingsPage>
               PopupFramework(
                 title: "Select Color",
                 child: SelectColor(
+                  includeThemeColor: false,
                   selectedColor: selectedColor,
                   setSelectedColor: (color) {
                     selectedColor = color;

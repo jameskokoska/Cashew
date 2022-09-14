@@ -53,7 +53,10 @@ class _WalletEntryState extends State<WalletEntry>
                 border: Border.all(
                   width: 2,
                   color: widget.selected
-                      ? HexColor(widget.wallet.colour).withOpacity(0.7)
+                      ? HexColor(widget.wallet.colour,
+                              defaultColor:
+                                  Theme.of(context).colorScheme.primary)
+                          .withOpacity(0.7)
                       : Colors.transparent,
                 ),
               ),
@@ -69,8 +72,10 @@ class _WalletEntryState extends State<WalletEntry>
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
-                          color:
-                              HexColor(widget.wallet.colour).withOpacity(0.7),
+                          color: HexColor(widget.wallet.colour,
+                                  defaultColor:
+                                      Theme.of(context).colorScheme.primary)
+                              .withOpacity(0.7),
                         ),
                         width: 20,
                         height: 20,

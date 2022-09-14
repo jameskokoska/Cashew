@@ -47,7 +47,8 @@ class _BudgetPageState extends State<BudgetPage> {
         widget.dateForRange == null ? DateTime.now() : widget.dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(widget.budget, dateForRange);
     ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-      seedColor: HexColor(widget.budget.colour),
+      seedColor: HexColor(widget.budget.colour,
+          defaultColor: Theme.of(context).colorScheme.primary),
       brightness: getSettingConstants(appStateSettings)["theme"] ==
               ThemeMode.system
           ? MediaQuery.of(context).platformBrightness

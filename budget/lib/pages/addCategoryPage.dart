@@ -63,7 +63,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     );
   }
 
-  void setSelectedColor(Color color) {
+  void setSelectedColor(Color? color) {
     setState(() {
       selectedColor = color;
     });
@@ -96,7 +96,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   }
 
   determineBottomButton() {
-    if (selectedTitle != null && selectedColor != null) {
+    if (selectedTitle != null) {
       if (canAddCategory != true)
         this.setState(() {
           canAddCategory = true;
@@ -127,7 +127,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       order: widget.category != null
           ? widget.category!.order
           : await database.getAmountOfCategories(),
-      colour: toHexString(selectedColor ?? Colors.white),
+      colour: toHexString(selectedColor),
       iconName: selectedImage,
     );
   }
@@ -135,16 +135,19 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.category != null) {
-      //We are editing a transaction
-      //Fill in the information from the passed in transaction
-      setState(() {
-        selectedTitle = widget.category!.name;
-        selectedColor = HexColor(widget.category!.colour);
-        selectedImage = widget.category!.iconName;
-        selectedIncome = widget.category!.income;
-      });
-    }
+    Future.delayed(Duration.zero, () {
+      if (widget.category != null) {
+        //We are editing a transaction
+        //Fill in the information from the passed in transaction
+        setState(() {
+          selectedTitle = widget.category!.name;
+          selectedColor = HexColor(widget.category!.colour,
+              defaultColor: Theme.of(context).colorScheme.primary);
+          selectedImage = widget.category!.iconName;
+          selectedIncome = widget.category!.income;
+        });
+      }
+    });
     //Set to false because we can't save until we made some changes
     setState(() {
       canAddCategory = false;
@@ -241,8 +244,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                     order: 0,
                                     income: false,
                                     iconName: selectedImage,
-                                    colour: toHexString(
-                                        selectedColor ?? Colors.red),
+                                    colour: toHexString(selectedColor),
                                   ),
                                   size: 60,
                                   sizePadding: 25,
