@@ -33,6 +33,8 @@ flutter channel master
 flutter upgrade
 
 flutter build appbundle --release
+
+firebase deploy
 */
 
 void main() async {
