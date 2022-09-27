@@ -1,0 +1,185 @@
+import 'dart:developer';
+
+import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
+import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
+import '../colors.dart';
+import 'package:intl/intl.dart';
+
+class GlobalSnackbar extends StatefulWidget {
+  const GlobalSnackbar({Key? key}) : super(key: key);
+
+  @override
+  State<GlobalSnackbar> createState() => GlobalSnackbarState();
+}
+
+class GlobalSnackbarState extends State<GlobalSnackbar>
+    with TickerProviderStateMixin {
+  late AnimationController _animationControllerY;
+  late AnimationController _animationControllerX;
+  double totalMovedNegative = 0;
+
+  animateIn() {
+    _animationControllerY.animateTo(0.5,
+        curve: ElasticOutCurve(0.7),
+        duration: Duration(
+            milliseconds:
+                ((_animationControllerY.value - 0.5).abs() * 800 + 700)
+                    .toInt()));
+  }
+
+  animateOut() {
+    _animationControllerY.animateTo(0,
+        curve: Curves.elasticOut,
+        duration: Duration(
+            milliseconds:
+                ((_animationControllerY.value - 0.5).abs() * 800 + 700)
+                    .toInt()));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationControllerY = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
+    _animationControllerX = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
+  }
+
+  _onPointerMove(PointerMoveEvent ptr) {
+    if (ptr.delta.dy <= 0) {
+      totalMovedNegative += ptr.delta.dy;
+    }
+    if (_animationControllerY.value <= 0.5) {
+      _animationControllerY.value += ptr.delta.dy / 200;
+    } else {
+      _animationControllerY.value +=
+          ptr.delta.dy / (2000 * _animationControllerY.value * 4);
+    }
+    _animationControllerX.value +=
+        ptr.delta.dx / (1000 + (_animationControllerX.value - 0.5).abs() * 100);
+  }
+
+  _onPointerUp(PointerUpEvent event) {
+    if (totalMovedNegative <= -200) {
+      // if user drags it around but has a net negative, swipe up
+      animateOut();
+    } else if (_animationControllerY.value <= 0.4) {
+      // it is swiped up
+      animateOut();
+    } else {
+      _animationControllerY.animateTo(0.5,
+          curve: Curves.elasticOut,
+          duration: Duration(
+              milliseconds:
+                  ((_animationControllerY.value - 0.5).abs() * 800 + 700)
+                      .toInt()));
+    }
+
+    _animationControllerX.animateTo(0.5,
+        curve: Curves.elasticOut,
+        duration: Duration(
+            milliseconds:
+                ((_animationControllerX.value - 0.5).abs() * 800 + 700)
+                    .toInt()));
+    totalMovedNegative = 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animationControllerX,
+      builder: (context, child) {
+        return child!;
+      },
+      child: AnimatedBuilder(
+        animation: _animationControllerY,
+        builder: (context, child) {
+          return Transform.translate(
+            offset: Offset(
+                (_animationControllerX.value - 0.5) * 100,
+                (_animationControllerY.value - 0.5) * 200 +
+                    MediaQuery.of(context).viewPadding.top +
+                    10),
+            child: child,
+          );
+        },
+        child: Listener(
+          onPointerMove: (ptr) => {_onPointerMove(ptr)},
+          onPointerUp: (ptr) => {_onPointerUp(ptr)},
+          child: Center(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.shadowColorLight,
+                    blurRadius: 20,
+                    offset: Offset(0, 0),
+                    spreadRadius: 8,
+                  ),
+                ]),
+                child: Tappable(
+                    onTap: () {},
+                    borderRadius: 13,
+                    color: Theme.of(context).colorScheme.lightDarkAccent,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.backup,
+                                size: 33,
+                              ),
+                              SizedBox(width: 10),
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    TextFont(
+                                      text: "Backup created",
+                                      textAlign: TextAlign.left,
+                                      fontSize: 15,
+                                    ),
+                                    TextFont(
+                                      maxLines: 1,
+                                      text: "Created on Tuesdayd",
+                                      textAlign: TextAlign.left,
+                                      fontSize: 13,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

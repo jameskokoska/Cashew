@@ -15,6 +15,8 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/globalLoadingProgress.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -38,7 +40,8 @@ GlobalKey<TransactionsListPageState> transactionsListPageStateKey = GlobalKey();
 GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
 GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
 GlobalKey<BottomNavBarState> navbarStateKey = GlobalKey();
-GlobalKey<_GlobalLoadingProgressState> loadingProgressKey = GlobalKey();
+GlobalKey<GlobalLoadingProgressState> loadingProgressKey = GlobalKey();
+GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pages;
@@ -100,6 +103,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           return false;
         },
+        // The global Widget stack
         child: Stack(children: [
           AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light.copyWith(
@@ -124,7 +128,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           //   children: pages,
           //   index: currentPage,
           // ),
-          GlobalLoadingProgress(key: loadingProgressKey),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
@@ -176,44 +179,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
             ),
           ),
         ]),
-      ),
-    );
-  }
-}
-
-class GlobalLoadingProgress extends StatefulWidget {
-  const GlobalLoadingProgress({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<GlobalLoadingProgress> createState() => _GlobalLoadingProgressState();
-}
-
-class _GlobalLoadingProgressState extends State<GlobalLoadingProgress> {
-  double progressPercentage = 0;
-  void setProgressPercentage(double percent) {
-    setState(() {
-      progressPercentage = percent;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        height: progressPercentage <= 0 || progressPercentage >= 1 ? 0 : 3,
-        width: MediaQuery.of(context).size.width * progressPercentage,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(5),
-            topRight: Radius.circular(5),
-          ),
-        ),
       ),
     );
   }

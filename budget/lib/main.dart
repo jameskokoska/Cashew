@@ -11,6 +11,8 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
+import 'package:budget/widgets/globalLoadingProgress.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
@@ -298,6 +300,16 @@ class App extends StatelessWidget {
             ? OnBoardingPage()
             : PageNavigationFramework(key: pageNavigationFrameworkKey),
       ),
+      builder: (context, child) {
+        return Stack(
+          children: [
+            child!,
+            // The persistent global Widget stack (stays on navigation change)
+            GlobalSnackbar(key: snackbarKey),
+            GlobalLoadingProgress(key: loadingProgressKey),
+          ],
+        );
+      },
     );
   }
 }
