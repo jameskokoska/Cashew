@@ -75,7 +75,7 @@ class AccountAndBackup extends StatefulWidget {
 }
 
 signIn.GoogleSignInAccount? user;
-late signIn.GoogleSignIn googleSignIn;
+signIn.GoogleSignIn? googleSignIn;
 
 Future<bool> signInGoogle(context,
     {bool? waitForCompletion,
@@ -102,13 +102,20 @@ Future<bool> signInGoogle(context,
 
     if (waitForCompletion == true) openLoadingPopup(context);
     if (user == null) {
-      googleSignIn = signIn.GoogleSignIn.standard(scopes: [
-        ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
-        ...(gMailPermissions == true ? [gMail.GmailApi.gmailReadonlyScope] : [])
-      ]);
+      // we can only have one instance of this set (on web at least)
+      if (googleSignIn == null) {
+        googleSignIn = signIn.GoogleSignIn.standard(scopes: [
+          ...(drivePermissions == true
+              ? [drive.DriveApi.driveAppdataScope]
+              : []),
+          ...(gMailPermissions == true
+              ? [gMail.GmailApi.gmailReadonlyScope]
+              : [])
+        ]);
+      }
       final signIn.GoogleSignInAccount? account = silentSignIn == true
-          ? await googleSignIn.signInSilently()
-          : await googleSignIn.signIn();
+          ? await googleSignIn?.signInSilently()
+          : await googleSignIn?.signIn();
       if (account != null) {
         user = account;
       } else {
@@ -119,6 +126,7 @@ Future<bool> signInGoogle(context,
     next != null ? next() : 0;
     return true;
   } catch (e) {
+    print(e);
     if (waitForCompletion == true) Navigator.of(context).pop();
     openSnackbar(context, e.toString(), isErrorColor: true);
     return false;
@@ -126,7 +134,7 @@ Future<bool> signInGoogle(context,
 }
 
 Future<bool> signOutGoogle() async {
-  await googleSignIn.signOut();
+  await googleSignIn?.signOut();
   user = null;
   print("Signedout");
   return true;
