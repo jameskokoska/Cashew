@@ -100,7 +100,7 @@ Future<T?> openPopup<T extends Object?>(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(height: 7),
+                SizedBox(height: 7),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
@@ -202,7 +202,7 @@ Future<T?> openPopup<T extends Object?>(
                         ),
                       )
                     : SizedBox.shrink(),
-                Container(height: 6),
+                SizedBox(height: 6),
               ],
             ),
           ),
