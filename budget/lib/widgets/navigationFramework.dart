@@ -247,7 +247,8 @@ class SelectedTransactionsButton extends StatelessWidget {
                       SnackbarMessage(
                         title: "Deleted " +
                             (value as Map)[pageID].length.toString() +
-                            " transactions",
+                            pluralString((value as Map)[pageID].length == 1,
+                                " transaction"),
                         icon: Icons.delete_rounded,
                       ),
                     );
