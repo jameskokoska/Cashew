@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
@@ -22,28 +23,66 @@ class GlobalSnackbar extends StatefulWidget {
   State<GlobalSnackbar> createState() => GlobalSnackbarState();
 }
 
+class SnackbarMessage {
+  final String title;
+  String? description;
+  IconData? icon;
+  Duration timeout;
+
+  SnackbarMessage({
+    this.title = "",
+    this.description,
+    this.icon,
+    this.timeout = const Duration(milliseconds: 3500),
+  });
+}
+
 class GlobalSnackbarState extends State<GlobalSnackbar>
     with TickerProviderStateMixin {
+  Timer? currentTimeout;
   late AnimationController _animationControllerY;
   late AnimationController _animationControllerX;
   double totalMovedNegative = 0;
+  List<SnackbarMessage> currentQueue = [];
+  SnackbarMessage? currentMessage;
 
-  animateIn() {
+  post(SnackbarMessage message) {
+    currentQueue.add(message);
+    if (currentQueue.length <= 1) animateIn(message);
+  }
+
+  animateIn(SnackbarMessage message) {
+    setState(() {
+      currentMessage = currentQueue[0];
+    });
+    _animationControllerX.animateTo(0.5, duration: Duration.zero);
     _animationControllerY.animateTo(0.5,
         curve: ElasticOutCurve(0.7),
         duration: Duration(
             milliseconds:
                 ((_animationControllerY.value - 0.5).abs() * 800 + 700)
                     .toInt()));
+    currentTimeout = Timer(message.timeout, () {
+      animateOut();
+    });
   }
 
   animateOut() {
+    currentTimeout?.cancel();
     _animationControllerY.animateTo(0,
         curve: Curves.elasticOut,
         duration: Duration(
             milliseconds:
-                ((_animationControllerY.value - 0.5).abs() * 800 + 700)
+                ((_animationControllerY.value - 0.5).abs() * 800 + 1000)
                     .toInt()));
+    if (currentQueue.length >= 1) {
+      currentQueue.removeAt(0);
+    }
+    if (currentQueue.length >= 1) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        animateIn(currentQueue[0]);
+      });
+    }
   }
 
   @override
@@ -146,27 +185,45 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                Icons.backup,
-                                size: 33,
-                              ),
-                              SizedBox(width: 10),
+                              currentMessage?.icon == null
+                                  ? SizedBox.shrink()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Icon(
+                                        currentMessage?.icon,
+                                        size: 33,
+                                      ),
+                                    ),
                               Flexible(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      currentMessage?.icon == null
+                                          ? CrossAxisAlignment.center
+                                          : CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      currentMessage?.icon == null
+                                          ? MainAxisAlignment.center
+                                          : MainAxisAlignment.start,
                                   children: [
                                     TextFont(
-                                      text: "Backup created",
-                                      textAlign: TextAlign.left,
+                                      text: currentMessage?.title ?? "",
+                                      textAlign: currentMessage?.icon == null
+                                          ? TextAlign.center
+                                          : TextAlign.left,
                                       fontSize: 15,
                                     ),
-                                    TextFont(
-                                      maxLines: 1,
-                                      text: "Created on Tuesdayd",
-                                      textAlign: TextAlign.left,
-                                      fontSize: 13,
-                                    ),
+                                    currentMessage?.description == null
+                                        ? SizedBox.shrink()
+                                        : TextFont(
+                                            maxLines: 1,
+                                            text: currentMessage?.description ??
+                                                "",
+                                            textAlign:
+                                                currentMessage?.icon == null
+                                                    ? TextAlign.center
+                                                    : TextAlign.left,
+                                            fontSize: 13,
+                                          ),
                                   ],
                                 ),
                               ),

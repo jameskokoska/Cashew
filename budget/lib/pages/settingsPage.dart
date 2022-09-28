@@ -190,6 +190,16 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.account_balance_wallet_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Overdue and Upcoming",
+          description: "Sections on home page",
+          onSwitched: (value) {
+            updateSettings("showOverdueUpcoming", value,
+                pagesNeedingRefresh: [0], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["showOverdueUpcoming"],
+          icon: Icons.upcoming_rounded,
+        ),
+        SettingsContainerSwitch(
           title: "Total spent label",
           description: "For budgets instead of the remaining amount",
           onSwitched: (value) {
@@ -200,7 +210,7 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.data_array_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Show Cumulative Spending",
+          title: "Use Cumulative Spending",
           description: "For spending line graphs",
           onSwitched: (value) {
             updateSettings("showCumulativeSpending", value,

@@ -244,10 +244,13 @@ class SelectedTransactionsButton extends StatelessWidget {
                       database.deleteTransaction(transactionID);
                     }
                     openSnackbar(
-                        context,
-                        "Deleted " +
+                      SnackbarMessage(
+                        title: "Deleted " +
                             (value as Map)[pageID].length.toString() +
-                            " transactions");
+                            " transactions",
+                        icon: Icons.delete_rounded,
+                      ),
+                    );
                     globalSelectedID.value[pageID] = [];
                     globalSelectedID.notifyListeners();
                     Navigator.pop(context);

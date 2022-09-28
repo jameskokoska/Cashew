@@ -14,6 +14,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -165,6 +166,7 @@ Future<void> parseEmailsInBackground(context) async {
       int currentEmailIndex = 0;
       for (gMail.Message message in results.messages!) {
         currentEmailIndex++;
+        await Future.delayed(Duration(milliseconds: 100), () {});
         loadingProgressKey.currentState!
             .setProgressPercentage(currentEmailIndex / amountOfEmails);
         // await Future.delayed(Duration(milliseconds: 1000));
@@ -212,8 +214,12 @@ Future<void> parseEmailsInBackground(context) async {
         if (emailContains == "" ||
             (amountTransactionBefore == "" && amountTransactionAfter == "") ||
             (titleTransactionBefore == "" && titleTransactionAfter == "")) {
-          openSnackbar(context,
-              "You have not setup the email scanning configuration in settings.");
+          openSnackbar(
+            SnackbarMessage(
+              title:
+                  "You have not setup the email scanning configuration in settings.",
+            ),
+          );
           break;
         }
         if (messageString.contains(emailContains) == false) {
@@ -226,14 +232,22 @@ Future<void> parseEmailsInBackground(context) async {
             amountTransactionBefore, amountTransactionAfter);
 
         if (title == null) {
-          openSnackbar(context,
-              "Couldn't find title in email. Check the email settings page for more information.",
-              backgroundColor: Theme.of(context).colorScheme.unPaidRed);
+          openSnackbar(
+            SnackbarMessage(
+              title:
+                  "Couldn't find title in email. Check the email settings page for more information.",
+            ),
+          );
           emailsParsed.add(message.id!);
           continue;
         } else if (amountDouble == null) {
-          openSnackbar(context,
-              "Couldn't find amount in email. Check the email settings page for more information.");
+          openSnackbar(
+            SnackbarMessage(
+              title:
+                  "Couldn't find amount in email. Check the email settings page for more information.",
+            ),
+          );
+
           emailsParsed.add(message.id!);
           continue;
         }
@@ -273,9 +287,13 @@ Future<void> parseEmailsInBackground(context) async {
           selectedCategory = await database.getCategoryInstance(categoryId);
         } catch (e) {
           openSnackbar(
-              context,
-              "The transaction category cannot be found for this email! " +
-                  e.toString());
+            SnackbarMessage(
+              title:
+                  "The transaction category cannot be found for this email! " +
+                      e.toString(),
+            ),
+          );
+
           continue;
         }
 
@@ -301,20 +319,22 @@ Future<void> parseEmailsInBackground(context) async {
             methodAdded: MethodAdded.email,
           ),
         );
+        openSnackbar(
+          SnackbarMessage(
+            title: "Added a transaction from email: " + title,
+          ),
+        );
 
-        openSnackbar(context, "Added a transaction from email: " + title);
         emailsParsed.add(message.id!);
       }
       updateSettings("EmailAutoTransactions-emailsParsed", emailsParsed,
           updateGlobalState: false);
       openSnackbar(
-        context,
-        "Finished scanning " +
-            results.messages!.length.toString() +
-            " emails" +
-            "\n" +
-            "New emails: " +
-            newEmailCount.toString(),
+        SnackbarMessage(
+          title: "Scanned " + results.messages!.length.toString() + " emails",
+          description: newEmailCount.toString() + " new emails",
+          icon: Icons.mark_email_unread_rounded,
+        ),
       );
     }
   }

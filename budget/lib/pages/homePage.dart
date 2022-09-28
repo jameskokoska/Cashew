@@ -8,6 +8,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
@@ -269,24 +270,27 @@ class HomePageState extends State<HomePage>
               }
             },
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(child: UpcomingTransactions()),
-                  SizedBox(width: 13),
-                  Expanded(
-                    child: UpcomingTransactions(
-                      overdueTransactions: true,
+          !appStateSettings["showOverdueUpcoming"]
+              ? SliverToBoxAdapter(child: SizedBox.shrink())
+              : SliverToBoxAdapter(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(child: UpcomingTransactions()),
+                        SizedBox(width: 13),
+                        Expanded(
+                          child: UpcomingTransactions(
+                            overdueTransactions: true,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                ),
           StreamBuilder<List<Transaction>>(
             stream: database.getTransactionsInTimeRangeFromCategories(
                 DateTime(

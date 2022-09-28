@@ -1522,7 +1522,7 @@ getRelatingAssociatedTitle(String text) async {
 
   int categoryFk = -1;
   TransactionAssociatedTitle? selectedTitleLocal;
-  for (TransactionAssociatedTitle title in allTitles) {
+  for (TransactionAssociatedTitle title in allTitles.reversed) {
     if (text.toLowerCase().contains(title.title.toLowerCase())) {
       categoryFk = title.categoryFk;
       selectedTitleLocal = title;

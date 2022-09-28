@@ -12,6 +12,7 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -128,7 +129,9 @@ Future<bool> signInGoogle(context,
   } catch (e) {
     print(e);
     if (waitForCompletion == true) Navigator.of(context).pop();
-    openSnackbar(context, e.toString(), isErrorColor: true);
+    openSnackbar(
+      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+    );
     return false;
   }
 }
@@ -226,7 +229,13 @@ Future<void> createBackup(context, {bool? silentBackup}) async {
     if (silentBackup == false || silentBackup == null) {
       Navigator.of(context).pop();
     }
-    openSnackbar(context, "Backup created: " + (driveFile.name ?? ""));
+    openSnackbar(
+      SnackbarMessage(
+        title: "Backup Created",
+        description: driveFile.name,
+        icon: Icons.backup_rounded,
+      ),
+    );
 
     updateSettings("lastBackup", DateTime.now().toString(),
         pagesNeedingRefresh: [], updateGlobalState: false);
@@ -234,7 +243,9 @@ Future<void> createBackup(context, {bool? silentBackup}) async {
     if (silentBackup == false || silentBackup == null) {
       Navigator.of(context).pop();
     }
-    openSnackbar(context, e.toString());
+    openSnackbar(
+      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+    );
   }
 }
 
@@ -273,7 +284,9 @@ Future<void> deleteRecentBackups(context, amountToKeep,
     if (silentDelete == false || silentDelete == null) {
       Navigator.of(context).pop();
     }
-    openSnackbar(context, e.toString());
+    openSnackbar(
+      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+    );
   }
 }
 
@@ -321,12 +334,16 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           );
         },
         onError: (error) {
-          openSnackbar(context, error.toString());
+          openSnackbar(
+            SnackbarMessage(title: error.toString(), icon: Icons.error_rounded),
+          );
         },
       );
     } catch (e) {
       Navigator.of(context).pop();
-      openSnackbar(context, e.toString());
+      openSnackbar(
+        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      );
     }
   }
 
@@ -403,7 +420,9 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
       );
     } catch (e) {
       Navigator.of(context).pop();
-      openSnackbar(context, e.toString());
+      openSnackbar(
+        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      );
     }
   }
 
@@ -618,7 +637,9 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
       }
     } catch (e) {
       Navigator.of(context).pop();
-      openSnackbar(context, e.toString());
+      openSnackbar(
+        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      );
     }
   }
 

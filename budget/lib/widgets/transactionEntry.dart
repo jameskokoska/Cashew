@@ -4,6 +4,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -69,10 +70,12 @@ class _TransactionEntryState extends State<TransactionEntry> {
         dateCreated: newDate,
       );
       database.createOrUpdateTransaction(newTransaction);
+
       openSnackbar(
-        context,
-        "Created new subscription transaction for " +
-            getWordedDateShort(newDate),
+        SnackbarMessage(
+            title: "Created new subscription transaction for " +
+                getWordedDateShort(newDate),
+            icon: Icons.create),
       );
     }
   }

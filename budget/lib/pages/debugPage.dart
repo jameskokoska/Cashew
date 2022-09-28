@@ -10,6 +10,7 @@ import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -50,7 +51,40 @@ class DebugPage extends StatelessWidget {
       listWidgets: [
         Button(
             label: "TAPME",
-            onTap: () => {snackbarKey.currentState!.animateIn()}),
+            onTap: () {
+              openSnackbar(
+                SnackbarMessage(
+                  title:
+                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                  icon: Icons.time_to_leave,
+                  timeout: Duration(milliseconds: 1000),
+                ),
+              );
+              openSnackbar(
+                SnackbarMessage(
+                  title: "Test",
+                  description:
+                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                  icon: Icons.abc,
+                  timeout: Duration(milliseconds: 1000),
+                ),
+              );
+              openSnackbar(
+                SnackbarMessage(
+                  title:
+                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                  timeout: Duration(milliseconds: 1000),
+                ),
+              );
+              openSnackbar(
+                SnackbarMessage(
+                  title:
+                      '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
+                  description: "Some description",
+                  timeout: Duration(milliseconds: 7000),
+                ),
+              );
+            }),
         TextFont(
             maxLines: 10,
             text: kIsWeb

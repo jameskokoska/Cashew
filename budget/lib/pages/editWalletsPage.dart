@@ -9,6 +9,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -171,7 +172,11 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                           database.deleteWallet(wallet.walletPk, wallet.order);
                           database.deleteWalletsTransactions(wallet.walletPk);
                           Navigator.pop(context);
-                          openSnackbar(context, "Deleted " + wallet.name);
+                          openSnackbar(
+                            SnackbarMessage(
+                                title: "Deleted " + wallet.name,
+                                icon: Icons.delete),
+                          );
                         },
                         onSubmitLabel: "Delete",
                       );

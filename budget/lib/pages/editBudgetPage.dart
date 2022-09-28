@@ -8,6 +8,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -108,7 +109,11 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                         onSubmit: () {
                           database.deleteBudget(budget.budgetPk, budget.order);
                           Navigator.pop(context);
-                          openSnackbar(context, "Deleted " + budget.name);
+                          openSnackbar(
+                            SnackbarMessage(
+                                title: "Deleted " + budget.name,
+                                icon: Icons.delete),
+                          );
                         },
                         onSubmitLabel: "Delete",
                       );

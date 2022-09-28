@@ -11,6 +11,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -170,7 +171,10 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                               associatedTitle.order);
                           Navigator.pop(context);
                           openSnackbar(
-                              context, "Deleted " + associatedTitle.title);
+                            SnackbarMessage(
+                                title: "Deleted " + associatedTitle.title,
+                                icon: Icons.delete),
+                          );
                         },
                         onSubmitLabel: "Delete",
                       );

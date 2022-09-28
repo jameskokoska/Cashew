@@ -817,15 +817,17 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit, int? offset}) {
     return (select(associatedTitles)
           ..orderBy([(t) => OrderingTerm.desc(t.order)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
+        )
         .watch();
   }
 
   Future<List<TransactionAssociatedTitle>> getAllAssociatedTitles(
       {int? limit, int? offset}) {
     return (select(associatedTitles)
-          ..orderBy([(t) => OrderingTerm.asc(t.order)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+          ..orderBy([(t) => OrderingTerm.desc(t.order)])
+        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
+        )
         .get();
   }
 
@@ -835,7 +837,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       int? offset}) {
     return (select(associatedTitles)
           ..where((t) => t.title.lower().like(searchFor.toLowerCase().trim()))
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
+        )
         .getSingle();
   }
 
@@ -854,7 +857,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(associatedTitles)
           ..where((t) => t.categoryFk.equals(categoryFk))
           ..orderBy([(t) => OrderingTerm.asc(t.order)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
+        )
         .watch();
   }
 
