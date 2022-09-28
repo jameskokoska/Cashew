@@ -166,7 +166,7 @@ Future<void> parseEmailsInBackground(context) async {
       int currentEmailIndex = 0;
       for (gMail.Message message in results.messages!) {
         currentEmailIndex++;
-        await Future.delayed(Duration(milliseconds: 100), () {});
+        await Future.delayed(Duration(milliseconds: 25), () {});
         loadingProgressKey.currentState!
             .setProgressPercentage(currentEmailIndex / amountOfEmails);
         // await Future.delayed(Duration(milliseconds: 1000));

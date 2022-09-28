@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
@@ -79,9 +80,9 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
-        minY: widget.minPair.y,
-        maxY: widget.maxPair.y,
-        maxX: widget.maxPair.x + 1,
+        minY: !loaded ? 0 : widget.minPair.y,
+        maxY: !loaded ? widget.minPair.y * -1 : widget.maxPair.y,
+        maxX: !loaded ? 0 : widget.maxPair.x + 1,
         // axisTitleData: axisTitleData,
         titlesData: titlesData,
         extraLinesData: extraLinesData,
@@ -146,8 +147,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         ),
         leftTitles: SideTitles(
           showTitles: true,
+          textAlign: TextAlign.right,
           getTextStyles: (_, __) {
             return TextStyle(
+                fontSize: 13,
+                height: 1.5,
                 color: dynamicPastel(context, widget.color,
                         amount: 0.5, inverse: true)
                     .withOpacity(0.3),
@@ -298,7 +302,17 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               ((widget.maxPair.y).abs()) /
                   ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
-        spots: loaded ? widget.spots : [],
+        spots: loaded
+            ? widget.spots
+            : [
+                for (int i = 0; i <= widget.spots.length - 1; i++)
+                  FlSpot(
+                      widget.minPair.x +
+                          (widget.maxPair.x - widget.minPair.x) *
+                              i /
+                              widget.spots.length,
+                      0),
+              ],
       );
 }
 
@@ -324,6 +338,25 @@ class LineChartWrapper extends StatelessWidget {
   final Color? color;
   final DateTime? endDate;
   final double? verticalLineAt;
+
+  List<Pair> filterPoints(points) {
+    List<Pair> pointsOut = [];
+    if (appStateSettings["removeZeroTransactionEntries"]) {
+      for (Pair point in points) {
+        if (point.y != 0) {
+          pointsOut.add(Pair(point.x, point.y));
+        }
+      }
+      if (pointsOut.length <= 0) {
+        return [Pair(0, 0)];
+      }
+      pointsOut.last.x != points.last.x
+          ? pointsOut.add(Pair(points.last.x, 0))
+          : 0;
+      return pointsOut;
+    }
+    return points;
+  }
 
   List<FlSpot> convertPoints(points) {
     List<FlSpot> pointsOut = [];
@@ -364,16 +397,18 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 175,
-      child: _LineChart(
-        spots: convertPoints(points),
-        maxPair: getMaxPoint(points),
-        minPair: getMinPoint(points),
-        color: color == null ? Theme.of(context).colorScheme.primary : color!,
-        isCurved: isCurved,
-        endDate: endDate,
-        verticalLineAt: verticalLineAt,
+    return ClipRRect(
+      child: Container(
+        height: 175,
+        child: _LineChart(
+          spots: convertPoints(filterPoints(points)),
+          maxPair: getMaxPoint(points),
+          minPair: getMinPoint(points),
+          color: color == null ? Theme.of(context).colorScheme.primary : color!,
+          isCurved: isCurved,
+          endDate: endDate,
+          verticalLineAt: verticalLineAt,
+        ),
       ),
     );
   }
