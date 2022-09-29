@@ -84,6 +84,13 @@ class DebugPage extends StatelessWidget {
                   timeout: Duration(milliseconds: 7000),
                 ),
               );
+              openSnackbar(
+                SnackbarMessage(
+                  title:
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation',
+                  timeout: Duration(milliseconds: 10000),
+                ),
+              );
             }),
         TextFont(
             maxLines: 10,

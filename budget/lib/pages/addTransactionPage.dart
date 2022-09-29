@@ -1558,7 +1558,9 @@ addAssociatedTitles(
     String selectedTitle, TransactionCategory selectedCategory) async {
   if (appStateSettings["autoAddAssociatedTitles"]) {
     List result = await getRelatingAssociatedTitle(selectedTitle);
+
     TransactionAssociatedTitle? foundTitle = result[0];
+
     if (foundTitle == null ||
         (foundTitle.categoryFk != selectedCategory.categoryPk ||
                 foundTitle.title != selectedTitle) &&

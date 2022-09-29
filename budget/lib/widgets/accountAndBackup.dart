@@ -733,6 +733,10 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                       MaterialPageRoute(builder: (context) => accountsPage),
                     );
                   });
+                  if (appStateSettings["username"] == "") {
+                    updateSettings("username", user!.displayName,
+                        pagesNeedingRefresh: [0]);
+                  }
                 },
                 title: "Login",
                 icon: MoreIcons.google,

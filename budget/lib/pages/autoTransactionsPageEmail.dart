@@ -166,7 +166,6 @@ Future<void> parseEmailsInBackground(context) async {
       int currentEmailIndex = 0;
       for (gMail.Message message in results.messages!) {
         currentEmailIndex++;
-        await Future.delayed(Duration(milliseconds: 25), () {});
         loadingProgressKey.currentState!
             .setProgressPercentage(currentEmailIndex / amountOfEmails);
         // await Future.delayed(Duration(milliseconds: 1000));
@@ -297,11 +296,11 @@ Future<void> parseEmailsInBackground(context) async {
           continue;
         }
 
-        await addAssociatedTitles(title, selectedCategory);
-
         // Remove store number (everything past the last '#' symbol)
         int position = title.lastIndexOf('#');
         title = (position != -1) ? title.substring(0, position) : title;
+
+        await addAssociatedTitles(title, selectedCategory);
 
         await database.createOrUpdateTransaction(
           Transaction(

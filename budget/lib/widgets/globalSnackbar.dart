@@ -57,10 +57,10 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
     });
     _animationControllerX.animateTo(0.5, duration: Duration.zero);
     _animationControllerY.animateTo(0.5,
-        curve: ElasticOutCurve(0.7),
+        curve: ElasticOutCurve(0.8),
         duration: Duration(
             milliseconds:
-                ((_animationControllerY.value - 0.5).abs() * 800 + 700)
+                ((_animationControllerY.value - 0.5).abs() * 800 + 900)
                     .toInt()));
     currentTimeout = Timer(message.timeout, () {
       animateOut();
@@ -73,13 +73,13 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
         curve: Curves.elasticOut,
         duration: Duration(
             milliseconds:
-                ((_animationControllerY.value - 0.5).abs() * 800 + 1000)
+                ((_animationControllerY.value - 0.5).abs() * 800 + 2000)
                     .toInt()));
     if (currentQueue.length >= 1) {
       currentQueue.removeAt(0);
     }
     if (currentQueue.length >= 1) {
-      Future.delayed(Duration(milliseconds: 100), () {
+      Future.delayed(Duration(milliseconds: 150), () {
         animateIn(currentQueue[0]);
       });
     }
@@ -100,10 +100,10 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
       totalMovedNegative += ptr.delta.dy;
     }
     if (_animationControllerY.value <= 0.5) {
-      _animationControllerY.value += ptr.delta.dy / 200;
+      _animationControllerY.value += ptr.delta.dy / 400;
     } else {
       _animationControllerY.value +=
-          ptr.delta.dy / (2000 * _animationControllerY.value * 4);
+          ptr.delta.dy / (2000 * _animationControllerY.value * 8);
     }
     _animationControllerX.value +=
         ptr.delta.dx / (1000 + (_animationControllerX.value - 0.5).abs() * 100);
@@ -147,7 +147,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
           return Transform.translate(
             offset: Offset(
                 (_animationControllerX.value - 0.5) * 100,
-                (_animationControllerY.value - 0.5) * 200 +
+                (_animationControllerY.value - 0.5) * 400 +
                     MediaQuery.of(context).viewPadding.top +
                     10),
             child: child,
@@ -160,12 +160,13 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
             child: Align(
               alignment: Alignment.topCenter,
               child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).colorScheme.shadowColorLight,
                     blurRadius: 20,
                     offset: Offset(0, 0),
-                    spreadRadius: 8,
+                    spreadRadius: 3,
                   ),
                 ]),
                 child: Tappable(
@@ -211,11 +212,12 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                                           ? TextAlign.center
                                           : TextAlign.left,
                                       fontSize: 15,
+                                      maxLines: 3,
                                     ),
                                     currentMessage?.description == null
                                         ? SizedBox.shrink()
                                         : TextFont(
-                                            maxLines: 1,
+                                            maxLines: 3,
                                             text: currentMessage?.description ??
                                                 "",
                                             textAlign:

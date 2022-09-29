@@ -192,14 +192,8 @@ class InitializeDatabase extends StatelessWidget {
       future: initializeDatabase(),
       builder: (context, snapshot) {
         debugPrint("Initialized Database");
-        Widget child = SizedBox(
-          height: 50,
-          width: 50,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-                Theme.of(context).colorScheme.secondary),
-          ),
-        );
+        Widget child = SizedBox.shrink();
+
         if (snapshot.hasData || entireAppLoaded == true) {
           child = InitializeApp(
             key: appStateKey,

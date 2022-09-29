@@ -218,6 +218,8 @@ BudgetReoccurence mapRecurrence(String? recurrenceString) {
 DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
   if (budget.reoccurrence == BudgetReoccurence.custom) {
     return DateTimeRange(start: budget.startDate, end: budget.endDate);
+  } else if (budget.reoccurrence == BudgetReoccurence.daily) {
+    //TODO implement daily budgets with custom periodLength
   } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
     DateTime currentDateLoop = currentDate;
     for (int daysToGoBack = 0; daysToGoBack <= 7; daysToGoBack++) {
@@ -230,6 +232,7 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
     }
   } else if (budget.reoccurrence == BudgetReoccurence.monthly) {
     //this gives weird things when you select 31 and current month is march... because of february
+    //TODO this doesn't work for custom periodLength
     DateTime startDate =
         new DateTime(currentDate.year, currentDate.month, budget.startDate.day);
     DateTime endDate = new DateTime(

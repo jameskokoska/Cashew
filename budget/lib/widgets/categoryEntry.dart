@@ -59,9 +59,9 @@ class CategoryEntry extends StatelessWidget {
                       curve: Curves.easeInOut,
                       duration: Duration(milliseconds: 500),
                       color: selected
-                          ? dynamicPastel(
-                              context, budgetColorScheme.secondaryContainer,
-                              amount: 0.5)
+                          ? dynamicPastel(context, budgetColorScheme.primary,
+                                  amount: 0.3)
+                              .withAlpha(80)
                           : Colors.transparent,
                       padding: EdgeInsets.only(
                           left: 20, right: 25, top: 11, bottom: 11),
@@ -102,8 +102,14 @@ class CategoryEntry extends StatelessWidget {
                                             .toStringAsFixed(0) +
                                         "% of budget",
                                     fontSize: 15,
-                                    textColor:
-                                        Theme.of(context).colorScheme.textLight,
+                                    textColor: selected
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .black
+                                            .withOpacity(0.4)
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .textLight,
                                   )
                                 ],
                               ),
@@ -126,8 +132,12 @@ class CategoryEntry extends StatelessWidget {
                                     pluralString(
                                         transactionCount == 1, " transaction"),
                                 fontSize: 15,
-                                textColor:
-                                    Theme.of(context).colorScheme.textLight,
+                                textColor: selected
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .black
+                                        .withOpacity(0.4)
+                                    : Theme.of(context).colorScheme.textLight,
                               )
                             ],
                           ),
