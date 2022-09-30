@@ -1174,7 +1174,8 @@ class _SelectTitleState extends State<SelectTitle> {
                           selectedTitleLocal != null) {
                         TransactionCategory? foundCategory =
                             await database.getCategoryInstance(categoryFk);
-                        Future.delayed(Duration(milliseconds: 0), () {
+                        // Update the size of the bottom sheet
+                        Future.delayed(Duration(milliseconds: 100), () {
                           bottomSheetControllerGlobal.snapToExtent(0);
                         });
                         setState(() {
@@ -1188,7 +1189,8 @@ class _SelectTitleState extends State<SelectTitle> {
                           selectedAssociatedTitle = null;
                           foundFromCategory = foundFromCategoryLocal;
                         });
-                        Future.delayed(Duration(milliseconds: 100), () {
+                        // Update the size of the bottom sheet
+                        Future.delayed(Duration(milliseconds: 300), () {
                           bottomSheetControllerGlobal.snapToExtent(0);
                         });
                       }

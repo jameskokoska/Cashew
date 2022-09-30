@@ -14,6 +14,7 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/restartApp.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +43,7 @@ firebase deploy
 void main() async {
   database = await constructDb();
   entireAppLoaded = false;
-  runApp(InitializeDatabase());
-  // initNotificationListener();
+  runApp(RestartApp(child: InitializeDatabase()));
 }
 
 Random random = new Random();
@@ -91,6 +91,7 @@ Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
 Future<Map<String, dynamic>> getUserSettings() async {
   Map<String, dynamic> userPreferencesDefault = {
     "databaseJustImported": false,
+    "backupLimit": 10,
     "theme": "system",
     "selectedWallet": 0,
     "selectedSubscriptionType": 0,

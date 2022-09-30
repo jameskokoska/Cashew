@@ -29,6 +29,14 @@ import 'package:flutter/services.dart';
 class PageNavigationFramework extends StatefulWidget {
   const PageNavigationFramework({Key? key}) : super(key: key);
 
+  //PageNavigationFramework.changePage(context, 0);
+  static void changePage(BuildContext context, page,
+      {bool switchNavbar = false}) {
+    context
+        .findAncestorStateOfType<PageNavigationFrameworkState>()!
+        .changePage(page, switchNavbar: switchNavbar);
+  }
+
   @override
   State<PageNavigationFramework> createState() =>
       PageNavigationFrameworkState();
@@ -84,7 +92,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     });
 
     pages = [
-      HomePage(key: homePageStateKey, changePage: changePage),
+      HomePage(key: homePageStateKey),
       TransactionsListPage(key: transactionsListPageStateKey),
       BudgetsListPage(key: budgetsListPageStateKey),
       SettingsPage(key: settingsPageStateKey)

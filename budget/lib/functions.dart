@@ -4,9 +4,11 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/defaultCategories.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
-import 'package:universal_html/html.dart';
+import 'package:universal_html/html.dart' hide Navigator;
 
 import './colors.dart';
 import './widgets/textWidgets.dart';
@@ -431,4 +433,13 @@ String? getOSInsideWeb() {
   } else {
     return null;
   }
+}
+
+restartApp(context) {
+  // Pop all routes, select home tab
+  RestartApp.restartApp(context);
+  Navigator.of(context).popUntil((route) => route.isFirst);
+  Future.delayed(Duration(milliseconds: 100), () {
+    PageNavigationFramework.changePage(context, 0, switchNavbar: true);
+  });
 }

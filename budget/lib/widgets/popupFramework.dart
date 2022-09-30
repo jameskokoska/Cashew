@@ -7,10 +7,12 @@ class PopupFramework extends StatelessWidget {
     Key? key,
     required this.child,
     this.title,
+    this.subtitle,
     this.padding = true,
   }) : super(key: key);
   final Widget child;
   final String? title;
+  final String? subtitle;
   final bool padding;
   @override
   Widget build(BuildContext context) {
@@ -26,13 +28,23 @@ class PopupFramework extends StatelessWidget {
             children: [
               Container(height: 17),
               title == null
-                  ? Container()
+                  ? SizedBox.shrink()
                   : Padding(
                       padding: EdgeInsets.only(left: 18, right: 18, top: 5),
                       child: TextFont(
                         text: title ?? "",
                         fontSize: title!.length > 16 ? 24 : 32,
                         fontWeight: FontWeight.bold,
+                        maxLines: 5,
+                      ),
+                    ),
+              subtitle == null
+                  ? SizedBox.shrink()
+                  : Padding(
+                      padding: EdgeInsets.only(left: 18, right: 18, bottom: 4),
+                      child: TextFont(
+                        text: subtitle ?? "",
+                        fontSize: 17,
                         maxLines: 5,
                       ),
                     ),

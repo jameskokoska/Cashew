@@ -1,14 +1,19 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/debugPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -227,7 +232,47 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 50),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          child: Button(
+            label: "Delete All Data",
+            onTap: () {
+              openPopup(
+                context,
+                title: "Erase everything?",
+                description: "All Google Drive backups will be kept.",
+                icon: Icons.warning_amber_rounded,
+                onSubmit: () async {
+                  openPopup(
+                    context,
+                    title: "Are you sure you want to erase everything?",
+                    description: "All data and preferences will be deleted!",
+                    icon: Icons.warning_rounded,
+                    onSubmit: () async {
+                      database.deleteEverything();
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      await preferences.clear();
+                      restartApp(context);
+                    },
+                    onSubmitLabel: "Erase",
+                    onCancelLabel: "Cancel",
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+                onSubmitLabel: "Erase",
+                onCancelLabel: "Cancel",
+                onCancel: () {
+                  Navigator.pop(context);
+                },
+              );
+            },
+            color: Theme.of(context).errorColor,
+          ),
+        ),
       ],
     );
   }

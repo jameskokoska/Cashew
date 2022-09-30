@@ -233,6 +233,14 @@ class FinanceDatabase extends _$FinanceDatabase {
         },
       );
 
+  Future<void> deleteEverything() {
+    return transaction(() async {
+      for (final table in allTables) {
+        await delete(table).go();
+      }
+    });
+  }
+
   // get all filtered transactions from earliest to oldest date created, paginated
   Stream<List<Transaction>> watchAllTransactionsFiltered(
       {int? categoryPk, String? itemPk, int? limit, int? offset}) {

@@ -132,6 +132,7 @@ class SettingsContainerDropdown extends StatelessWidget {
     required this.initial,
     required this.items,
     required this.onChanged,
+    this.verticalPadding,
   }) : super(key: key);
 
   final String title;
@@ -140,10 +141,12 @@ class SettingsContainerDropdown extends StatelessWidget {
   final String initial;
   final List<String> items;
   final Function(String) onChanged;
+  final double? verticalPadding;
 
   @override
   Widget build(BuildContext context) {
     return SettingsContainer(
+      verticalPadding: verticalPadding,
       title: title,
       description: description,
       icon: icon,
@@ -186,6 +189,7 @@ class SettingsContainer extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 0),
       child: Tappable(
+        color: Colors.transparent,
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -197,12 +201,16 @@ class SettingsContainer extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      icon,
-                      size: iconSize ?? 30,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    Container(width: 16),
+                    icon == null
+                        ? SizedBox.shrink()
+                        : Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: Icon(
+                              icon,
+                              size: iconSize ?? 30,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
                     Expanded(
                       child: description == null
                           ? TextFont(

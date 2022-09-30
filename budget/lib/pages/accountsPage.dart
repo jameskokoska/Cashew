@@ -49,10 +49,13 @@ class AccountsPage extends StatefulWidget {
     Key? key,
     required this.exportData,
     required this.importData,
+    required this.manageData,
     required this.logout,
   }) : super(key: key);
   final Function() exportData;
   final Function() importData;
+  final Function() manageData;
+
   final Function() logout;
   @override
   State<AccountsPage> createState() => _AccountsPageState();
@@ -206,6 +209,41 @@ class _AccountsPageState extends State<AccountsPage> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                        boxShadow: boxShadowCheck(boxShadowGeneral(context))),
+                    child: Tappable(
+                      onTap: widget.manageData,
+                      borderRadius: 15,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .lightDarkAccentHeavyLight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 30),
+                          Icon(
+                            Icons.folder_rounded,
+                            size: 35,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          SizedBox(width: 10),
+                          TextFont(
+                            text: "Manage",
+                            fontSize: 21,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(width: 30),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 75),
               ],

@@ -14,6 +14,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -167,8 +168,7 @@ Future<void> createBackupInBackground(context) async {
         if (hasSignedIn == false) {
           return;
         }
-        await deleteRecentBackups(context, 10, silentDelete: true);
-        await createBackup(context, silentBackup: true);
+        await createBackup(context, silentBackup: true, deleteOldBackups: true);
       } else {
         print("backup already made today");
       }
@@ -177,9 +177,13 @@ Future<void> createBackupInBackground(context) async {
   return;
 }
 
-Future<void> createBackup(context, {bool? silentBackup}) async {
+Future<void> createBackup(context,
+    {bool? silentBackup, bool deleteOldBackups = false}) async {
   // Backup user settings
   try {
+    if (silentBackup == false || silentBackup == null) {
+      openLoadingPopup(context);
+    }
     final prefs = await SharedPreferences.getInstance();
     String userSettings = prefs.getString('userSettings') ?? "";
     if (userSettings == "") throw ("No settings stored");
@@ -191,12 +195,19 @@ Future<void> createBackup(context, {bool? silentBackup}) async {
       ),
     );
     print("successfully created settings entry");
-  } catch (_) {}
+  } catch (e) {
+    if (silentBackup == false || silentBackup == null) {
+      Navigator.of(context).pop();
+    }
+    openSnackbar(
+      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+    );
+  }
 
   try {
-    if (silentBackup == false || silentBackup == null) {
-      openLoadingPopup(context);
-    }
+    if (deleteOldBackups)
+      await deleteRecentBackups(context, appStateSettings["backupLimit"],
+          silentDelete: true);
     var dbFileBytes;
     late Stream<List<int>> mediaStream;
     if (kIsWeb) {
@@ -226,9 +237,6 @@ Future<void> createBackup(context, {bool? silentBackup}) async {
     driveFile.parents = ["appDataFolder"];
 
     await driveApi.files.create(driveFile, uploadMedia: media);
-    if (silentBackup == false || silentBackup == null) {
-      Navigator.of(context).pop();
-    }
     openSnackbar(
       SnackbarMessage(
         title: "Backup Created",
@@ -236,9 +244,12 @@ Future<void> createBackup(context, {bool? silentBackup}) async {
         icon: Icons.backup_rounded,
       ),
     );
-
     updateSettings("lastBackup", DateTime.now().toString(),
         pagesNeedingRefresh: [], updateGlobalState: false);
+
+    if (silentBackup == false || silentBackup == null) {
+      Navigator.of(context).pop();
+    }
   } catch (e) {
     if (silentBackup == false || silentBackup == null) {
       Navigator.of(context).pop();
@@ -272,7 +283,8 @@ Future<void> deleteRecentBackups(context, amountToKeep,
 
     int index = 0;
     files.forEach((file) {
-      if (index >= amountToKeep) {
+      // subtract 1 because we just made a backup
+      if (index >= amountToKeep - 1) {
         deleteBackup(driveApi, file.id ?? "");
       }
       index++;
@@ -291,7 +303,11 @@ Future<void> deleteRecentBackups(context, amountToKeep,
 }
 
 Future<void> deleteBackup(drive.DriveApi driveApi, String fileId) async {
-  await driveApi.files.delete(fileId);
+  try {
+    await driveApi.files.delete(fileId);
+  } catch (e) {
+    openSnackbar(SnackbarMessage(title: e.toString()));
+  }
 }
 
 class _AccountAndBackupState extends State<AccountAndBackup> {
@@ -325,13 +341,12 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
           await updateSettings("databaseJustImported", true,
               pagesNeedingRefresh: [], updateGlobalState: false);
           print(appStateSettings);
-
-          openPopup(
-            context,
-            title: "Please Restart the Application",
-            barrierDismissible: false,
-            icon: Icons.restart_alt_rounded,
+          openSnackbar(
+            SnackbarMessage(
+                title: "Backup Restored",
+                icon: Icons.settings_backup_restore_rounded),
           );
+          restartApp(context);
         },
         onError: (error) {
           openSnackbar(
@@ -347,77 +362,10 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
     }
   }
 
-  Future<void> _chooseBackup() async {
+  Future<void> _chooseBackup({isManaging: false}) async {
     try {
-      openLoadingPopup(context);
-
-      final authHeaders = await user!.authHeaders;
-      final authenticateClient = GoogleAuthClient(authHeaders);
-      final driveApi = drive.DriveApi(authenticateClient);
-      if (driveApi == null) {
-        throw "Failed to login to Google Drive";
-      }
-
-      final fileList = await driveApi.files.list(
-          spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
-      final files = fileList.files;
-      if (files == null) {
-        throw "No backups found.";
-      }
-
-      Navigator.of(context).pop();
-
-      openBottomSheet(
-        context,
-        PopupFramework(
-          title: "Choose a Backup to Restore",
-          child: Column(
-            children: files
-                .map(
-                  (file) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Tappable(
-                      onTap: () {
-                        _loadBackup(driveApi, file.id ?? "");
-                      },
-                      borderRadius: 15,
-                      color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
-                      child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.description_rounded,
-                                color: Theme.of(context).colorScheme.secondary,
-                                size: 30,
-                              ),
-                              SizedBox(width: 13),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextFont(
-                                    text: getWordedDateShortMore(
-                                        (file.modifiedTime ?? DateTime.now())
-                                            .toLocal(),
-                                        includeTimeIfToday: true),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  TextFont(
-                                      text: file.name ?? "No name",
-                                      fontSize: 15),
-                                ],
-                              ),
-                            ],
-                          )),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-      );
+      openBottomSheet(context,
+          BackupManagement(isManaging: isManaging, loadBackup: _loadBackup));
     } catch (e) {
       Navigator.of(context).pop();
       openSnackbar(
@@ -707,8 +655,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
   Widget build(BuildContext context) {
     final Widget accountsPage = AccountsPage(
       exportData: () async {
-        await deleteRecentBackups(context, 10);
-        await createBackup(context);
+        await createBackup(context, deleteOldBackups: true);
       },
       importData: () async {
         await _chooseBackup();
@@ -717,6 +664,9 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
         final result = await signOutGoogle();
         if (result) Navigator.pop(context);
         setState(() {});
+      },
+      manageData: () async {
+        await _chooseBackup(isManaging: true);
       },
     );
     return Column(
@@ -947,6 +897,225 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     return ProgressBar(
       currentPercent: currentPercent,
       color: Colors.black,
+    );
+  }
+}
+
+class BackupManagement extends StatefulWidget {
+  const BackupManagement(
+      {Key? key, required this.isManaging, required this.loadBackup})
+      : super(key: key);
+
+  final bool isManaging;
+  final Function(drive.DriveApi driveApi, String fileId) loadBackup;
+
+  @override
+  State<BackupManagement> createState() => _BackupManagementState();
+}
+
+class _BackupManagementState extends State<BackupManagement> {
+  List<drive.File> filesState = [];
+  List<int> deletedIndices = [];
+  drive.DriveApi? driveApiState;
+  UniqueKey dropDownKey = UniqueKey();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      openLoadingPopup(context);
+      final authHeaders = await user!.authHeaders;
+      final authenticateClient = GoogleAuthClient(authHeaders);
+      drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
+      if (driveApi == null) {
+        throw "Failed to login to Google Drive";
+      }
+
+      drive.FileList fileList = await driveApi.files.list(
+          spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+      List<drive.File>? files = fileList.files;
+      if (files == null) {
+        throw "No backups found.";
+      }
+      setState(() {
+        filesState = files;
+        driveApiState = driveApi;
+      });
+      bottomSheetControllerGlobal.snapToExtent(0);
+      Navigator.of(context).pop();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title:
+          widget.isManaging ? "Manage Backups" : "Choose a Backup to Restore",
+      subtitle:
+          widget.isManaging ? null : "This will overwrite all previous data",
+      child: Column(
+        children: [
+          widget.isManaging
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: SettingsContainerDropdown(
+                    key: dropDownKey,
+                    verticalPadding: 0,
+                    title: "Backup Limit",
+                    icon: Icons.format_list_numbered_rtl_outlined,
+                    initial: appStateSettings["backupLimit"].toString(),
+                    items: ["10", "15", "20", "30"],
+                    onChanged: (value) {
+                      if (int.parse(value) < appStateSettings["backupLimit"]) {
+                        openPopup(
+                          context,
+                          icon: Icons.delete_rounded,
+                          title: "Change Limit?",
+                          description:
+                              "Changing the backup limit to a smaller number will remove any past backups that are currently stored, if they exceed the limit, everytime a backup is made.",
+                          onSubmit: () async {
+                            updateSettings("backupLimit", int.parse(value),
+                                updateGlobalState: false);
+                            Navigator.pop(context);
+                          },
+                          onSubmitLabel: "Change",
+                          onCancel: () {
+                            Navigator.pop(context);
+                            setState(() {
+                              dropDownKey = UniqueKey();
+                            });
+                          },
+                          onCancelLabel: "Cancel",
+                        );
+                      } else {
+                        updateSettings("backupLimit", int.parse(value),
+                            updateGlobalState: false);
+                      }
+                    },
+                  ),
+                )
+              : SizedBox.shrink(),
+          ...filesState
+              .asMap()
+              .entries
+              .map(
+                (file) => AnimatedSize(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOutCubic,
+                  child: deletedIndices.contains(file.key)
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Tappable(
+                            onTap: () {
+                              if (!widget.isManaging)
+                                widget.loadBackup(
+                                    driveApiState!, file.value.id ?? "");
+                            },
+                            borderRadius: 15,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavy,
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.description_rounded,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            size: 30,
+                                          ),
+                                          SizedBox(width: 13),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextFont(
+                                                  text: getWordedDateShortMore(
+                                                      (file.value.modifiedTime ??
+                                                              DateTime.now())
+                                                          .toLocal(),
+                                                      includeTimeIfToday: true),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                TextFont(
+                                                  text: (file.value.name ??
+                                                      "No name"),
+                                                  fontSize: 15,
+                                                  maxLines: 2,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    widget.isManaging
+                                        ? ButtonIcon(
+                                            onTap: () {
+                                              openPopup(
+                                                context,
+                                                icon: Icons.delete_rounded,
+                                                title: "Delete backup?",
+                                                description: "Backup " +
+                                                    (file.value.name ??
+                                                        "No name") +
+                                                    " created " +
+                                                    getWordedDateShortMore(
+                                                        (file.value.modifiedTime ??
+                                                                DateTime.now())
+                                                            .toLocal(),
+                                                        includeTimeIfToday:
+                                                            true),
+                                                onSubmit: () async {
+                                                  Navigator.pop(context);
+                                                  openLoadingPopup(context);
+                                                  await deleteBackup(
+                                                      driveApiState!,
+                                                      file.value.id ?? "");
+                                                  openSnackbar(
+                                                    SnackbarMessage(
+                                                        title: "Deleted Backup",
+                                                        description:
+                                                            (file.value.name ??
+                                                                "No name"),
+                                                        icon: Icons
+                                                            .delete_rounded),
+                                                  );
+                                                  setState(() {
+                                                    deletedIndices
+                                                        .add(file.key);
+                                                  });
+                                                  // bottomSheetControllerGlobal
+                                                  //     .snapToExtent(0);
+                                                  Navigator.pop(context);
+                                                },
+                                                onSubmitLabel: "Delete",
+                                                onCancel: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onCancelLabel: "Cancel",
+                                              );
+                                            },
+                                            icon: Icons.close_rounded)
+                                        : SizedBox.shrink(),
+                                  ],
+                                )),
+                          ),
+                        ),
+                ),
+              )
+              .toList()
+        ],
+      ),
     );
   }
 }

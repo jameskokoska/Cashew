@@ -89,7 +89,9 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
         isExactMatch: false,
         title: selectedTitle ?? "",
         dateCreated: DateTime.now(),
-        order: length,
+        order: widget.associatedTitle != null
+            ? widget.associatedTitle!.order
+            : length,
       ),
     );
     Navigator.pop(context);

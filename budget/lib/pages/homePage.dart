@@ -29,10 +29,7 @@ import 'package:universal_html/html.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
-    required Function this.changePage,
   }) : super(key: key);
-
-  final changePage;
 
   @override
   State<HomePage> createState() => HomePageState();
@@ -402,7 +399,8 @@ class HomePageState extends State<HomePage>
                   ),
                 ),
                 onTap: () {
-                  widget.changePage(1, switchNavbar: true);
+                  PageNavigationFramework.changePage(context, 1,
+                      switchNavbar: true);
                 },
                 borderRadius: 10,
               ),
