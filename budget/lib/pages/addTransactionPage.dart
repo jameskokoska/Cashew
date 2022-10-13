@@ -270,11 +270,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           ? widget.transaction!.paid
           : selectedType == null,
       skipPaid: widget.transaction != null
-          ? widget.transaction!.paid
+          ? widget.transaction!.skipPaid
           : selectedType == null,
       type: selectedType,
-      reoccurrence: selectedRecurrenceEnum,
-      periodLength: selectedPeriodLength,
+      reoccurrence: widget.transaction != null
+          ? widget.transaction!.reoccurrence
+          : selectedRecurrenceEnum,
+      periodLength: widget.transaction != null
+          ? widget.transaction!.periodLength
+          : selectedPeriodLength,
+      methodAdded:
+          widget.transaction != null ? widget.transaction!.methodAdded : null,
     );
   }
 

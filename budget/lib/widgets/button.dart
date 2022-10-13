@@ -15,6 +15,7 @@ class Button extends StatefulWidget {
     this.fontSize = 16,
     required this.onTap,
     this.color,
+    this.textColor,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
     this.hasBottomExtraSafeArea = false,
   }) : super(key: key);
@@ -24,6 +25,7 @@ class Button extends StatefulWidget {
   final double fontSize;
   final VoidCallback onTap;
   final Color? color;
+  final Color? textColor;
   final EdgeInsets padding;
   final bool hasBottomExtraSafeArea;
 
@@ -84,7 +86,8 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
               child: TextFont(
                 text: widget.label,
                 fontSize: widget.fontSize,
-                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                textColor: widget.textColor ??
+                    Theme.of(context).colorScheme.onSecondaryContainer,
               ),
             ),
           ),

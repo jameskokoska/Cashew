@@ -244,6 +244,7 @@ class AboutPage extends StatelessWidget {
                 description: "All Google Drive backups will be kept.",
                 icon: Icons.warning_amber_rounded,
                 onSubmit: () async {
+                  Navigator.pop(context);
                   openPopup(
                     context,
                     title: "Are you sure you want to erase everything?",
@@ -270,7 +271,8 @@ class AboutPage extends StatelessWidget {
                 },
               );
             },
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).colorScheme.error,
+            textColor: Theme.of(context).colorScheme.onError,
           ),
         ),
       ],

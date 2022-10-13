@@ -67,6 +67,7 @@ class DebugPage extends StatelessWidget {
                       '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}.${DateTime.now().millisecond}',
                   icon: Icons.abc,
                   timeout: Duration(milliseconds: 1000),
+                  onTap: () {},
                 ),
               );
               openSnackbar(

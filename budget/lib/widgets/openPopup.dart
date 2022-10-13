@@ -320,6 +320,8 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
 }
 
 void discardChangesPopup(context, {previousObject, currentObject}) async {
+  print(previousObject);
+  print(currentObject);
   if (previousObject == currentObject &&
       previousObject != null &&
       currentObject != null) {
@@ -343,7 +345,7 @@ void discardChangesPopup(context, {previousObject, currentObject}) async {
         Navigator.pop(context);
         Navigator.pop(context);
       },
-      onCancelLabel: "No",
+      onCancelLabel: "Cancel",
       onCancel: () {
         Navigator.pop(context);
       },

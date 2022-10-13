@@ -86,9 +86,12 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                     showTodayForSmallBudget: (index == 0 ? true : false),
                     dateForRange: DateTime(
                       DateTime.now().year,
+                      // TODO needs to respect budget length
                       DateTime.now().month - index,
                       DateTime.now().day,
                     ),
+                    isPastBudget: index == 0 ? false : true,
+                    isPastBudgetButCurrentPeriod: index == 0,
                   ),
                 );
               },

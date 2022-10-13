@@ -82,8 +82,7 @@ class _AccountsPageState extends State<AccountsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 15),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
+                ClipOval(
                   child: user!.photoUrl == null
                       ? Container(
                           width: 100,

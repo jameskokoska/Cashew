@@ -296,9 +296,7 @@ Future<void> parseEmailsInBackground(context) async {
           continue;
         }
 
-        // Remove store number (everything past the last '#' symbol)
-        int position = title.lastIndexOf('#');
-        title = (position != -1) ? title.substring(0, position) : title;
+        title = filterEmailTitle(title);
 
         await addAssociatedTitles(title, selectedCategory);
 
@@ -320,7 +318,9 @@ Future<void> parseEmailsInBackground(context) async {
         );
         openSnackbar(
           SnackbarMessage(
-            title: "Added a transaction from email: " + title,
+            title: "Added a transaction from email",
+            description: title,
+            icon: Icons.payments_rounded,
           ),
         );
 
@@ -331,7 +331,8 @@ Future<void> parseEmailsInBackground(context) async {
       openSnackbar(
         SnackbarMessage(
           title: "Scanned " + results.messages!.length.toString() + " emails",
-          description: newEmailCount.toString() + " new emails",
+          description: newEmailCount.toString() +
+              pluralString(newEmailCount == 1, " new email"),
           icon: Icons.mark_email_unread_rounded,
         ),
       );

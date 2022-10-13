@@ -6,7 +6,7 @@ part of 'tables.dart';
 // MoorGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class TransactionWallet extends DataClass
     implements Insertable<TransactionWallet> {
   final int walletPk;
@@ -237,9 +237,10 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
 
 class $WalletsTable extends Wallets
     with TableInfo<$WalletsTable, TransactionWallet> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $WalletsTable(this._db, [this._alias]);
+  $WalletsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _walletPkMeta = const VerificationMeta('walletPk');
   @override
   late final GeneratedColumn<int?> walletPk = GeneratedColumn<int?>(
@@ -334,7 +335,7 @@ class $WalletsTable extends Wallets
 
   @override
   $WalletsTable createAlias(String alias) {
-    return $WalletsTable(_db, alias);
+    return $WalletsTable(attachedDatabase, alias);
   }
 }
 
@@ -812,9 +813,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
 
 class $TransactionsTable extends Transactions
     with TableInfo<$TransactionsTable, Transaction> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TransactionsTable(this._db, [this._alias]);
+  $TransactionsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _transactionPkMeta =
       const VerificationMeta('transactionPk');
   @override
@@ -1023,7 +1025,7 @@ class $TransactionsTable extends Transactions
 
   @override
   $TransactionsTable createAlias(String alias) {
-    return $TransactionsTable(_db, alias);
+    return $TransactionsTable(attachedDatabase, alias);
   }
 
   static TypeConverter<List<int>, String> $converter0 =
@@ -1290,9 +1292,10 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
 
 class $CategoriesTable extends Categories
     with TableInfo<$CategoriesTable, TransactionCategory> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CategoriesTable(this._db, [this._alias]);
+  $CategoriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _categoryPkMeta = const VerificationMeta('categoryPk');
   @override
   late final GeneratedColumn<int?> categoryPk = GeneratedColumn<int?>(
@@ -1402,7 +1405,7 @@ class $CategoriesTable extends Categories
 
   @override
   $CategoriesTable createAlias(String alias) {
-    return $CategoriesTable(_db, alias);
+    return $CategoriesTable(attachedDatabase, alias);
   }
 }
 
@@ -1607,9 +1610,10 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
 
 class $LabelsTable extends Labels
     with TableInfo<$LabelsTable, TransactionLabel> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $LabelsTable(this._db, [this._alias]);
+  $LabelsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _label_pkMeta = const VerificationMeta('label_pk');
   @override
   late final GeneratedColumn<int?> label_pk = GeneratedColumn<int?>(
@@ -1697,7 +1701,7 @@ class $LabelsTable extends Labels
 
   @override
   $LabelsTable createAlias(String alias) {
-    return $LabelsTable(_db, alias);
+    return $LabelsTable(attachedDatabase, alias);
   }
 }
 
@@ -1926,9 +1930,10 @@ class AssociatedTitlesCompanion
 
 class $AssociatedTitlesTable extends AssociatedTitles
     with TableInfo<$AssociatedTitlesTable, TransactionAssociatedTitle> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $AssociatedTitlesTable(this._db, [this._alias]);
+  $AssociatedTitlesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _associatedTitlePkMeta =
       const VerificationMeta('associatedTitlePk');
   @override
@@ -2036,7 +2041,7 @@ class $AssociatedTitlesTable extends AssociatedTitles
 
   @override
   $AssociatedTitlesTable createAlias(String alias) {
-    return $AssociatedTitlesTable(_db, alias);
+    return $AssociatedTitlesTable(attachedDatabase, alias);
   }
 }
 
@@ -2481,9 +2486,10 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
 }
 
 class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $BudgetsTable(this._db, [this._alias]);
+  $BudgetsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _budgetPkMeta = const VerificationMeta('budgetPk');
   @override
   late final GeneratedColumn<int?> budgetPk = GeneratedColumn<int?>(
@@ -2685,7 +2691,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
 
   @override
   $BudgetsTable createAlias(String alias) {
-    return $BudgetsTable(_db, alias);
+    return $BudgetsTable(attachedDatabase, alias);
   }
 
   static TypeConverter<List<int>, String> $converter0 =
@@ -2842,9 +2848,10 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
 
 class $AppSettingsTable extends AppSettings
     with TableInfo<$AppSettingsTable, AppSetting> {
-  final GeneratedDatabase _db;
+  @override
+  final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $AppSettingsTable(this._db, [this._alias]);
+  $AppSettingsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _settingsPkMeta = const VerificationMeta('settingsPk');
   @override
   late final GeneratedColumn<int?> settingsPk = GeneratedColumn<int?>(
@@ -2910,7 +2917,7 @@ class $AppSettingsTable extends AppSettings
 
   @override
   $AppSettingsTable createAlias(String alias) {
-    return $AppSettingsTable(_db, alias);
+    return $AppSettingsTable(attachedDatabase, alias);
   }
 }
 

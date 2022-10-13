@@ -73,9 +73,10 @@ class _TransactionEntryState extends State<TransactionEntry> {
 
       openSnackbar(
         SnackbarMessage(
-            title: "Created new subscription transaction for " +
-                getWordedDateShort(newDate),
-            icon: Icons.create),
+          title: "Created new subscription transaction",
+          description: "On " + getWordedDateShort(newDate),
+          icon: Icons.create,
+        ),
       );
     }
   }

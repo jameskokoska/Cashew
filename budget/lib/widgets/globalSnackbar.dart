@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -15,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import '../colors.dart';
 import 'package:intl/intl.dart';
+import 'package:pausable_timer/pausable_timer.dart';
 
 class GlobalSnackbar extends StatefulWidget {
   const GlobalSnackbar({Key? key}) : super(key: key);
@@ -28,18 +28,20 @@ class SnackbarMessage {
   String? description;
   IconData? icon;
   Duration timeout;
+  VoidCallback? onTap;
 
   SnackbarMessage({
     this.title = "",
     this.description,
     this.icon,
     this.timeout = const Duration(milliseconds: 3500),
+    this.onTap,
   });
 }
 
 class GlobalSnackbarState extends State<GlobalSnackbar>
     with TickerProviderStateMixin {
-  Timer? currentTimeout;
+  PausableTimer? currentTimeout;
   late AnimationController _animationControllerY;
   late AnimationController _animationControllerX;
   double totalMovedNegative = 0;
@@ -62,9 +64,10 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
             milliseconds:
                 ((_animationControllerY.value - 0.5).abs() * 800 + 900)
                     .toInt()));
-    currentTimeout = Timer(message.timeout, () {
+    currentTimeout = PausableTimer(message.timeout, () {
       animateOut();
     });
+    currentTimeout!.start();
   }
 
   animateOut() {
@@ -107,6 +110,8 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
     }
     _animationControllerX.value +=
         ptr.delta.dx / (1000 + (_animationControllerX.value - 0.5).abs() * 100);
+
+    currentTimeout!.pause();
   }
 
   _onPointerUp(PointerUpEvent event) {
@@ -123,6 +128,8 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
               milliseconds:
                   ((_animationControllerY.value - 0.5).abs() * 800 + 700)
                       .toInt()));
+
+      currentTimeout!.start();
     }
 
     _animationControllerX.animateTo(0.5,
@@ -170,7 +177,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                   ),
                 ]),
                 child: Tappable(
-                    onTap: () {},
+                    onTap: currentMessage?.onTap,
                     borderRadius: 13,
                     color: Theme.of(context).colorScheme.lightDarkAccent,
                     child: Padding(

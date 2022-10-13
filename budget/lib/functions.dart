@@ -443,3 +443,10 @@ restartApp(context) {
     PageNavigationFramework.changePage(context, 0, switchNavbar: true);
   });
 }
+
+String filterEmailTitle(string) {
+  // Remove store number (everything past the last '#' symbol)
+  int position = string.lastIndexOf('#');
+  String title = (position != -1) ? string.substring(0, position) : string;
+  return title;
+}

@@ -26,6 +26,8 @@ class BudgetContainer extends StatelessWidget {
     this.smallBudgetContainer = false,
     this.showTodayForSmallBudget = true,
     this.dateForRange,
+    this.isPastBudget = false,
+    this.isPastBudgetButCurrentPeriod = false,
   }) : super(key: key);
 
   final Budget budget;
@@ -33,6 +35,8 @@ class BudgetContainer extends StatelessWidget {
   final bool smallBudgetContainer;
   final bool showTodayForSmallBudget;
   final DateTime? dateForRange;
+  final bool? isPastBudget;
+  final bool? isPastBudgetButCurrentPeriod;
 
   @override
   Widget build(BuildContext context) {
@@ -425,7 +429,12 @@ class BudgetContainer extends StatelessWidget {
             color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
           );
         },
-        openPage: BudgetPage(budget: budget, dateForRange: dateForRangeLocal),
+        openPage: BudgetPage(
+          budget: budget,
+          dateForRange: dateForRangeLocal,
+          isPastBudget: isPastBudget,
+          isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
+        ),
       ),
     );
   }
