@@ -684,39 +684,14 @@ class BudgetProgress extends StatelessWidget {
                             bottomRight: Radius.circular(50),
                           )
                         : BorderRadius.circular(50),
-                    child: SlideFadeTransition(
-                      animate: percent <= 100,
-                      animationDuration: Duration(milliseconds: 1700),
-                      reverse: true,
-                      direction: Direction.horizontal,
-                      child: Container(
-                          child: AnimatedFractionallySizedBox(
-                            duration: Duration(milliseconds: 1000),
-                            heightFactor: 1,
-                            widthFactor: percent > 100 ? 1 : percent / 100,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(50),
-                                      bottomRight: Radius.circular(50),
-                                    ),
-                                    color: large
-                                        ? dynamicPastel(context, color,
-                                            amount: 0.1)
-                                        : lightenPastel(color, amount: 0.6),
-                                  ),
-                                ),
-                                percent > 40
-                                    ? getPercentText(
-                                        darkenPastel(color, amount: 0.6),
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                          ),
-                          height: large ? 25 : 20),
+                    child: Container(
+                      height: large ? 25 : 20,
+                      child: AnimatedProgress(
+                        percent: percent,
+                        large: large,
+                        color: color,
+                        getPercentText: getPercentText,
+                      ),
                     ),
                   ),
                   percent <= 40
@@ -739,6 +714,68 @@ class BudgetProgress extends StatelessWidget {
                 large: large,
               ),
       ],
+    );
+  }
+}
+
+class AnimatedProgress extends StatefulWidget {
+  const AnimatedProgress(
+      {required this.percent,
+      required this.large,
+      required this.color,
+      required this.getPercentText,
+      super.key});
+
+  final double percent;
+  final bool large;
+  final Color color;
+  final Function(Color color) getPercentText;
+
+  @override
+  State<AnimatedProgress> createState() => _AnimatedProgressState();
+}
+
+class _AnimatedProgressState extends State<AnimatedProgress> {
+  bool animateIn = false;
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        animateIn = true;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedFractionallySizedBox(
+      duration:
+          widget.percent >= 100 ? Duration.zero : Duration(milliseconds: 1500),
+      curve: Curves.easeInOutCubic,
+      heightFactor: 1,
+      widthFactor:
+          animateIn ? (widget.percent > 100 ? 1 : widget.percent / 100) : 0,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(50),
+                bottomRight: Radius.circular(50),
+              ),
+              color: widget.large
+                  ? dynamicPastel(context, widget.color, amount: 0.1)
+                  : lightenPastel(widget.color, amount: 0.6),
+            ),
+          ),
+          widget.percent > 40
+              ? widget.getPercentText(
+                  darkenPastel(widget.color, amount: 0.6),
+                )
+              : Container(),
+        ],
+      ),
     );
   }
 }
