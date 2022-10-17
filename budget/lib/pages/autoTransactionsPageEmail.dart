@@ -171,7 +171,7 @@ Future<void> parseEmailsInBackground(context) async {
         // await Future.delayed(Duration(milliseconds: 1000));
 
         // Remove this to always parse emails
-        if (emailsParsed.contains(message.id)) {
+        if (emailsParsed.contains(message.id!)) {
           print("Already checked this email!");
           continue;
         }
@@ -222,7 +222,7 @@ Future<void> parseEmailsInBackground(context) async {
           break;
         }
         if (messageString.contains(emailContains) == false) {
-          emailsParsed.add(message.id!);
+          emailsParsed.insert(0, message.id!);
           continue;
         }
         title = getTransactionTitleFromEmail(context, messageString,
@@ -237,7 +237,7 @@ Future<void> parseEmailsInBackground(context) async {
                   "Couldn't find title in email. Check the email settings page for more information.",
             ),
           );
-          emailsParsed.add(message.id!);
+          emailsParsed.insert(0, message.id!);
           continue;
         } else if (amountDouble == null) {
           openSnackbar(
@@ -247,7 +247,7 @@ Future<void> parseEmailsInBackground(context) async {
             ),
           );
 
-          emailsParsed.add(message.id!);
+          emailsParsed.insert(0, message.id!);
           continue;
         }
 
@@ -324,10 +324,17 @@ Future<void> parseEmailsInBackground(context) async {
           ),
         );
 
-        emailsParsed.add(message.id!);
+        emailsParsed.insert(0, message.id!);
       }
-      updateSettings("EmailAutoTransactions-emailsParsed", emailsParsed,
-          updateGlobalState: false);
+      List<dynamic> emails = [
+        ...emailsParsed
+            .take(appStateSettings["EmailAutoTransactions-amountOfEmails"] + 10)
+      ];
+      updateSettings(
+        "EmailAutoTransactions-emailsParsed",
+        emails, // Keep 10 extra in case maybe the user deleted some emails recently
+        updateGlobalState: false,
+      );
       openSnackbar(
         SnackbarMessage(
           title: "Scanned " + results.messages!.length.toString() + " emails",

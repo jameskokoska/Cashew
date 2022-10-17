@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 

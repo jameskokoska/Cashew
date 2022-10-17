@@ -18,6 +18,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 
 class EditWalletsPage extends StatefulWidget {
   EditWalletsPage({
@@ -93,6 +94,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(
+                    canReorder: (snapshot.data ?? []).length != 1,
                     currentReorder:
                         currentReorder != -1 && currentReorder != index,
                     index: index,

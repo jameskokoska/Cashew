@@ -9,6 +9,7 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -52,35 +53,59 @@ class AboutPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 5),
-              TextFont(
-                text: "v" +
-                    version +
-                    "+" +
-                    buildNumber +
-                    ", db-v" +
-                    schemaVersionGlobal.toString(),
-                fontSize: 14,
-                textAlign: TextAlign.center,
-                maxLines: 5,
+              Tappable(
+                onTap: () {
+                  showChangelog(context, forceShow: true);
+                },
+                child: TextFont(
+                  text: "v" +
+                      version +
+                      "+" +
+                      buildNumber +
+                      ", db-v" +
+                      schemaVersionGlobal.toString(),
+                  fontSize: 14,
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                ),
               ),
               SizedBox(height: 10),
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23),
-          child: Button(
-            label: "View App Intro",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      OnBoardingPage(popNavigationWhenDone: true),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 23),
+                child: Button(
+                  label: "View App Intro",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            OnBoardingPage(popNavigationWhenDone: true),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 23),
+                child: Button(
+                  label: "View Changelog",
+                  onTap: () {
+                    showChangelog(context, forceShow: true);
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(height: 10),
         Padding(

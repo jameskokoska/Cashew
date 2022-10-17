@@ -5,6 +5,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
@@ -141,6 +142,7 @@ getWordedDateShort(
   includeYear = false,
   showTodayTomorrow = true,
   newLineYear = false,
+  newLineDay = false,
 }) {
   if (showTodayTomorrow && checkYesterdayTodayTomorrow(date) != false) {
     return checkYesterdayTodayTomorrow(date);
@@ -149,7 +151,10 @@ getWordedDateShort(
     return DateFormat('MMM d\nyyyy').format(date);
   } else if (includeYear) {
     return DateFormat('MMM d, yyyy').format(date);
-  } else {
+  } else if (newLineDay) {
+    return DateFormat('MMM \nd').format(date);
+  }
+  {
     return DateFormat('MMM d').format(date);
   }
 }
@@ -436,12 +441,18 @@ String? getOSInsideWeb() {
 }
 
 restartApp(context) {
-  // Pop all routes, select home tab
-  RestartApp.restartApp(context);
-  Navigator.of(context).popUntil((route) => route.isFirst);
-  Future.delayed(Duration(milliseconds: 100), () {
-    PageNavigationFramework.changePage(context, 0, switchNavbar: true);
-  });
+  if (kIsWeb) {
+    openPopup(context,
+        title: "Please Restart the Application",
+        icon: Icons.restart_alt_rounded);
+  } else {
+    // Pop all routes, select home tab
+    RestartApp.restartApp(context);
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    Future.delayed(Duration(milliseconds: 100), () {
+      PageNavigationFramework.changePage(context, 0, switchNavbar: true);
+    });
+  }
 }
 
 String filterEmailTitle(string) {

@@ -8,6 +8,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -20,6 +21,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 
 class EditCategoriesPage extends StatefulWidget {
   EditCategoriesPage({
@@ -95,6 +97,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(
+                    canReorder: (snapshot.data ?? []).length != 1,
                     currentReorder:
                         currentReorder != -1 && currentReorder != index,
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -107,6 +110,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                           categoryPk: category.categoryPk,
                           size: 40,
                           category: category,
+                          canEditByLongPress: false,
                         ),
                         Container(width: 5),
                         Column(

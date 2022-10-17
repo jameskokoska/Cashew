@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
@@ -10,9 +11,12 @@ import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
+import 'package:budget/struct/defaultPreferences.dart';
+import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:drift/drift.dart';
@@ -25,6 +29,7 @@ import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
@@ -41,8 +46,12 @@ firebase deploy
 */
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   database = await constructDb();
+  notificationPayload = await initializeNotifications();
   entireAppLoaded = false;
+
   runApp(RestartApp(child: InitializeDatabase()));
 }
 
@@ -57,7 +66,6 @@ Future<bool> updateSettings(setting, value,
   final prefs = await SharedPreferences.getInstance();
   appStateSettings[setting] = value;
   await prefs.setString('userSettings', json.encode(appStateSettings));
-
   if (updateGlobalState == true) appStateKey.currentState?.refreshAppState();
   //Refresh any pages listed
   for (int page in pagesNeedingRefresh) {
@@ -89,31 +97,7 @@ Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
 }
 
 Future<Map<String, dynamic>> getUserSettings() async {
-  Map<String, dynamic> userPreferencesDefault = {
-    "databaseJustImported": false,
-    "backupLimit": 10,
-    "theme": "system",
-    "selectedWallet": 0,
-    "selectedSubscriptionType": 0,
-    "accentColor": toHexString(Color(0xFF1B447A)),
-    "showWalletSwitcher": true,
-    "showOverdueUpcoming": true,
-    "showTotalSpentForBudget": false,
-    "roundedGraphLines": true,
-    "showCumulativeSpending": true,
-    "removeZeroTransactionEntries": false,
-    "askForTransactionTitle": true,
-    "batterySaver": kIsWeb,
-    "username": "",
-    "hasOnboarded": false,
-    "autoAddAssociatedTitles": true,
-    "AutoTransactions-canReadEmails": false,
-    "currencyIcon": "\$",
-    "EmailAutoTransactions-setWallet": 0,
-    "EmailAutoTransactions-defaultCategory": 0,
-    "autoBackups": true,
-    "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),
-  };
+  Map<String, dynamic> userPreferencesDefault = defaultPreferences();
 
   final prefs = await SharedPreferences.getInstance();
   String? userSettings = prefs.getString('userSettings');
@@ -256,6 +240,8 @@ class _InitializeAppState extends State<InitializeApp> {
   }
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
@@ -264,6 +250,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       key: ValueKey(1),
       title: 'Budget App',
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],

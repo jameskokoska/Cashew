@@ -88,6 +88,8 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                 fontSize: widget.fontSize,
                 textColor: widget.textColor ??
                     Theme.of(context).colorScheme.onSecondaryContainer,
+                maxLines: 5,
+                textAlign: TextAlign.center,
               ),
             ),
           ),

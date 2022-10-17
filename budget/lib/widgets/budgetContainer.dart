@@ -13,10 +13,18 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
 import '../colors.dart';
 import '../functions.dart';
+
+class BudgetContainerUI extends StatelessWidget {
+  const BudgetContainerUI({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
 
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({
@@ -337,32 +345,36 @@ class BudgetContainer extends StatelessWidget {
                         alignment: Alignment.topRight,
                         child: Container(
                           padding: EdgeInsets.only(top: 10, right: 10),
-                          child: ButtonIcon(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PastBudgetsPage(budget: budget),
+                          child: budget.reoccurrence == BudgetReoccurence.custom
+                              ? SizedBox.shrink()
+                              : ButtonIcon(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PastBudgetsPage(budget: budget),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icons.history_rounded,
+                                  color: dynamicPastel(
+                                      context,
+                                      HexColor(budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.5),
+                                  iconColor: dynamicPastel(
+                                      context,
+                                      HexColor(budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.7,
+                                      inverse: true),
+                                  size: 38,
                                 ),
-                              );
-                            },
-                            icon: Icons.history_rounded,
-                            color: dynamicPastel(
-                                context,
-                                HexColor(budget.colour,
-                                    defaultColor:
-                                        Theme.of(context).colorScheme.primary),
-                                amount: 0.5),
-                            iconColor: dynamicPastel(
-                                context,
-                                HexColor(budget.colour,
-                                    defaultColor:
-                                        Theme.of(context).colorScheme.primary),
-                                amount: 0.7,
-                                inverse: true),
-                            size: 38,
-                          ),
                         ),
                       ),
                     ],
@@ -678,7 +690,8 @@ class BudgetProgress extends StatelessWidget {
                       reverse: true,
                       direction: Direction.horizontal,
                       child: Container(
-                          child: FractionallySizedBox(
+                          child: AnimatedFractionallySizedBox(
+                            duration: Duration(milliseconds: 1000),
                             heightFactor: 1,
                             widthFactor: percent > 100 ? 1 : percent / 100,
                             child: Stack(

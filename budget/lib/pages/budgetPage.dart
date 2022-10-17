@@ -65,7 +65,8 @@ class _BudgetPageState extends State<BudgetPage> {
     );
     return PageFramework(
       actions: [
-        widget.isPastBudget == true ||
+        widget.budget.reoccurrence == BudgetReoccurence.custom ||
+                widget.isPastBudget == true ||
                 widget.isPastBudgetButCurrentPeriod == true
             ? SizedBox.shrink()
             : Container(
@@ -89,7 +90,6 @@ class _BudgetPageState extends State<BudgetPage> {
       appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
       textColor: Theme.of(context).colorScheme.black,
       navbar: false,
-      showElevationAfterScrollPast: budgetHeaderHeight,
       dragDownToDismiss: true,
       dragDownToDissmissBackground: budgetColorScheme.secondaryContainer,
       slivers: [

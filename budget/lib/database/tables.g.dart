@@ -353,6 +353,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final BudgetReoccurence? reoccurrence;
   final TransactionSpecialType? type;
   final bool paid;
+  final bool? createdAnotherFutureTransaction;
   final bool skipPaid;
   final MethodAdded? methodAdded;
   Transaction(
@@ -369,6 +370,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.reoccurrence,
       this.type,
       required this.paid,
+      this.createdAnotherFutureTransaction,
       required this.skipPaid,
       this.methodAdded});
   factory Transaction.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -400,6 +402,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           .mapFromDatabaseResponse(data['${effectivePrefix}type'])),
       paid: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}paid'])!,
+      createdAnotherFutureTransaction: const BoolType().mapFromDatabaseResponse(
+          data['${effectivePrefix}created_another_future_transaction']),
       skipPaid: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}skip_paid'])!,
       methodAdded: $TransactionsTable.$converter3.mapToDart(const IntType()
@@ -433,6 +437,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       map['type'] = Variable<int?>(converter.mapToSql(type));
     }
     map['paid'] = Variable<bool>(paid);
+    if (!nullToAbsent || createdAnotherFutureTransaction != null) {
+      map['created_another_future_transaction'] =
+          Variable<bool?>(createdAnotherFutureTransaction);
+    }
     map['skip_paid'] = Variable<bool>(skipPaid);
     if (!nullToAbsent || methodAdded != null) {
       final converter = $TransactionsTable.$converter3;
@@ -462,6 +470,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           : Value(reoccurrence),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       paid: Value(paid),
+      createdAnotherFutureTransaction:
+          createdAnotherFutureTransaction == null && nullToAbsent
+              ? const Value.absent()
+              : Value(createdAnotherFutureTransaction),
       skipPaid: Value(skipPaid),
       methodAdded: methodAdded == null && nullToAbsent
           ? const Value.absent()
@@ -487,6 +499,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           serializer.fromJson<BudgetReoccurence?>(json['reoccurrence']),
       type: serializer.fromJson<TransactionSpecialType?>(json['type']),
       paid: serializer.fromJson<bool>(json['paid']),
+      createdAnotherFutureTransaction:
+          serializer.fromJson<bool?>(json['createdAnotherFutureTransaction']),
       skipPaid: serializer.fromJson<bool>(json['skipPaid']),
       methodAdded: serializer.fromJson<MethodAdded?>(json['methodAdded']),
     );
@@ -508,6 +522,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
       'type': serializer.toJson<TransactionSpecialType?>(type),
       'paid': serializer.toJson<bool>(paid),
+      'createdAnotherFutureTransaction':
+          serializer.toJson<bool?>(createdAnotherFutureTransaction),
       'skipPaid': serializer.toJson<bool>(skipPaid),
       'methodAdded': serializer.toJson<MethodAdded?>(methodAdded),
     };
@@ -527,6 +543,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           BudgetReoccurence? reoccurrence,
           TransactionSpecialType? type,
           bool? paid,
+          bool? createdAnotherFutureTransaction,
           bool? skipPaid,
           MethodAdded? methodAdded}) =>
       Transaction(
@@ -543,6 +560,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         reoccurrence: reoccurrence ?? this.reoccurrence,
         type: type ?? this.type,
         paid: paid ?? this.paid,
+        createdAnotherFutureTransaction: createdAnotherFutureTransaction ??
+            this.createdAnotherFutureTransaction,
         skipPaid: skipPaid ?? this.skipPaid,
         methodAdded: methodAdded ?? this.methodAdded,
       );
@@ -562,6 +581,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('reoccurrence: $reoccurrence, ')
           ..write('type: $type, ')
           ..write('paid: $paid, ')
+          ..write(
+              'createdAnotherFutureTransaction: $createdAnotherFutureTransaction, ')
           ..write('skipPaid: $skipPaid, ')
           ..write('methodAdded: $methodAdded')
           ..write(')'))
@@ -583,6 +604,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       reoccurrence,
       type,
       paid,
+      createdAnotherFutureTransaction,
       skipPaid,
       methodAdded);
   @override
@@ -602,6 +624,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.reoccurrence == this.reoccurrence &&
           other.type == this.type &&
           other.paid == this.paid &&
+          other.createdAnotherFutureTransaction ==
+              this.createdAnotherFutureTransaction &&
           other.skipPaid == this.skipPaid &&
           other.methodAdded == this.methodAdded);
 }
@@ -620,6 +644,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<BudgetReoccurence?> reoccurrence;
   final Value<TransactionSpecialType?> type;
   final Value<bool> paid;
+  final Value<bool?> createdAnotherFutureTransaction;
   final Value<bool> skipPaid;
   final Value<MethodAdded?> methodAdded;
   const TransactionsCompanion({
@@ -636,6 +661,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.reoccurrence = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
+    this.createdAnotherFutureTransaction = const Value.absent(),
     this.skipPaid = const Value.absent(),
     this.methodAdded = const Value.absent(),
   });
@@ -653,6 +679,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.reoccurrence = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
+    this.createdAnotherFutureTransaction = const Value.absent(),
     this.skipPaid = const Value.absent(),
     this.methodAdded = const Value.absent(),
   })  : name = Value(name),
@@ -674,6 +701,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<BudgetReoccurence?>? reoccurrence,
     Expression<TransactionSpecialType?>? type,
     Expression<bool>? paid,
+    Expression<bool?>? createdAnotherFutureTransaction,
     Expression<bool>? skipPaid,
     Expression<MethodAdded?>? methodAdded,
   }) {
@@ -691,6 +719,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
       if (type != null) 'type': type,
       if (paid != null) 'paid': paid,
+      if (createdAnotherFutureTransaction != null)
+        'created_another_future_transaction': createdAnotherFutureTransaction,
       if (skipPaid != null) 'skip_paid': skipPaid,
       if (methodAdded != null) 'method_added': methodAdded,
     });
@@ -710,6 +740,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<BudgetReoccurence?>? reoccurrence,
       Value<TransactionSpecialType?>? type,
       Value<bool>? paid,
+      Value<bool?>? createdAnotherFutureTransaction,
       Value<bool>? skipPaid,
       Value<MethodAdded?>? methodAdded}) {
     return TransactionsCompanion(
@@ -726,6 +757,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       reoccurrence: reoccurrence ?? this.reoccurrence,
       type: type ?? this.type,
       paid: paid ?? this.paid,
+      createdAnotherFutureTransaction: createdAnotherFutureTransaction ??
+          this.createdAnotherFutureTransaction,
       skipPaid: skipPaid ?? this.skipPaid,
       methodAdded: methodAdded ?? this.methodAdded,
     );
@@ -777,6 +810,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (paid.present) {
       map['paid'] = Variable<bool>(paid.value);
     }
+    if (createdAnotherFutureTransaction.present) {
+      map['created_another_future_transaction'] =
+          Variable<bool?>(createdAnotherFutureTransaction.value);
+    }
     if (skipPaid.present) {
       map['skip_paid'] = Variable<bool>(skipPaid.value);
     }
@@ -804,6 +841,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('reoccurrence: $reoccurrence, ')
           ..write('type: $type, ')
           ..write('paid: $paid, ')
+          ..write(
+              'createdAnotherFutureTransaction: $createdAnotherFutureTransaction, ')
           ..write('skipPaid: $skipPaid, ')
           ..write('methodAdded: $methodAdded')
           ..write(')'))
@@ -904,6 +943,17 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (paid IN (0, 1))',
       defaultValue: const Constant(false));
+  final VerificationMeta _createdAnotherFutureTransactionMeta =
+      const VerificationMeta('createdAnotherFutureTransaction');
+  @override
+  late final GeneratedColumn<bool?> createdAnotherFutureTransaction =
+      GeneratedColumn<bool?>(
+          'created_another_future_transaction', aliasedName, true,
+          type: const BoolType(),
+          requiredDuringInsert: false,
+          defaultConstraints:
+              'CHECK (created_another_future_transaction IN (0, 1))',
+          defaultValue: const Constant(false));
   final VerificationMeta _skipPaidMeta = const VerificationMeta('skipPaid');
   @override
   late final GeneratedColumn<bool?> skipPaid = GeneratedColumn<bool?>(
@@ -934,6 +984,7 @@ class $TransactionsTable extends Transactions
         reoccurrence,
         type,
         paid,
+        createdAnotherFutureTransaction,
         skipPaid,
         methodAdded
       ];
@@ -1006,6 +1057,13 @@ class $TransactionsTable extends Transactions
     if (data.containsKey('paid')) {
       context.handle(
           _paidMeta, paid.isAcceptableOrUnknown(data['paid']!, _paidMeta));
+    }
+    if (data.containsKey('created_another_future_transaction')) {
+      context.handle(
+          _createdAnotherFutureTransactionMeta,
+          createdAnotherFutureTransaction.isAcceptableOrUnknown(
+              data['created_another_future_transaction']!,
+              _createdAnotherFutureTransactionMeta));
     }
     if (data.containsKey('skip_paid')) {
       context.handle(_skipPaidMeta,
