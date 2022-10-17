@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    New budget progress bar animation
     Budget bar graph to track older budget periods spending
     Notifications transaction reminder WIP
     Empty Budget new image
