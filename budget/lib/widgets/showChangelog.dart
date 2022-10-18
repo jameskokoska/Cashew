@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Extra white space removed when adding transaction titles from email
+    Emails are marked as read when parsed
+    Escape key pops current navigation route
+    Notifications setting removed on web
+    Web should have beter text input handling (driect instead of popups)
+    Larger displays navigation bar max size
     New budget progress bar animation
     Budget bar graph to track older budget periods spending
     Notifications transaction reminder WIP

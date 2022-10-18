@@ -97,7 +97,10 @@ class EditRowEntry extends StatelessWidget {
       },
     );
     if (!canReorder) {
-      return container;
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: container,
+      );
     }
     return AnimatedScale(
       duration: Duration(milliseconds: 800),

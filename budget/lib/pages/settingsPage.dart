@@ -267,7 +267,7 @@ class SettingsPageState extends State<SettingsPage>
           initialValue: appStateSettings["batterySaver"],
           icon: Icons.battery_charging_full_rounded,
         ),
-        SettingsContainerSwitch(
+        kIsWeb ? SizedBox.shrink() : SettingsContainerSwitch(
           title: "Notifications",
           description: "Send add transaction reminders",
           onSwitched: (value) async {

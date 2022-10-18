@@ -292,7 +292,6 @@ Future<void> parseEmailsInBackground(context) async {
                       e.toString(),
             ),
           );
-
           continue;
         }
 
@@ -323,6 +322,11 @@ Future<void> parseEmailsInBackground(context) async {
             icon: Icons.payments_rounded,
           ),
         );
+        // TODO have setting so they can choose if the emails are markes as read
+        gmailApi.users.messages.modify(
+            gMail.ModifyMessageRequest(removeLabelIds: ["UNREAD"]),
+            user!.id,
+            message.id!);
 
         emailsParsed.insert(0, message.id!);
       }
