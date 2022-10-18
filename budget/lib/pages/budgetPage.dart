@@ -12,6 +12,7 @@ import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
@@ -28,10 +29,14 @@ class BudgetPage extends StatefulWidget {
     Key? key,
     required Budget this.budget,
     this.dateForRange,
+    this.isPastBudget = false,
+    this.isPastBudgetButCurrentPeriod = false,
   }) : super(key: key);
 
   final Budget budget;
   final DateTime? dateForRange;
+  final bool? isPastBudget;
+  final bool? isPastBudgetButCurrentPeriod;
 
   @override
   State<BudgetPage> createState() => _BudgetPageState();
@@ -60,27 +65,31 @@ class _BudgetPageState extends State<BudgetPage> {
     );
     return PageFramework(
       actions: [
-        Container(
-          padding: EdgeInsets.only(top: 12.5, right: 5),
-          child: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PastBudgetsPage(budget: widget.budget),
+        widget.budget.reoccurrence == BudgetReoccurence.custom ||
+                widget.isPastBudget == true ||
+                widget.isPastBudgetButCurrentPeriod == true
+            ? SizedBox.shrink()
+            : Container(
+                padding: EdgeInsets.only(top: 12.5, right: 5),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PastBudgetsPage(budget: widget.budget),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.history_rounded),
                 ),
-              );
-            },
-            icon: Icon(Icons.history_rounded),
-          ),
-        ),
+              )
       ],
       title: widget.budget.name,
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
       appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
       textColor: Theme.of(context).colorScheme.black,
       navbar: false,
-      showElevationAfterScrollPast: budgetHeaderHeight,
       dragDownToDismiss: true,
       dragDownToDissmissBackground: budgetColorScheme.secondaryContainer,
       slivers: [
@@ -94,6 +103,11 @@ class _BudgetPageState extends State<BudgetPage> {
           ),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              if (snapshot.data!.length <= 0)
+                return SliverToBoxAdapter(
+                  child: NoResults(),
+                );
+
               double totalSpent = 0;
               List<Widget> categoryEntries = [];
               snapshot.data!.forEach((category) {
@@ -240,6 +254,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                   ),
                             Container(height: 10),
                             BudgetTimeline(
+                              dateForRange: dateForRange,
                               budget: widget.budget,
                               large: true,
                               percent: totalSpent / widget.budget.amount * 100,
@@ -260,28 +275,14 @@ class _BudgetPageState extends State<BudgetPage> {
                     ),
                   ),
                   Container(height: 20),
-                  snapshot.data!.length > 0
-                      ? PieChartWrapper(
-                          data: snapshot.data ?? [],
-                          totalSpent: totalSpent,
-                          setSelectedCategory: (categoryPk) {
-                            setState(() {
-                              selectedCategoryPk = categoryPk;
-                            });
-                          })
-                      : Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 35, right: 30, left: 30),
-                            child: TextFont(
-                              maxLines: 4,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              text: "No transactions for this budget.",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
+                  PieChartWrapper(
+                      data: snapshot.data ?? [],
+                      totalSpent: totalSpent,
+                      setSelectedCategory: (categoryPk) {
+                        setState(() {
+                          selectedCategoryPk = categoryPk;
+                        });
+                      }),
                   Container(height: 35),
                   ...categoryEntries,
                   Container(height: 15),
@@ -370,8 +371,9 @@ class _BudgetPageState extends State<BudgetPage> {
                       points: points,
                       isCurved: true,
                       color: budgetColorScheme.primary,
-                      verticalLineAt:
-                          (budgetRange.end.difference(dateForRange).inDays)
+                      verticalLineAt: widget.isPastBudget == true
+                          ? null
+                          : (budgetRange.end.difference(dateForRange).inDays)
                               .toDouble(),
                     ),
                   ),

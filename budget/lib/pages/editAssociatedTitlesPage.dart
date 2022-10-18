@@ -9,6 +9,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -23,6 +24,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 
 class EditAssociatedTitlesPage extends StatefulWidget {
   EditAssociatedTitlesPage({
@@ -116,6 +118,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                   TransactionAssociatedTitle associatedTitle =
                       snapshot.data![index];
                   return EditRowEntry(
+                    canReorder: (snapshot.data ?? []).length != 1,
                     onTap: () {
                       openBottomSheet(
                         context,

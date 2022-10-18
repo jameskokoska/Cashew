@@ -10,7 +10,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 11;
+int schemaVersionGlobal = 13;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -101,6 +101,9 @@ class Transactions extends Table {
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
   IntColumn get type => intEnum<TransactionSpecialType>().nullable()();
   BoolColumn get paid => boolean().withDefault(const Constant(false))();
+  // If user sets to paid and then un pays it will not create a new transaction
+  BoolColumn get createdAnotherFutureTransaction =>
+      boolean().withDefault(const Constant(false)).nullable()();
   BoolColumn get skipPaid => boolean().withDefault(const Constant(false))();
   IntColumn get methodAdded => intEnum<MethodAdded>().nullable()();
 }
@@ -222,13 +225,17 @@ class FinanceDatabase extends _$FinanceDatabase {
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onUpgrade: (migrator, from, to) async {
-          if (from == 9) {
+          if (from <= 9) {
             await migrator.createTable($AppSettingsTable(database));
           }
-          if (from == 10) {
+          if (from <= 10) {
             await migrator.alterTable(TableMigration(budgets));
             await migrator.alterTable(TableMigration(categories));
             await migrator.alterTable(TableMigration(wallets));
+          }
+          if (from <= 12) {
+            await migrator.addColumn(
+                transactions, transactions.createdAnotherFutureTransaction);
           }
         },
       );
@@ -579,6 +586,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<Transaction>> watchAllUpcomingTransactions(
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
+      ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
       ..where((transaction) =>
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
@@ -593,6 +601,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<Transaction>> watchAllOverdueTransactions(
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
+      ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
       ..where((transaction) =>
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
@@ -1169,6 +1178,39 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..addColumns([transactions.categoryFk, totalAmt])
           ..groupBy([transactions.categoryFk]))
         .watch();
+  }
+
+  // get total amount spent in each day
+  Stream<double?> watchTotalSpentInTimeRangeFromCategories(DateTime start,
+      DateTime end, List<int>? categoryFks, bool allCategories) {
+    DateTime startDate = DateTime(start.year, start.month, start.day);
+    DateTime endDate = DateTime(end.year, end.month, end.day);
+    final totalAmt = transactions.amount.sum();
+    final date = transactions.dateCreated.date;
+
+    JoinedSelectStatement<$TransactionsTable, Transaction> query;
+    if (allCategories) {
+      query = (selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(
+          transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
+              transactions.dateCreated.isBetweenValues(startDate, endDate) &
+              transactions.paid.equals(true) &
+              transactions.income.equals(false),
+        ));
+    } else {
+      query = (selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(
+          transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
+              transactions.dateCreated.isBetweenValues(startDate, endDate) &
+              transactions.categoryFk.isIn(categoryFks ?? []) &
+              transactions.paid.equals(true) &
+              transactions.income.equals(false),
+        ));
+    }
+
+    return query.map(((row) => row.read(totalAmt))).watchSingle();
   }
 
   // The total amount of that category will always be that last column

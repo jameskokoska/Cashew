@@ -37,6 +37,7 @@ List<Widget> getTransactionsSlivers(
   Function(Transaction, bool)? onSelected,
   String? listID,
   bool? income,
+  bool sticky = true,
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
@@ -61,36 +62,51 @@ List<Widget> getTransactionsSlivers(
               if (transaction.transaction.paid)
                 totalSpentForDay += transaction.transaction.amount;
             });
-            return SliverStickyHeader(
-              header: DateDivider(
-                  date: date,
-                  info: transactionList.length > 1
-                      ? convertToMoney(totalSpentForDay)
-                      : ""),
-              sticky: true,
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return TransactionEntry(
-                      key: ValueKey(
-                          transactionList[index].transaction.transactionPk),
-                      category: transactionList[index].category,
-                      openPage: AddTransactionPage(
-                        title: "Edit Transaction",
-                        transaction: transactionList[index].transaction,
-                      ),
-                      transaction: transactionList[index].transaction,
-                      onSelected: (Transaction transaction, bool selected) {
-                        if (onSelected != null)
-                          onSelected(transaction, selected);
-                      },
-                      listID: listID,
-                    );
-                  },
-                  childCount: transactionList.length,
-                ),
+            Widget sliverList = SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  int realIndex = index - 1;
+                  if (realIndex == -1) {
+                    if (sticky)
+                      return SizedBox.shrink();
+                    else
+                      return DateDivider(
+                          date: date,
+                          info: transactionList.length > 1
+                              ? convertToMoney(totalSpentForDay)
+                              : "");
+                  }
+                  return TransactionEntry(
+                    key: ValueKey(
+                        transactionList[realIndex].transaction.transactionPk),
+                    category: transactionList[realIndex].category,
+                    openPage: AddTransactionPage(
+                      title: "Edit Transaction",
+                      transaction: transactionList[realIndex].transaction,
+                    ),
+                    transaction: transactionList[realIndex].transaction,
+                    onSelected: (Transaction transaction, bool selected) {
+                      if (onSelected != null) onSelected(transaction, selected);
+                    },
+                    listID: listID,
+                  );
+                },
+                childCount: transactionList.length + 1,
               ),
             );
+            if (sticky) {
+              return SliverStickyHeader(
+                header: DateDivider(
+                    date: date,
+                    info: transactionList.length > 1
+                        ? convertToMoney(totalSpentForDay)
+                        : ""),
+                sticky: true,
+                sliver: sliverList,
+              );
+            } else {
+              return sliverList;
+            }
           }
           return SliverToBoxAdapter(child: SizedBox());
         },

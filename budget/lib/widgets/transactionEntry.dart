@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
@@ -45,38 +47,42 @@ class _TransactionEntryState extends State<TransactionEntry> {
   bool selected = false;
 
   createNewSubscriptionTransaction(Transaction transaction) {
-    if (widget.transaction.type == TransactionSpecialType.subscription ||
-        widget.transaction.type == TransactionSpecialType.repetitive) {
-      int yearOffset = 0;
-      int monthOffset = 0;
-      int dayOffset = 0;
-      if (transaction.reoccurrence == BudgetReoccurence.yearly) {
-        yearOffset = transaction.periodLength ?? 0;
-      } else if (transaction.reoccurrence == BudgetReoccurence.monthly) {
-        monthOffset = transaction.periodLength ?? 0;
-      } else if (transaction.reoccurrence == BudgetReoccurence.weekly) {
-        dayOffset = (transaction.periodLength ?? 0) * 7;
-      } else if (transaction.reoccurrence == BudgetReoccurence.daily) {
-        dayOffset = transaction.periodLength ?? 0;
-      }
-      DateTime newDate = DateTime(
-        transaction.dateCreated.year + yearOffset,
-        transaction.dateCreated.month + monthOffset,
-        transaction.dateCreated.day + dayOffset,
-      );
-      Transaction newTransaction = widget.transaction.copyWith(
-        paid: false,
-        transactionPk: DateTime.now().millisecond,
-        dateCreated: newDate,
-      );
-      database.createOrUpdateTransaction(newTransaction);
+    if (widget.transaction.createdAnotherFutureTransaction == false) {
+      if (widget.transaction.type == TransactionSpecialType.subscription ||
+          widget.transaction.type == TransactionSpecialType.repetitive) {
+        int yearOffset = 0;
+        int monthOffset = 0;
+        int dayOffset = 0;
+        if (transaction.reoccurrence == BudgetReoccurence.yearly) {
+          yearOffset = transaction.periodLength ?? 0;
+        } else if (transaction.reoccurrence == BudgetReoccurence.monthly) {
+          monthOffset = transaction.periodLength ?? 0;
+        } else if (transaction.reoccurrence == BudgetReoccurence.weekly) {
+          dayOffset = (transaction.periodLength ?? 0) * 7;
+        } else if (transaction.reoccurrence == BudgetReoccurence.daily) {
+          dayOffset = transaction.periodLength ?? 0;
+        }
+        DateTime newDate = DateTime(
+          transaction.dateCreated.year + yearOffset,
+          transaction.dateCreated.month + monthOffset,
+          transaction.dateCreated.day + dayOffset,
+        );
+        Transaction newTransaction = widget.transaction.copyWith(
+          paid: false,
+          transactionPk: DateTime.now().millisecond,
+          dateCreated: newDate,
+          createdAnotherFutureTransaction: false,
+        );
+        database.createOrUpdateTransaction(newTransaction);
 
-      openSnackbar(
-        SnackbarMessage(
-            title: "Created new subscription transaction for " +
-                getWordedDateShort(newDate),
-            icon: Icons.create),
-      );
+        openSnackbar(
+          SnackbarMessage(
+            title: "Created new subscription transaction",
+            description: "On " + getWordedDateShort(newDate),
+            icon: Icons.create,
+          ),
+        );
+      }
     }
   }
 
@@ -361,13 +367,19 @@ class _TransactionEntryState extends State<TransactionEntry> {
                                       },
                                       onExtraLabel: "Skip",
                                       onExtra: () {
-                                        Transaction transaction = widget
-                                            .transaction
-                                            .copyWith(skipPaid: true);
+                                        Transaction transaction =
+                                            widget.transaction.copyWith(
+                                                skipPaid: true,
+                                                dateCreated: DateTime(
+                                                    DateTime.now().year,
+                                                    DateTime.now().month,
+                                                    DateTime.now().day),
+                                                createdAnotherFutureTransaction:
+                                                    true);
                                         database.createOrUpdateTransaction(
                                             transaction);
                                         createNewSubscriptionTransaction(
-                                            transaction);
+                                            widget.transaction);
                                         Navigator.pop(context);
                                       },
                                       onSubmitLabel: widget.transaction.income
@@ -376,11 +388,17 @@ class _TransactionEntryState extends State<TransactionEntry> {
                                       onSubmit: () {
                                         Transaction transaction =
                                             widget.transaction.copyWith(
-                                                paid: !widget.transaction.paid);
+                                                paid: !widget.transaction.paid,
+                                                dateCreated: DateTime(
+                                                    DateTime.now().year,
+                                                    DateTime.now().month,
+                                                    DateTime.now().day),
+                                                createdAnotherFutureTransaction:
+                                                    true);
                                         database.createOrUpdateTransaction(
                                             transaction);
                                         createNewSubscriptionTransaction(
-                                            transaction);
+                                            widget.transaction);
                                         Navigator.pop(context);
                                       },
                                     );
@@ -415,124 +433,6 @@ class _TransactionEntryState extends State<TransactionEntry> {
       },
       openPage: widget.openPage,
       closedColor: Theme.of(context).canvasColor,
-    );
-  }
-}
-
-class CategoryIcon extends StatelessWidget {
-  CategoryIcon({
-    Key? key,
-    required this.categoryPk,
-    required this.size,
-    this.onTap,
-    this.label = false,
-    this.labelSize = 10,
-    this.margin,
-    this.sizePadding = 20,
-    this.outline = false,
-    this.noBackground = false,
-    this.category, //pass this in to not look it up again
-    this.borderRadius = 18,
-  }) : super(key: key);
-
-  final int categoryPk;
-  final double size;
-  final VoidCallback? onTap;
-  final bool label;
-  final double labelSize;
-  final EdgeInsets? margin;
-  final double sizePadding;
-  final bool outline;
-  final bool noBackground;
-  final TransactionCategory? category;
-  final double borderRadius;
-
-  categoryIconWidget(context, TransactionCategory? category) {
-    return Column(
-      children: [
-        AnimatedContainer(
-          duration: Duration(milliseconds: 250),
-          margin: margin ??
-              EdgeInsets.only(left: 8, right: 8, top: 8, bottom: label ? 2 : 8),
-          height: size + sizePadding,
-          width: size + sizePadding,
-          decoration: outline
-              ? BoxDecoration(
-                  border: Border.all(
-                    color: dynamicPastel(
-                        context,
-                        HexColor(category != null ? category.colour : "FFFFFFF",
-                            defaultColor:
-                                Theme.of(context).colorScheme.primary),
-                        amountLight: 0.5,
-                        amountDark: 0.4,
-                        inverse: true),
-                    width: 3,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                )
-              : BoxDecoration(
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                ),
-          child: Tappable(
-            color: noBackground && category != null
-                ? Colors.transparent
-                : category != null
-                    ? dynamicPastel(
-                        context,
-                        HexColor(category.colour,
-                            defaultColor:
-                                Theme.of(context).colorScheme.primary),
-                        amountLight: 0.55,
-                        amountDark: 0.35)
-                    : Theme.of(context).colorScheme.canvasContainer,
-            onTap: onTap,
-            borderRadius: borderRadius - 3,
-            child: Center(
-              child: (category != null && category.iconName != null
-                  ? Image(
-                      image: AssetImage(
-                          "assets/categories/" + (category.iconName ?? "")),
-                      width: size,
-                    )
-                  : Container()),
-            ),
-          ),
-        ),
-        label
-            ? Container(
-                margin: EdgeInsets.only(top: 3),
-                width: 60,
-                child: Center(
-                  child: TextFont(
-                    textAlign: TextAlign.center,
-                    text: category != null ? category.name : "",
-                    fontSize: labelSize,
-                    maxLines: 1,
-                  ),
-                ),
-              )
-            : Container(
-                width: size + sizePadding,
-              ),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (category != null) {
-      return categoryIconWidget(context, category);
-    }
-    return StreamBuilder<TransactionCategory>(
-      stream: database.getCategory(categoryPk),
-      builder: (context, snapshot) {
-        return categoryIconWidget(context, snapshot.data);
-      },
     );
   }
 }

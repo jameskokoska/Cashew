@@ -14,7 +14,6 @@ class PageFramework extends StatefulWidget {
     this.navbar = true,
     this.appBarBackgroundColor,
     this.appBarBackgroundColorStart,
-    this.showElevationAfterScrollPast,
     this.backButton = true,
     this.subtitle = null,
     this.subtitleSize = null,
@@ -41,7 +40,6 @@ class PageFramework extends StatefulWidget {
   final List<Widget>? listWidgets;
   final bool navbar;
   final Color? appBarBackgroundColor;
-  final double? showElevationAfterScrollPast;
   final bool backButton;
   final Color? appBarBackgroundColorStart;
   final Widget? subtitle;
@@ -68,7 +66,6 @@ class PageFramework extends StatefulWidget {
 
 class PageFrameworkState extends State<PageFramework>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  bool showElevation = false;
   late ScrollController _scrollController;
   late AnimationController _animationControllerShift;
   late AnimationController _animationControllerOpacity;
@@ -105,11 +102,11 @@ class PageFrameworkState extends State<PageFramework>
   double measurement = 0;
   @override
   void didChangeMetrics() {
-    if (MediaQuery.of(context).viewInsets.bottom < measurement) {
-      // keyboard closed
-      _scrollListener();
-    }
-    measurement = MediaQuery.of(context).viewInsets.bottom;
+    // if (MediaQuery.of(context).viewInsets.bottom < measurement) {
+    //   // keyboard closed
+    //   _scrollListener();
+    // }
+    // measurement = MediaQuery.of(context).viewInsets.bottom;
   }
 
   _scrollListener() {
@@ -137,21 +134,6 @@ class PageFrameworkState extends State<PageFramework>
     if (widget.subtitle != null && percent <= 0.75 && percent >= 0) {
       _animationController0at50.value =
           1 - (_scrollController.offset / (widget.expandedHeight - 65)) * 1.75;
-    }
-    if (widget.showElevationAfterScrollPast != null &&
-        showElevation == false &&
-        _scrollController.offset <
-            widget.showElevationAfterScrollPast! + widget.expandedHeight - 65) {
-      setState(() {
-        showElevation = true;
-      });
-    } else if (widget.showElevationAfterScrollPast != null &&
-        showElevation == true &&
-        _scrollController.offset >
-            widget.showElevationAfterScrollPast! + widget.expandedHeight - 65) {
-      setState(() {
-        showElevation = false;
-      });
     }
   }
 
@@ -223,7 +205,6 @@ class PageFrameworkState extends State<PageFramework>
             titleWidget: widget.titleWidget,
             appBarBackgroundColor: widget.appBarBackgroundColor,
             appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
-            showElevationAfterScrollPast: widget.showElevationAfterScrollPast,
             backButton: widget.backButton,
             subtitle: widget.subtitle,
             subtitleSize: widget.subtitleSize,
@@ -232,7 +213,6 @@ class PageFrameworkState extends State<PageFramework>
             pinned: widget.pinned,
             subtitleAlignment: widget.subtitleAlignment,
             customTitleBuilder: widget.customTitleBuilder,
-            showElevation: showElevation,
             animationControllerOpacity: _animationControllerOpacity,
             animationControllerShift: _animationControllerShift,
             animationController0at50: _animationController0at50,
@@ -323,7 +303,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.titleWidget,
     this.appBarBackgroundColor,
     this.appBarBackgroundColorStart,
-    this.showElevationAfterScrollPast,
     this.backButton = true,
     this.subtitle = null,
     this.subtitleSize = null,
@@ -332,7 +311,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.pinned = true,
     this.subtitleAlignment = Alignment.bottomCenter,
     this.customTitleBuilder,
-    this.showElevation,
     this.animationControllerOpacity,
     this.animationControllerShift,
     this.animationController0at50,
@@ -345,7 +323,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final String title;
   final Widget? titleWidget;
   final Color? appBarBackgroundColor;
-  final double? showElevationAfterScrollPast;
   final bool backButton;
   final Color? appBarBackgroundColorStart;
   final Widget? subtitle;
@@ -358,7 +335,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final AnimationController? animationControllerOpacity;
   final AnimationController? animationControllerShift;
   final AnimationController? animationController0at50;
-  final bool? showElevation;
   final List<Widget>? actions;
   final Color? textColor;
   final VoidCallback? onBackButton;
@@ -395,7 +371,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       pinned: pinned,
       expandedHeight: expandedHeight ?? 200,
       collapsedHeight: 65,
-      elevation: showElevation == true ? 0 : 5,
       actions: actions,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: false,

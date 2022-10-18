@@ -15,6 +15,8 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/showChangelog.dart';
+import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -25,6 +27,8 @@ import 'package:budget/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:budget/struct/notificationsGlobal.dart';
 
 class PageNavigationFramework extends StatefulWidget {
   const PageNavigationFramework({Key? key}) : super(key: key);
@@ -87,6 +91,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     Future.delayed(Duration.zero, () async {
       await parseEmailsInBackground(context);
       await createBackupInBackground(context);
+      await showChangelog(context);
+      await runNotificationPayLoads(context);
 
       entireAppLoaded = true;
     });

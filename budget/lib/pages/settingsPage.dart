@@ -13,6 +13,7 @@ import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/moreIcons.dart';
@@ -31,6 +32,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -264,6 +266,33 @@ class SettingsPageState extends State<SettingsPage>
           },
           initialValue: appStateSettings["batterySaver"],
           icon: Icons.battery_charging_full_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "Notifications",
+          description: "Send add transaction reminders",
+          onSwitched: (value) async {
+            updateSettings("notifications", value, updateGlobalState: false);
+
+            AndroidNotificationDetails androidNotificationDetails =
+                AndroidNotificationDetails(
+              'transactionReminders',
+              'Transaction Reminders',
+              importance: Importance.max,
+              priority: Priority.high,
+              color: Theme.of(context).colorScheme.primary,
+            );
+            NotificationDetails notificationDetails =
+                NotificationDetails(android: androidNotificationDetails);
+            await flutterLocalNotificationsPlugin.show(
+              0,
+              'Add Transactions',
+              'Don\'t forget to add transactions from today!',
+              notificationDetails,
+              payload: 'addTransaction',
+            );
+          },
+          initialValue: appStateSettings["notifications"],
+          icon: Icons.notifications_rounded,
         ),
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(

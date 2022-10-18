@@ -90,12 +90,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String? selectedTitle;
   bool selectedAllCategories = true;
   String selectedCategoriesText = "All Categories";
-  int selectedPeriodLength = 0;
+  int selectedPeriodLength = 1;
   DateTime selectedStartDate = DateTime.now();
   DateTime? selectedEndDate;
   Color? selectedColor;
   String selectedRecurrence = "Monthly";
-  String selectedRecurrenceDisplay = "months";
+  String selectedRecurrenceDisplay = "month";
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -652,21 +652,27 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           child: Row(
                             children: [
                               selectedRecurrence != "Custom"
-                                  ? TappableTextEntry(
-                                      title: "/ " +
-                                          selectedPeriodLength.toString(),
-                                      placeholder: "/ 0",
-                                      showPlaceHolderWhenTextEquals: "/ 0",
-                                      onTap: () {
-                                        selectPeriodLength(context);
-                                      },
+                                  ? TextFont(
+                                      text: " /",
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
-                                      internalPadding: EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 4),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 3),
                                     )
+                                  // Disable the custom period length for now...
+                                  // TappableTextEntry(
+                                  //   title: "/ " +
+                                  //       selectedPeriodLength.toString(),
+                                  //   placeholder: "/ 0",
+                                  //   showPlaceHolderWhenTextEquals: "/ 0",
+                                  //   onTap: () {
+                                  //     selectPeriodLength(context);
+                                  //   },
+                                  //   fontSize: 25,
+                                  //   fontWeight: FontWeight.bold,
+                                  //   internalPadding: EdgeInsets.symmetric(
+                                  //       vertical: 4, horizontal: 4),
+                                  //   padding: EdgeInsets.symmetric(
+                                  //       vertical: 10, horizontal: 3),
+                                  // )
                                   : TextFont(
                                       text: " /",
                                       fontSize: 25,

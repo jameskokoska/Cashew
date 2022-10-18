@@ -62,7 +62,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
             }
             if (snapshot.hasData) {
               return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 13),
+                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {

@@ -15,6 +15,7 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -94,6 +95,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(
+                    canReorder: (snapshot.data ?? []).length != 1,
                     currentReorder:
                         currentReorder != -1 && currentReorder != index,
                     backgroundColor: backgroundColor,
@@ -243,102 +245,6 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           },
         ),
       ],
-    );
-  }
-}
-
-class EditRowEntry extends StatelessWidget {
-  const EditRowEntry(
-      {required this.index,
-      required this.content,
-      required this.backgroundColor,
-      required this.openPage,
-      required this.onDelete,
-      this.onTap,
-      this.padding,
-      this.currentReorder = false,
-      Key? key})
-      : super(key: key);
-  final int index;
-  final Widget content;
-  final Color backgroundColor;
-  final Widget openPage;
-  final VoidCallback onDelete;
-  final EdgeInsets? padding;
-  final bool currentReorder;
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedScale(
-      duration: Duration(milliseconds: 800),
-      curve: Curves.elasticOut,
-      scale: currentReorder ? 0.95 : 1,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: ReorderableDelayedDragStartListener(
-          index: index,
-          child: OpenContainerNavigation(
-            openPage: openPage,
-            closedColor: backgroundColor,
-            borderRadius: 18,
-            button: (openContainer) {
-              return Tappable(
-                borderRadius: 18,
-                color: backgroundColor,
-                onTap: () {
-                  if (onTap != null)
-                    onTap!();
-                  else
-                    openContainer();
-                },
-                child: IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: padding ??
-                              EdgeInsets.only(
-                                left: 25,
-                                right: 10,
-                                top: 15,
-                                bottom: 15,
-                              ),
-                          child: content,
-                        ),
-                      ),
-                      Tappable(
-                        color: Colors.transparent,
-                        borderRadius: 18,
-                        child: Container(
-                            height: double.infinity,
-                            width: 40,
-                            child: Icon(Icons.delete_rounded)),
-                        onTap: onDelete,
-                      ),
-                      ReorderableDragStartListener(
-                        index: index,
-                        child: Tappable(
-                          color: Colors.transparent,
-                          borderRadius: 18,
-                          child: Container(
-                              margin: EdgeInsets.only(right: 10),
-                              width: 40,
-                              height: double.infinity,
-                              child: Icon(Icons.drag_handle_rounded)),
-                          onTap: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
     );
   }
 }

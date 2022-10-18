@@ -13,10 +13,18 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
 import '../colors.dart';
 import '../functions.dart';
+
+class BudgetContainerUI extends StatelessWidget {
+  const BudgetContainerUI({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
 
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({
@@ -26,6 +34,8 @@ class BudgetContainer extends StatelessWidget {
     this.smallBudgetContainer = false,
     this.showTodayForSmallBudget = true,
     this.dateForRange,
+    this.isPastBudget = false,
+    this.isPastBudgetButCurrentPeriod = false,
   }) : super(key: key);
 
   final Budget budget;
@@ -33,6 +43,8 @@ class BudgetContainer extends StatelessWidget {
   final bool smallBudgetContainer;
   final bool showTodayForSmallBudget;
   final DateTime? dateForRange;
+  final bool? isPastBudget;
+  final bool? isPastBudgetButCurrentPeriod;
 
   @override
   Widget build(BuildContext context) {
@@ -333,32 +345,36 @@ class BudgetContainer extends StatelessWidget {
                         alignment: Alignment.topRight,
                         child: Container(
                           padding: EdgeInsets.only(top: 10, right: 10),
-                          child: ButtonIcon(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PastBudgetsPage(budget: budget),
+                          child: budget.reoccurrence == BudgetReoccurence.custom
+                              ? SizedBox.shrink()
+                              : ButtonIcon(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PastBudgetsPage(budget: budget),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icons.history_rounded,
+                                  color: dynamicPastel(
+                                      context,
+                                      HexColor(budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.5),
+                                  iconColor: dynamicPastel(
+                                      context,
+                                      HexColor(budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.7,
+                                      inverse: true),
+                                  size: 38,
                                 ),
-                              );
-                            },
-                            icon: Icons.history_rounded,
-                            color: dynamicPastel(
-                                context,
-                                HexColor(budget.colour,
-                                    defaultColor:
-                                        Theme.of(context).colorScheme.primary),
-                                amount: 0.5),
-                            iconColor: dynamicPastel(
-                                context,
-                                HexColor(budget.colour,
-                                    defaultColor:
-                                        Theme.of(context).colorScheme.primary),
-                                amount: 0.7,
-                                inverse: true),
-                            size: 38,
-                          ),
                         ),
                       ),
                     ],
@@ -425,7 +441,12 @@ class BudgetContainer extends StatelessWidget {
             color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
           );
         },
-        openPage: BudgetPage(budget: budget, dateForRange: dateForRangeLocal),
+        openPage: BudgetPage(
+          budget: budget,
+          dateForRange: dateForRangeLocal,
+          isPastBudget: isPastBudget,
+          isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
+        ),
       ),
     );
   }
@@ -663,38 +684,14 @@ class BudgetProgress extends StatelessWidget {
                             bottomRight: Radius.circular(50),
                           )
                         : BorderRadius.circular(50),
-                    child: SlideFadeTransition(
-                      animate: percent <= 100,
-                      animationDuration: Duration(milliseconds: 1700),
-                      reverse: true,
-                      direction: Direction.horizontal,
-                      child: Container(
-                          child: FractionallySizedBox(
-                            heightFactor: 1,
-                            widthFactor: percent > 100 ? 1 : percent / 100,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(50),
-                                      bottomRight: Radius.circular(50),
-                                    ),
-                                    color: large
-                                        ? dynamicPastel(context, color,
-                                            amount: 0.1)
-                                        : lightenPastel(color, amount: 0.6),
-                                  ),
-                                ),
-                                percent > 40
-                                    ? getPercentText(
-                                        darkenPastel(color, amount: 0.6),
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                          ),
-                          height: large ? 25 : 20),
+                    child: Container(
+                      height: large ? 25 : 20,
+                      child: AnimatedProgress(
+                        percent: percent,
+                        large: large,
+                        color: color,
+                        getPercentText: getPercentText,
+                      ),
                     ),
                   ),
                   percent <= 40
@@ -717,6 +714,68 @@ class BudgetProgress extends StatelessWidget {
                 large: large,
               ),
       ],
+    );
+  }
+}
+
+class AnimatedProgress extends StatefulWidget {
+  const AnimatedProgress(
+      {required this.percent,
+      required this.large,
+      required this.color,
+      required this.getPercentText,
+      super.key});
+
+  final double percent;
+  final bool large;
+  final Color color;
+  final Function(Color color) getPercentText;
+
+  @override
+  State<AnimatedProgress> createState() => _AnimatedProgressState();
+}
+
+class _AnimatedProgressState extends State<AnimatedProgress> {
+  bool animateIn = false;
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        animateIn = true;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedFractionallySizedBox(
+      duration:
+          widget.percent >= 100 ? Duration.zero : Duration(milliseconds: 1500),
+      curve: Curves.easeInOutCubic,
+      heightFactor: 1,
+      widthFactor:
+          animateIn ? (widget.percent > 100 ? 1 : widget.percent / 100) : 0,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(50),
+                bottomRight: Radius.circular(50),
+              ),
+              color: widget.large
+                  ? dynamicPastel(context, widget.color, amount: 0.1)
+                  : lightenPastel(widget.color, amount: 0.6),
+            ),
+          ),
+          widget.percent > 40
+              ? widget.getPercentText(
+                  darkenPastel(widget.color, amount: 0.6),
+                )
+              : Container(),
+        ],
+      ),
     );
   }
 }

@@ -370,17 +370,19 @@ class HomePageState extends State<HomePage>
             child: Container(height: 4),
           ),
           ...getTransactionsSlivers(
-              DateTime(
-                DateTime.now().year,
-                DateTime.now().month,
-                DateTime.now().day - 7,
-              ),
-              DateTime.now(),
-              income: selectedSlidingSelector == 1
-                  ? null
-                  : selectedSlidingSelector == 2
-                      ? false
-                      : true),
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day - 7,
+            ),
+            DateTime.now(),
+            income: selectedSlidingSelector == 1
+                ? null
+                : selectedSlidingSelector == 2
+                    ? false
+                    : true,
+            sticky: false,
+          ),
           SliverToBoxAdapter(
             child: Container(height: 7),
           ),

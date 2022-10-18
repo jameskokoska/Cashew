@@ -9,6 +9,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -270,11 +271,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           ? widget.transaction!.paid
           : selectedType == null,
       skipPaid: widget.transaction != null
-          ? widget.transaction!.paid
+          ? widget.transaction!.skipPaid
           : selectedType == null,
       type: selectedType,
-      reoccurrence: selectedRecurrenceEnum,
-      periodLength: selectedPeriodLength,
+      reoccurrence: widget.transaction != null
+          ? widget.transaction!.reoccurrence
+          : selectedRecurrenceEnum,
+      periodLength: widget.transaction != null
+          ? widget.transaction!.periodLength
+          : selectedPeriodLength,
+      methodAdded:
+          widget.transaction != null ? widget.transaction!.methodAdded : null,
     );
   }
 
@@ -486,6 +493,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 AnimatedSwitcher(
                                   duration: Duration(milliseconds: 300),
                                   child: CategoryIcon(
+                                    canEditByLongPress: false,
                                     noBackground: true,
                                     key: ValueKey(
                                         selectedCategory?.categoryPk ?? ""),

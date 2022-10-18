@@ -6,6 +6,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -248,6 +249,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                   ),
                                   size: 60,
                                   sizePadding: 25,
+                                  canEditByLongPress: false,
                                 ),
                               ),
                             ],
