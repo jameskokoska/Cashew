@@ -722,17 +722,27 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               );
                             },
                             borderRadius: 15,
-                            child: IgnorePointer(
-                              child: TextInput(
-                                backgroundColor: Colors.transparent,
-                                padding: EdgeInsets.zero,
-                                readOnly: true,
-                                bubbly: true,
-                                labelText: "Title",
-                                icon: Icons.title_rounded,
-                                controller: _titleInputController,
-                              ),
-                            ),
+                            child: kIsWeb
+                                ? TextInput(
+                                    backgroundColor: Colors.transparent,
+                                    padding: EdgeInsets.zero,
+                                    labelText: "Title",
+                                    icon: Icons.title_rounded,
+                                    controller: _titleInputController,
+                                    onChanged: (text) async {
+                                      setSelectedTitle(text);
+                                    },
+                                  )
+                                : IgnorePointer(
+                                    child: TextInput(
+                                      backgroundColor: Colors.transparent,
+                                      padding: EdgeInsets.zero,
+                                      readOnly: true,
+                                      labelText: "Title",
+                                      icon: Icons.title_rounded,
+                                      controller: _titleInputController,
+                                    ),
+                                  ),
                           ),
                         ),
                         Container(height: 14),
@@ -754,20 +764,33 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                               );
                             },
                             borderRadius: 15,
-                            child: IgnorePointer(
-                              child: TextInput(
-                                backgroundColor: Colors.transparent,
-                                padding: EdgeInsets.zero,
-                                readOnly: true,
-                                bubbly: true,
-                                labelText: "Notes",
-                                icon: Icons.edit,
-                                controller: _noteInputController,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                minLines: 3,
-                              ),
-                            ),
+                            child: kIsWeb
+                                ? TextInput(
+                                    backgroundColor: Colors.transparent,
+                                    padding: EdgeInsets.zero,
+                                    labelText: "Notes",
+                                    icon: Icons.edit,
+                                    controller: _noteInputController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    minLines: 3,
+                                    onChanged: (text) async {
+                                      setSelectedNoteController(text);
+                                    },
+                                  )
+                                : IgnorePointer(
+                                    child: TextInput(
+                                      backgroundColor: Colors.transparent,
+                                      padding: EdgeInsets.zero,
+                                      readOnly: true,
+                                      labelText: "Notes",
+                                      icon: Icons.edit,
+                                      controller: _noteInputController,
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                      minLines: 3,
+                                    ),
+                                  ),
                           ),
                         ),
 
@@ -780,7 +803,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         //         backgroundColor:
                         //             Theme.of(context).colorScheme.canvasContainer,
                         //         padding: EdgeInsets.zero,
-                        //         bubbly: true,
+                        //
                         //         labelText: "Title",
                         //         icon: Icons.title_rounded,
                         //         controller: _titleInputController,
@@ -790,7 +813,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         //         backgroundColor:
                         //             Theme.of(context).colorScheme.canvasContainer,
                         //         padding: EdgeInsets.zero,
-                        //         bubbly: true,
+                        //
                         //         labelText: "Notes",
                         //         icon: Icons.edit,
                         //         controller: _noteInputController,
@@ -1050,7 +1073,6 @@ class _SelectNotesState extends State<SelectNotes> {
                 Container(
                   width: MediaQuery.of(context).size.width - 36,
                   child: TextInput(
-                    bubbly: true,
                     // icon: Icons.title_rounded,
                     backgroundColor:
                         Theme.of(context).colorScheme.lightDarkAccentHeavy,
@@ -1141,7 +1163,6 @@ class _SelectTitleState extends State<SelectTitle> {
                 Container(
                   width: MediaQuery.of(context).size.width - 36,
                   child: TextInput(
-                    bubbly: true,
                     icon: Icons.title_rounded,
                     backgroundColor:
                         Theme.of(context).colorScheme.lightDarkAccentHeavy,
@@ -1380,7 +1401,6 @@ class _SelectTextState extends State<SelectText> {
         Container(
           width: MediaQuery.of(context).size.width - 36,
           child: TextInput(
-            bubbly: true,
             icon: Icons.title_rounded,
             backgroundColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
             initialValue: widget.selectedText,
@@ -1469,7 +1489,6 @@ class _EnterTextButtonState extends State<EnterTextButton> {
             backgroundColor: Colors.transparent,
             padding: EdgeInsets.zero,
             readOnly: true,
-            bubbly: true,
             labelText: widget.placeholder,
             icon: widget.icon,
             controller: _textController,

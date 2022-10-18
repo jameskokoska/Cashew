@@ -27,6 +27,9 @@ class TextInput extends StatelessWidget {
   final bool? bubbly;
   final Color? backgroundColor;
   final TextInputType? keyboardType;
+  final double? fontSize;
+  final FontWeight fontWeight;
+  final double? topContentPadding;
 
   const TextInput({
     Key? key,
@@ -50,9 +53,12 @@ class TextInput extends StatelessWidget {
     this.suffix,
     this.paddingRight = 12,
     this.focusNode,
-    this.bubbly = false,
+    this.bubbly = true,
     this.backgroundColor,
     this.keyboardType,
+    this.fontSize,
+    this.fontWeight = FontWeight.normal,
+    this.topContentPadding,
   }) : super(key: key);
 
   @override
@@ -93,8 +99,10 @@ class TextInput extends StatelessWidget {
             autofocus: autoFocus,
             onEditingComplete: onEditingComplete,
             style: TextStyle(
-              fontSize: bubbly == false ? 18 : 15,
+              fontSize:
+                  fontSize != null ? fontSize : (bubbly == false ? 18 : 15),
               height: kIsWeb ? null : 1.7,
+              fontWeight: fontWeight,
             ),
             cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
             decoration: new InputDecoration(
@@ -102,17 +110,16 @@ class TextInput extends StatelessWidget {
               prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
               suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
               contentPadding: EdgeInsets.only(
-                left: bubbly == false ? 12 : 18,
+                left: bubbly == false ? 8 : 18,
                 right: paddingRight,
-                top: bubbly == false ? 7 : 18,
-                bottom: bubbly == false ? 7 : (kIsWeb ? 15 : 0),
+                top: topContentPadding != null
+                    ? topContentPadding ?? 0
+                    : (bubbly == false ? 15 : 18),
+                bottom: bubbly == false ? 0 : (kIsWeb ? 15 : 0),
               ),
               hintText: labelText,
               filled: bubbly == false ? true : false,
-              fillColor: Theme.of(context)
-                  .colorScheme
-                  .lightDarkAccent
-                  .withOpacity(0.2),
+              fillColor: Colors.transparent,
               isDense: true,
               suffixIconConstraints: BoxConstraints(maxHeight: 20),
               suffixIcon: bubbly == false || icon == null
@@ -145,16 +152,28 @@ class TextInput extends StatelessWidget {
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(8.0)),
                       borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.lightDarkAccent),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withAlpha(100),
+                        width: 2,
+                      ),
                     )
+                  : null,
+              hoverColor: bubbly == false
+                  ? Theme.of(context)
+                      .colorScheme
+                      .secondaryContainer
+                      .withAlpha(90)
                   : null,
               focusedBorder: bubbly == false
                   ? UnderlineInputBorder(
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(5.0)),
                       borderSide: BorderSide(
-                          color:
-                              Theme.of(context).colorScheme.accentColorHeavy),
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 2,
+                      ),
                     )
                   : null,
               border: bubbly == false

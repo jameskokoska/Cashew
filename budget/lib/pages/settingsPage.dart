@@ -310,7 +310,6 @@ Function enterNameBottomSheet(context) {
           Container(
             width: MediaQuery.of(context).size.width - 36,
             child: TextInput(
-              bubbly: true,
               icon: Icons.title_rounded,
               backgroundColor:
                   Theme.of(context).colorScheme.lightDarkAccentHeavy,
