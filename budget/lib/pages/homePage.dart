@@ -83,209 +83,190 @@ class HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
+      body: ListView(
         controller: _scrollController,
-        slivers: [
+        children: [
           // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-          SliverToBoxAdapter(
-            child: Container(height: 1, color: Theme.of(context).canvasColor),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Container(
-                  // Subtract one (1) here because of the thickness of the wiper above
-                  height: 207 - 1 + MediaQuery.of(context).padding.top,
-                  alignment: Alignment.bottomLeft,
-                  padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          appStateSettings["username"] == ""
-                              ? SizedBox()
-                              : AnimatedBuilder(
-                                  animation: _animationControllerHeader,
-                                  builder: (_, child) {
-                                    return Transform.translate(
-                                      offset: Offset(
-                                          0,
-                                          20 -
-                                              20 *
-                                                  (_animationControllerHeader
-                                                      .value)),
-                                      child: child,
-                                    );
-                                  },
-                                  child: FadeTransition(
-                                    opacity: _animationControllerHeader2,
-                                    child: TextFont(
-                                      text: getWelcomeMessage(),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                          AnimatedBuilder(
+          Container(height: 1, color: Theme.of(context).canvasColor),
+          Container(
+            // Subtract one (1) here because of the thickness of the wiper above
+            height: 207 - 1 + MediaQuery.of(context).padding.top,
+            alignment: Alignment.bottomLeft,
+            padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    appStateSettings["username"] == ""
+                        ? SizedBox()
+                        : AnimatedBuilder(
                             animation: _animationControllerHeader,
                             builder: (_, child) {
-                              return Transform.scale(
-                                alignment: Alignment.bottomLeft,
-                                scale: _animationControllerHeader.value < 0.5
-                                    ? 0.25 + 0.5
-                                    : (_animationControllerHeader.value) * 0.5 +
-                                        0.5,
+                              return Transform.translate(
+                                offset: Offset(
+                                    0,
+                                    20 -
+                                        20 *
+                                            (_animationControllerHeader.value)),
                                 child: child,
                               );
                             },
-                            child: TextFont(
-                              text: appStateSettings["username"] == ""
-                                  ? "Home"
-                                  : appStateSettings["username"],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 39,
-                              textColor: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer,
+                            child: FadeTransition(
+                              opacity: _animationControllerHeader2,
+                              child: TextFont(
+                                text: getWelcomeMessage(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
-                        ],
+                    AnimatedBuilder(
+                      animation: _animationControllerHeader,
+                      builder: (_, child) {
+                        return Transform.scale(
+                          alignment: Alignment.bottomLeft,
+                          scale: _animationControllerHeader.value < 0.5
+                              ? 0.25 + 0.5
+                              : (_animationControllerHeader.value) * 0.5 + 0.5,
+                          child: child,
+                        );
+                      },
+                      child: TextFont(
+                        text: appStateSettings["username"] == ""
+                            ? "Home"
+                            : appStateSettings["username"],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 39,
+                        textColor:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
-                      // Profile icon
-                      // AnimatedBuilder(
-                      //   animation: _animationControllerHeader,
-                      //   builder: (_, child) {
-                      //     return Transform.scale(
-                      //       alignment: Alignment.bottomRight,
-                      //       scale: _animationControllerHeader.value < 0.5
-                      //           ? 0.25 + 0.5
-                      //           : (_animationControllerHeader.value) * 0.5 +
-                      //               0.5,
-                      //       child: child,
-                      //     );
-                      //   },
-                      //   child: Container(
-                      //     width: 50,
-                      //     height: 50,
-                      //     color: Colors.red,
-                      //   ),
-                      // ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+                // Profile icon
+                // AnimatedBuilder(
+                //   animation: _animationControllerHeader,
+                //   builder: (_, child) {
+                //     return Transform.scale(
+                //       alignment: Alignment.bottomRight,
+                //       scale: _animationControllerHeader.value < 0.5
+                //           ? 0.25 + 0.5
+                //           : (_animationControllerHeader.value) * 0.5 +
+                //               0.5,
+                //       child: child,
+                //     );
+                //   },
+                //   child: Container(
+                //     width: 50,
+                //     height: 50,
+                //     color: Colors.red,
+                //   ),
+                // ),
               ],
             ),
           ),
           appStateSettings["showWalletSwitcher"] == true
-              ? SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 13.0),
-                    child: Container(
-                      height: 85.0,
-                      child: StreamBuilder<List<TransactionWallet>>(
-                        stream: database.watchAllWallets(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                              addAutomaticKeepAlives: true,
-                              clipBehavior: Clip.none,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data!.length + 1,
-                              itemBuilder: (context, index) {
-                                bool lastIndex = index == snapshot.data!.length;
-                                if (lastIndex) {
-                                  return WalletEntryAdd();
-                                }
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                    left: (index == 0 ? 7 : 0.0),
-                                  ),
-                                  child: WalletEntry(
-                                    selected:
-                                        appStateSettings["selectedWallet"] ==
-                                            snapshot.data![index].walletPk,
-                                    wallet: snapshot.data![index],
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                          return Container();
-                        },
-                      ),
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 13.0),
+                  child: Container(
+                    height: 85.0,
+                    child: StreamBuilder<List<TransactionWallet>>(
+                      stream: database.watchAllWallets(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            addAutomaticKeepAlives: true,
+                            clipBehavior: Clip.none,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data!.length + 1,
+                            itemBuilder: (context, index) {
+                              bool lastIndex = index == snapshot.data!.length;
+                              if (lastIndex) {
+                                return WalletEntryAdd();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  left: (index == 0 ? 7 : 0.0),
+                                ),
+                                child: WalletEntry(
+                                  selected:
+                                      appStateSettings["selectedWallet"] ==
+                                          snapshot.data![index].walletPk,
+                                  wallet: snapshot.data![index],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        return Container();
+                      },
                     ),
                   ),
                 )
-              : SliverToBoxAdapter(),
+              : SizedBox.shrink(),
           StreamBuilder<List<Budget>>(
             stream: database.watchAllPinnedBudgets(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data!.length == 0) {
-                  return SliverToBoxAdapter();
+                  return SizedBox.shrink();
                 }
                 if (snapshot.data!.length == 1) {
-                  return SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 13, right: 13, bottom: 13),
-                      child: BudgetContainer(
-                        budget: snapshot.data![0],
-                      ),
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(left: 13, right: 13, bottom: 13),
+                    child: BudgetContainer(
+                      budget: snapshot.data![0],
                     ),
                   );
                 }
-                return SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 13),
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        height: 183,
-                        enableInfiniteScroll: false,
-                        enlargeCenterPage: true,
-                        enlargeStrategy: CenterPageEnlargeStrategy.height,
-                        viewportFraction: 0.95,
-                        clipBehavior: Clip.none,
-                      ),
-                      items: snapshot.data?.map((Budget budget) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 3),
-                          child: BudgetContainer(
-                            budget: budget,
-                          ),
-                        );
-                      }).toList(),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 13),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 183,
+                      enableInfiniteScroll: false,
+                      enlargeCenterPage: true,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      viewportFraction: 0.95,
+                      clipBehavior: Clip.none,
                     ),
+                    items: snapshot.data?.map((Budget budget) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 3),
+                        child: BudgetContainer(
+                          budget: budget,
+                        ),
+                      );
+                    }).toList(),
                   ),
                 );
               } else {
-                return SliverToBoxAdapter();
+                return SizedBox.shrink();
               }
             },
           ),
           !appStateSettings["showOverdueUpcoming"]
-              ? SliverToBoxAdapter(child: SizedBox.shrink())
-              : SliverToBoxAdapter(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(child: UpcomingTransactions()),
-                        SizedBox(width: 13),
-                        Expanded(
-                          child: UpcomingTransactions(
-                            overdueTransactions: true,
-                          ),
+              ? SizedBox.shrink()
+              : Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: UpcomingTransactions()),
+                      SizedBox(width: 13),
+                      Expanded(
+                        child: UpcomingTransactions(
+                          overdueTransactions: true,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
           StreamBuilder<List<Transaction>>(
@@ -337,38 +318,31 @@ class HomePageState extends State<HomePage>
                   points.add(Pair(points.length.toDouble(),
                       cumulative ? cumulativeTotal : totalForDay));
                 }
-                return SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 13),
-                    child: Container(
-                        padding: EdgeInsets.only(
-                            left: 10, right: 10, bottom: 10, top: 20),
-                        margin: EdgeInsets.symmetric(horizontal: 13),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          color: Theme.of(context)
-                              .colorScheme
-                              .lightDarkAccentHeavyLight,
-                          boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-                        ),
-                        child:
-                            LineChartWrapper(points: points, isCurved: true)),
-                  ),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 13),
+                  child: Container(
+                      padding: EdgeInsets.only(
+                          left: 10, right: 10, bottom: 10, top: 20),
+                      margin: EdgeInsets.symmetric(horizontal: 13),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .lightDarkAccentHeavyLight,
+                        boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+                      ),
+                      child: LineChartWrapper(points: points, isCurved: true)),
                 );
               }
-              return SliverToBoxAdapter();
+              return SizedBox.shrink();
             },
           ),
-          SliverToBoxAdapter(
-            child: SlidingSelector(onSelected: (index) {
-              setState(() {
-                selectedSlidingSelector = index;
-              });
-            }),
-          ),
-          SliverToBoxAdapter(
-            child: Container(height: 4),
-          ),
+          SlidingSelector(onSelected: (index) {
+            setState(() {
+              selectedSlidingSelector = index;
+            });
+          }),
+          Container(height: 4),
           ...getTransactionsSlivers(
             DateTime(
               DateTime.now().year,
@@ -382,37 +356,32 @@ class HomePageState extends State<HomePage>
                     ? false
                     : true,
             sticky: false,
+            slivers: false,
           ),
-          SliverToBoxAdapter(
-            child: Container(height: 7),
-          ),
-          SliverToBoxAdapter(
-            child: Center(
-              child: Tappable(
-                color: Theme.of(context).colorScheme.lightDarkAccent,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: TextFont(
-                    text: "View All Transactions",
-                    textAlign: TextAlign.center,
-                    fontSize: 16,
-                    textColor: Theme.of(context).colorScheme.textLight,
-                  ),
+          Container(height: 7),
+          Center(
+            child: Tappable(
+              color: Theme.of(context).colorScheme.lightDarkAccent,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                child: TextFont(
+                  text: "View All Transactions",
+                  textAlign: TextAlign.center,
+                  fontSize: 16,
+                  textColor: Theme.of(context).colorScheme.textLight,
                 ),
-                onTap: () {
-                  PageNavigationFramework.changePage(context, 1,
-                      switchNavbar: true);
-                },
-                borderRadius: 10,
               ),
+              onTap: () {
+                PageNavigationFramework.changePage(context, 1,
+                    switchNavbar: true);
+              },
+              borderRadius: 10,
             ),
           ),
-          SliverToBoxAdapter(child: Container(height: 135)),
+          Container(height: 135),
           // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-          SliverToBoxAdapter(
-            child: Container(height: 1, color: Theme.of(context).canvasColor),
-          ),
+          Container(height: 1, color: Theme.of(context).canvasColor),
         ],
       ),
     );

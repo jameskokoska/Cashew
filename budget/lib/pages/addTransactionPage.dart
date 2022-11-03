@@ -282,6 +282,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           : selectedPeriodLength,
       methodAdded:
           widget.transaction != null ? widget.transaction!.methodAdded : null,
+      createdAnotherFutureTransaction: widget.transaction != null
+          ? widget.transaction!.createdAnotherFutureTransaction
+          : null,
     );
   }
 

@@ -7,6 +7,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    App name changed
+    Home page now List View for better performance
+    Discard changes popup doesn't show up anymore when no changed made to transaction
+    Budget now animates even when 100% then shakes
+    Budget progress no longer has count-up
+
+    Past changes:
+
     New budget progress bar animation
     Budget bar graph to track older budget periods spending
     Notifications transaction reminder WIP
@@ -24,7 +32,6 @@ Future<void> showChangelog(context, {forceShow: false}) async {
     Added changelog!
     You can read the changelog in the About page.
 
-    Past changes:
     All past changes will go here, to prevent clutter.
 end""";
 

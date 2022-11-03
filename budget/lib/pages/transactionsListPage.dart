@@ -38,6 +38,7 @@ List<Widget> getTransactionsSlivers(
   String? listID,
   bool? income,
   bool sticky = true,
+  bool slivers = true,
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
@@ -62,6 +63,40 @@ List<Widget> getTransactionsSlivers(
               if (transaction.transaction.paid)
                 totalSpentForDay += transaction.transaction.amount;
             });
+            if (slivers == false) {
+              List<Widget> children = [];
+              for (int index = 0; index < transactionList.length + 1; index++) {
+                int realIndex = index - 1;
+                if (realIndex == -1) {
+                  children.add(DateDivider(
+                      date: date,
+                      info: transactionList.length > 1
+                          ? convertToMoney(totalSpentForDay)
+                          : ""));
+                } else {
+                  children.add(
+                    TransactionEntry(
+                      key: ValueKey(
+                          transactionList[realIndex].transaction.transactionPk),
+                      category: transactionList[realIndex].category,
+                      openPage: AddTransactionPage(
+                        title: "Edit Transaction",
+                        transaction: transactionList[realIndex].transaction,
+                      ),
+                      transaction: transactionList[realIndex].transaction,
+                      onSelected: (Transaction transaction, bool selected) {
+                        if (onSelected != null)
+                          onSelected(transaction, selected);
+                      },
+                      listID: listID,
+                    ),
+                  );
+                }
+              }
+              return Column(
+                children: children,
+              );
+            }
             Widget sliverList = SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
@@ -107,6 +142,9 @@ List<Widget> getTransactionsSlivers(
             } else {
               return sliverList;
             }
+          }
+          if (slivers == false) {
+            return SizedBox.shrink();
           }
           return SliverToBoxAdapter(child: SizedBox());
         },

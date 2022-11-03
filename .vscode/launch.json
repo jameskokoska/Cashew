@@ -9,6 +9,7 @@
       "request": "launch",
       "type": "dart",
       "args": ["--web-port", "5000"],
+      // "flutterMode": "profile",
     },
     // {
     //   "name": "budget",

@@ -336,7 +336,7 @@ class _AnimatedScaleDelayedState extends State<AnimatedScaleDelayed> {
   }
 }
 
-class ShakeAnimation extends StatelessWidget {
+class ShakeAnimation extends StatefulWidget {
   const ShakeAnimation({
     Key? key,
     this.duration = const Duration(milliseconds: 2500),
@@ -344,6 +344,7 @@ class ShakeAnimation extends StatelessWidget {
     this.curve = const ElasticInOutCurve(0.19),
     required this.child,
     this.animate = true,
+    this.delay,
   }) : super(key: key);
 
   final Duration duration;
@@ -351,25 +352,44 @@ class ShakeAnimation extends StatelessWidget {
   final Widget child;
   final Curve curve;
   final bool animate;
+  final Duration? delay;
+
+  @override
+  State<ShakeAnimation> createState() => _ShakeAnimationState();
+}
+
+class _ShakeAnimationState extends State<ShakeAnimation> {
+  bool startAnimation = false;
+  @override
+  void initState() {
+    if (widget.delay != null) {
+      Future.delayed(widget.delay!, () {
+        setState(() {
+          startAnimation = true;
+        });
+      });
+    }
+    super.initState();
+  }
 
   double shakeAnimation(double animation) =>
-      0.3 * (0.5 - (0.5 - curve.transform(animation)).abs());
+      0.3 * (0.5 - (0.5 - widget.curve.transform(animation)).abs());
 
   @override
   Widget build(BuildContext context) {
-    if (animate == false) {
-      return child;
-    }
     return TweenAnimationBuilder<double>(
-      key: key,
-      tween: Tween(begin: 0.0, end: 1.0),
+      key: widget.key,
+      tween: Tween(
+        begin: 0.0,
+        end: widget.animate == false || startAnimation == false ? 0 : 1,
+      ),
       curve: Curves.easeOut,
-      duration: duration,
+      duration: widget.duration,
       builder: (context, animation, child) => Transform.translate(
-        offset: Offset(deltaX * shakeAnimation(animation), 0),
+        offset: Offset(widget.deltaX * shakeAnimation(animation), 0),
         child: child,
       ),
-      child: child,
+      child: widget.child,
     );
   }
 }

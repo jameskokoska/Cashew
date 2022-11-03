@@ -639,16 +639,12 @@ class BudgetProgress extends StatelessWidget {
   Widget getPercentText(Color color) {
     return Container(
       child: Center(
-        child: CountUp(
-          count: percent,
+        child: TextFont(
+          text: percent.toStringAsFixed(0) + "%",
           textColor: color,
-          decimals: 0,
-          suffix: "%",
           fontSize: large ? 16 : 14,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.bold,
-          curve: Curves.decelerate,
-          duration: Duration(milliseconds: 700),
         ),
       ),
     );
@@ -660,8 +656,10 @@ class BudgetProgress extends StatelessWidget {
       alignment: Alignment.bottomLeft,
       children: [
         ShakeAnimation(
+          delay: Duration(milliseconds: 600),
           animate: percent > 100,
           child: Padding(
+            key: ValueKey(1),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
@@ -750,8 +748,7 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
   @override
   Widget build(BuildContext context) {
     return AnimatedFractionallySizedBox(
-      duration:
-          widget.percent >= 100 ? Duration.zero : Duration(milliseconds: 1500),
+      duration: Duration(milliseconds: 1500),
       curve: Curves.easeInOutCubic,
       heightFactor: 1,
       widthFactor:
