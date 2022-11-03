@@ -387,7 +387,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                     ? setCategoryPk
                                     : widget.category!.categoryPk,
                                 isExactMatch: false,
-                                title: text,
+                                title: text.trim(),
                                 dateCreated: DateTime.now(),
                                 order: length,
                               ),
@@ -427,7 +427,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                             : widget.category!.categoryPk,
                                         isExactMatch:
                                             associatedTitle.isExactMatch,
-                                        title: text,
+                                        title: text.trim(),
                                         dateCreated: DateTime.now(),
                                         order: associatedTitle.order,
                                       ),

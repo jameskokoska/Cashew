@@ -972,7 +972,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // create or update a new transaction
-  Future<int> createOrUpdateTransaction(Transaction transaction) {
+  Future<int>? createOrUpdateTransaction(Transaction transaction) {
+    if (transaction.amount == double.infinity ||
+        transaction.amount == double.negativeInfinity ||
+        transaction.amount == double.nan ||
+        transaction.amount.isNaN) {
+      return null;
+    }
     return into(transactions).insertOnConflictUpdate(transaction);
   }
 

@@ -415,10 +415,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
       selectedAllCategories = widget.budget!.allCategoryFks;
       selectedAmount = widget.budget!.amount;
-      Future.delayed(Duration.zero, () {
-        setSelectedColor(HexColor(widget.budget!.colour,
-            defaultColor: Theme.of(context).colorScheme.primary));
-      });
+
       selectedPeriodLength = widget.budget!.periodLength;
       selectedRecurrence = enumRecurrence[widget.budget!.reoccurrence];
       if (selectedPeriodLength == 1) {
@@ -428,6 +425,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       }
       selectedStartDate = widget.budget!.startDate;
       selectedEndDate = widget.budget!.endDate;
+      selectedColor = widget.budget!.colour == null
+          ? null
+          : HexColor(widget.budget!.colour);
 
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {

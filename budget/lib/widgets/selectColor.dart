@@ -39,8 +39,23 @@ class _SelectColorState extends State<SelectColor> {
   void initState() {
     super.initState();
     if (widget.selectedColor != null) {
-      setState(() {
-        selectedColor = widget.selectedColor;
+      int index = 0;
+      Future.delayed(Duration.zero, () {
+        for (Color color in selectableColors(context)) {
+          if (color.toString() == widget.selectedColor.toString()) {
+            setState(() {
+              selectedIndex = index;
+              selectedColor = widget.selectedColor;
+            });
+            return;
+          }
+          index++;
+        }
+        print("NOT FOUND");
+        setState(() {
+          selectedIndex = -1;
+          selectedColor = widget.selectedColor;
+        });
       });
     } else {
       setState(() {
@@ -76,13 +91,13 @@ class _SelectColorState extends State<SelectColor> {
                 right: index + 1 == selectableColorsList.length ? 12 : 0),
             child: widget.includeThemeColor && index == 0
                 ? ThemeColorIcon(
-                    outline: selectedIndex == 0,
+                    outline: selectedIndex == 0 && selectedColor == null,
                     margin: EdgeInsets.all(5),
                     size: 55,
                     onTap: () {
                       widget.setSelectedColor!(null);
                       setState(() {
-                        selectedColor = color;
+                        selectedColor = null;
                         selectedIndex = index;
                       });
                     },
@@ -90,7 +105,8 @@ class _SelectColorState extends State<SelectColor> {
                 : widget.supportCustomColors &&
                         index + 1 == selectableColorsList.length
                     ? ColorIconCustom(
-                        outline:
+                        initialSelectedColor: selectedColor ?? Colors.red,
+                        outline: selectedIndex == -1 ||
                             selectedIndex == selectableColorsList.length - 1,
                         margin: EdgeInsets.all(5),
                         size: 55,
@@ -148,6 +164,7 @@ class _SelectColorState extends State<SelectColor> {
                       widget.supportCustomColors &&
                               index + 1 == selectableColorsList.length
                           ? ColorIconCustom(
+                              initialSelectedColor: selectedColor ?? Colors.red,
                               margin: EdgeInsets.all(5),
                               size: 55,
                               onTap: (colorPassed) {
@@ -306,19 +323,21 @@ class ColorIconCustom extends StatefulWidget {
     required this.onTap,
     this.margin,
     required this.outline,
+    required this.initialSelectedColor,
   }) : super(key: key);
 
   final double size;
   final Function(Color) onTap;
   final EdgeInsets? margin;
   final bool outline;
+  final Color initialSelectedColor;
 
   @override
   State<ColorIconCustom> createState() => _ColorIconCustomState();
 }
 
 class _ColorIconCustomState extends State<ColorIconCustom> {
-  Color selectedColor = Colors.transparent;
+  late Color selectedColor = widget.initialSelectedColor;
   double? colorSliderPosition;
   double? shadeSliderPosition;
 

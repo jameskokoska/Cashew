@@ -207,134 +207,142 @@ class HomePageState extends State<HomePage>
                   ),
                 )
               : SizedBox.shrink(),
-          StreamBuilder<List<Budget>>(
-            stream: database.watchAllPinnedBudgets(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.length == 0) {
-                  return SizedBox.shrink();
-                }
-                if (snapshot.data!.length == 1) {
+          KeepAlive(
+            child: StreamBuilder<List<Budget>>(
+              stream: database.watchAllPinnedBudgets(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length == 0) {
+                    return SizedBox.shrink();
+                  }
+                  if (snapshot.data!.length == 1) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 13, right: 13, bottom: 13),
+                      child: BudgetContainer(
+                        budget: snapshot.data![0],
+                      ),
+                    );
+                  }
                   return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 13, right: 13, bottom: 13),
-                    child: BudgetContainer(
-                      budget: snapshot.data![0],
+                    padding: const EdgeInsets.only(bottom: 13),
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        height: 183,
+                        enableInfiniteScroll: false,
+                        enlargeCenterPage: true,
+                        enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        viewportFraction: 0.95,
+                        clipBehavior: Clip.none,
+                      ),
+                      items: snapshot.data?.map((Budget budget) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
+                          child: BudgetContainer(
+                            budget: budget,
+                          ),
+                        );
+                      }).toList(),
                     ),
                   );
+                } else {
+                  return SizedBox.shrink();
                 }
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 13),
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      height: 183,
-                      enableInfiniteScroll: false,
-                      enlargeCenterPage: true,
-                      enlargeStrategy: CenterPageEnlargeStrategy.height,
-                      viewportFraction: 0.95,
-                      clipBehavior: Clip.none,
-                    ),
-                    items: snapshot.data?.map((Budget budget) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 3),
-                        child: BudgetContainer(
-                          budget: budget,
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                );
-              } else {
-                return SizedBox.shrink();
-              }
-            },
+              },
+            ),
           ),
+
           !appStateSettings["showOverdueUpcoming"]
               ? SizedBox.shrink()
-              : Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(child: UpcomingTransactions()),
-                      SizedBox(width: 13),
-                      Expanded(
-                        child: UpcomingTransactions(
-                          overdueTransactions: true,
+              : KeepAlive(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(child: UpcomingTransactions()),
+                        SizedBox(width: 13),
+                        Expanded(
+                          child: UpcomingTransactions(
+                            overdueTransactions: true,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-          StreamBuilder<List<Transaction>>(
-            stream: database.getTransactionsInTimeRangeFromCategories(
-                DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month - 1,
-                  DateTime.now().day,
-                ),
-                DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                ),
-                [],
-                true,
-                true,
-                selectedSlidingSelector == 2
-                    ? false
-                    : selectedSlidingSelector == 3
-                        ? true
-                        : null),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                bool cumulative = appStateSettings["showCumulativeSpending"];
-                double cumulativeTotal = 0;
-                List<Pair> points = [];
-                for (DateTime indexDay = DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month - 1,
-                  DateTime.now().day,
-                );
-                    indexDay.compareTo(DateTime.now()) < 0;
-                    indexDay = indexDay.add(Duration(days: 1))) {
-                  //can be optimized...
-                  double totalForDay = 0;
-                  for (Transaction transaction in snapshot.data!) {
-                    if (indexDay.year == transaction.dateCreated.year &&
-                        indexDay.month == transaction.dateCreated.month &&
-                        indexDay.day == transaction.dateCreated.day) {
-                      if (transaction.income) {
-                        totalForDay += transaction.amount.abs();
-                      } else {
-                        totalForDay -= transaction.amount.abs();
+          KeepAlive(
+            child: StreamBuilder<List<Transaction>>(
+              stream: database.getTransactionsInTimeRangeFromCategories(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 1,
+                    DateTime.now().day,
+                  ),
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    DateTime.now().day,
+                  ),
+                  [],
+                  true,
+                  true,
+                  selectedSlidingSelector == 2
+                      ? false
+                      : selectedSlidingSelector == 3
+                          ? true
+                          : null),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  bool cumulative = appStateSettings["showCumulativeSpending"];
+                  double cumulativeTotal = 0;
+                  List<Pair> points = [];
+                  for (DateTime indexDay = DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 1,
+                    DateTime.now().day,
+                  );
+                      indexDay.compareTo(DateTime.now()) < 0;
+                      indexDay = indexDay.add(Duration(days: 1))) {
+                    //can be optimized...
+                    double totalForDay = 0;
+                    for (Transaction transaction in snapshot.data!) {
+                      if (indexDay.year == transaction.dateCreated.year &&
+                          indexDay.month == transaction.dateCreated.month &&
+                          indexDay.day == transaction.dateCreated.day) {
+                        if (transaction.income) {
+                          totalForDay += transaction.amount.abs();
+                        } else {
+                          totalForDay -= transaction.amount.abs();
+                        }
                       }
                     }
+                    cumulativeTotal += totalForDay;
+                    points.add(Pair(points.length.toDouble(),
+                        cumulative ? cumulativeTotal : totalForDay));
                   }
-                  cumulativeTotal += totalForDay;
-                  points.add(Pair(points.length.toDouble(),
-                      cumulative ? cumulativeTotal : totalForDay));
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 13),
+                    child: Container(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, bottom: 10, top: 20),
+                        margin: EdgeInsets.symmetric(horizontal: 13),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .lightDarkAccentHeavyLight,
+                          boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+                        ),
+                        child:
+                            LineChartWrapper(points: points, isCurved: true)),
+                  );
                 }
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 13),
-                  child: Container(
-                      padding: EdgeInsets.only(
-                          left: 10, right: 10, bottom: 10, top: 20),
-                      margin: EdgeInsets.symmetric(horizontal: 13),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        color: Theme.of(context)
-                            .colorScheme
-                            .lightDarkAccentHeavyLight,
-                        boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-                      ),
-                      child: LineChartWrapper(points: points, isCurved: true)),
-                );
-              }
-              return SizedBox.shrink();
-            },
+                return SizedBox.shrink();
+              },
+            ),
           ),
           SlidingSelector(onSelected: (index) {
             setState(() {
@@ -728,5 +736,24 @@ class UpcomingTransactions extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class KeepAlive extends StatefulWidget {
+  const KeepAlive({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<KeepAlive> createState() => _KeepAliveState();
+}
+
+class _KeepAliveState extends State<KeepAlive>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
   }
 }

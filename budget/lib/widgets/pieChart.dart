@@ -214,6 +214,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
             "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),
           percent: (widget.data[i].total / widget.totalSpent * 100).abs(),
+          isTouched: isTouched,
         ),
         titlePositionPercentageOffset: 1.4,
         badgePositionPercentageOffset: .98,
@@ -227,6 +228,7 @@ class _Badge extends StatelessWidget {
   final Color color;
   final AssetImage assetImage;
   final double percent;
+  final bool isTouched;
 
   const _Badge({
     Key? key,
@@ -234,17 +236,18 @@ class _Badge extends StatelessWidget {
     required this.color,
     required this.assetImage,
     required this.percent,
+    required this.isTouched,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (percent < 5) {
-      return SizedBox.shrink();
-    }
     return AnimatedScale(
-      curve: ElasticOutCurve(0.6),
-      duration: Duration(milliseconds: 1300),
-      scale: scale,
+      curve:
+          percent < 5 ? Curves.easeInOutCubicEmphasized : ElasticOutCurve(0.6),
+      duration: percent < 5
+          ? Duration(milliseconds: 700)
+          : Duration(milliseconds: 1300),
+      scale: percent < 5 && isTouched == false ? 0 : (percent < 5 ? 1 : scale),
       child: Container(
         width: 45,
         height: 45,

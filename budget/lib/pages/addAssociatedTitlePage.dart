@@ -88,7 +88,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
             : DateTime.now().millisecondsSinceEpoch,
         categoryFk: selectedCategory == null ? 0 : selectedCategory!.categoryPk,
         isExactMatch: false,
-        title: selectedTitle ?? "",
+        title: selectedTitle?.trim() ?? "",
         dateCreated: DateTime.now(),
         order: widget.associatedTitle != null
             ? widget.associatedTitle!.order

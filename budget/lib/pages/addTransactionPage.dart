@@ -130,6 +130,12 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   void setSelectedAmount(double amount, String amountCalculation) {
+    if (amount == double.infinity ||
+        amount == double.negativeInfinity ||
+        amount == double.nan ||
+        amount.isNaN) {
+      return;
+    }
     if (amount == selectedAmount) {
       selectedAmountCalculation = amountCalculation;
     } else {
@@ -248,7 +254,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   Future addTransaction() async {
     print("Added transaction");
-    if (selectedTitle != null && selectedCategory != null)
+    if (selectedTitle != null &&
+        selectedCategory != null &&
+        selectedTitle != "")
       await addAssociatedTitles(selectedTitle!, selectedCategory!);
     await database.createOrUpdateTransaction(await createTransaction());
   }
@@ -1611,7 +1619,7 @@ addAssociatedTitles(
           associatedTitlePk: DateTime.now().millisecondsSinceEpoch,
           categoryFk: selectedCategory.categoryPk,
           isExactMatch: false,
-          title: selectedTitle,
+          title: selectedTitle.trim(),
           dateCreated: DateTime.now(),
           order: length,
         ),
