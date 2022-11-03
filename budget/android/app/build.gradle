@@ -48,6 +48,13 @@ android {
         multiDexEnabled true
     }
 
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "Instantiatable"
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     compileOptions {
       // Flag to enable support for the new language APIs
       coreLibraryDesugaringEnabled true
