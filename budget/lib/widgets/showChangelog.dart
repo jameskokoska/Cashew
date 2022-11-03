@@ -15,6 +15,12 @@ Future<void> showChangelog(context, {forceShow: false}) async {
 
     Past changes:
 
+    Extra white space removed when adding transaction titles from email
+    Emails are marked as read when parsed
+    Escape key pops current navigation route
+    Notifications setting removed on web
+    Web should have better text input handling (direct instead of popups)
+    Larger displays navigation bar max size
     New budget progress bar animation
     Budget bar graph to track older budget periods spending
     Notifications transaction reminder WIP

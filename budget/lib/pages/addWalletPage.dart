@@ -79,7 +79,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
   }
 
   void setSelectedTitle(String title) {
-    selectedTitle = title;
+    setState(() {
+      selectedTitle = title;
+    });
     determineBottomButton();
     return;
   }
@@ -119,11 +121,12 @@ class _AddWalletPageState extends State<AddWalletPage> {
       //We are editing a wallet
       textAddWallet = "Edit Wallet";
       //Fill in the information from the passed in wallet
+      //Outside of future.delayed because of textinput when in web mode initial value
+      selectedTitle = widget.wallet!.name;
       Future.delayed(Duration.zero, () {
         setState(() {
           selectedColor = HexColor(widget.wallet!.colour,
               defaultColor: Theme.of(context).colorScheme.primary);
-          selectedTitle = widget.wallet!.name;
           //Set to false because we can't save until we made some changes
           canAddWallet = false;
         });
@@ -206,16 +209,29 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 listWidgets: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TappableTextEntry(
-                      title: selectedTitle,
-                      placeholder: "Name",
-                      onTap: () {
-                        selectTitle();
-                      },
-                      autoSizeText: true,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    ),
+                    child: kIsWeb
+                        ? TextInput(
+                            labelText: "Name",
+                            bubbly: false,
+                            initialValue: selectedTitle,
+                            onChanged: (text) {
+                              setSelectedTitle(text);
+                            },
+                            padding: EdgeInsets.only(left: 7, right: 7),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            topContentPadding: 20,
+                          )
+                        : TappableTextEntry(
+                            title: selectedTitle,
+                            placeholder: "Name",
+                            onTap: () {
+                              selectTitle();
+                            },
+                            autoSizeText: true,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                          ),
                   ),
                   SizedBox(height: 14),
                   Column(

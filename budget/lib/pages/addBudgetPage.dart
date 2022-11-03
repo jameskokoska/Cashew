@@ -541,16 +541,29 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   Container(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TappableTextEntry(
-                      title: selectedTitle,
-                      placeholder: "Name",
-                      onTap: () {
-                        selectTitle();
-                      },
-                      autoSizeText: true,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    ),
+                    child: kIsWeb
+                        ? TextInput(
+                            labelText: "Name",
+                            bubbly: false,
+                            initialValue: selectedTitle,
+                            onChanged: (text) {
+                              setSelectedTitle(text);
+                            },
+                            padding: EdgeInsets.only(left: 7, right: 7),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            topContentPadding: 20,
+                          )
+                        : TappableTextEntry(
+                            title: selectedTitle,
+                            placeholder: "Name",
+                            onTap: () {
+                              selectTitle();
+                            },
+                            autoSizeText: true,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                          ),
                   ),
                   Container(height: 17),
                   Padding(

@@ -162,7 +162,6 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       backgroundColor:
                           Theme.of(context).colorScheme.secondaryContainer,
                       labelText: "Search...",
-                      bubbly: true,
                       icon: Icons.search_rounded,
                       onSubmitted: (value) {
                         searchTransaction(value, income: selectedIncome);

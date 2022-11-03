@@ -240,6 +240,10 @@ class _InitializeAppState extends State<InitializeApp> {
   }
 }
 
+class EscapeIntent extends Intent {
+  const EscapeIntent();
+}
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class App extends StatelessWidget {
@@ -248,6 +252,17 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      shortcuts: <ShortcutActivator, Intent>{
+        LogicalKeySet(LogicalKeyboardKey.escape): const EscapeIntent(),
+      },
+      actions: <Type, Action<Intent>>{
+        EscapeIntent: CallbackAction<EscapeIntent>(
+          onInvoke: (EscapeIntent intent) => {
+            if (navigatorKey.currentState!.canPop())
+              navigatorKey.currentState!.pop()
+          },
+        ),
+      },
       key: ValueKey(1),
       title: 'Budget App',
       navigatorKey: navigatorKey,

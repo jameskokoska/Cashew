@@ -111,7 +111,11 @@ Future<bool> signInGoogle(context,
               ? [drive.DriveApi.driveAppdataScope]
               : []),
           ...(gMailPermissions == true
-              ? [gMail.GmailApi.gmailReadonlyScope]
+              ? [
+                  gMail.GmailApi.gmailReadonlyScope,
+                  gMail.GmailApi
+                      .gmailModifyScope //We do this so the emails can be marked read
+                ]
               : [])
         ]);
       }

@@ -113,8 +113,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                           Navigator.pop(context);
                           openSnackbar(
                             SnackbarMessage(
-                                title: "Deleted " + budget.name,
-                                icon: Icons.delete),
+                              title: "Deleted " + budget.name,
+                              icon: Icons.delete,
+                            ),
                           );
                         },
                         onSubmitLabel: "Delete",

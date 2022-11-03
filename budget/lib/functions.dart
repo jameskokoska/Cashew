@@ -459,5 +459,6 @@ String filterEmailTitle(string) {
   // Remove store number (everything past the last '#' symbol)
   int position = string.lastIndexOf('#');
   String title = (position != -1) ? string.substring(0, position) : string;
+  title = title.trim();
   return title;
 }

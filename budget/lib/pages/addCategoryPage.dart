@@ -258,9 +258,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       ),
                       Expanded(
                         child: Tappable(
-                          onTap: () {
-                            selectTitle();
-                          },
+                          onTap: !kIsWeb
+                              ? () {
+                                  selectTitle();
+                                }
+                              : null,
                           color: Colors.transparent,
                           child: Container(
                             height: 136,
@@ -280,24 +282,39 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                               child: IntrinsicWidth(
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: TextFont(
-                                    autoSizeText: true,
-                                    maxLines: 1,
-                                    minFontSize: 16,
-                                    textAlign: TextAlign.left,
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.bold,
-                                    text: selectedTitle == null ||
-                                            selectedTitle == ""
-                                        ? "Name"
-                                        : selectedTitle ?? "",
-                                    textColor: selectedTitle == null ||
-                                            selectedTitle == ""
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .textLight
-                                        : Theme.of(context).colorScheme.black,
-                                  ),
+                                  child: kIsWeb
+                                      ? TextInput(
+                                          labelText: "Name",
+                                          bubbly: false,
+                                          initialValue: selectedTitle,
+                                          onChanged: (text) {
+                                            setSelectedTitle(text);
+                                          },
+                                          padding: EdgeInsets.zero,
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold,
+                                          topContentPadding: 40,
+                                        )
+                                      : TextFont(
+                                          autoSizeText: true,
+                                          maxLines: 1,
+                                          minFontSize: 16,
+                                          textAlign: TextAlign.left,
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold,
+                                          text: selectedTitle == null ||
+                                                  selectedTitle == ""
+                                              ? "Name"
+                                              : selectedTitle ?? "",
+                                          textColor: selectedTitle == null ||
+                                                  selectedTitle == ""
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .textLight
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .black,
+                                        ),
                                 ),
                               ),
                             ),

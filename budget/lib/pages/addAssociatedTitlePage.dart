@@ -185,15 +185,29 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                 ),
               ),
               Expanded(
-                child: TappableTextEntry(
-                  title: selectedTitle,
-                  placeholder: "Title",
-                  onTap: () {
-                    selectTitle();
-                  },
-                  autoSizeText: true,
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                ),
+                child: kIsWeb
+                    ? TextInput(
+                        labelText: "Title",
+                        bubbly: false,
+                        initialValue: selectedTitle,
+                        onChanged: (text) {
+                          setSelectedTitle(text);
+                        },
+                        padding: EdgeInsets.only(left: 7, right: 7),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        topContentPadding: 20,
+                      )
+                    : TappableTextEntry(
+                        title: selectedTitle,
+                        placeholder: "Title",
+                        onTap: () {
+                          selectTitle();
+                        },
+                        autoSizeText: true,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      ),
               ),
             ],
           ),
