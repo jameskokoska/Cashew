@@ -89,7 +89,7 @@ class HomePageState extends State<HomePage>
           Container(height: 1, color: Theme.of(context).canvasColor),
           Container(
             // Subtract one (1) here because of the thickness of the wiper above
-            height: 207 - 1 + MediaQuery.of(context).padding.top,
+            height: 179 - 1 + MediaQuery.of(context).padding.top,
             alignment: Alignment.bottomLeft,
             padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
             child: Row(
