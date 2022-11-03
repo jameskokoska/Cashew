@@ -528,7 +528,7 @@ class AnimatedGooBackground extends StatelessWidget {
           variation2: 0,
           variation3: 0,
           rotation:
-              (randomInt % (randomOffset > 0 ? randomOffset : 1)).toDouble(),
+              (randomInt[0] % (randomOffset > 0 ? randomOffset : 1)).toDouble(),
         ),
       ),
     );
@@ -761,9 +761,7 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
                 topRight: Radius.circular(50),
                 bottomRight: Radius.circular(50),
               ),
-              color: widget.large
-                  ? dynamicPastel(context, widget.color, amount: 0.1)
-                  : lightenPastel(widget.color, amount: 0.6),
+              color: lightenPastel(widget.color, amount: 0.6),
             ),
           ),
           widget.percent > 40

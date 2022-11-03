@@ -319,19 +319,19 @@ String getWelcomeMessage() {
   ];
   List<String> greetingsEvening = ["Good evening"];
   List<String> greetingsLate = ["Good night", "Get some rest"];
-  if (randomInt % 2 == 0) {
+  if (randomInt[0] % 2 == 0) {
     if (h24 <= 12 && h24 >= 6)
-      return greetingsMorning[randomInt % (greetingsMorning.length)];
+      return greetingsMorning[randomInt[0] % (greetingsMorning.length)];
     else if (h24 <= 16 && h24 >= 13)
-      return greetingsAfternoon[randomInt % (greetingsAfternoon.length)];
+      return greetingsAfternoon[randomInt[0] % (greetingsAfternoon.length)];
     else if (h24 <= 22 && h24 >= 19)
-      return greetingsEvening[randomInt % (greetingsEvening.length)];
+      return greetingsEvening[randomInt[0] % (greetingsEvening.length)];
     else if (h24 >= 23 || h24 <= 5)
-      return greetingsLate[randomInt % (greetingsLate.length)];
+      return greetingsLate[randomInt[0] % (greetingsLate.length)];
     else
-      return greetings[randomInt % (greetings.length)];
+      return greetings[randomInt[0] % (greetings.length)];
   } else {
-    return greetings[randomInt % (greetings.length)];
+    return greetings[randomInt[0] % (greetings.length)];
   }
 }
 

@@ -56,7 +56,30 @@ void main() async {
 }
 
 Random random = new Random();
-int randomInt = random.nextInt(100);
+List<int> randomInt = [
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100),
+  random.nextInt(100)
+];
+List<double> randomDouble = [
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble(),
+  random.nextDouble()
+];
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;
 

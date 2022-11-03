@@ -402,6 +402,15 @@ class TransactionsListPageState extends State<TransactionsListPage>
                   CustomScrollView(
                     slivers: [
                       ...transactionWidgets,
+                      SliverToBoxAdapter(
+                        child: CashFlow(
+                          selectedDateStart,
+                          new DateTime(
+                              selectedDateStart.year,
+                              selectedDateStart.month + 1,
+                              selectedDateStart.day - 1),
+                        ),
+                      ),
                       // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                       SliverToBoxAdapter(
                         child: Container(
@@ -418,6 +427,36 @@ class TransactionsListPageState extends State<TransactionsListPage>
           },
         ),
       ),
+    );
+  }
+}
+
+class CashFlow extends StatelessWidget {
+  const CashFlow(this.startDate, this.endDate, {super.key});
+
+  final DateTime startDate;
+  final DateTime endDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<double?>(
+      stream: database.watchTotalSpentInTimeRangeFromCategories(
+          startDate, endDate, [], true,
+          allCashFlow: true),
+      builder: (context, snapshot) {
+        if (snapshot.data != null && snapshot.hasData) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+            child: TextFont(
+              text: "Total cash flow: " + convertToMoney(snapshot.data!),
+              fontSize: 13,
+              textAlign: TextAlign.center,
+              textColor: Theme.of(context).colorScheme.textLight,
+            ),
+          );
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 }
@@ -491,15 +530,53 @@ class LoadingShimmer extends StatelessWidget {
       baseColor: Theme.of(context).colorScheme.lightDarkAccent,
       highlightColor:
           Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
-      child: ListView.builder(
-        itemBuilder: (_, __) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 2),
+        child: ListView.builder(
+          itemBuilder: (_, i) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Colors.white,
+                      ),
+                      height: 20,
+                      width: 55 + randomDouble[i % 10] * 40,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Colors.white,
+                      ),
+                      height: 20,
+                      width: 55 + randomDouble[i % 10] * 40,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 7),
+                ...[
+                  for (int index = 0;
+                      index < 1 + randomInt[i % 10] % 3;
+                      index++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Colors.white,
+                        ),
+                        height: 51,
+                      ),
+                    )
+                ],
+              ],
             ),
-            height: 60,
           ),
         ),
       ),

@@ -50,6 +50,7 @@ class ColorPicker extends StatefulWidget {
 
 class _ColorPickerState extends State<ColorPicker> {
   final List<Color> _colors = [
+    Color.fromARGB(255, 255, 255, 255),
     Color.fromARGB(255, 255, 0, 0),
     Color.fromARGB(255, 255, 128, 0),
     Color.fromARGB(255, 255, 255, 0),

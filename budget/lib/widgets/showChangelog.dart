@@ -12,6 +12,13 @@ Future<void> showChangelog(context, {forceShow: false}) async {
     Discard changes popup doesn't show up anymore when no changed made to transaction
     Budget now animates even when 100% then shakes
     Budget progress no longer has count-up
+    Budget list page period length hidden
+    Budget page graph takes color of selected category
+    If category has less than 5%, icon isn't shown on pie chart
+    Total cash flow for transactions page month
+    Changed shimmer effect to reflect a transaction entry
+    Fixed settings container closing colors on light mode
+    Color tweaks
 
     Past changes:
 

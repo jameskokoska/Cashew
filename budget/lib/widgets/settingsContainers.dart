@@ -100,7 +100,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenContainerNavigation(
-      closedColor: Colors.transparent,
+      closedColor: Theme.of(context).canvasColor,
       borderRadius: 0,
       button: (openContainer) {
         return SettingsContainer(
@@ -110,6 +110,24 @@ class SettingsContainerOpenPage extends StatelessWidget {
           iconSize: iconSize,
           onTap: () {
             openContainer();
+            // Navigator.push(
+            //   context,
+            //   PageRouteBuilder(
+            //     transitionDuration: Duration(milliseconds: 500),
+            //     transitionsBuilder:
+            //         (context, animation, secondaryAnimation, child) {
+            //       return SharedAxisTransition(
+            //         animation: animation,
+            //         secondaryAnimation: secondaryAnimation,
+            //         transitionType: SharedAxisTransitionType.horizontal,
+            //         child: child,
+            //       );
+            //     },
+            //     pageBuilder: (context, animation, secondaryAnimation) {
+            //       return openPage;
+            //     },
+            //   ),
+            // );
           },
           afterWidget: Icon(
             Icons.chevron_right_rounded,

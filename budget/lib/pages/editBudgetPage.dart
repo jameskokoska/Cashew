@@ -146,13 +146,13 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
-                            budget.reoccurrence!.index != 0
-                                ? TextFont(
-                                    text: budget.periodLength.toString() + " ",
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  )
-                                : SizedBox(),
+                            // budget.reoccurrence!.index != 0
+                            //     ? TextFont(
+                            //         text: budget.periodLength.toString() + " ",
+                            //         fontWeight: FontWeight.bold,
+                            //         fontSize: 16,
+                            //       )
+                            //     : SizedBox(),
                             TextFont(
                               text: budget.periodLength == 1
                                   ? nameRecurrence[budget.reoccurrence]

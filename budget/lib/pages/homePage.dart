@@ -73,10 +73,10 @@ class HomePageState extends State<HomePage>
 
   @override
   void dispose() {
-    super.dispose();
     _animationControllerHeader.dispose();
     _animationControllerHeader2.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 
   @override

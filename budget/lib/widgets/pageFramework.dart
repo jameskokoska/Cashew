@@ -139,7 +139,6 @@ class PageFrameworkState extends State<PageFramework>
 
   @override
   void dispose() {
-    super.dispose();
     _animationControllerShift.dispose();
     _animationControllerOpacity.dispose();
     _animationController0at50.dispose();
@@ -148,6 +147,7 @@ class PageFrameworkState extends State<PageFramework>
 
     _scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   double keyboardOpenedPrevious = 0;

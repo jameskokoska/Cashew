@@ -53,7 +53,7 @@ class PieChartWrapper extends StatelessWidget {
       : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
-  final Function(int) setSelectedCategory;
+  final Function(int, TransactionCategory?) setSelectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,7 @@ class PieChartDisplay extends StatefulWidget {
       : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
-  final Function(int) setSelectedCategory;
+  final Function(int, TransactionCategory?) setSelectedCategory;
 
   @override
   State<StatefulWidget> createState() => PieChartDisplayState();
@@ -159,15 +159,17 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                 touchedIndex =
                     pieTouchResponse.touchedSection!.touchedSectionIndex;
                 widget.setSelectedCategory(
-                    widget.data[touchedIndex].category.categoryPk);
+                    widget.data[touchedIndex].category.categoryPk,
+                    widget.data[touchedIndex].category);
               } else if (event.runtimeType == FlTapDownEvent) {
                 touchedIndex = -1;
-                widget.setSelectedCategory(-1);
+                widget.setSelectedCategory(-1, null);
               } else if (event.runtimeType == FlLongPressMoveUpdate) {
                 touchedIndex =
                     pieTouchResponse.touchedSection!.touchedSectionIndex;
                 widget.setSelectedCategory(
-                    widget.data[touchedIndex].category.categoryPk);
+                    widget.data[touchedIndex].category.categoryPk,
+                    widget.data[touchedIndex].category);
               }
             });
           }),
@@ -211,10 +213,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           assetImage: AssetImage(
             "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),
-          percent: (widget.data[i].total / widget.totalSpent * 100)
-                  .abs()
-                  .toStringAsFixed(0) +
-              '%',
+          percent: (widget.data[i].total / widget.totalSpent * 100).abs(),
         ),
         titlePositionPercentageOffset: 1.4,
         badgePositionPercentageOffset: .98,
@@ -227,7 +226,7 @@ class _Badge extends StatelessWidget {
   final double scale;
   final Color color;
   final AssetImage assetImage;
-  final String percent;
+  final double percent;
 
   const _Badge({
     Key? key,
@@ -239,6 +238,9 @@ class _Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (percent < 5) {
+      return SizedBox.shrink();
+    }
     return AnimatedScale(
       curve: ElasticOutCurve(0.6),
       duration: Duration(milliseconds: 1300),
@@ -275,7 +277,7 @@ class _Badge extends StatelessWidget {
                       ),
                       child: Center(
                         child: TextFont(
-                          text: percent,
+                          text: percent.toStringAsFixed(0) + '%',
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           textAlign: TextAlign.center,

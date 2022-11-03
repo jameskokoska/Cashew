@@ -1181,8 +1181,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get total amount spent in each day
-  Stream<double?> watchTotalSpentInTimeRangeFromCategories(DateTime start,
-      DateTime end, List<int>? categoryFks, bool allCategories) {
+  Stream<double?> watchTotalSpentInTimeRangeFromCategories(
+      DateTime start, DateTime end, List<int>? categoryFks, bool allCategories,
+      {bool allCashFlow = false}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     final totalAmt = transactions.amount.sum();
@@ -1196,7 +1197,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
               transactions.dateCreated.isBetweenValues(startDate, endDate) &
               transactions.paid.equals(true) &
-              transactions.income.equals(false),
+              (allCashFlow
+                  ? transactions.income.isIn([true, false])
+                  : transactions.income.equals(false)),
         ));
     } else {
       query = (selectOnly(transactions)
@@ -1206,7 +1209,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               transactions.dateCreated.isBetweenValues(startDate, endDate) &
               transactions.categoryFk.isIn(categoryFks ?? []) &
               transactions.paid.equals(true) &
-              transactions.income.equals(false),
+              (allCashFlow
+                  ? transactions.income.isIn([true, false])
+                  : transactions.income.equals(false)),
         ));
     }
 

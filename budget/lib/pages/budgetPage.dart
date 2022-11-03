@@ -45,6 +45,8 @@ class BudgetPage extends StatefulWidget {
 class _BudgetPageState extends State<BudgetPage> {
   double budgetHeaderHeight = 0;
   int selectedCategoryPk = -1;
+  TransactionCategory? selectedCategory =
+      null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
 
   @override
   Widget build(BuildContext context) {
@@ -126,12 +128,14 @@ class _BudgetPageState extends State<BudgetPage> {
                       if (selectedCategoryPk == category.category.categoryPk) {
                         setState(() {
                           selectedCategoryPk = -1;
+                          selectedCategory = null;
                         });
                         pieChartDisplayStateKey.currentState!
                             .setTouchedIndex(-1);
                       } else {
                         setState(() {
                           selectedCategoryPk = category.category.categoryPk;
+                          selectedCategory = category.category;
                         });
                         pieChartDisplayStateKey.currentState!
                             .setTouchedIndex(index);
@@ -278,9 +282,10 @@ class _BudgetPageState extends State<BudgetPage> {
                   PieChartWrapper(
                       data: snapshot.data ?? [],
                       totalSpent: totalSpent,
-                      setSelectedCategory: (categoryPk) {
+                      setSelectedCategory: (categoryPk, category) {
                         setState(() {
                           selectedCategoryPk = categoryPk;
+                          selectedCategory = category;
                         });
                       }),
                   Container(height: 35),
@@ -370,7 +375,10 @@ class _BudgetPageState extends State<BudgetPage> {
                       endDate: budgetRange.end,
                       points: points,
                       isCurved: true,
-                      color: budgetColorScheme.primary,
+                      color:
+                          selectedCategoryPk != -1 && selectedCategory != null
+                              ? HexColor(selectedCategory!.colour)
+                              : budgetColorScheme.primary,
                       verticalLineAt: widget.isPastBudget == true
                           ? null
                           : (budgetRange.end.difference(dateForRange).inDays)

@@ -49,8 +49,8 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    super.dispose();
     if (timer != null) timer!.cancel();
+    super.dispose();
   }
 
   @override
