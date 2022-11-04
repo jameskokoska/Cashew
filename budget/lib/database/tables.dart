@@ -77,7 +77,7 @@ class Wallets extends Table {
   IntColumn get walletPk => integer().autoIncrement()();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   TextColumn get colour => text().withLength(max: COLOUR_LIMIT).nullable()();
-  TextColumn get iconName => text().nullable()();
+  TextColumn get iconName => text().nullable()(); // Money symbol
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();

@@ -45,6 +45,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   String? selectedTitle;
   Color? selectedColor;
+  String? selectedIconName;
 
   late FocusNode _periodLengthFocusNode;
 
@@ -92,6 +93,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
     return;
   }
 
+  void setSelectedIconName(String iconName) {
+    setState(() {
+      selectedIconName = iconName;
+    });
+    return;
+  }
+
   Future addWallet() async {
     print("Added wallet");
     await database.createOrUpdateWallet(await createTransactionWallet());
@@ -109,6 +117,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
       dateCreated:
           widget.wallet != null ? widget.wallet!.dateCreated : DateTime.now(),
       order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
+      iconName: selectedIconName,
     );
   }
 
