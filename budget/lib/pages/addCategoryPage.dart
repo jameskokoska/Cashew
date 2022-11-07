@@ -136,14 +136,15 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   @override
   void initState() {
     super.initState();
+    selectedColor = widget.category!.colour == null
+        ? null
+        : HexColor(widget.category!.colour);
     Future.delayed(Duration.zero, () {
       if (widget.category != null) {
         //We are editing a transaction
         //Fill in the information from the passed in transaction
         setState(() {
           selectedTitle = widget.category!.name;
-          selectedColor = HexColor(widget.category!.colour,
-              defaultColor: Theme.of(context).colorScheme.primary);
           selectedImage = widget.category!.iconName;
           selectedIncome = widget.category!.income;
         });
@@ -550,12 +551,12 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
                   title: "Delete Title?",
                   description: "Are you sure you want to delete this title?",
                   icon: Icons.delete_rounded,
-                  onSubmitLabel: "Yes",
+                  onSubmitLabel: "Delete",
                   onSubmit: () {
                     Navigator.pop(context);
                     widget.onDelete();
                   },
-                  onCancelLabel: "No",
+                  onCancelLabel: "Cancel",
                   onCancel: () {
                     Navigator.pop(context);
                   },

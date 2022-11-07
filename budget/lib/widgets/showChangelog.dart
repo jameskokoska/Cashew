@@ -26,7 +26,14 @@ Future<void> showChangelog(context, {forceShow: false}) async {
     Extra white space removed from associated titles
     Colors discard changes discrepencies fixed
     Selected color selected properly when editing
-
+    Can tap snackbar messages for some actions
+    Email scanning redone
+    Email scanning profiles and different templates
+    Home page animations
+    Home page transactions list shows upcoming transactions (3 days before)
+    Fixed adding wallet unreferenced widget for animation
+    Started currency picker for wallet
+    
     Past changes:
 
     Extra white space removed when adding transaction titles from email

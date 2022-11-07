@@ -24,6 +24,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' hide TextInput;
 
 class AddWalletPage extends StatefulWidget {
   AddWalletPage({
@@ -46,6 +48,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   String? selectedTitle;
   Color? selectedColor;
   String? selectedIconName;
+  List<dynamic> currencies = [];
 
   late FocusNode _periodLengthFocusNode;
 
@@ -132,12 +135,16 @@ class _AddWalletPageState extends State<AddWalletPage> {
       //Fill in the information from the passed in wallet
       //Outside of future.delayed because of textinput when in web mode initial value
       selectedTitle = widget.wallet!.name;
-      Future.delayed(Duration.zero, () {
+      selectedColor = widget.wallet!.colour == null
+          ? null
+          : HexColor(widget.wallet!.colour);
+      Future.delayed(Duration.zero, () async {
+        String response =
+            await rootBundle.loadString('assets/static/currencies.json');
         setState(() {
-          selectedColor = HexColor(widget.wallet!.colour,
-              defaultColor: Theme.of(context).colorScheme.primary);
           //Set to false because we can't save until we made some changes
           canAddWallet = false;
+          currencies = jsonDecode(response);
         });
       });
     } else {}
@@ -243,18 +250,75 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           ),
                   ),
                   SizedBox(height: 14),
-                  Column(
-                    children: [
-                      Container(
-                        height: 65,
-                        child: SelectColor(
-                          horizontalList: true,
-                          selectedColor: selectedColor,
-                          setSelectedColor: setSelectedColor,
-                        ),
-                      ),
-                    ],
+                  Container(
+                    height: 65,
+                    child: SelectColor(
+                      horizontalList: true,
+                      selectedColor: selectedColor,
+                      setSelectedColor: setSelectedColor,
+                    ),
                   ),
+                  SizedBox(height: 25),
+                  Container(
+                    height: 300,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: currencies.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 18.0, right: 18, bottom: 5),
+                          child: Tappable(
+                            color:
+                                Theme.of(context).colorScheme.lightDarkAccent,
+                            borderRadius: 10,
+                            onTap: () {},
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: Wrap(
+                                alignment: WrapAlignment.spaceBetween,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  IntrinsicWidth(
+                                    child: Row(
+                                      children: [
+                                        currencies[index]?["Flag"] != null
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: Image.network(
+                                                  currencies[index]?["Flag"],
+                                                  height: 20,
+                                                ),
+                                              )
+                                            : SizedBox.shrink(),
+                                        TextFont(
+                                            text: currencies[index]
+                                                    ?["CountryName"] ??
+                                                currencies[index]?["Currency"]),
+                                      ],
+                                    ),
+                                  ),
+                                  IntrinsicWidth(
+                                    child: Row(
+                                      children: [
+                                        TextFont(
+                                            text: currencies[index]["Code"]),
+                                        SizedBox(width: 15),
+                                        TextFont(
+                                            text: currencies[index]["Symbol"]),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
               Align(

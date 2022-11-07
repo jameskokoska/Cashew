@@ -57,6 +57,27 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   @override
   void initState() {
     super.initState();
+    if (widget.scannerTemplate != null) {
+      selectedName = widget.scannerTemplate!.templateName;
+      selectedSubject = widget.scannerTemplate!.contains;
+      amountTransactionBefore = widget.scannerTemplate!.amountTransactionBefore;
+      amountTransactionAfter = widget.scannerTemplate!.amountTransactionAfter;
+      titleTransactionBefore = widget.scannerTemplate!.titleTransactionBefore;
+      titleTransactionAfter = widget.scannerTemplate!.titleTransactionAfter;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      updateInitial();
+    });
+  }
+
+  updateInitial() async {
+    if (widget.scannerTemplate != null) {
+      TransactionCategory? getSelectedCategory = await database
+          .getCategoryInstance(widget.scannerTemplate!.defaultCategoryFk);
+      setState(() {
+        selectedCategory = getSelectedCategory;
+      });
+    }
   }
 
   @override
@@ -65,6 +86,30 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   }
 
   determineBottomButton() {
+    if (double.tryParse(selectedAmount ?? "") == null &&
+        selectedMessageString != null) {
+      setState(() {
+        canAddTemplate = false;
+      });
+      return;
+    }
+    if (selectedTitle == null && selectedMessageString != null) {
+      setState(() {
+        canAddTemplate = false;
+      });
+      return;
+    }
+
+    if (selectedName == null) return;
+    if (selectedCategory == null) return;
+    if (amountTransactionBefore == null) return;
+    if (amountTransactionAfter == null) return;
+    if (titleTransactionBefore == null) return;
+    if (titleTransactionAfter == null) return;
+
+    setState(() {
+      canAddTemplate = true;
+    });
     return true;
   }
 
@@ -142,6 +187,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                 onSelectionChanged: (selection, changeCause) {
                   selectedSubject = messageString.substring(
                       selection.baseOffset, selection.extentOffset);
+                  determineBottomButton();
                   setState(() {});
                 },
               ),
@@ -151,6 +197,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Button(
             label: "Done",
             onTap: () {
+              determineBottomButton();
               setState(() {});
               Navigator.pop(context);
               next();
@@ -214,6 +261,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   }
                   selectedAmount = messageString.substring(
                       selection.baseOffset, selection.extentOffset);
+                  determineBottomButton();
                   setState(() {});
                 },
               ),
@@ -223,6 +271,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Button(
             label: "Done",
             onTap: () {
+              determineBottomButton();
               Navigator.pop(context);
               setState(() {});
               next();
@@ -287,6 +336,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   }
                   selectedTitle = messageString.substring(
                       selection.baseOffset, selection.extentOffset);
+                  determineBottomButton();
                   setState(() {});
                 },
               ),
@@ -296,18 +346,9 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Button(
             label: "Done",
             onTap: () {
+              determineBottomButton();
               next();
               setState(() {});
-              // updateSettings(
-              //     "EmailAutoTransactions-emailContains", emailContains);
-              // updateSettings("EmailAutoTransactions-amountTransactionBefore",
-              //     amountTransactionBefore);
-              // updateSettings("EmailAutoTransactions-amountTransactionAfter",
-              //     amountTransactionAfter);
-              // updateSettings("EmailAutoTransactions-titleTransactionBefore",
-              //     titleTransactionBefore);
-              // updateSettings("EmailAutoTransactions-titleTransactionAfter",
-              //     titleTransactionAfter);
               Navigator.pop(context);
             },
           )
@@ -318,12 +359,12 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
 
   Future addTemplate() async {
     print("Added template");
-    await database.createOrUpdateScannerTemplate(await createTemplate());
+    await database.createOrUpdateScannerTemplate(createTemplate());
     Navigator.pop(context);
   }
 
-  Future<ScannerTemplate> createTemplate() async {
-    return await ScannerTemplate(
+  ScannerTemplate createTemplate() {
+    return ScannerTemplate(
       scannerTemplatePk: widget.scannerTemplate != null
           ? widget.scannerTemplate!.scannerTemplatePk
           : DateTime.now().millisecondsSinceEpoch,
@@ -349,7 +390,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           discardChangesPopup(
             context,
             previousObject: widget.scannerTemplate,
-            currentObject: "await createTemplate()",
+            currentObject: createTemplate(),
           );
         } else {
           discardChangesPopup(context);
@@ -369,6 +410,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           child: Stack(
             children: [
               PageFramework(
+                dragDownToDismiss: true,
                 title: widget.title,
                 navbar: false,
                 onBackButton: () async {
@@ -376,7 +418,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     discardChangesPopup(
                       context,
                       previousObject: widget.scannerTemplate,
-                      currentObject: "await createTemplate()",
+                      currentObject: createTemplate(),
                     );
                   } else {
                     discardChangesPopup(context);
@@ -387,7 +429,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     discardChangesPopup(
                       context,
                       previousObject: widget.scannerTemplate,
-                      currentObject: "await createTemplate()",
+                      currentObject: createTemplate(),
                     );
                   } else {
                     discardChangesPopup(context);
@@ -432,7 +474,18 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                       fontSize: 16,
                     ),
                   ),
-                  Container(height: 2),
+                  SizedBox(height: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text:
+                          "Categories are also automatically set based on the Associated Title.",
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      fontSize: 11,
+                      maxLines: 5,
+                    ),
+                  ),
+                  SizedBox(height: 3),
                   Container(
                     height: 100,
                     child: SelectCategory(
@@ -442,7 +495,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                       popRoute: false,
                     ),
                   ),
-                  Container(height: 20),
+                  SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Button(
@@ -492,146 +545,129 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: AnimatedSize(
-                      duration: Duration(milliseconds: 400),
-                      curve: Curves.easeInOut,
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: selectedMessageString == null
-                            ? Container()
-                            : Column(
-                                children: [
-                                  TemplateInfoBox(
-                                    onTap: () {
-                                      openBottomSheet(
-                                        context,
-                                        selectSubjectText(
-                                          selectedMessageString ?? "",
-                                          () {},
-                                        ),
-                                      );
-                                    },
-                                    selectedText: selectedSubject ?? "",
-                                    label: "Subject: ",
-                                    secondaryLabel:
-                                        "All emails containing this text will be checked.",
-                                  ),
-                                  SizedBox(height: 10),
-                                  TemplateInfoBox(
-                                    onTap: () {
-                                      openBottomSheet(
-                                        context,
-                                        selectAmountText(
-                                          selectedMessageString ?? "",
-                                          () {},
-                                        ),
-                                      );
-                                    },
-                                    selectedText: selectedAmount ?? "",
-                                    label: "Amount: ",
-                                    secondaryLabel:
-                                        "The selected amount from this email. Surrounding text will be used to find this amount in new emails.",
-                                    extraCheck: (input) {
-                                      return double.tryParse(input) != null;
-                                    },
-                                    extraCheckMessage:
-                                        "Please select a valid number!",
-                                  ),
-                                  SizedBox(height: 10),
-                                  TemplateInfoBox(
-                                    onTap: () {
-                                      openBottomSheet(
-                                        context,
-                                        selectTitleText(
-                                          selectedMessageString ?? "",
-                                          () {},
-                                        ),
-                                      );
-                                    },
-                                    selectedText: selectedTitle ?? "",
-                                    label: "Title: ",
-                                    secondaryLabel:
-                                        "The selected title from this email. Surrounding text will be used to find this title in new emails.",
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 18, vertical: 15),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .lightDarkAccentHeavy,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextFont(
-                                                text: "Sample",
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              TextFont(
-                                                text: (selectedSubject ?? "")
-                                                    .replaceAll("\n", ""),
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                maxLines: 10,
-                                                textColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                              ),
-                                              SizedBox(height: 2),
-                                              TextFont(
-                                                text: (amountTransactionBefore ??
-                                                            "")
-                                                        .replaceAll("\n", "") +
-                                                    "..." +
-                                                    " [Amount] " +
-                                                    "..." +
-                                                    (amountTransactionAfter ??
-                                                            "")
-                                                        .replaceAll("\n", ""),
-                                                fontSize: 16,
-                                                maxLines: 10,
-                                                textColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                              ),
-                                              SizedBox(height: 2),
-                                              TextFont(
-                                                text: (titleTransactionBefore ??
-                                                            "")
-                                                        .replaceAll("\n", "") +
-                                                    "..." +
-                                                    " [Title] " +
-                                                    "..." +
-                                                    (titleTransactionAfter ??
-                                                            "")
-                                                        .replaceAll("\n", ""),
-                                                fontSize: 16,
-                                                maxLines: 10,
-                                                textColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .tertiary,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                    child: selectedMessageString == null
+                        ? Container()
+                        : Column(
+                            children: [
+                              TemplateInfoBox(
+                                onTap: () {
+                                  openBottomSheet(
+                                    context,
+                                    selectSubjectText(
+                                      selectedMessageString ?? "",
+                                      () {},
+                                    ),
+                                  );
+                                },
+                                selectedText: selectedSubject ?? "",
+                                label: "Subject: ",
+                                secondaryLabel:
+                                    "All emails containing this text will be checked.",
                               ),
-                      ),
-                    ),
+                              SizedBox(height: 10),
+                              TemplateInfoBox(
+                                onTap: () {
+                                  openBottomSheet(
+                                    context,
+                                    selectAmountText(
+                                      selectedMessageString ?? "",
+                                      () {},
+                                    ),
+                                  );
+                                },
+                                selectedText: selectedAmount ?? "",
+                                label: "Amount: ",
+                                secondaryLabel:
+                                    "The selected amount from this email. Surrounding text will be used to find this amount in new emails.",
+                                extraCheck: (input) {
+                                  return double.tryParse(input) != null;
+                                },
+                                extraCheckMessage:
+                                    "Please select a valid number!",
+                              ),
+                              SizedBox(height: 10),
+                              TemplateInfoBox(
+                                onTap: () {
+                                  openBottomSheet(
+                                    context,
+                                    selectTitleText(
+                                      selectedMessageString ?? "",
+                                      () {},
+                                    ),
+                                  );
+                                },
+                                selectedText: selectedTitle ?? "",
+                                label: "Title: ",
+                                secondaryLabel:
+                                    "The selected title from this email. Surrounding text will be used to find this title in new emails.",
+                              ),
+                            ],
+                          ),
                   ),
+                  widget.scannerTemplate == null &&
+                          selectedMessageString == null
+                      ? SizedBox.shrink()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 15),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .lightDarkAccentHeavy,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFont(
+                                  text: "Sample",
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                TextFont(
+                                  text: (selectedSubject ?? "")
+                                      .replaceAll("\n", ""),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  maxLines: 10,
+                                  textColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                SizedBox(height: 2),
+                                TextFont(
+                                  text: (amountTransactionBefore ?? "")
+                                          .replaceAll("\n", "") +
+                                      "..." +
+                                      " [Amount] " +
+                                      "..." +
+                                      (amountTransactionAfter ?? "")
+                                          .replaceAll("\n", ""),
+                                  fontSize: 16,
+                                  maxLines: 10,
+                                  textColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                SizedBox(height: 2),
+                                TextFont(
+                                  text: (titleTransactionBefore ?? "")
+                                          .replaceAll("\n", "") +
+                                      "..." +
+                                      " [Title] " +
+                                      "..." +
+                                      (titleTransactionAfter ?? "")
+                                          .replaceAll("\n", ""),
+                                  fontSize: 16,
+                                  maxLines: 10,
+                                  textColor:
+                                      Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                   SizedBox(height: 70),
                 ],
               ),
@@ -655,9 +691,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                             : "Save Changes",
                         width: MediaQuery.of(context).size.width,
                         height: 50,
-                        onTap: () {
-                          addTemplate();
-                        },
+                        onTap: () {},
                         color: Colors.grey,
                         hasBottomExtraSafeArea: true,
                       ),

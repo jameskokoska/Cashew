@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -77,10 +78,18 @@ class _TransactionEntryState extends State<TransactionEntry> {
 
         openSnackbar(
           SnackbarMessage(
-            title: "Created new subscription transaction",
-            description: "On " + getWordedDateShort(newDate),
-            icon: Icons.create,
-          ),
+              title: "Created New Subscription",
+              description: "On " + getWordedDateShort(newDate),
+              icon: Icons.event_repeat_rounded,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddTransactionPage(
+                        title: "Edit Transaction", transaction: newTransaction),
+                  ),
+                );
+              }),
         );
       }
     }

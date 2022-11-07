@@ -107,6 +107,7 @@ flutter:
     - assets/landing/
     - assets/animations/
     - assets/images/
+    - assets/static/
     
 
   # To add custom fonts to your application, add a fonts section here,

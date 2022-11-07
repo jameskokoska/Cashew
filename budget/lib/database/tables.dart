@@ -202,6 +202,7 @@ class ScannerTemplates extends Table {
   IntColumn get defaultCategoryFk =>
       integer().references(Categories, #categoryPk)();
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
+  BoolColumn get ignore => boolean().withDefault(const Constant(false))();
 }
 
 class TransactionWithCategory {
@@ -610,7 +611,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       ..where((transaction) =>
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
-          transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+          transactions.dateCreated
+              .isBiggerThanValue(startDate ?? DateTime.now()) &
+          transactions.dateCreated.isSmallerThanValue(
+              endDate ?? DateTime.now().add(Duration(days: 1000))) &
           (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
                   .equals(TransactionSpecialType.repetitive.index) |
@@ -763,6 +767,14 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(s) => OrderingTerm.asc(s.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Future<List<ScannerTemplate>> getAllScannerTemplates(
+      {int? limit, int? offset}) {
+    return (select(scannerTemplates)
+          ..orderBy([(s) => OrderingTerm.asc(s.dateCreated)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .get();
   }
 
   Future<List<TransactionWallet>> getAllWallets({int? limit, int? offset}) {
@@ -1193,6 +1205,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future deleteWallet(int walletPk, int order) async {
     await database.shiftWallets(-1, order);
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
+  }
+
+  Future deleteScannerTemplate(int scannerTemplatePk) async {
+    return (delete(scannerTemplates)
+          ..where((s) => s.scannerTemplatePk.equals(scannerTemplatePk)))
+        .go();
   }
 
   //delete transactions that belong to specific wallet key

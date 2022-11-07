@@ -177,28 +177,35 @@ class HomePageState extends State<HomePage>
                       stream: database.watchAllWallets(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return ListView.builder(
-                            addAutomaticKeepAlives: true,
-                            clipBehavior: Clip.none,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapshot.data!.length + 1,
-                            itemBuilder: (context, index) {
-                              bool lastIndex = index == snapshot.data!.length;
-                              if (lastIndex) {
-                                return WalletEntryAdd();
-                              }
-                              return Padding(
+                          List<Widget> children = [];
+                          int index = 0;
+                          for (TransactionWallet wallet in snapshot.data!) {
+                            children.add(
+                              Padding(
                                 padding: EdgeInsets.only(
                                   left: (index == 0 ? 7 : 0.0),
                                 ),
                                 child: WalletEntry(
                                   selected:
                                       appStateSettings["selectedWallet"] ==
-                                          snapshot.data![index].walletPk,
-                                  wallet: snapshot.data![index],
+                                          wallet.walletPk,
+                                  wallet: wallet,
                                 ),
-                              );
-                            },
+                              ),
+                            );
+                            index++;
+                          }
+
+                          return ListView(
+                            addAutomaticKeepAlives: true,
+                            clipBehavior: Clip.none,
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              ...children,
+                              WalletEntryAdd(
+                                key: ValueKey(1),
+                              ),
+                            ],
                           );
                         }
                         return Container();
@@ -349,21 +356,76 @@ class HomePageState extends State<HomePage>
               selectedSlidingSelector = index;
             });
           }),
-          Container(height: 4),
-          ...getTransactionsSlivers(
-            DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day - 7,
+          Container(height: 8),
+          AnimatedSize(
+            duration: Duration(milliseconds: 600),
+            curve: Curves.easeInOutCubicEmphasized,
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: StreamBuilder<List<Transaction>>(
+                stream: database.watchAllUpcomingTransactions(
+                    endDate: DateTime.now().add(Duration(days: 3))),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.length <= 0) {
+                      return SizedBox.shrink();
+                    }
+                    List<Widget> children = [];
+                    for (Transaction transaction in snapshot.data!) {
+                      children.add(Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          UpcomingTransactionDateHeader(
+                              transaction: transaction, small: true),
+                          TransactionEntry(
+                            openPage: AddTransactionPage(
+                              title: "Edit Transaction",
+                              transaction: transaction,
+                            ),
+                            transaction: transaction,
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      ));
+                    }
+                    return Column(children: children);
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+              ),
             ),
-            DateTime.now(),
-            income: selectedSlidingSelector == 1
-                ? null
-                : selectedSlidingSelector == 2
-                    ? false
-                    : true,
-            sticky: false,
-            slivers: false,
+          ),
+          AnimatedSize(
+            duration: Duration(milliseconds: 600),
+            curve: Curves.easeInOutCubicEmphasized,
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: Column(
+                key: ValueKey(selectedSlidingSelector),
+                children: [
+                  ...getTransactionsSlivers(
+                    DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day - 7,
+                    ),
+                    DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day + 1,
+                    ),
+                    income: selectedSlidingSelector == 1
+                        ? null
+                        : selectedSlidingSelector == 2
+                            ? false
+                            : true,
+                    sticky: false,
+                    slivers: false,
+                  ),
+                ],
+              ),
+            ),
           ),
           Container(height: 7),
           Center(

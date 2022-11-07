@@ -252,10 +252,12 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 }
 
 class UpcomingTransactionDateHeader extends StatelessWidget {
-  const UpcomingTransactionDateHeader({Key? key, required this.transaction})
+  const UpcomingTransactionDateHeader(
+      {Key? key, required this.transaction, this.small = false})
       : super(key: key);
 
   final Transaction transaction;
+  final bool small;
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +266,8 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
             .difference(transaction.dateCreated)
             .inDays;
     return Padding(
-      padding: const EdgeInsets.only(left: 19, bottom: 3, right: 19),
+      padding: EdgeInsets.only(
+          left: (small ? 16 : 19), bottom: 3, right: (small ? 16 : 19)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -272,19 +275,21 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
             children: [
               TextFont(
                 text: getWordedDateShortMore(transaction.dateCreated),
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontWeight: small ? FontWeight.normal : FontWeight.bold,
+                fontSize: small ? 14 : 18,
+                textColor:
+                    small ? Theme.of(context).colorScheme.textLight : null,
               ),
               daysDifference != 0
                   ? TextFont(
-                      fontSize: 16,
+                      fontSize: small ? 14 : 16,
                       textColor: Theme.of(context).colorScheme.textLight,
                       text: " • " +
                           daysDifference.abs().toString() +
                           " " +
                           (daysDifference.abs() == 1 ? "day" : "days") +
                           (daysDifference > 0 ? " overdue" : ""),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: small ? FontWeight.normal : FontWeight.bold,
                     )
                   : SizedBox(),
             ],
@@ -298,7 +303,7 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                       color: dynamicPastel(
                           context, Theme.of(context).colorScheme.primary,
                           amount: 0.4),
-                      size: 16,
+                      size: small ? 12 : 16,
                     ),
                     SizedBox(width: 3),
                     TextFont(
@@ -308,7 +313,7 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                               ? nameRecurrence[transaction.reoccurrence]
                               : namesRecurrence[transaction.reoccurrence]),
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: small ? 14 : 18,
                       textColor: dynamicPastel(
                           context, Theme.of(context).colorScheme.primary,
                           amount: 0.4),

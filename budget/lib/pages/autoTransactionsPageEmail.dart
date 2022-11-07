@@ -16,9 +16,11 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -38,6 +40,7 @@ import 'package:budget/main.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:pausable_timer/pausable_timer.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
@@ -118,7 +121,7 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
           description:
               "Parse Gmail emails on app launch. Every email is only scanned once.",
           initialValue: canReadEmails,
-          icon: Icons.mark_unread_chat_alt_rounded,
+          icon: Icons.mark_email_unread_rounded,
         ),
         IgnorePointer(
           ignoring: !canReadEmails,
@@ -138,6 +141,8 @@ Future<void> parseEmailsInBackground(context) async {
   //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
   if (entireAppLoaded == false) {
     if (appStateSettings["AutoTransactions-canReadEmails"] == true) {
+      List<Transaction> transactionsToAdd = [];
+      Stopwatch stopwatch = new Stopwatch()..start();
       print("Scanning emails");
 
       bool hasSignedIn = false;
@@ -166,6 +171,23 @@ Future<void> parseEmailsInBackground(context) async {
           .list(user!.id.toString(), maxResults: amountOfEmails);
 
       int currentEmailIndex = 0;
+
+      List<ScannerTemplate> scannerTemplates =
+          await database.getAllScannerTemplates();
+      if (scannerTemplates.length <= 0) {
+        openSnackbar(
+          SnackbarMessage(
+            title:
+                "You have not setup the email scanning configuration in settings.",
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AutoTransactionsPageEmail()));
+            },
+          ),
+        );
+      }
       for (gMail.Message message in results.messages!) {
         currentEmailIndex++;
         loadingProgressKey.currentState!
@@ -195,48 +217,45 @@ Future<void> parseEmailsInBackground(context) async {
         }
         print("Adding transaction based on email");
 
-        String emailContains =
-            appStateSettings["EmailAutoTransactions-emailContains"] ?? "";
-        String amountTransactionBefore =
-            appStateSettings["EmailAutoTransactions-amountTransactionBefore"] ??
-                "";
-        String amountTransactionAfter =
-            appStateSettings["EmailAutoTransactions-amountTransactionAfter"] ??
-                "";
-        String titleTransactionBefore =
-            appStateSettings["EmailAutoTransactions-titleTransactionBefore"] ??
-                "";
-        String titleTransactionAfter =
-            appStateSettings["EmailAutoTransactions-titleTransactionAfter"] ??
-                "";
         String? title;
         double? amountDouble;
 
-        if (emailContains == "" ||
-            (amountTransactionBefore == "" && amountTransactionAfter == "") ||
-            (titleTransactionBefore == "" && titleTransactionAfter == "")) {
-          openSnackbar(
-            SnackbarMessage(
-              title:
-                  "You have not setup the email scanning configuration in settings.",
-            ),
-          );
-          break;
+        bool doesEmailContain = false;
+        ScannerTemplate? templateFound;
+        for (ScannerTemplate scannerTemplate in scannerTemplates) {
+          if (messageString.contains(scannerTemplate.contains)) {
+            doesEmailContain = true;
+            templateFound = scannerTemplate;
+            title = getTransactionTitleFromEmail(
+                context,
+                messageString,
+                scannerTemplate.titleTransactionBefore,
+                scannerTemplate.titleTransactionAfter);
+            amountDouble = getTransactionAmountFromEmail(
+                context,
+                messageString,
+                scannerTemplate.amountTransactionBefore,
+                scannerTemplate.amountTransactionAfter);
+            break;
+          }
         }
-        if (messageString.contains(emailContains) == false) {
+
+        if (doesEmailContain == false) {
           emailsParsed.insert(0, message.id!);
           continue;
         }
-        title = getTransactionTitleFromEmail(context, messageString,
-            titleTransactionBefore, titleTransactionAfter);
-        amountDouble = getTransactionAmountFromEmail(context, messageString,
-            amountTransactionBefore, amountTransactionAfter);
 
         if (title == null) {
           openSnackbar(
             SnackbarMessage(
               title:
                   "Couldn't find title in email. Check the email settings page for more information.",
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AutoTransactionsPageEmail()));
+              },
             ),
           );
           emailsParsed.insert(0, message.id!);
@@ -246,6 +265,12 @@ Future<void> parseEmailsInBackground(context) async {
             SnackbarMessage(
               title:
                   "Couldn't find amount in email. Check the email settings page for more information.",
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AutoTransactionsPageEmail()));
+              },
             ),
           );
 
@@ -264,23 +289,9 @@ Future<void> parseEmailsInBackground(context) async {
                   .categoryPk;
         } else {
           print("NO FOUND TITLE");
-          categoryId =
-              appStateSettings["EmailAutoTransactions-defaultCategory"];
+          categoryId = templateFound!.defaultCategoryFk;
         }
         print("NEXT");
-
-        try {
-          // Check if the wallet exists
-          await database.getWalletInstance(
-              appStateSettings["EmailAutoTransactions-setWallet"]);
-        } catch (e) {
-          print(
-              "This wallet has been deleted or is missing. Defaulting to selected.");
-          updateSettings(
-            "EmailAutoTransactions-setWallet",
-            appStateSettings["selectedWallet"],
-          );
-        }
 
         TransactionCategory selectedCategory;
         try {
@@ -292,6 +303,12 @@ Future<void> parseEmailsInBackground(context) async {
               title:
                   "The transaction category cannot be found for this email! " +
                       e.toString(),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AutoTransactionsPageEmail()));
+              },
             ),
           );
           continue;
@@ -301,27 +318,36 @@ Future<void> parseEmailsInBackground(context) async {
 
         await addAssociatedTitles(title, selectedCategory);
 
-        await database.createOrUpdateTransaction(
-          Transaction(
-            transactionPk: messageDate.millisecondsSinceEpoch,
-            name: title,
-            amount: (amountDouble).abs() * -1,
-            note: "",
-            categoryFk: categoryId,
-            walletFk: appStateSettings["EmailAutoTransactions-setWallet"],
-            dateCreated: DateTime(
-                DateTime.now().year, DateTime.now().month, DateTime.now().day),
-            income: false,
-            paid: true,
-            skipPaid: false,
-            methodAdded: MethodAdded.email,
-          ),
+        Transaction transactionToAdd = Transaction(
+          transactionPk: messageDate.millisecondsSinceEpoch,
+          name: title,
+          amount: (amountDouble).abs() * -1,
+          note: "",
+          categoryFk: categoryId,
+          walletFk: appStateSettings["selectedWallet"],
+          dateCreated:
+              DateTime(messageDate.year, messageDate.month, messageDate.day),
+          income: false,
+          paid: true,
+          skipPaid: false,
+          methodAdded: MethodAdded.email,
         );
+        transactionsToAdd.add(transactionToAdd);
         openSnackbar(
           SnackbarMessage(
-            title: "Added a transaction from email",
+            title: templateFound!.templateName + ": " + "From Email",
             description: title,
             icon: Icons.payments_rounded,
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddTransactionPage(
+                      title: "Edit Transaction",
+                      transaction: transactionToAdd,
+                    ),
+                  ));
+            },
           ),
         );
         // TODO have setting so they can choose if the emails are markes as read
@@ -331,6 +357,16 @@ Future<void> parseEmailsInBackground(context) async {
             message.id!);
 
         emailsParsed.insert(0, message.id!);
+      }
+      // wait for intro animation to finish
+      if (Duration(milliseconds: 2500) > stopwatch.elapsed) {
+        print("waited extra" +
+            (Duration(milliseconds: 2500) - stopwatch.elapsed).toString());
+        await Future.delayed(
+            Duration(milliseconds: 2500) - stopwatch.elapsed, () {});
+      }
+      for (Transaction transaction in transactionsToAdd) {
+        await database.createOrUpdateTransaction(transaction);
       }
       List<dynamic> emails = [
         ...emailsParsed
@@ -347,6 +383,12 @@ Future<void> parseEmailsInBackground(context) async {
           description: newEmailCount.toString() +
               pluralString(newEmailCount == 1, " new email"),
           icon: Icons.mark_email_unread_rounded,
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AutoTransactionsPageEmail()));
+          },
         ),
       );
     }
@@ -389,16 +431,6 @@ class GmailApiScreen extends StatefulWidget {
 class _GmailApiScreenState extends State<GmailApiScreen> {
   bool loaded = false;
   bool loading = false;
-  String emailContains =
-      appStateSettings["EmailAutoTransactions-emailContains"] ?? "";
-  String amountTransactionBefore =
-      appStateSettings["EmailAutoTransactions-amountTransactionBefore"] ?? "";
-  String amountTransactionAfter =
-      appStateSettings["EmailAutoTransactions-amountTransactionAfter"] ?? "";
-  String titleTransactionBefore =
-      appStateSettings["EmailAutoTransactions-titleTransactionBefore"] ?? "";
-  String titleTransactionAfter =
-      appStateSettings["EmailAutoTransactions-titleTransactionAfter"] ?? "";
   int amountOfEmails =
       appStateSettings["EmailAutoTransactions-amountOfEmails"] ?? 10;
 
@@ -421,13 +453,19 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
       setState(() {
         loaded = true;
       });
+      int currentEmailIndex = 0;
       for (gMail.Message message in results.messages!) {
         gMail.Message messageData =
             await gmailApi.users.messages.get(user!.id.toString(), message.id!);
         // print(DateTime.fromMillisecondsSinceEpoch(
         //     int.parse(messageData.internalDate ?? "")));
         messagesList.add(messageData);
-        if (mounted) setState(() {});
+        currentEmailIndex++;
+        loadingProgressKey.currentState!
+            .setProgressPercentage(currentEmailIndex / amountOfEmails);
+        if (mounted) {
+          setState(() {});
+        }
       }
     }
     loading = false;
@@ -446,18 +484,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          emailContains == "" ||
-                  (amountTransactionBefore == "" &&
-                      amountTransactionAfter == "") ||
-                  (titleTransactionBefore == "" && titleTransactionAfter == "")
-              ? StatusBox(
-                  title: "Email Configuration Missing",
-                  description:
-                      "Please go through the configuration process below.",
-                  icon: Icons.warning_rounded,
-                  color: Theme.of(context).errorColor,
-                )
-              : Container(),
           SettingsContainerDropdown(
             title: "Amount to Parse",
             description:
@@ -472,80 +498,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
             },
             icon: Icons.format_list_numbered_rounded,
           ),
-          Opacity(
-            opacity: 0.4,
-            child: StreamBuilder<List<TransactionWallet>>(
-                stream: database.watchAllWallets(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<String> walletNames = [];
-                    List<int> walletKeys = [];
-                    for (TransactionWallet wallet in snapshot.data!) {
-                      walletNames.add(wallet.name);
-                      walletKeys.add(wallet.walletPk);
-                    }
-                    return SettingsContainerDropdown(
-                      title: "Wallet",
-                      description:
-                          "Select the wallet transactions will be added to.",
-                      initial: walletKeys.contains(appStateSettings[
-                              "EmailAutoTransactions-setWallet"])
-                          ? walletNames[walletKeys.indexOf(appStateSettings[
-                              "EmailAutoTransactions-setWallet"])]
-                          : walletNames[0],
-                      items: walletNames,
-                      onChanged: (value) async {
-                        TransactionWallet wallet =
-                            await database.getWalletInstanceGivenName(value);
-                        updateSettings(
-                          "EmailAutoTransactions-setWallet",
-                          wallet.walletPk,
-                        );
-                      },
-                      icon: Icons.wallet_rounded,
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-          ),
-          Opacity(
-            opacity: 0.4,
-            child: StreamBuilder<List<TransactionCategory>>(
-                stream: database.watchAllCategories(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<String> categoryNames = [];
-                    List<int> categoryKeys = [];
-                    for (TransactionCategory category in snapshot.data!) {
-                      categoryNames.add(category.name);
-                      categoryKeys.add(category.categoryPk);
-                    }
-                    return SettingsContainerDropdown(
-                      title: "Default Category",
-                      description:
-                          "If an associated title is found, it will get added to that category.",
-                      initial: categoryKeys.contains(appStateSettings[
-                              "EmailAutoTransactions-defaultCategory"])
-                          ? categoryNames[categoryKeys.indexOf(appStateSettings[
-                              "EmailAutoTransactions-defaultCategory"])]
-                          : categoryNames[0],
-                      items: categoryNames,
-                      onChanged: (value) async {
-                        TransactionCategory category =
-                            await database.getCategoryInstanceGivenName(value);
-                        updateSettings(
-                          "EmailAutoTransactions-defaultCategory",
-                          category.categoryPk,
-                        );
-                      },
-                      icon: Icons.category_rounded,
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-          ),
           Padding(
             padding: const EdgeInsets.only(top: 13, bottom: 4, left: 15),
             child: TextFont(
@@ -554,30 +506,138 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 0, bottom: 4, left: 16),
-            child: TextFont(
-              text: "Select an email from your bank to start the confugration.",
-              fontSize: 13,
-              maxLines: 10,
-            ),
+          SizedBox(height: 5),
+          StreamBuilder<List<ScannerTemplate>>(
+            stream: database.watchAllScannerTemplates(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.length <= 0) {
+                  return Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: StatusBox(
+                      title: "Email Configuration Missing",
+                      description: "Please add a configuration.",
+                      icon: Icons.warning_rounded,
+                      color: Theme.of(context).errorColor,
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    for (ScannerTemplate scannerTemplate in snapshot.data!)
+                      ScannerTemplateEntry(
+                        messagesList: messagesList,
+                        scannerTemplate: scannerTemplate,
+                      )
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            },
           ),
-          AddButton(onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddEmailTemplate(
-                  title: "Add Template",
-                  messagesList: messagesList,
-                ),
-              ),
-            );
-          }),
+          OpenContainerNavigation(
+            openPage: AddEmailTemplate(
+              title: "Add Template",
+              messagesList: messagesList,
+            ),
+            borderRadius: 15,
+            button: (openContainer) {
+              return Row(
+                children: [
+                  Expanded(
+                    child: AddButton(
+                      onTap: openContainer,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          EmailsList(messagesList: messagesList)
         ],
       );
     } else {
-      return Center(child: CircularProgressIndicator());
+      return Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Center(child: CircularProgressIndicator()),
+      );
     }
+  }
+}
+
+class ScannerTemplateEntry extends StatelessWidget {
+  const ScannerTemplateEntry({
+    required this.scannerTemplate,
+    required this.messagesList,
+    super.key,
+  });
+  final ScannerTemplate scannerTemplate;
+  final List<gMail.Message> messagesList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      child: OpenContainerNavigation(
+        openPage: AddEmailTemplate(
+          title: "Add Template",
+          messagesList: messagesList,
+          scannerTemplate: scannerTemplate,
+        ),
+        borderRadius: 15,
+        button: (openContainer) {
+          return Tappable(
+            borderRadius: 15,
+            color: Theme.of(context).colorScheme.lightDarkAccent,
+            onTap: openContainer,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 25,
+                right: 15,
+                top: 10,
+                bottom: 10,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextFont(
+                    text: scannerTemplate.templateName,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  ButtonIcon(
+                    onTap: () async {
+                      openPopup(
+                        context,
+                        title: "Delete " + scannerTemplate.templateName + "?",
+                        icon: Icons.delete_rounded,
+                        onCancel: () {
+                          Navigator.pop(context);
+                        },
+                        onCancelLabel: "Cancel",
+                        onSubmit: () async {
+                          await database.deleteScannerTemplate(
+                              scannerTemplate.scannerTemplatePk);
+                          Navigator.pop(context);
+                          openSnackbar(
+                            SnackbarMessage(
+                              title: "Deleted " + scannerTemplate.templateName,
+                              icon: Icons.delete,
+                            ),
+                          );
+                        },
+                        onSubmitLabel: "Delete",
+                      );
+                    },
+                    icon: Icons.delete_rounded,
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -589,11 +649,12 @@ String parseHtmlString(String htmlString) {
 }
 
 class EmailsList extends StatelessWidget {
-  const EmailsList(
-      {required this.messagesList,
-      this.onTap,
-      this.backgroundColor,
-      super.key});
+  const EmailsList({
+    required this.messagesList,
+    this.onTap,
+    this.backgroundColor,
+    super.key,
+  });
   final List<gMail.Message> messagesList;
   final Function(String)? onTap;
   final Color? backgroundColor;
@@ -684,13 +745,13 @@ class EmailsList extends StatelessWidget {
                             ? templateFound == null
                                 ? TextFont(
                                     fontSize: 19,
-                                    text: "Template: Not found.",
+                                    text: "Template Not found.",
                                     maxLines: 10,
                                     fontWeight: FontWeight.bold,
                                   )
                                 : TextFont(
                                     fontSize: 19,
-                                    text: "Template: " + templateFound,
+                                    text: templateFound,
                                     maxLines: 10,
                                     fontWeight: FontWeight.bold,
                                   )

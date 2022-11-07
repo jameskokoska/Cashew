@@ -75,20 +75,24 @@ List<Widget> getTransactionsSlivers(
                           : ""));
                 } else {
                   children.add(
-                    TransactionEntry(
-                      key: ValueKey(
-                          transactionList[realIndex].transaction.transactionPk),
-                      category: transactionList[realIndex].category,
-                      openPage: AddTransactionPage(
-                        title: "Edit Transaction",
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: TransactionEntry(
+                        key: ValueKey(transactionList[realIndex]
+                            .transaction
+                            .transactionPk),
+                        category: transactionList[realIndex].category,
+                        openPage: AddTransactionPage(
+                          title: "Edit Transaction",
+                          transaction: transactionList[realIndex].transaction,
+                        ),
                         transaction: transactionList[realIndex].transaction,
+                        onSelected: (Transaction transaction, bool selected) {
+                          if (onSelected != null)
+                            onSelected(transaction, selected);
+                        },
+                        listID: listID,
                       ),
-                      transaction: transactionList[realIndex].transaction,
-                      onSelected: (Transaction transaction, bool selected) {
-                        if (onSelected != null)
-                          onSelected(transaction, selected);
-                      },
-                      listID: listID,
                     ),
                   );
                 }

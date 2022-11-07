@@ -23,8 +23,6 @@ Map<String, dynamic> defaultPreferences() {
     "autoAddAssociatedTitles": true,
     "AutoTransactions-canReadEmails": false,
     "currencyIcon": "\$",
-    "EmailAutoTransactions-setWallet": 0,
-    "EmailAutoTransactions-defaultCategory": 0,
     "EmailAutoTransactions-amountOfEmails": 10,
     "autoBackups": true,
     "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),

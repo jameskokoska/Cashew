@@ -177,7 +177,10 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                   ),
                 ]),
                 child: Tappable(
-                    onTap: currentMessage?.onTap,
+                    onTap: () {
+                      currentMessage?.onTap!();
+                      animateOut();
+                    },
                     borderRadius: 13,
                     color: Theme.of(context).colorScheme.lightDarkAccent,
                     child: Padding(

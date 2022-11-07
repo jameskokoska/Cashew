@@ -305,8 +305,7 @@ class SettingsPageState extends State<SettingsPage>
         SettingsContainerOpenPage(
           openPage: AutoTransactionsPageEmail(),
           title: "Auto Email Transactions",
-          icon: Icons.outgoing_mail,
-          description: "(Beta)",
+          icon: Icons.mark_email_unread_rounded,
         ),
       ],
     );

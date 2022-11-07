@@ -135,7 +135,18 @@ Future<bool> signInGoogle(context,
     print(e);
     if (waitForCompletion == true) Navigator.of(context).pop();
     openSnackbar(
-      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      SnackbarMessage(
+        title: e.toString(),
+        icon: Icons.error_rounded,
+        onTap: () async {
+          await signInGoogle(context,
+              waitForCompletion: true, drivePermissions: true, next: () {});
+          if (appStateSettings["username"] == "") {
+            updateSettings("username", user!.displayName,
+                pagesNeedingRefresh: [0]);
+          }
+        },
+      ),
     );
     return false;
   }
