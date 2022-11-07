@@ -6,6 +6,8 @@ import 'dart:ui';
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
@@ -440,131 +442,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
     }
     if (loaded) {
       // If the Future is complete, display the preview.
-      List<Widget> messageTxt = [];
-      for (var m in messagesList) {
-        String messageShort = m.snippet ?? "";
-        String messageEncoded = m.payload?.parts?[0].body?.data ?? "";
-        String messageString;
-        if (messageEncoded == "") {
-          messageString = (m.snippet ?? "") +
-              "\n\n" +
-              "There was an error getting the rest of this email.";
-        } else {
-          messageString =
-              parseHtmlString(utf8.decode(base64.decode(messageEncoded)));
-        }
-        bool doesEmailContain = false;
-        String? title;
-        double? amountDouble;
-        if (messageString.contains(emailContains)) {
-          doesEmailContain = true;
-          title = getTransactionTitleFromEmail(context, messageString,
-              titleTransactionBefore, titleTransactionAfter);
-          amountDouble = getTransactionAmountFromEmail(context, messageString,
-              amountTransactionBefore, amountTransactionAfter);
-        }
 
-        messageTxt.add(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            child: Tappable(
-              borderRadius: 15,
-              color: doesEmailContain && (title == null || amountDouble == null)
-                  ? Theme.of(context)
-                      .colorScheme
-                      .selectableColorRed
-                      .withOpacity(0.5)
-                  : doesEmailContain
-                      ? Theme.of(context)
-                          .colorScheme
-                          .selectableColorGreen
-                          .withOpacity(0.5)
-                      : Theme.of(context).colorScheme.lightDarkAccent,
-              onTap: () {
-                openBottomSheet(
-                  context,
-                  selectSubjectText(
-                    messageString,
-                    () {
-                      openBottomSheet(
-                        context,
-                        selectAmountText(
-                          messageString,
-                          () {
-                            openBottomSheet(
-                                context, selectTitleText(messageString, () {}));
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    doesEmailContain && (title == null || amountDouble == null)
-                        ? Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: TextFont(
-                              text: "Email parsing failed.",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                            ),
-                          )
-                        : SizedBox(),
-                    doesEmailContain
-                        ? title == null
-                            ? TextFont(
-                                fontSize: 15,
-                                text: "Title: Not found.",
-                                maxLines: 10,
-                                fontWeight: FontWeight.bold,
-                              )
-                            : TextFont(
-                                fontSize: 15,
-                                text: "Title: " + title,
-                                maxLines: 10,
-                                fontWeight: FontWeight.bold,
-                              )
-                        : SizedBox(),
-                    doesEmailContain
-                        ? amountDouble == null
-                            ? Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: TextFont(
-                                  fontSize: 15,
-                                  text: "Amount: Not found / invalid number.",
-                                  maxLines: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: TextFont(
-                                  fontSize: 15,
-                                  text:
-                                      "Amount: " + convertToMoney(amountDouble),
-                                  maxLines: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                        : SizedBox(),
-                    TextFont(
-                      fontSize: 13,
-                      text: messageShort,
-                      maxLines: 10,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -669,58 +547,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 }),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 4, left: 15),
-            child: TextFont(
-              text: "Sample Email",
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(),
-                SizedBox(height: 5),
-                TextFont(
-                  text: emailContains,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  maxLines: 10,
-                  textColor: Theme.of(context).colorScheme.primary,
-                ),
-                SizedBox(height: 2),
-                TextFont(
-                  text: amountTransactionBefore +
-                      "..." +
-                      " [Amount] " +
-                      "..." +
-                      amountTransactionAfter,
-                  fontSize: 16,
-                  maxLines: 10,
-                  textColor: Theme.of(context).colorScheme.secondary,
-                ),
-                SizedBox(height: 2),
-                TextFont(
-                  text: titleTransactionBefore +
-                      "..." +
-                      " [Title] " +
-                      "..." +
-                      titleTransactionAfter,
-                  fontSize: 16,
-                  maxLines: 10,
-                  textColor: Theme.of(context).colorScheme.tertiary,
-                ),
-              ],
-            ),
-          ),
-          Padding(
             padding: const EdgeInsets.only(top: 13, bottom: 4, left: 15),
             child: TextFont(
               text: "Configure",
@@ -736,215 +562,22 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
               maxLines: 10,
             ),
           ),
-          ...messageTxt
+          AddButton(onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddEmailTemplate(
+                  title: "Add Template",
+                  messagesList: messagesList,
+                ),
+              ),
+            );
+          }),
         ],
       );
     } else {
       return Center(child: CircularProgressIndicator());
     }
-  }
-
-  int characterPadding = 8;
-
-  Widget selectSubjectText(String messageString, VoidCallback next) {
-    return PopupFramework(
-      title: "Select Subject Text",
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFont(
-            text: "Only these emails that contain this text will be scanned.",
-            fontSize: 14,
-            maxLines: 10,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 5),
-          TextFont(
-            text:
-                "Long press/double tap to select text. Press the 'Done' button at the bottom after selected",
-            fontSize: 14,
-            maxLines: 10,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 15),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: SelectableText(
-                messageString,
-                toolbarOptions: ToolbarOptions(
-                    copy: false, cut: false, paste: false, selectAll: false),
-                onSelectionChanged: (selection, changeCause) {
-                  emailContains = messageString.substring(
-                      selection.baseOffset, selection.extentOffset);
-                },
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
-          Button(
-            label: "Done",
-            onTap: () {
-              Navigator.pop(context);
-              next();
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget selectAmountText(String messageString, VoidCallback next) {
-    return PopupFramework(
-      title: "Select Amount",
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFont(
-            text: "Select the amount of the transaction.",
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            maxLines: 10,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 5),
-          TextFont(
-            text:
-                "Long press/double tap to select text. Press the 'Done' button at the bottom after selected",
-            fontSize: 14,
-            maxLines: 10,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 15),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: SelectableText(
-                messageString,
-                toolbarOptions: ToolbarOptions(
-                    copy: false, cut: false, paste: false, selectAll: false),
-                onSelectionChanged: (selection, changeCause) {
-                  if (selection.baseOffset - characterPadding < 0) {
-                    amountTransactionBefore =
-                        messageString.substring(0, selection.baseOffset);
-                  } else {
-                    amountTransactionBefore = messageString.substring(
-                        selection.baseOffset - characterPadding,
-                        selection.baseOffset);
-                  }
-
-                  if (selection.extentOffset + characterPadding >
-                      messageString.length - 1) {
-                    amountTransactionAfter = messageString.substring(
-                        selection.extentOffset, messageString.length);
-                  } else {
-                    amountTransactionAfter = messageString.substring(
-                        selection.extentOffset,
-                        selection.extentOffset + characterPadding);
-                  }
-                },
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
-          Button(
-            label: "Done",
-            onTap: () {
-              Navigator.pop(context);
-              next();
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget selectTitleText(String messageString, VoidCallback next) {
-    return PopupFramework(
-      title: "Select Title",
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFont(
-            text: "Select the title of the transaction.",
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            maxLines: 10,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 5),
-          TextFont(
-            text:
-                "Long press/double tap to select text. Press the 'Done' button at the bottom after selected",
-            fontSize: 14,
-            maxLines: 10,
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 15),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: SelectableText(
-                messageString,
-                toolbarOptions: ToolbarOptions(
-                    copy: false, cut: false, paste: false, selectAll: false),
-                onSelectionChanged: (selection, changeCause) {
-                  if (selection.baseOffset - characterPadding < 0) {
-                    titleTransactionBefore =
-                        messageString.substring(0, selection.baseOffset);
-                  } else {
-                    titleTransactionBefore = messageString.substring(
-                        selection.baseOffset - characterPadding,
-                        selection.baseOffset);
-                  }
-
-                  if (selection.extentOffset + characterPadding >
-                      messageString.length - 1) {
-                    titleTransactionAfter = messageString.substring(
-                        selection.extentOffset, messageString.length);
-                  } else {
-                    titleTransactionAfter = messageString.substring(
-                        selection.extentOffset,
-                        selection.extentOffset + characterPadding);
-                  }
-                },
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
-          Button(
-            label: "Done",
-            onTap: () {
-              next();
-              setState(() {});
-              updateSettings(
-                  "EmailAutoTransactions-emailContains", emailContains);
-              updateSettings("EmailAutoTransactions-amountTransactionBefore",
-                  amountTransactionBefore);
-              updateSettings("EmailAutoTransactions-amountTransactionAfter",
-                  amountTransactionAfter);
-              updateSettings("EmailAutoTransactions-titleTransactionBefore",
-                  titleTransactionBefore);
-              updateSettings("EmailAutoTransactions-titleTransactionAfter",
-                  titleTransactionAfter);
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-    );
   }
 }
 
@@ -953,4 +586,172 @@ String parseHtmlString(String htmlString) {
   final String parsedString = parse(document.body!.text).documentElement!.text;
 
   return parsedString;
+}
+
+class EmailsList extends StatelessWidget {
+  const EmailsList(
+      {required this.messagesList,
+      this.onTap,
+      this.backgroundColor,
+      super.key});
+  final List<gMail.Message> messagesList;
+  final Function(String)? onTap;
+  final Color? backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<ScannerTemplate>>(
+      stream: database.watchAllScannerTemplates(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<ScannerTemplate> scannerTemplates = snapshot.data!;
+          List<Widget> messageTxt = [];
+          for (var m in messagesList) {
+            String messageShort = m.snippet ?? "";
+            String messageEncoded = m.payload?.parts?[0].body?.data ?? "";
+            String messageString;
+            if (messageEncoded == "") {
+              messageString = (m.snippet ?? "") +
+                  "\n\n" +
+                  "There was an error getting the rest of this email.";
+            } else {
+              messageString =
+                  parseHtmlString(utf8.decode(base64.decode(messageEncoded)));
+            }
+            bool doesEmailContain = false;
+            String? title;
+            double? amountDouble;
+            String? templateFound;
+
+            for (ScannerTemplate scannerTemplate in scannerTemplates) {
+              if (messageString.contains(scannerTemplate.contains)) {
+                doesEmailContain = true;
+                templateFound = scannerTemplate.templateName;
+                title = getTransactionTitleFromEmail(
+                    context,
+                    messageString,
+                    scannerTemplate.titleTransactionBefore,
+                    scannerTemplate.titleTransactionAfter);
+                amountDouble = getTransactionAmountFromEmail(
+                    context,
+                    messageString,
+                    scannerTemplate.amountTransactionBefore,
+                    scannerTemplate.amountTransactionAfter);
+                break;
+              }
+            }
+
+            messageTxt.add(
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                child: Tappable(
+                  borderRadius: 15,
+                  color: doesEmailContain &&
+                          (title == null || amountDouble == null)
+                      ? Theme.of(context)
+                          .colorScheme
+                          .selectableColorRed
+                          .withOpacity(0.5)
+                      : doesEmailContain
+                          ? Theme.of(context)
+                              .colorScheme
+                              .selectableColorGreen
+                              .withOpacity(0.5)
+                          : backgroundColor ??
+                              Theme.of(context).colorScheme.lightDarkAccent,
+                  onTap: () {
+                    if (onTap != null) onTap!(messageString);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        doesEmailContain &&
+                                (title == null || amountDouble == null)
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: TextFont(
+                                  text: "Email parsing failed.",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                ),
+                              )
+                            : SizedBox(),
+                        doesEmailContain
+                            ? templateFound == null
+                                ? TextFont(
+                                    fontSize: 19,
+                                    text: "Template: Not found.",
+                                    maxLines: 10,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                                : TextFont(
+                                    fontSize: 19,
+                                    text: "Template: " + templateFound,
+                                    maxLines: 10,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                            : SizedBox(),
+                        doesEmailContain
+                            ? title == null
+                                ? TextFont(
+                                    fontSize: 15,
+                                    text: "Title: Not found.",
+                                    maxLines: 10,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                                : TextFont(
+                                    fontSize: 15,
+                                    text: "Title: " + title,
+                                    maxLines: 10,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                            : SizedBox(),
+                        doesEmailContain
+                            ? amountDouble == null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: TextFont(
+                                      fontSize: 15,
+                                      text:
+                                          "Amount: Not found / invalid number.",
+                                      maxLines: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: TextFont(
+                                      fontSize: 15,
+                                      text: "Amount: " +
+                                          convertToMoney(amountDouble),
+                                      maxLines: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                            : SizedBox(),
+                        TextFont(
+                          fontSize: 13,
+                          text: messageShort,
+                          maxLines: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+          return Column(
+            children: messageTxt,
+          );
+        } else {
+          return Container(width: 100, height: 100, color: Colors.white);
+        }
+      },
+    );
+  }
 }

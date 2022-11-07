@@ -187,6 +187,23 @@ class AppSettings extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
 }
 
+@DataClassName('ScannerTemplate')
+class ScannerTemplates extends Table {
+  IntColumn get scannerTemplatePk => integer().autoIncrement()();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+  TextColumn get templateName => text().withLength(max: NAME_LIMIT)();
+  TextColumn get contains => text().withLength(max: NAME_LIMIT)();
+  TextColumn get titleTransactionBefore => text().withLength(max: NAME_LIMIT)();
+  TextColumn get titleTransactionAfter => text().withLength(max: NAME_LIMIT)();
+  TextColumn get amountTransactionBefore =>
+      text().withLength(max: NAME_LIMIT)();
+  TextColumn get amountTransactionAfter => text().withLength(max: NAME_LIMIT)();
+  IntColumn get defaultCategoryFk =>
+      integer().references(Categories, #categoryPk)();
+  IntColumn get walletFk => integer().references(Wallets, #walletPk)();
+}
+
 class TransactionWithCategory {
   final TransactionCategory category;
   final Transaction transaction;
@@ -212,6 +229,7 @@ class CategoryWithTotal {
   AssociatedTitles,
   Budgets,
   AppSettings,
+  ScannerTemplates,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -235,6 +253,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 12) {
             await migrator.addColumn(
                 transactions, transactions.createdAnotherFutureTransaction);
+          }
+          if (from <= 13) {
+            await migrator.createTable($ScannerTemplatesTable(database));
           }
         },
       );
@@ -736,6 +757,14 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<List<ScannerTemplate>> watchAllScannerTemplates(
+      {int? limit, int? offset}) {
+    return (select(scannerTemplates)
+          ..orderBy([(s) => OrderingTerm.asc(s.dateCreated)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch();
+  }
+
   Future<List<TransactionWallet>> getAllWallets({int? limit, int? offset}) {
     return (select(wallets)
           ..orderBy([(w) => OrderingTerm.asc(w.dateCreated)])
@@ -827,6 +856,11 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     return into(wallets).insertOnConflictUpdate(wallet);
+  }
+
+  //create or update a new wallet
+  Future<int> createOrUpdateScannerTemplate(ScannerTemplate scannerTemplate) {
+    return into(scannerTemplates).insertOnConflictUpdate(scannerTemplate);
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(

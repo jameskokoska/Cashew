@@ -2989,6 +2989,553 @@ class $AppSettingsTable extends AppSettings
   }
 }
 
+class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
+  final int scannerTemplatePk;
+  final DateTime dateCreated;
+  final String templateName;
+  final String contains;
+  final String titleTransactionBefore;
+  final String titleTransactionAfter;
+  final String amountTransactionBefore;
+  final String amountTransactionAfter;
+  final int defaultCategoryFk;
+  final int walletFk;
+  ScannerTemplate(
+      {required this.scannerTemplatePk,
+      required this.dateCreated,
+      required this.templateName,
+      required this.contains,
+      required this.titleTransactionBefore,
+      required this.titleTransactionAfter,
+      required this.amountTransactionBefore,
+      required this.amountTransactionAfter,
+      required this.defaultCategoryFk,
+      required this.walletFk});
+  factory ScannerTemplate.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ScannerTemplate(
+      scannerTemplatePk: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}scanner_template_pk'])!,
+      dateCreated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
+      templateName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}template_name'])!,
+      contains: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}contains'])!,
+      titleTransactionBefore: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}title_transaction_before'])!,
+      titleTransactionAfter: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}title_transaction_after'])!,
+      amountTransactionBefore: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}amount_transaction_before'])!,
+      amountTransactionAfter: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}amount_transaction_after'])!,
+      defaultCategoryFk: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}default_category_fk'])!,
+      walletFk: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}wallet_fk'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['scanner_template_pk'] = Variable<int>(scannerTemplatePk);
+    map['date_created'] = Variable<DateTime>(dateCreated);
+    map['template_name'] = Variable<String>(templateName);
+    map['contains'] = Variable<String>(contains);
+    map['title_transaction_before'] = Variable<String>(titleTransactionBefore);
+    map['title_transaction_after'] = Variable<String>(titleTransactionAfter);
+    map['amount_transaction_before'] =
+        Variable<String>(amountTransactionBefore);
+    map['amount_transaction_after'] = Variable<String>(amountTransactionAfter);
+    map['default_category_fk'] = Variable<int>(defaultCategoryFk);
+    map['wallet_fk'] = Variable<int>(walletFk);
+    return map;
+  }
+
+  ScannerTemplatesCompanion toCompanion(bool nullToAbsent) {
+    return ScannerTemplatesCompanion(
+      scannerTemplatePk: Value(scannerTemplatePk),
+      dateCreated: Value(dateCreated),
+      templateName: Value(templateName),
+      contains: Value(contains),
+      titleTransactionBefore: Value(titleTransactionBefore),
+      titleTransactionAfter: Value(titleTransactionAfter),
+      amountTransactionBefore: Value(amountTransactionBefore),
+      amountTransactionAfter: Value(amountTransactionAfter),
+      defaultCategoryFk: Value(defaultCategoryFk),
+      walletFk: Value(walletFk),
+    );
+  }
+
+  factory ScannerTemplate.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ScannerTemplate(
+      scannerTemplatePk: serializer.fromJson<int>(json['scannerTemplatePk']),
+      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      templateName: serializer.fromJson<String>(json['templateName']),
+      contains: serializer.fromJson<String>(json['contains']),
+      titleTransactionBefore:
+          serializer.fromJson<String>(json['titleTransactionBefore']),
+      titleTransactionAfter:
+          serializer.fromJson<String>(json['titleTransactionAfter']),
+      amountTransactionBefore:
+          serializer.fromJson<String>(json['amountTransactionBefore']),
+      amountTransactionAfter:
+          serializer.fromJson<String>(json['amountTransactionAfter']),
+      defaultCategoryFk: serializer.fromJson<int>(json['defaultCategoryFk']),
+      walletFk: serializer.fromJson<int>(json['walletFk']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'scannerTemplatePk': serializer.toJson<int>(scannerTemplatePk),
+      'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'templateName': serializer.toJson<String>(templateName),
+      'contains': serializer.toJson<String>(contains),
+      'titleTransactionBefore':
+          serializer.toJson<String>(titleTransactionBefore),
+      'titleTransactionAfter': serializer.toJson<String>(titleTransactionAfter),
+      'amountTransactionBefore':
+          serializer.toJson<String>(amountTransactionBefore),
+      'amountTransactionAfter':
+          serializer.toJson<String>(amountTransactionAfter),
+      'defaultCategoryFk': serializer.toJson<int>(defaultCategoryFk),
+      'walletFk': serializer.toJson<int>(walletFk),
+    };
+  }
+
+  ScannerTemplate copyWith(
+          {int? scannerTemplatePk,
+          DateTime? dateCreated,
+          String? templateName,
+          String? contains,
+          String? titleTransactionBefore,
+          String? titleTransactionAfter,
+          String? amountTransactionBefore,
+          String? amountTransactionAfter,
+          int? defaultCategoryFk,
+          int? walletFk}) =>
+      ScannerTemplate(
+        scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
+        dateCreated: dateCreated ?? this.dateCreated,
+        templateName: templateName ?? this.templateName,
+        contains: contains ?? this.contains,
+        titleTransactionBefore:
+            titleTransactionBefore ?? this.titleTransactionBefore,
+        titleTransactionAfter:
+            titleTransactionAfter ?? this.titleTransactionAfter,
+        amountTransactionBefore:
+            amountTransactionBefore ?? this.amountTransactionBefore,
+        amountTransactionAfter:
+            amountTransactionAfter ?? this.amountTransactionAfter,
+        defaultCategoryFk: defaultCategoryFk ?? this.defaultCategoryFk,
+        walletFk: walletFk ?? this.walletFk,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ScannerTemplate(')
+          ..write('scannerTemplatePk: $scannerTemplatePk, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('templateName: $templateName, ')
+          ..write('contains: $contains, ')
+          ..write('titleTransactionBefore: $titleTransactionBefore, ')
+          ..write('titleTransactionAfter: $titleTransactionAfter, ')
+          ..write('amountTransactionBefore: $amountTransactionBefore, ')
+          ..write('amountTransactionAfter: $amountTransactionAfter, ')
+          ..write('defaultCategoryFk: $defaultCategoryFk, ')
+          ..write('walletFk: $walletFk')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      scannerTemplatePk,
+      dateCreated,
+      templateName,
+      contains,
+      titleTransactionBefore,
+      titleTransactionAfter,
+      amountTransactionBefore,
+      amountTransactionAfter,
+      defaultCategoryFk,
+      walletFk);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ScannerTemplate &&
+          other.scannerTemplatePk == this.scannerTemplatePk &&
+          other.dateCreated == this.dateCreated &&
+          other.templateName == this.templateName &&
+          other.contains == this.contains &&
+          other.titleTransactionBefore == this.titleTransactionBefore &&
+          other.titleTransactionAfter == this.titleTransactionAfter &&
+          other.amountTransactionBefore == this.amountTransactionBefore &&
+          other.amountTransactionAfter == this.amountTransactionAfter &&
+          other.defaultCategoryFk == this.defaultCategoryFk &&
+          other.walletFk == this.walletFk);
+}
+
+class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
+  final Value<int> scannerTemplatePk;
+  final Value<DateTime> dateCreated;
+  final Value<String> templateName;
+  final Value<String> contains;
+  final Value<String> titleTransactionBefore;
+  final Value<String> titleTransactionAfter;
+  final Value<String> amountTransactionBefore;
+  final Value<String> amountTransactionAfter;
+  final Value<int> defaultCategoryFk;
+  final Value<int> walletFk;
+  const ScannerTemplatesCompanion({
+    this.scannerTemplatePk = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    this.templateName = const Value.absent(),
+    this.contains = const Value.absent(),
+    this.titleTransactionBefore = const Value.absent(),
+    this.titleTransactionAfter = const Value.absent(),
+    this.amountTransactionBefore = const Value.absent(),
+    this.amountTransactionAfter = const Value.absent(),
+    this.defaultCategoryFk = const Value.absent(),
+    this.walletFk = const Value.absent(),
+  });
+  ScannerTemplatesCompanion.insert({
+    this.scannerTemplatePk = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    required String templateName,
+    required String contains,
+    required String titleTransactionBefore,
+    required String titleTransactionAfter,
+    required String amountTransactionBefore,
+    required String amountTransactionAfter,
+    required int defaultCategoryFk,
+    required int walletFk,
+  })  : templateName = Value(templateName),
+        contains = Value(contains),
+        titleTransactionBefore = Value(titleTransactionBefore),
+        titleTransactionAfter = Value(titleTransactionAfter),
+        amountTransactionBefore = Value(amountTransactionBefore),
+        amountTransactionAfter = Value(amountTransactionAfter),
+        defaultCategoryFk = Value(defaultCategoryFk),
+        walletFk = Value(walletFk);
+  static Insertable<ScannerTemplate> custom({
+    Expression<int>? scannerTemplatePk,
+    Expression<DateTime>? dateCreated,
+    Expression<String>? templateName,
+    Expression<String>? contains,
+    Expression<String>? titleTransactionBefore,
+    Expression<String>? titleTransactionAfter,
+    Expression<String>? amountTransactionBefore,
+    Expression<String>? amountTransactionAfter,
+    Expression<int>? defaultCategoryFk,
+    Expression<int>? walletFk,
+  }) {
+    return RawValuesInsertable({
+      if (scannerTemplatePk != null) 'scanner_template_pk': scannerTemplatePk,
+      if (dateCreated != null) 'date_created': dateCreated,
+      if (templateName != null) 'template_name': templateName,
+      if (contains != null) 'contains': contains,
+      if (titleTransactionBefore != null)
+        'title_transaction_before': titleTransactionBefore,
+      if (titleTransactionAfter != null)
+        'title_transaction_after': titleTransactionAfter,
+      if (amountTransactionBefore != null)
+        'amount_transaction_before': amountTransactionBefore,
+      if (amountTransactionAfter != null)
+        'amount_transaction_after': amountTransactionAfter,
+      if (defaultCategoryFk != null) 'default_category_fk': defaultCategoryFk,
+      if (walletFk != null) 'wallet_fk': walletFk,
+    });
+  }
+
+  ScannerTemplatesCompanion copyWith(
+      {Value<int>? scannerTemplatePk,
+      Value<DateTime>? dateCreated,
+      Value<String>? templateName,
+      Value<String>? contains,
+      Value<String>? titleTransactionBefore,
+      Value<String>? titleTransactionAfter,
+      Value<String>? amountTransactionBefore,
+      Value<String>? amountTransactionAfter,
+      Value<int>? defaultCategoryFk,
+      Value<int>? walletFk}) {
+    return ScannerTemplatesCompanion(
+      scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
+      dateCreated: dateCreated ?? this.dateCreated,
+      templateName: templateName ?? this.templateName,
+      contains: contains ?? this.contains,
+      titleTransactionBefore:
+          titleTransactionBefore ?? this.titleTransactionBefore,
+      titleTransactionAfter:
+          titleTransactionAfter ?? this.titleTransactionAfter,
+      amountTransactionBefore:
+          amountTransactionBefore ?? this.amountTransactionBefore,
+      amountTransactionAfter:
+          amountTransactionAfter ?? this.amountTransactionAfter,
+      defaultCategoryFk: defaultCategoryFk ?? this.defaultCategoryFk,
+      walletFk: walletFk ?? this.walletFk,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (scannerTemplatePk.present) {
+      map['scanner_template_pk'] = Variable<int>(scannerTemplatePk.value);
+    }
+    if (dateCreated.present) {
+      map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (templateName.present) {
+      map['template_name'] = Variable<String>(templateName.value);
+    }
+    if (contains.present) {
+      map['contains'] = Variable<String>(contains.value);
+    }
+    if (titleTransactionBefore.present) {
+      map['title_transaction_before'] =
+          Variable<String>(titleTransactionBefore.value);
+    }
+    if (titleTransactionAfter.present) {
+      map['title_transaction_after'] =
+          Variable<String>(titleTransactionAfter.value);
+    }
+    if (amountTransactionBefore.present) {
+      map['amount_transaction_before'] =
+          Variable<String>(amountTransactionBefore.value);
+    }
+    if (amountTransactionAfter.present) {
+      map['amount_transaction_after'] =
+          Variable<String>(amountTransactionAfter.value);
+    }
+    if (defaultCategoryFk.present) {
+      map['default_category_fk'] = Variable<int>(defaultCategoryFk.value);
+    }
+    if (walletFk.present) {
+      map['wallet_fk'] = Variable<int>(walletFk.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScannerTemplatesCompanion(')
+          ..write('scannerTemplatePk: $scannerTemplatePk, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('templateName: $templateName, ')
+          ..write('contains: $contains, ')
+          ..write('titleTransactionBefore: $titleTransactionBefore, ')
+          ..write('titleTransactionAfter: $titleTransactionAfter, ')
+          ..write('amountTransactionBefore: $amountTransactionBefore, ')
+          ..write('amountTransactionAfter: $amountTransactionAfter, ')
+          ..write('defaultCategoryFk: $defaultCategoryFk, ')
+          ..write('walletFk: $walletFk')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ScannerTemplatesTable extends ScannerTemplates
+    with TableInfo<$ScannerTemplatesTable, ScannerTemplate> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ScannerTemplatesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _scannerTemplatePkMeta =
+      const VerificationMeta('scannerTemplatePk');
+  @override
+  late final GeneratedColumn<int?> scannerTemplatePk = GeneratedColumn<int?>(
+      'scanner_template_pk', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _dateCreatedMeta =
+      const VerificationMeta('dateCreated');
+  @override
+  late final GeneratedColumn<DateTime?> dateCreated =
+      GeneratedColumn<DateTime?>('date_created', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          clientDefault: () => new DateTime.now());
+  final VerificationMeta _templateNameMeta =
+      const VerificationMeta('templateName');
+  @override
+  late final GeneratedColumn<String?> templateName = GeneratedColumn<String?>(
+      'template_name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _containsMeta = const VerificationMeta('contains');
+  @override
+  late final GeneratedColumn<String?> contains = GeneratedColumn<String?>(
+      'contains', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _titleTransactionBeforeMeta =
+      const VerificationMeta('titleTransactionBefore');
+  @override
+  late final GeneratedColumn<String?> titleTransactionBefore =
+      GeneratedColumn<String?>('title_transaction_before', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(),
+          type: const StringType(),
+          requiredDuringInsert: true);
+  final VerificationMeta _titleTransactionAfterMeta =
+      const VerificationMeta('titleTransactionAfter');
+  @override
+  late final GeneratedColumn<String?> titleTransactionAfter =
+      GeneratedColumn<String?>('title_transaction_after', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(),
+          type: const StringType(),
+          requiredDuringInsert: true);
+  final VerificationMeta _amountTransactionBeforeMeta =
+      const VerificationMeta('amountTransactionBefore');
+  @override
+  late final GeneratedColumn<String?> amountTransactionBefore =
+      GeneratedColumn<String?>('amount_transaction_before', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(),
+          type: const StringType(),
+          requiredDuringInsert: true);
+  final VerificationMeta _amountTransactionAfterMeta =
+      const VerificationMeta('amountTransactionAfter');
+  @override
+  late final GeneratedColumn<String?> amountTransactionAfter =
+      GeneratedColumn<String?>('amount_transaction_after', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(),
+          type: const StringType(),
+          requiredDuringInsert: true);
+  final VerificationMeta _defaultCategoryFkMeta =
+      const VerificationMeta('defaultCategoryFk');
+  @override
+  late final GeneratedColumn<int?> defaultCategoryFk = GeneratedColumn<int?>(
+      'default_category_fk', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES categories (category_pk)');
+  final VerificationMeta _walletFkMeta = const VerificationMeta('walletFk');
+  @override
+  late final GeneratedColumn<int?> walletFk = GeneratedColumn<int?>(
+      'wallet_fk', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES wallets (wallet_pk)');
+  @override
+  List<GeneratedColumn> get $columns => [
+        scannerTemplatePk,
+        dateCreated,
+        templateName,
+        contains,
+        titleTransactionBefore,
+        titleTransactionAfter,
+        amountTransactionBefore,
+        amountTransactionAfter,
+        defaultCategoryFk,
+        walletFk
+      ];
+  @override
+  String get aliasedName => _alias ?? 'scanner_templates';
+  @override
+  String get actualTableName => 'scanner_templates';
+  @override
+  VerificationContext validateIntegrity(Insertable<ScannerTemplate> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('scanner_template_pk')) {
+      context.handle(
+          _scannerTemplatePkMeta,
+          scannerTemplatePk.isAcceptableOrUnknown(
+              data['scanner_template_pk']!, _scannerTemplatePkMeta));
+    }
+    if (data.containsKey('date_created')) {
+      context.handle(
+          _dateCreatedMeta,
+          dateCreated.isAcceptableOrUnknown(
+              data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('template_name')) {
+      context.handle(
+          _templateNameMeta,
+          templateName.isAcceptableOrUnknown(
+              data['template_name']!, _templateNameMeta));
+    } else if (isInserting) {
+      context.missing(_templateNameMeta);
+    }
+    if (data.containsKey('contains')) {
+      context.handle(_containsMeta,
+          contains.isAcceptableOrUnknown(data['contains']!, _containsMeta));
+    } else if (isInserting) {
+      context.missing(_containsMeta);
+    }
+    if (data.containsKey('title_transaction_before')) {
+      context.handle(
+          _titleTransactionBeforeMeta,
+          titleTransactionBefore.isAcceptableOrUnknown(
+              data['title_transaction_before']!, _titleTransactionBeforeMeta));
+    } else if (isInserting) {
+      context.missing(_titleTransactionBeforeMeta);
+    }
+    if (data.containsKey('title_transaction_after')) {
+      context.handle(
+          _titleTransactionAfterMeta,
+          titleTransactionAfter.isAcceptableOrUnknown(
+              data['title_transaction_after']!, _titleTransactionAfterMeta));
+    } else if (isInserting) {
+      context.missing(_titleTransactionAfterMeta);
+    }
+    if (data.containsKey('amount_transaction_before')) {
+      context.handle(
+          _amountTransactionBeforeMeta,
+          amountTransactionBefore.isAcceptableOrUnknown(
+              data['amount_transaction_before']!,
+              _amountTransactionBeforeMeta));
+    } else if (isInserting) {
+      context.missing(_amountTransactionBeforeMeta);
+    }
+    if (data.containsKey('amount_transaction_after')) {
+      context.handle(
+          _amountTransactionAfterMeta,
+          amountTransactionAfter.isAcceptableOrUnknown(
+              data['amount_transaction_after']!, _amountTransactionAfterMeta));
+    } else if (isInserting) {
+      context.missing(_amountTransactionAfterMeta);
+    }
+    if (data.containsKey('default_category_fk')) {
+      context.handle(
+          _defaultCategoryFkMeta,
+          defaultCategoryFk.isAcceptableOrUnknown(
+              data['default_category_fk']!, _defaultCategoryFkMeta));
+    } else if (isInserting) {
+      context.missing(_defaultCategoryFkMeta);
+    }
+    if (data.containsKey('wallet_fk')) {
+      context.handle(_walletFkMeta,
+          walletFk.isAcceptableOrUnknown(data['wallet_fk']!, _walletFkMeta));
+    } else if (isInserting) {
+      context.missing(_walletFkMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {scannerTemplatePk};
+  @override
+  ScannerTemplate map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ScannerTemplate.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ScannerTemplatesTable createAlias(String alias) {
+    return $ScannerTemplatesTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$FinanceDatabase extends GeneratedDatabase {
   _$FinanceDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $WalletsTable wallets = $WalletsTable(this);
@@ -2999,6 +3546,8 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
       $AssociatedTitlesTable(this);
   late final $BudgetsTable budgets = $BudgetsTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
+  late final $ScannerTemplatesTable scannerTemplates =
+      $ScannerTemplatesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -3009,6 +3558,7 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
         labels,
         associatedTitles,
         budgets,
-        appSettings
+        appSettings,
+        scannerTemplates
       ];
 }

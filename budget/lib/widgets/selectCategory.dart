@@ -16,6 +16,7 @@ class SelectCategory extends StatefulWidget {
     this.skipIfSet,
     this.nextLabel,
     this.horizontalList = false,
+    this.popRoute = true,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<TransactionCategory>)? setSelectedCategories;
@@ -25,6 +26,7 @@ class SelectCategory extends StatefulWidget {
   final bool? skipIfSet;
   final String? nextLabel;
   final bool horizontalList;
+  final bool popRoute;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -39,7 +41,7 @@ class _SelectCategoryState extends State<SelectCategory> {
     super.initState();
     Future.delayed(Duration(milliseconds: 0), () {
       if (widget.selectedCategory != null && widget.skipIfSet == true) {
-        Navigator.pop(context);
+        if (widget.popRoute) Navigator.pop(context);
         if (widget.next != null) {
           widget.next!();
         }
@@ -108,7 +110,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                             selectedCategories.add(category);
                           });
                           Future.delayed(Duration(milliseconds: 70), () {
-                            Navigator.pop(context);
+                            if (widget.popRoute) Navigator.pop(context);
                             if (widget.next != null) {
                               widget.next!();
                             }
@@ -158,7 +160,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                                     });
                                     Future.delayed(Duration(milliseconds: 70),
                                         () {
-                                      Navigator.pop(context);
+                                      if (widget.popRoute)
+                                        Navigator.pop(context);
                                       if (widget.next != null) {
                                         widget.next!();
                                       }

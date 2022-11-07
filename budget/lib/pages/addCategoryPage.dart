@@ -366,7 +366,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  AssociatedTitleEntryAdd(onTap: () {
+                  AddButton(onTap: () {
                     openBottomSheet(
                       context,
                       PopupFramework(
@@ -579,9 +579,8 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
   }
 }
 
-class AssociatedTitleEntryAdd extends StatelessWidget {
-  const AssociatedTitleEntryAdd({Key? key, required this.onTap})
-      : super(key: key);
+class AddButton extends StatelessWidget {
+  const AddButton({Key? key, required this.onTap}) : super(key: key);
 
   final VoidCallback onTap;
 
