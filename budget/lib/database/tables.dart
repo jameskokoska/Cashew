@@ -10,7 +10,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 13;
+int schemaVersionGlobal = 14;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -43,14 +43,12 @@ class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   @override
   List<int>? mapToDart(String? string_from_db) {
     if (string_from_db == null) return null;
-    // return label_fks_from_db.split(',').map(int.parse).toList();
     return new List<int>.from(json.decode(string_from_db));
   }
 
   @override
   String? mapToSql(List<int>? ints) {
     if (ints == null) return null;
-    // throw label_fks.map((fk) => toString).join(',');
     return json.encode(ints);
   }
 }
@@ -60,15 +58,28 @@ class StringListInColumnConverter extends TypeConverter<List<String>, String> {
   @override
   List<String>? mapToDart(String? string_from_db) {
     if (string_from_db == null) return null;
-    // return label_fks_from_db.split(',').map(int.parse).toList();
     return new List<String>.from(json.decode(string_from_db));
   }
 
   @override
   String? mapToSql(List<String>? strings) {
     if (strings == null) return null;
-    // throw label_fks.map((fk) => toString).join(',');
     return json.encode(strings);
+  }
+}
+
+class DoubleListInColumnConverter extends TypeConverter<List<double>, String> {
+  const DoubleListInColumnConverter();
+  @override
+  List<double>? mapToDart(String? string_from_db) {
+    if (string_from_db == null) return null;
+    return new List<double>.from(json.decode(string_from_db));
+  }
+
+  @override
+  String? mapToSql(List<double>? doubles) {
+    if (doubles == null) return null;
+    return json.encode(doubles);
   }
 }
 
@@ -89,8 +100,8 @@ class Transactions extends Table {
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   RealColumn get amount => real()();
   TextColumn get note => text().withLength(max: NOTE_LIMIT)();
-  IntColumn get categoryFk => integer()();
-  IntColumn get walletFk => integer()();
+  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
+  IntColumn get walletFk => integer().references(Wallets, #walletPk)();
   TextColumn get labelFks =>
       text().map(const IntListInColumnConverter()).nullable()();
   DateTimeColumn get dateCreated =>
@@ -128,7 +139,7 @@ class Categories extends Table {
 class AssociatedTitles extends Table {
   IntColumn get associatedTitlePk => integer().autoIncrement()();
   TextColumn get title => text().withLength(max: NAME_LIMIT)();
-  IntColumn get categoryFk => integer()();
+  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
@@ -139,7 +150,7 @@ class AssociatedTitles extends Table {
 class Labels extends Table {
   IntColumn get label_pk => integer().autoIncrement()();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
-  IntColumn get categoryFk => integer()();
+  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
@@ -164,7 +175,7 @@ class Budgets extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
   IntColumn get order => integer()();
-  IntColumn get walletFk => integer()();
+  IntColumn get walletFk => integer().references(Wallets, #walletPk)();
 }
 
 @DataClassName('TransactionTabs')
@@ -185,6 +196,30 @@ class AppSettings extends Table {
   TextColumn get settingsJSON =>
       text()(); // This is the JSON stored as a string for shared prefs 'userSettings'
   DateTimeColumn get dateUpdated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+}
+
+@DataClassName('BillSplitter')
+class BillSplitters extends Table {
+  IntColumn get billSplitterPk => integer().autoIncrement()();
+  TextColumn get name => text().withLength(max: NAME_LIMIT)();
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+  IntColumn get order => integer()();
+}
+
+@DataClassName('BillSplitterTransaction')
+class BillSplitterTransactions extends Table {
+  IntColumn get billSplitterTransactionPk => integer().autoIncrement()();
+  IntColumn get billSplitterFk =>
+      integer().references(BillSplitters, #billSplitterPk)();
+  TextColumn get name => text().withLength(max: NAME_LIMIT)();
+  RealColumn get cost => real()();
+  TextColumn get personNames =>
+      text().map(const StringListInColumnConverter()).nullable()();
+  TextColumn get personsPercents =>
+      text().map(const DoubleListInColumnConverter()).nullable()();
+  DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
 }
 
@@ -213,6 +248,8 @@ class CategoryWithTotal {
   AssociatedTitles,
   Budgets,
   AppSettings,
+  BillSplitters,
+  BillSplitterTransactions,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -236,6 +273,11 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 12) {
             await migrator.addColumn(
                 transactions, transactions.createdAnotherFutureTransaction);
+          }
+          if (from <= 13) {
+            await migrator.createTable($BillSplittersTable(database));
+            await migrator
+                .createTable($BillSplitterTransactionsTable(database));
           }
         },
       );
@@ -664,7 +706,98 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  Future getAmountOfBudgets() async {
+  Stream<List<BillSplitter>> watchAllBillSplitters() {
+    return (select(billSplitters)..orderBy([(b) => OrderingTerm.desc(b.order)]))
+        .watch();
+  }
+
+  Stream<List<BillSplitterTransaction>> watchAllBillSplitterTransactions(
+      int billSplitterFk) {
+    return (select(billSplitterTransactions)
+          ..where((tbl) => tbl.billSplitterFk.equals(billSplitterFk))
+          ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)]))
+        .watch();
+  }
+
+  Future<int> createOrUpdateBillSplitter(BillSplitter billSplitter) {
+    return into(billSplitters).insertOnConflictUpdate(billSplitter);
+  }
+
+  Future<int> getAmountOfBillSplitters() async {
+    return (await select(billSplitters).get()).length;
+  }
+
+  Future deleteBillSplitter(int billSplitterPk, int order) async {
+    await database.shiftBillSplitters(-1, order);
+    return (delete(billSplitters)
+          ..where((t) => t.billSplitterPk.equals(billSplitterPk)))
+        .go();
+  }
+
+  Future<bool> shiftBillSplitters(int direction, int pastIndexIncluding) async {
+    List<BillSplitter> billSplittersList = await (select(billSplitters)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+        .get();
+    if (direction == -1 || direction == 1) {
+      for (BillSplitter billSplitter in billSplittersList) {
+        await (update(billSplitters)
+              ..where(
+                (t) =>
+                    t.order.isBiggerOrEqualValue(pastIndexIncluding) &
+                    t.billSplitterPk.equals(billSplitter.billSplitterPk),
+              ))
+            .write(
+          BillSplittersCompanion(order: Value(billSplitter.order + direction)),
+        );
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
+
+  Future moveBillSplitter(
+      int billSplitterPk, int newPosition, int oldPosition) async {
+    List<BillSplitter> billSplittersList = await (select(billSplitters)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+        .get();
+    if (newPosition > oldPosition) {
+      for (BillSplitter billSplitter in billSplittersList) {
+        await (update(billSplitters)
+              ..where(
+                (t) =>
+                    t.billSplitterPk.equals(billSplitter.billSplitterPk) &
+                    t.order.isBiggerOrEqualValue(oldPosition) &
+                    t.order.isSmallerOrEqualValue(newPosition),
+              ))
+            .write(
+          BillSplittersCompanion(order: Value(billSplitter.order - 1)),
+        );
+      }
+    } else {
+      for (BillSplitter billSplitter in billSplittersList) {
+        await (update(billSplitters)
+              ..where(
+                (t) =>
+                    t.billSplitterPk.equals(billSplitter.billSplitterPk) &
+                    t.order.isBiggerOrEqualValue(newPosition) &
+                    t.order.isSmallerOrEqualValue(oldPosition),
+              ))
+            .write(
+          BillSplittersCompanion(order: Value(billSplitter.order + 1)),
+        );
+      }
+    }
+    await (update(billSplitters)
+          ..where(
+            (t) => t.billSplitterPk.equals(billSplitterPk),
+          ))
+        .write(
+      BillSplittersCompanion(order: Value(newPosition)),
+    );
+  }
+
+  Future<int> getAmountOfBudgets() async {
     return (await select(budgets).get()).length;
   }
 

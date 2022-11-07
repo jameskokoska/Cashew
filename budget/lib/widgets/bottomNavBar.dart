@@ -98,8 +98,8 @@ class BottomNavBarState extends State<BottomNavBar> {
                       label: "Budgets",
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.settings_rounded),
-                      label: "Settings",
+                      icon: Icon(Icons.more_horiz_rounded),
+                      label: "More",
                     ),
                   ],
                   selectedIndex: selectedIndex,

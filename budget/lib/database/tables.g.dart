@@ -339,6 +339,376 @@ class $WalletsTable extends Wallets
   }
 }
 
+class TransactionCategory extends DataClass
+    implements Insertable<TransactionCategory> {
+  final int categoryPk;
+  final String name;
+  final String? colour;
+  final String? iconName;
+  final DateTime dateCreated;
+  final int order;
+  final bool income;
+  TransactionCategory(
+      {required this.categoryPk,
+      required this.name,
+      this.colour,
+      this.iconName,
+      required this.dateCreated,
+      required this.order,
+      required this.income});
+  factory TransactionCategory.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return TransactionCategory(
+      categoryPk: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}category_pk'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      colour: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}colour']),
+      iconName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}icon_name']),
+      dateCreated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
+      order: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}order'])!,
+      income: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}income'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['category_pk'] = Variable<int>(categoryPk);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || colour != null) {
+      map['colour'] = Variable<String?>(colour);
+    }
+    if (!nullToAbsent || iconName != null) {
+      map['icon_name'] = Variable<String?>(iconName);
+    }
+    map['date_created'] = Variable<DateTime>(dateCreated);
+    map['order'] = Variable<int>(order);
+    map['income'] = Variable<bool>(income);
+    return map;
+  }
+
+  CategoriesCompanion toCompanion(bool nullToAbsent) {
+    return CategoriesCompanion(
+      categoryPk: Value(categoryPk),
+      name: Value(name),
+      colour:
+          colour == null && nullToAbsent ? const Value.absent() : Value(colour),
+      iconName: iconName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(iconName),
+      dateCreated: Value(dateCreated),
+      order: Value(order),
+      income: Value(income),
+    );
+  }
+
+  factory TransactionCategory.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TransactionCategory(
+      categoryPk: serializer.fromJson<int>(json['categoryPk']),
+      name: serializer.fromJson<String>(json['name']),
+      colour: serializer.fromJson<String?>(json['colour']),
+      iconName: serializer.fromJson<String?>(json['iconName']),
+      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      order: serializer.fromJson<int>(json['order']),
+      income: serializer.fromJson<bool>(json['income']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'categoryPk': serializer.toJson<int>(categoryPk),
+      'name': serializer.toJson<String>(name),
+      'colour': serializer.toJson<String?>(colour),
+      'iconName': serializer.toJson<String?>(iconName),
+      'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'order': serializer.toJson<int>(order),
+      'income': serializer.toJson<bool>(income),
+    };
+  }
+
+  TransactionCategory copyWith(
+          {int? categoryPk,
+          String? name,
+          String? colour,
+          String? iconName,
+          DateTime? dateCreated,
+          int? order,
+          bool? income}) =>
+      TransactionCategory(
+        categoryPk: categoryPk ?? this.categoryPk,
+        name: name ?? this.name,
+        colour: colour ?? this.colour,
+        iconName: iconName ?? this.iconName,
+        dateCreated: dateCreated ?? this.dateCreated,
+        order: order ?? this.order,
+        income: income ?? this.income,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TransactionCategory(')
+          ..write('categoryPk: $categoryPk, ')
+          ..write('name: $name, ')
+          ..write('colour: $colour, ')
+          ..write('iconName: $iconName, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order, ')
+          ..write('income: $income')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      categoryPk, name, colour, iconName, dateCreated, order, income);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TransactionCategory &&
+          other.categoryPk == this.categoryPk &&
+          other.name == this.name &&
+          other.colour == this.colour &&
+          other.iconName == this.iconName &&
+          other.dateCreated == this.dateCreated &&
+          other.order == this.order &&
+          other.income == this.income);
+}
+
+class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
+  final Value<int> categoryPk;
+  final Value<String> name;
+  final Value<String?> colour;
+  final Value<String?> iconName;
+  final Value<DateTime> dateCreated;
+  final Value<int> order;
+  final Value<bool> income;
+  const CategoriesCompanion({
+    this.categoryPk = const Value.absent(),
+    this.name = const Value.absent(),
+    this.colour = const Value.absent(),
+    this.iconName = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    this.order = const Value.absent(),
+    this.income = const Value.absent(),
+  });
+  CategoriesCompanion.insert({
+    this.categoryPk = const Value.absent(),
+    required String name,
+    this.colour = const Value.absent(),
+    this.iconName = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    required int order,
+    this.income = const Value.absent(),
+  })  : name = Value(name),
+        order = Value(order);
+  static Insertable<TransactionCategory> custom({
+    Expression<int>? categoryPk,
+    Expression<String>? name,
+    Expression<String?>? colour,
+    Expression<String?>? iconName,
+    Expression<DateTime>? dateCreated,
+    Expression<int>? order,
+    Expression<bool>? income,
+  }) {
+    return RawValuesInsertable({
+      if (categoryPk != null) 'category_pk': categoryPk,
+      if (name != null) 'name': name,
+      if (colour != null) 'colour': colour,
+      if (iconName != null) 'icon_name': iconName,
+      if (dateCreated != null) 'date_created': dateCreated,
+      if (order != null) 'order': order,
+      if (income != null) 'income': income,
+    });
+  }
+
+  CategoriesCompanion copyWith(
+      {Value<int>? categoryPk,
+      Value<String>? name,
+      Value<String?>? colour,
+      Value<String?>? iconName,
+      Value<DateTime>? dateCreated,
+      Value<int>? order,
+      Value<bool>? income}) {
+    return CategoriesCompanion(
+      categoryPk: categoryPk ?? this.categoryPk,
+      name: name ?? this.name,
+      colour: colour ?? this.colour,
+      iconName: iconName ?? this.iconName,
+      dateCreated: dateCreated ?? this.dateCreated,
+      order: order ?? this.order,
+      income: income ?? this.income,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (categoryPk.present) {
+      map['category_pk'] = Variable<int>(categoryPk.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (colour.present) {
+      map['colour'] = Variable<String?>(colour.value);
+    }
+    if (iconName.present) {
+      map['icon_name'] = Variable<String?>(iconName.value);
+    }
+    if (dateCreated.present) {
+      map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (income.present) {
+      map['income'] = Variable<bool>(income.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoriesCompanion(')
+          ..write('categoryPk: $categoryPk, ')
+          ..write('name: $name, ')
+          ..write('colour: $colour, ')
+          ..write('iconName: $iconName, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order, ')
+          ..write('income: $income')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CategoriesTable extends Categories
+    with TableInfo<$CategoriesTable, TransactionCategory> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CategoriesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _categoryPkMeta = const VerificationMeta('categoryPk');
+  @override
+  late final GeneratedColumn<int?> categoryPk = GeneratedColumn<int?>(
+      'category_pk', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _colourMeta = const VerificationMeta('colour');
+  @override
+  late final GeneratedColumn<String?> colour = GeneratedColumn<String?>(
+      'colour', aliasedName, true,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: const StringType(),
+      requiredDuringInsert: false);
+  final VerificationMeta _iconNameMeta = const VerificationMeta('iconName');
+  @override
+  late final GeneratedColumn<String?> iconName = GeneratedColumn<String?>(
+      'icon_name', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _dateCreatedMeta =
+      const VerificationMeta('dateCreated');
+  @override
+  late final GeneratedColumn<DateTime?> dateCreated =
+      GeneratedColumn<DateTime?>('date_created', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          clientDefault: () => new DateTime.now());
+  final VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int?> order = GeneratedColumn<int?>(
+      'order', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _incomeMeta = const VerificationMeta('income');
+  @override
+  late final GeneratedColumn<bool?> income = GeneratedColumn<bool?>(
+      'income', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (income IN (0, 1))',
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [categoryPk, name, colour, iconName, dateCreated, order, income];
+  @override
+  String get aliasedName => _alias ?? 'categories';
+  @override
+  String get actualTableName => 'categories';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TransactionCategory> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('category_pk')) {
+      context.handle(
+          _categoryPkMeta,
+          categoryPk.isAcceptableOrUnknown(
+              data['category_pk']!, _categoryPkMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('colour')) {
+      context.handle(_colourMeta,
+          colour.isAcceptableOrUnknown(data['colour']!, _colourMeta));
+    }
+    if (data.containsKey('icon_name')) {
+      context.handle(_iconNameMeta,
+          iconName.isAcceptableOrUnknown(data['icon_name']!, _iconNameMeta));
+    }
+    if (data.containsKey('date_created')) {
+      context.handle(
+          _dateCreatedMeta,
+          dateCreated.isAcceptableOrUnknown(
+              data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    if (data.containsKey('income')) {
+      context.handle(_incomeMeta,
+          income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {categoryPk};
+  @override
+  TransactionCategory map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return TransactionCategory.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $CategoriesTable createAlias(String alias) {
+    return $CategoriesTable(attachedDatabase, alias);
+  }
+}
+
 class Transaction extends DataClass implements Insertable<Transaction> {
   final int transactionPk;
   final String name;
@@ -887,12 +1257,16 @@ class $TransactionsTable extends Transactions
   @override
   late final GeneratedColumn<int?> categoryFk = GeneratedColumn<int?>(
       'category_fk', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES categories (category_pk)');
   final VerificationMeta _walletFkMeta = const VerificationMeta('walletFk');
   @override
   late final GeneratedColumn<int?> walletFk = GeneratedColumn<int?>(
       'wallet_fk', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES wallets (wallet_pk)');
   final VerificationMeta _labelFksMeta = const VerificationMeta('labelFks');
   @override
   late final GeneratedColumnWithTypeConverter<List<int>, String?> labelFks =
@@ -1095,376 +1469,6 @@ class $TransactionsTable extends Transactions
           TransactionSpecialType.values);
   static TypeConverter<MethodAdded?, int> $converter3 =
       const EnumIndexConverter<MethodAdded>(MethodAdded.values);
-}
-
-class TransactionCategory extends DataClass
-    implements Insertable<TransactionCategory> {
-  final int categoryPk;
-  final String name;
-  final String? colour;
-  final String? iconName;
-  final DateTime dateCreated;
-  final int order;
-  final bool income;
-  TransactionCategory(
-      {required this.categoryPk,
-      required this.name,
-      this.colour,
-      this.iconName,
-      required this.dateCreated,
-      required this.order,
-      required this.income});
-  factory TransactionCategory.fromData(Map<String, dynamic> data,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return TransactionCategory(
-      categoryPk: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}category_pk'])!,
-      name: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      colour: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}colour']),
-      iconName: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}icon_name']),
-      dateCreated: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
-      order: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}order'])!,
-      income: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}income'])!,
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['category_pk'] = Variable<int>(categoryPk);
-    map['name'] = Variable<String>(name);
-    if (!nullToAbsent || colour != null) {
-      map['colour'] = Variable<String?>(colour);
-    }
-    if (!nullToAbsent || iconName != null) {
-      map['icon_name'] = Variable<String?>(iconName);
-    }
-    map['date_created'] = Variable<DateTime>(dateCreated);
-    map['order'] = Variable<int>(order);
-    map['income'] = Variable<bool>(income);
-    return map;
-  }
-
-  CategoriesCompanion toCompanion(bool nullToAbsent) {
-    return CategoriesCompanion(
-      categoryPk: Value(categoryPk),
-      name: Value(name),
-      colour:
-          colour == null && nullToAbsent ? const Value.absent() : Value(colour),
-      iconName: iconName == null && nullToAbsent
-          ? const Value.absent()
-          : Value(iconName),
-      dateCreated: Value(dateCreated),
-      order: Value(order),
-      income: Value(income),
-    );
-  }
-
-  factory TransactionCategory.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TransactionCategory(
-      categoryPk: serializer.fromJson<int>(json['categoryPk']),
-      name: serializer.fromJson<String>(json['name']),
-      colour: serializer.fromJson<String?>(json['colour']),
-      iconName: serializer.fromJson<String?>(json['iconName']),
-      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
-      order: serializer.fromJson<int>(json['order']),
-      income: serializer.fromJson<bool>(json['income']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'categoryPk': serializer.toJson<int>(categoryPk),
-      'name': serializer.toJson<String>(name),
-      'colour': serializer.toJson<String?>(colour),
-      'iconName': serializer.toJson<String?>(iconName),
-      'dateCreated': serializer.toJson<DateTime>(dateCreated),
-      'order': serializer.toJson<int>(order),
-      'income': serializer.toJson<bool>(income),
-    };
-  }
-
-  TransactionCategory copyWith(
-          {int? categoryPk,
-          String? name,
-          String? colour,
-          String? iconName,
-          DateTime? dateCreated,
-          int? order,
-          bool? income}) =>
-      TransactionCategory(
-        categoryPk: categoryPk ?? this.categoryPk,
-        name: name ?? this.name,
-        colour: colour ?? this.colour,
-        iconName: iconName ?? this.iconName,
-        dateCreated: dateCreated ?? this.dateCreated,
-        order: order ?? this.order,
-        income: income ?? this.income,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('TransactionCategory(')
-          ..write('categoryPk: $categoryPk, ')
-          ..write('name: $name, ')
-          ..write('colour: $colour, ')
-          ..write('iconName: $iconName, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order, ')
-          ..write('income: $income')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      categoryPk, name, colour, iconName, dateCreated, order, income);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is TransactionCategory &&
-          other.categoryPk == this.categoryPk &&
-          other.name == this.name &&
-          other.colour == this.colour &&
-          other.iconName == this.iconName &&
-          other.dateCreated == this.dateCreated &&
-          other.order == this.order &&
-          other.income == this.income);
-}
-
-class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
-  final Value<int> categoryPk;
-  final Value<String> name;
-  final Value<String?> colour;
-  final Value<String?> iconName;
-  final Value<DateTime> dateCreated;
-  final Value<int> order;
-  final Value<bool> income;
-  const CategoriesCompanion({
-    this.categoryPk = const Value.absent(),
-    this.name = const Value.absent(),
-    this.colour = const Value.absent(),
-    this.iconName = const Value.absent(),
-    this.dateCreated = const Value.absent(),
-    this.order = const Value.absent(),
-    this.income = const Value.absent(),
-  });
-  CategoriesCompanion.insert({
-    this.categoryPk = const Value.absent(),
-    required String name,
-    this.colour = const Value.absent(),
-    this.iconName = const Value.absent(),
-    this.dateCreated = const Value.absent(),
-    required int order,
-    this.income = const Value.absent(),
-  })  : name = Value(name),
-        order = Value(order);
-  static Insertable<TransactionCategory> custom({
-    Expression<int>? categoryPk,
-    Expression<String>? name,
-    Expression<String?>? colour,
-    Expression<String?>? iconName,
-    Expression<DateTime>? dateCreated,
-    Expression<int>? order,
-    Expression<bool>? income,
-  }) {
-    return RawValuesInsertable({
-      if (categoryPk != null) 'category_pk': categoryPk,
-      if (name != null) 'name': name,
-      if (colour != null) 'colour': colour,
-      if (iconName != null) 'icon_name': iconName,
-      if (dateCreated != null) 'date_created': dateCreated,
-      if (order != null) 'order': order,
-      if (income != null) 'income': income,
-    });
-  }
-
-  CategoriesCompanion copyWith(
-      {Value<int>? categoryPk,
-      Value<String>? name,
-      Value<String?>? colour,
-      Value<String?>? iconName,
-      Value<DateTime>? dateCreated,
-      Value<int>? order,
-      Value<bool>? income}) {
-    return CategoriesCompanion(
-      categoryPk: categoryPk ?? this.categoryPk,
-      name: name ?? this.name,
-      colour: colour ?? this.colour,
-      iconName: iconName ?? this.iconName,
-      dateCreated: dateCreated ?? this.dateCreated,
-      order: order ?? this.order,
-      income: income ?? this.income,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (categoryPk.present) {
-      map['category_pk'] = Variable<int>(categoryPk.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (colour.present) {
-      map['colour'] = Variable<String?>(colour.value);
-    }
-    if (iconName.present) {
-      map['icon_name'] = Variable<String?>(iconName.value);
-    }
-    if (dateCreated.present) {
-      map['date_created'] = Variable<DateTime>(dateCreated.value);
-    }
-    if (order.present) {
-      map['order'] = Variable<int>(order.value);
-    }
-    if (income.present) {
-      map['income'] = Variable<bool>(income.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('CategoriesCompanion(')
-          ..write('categoryPk: $categoryPk, ')
-          ..write('name: $name, ')
-          ..write('colour: $colour, ')
-          ..write('iconName: $iconName, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order, ')
-          ..write('income: $income')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $CategoriesTable extends Categories
-    with TableInfo<$CategoriesTable, TransactionCategory> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $CategoriesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _categoryPkMeta = const VerificationMeta('categoryPk');
-  @override
-  late final GeneratedColumn<int?> categoryPk = GeneratedColumn<int?>(
-      'category_pk', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
-      'name', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _colourMeta = const VerificationMeta('colour');
-  @override
-  late final GeneratedColumn<String?> colour = GeneratedColumn<String?>(
-      'colour', aliasedName, true,
-      additionalChecks: GeneratedColumn.checkTextLength(),
-      type: const StringType(),
-      requiredDuringInsert: false);
-  final VerificationMeta _iconNameMeta = const VerificationMeta('iconName');
-  @override
-  late final GeneratedColumn<String?> iconName = GeneratedColumn<String?>(
-      'icon_name', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
-  final VerificationMeta _dateCreatedMeta =
-      const VerificationMeta('dateCreated');
-  @override
-  late final GeneratedColumn<DateTime?> dateCreated =
-      GeneratedColumn<DateTime?>('date_created', aliasedName, false,
-          type: const IntType(),
-          requiredDuringInsert: false,
-          clientDefault: () => new DateTime.now());
-  final VerificationMeta _orderMeta = const VerificationMeta('order');
-  @override
-  late final GeneratedColumn<int?> order = GeneratedColumn<int?>(
-      'order', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _incomeMeta = const VerificationMeta('income');
-  @override
-  late final GeneratedColumn<bool?> income = GeneratedColumn<bool?>(
-      'income', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (income IN (0, 1))',
-      defaultValue: const Constant(false));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [categoryPk, name, colour, iconName, dateCreated, order, income];
-  @override
-  String get aliasedName => _alias ?? 'categories';
-  @override
-  String get actualTableName => 'categories';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<TransactionCategory> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('category_pk')) {
-      context.handle(
-          _categoryPkMeta,
-          categoryPk.isAcceptableOrUnknown(
-              data['category_pk']!, _categoryPkMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('colour')) {
-      context.handle(_colourMeta,
-          colour.isAcceptableOrUnknown(data['colour']!, _colourMeta));
-    }
-    if (data.containsKey('icon_name')) {
-      context.handle(_iconNameMeta,
-          iconName.isAcceptableOrUnknown(data['icon_name']!, _iconNameMeta));
-    }
-    if (data.containsKey('date_created')) {
-      context.handle(
-          _dateCreatedMeta,
-          dateCreated.isAcceptableOrUnknown(
-              data['date_created']!, _dateCreatedMeta));
-    }
-    if (data.containsKey('order')) {
-      context.handle(
-          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
-    } else if (isInserting) {
-      context.missing(_orderMeta);
-    }
-    if (data.containsKey('income')) {
-      context.handle(_incomeMeta,
-          income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {categoryPk};
-  @override
-  TransactionCategory map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return TransactionCategory.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
-  }
-
-  @override
-  $CategoriesTable createAlias(String alias) {
-    return $CategoriesTable(attachedDatabase, alias);
-  }
 }
 
 class TransactionLabel extends DataClass
@@ -1690,7 +1694,9 @@ class $LabelsTable extends Labels
   @override
   late final GeneratedColumn<int?> categoryFk = GeneratedColumn<int?>(
       'category_fk', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES categories (category_pk)');
   final VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   @override
@@ -2011,7 +2017,9 @@ class $AssociatedTitlesTable extends AssociatedTitles
   @override
   late final GeneratedColumn<int?> categoryFk = GeneratedColumn<int?>(
       'category_fk', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES categories (category_pk)');
   final VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   @override
@@ -2637,7 +2645,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   @override
   late final GeneratedColumn<int?> walletFk = GeneratedColumn<int?>(
       'wallet_fk', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES wallets (wallet_pk)');
   @override
   List<GeneratedColumn> get $columns => [
         budgetPk,
@@ -2979,26 +2989,698 @@ class $AppSettingsTable extends AppSettings
   }
 }
 
+class BillSplitter extends DataClass implements Insertable<BillSplitter> {
+  final int billSplitterPk;
+  final String name;
+  final DateTime dateCreated;
+  final int order;
+  BillSplitter(
+      {required this.billSplitterPk,
+      required this.name,
+      required this.dateCreated,
+      required this.order});
+  factory BillSplitter.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return BillSplitter(
+      billSplitterPk: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}bill_splitter_pk'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      dateCreated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
+      order: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}order'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['bill_splitter_pk'] = Variable<int>(billSplitterPk);
+    map['name'] = Variable<String>(name);
+    map['date_created'] = Variable<DateTime>(dateCreated);
+    map['order'] = Variable<int>(order);
+    return map;
+  }
+
+  BillSplittersCompanion toCompanion(bool nullToAbsent) {
+    return BillSplittersCompanion(
+      billSplitterPk: Value(billSplitterPk),
+      name: Value(name),
+      dateCreated: Value(dateCreated),
+      order: Value(order),
+    );
+  }
+
+  factory BillSplitter.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BillSplitter(
+      billSplitterPk: serializer.fromJson<int>(json['billSplitterPk']),
+      name: serializer.fromJson<String>(json['name']),
+      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      order: serializer.fromJson<int>(json['order']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'billSplitterPk': serializer.toJson<int>(billSplitterPk),
+      'name': serializer.toJson<String>(name),
+      'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'order': serializer.toJson<int>(order),
+    };
+  }
+
+  BillSplitter copyWith(
+          {int? billSplitterPk,
+          String? name,
+          DateTime? dateCreated,
+          int? order}) =>
+      BillSplitter(
+        billSplitterPk: billSplitterPk ?? this.billSplitterPk,
+        name: name ?? this.name,
+        dateCreated: dateCreated ?? this.dateCreated,
+        order: order ?? this.order,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('BillSplitter(')
+          ..write('billSplitterPk: $billSplitterPk, ')
+          ..write('name: $name, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(billSplitterPk, name, dateCreated, order);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BillSplitter &&
+          other.billSplitterPk == this.billSplitterPk &&
+          other.name == this.name &&
+          other.dateCreated == this.dateCreated &&
+          other.order == this.order);
+}
+
+class BillSplittersCompanion extends UpdateCompanion<BillSplitter> {
+  final Value<int> billSplitterPk;
+  final Value<String> name;
+  final Value<DateTime> dateCreated;
+  final Value<int> order;
+  const BillSplittersCompanion({
+    this.billSplitterPk = const Value.absent(),
+    this.name = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    this.order = const Value.absent(),
+  });
+  BillSplittersCompanion.insert({
+    this.billSplitterPk = const Value.absent(),
+    required String name,
+    this.dateCreated = const Value.absent(),
+    required int order,
+  })  : name = Value(name),
+        order = Value(order);
+  static Insertable<BillSplitter> custom({
+    Expression<int>? billSplitterPk,
+    Expression<String>? name,
+    Expression<DateTime>? dateCreated,
+    Expression<int>? order,
+  }) {
+    return RawValuesInsertable({
+      if (billSplitterPk != null) 'bill_splitter_pk': billSplitterPk,
+      if (name != null) 'name': name,
+      if (dateCreated != null) 'date_created': dateCreated,
+      if (order != null) 'order': order,
+    });
+  }
+
+  BillSplittersCompanion copyWith(
+      {Value<int>? billSplitterPk,
+      Value<String>? name,
+      Value<DateTime>? dateCreated,
+      Value<int>? order}) {
+    return BillSplittersCompanion(
+      billSplitterPk: billSplitterPk ?? this.billSplitterPk,
+      name: name ?? this.name,
+      dateCreated: dateCreated ?? this.dateCreated,
+      order: order ?? this.order,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (billSplitterPk.present) {
+      map['bill_splitter_pk'] = Variable<int>(billSplitterPk.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (dateCreated.present) {
+      map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BillSplittersCompanion(')
+          ..write('billSplitterPk: $billSplitterPk, ')
+          ..write('name: $name, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BillSplittersTable extends BillSplitters
+    with TableInfo<$BillSplittersTable, BillSplitter> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BillSplittersTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _billSplitterPkMeta =
+      const VerificationMeta('billSplitterPk');
+  @override
+  late final GeneratedColumn<int?> billSplitterPk = GeneratedColumn<int?>(
+      'bill_splitter_pk', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _dateCreatedMeta =
+      const VerificationMeta('dateCreated');
+  @override
+  late final GeneratedColumn<DateTime?> dateCreated =
+      GeneratedColumn<DateTime?>('date_created', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          clientDefault: () => new DateTime.now());
+  final VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int?> order = GeneratedColumn<int?>(
+      'order', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [billSplitterPk, name, dateCreated, order];
+  @override
+  String get aliasedName => _alias ?? 'bill_splitters';
+  @override
+  String get actualTableName => 'bill_splitters';
+  @override
+  VerificationContext validateIntegrity(Insertable<BillSplitter> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('bill_splitter_pk')) {
+      context.handle(
+          _billSplitterPkMeta,
+          billSplitterPk.isAcceptableOrUnknown(
+              data['bill_splitter_pk']!, _billSplitterPkMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('date_created')) {
+      context.handle(
+          _dateCreatedMeta,
+          dateCreated.isAcceptableOrUnknown(
+              data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {billSplitterPk};
+  @override
+  BillSplitter map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return BillSplitter.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $BillSplittersTable createAlias(String alias) {
+    return $BillSplittersTable(attachedDatabase, alias);
+  }
+}
+
+class BillSplitterTransaction extends DataClass
+    implements Insertable<BillSplitterTransaction> {
+  final int billSplitterTransactionPk;
+  final int billSplitterFk;
+  final String name;
+  final double cost;
+  final List<String>? personNames;
+  final List<double>? personsPercents;
+  final DateTime dateCreated;
+  BillSplitterTransaction(
+      {required this.billSplitterTransactionPk,
+      required this.billSplitterFk,
+      required this.name,
+      required this.cost,
+      this.personNames,
+      this.personsPercents,
+      required this.dateCreated});
+  factory BillSplitterTransaction.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return BillSplitterTransaction(
+      billSplitterTransactionPk: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}bill_splitter_transaction_pk'])!,
+      billSplitterFk: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}bill_splitter_fk'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      cost: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}cost'])!,
+      personNames: $BillSplitterTransactionsTable.$converter0.mapToDart(
+          const StringType()
+              .mapFromDatabaseResponse(data['${effectivePrefix}person_names'])),
+      personsPercents: $BillSplitterTransactionsTable.$converter1.mapToDart(
+          const StringType().mapFromDatabaseResponse(
+              data['${effectivePrefix}persons_percents'])),
+      dateCreated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['bill_splitter_transaction_pk'] =
+        Variable<int>(billSplitterTransactionPk);
+    map['bill_splitter_fk'] = Variable<int>(billSplitterFk);
+    map['name'] = Variable<String>(name);
+    map['cost'] = Variable<double>(cost);
+    if (!nullToAbsent || personNames != null) {
+      final converter = $BillSplitterTransactionsTable.$converter0;
+      map['person_names'] = Variable<String?>(converter.mapToSql(personNames));
+    }
+    if (!nullToAbsent || personsPercents != null) {
+      final converter = $BillSplitterTransactionsTable.$converter1;
+      map['persons_percents'] =
+          Variable<String?>(converter.mapToSql(personsPercents));
+    }
+    map['date_created'] = Variable<DateTime>(dateCreated);
+    return map;
+  }
+
+  BillSplitterTransactionsCompanion toCompanion(bool nullToAbsent) {
+    return BillSplitterTransactionsCompanion(
+      billSplitterTransactionPk: Value(billSplitterTransactionPk),
+      billSplitterFk: Value(billSplitterFk),
+      name: Value(name),
+      cost: Value(cost),
+      personNames: personNames == null && nullToAbsent
+          ? const Value.absent()
+          : Value(personNames),
+      personsPercents: personsPercents == null && nullToAbsent
+          ? const Value.absent()
+          : Value(personsPercents),
+      dateCreated: Value(dateCreated),
+    );
+  }
+
+  factory BillSplitterTransaction.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BillSplitterTransaction(
+      billSplitterTransactionPk:
+          serializer.fromJson<int>(json['billSplitterTransactionPk']),
+      billSplitterFk: serializer.fromJson<int>(json['billSplitterFk']),
+      name: serializer.fromJson<String>(json['name']),
+      cost: serializer.fromJson<double>(json['cost']),
+      personNames: serializer.fromJson<List<String>?>(json['personNames']),
+      personsPercents:
+          serializer.fromJson<List<double>?>(json['personsPercents']),
+      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'billSplitterTransactionPk':
+          serializer.toJson<int>(billSplitterTransactionPk),
+      'billSplitterFk': serializer.toJson<int>(billSplitterFk),
+      'name': serializer.toJson<String>(name),
+      'cost': serializer.toJson<double>(cost),
+      'personNames': serializer.toJson<List<String>?>(personNames),
+      'personsPercents': serializer.toJson<List<double>?>(personsPercents),
+      'dateCreated': serializer.toJson<DateTime>(dateCreated),
+    };
+  }
+
+  BillSplitterTransaction copyWith(
+          {int? billSplitterTransactionPk,
+          int? billSplitterFk,
+          String? name,
+          double? cost,
+          List<String>? personNames,
+          List<double>? personsPercents,
+          DateTime? dateCreated}) =>
+      BillSplitterTransaction(
+        billSplitterTransactionPk:
+            billSplitterTransactionPk ?? this.billSplitterTransactionPk,
+        billSplitterFk: billSplitterFk ?? this.billSplitterFk,
+        name: name ?? this.name,
+        cost: cost ?? this.cost,
+        personNames: personNames ?? this.personNames,
+        personsPercents: personsPercents ?? this.personsPercents,
+        dateCreated: dateCreated ?? this.dateCreated,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('BillSplitterTransaction(')
+          ..write('billSplitterTransactionPk: $billSplitterTransactionPk, ')
+          ..write('billSplitterFk: $billSplitterFk, ')
+          ..write('name: $name, ')
+          ..write('cost: $cost, ')
+          ..write('personNames: $personNames, ')
+          ..write('personsPercents: $personsPercents, ')
+          ..write('dateCreated: $dateCreated')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(billSplitterTransactionPk, billSplitterFk,
+      name, cost, personNames, personsPercents, dateCreated);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BillSplitterTransaction &&
+          other.billSplitterTransactionPk == this.billSplitterTransactionPk &&
+          other.billSplitterFk == this.billSplitterFk &&
+          other.name == this.name &&
+          other.cost == this.cost &&
+          other.personNames == this.personNames &&
+          other.personsPercents == this.personsPercents &&
+          other.dateCreated == this.dateCreated);
+}
+
+class BillSplitterTransactionsCompanion
+    extends UpdateCompanion<BillSplitterTransaction> {
+  final Value<int> billSplitterTransactionPk;
+  final Value<int> billSplitterFk;
+  final Value<String> name;
+  final Value<double> cost;
+  final Value<List<String>?> personNames;
+  final Value<List<double>?> personsPercents;
+  final Value<DateTime> dateCreated;
+  const BillSplitterTransactionsCompanion({
+    this.billSplitterTransactionPk = const Value.absent(),
+    this.billSplitterFk = const Value.absent(),
+    this.name = const Value.absent(),
+    this.cost = const Value.absent(),
+    this.personNames = const Value.absent(),
+    this.personsPercents = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+  });
+  BillSplitterTransactionsCompanion.insert({
+    this.billSplitterTransactionPk = const Value.absent(),
+    required int billSplitterFk,
+    required String name,
+    required double cost,
+    this.personNames = const Value.absent(),
+    this.personsPercents = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+  })  : billSplitterFk = Value(billSplitterFk),
+        name = Value(name),
+        cost = Value(cost);
+  static Insertable<BillSplitterTransaction> custom({
+    Expression<int>? billSplitterTransactionPk,
+    Expression<int>? billSplitterFk,
+    Expression<String>? name,
+    Expression<double>? cost,
+    Expression<List<String>?>? personNames,
+    Expression<List<double>?>? personsPercents,
+    Expression<DateTime>? dateCreated,
+  }) {
+    return RawValuesInsertable({
+      if (billSplitterTransactionPk != null)
+        'bill_splitter_transaction_pk': billSplitterTransactionPk,
+      if (billSplitterFk != null) 'bill_splitter_fk': billSplitterFk,
+      if (name != null) 'name': name,
+      if (cost != null) 'cost': cost,
+      if (personNames != null) 'person_names': personNames,
+      if (personsPercents != null) 'persons_percents': personsPercents,
+      if (dateCreated != null) 'date_created': dateCreated,
+    });
+  }
+
+  BillSplitterTransactionsCompanion copyWith(
+      {Value<int>? billSplitterTransactionPk,
+      Value<int>? billSplitterFk,
+      Value<String>? name,
+      Value<double>? cost,
+      Value<List<String>?>? personNames,
+      Value<List<double>?>? personsPercents,
+      Value<DateTime>? dateCreated}) {
+    return BillSplitterTransactionsCompanion(
+      billSplitterTransactionPk:
+          billSplitterTransactionPk ?? this.billSplitterTransactionPk,
+      billSplitterFk: billSplitterFk ?? this.billSplitterFk,
+      name: name ?? this.name,
+      cost: cost ?? this.cost,
+      personNames: personNames ?? this.personNames,
+      personsPercents: personsPercents ?? this.personsPercents,
+      dateCreated: dateCreated ?? this.dateCreated,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (billSplitterTransactionPk.present) {
+      map['bill_splitter_transaction_pk'] =
+          Variable<int>(billSplitterTransactionPk.value);
+    }
+    if (billSplitterFk.present) {
+      map['bill_splitter_fk'] = Variable<int>(billSplitterFk.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (cost.present) {
+      map['cost'] = Variable<double>(cost.value);
+    }
+    if (personNames.present) {
+      final converter = $BillSplitterTransactionsTable.$converter0;
+      map['person_names'] =
+          Variable<String?>(converter.mapToSql(personNames.value));
+    }
+    if (personsPercents.present) {
+      final converter = $BillSplitterTransactionsTable.$converter1;
+      map['persons_percents'] =
+          Variable<String?>(converter.mapToSql(personsPercents.value));
+    }
+    if (dateCreated.present) {
+      map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BillSplitterTransactionsCompanion(')
+          ..write('billSplitterTransactionPk: $billSplitterTransactionPk, ')
+          ..write('billSplitterFk: $billSplitterFk, ')
+          ..write('name: $name, ')
+          ..write('cost: $cost, ')
+          ..write('personNames: $personNames, ')
+          ..write('personsPercents: $personsPercents, ')
+          ..write('dateCreated: $dateCreated')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BillSplitterTransactionsTable extends BillSplitterTransactions
+    with TableInfo<$BillSplitterTransactionsTable, BillSplitterTransaction> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BillSplitterTransactionsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _billSplitterTransactionPkMeta =
+      const VerificationMeta('billSplitterTransactionPk');
+  @override
+  late final GeneratedColumn<int?> billSplitterTransactionPk =
+      GeneratedColumn<int?>('bill_splitter_transaction_pk', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _billSplitterFkMeta =
+      const VerificationMeta('billSplitterFk');
+  @override
+  late final GeneratedColumn<int?> billSplitterFk = GeneratedColumn<int?>(
+      'bill_splitter_fk', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES bill_splitters (bill_splitter_pk)');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _costMeta = const VerificationMeta('cost');
+  @override
+  late final GeneratedColumn<double?> cost = GeneratedColumn<double?>(
+      'cost', aliasedName, false,
+      type: const RealType(), requiredDuringInsert: true);
+  final VerificationMeta _personNamesMeta =
+      const VerificationMeta('personNames');
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String?>
+      personNames = GeneratedColumn<String?>('person_names', aliasedName, true,
+              type: const StringType(), requiredDuringInsert: false)
+          .withConverter<List<String>>(
+              $BillSplitterTransactionsTable.$converter0);
+  final VerificationMeta _personsPercentsMeta =
+      const VerificationMeta('personsPercents');
+  @override
+  late final GeneratedColumnWithTypeConverter<List<double>, String?>
+      personsPercents = GeneratedColumn<String?>(
+              'persons_percents', aliasedName, true,
+              type: const StringType(), requiredDuringInsert: false)
+          .withConverter<List<double>>(
+              $BillSplitterTransactionsTable.$converter1);
+  final VerificationMeta _dateCreatedMeta =
+      const VerificationMeta('dateCreated');
+  @override
+  late final GeneratedColumn<DateTime?> dateCreated =
+      GeneratedColumn<DateTime?>('date_created', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          clientDefault: () => new DateTime.now());
+  @override
+  List<GeneratedColumn> get $columns => [
+        billSplitterTransactionPk,
+        billSplitterFk,
+        name,
+        cost,
+        personNames,
+        personsPercents,
+        dateCreated
+      ];
+  @override
+  String get aliasedName => _alias ?? 'bill_splitter_transactions';
+  @override
+  String get actualTableName => 'bill_splitter_transactions';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<BillSplitterTransaction> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('bill_splitter_transaction_pk')) {
+      context.handle(
+          _billSplitterTransactionPkMeta,
+          billSplitterTransactionPk.isAcceptableOrUnknown(
+              data['bill_splitter_transaction_pk']!,
+              _billSplitterTransactionPkMeta));
+    }
+    if (data.containsKey('bill_splitter_fk')) {
+      context.handle(
+          _billSplitterFkMeta,
+          billSplitterFk.isAcceptableOrUnknown(
+              data['bill_splitter_fk']!, _billSplitterFkMeta));
+    } else if (isInserting) {
+      context.missing(_billSplitterFkMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('cost')) {
+      context.handle(
+          _costMeta, cost.isAcceptableOrUnknown(data['cost']!, _costMeta));
+    } else if (isInserting) {
+      context.missing(_costMeta);
+    }
+    context.handle(_personNamesMeta, const VerificationResult.success());
+    context.handle(_personsPercentsMeta, const VerificationResult.success());
+    if (data.containsKey('date_created')) {
+      context.handle(
+          _dateCreatedMeta,
+          dateCreated.isAcceptableOrUnknown(
+              data['date_created']!, _dateCreatedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {billSplitterTransactionPk};
+  @override
+  BillSplitterTransaction map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    return BillSplitterTransaction.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $BillSplitterTransactionsTable createAlias(String alias) {
+    return $BillSplitterTransactionsTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<List<String>, String> $converter0 =
+      const StringListInColumnConverter();
+  static TypeConverter<List<double>, String> $converter1 =
+      const DoubleListInColumnConverter();
+}
+
 abstract class _$FinanceDatabase extends GeneratedDatabase {
   _$FinanceDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $WalletsTable wallets = $WalletsTable(this);
-  late final $TransactionsTable transactions = $TransactionsTable(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
+  late final $TransactionsTable transactions = $TransactionsTable(this);
   late final $LabelsTable labels = $LabelsTable(this);
   late final $AssociatedTitlesTable associatedTitles =
       $AssociatedTitlesTable(this);
   late final $BudgetsTable budgets = $BudgetsTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
+  late final $BillSplittersTable billSplitters = $BillSplittersTable(this);
+  late final $BillSplitterTransactionsTable billSplitterTransactions =
+      $BillSplitterTransactionsTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         wallets,
-        transactions,
         categories,
+        transactions,
         labels,
         associatedTitles,
         budgets,
-        appSettings
+        appSettings,
+        billSplitters,
+        billSplitterTransactions
       ];
 }

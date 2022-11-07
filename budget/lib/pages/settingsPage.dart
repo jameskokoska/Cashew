@@ -6,7 +6,9 @@ import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
+import 'package:budget/pages/billSplitterPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
+import 'package:budget/pages/editBillSplitterPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
@@ -78,7 +80,7 @@ class SettingsPageState extends State<SettingsPage>
   Widget build(BuildContext context) {
     return PageFramework(
       key: pageState,
-      title: "Settings",
+      title: "More",
       backButton: false,
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -89,18 +91,23 @@ class SettingsPageState extends State<SettingsPage>
           title: "About Budget App",
           icon: Icons.info_outline_rounded,
         ),
-        SettingsHeader(title: "Data"),
+        SettingsHeader(title: "Tools"),
         // SettingsContainerOpenPage(
         //   openPage: ColorsPage(),
         //   title: "Colors",
         //   icon: Icons.color_lens,
         // ),
         SettingsContainerOpenPage(
+          openPage: EditBillSplitterPage(),
+          title: "Bill Splitter",
+          icon: Icons.vertical_split_rounded,
+        ),
+        SettingsContainerOpenPage(
           openPage: SubscriptionsPage(),
           title: "Subscriptions",
           icon: Icons.event_repeat_rounded,
         ),
-
+        SettingsHeader(title: "Data"),
         SettingsContainerOpenPage(
           openPage: EditWalletsPage(title: "Edit Wallets"),
           title: "Edit Wallets",
@@ -267,33 +274,36 @@ class SettingsPageState extends State<SettingsPage>
           initialValue: appStateSettings["batterySaver"],
           icon: Icons.battery_charging_full_rounded,
         ),
-        kIsWeb ? SizedBox.shrink() : SettingsContainerSwitch(
-          title: "Notifications",
-          description: "Send add transaction reminders",
-          onSwitched: (value) async {
-            updateSettings("notifications", value, updateGlobalState: false);
+        kIsWeb
+            ? SizedBox.shrink()
+            : SettingsContainerSwitch(
+                title: "Notifications",
+                description: "Send add transaction reminders",
+                onSwitched: (value) async {
+                  updateSettings("notifications", value,
+                      updateGlobalState: false);
 
-            AndroidNotificationDetails androidNotificationDetails =
-                AndroidNotificationDetails(
-              'transactionReminders',
-              'Transaction Reminders',
-              importance: Importance.max,
-              priority: Priority.high,
-              color: Theme.of(context).colorScheme.primary,
-            );
-            NotificationDetails notificationDetails =
-                NotificationDetails(android: androidNotificationDetails);
-            await flutterLocalNotificationsPlugin.show(
-              0,
-              'Add Transactions',
-              'Don\'t forget to add transactions from today!',
-              notificationDetails,
-              payload: 'addTransaction',
-            );
-          },
-          initialValue: appStateSettings["notifications"],
-          icon: Icons.notifications_rounded,
-        ),
+                  AndroidNotificationDetails androidNotificationDetails =
+                      AndroidNotificationDetails(
+                    'transactionReminders',
+                    'Transaction Reminders',
+                    importance: Importance.max,
+                    priority: Priority.high,
+                    color: Theme.of(context).colorScheme.primary,
+                  );
+                  NotificationDetails notificationDetails =
+                      NotificationDetails(android: androidNotificationDetails);
+                  await flutterLocalNotificationsPlugin.show(
+                    0,
+                    'Add Transactions',
+                    'Don\'t forget to add transactions from today!',
+                    notificationDetails,
+                    payload: 'addTransaction',
+                  );
+                },
+                initialValue: appStateSettings["notifications"],
+                icon: Icons.notifications_rounded,
+              ),
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
