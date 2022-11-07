@@ -6,9 +6,7 @@ import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
-import 'package:budget/pages/billSplitterPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
-import 'package:budget/pages/editBillSplitterPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
@@ -80,7 +78,7 @@ class SettingsPageState extends State<SettingsPage>
   Widget build(BuildContext context) {
     return PageFramework(
       key: pageState,
-      title: "More",
+      title: "More Actions",
       backButton: false,
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -91,23 +89,17 @@ class SettingsPageState extends State<SettingsPage>
           title: "About Budget App",
           icon: Icons.info_outline_rounded,
         ),
-        SettingsHeader(title: "Tools"),
         // SettingsContainerOpenPage(
         //   openPage: ColorsPage(),
         //   title: "Colors",
         //   icon: Icons.color_lens,
         // ),
-        SettingsContainerOpenPage(
-          openPage: EditBillSplitterPage(),
-          title: "Bill Splitter",
-          icon: Icons.vertical_split_rounded,
-        ),
+        SettingsHeader(title: "Data"),
         SettingsContainerOpenPage(
           openPage: SubscriptionsPage(),
           title: "Subscriptions",
           icon: Icons.event_repeat_rounded,
         ),
-        SettingsHeader(title: "Data"),
         SettingsContainerOpenPage(
           openPage: EditWalletsPage(title: "Edit Wallets"),
           title: "Edit Wallets",

@@ -178,48 +178,12 @@ class Budgets extends Table {
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
 }
 
-@DataClassName('TransactionTabs')
-class TransactionTabs extends Table {
-  IntColumn get transactionTabsPk => integer().autoIncrement()();
-  TextColumn get name => text().withLength(max: NAME_LIMIT)();
-  RealColumn get amount => real()();
-  TextColumn get note => text().withLength(max: NOTE_LIMIT)();
-  TextColumn get transactionHistoryFks =>
-      text().map(const IntListInColumnConverter()).nullable()();
-  DateTimeColumn get dateCreated =>
-      dateTime().clientDefault(() => new DateTime.now())();
-}
-
 @DataClassName('AppSetting')
 class AppSettings extends Table {
   IntColumn get settingsPk => integer().autoIncrement()();
   TextColumn get settingsJSON =>
       text()(); // This is the JSON stored as a string for shared prefs 'userSettings'
   DateTimeColumn get dateUpdated =>
-      dateTime().clientDefault(() => new DateTime.now())();
-}
-
-@DataClassName('BillSplitter')
-class BillSplitters extends Table {
-  IntColumn get billSplitterPk => integer().autoIncrement()();
-  TextColumn get name => text().withLength(max: NAME_LIMIT)();
-  DateTimeColumn get dateCreated =>
-      dateTime().clientDefault(() => new DateTime.now())();
-  IntColumn get order => integer()();
-}
-
-@DataClassName('BillSplitterTransaction')
-class BillSplitterTransactions extends Table {
-  IntColumn get billSplitterTransactionPk => integer().autoIncrement()();
-  IntColumn get billSplitterFk =>
-      integer().references(BillSplitters, #billSplitterPk)();
-  TextColumn get name => text().withLength(max: NAME_LIMIT)();
-  RealColumn get cost => real()();
-  TextColumn get personNames =>
-      text().map(const StringListInColumnConverter()).nullable()();
-  TextColumn get personsPercents =>
-      text().map(const DoubleListInColumnConverter()).nullable()();
-  DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
 }
 
@@ -248,8 +212,6 @@ class CategoryWithTotal {
   AssociatedTitles,
   Budgets,
   AppSettings,
-  BillSplitters,
-  BillSplitterTransactions,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -273,11 +235,6 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 12) {
             await migrator.addColumn(
                 transactions, transactions.createdAnotherFutureTransaction);
-          }
-          if (from <= 13) {
-            await migrator.createTable($BillSplittersTable(database));
-            await migrator
-                .createTable($BillSplitterTransactionsTable(database));
           }
         },
       );
@@ -704,97 +661,6 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(b) => OrderingTerm.asc(b.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
-  }
-
-  Stream<List<BillSplitter>> watchAllBillSplitters() {
-    return (select(billSplitters)..orderBy([(b) => OrderingTerm.desc(b.order)]))
-        .watch();
-  }
-
-  Stream<List<BillSplitterTransaction>> watchAllBillSplitterTransactions(
-      int billSplitterFk) {
-    return (select(billSplitterTransactions)
-          ..where((tbl) => tbl.billSplitterFk.equals(billSplitterFk))
-          ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)]))
-        .watch();
-  }
-
-  Future<int> createOrUpdateBillSplitter(BillSplitter billSplitter) {
-    return into(billSplitters).insertOnConflictUpdate(billSplitter);
-  }
-
-  Future<int> getAmountOfBillSplitters() async {
-    return (await select(billSplitters).get()).length;
-  }
-
-  Future deleteBillSplitter(int billSplitterPk, int order) async {
-    await database.shiftBillSplitters(-1, order);
-    return (delete(billSplitters)
-          ..where((t) => t.billSplitterPk.equals(billSplitterPk)))
-        .go();
-  }
-
-  Future<bool> shiftBillSplitters(int direction, int pastIndexIncluding) async {
-    List<BillSplitter> billSplittersList = await (select(billSplitters)
-          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
-        .get();
-    if (direction == -1 || direction == 1) {
-      for (BillSplitter billSplitter in billSplittersList) {
-        await (update(billSplitters)
-              ..where(
-                (t) =>
-                    t.order.isBiggerOrEqualValue(pastIndexIncluding) &
-                    t.billSplitterPk.equals(billSplitter.billSplitterPk),
-              ))
-            .write(
-          BillSplittersCompanion(order: Value(billSplitter.order + direction)),
-        );
-      }
-    } else {
-      return false;
-    }
-    return true;
-  }
-
-  Future moveBillSplitter(
-      int billSplitterPk, int newPosition, int oldPosition) async {
-    List<BillSplitter> billSplittersList = await (select(billSplitters)
-          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
-        .get();
-    if (newPosition > oldPosition) {
-      for (BillSplitter billSplitter in billSplittersList) {
-        await (update(billSplitters)
-              ..where(
-                (t) =>
-                    t.billSplitterPk.equals(billSplitter.billSplitterPk) &
-                    t.order.isBiggerOrEqualValue(oldPosition) &
-                    t.order.isSmallerOrEqualValue(newPosition),
-              ))
-            .write(
-          BillSplittersCompanion(order: Value(billSplitter.order - 1)),
-        );
-      }
-    } else {
-      for (BillSplitter billSplitter in billSplittersList) {
-        await (update(billSplitters)
-              ..where(
-                (t) =>
-                    t.billSplitterPk.equals(billSplitter.billSplitterPk) &
-                    t.order.isBiggerOrEqualValue(newPosition) &
-                    t.order.isSmallerOrEqualValue(oldPosition),
-              ))
-            .write(
-          BillSplittersCompanion(order: Value(billSplitter.order + 1)),
-        );
-      }
-    }
-    await (update(billSplitters)
-          ..where(
-            (t) => t.billSplitterPk.equals(billSplitterPk),
-          ))
-        .write(
-      BillSplittersCompanion(order: Value(newPosition)),
-    );
   }
 
   Future<int> getAmountOfBudgets() async {
