@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Progress bar text clipping fixes
+    Daylight savings time transaction result fixes
+    Fixed associated title getting added twice (title trim fix comparison)
+    Email loading stops when page exited
+    Deleting associated titles optimized with batch insert all
+
     App name changed
     Home page now List View for better performance
     Fixed home page jumping around with budget container load/unload

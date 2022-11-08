@@ -465,6 +465,9 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
             .setProgressPercentage(currentEmailIndex / amountOfEmails);
         if (mounted) {
           setState(() {});
+        } else {
+          loadingProgressKey.currentState!.setProgressPercentage(0);
+          break;
         }
       }
     }

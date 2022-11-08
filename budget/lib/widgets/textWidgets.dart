@@ -14,6 +14,8 @@ class TextFont extends StatelessWidget {
   final bool autoSizeText;
   final double? minFontSize;
   final double? maxFontSize;
+  final TextOverflow? overflow;
+  final bool? softWrap;
 
   const TextFont({
     Key? key,
@@ -28,6 +30,8 @@ class TextFont extends StatelessWidget {
     this.autoSizeText = false,
     this.maxFontSize,
     this.minFontSize,
+    this.overflow,
+    this.softWrap,
   }) : super(key: key);
 
   @override
@@ -46,6 +50,7 @@ class TextFont extends StatelessWidget {
       decoration: TextDecoration.underline,
       decorationStyle: TextDecorationStyle.double,
       decorationColor: Color(0x00FFFFFF),
+      overflow: overflow,
       shadows: shadow == true
           ? [
               Shadow(
@@ -63,17 +68,19 @@ class TextFont extends StatelessWidget {
               "$text",
               maxLines: maxLines,
               textAlign: textAlign,
-              overflow: TextOverflow.ellipsis,
+              overflow: overflow ?? TextOverflow.ellipsis,
               style: textStyle,
               minFontSize: minFontSize ?? fontSize - 10,
               maxFontSize: maxFontSize ?? fontSize + 10,
+              softWrap: softWrap,
             )
           : Text(
               "$text",
               maxLines: maxLines,
               textAlign: textAlign,
-              overflow: TextOverflow.ellipsis,
+              overflow: overflow ?? TextOverflow.ellipsis,
               style: textStyle,
+              softWrap: softWrap,
             ),
     );
   }

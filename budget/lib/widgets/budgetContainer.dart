@@ -645,6 +645,9 @@ class BudgetProgress extends StatelessWidget {
           fontSize: large ? 16 : 14,
           textAlign: TextAlign.center,
           fontWeight: FontWeight.bold,
+          overflow: TextOverflow.fade,
+          softWrap: false,
+          maxLines: 1,
         ),
       ),
     );
@@ -735,11 +738,17 @@ class AnimatedProgress extends StatefulWidget {
 
 class _AnimatedProgressState extends State<AnimatedProgress> {
   bool animateIn = false;
+  bool fadeIn = false;
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
       setState(() {
         animateIn = true;
+      });
+    });
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        fadeIn = true;
       });
     });
     super.initState();
@@ -765,9 +774,12 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
             ),
           ),
           widget.percent > 40
-              ? widget.getPercentText(
-                  darkenPastel(widget.color, amount: 0.6),
-                )
+              ? AnimatedOpacity(
+                  opacity: fadeIn ? 1 : 0,
+                  duration: Duration(milliseconds: 300),
+                  child: widget.getPercentText(
+                    darkenPastel(widget.color, amount: 0.6),
+                  ))
               : Container(),
         ],
       ),

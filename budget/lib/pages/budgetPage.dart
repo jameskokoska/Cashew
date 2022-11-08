@@ -341,7 +341,8 @@ class _BudgetPageState extends State<BudgetPage> {
               List<Pair> points = [];
               for (DateTime indexDay = budgetRange.start;
                   indexDay.compareTo(budgetRange.end) <= 0;
-                  indexDay = indexDay.add(Duration(days: 1))) {
+                  indexDay = DateTime(
+                      indexDay.year, indexDay.month, indexDay.day + 1)) {
                 //can be optimized...
                 double totalForDay = 0;
                 for (Transaction transaction in snapshot.data!) {

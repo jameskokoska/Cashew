@@ -991,19 +991,22 @@ class FinanceDatabase extends _$FinanceDatabase {
               ..orderBy([(t) => OrderingTerm.asc(t.order)]))
             .get();
     if (direction == -1 || direction == 1) {
+      List<AssociatedTitlesCompanion> associatedTitlesNeedUpdating = [];
       for (TransactionAssociatedTitle associatedTitle in associatedTitlesList) {
-        await (update(associatedTitles)
-              ..where(
-                (t) =>
-                    t.order.isBiggerOrEqualValue(pastIndexIncluding) &
-                    t.associatedTitlePk
-                        .equals(associatedTitle.associatedTitlePk),
-              ))
-            .write(
-          AssociatedTitlesCompanion(
-              order: Value(associatedTitle.order + direction)),
-        );
+        if (associatedTitle.order >= pastIndexIncluding)
+          associatedTitlesNeedUpdating.add(AssociatedTitlesCompanion(
+            associatedTitlePk: Value(associatedTitle.associatedTitlePk),
+            dateCreated: Value(associatedTitle.dateCreated),
+            isExactMatch: Value(associatedTitle.isExactMatch),
+            title: Value(associatedTitle.title),
+            categoryFk: Value(associatedTitle.categoryFk),
+            order: Value(associatedTitle.order + direction),
+          ));
       }
+      await batch((batch) {
+        batch.insertAll(associatedTitles, associatedTitlesNeedUpdating,
+            mode: InsertMode.replace);
+      });
     } else {
       return false;
     }

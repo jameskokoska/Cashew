@@ -1603,9 +1603,9 @@ addAssociatedTitles(
 
     if (foundTitle == null ||
         (foundTitle.categoryFk != selectedCategory.categoryPk ||
-                foundTitle.title != selectedTitle) &&
+                foundTitle.title.trim() != selectedTitle.trim()) &&
             !(foundTitle.categoryFk == selectedCategory.categoryPk &&
-                foundTitle.title == selectedTitle)) {
+                foundTitle.title.trim() == selectedTitle.trim())) {
       //Should just add to the end but be sorted in opposite direction on edit titles page
       //Also when it loops through getRelatingAssociatedTitle it should reverse the order
       // It's way faster to avoid pushing elements all down by 1 spot

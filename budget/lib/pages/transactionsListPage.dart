@@ -44,7 +44,9 @@ List<Widget> getTransactionsSlivers(
   List<DateTime> dates = [];
   for (DateTime indexDay = startDay;
       indexDay.millisecondsSinceEpoch <= endDay.millisecondsSinceEpoch;
-      indexDay = indexDay.add(Duration(days: 1))) {
+      indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
+    // we do indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)
+    // instead of indexDay = indexDay.add(Duration(days:1)) because of the time change
     dates.add(indexDay);
   }
   for (DateTime date in dates.reversed) {

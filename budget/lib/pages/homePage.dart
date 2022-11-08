@@ -312,7 +312,8 @@ class HomePageState extends State<HomePage>
                     DateTime.now().day,
                   );
                       indexDay.compareTo(DateTime.now()) < 0;
-                      indexDay = indexDay.add(Duration(days: 1))) {
+                      indexDay = DateTime(
+                          indexDay.year, indexDay.month, indexDay.day + 1)) {
                     //can be optimized...
                     double totalForDay = 0;
                     for (Transaction transaction in snapshot.data!) {
@@ -364,7 +365,8 @@ class HomePageState extends State<HomePage>
               duration: Duration(milliseconds: 300),
               child: StreamBuilder<List<Transaction>>(
                 stream: database.watchAllUpcomingTransactions(
-                    endDate: DateTime.now().add(Duration(days: 3))),
+                    endDate: DateTime(DateTime.now().year, DateTime.now().month,
+                        DateTime.now().day + 1)),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0) {
@@ -413,7 +415,7 @@ class HomePageState extends State<HomePage>
                     DateTime(
                       DateTime.now().year,
                       DateTime.now().month,
-                      DateTime.now().day + 1,
+                      DateTime.now().day,
                     ),
                     income: selectedSlidingSelector == 1
                         ? null

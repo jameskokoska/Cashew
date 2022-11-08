@@ -115,7 +115,7 @@ checkYesterdayTodayTomorrow(DateTime date) {
   if (date.day == now.day && date.month == now.month && date.year == now.year) {
     return "Today";
   }
-  DateTime tomorrow = now.add(Duration(days: 1));
+  DateTime tomorrow = DateTime(now.year, now.month, now.day + 1);
   if (date.day == tomorrow.day &&
       date.month == tomorrow.month &&
       date.year == tomorrow.year) {
