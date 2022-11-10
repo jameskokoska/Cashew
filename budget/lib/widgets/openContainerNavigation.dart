@@ -11,12 +11,14 @@ class OpenContainerNavigation extends StatelessWidget {
     required this.button,
     this.closedColor,
     this.borderRadius = 250,
+    this.closedElevation,
   }) : super(key: key);
 
   final Widget openPage;
   final Widget Function(VoidCallback) button;
   final Color? closedColor;
   final double borderRadius;
+  final double? closedElevation;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class OpenContainerNavigation extends StatelessWidget {
       },
       tappable: false,
       transitionDuration: Duration(milliseconds: 350),
-      closedElevation: 0,
+      closedElevation: closedElevation ?? 0,
       openColor: closedColor ?? Colors.transparent,
       closedColor: closedColor ?? Colors.transparent,
       closedBuilder: (BuildContext context, VoidCallback openContainer) {

@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed past budgets bar graph
+    Changed the order of execution of startup functions
+    New FAB animation
+    
     Progress bar text clipping fixes
     Daylight savings time transaction result fixes
     Fixed associated title getting added twice (title trim fix comparison)

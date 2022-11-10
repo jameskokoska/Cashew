@@ -62,8 +62,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
-      floatingActionButton: AnimatedScaleDelayed(
-        child: Padding(
+      floatingActionButton: AnimateFABDelayed(
+        fab: Padding(
           padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
           child: FAB(
             tooltip: "Add Subscription",

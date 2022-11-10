@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class FAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenContainerNavigation(
+      closedElevation: 10,
       borderRadius: 18,
       closedColor: Theme.of(context).colorScheme.secondary,
       button: (openContainer) {

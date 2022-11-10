@@ -384,6 +384,8 @@ class _BudgetPageState extends State<BudgetPage> {
                           ? null
                           : (budgetRange.end.difference(dateForRange).inDays)
                               .toDouble(),
+                      // horizontalLineAt: -((widget.budget.amount) /
+                      //     daysBetween(budgetRange.start, budgetRange.end)),
                     ),
                   ),
                 ),

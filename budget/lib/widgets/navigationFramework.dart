@@ -89,11 +89,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
     // Functions to run after entire UI loaded
     Future.delayed(Duration.zero, () async {
-      await parseEmailsInBackground(context);
-      await createBackupInBackground(context);
       await showChangelog(context);
       await runNotificationPayLoads(context);
-
+      await parseEmailsInBackground(context);
+      await createBackupInBackground(context);
       entireAppLoaded = true;
     });
 
@@ -163,28 +162,21 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   ),
                   Stack(
                     children: [
-                      AnimatedScale(
-                        duration: currentPage == 0 || currentPage == 1
-                            ? Duration(milliseconds: 1100)
-                            : Duration(milliseconds: 0),
-                        scale: currentPage == 0 || currentPage == 1 ? 1 : 0,
-                        curve: ElasticOutCurve(0.8),
-                        child: FAB(
+                      AnimateFAB(
+                        fab: FAB(
                           tooltip: "Add Transaction",
                           openPage: AddTransactionPage(
                             title: "Add Transaction",
                           ),
                         ),
+                        condition: currentPage == 0 || currentPage == 1,
                       ),
-                      AnimatedScale(
-                        duration: currentPage == 2
-                            ? Duration(milliseconds: 1100)
-                            : Duration(milliseconds: 0),
-                        scale: currentPage == 2 ? 1 : 0,
-                        curve: ElasticOutCurve(0.8),
-                        child: FAB(
+                      AnimateFAB(
+                        fab: FAB(
+                          tooltip: "Add Budget",
                           openPage: AddBudgetPage(title: "Add Budget"),
                         ),
+                        condition: currentPage == 2,
                       ),
                     ],
                   ),
@@ -194,6 +186,43 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           ),
         ]),
       ),
+    );
+  }
+}
+
+class AnimateFAB extends StatelessWidget {
+  const AnimateFAB({required this.condition, required this.fab, super.key});
+
+  final bool condition;
+  final Widget fab;
+
+  @override
+  Widget build(BuildContext context) {
+    // return AnimatedOpacity(
+    //   duration: Duration(milliseconds: 400),
+    //   opacity: condition ? 1 : 0,
+    //   child: AnimatedScale(
+    //     duration: Duration(milliseconds: 1100),
+    //     scale: condition ? 1 : 0,
+    //     curve: Curves.easeInOutCubicEmphasized,
+    //     child: fab,
+    //     alignment: Alignment(0.7, 0.7),
+    //   ),
+    // );
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 500),
+      switchInCurve: Curves.easeInOutCubicEmphasized,
+      switchOutCurve: Curves.ease,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeScaleTransitionFAB(animation: animation, child: child);
+      },
+      child: condition
+          ? fab
+          : Container(
+              key: ValueKey(1),
+              width: 50,
+              height: 50,
+            ),
     );
   }
 }
@@ -277,6 +306,70 @@ class SelectedTransactionsButton extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class FadeScaleTransitionFAB extends StatelessWidget {
+  const FadeScaleTransitionFAB({
+    Key? key,
+    required this.animation,
+    this.child,
+  }) : super(key: key);
+
+  final Animation<double> animation;
+  final Widget? child;
+
+  static final Animatable<double> _fadeInTransition = Tween<double>(
+    begin: 0.0,
+    end: 1.00,
+  );
+  static final Animatable<double> _scaleInTransition = Tween<double>(
+    begin: 0.30,
+    end: 1.00,
+  );
+  static final Animatable<double> _fadeOutTransition = Tween<double>(
+    begin: 1.0,
+    end: 0,
+  );
+  static final Animatable<double> _scaleOutTransition = Tween<double>(
+    begin: 1.0,
+    end: 0.1,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return DualTransitionBuilder(
+      animation: animation,
+      forwardBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Widget? child,
+      ) {
+        return FadeTransition(
+          opacity: _fadeInTransition.animate(animation),
+          child: ScaleTransition(
+            scale: _scaleInTransition.animate(animation),
+            child: child,
+            alignment: Alignment(0.7, 0.7),
+          ),
+        );
+      },
+      reverseBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Widget? child,
+      ) {
+        return FadeTransition(
+          opacity: _fadeOutTransition.animate(animation),
+          child: ScaleTransition(
+            scale: _scaleOutTransition.animate(animation),
+            child: child,
+            alignment: Alignment(0.7, 0.7),
+          ),
+        );
+      },
+      child: child,
     );
   }
 }

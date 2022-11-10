@@ -19,6 +19,7 @@ class _LineChart extends StatefulWidget {
     this.isCurved = false,
     this.endDate,
     this.verticalLineAt,
+    this.horizontalLineAt,
     Key? key,
   }) : super(key: key);
 
@@ -29,6 +30,7 @@ class _LineChart extends StatefulWidget {
   final bool isCurved;
   final DateTime? endDate;
   final double? verticalLineAt;
+  final double? horizontalLineAt;
 
   @override
   State<_LineChart> createState() => _LineChartState();
@@ -91,6 +93,17 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   ExtraLinesData get extraLinesData => ExtraLinesData(
         horizontalLines: [
+          ...(widget.horizontalLineAt != null
+              ? [
+                  HorizontalLine(
+                    y: widget.horizontalLineAt!,
+                    dashArray: [2, 2],
+                    strokeWidth: 2,
+                    color: dynamicPastel(context, widget.color, amount: 0.3)
+                        .withOpacity(0.7),
+                  )
+                ]
+              : []),
           HorizontalLine(
             y: 0,
             color: dynamicPastel(context, widget.color, amount: 0.3)
@@ -330,6 +343,7 @@ class LineChartWrapper extends StatelessWidget {
     this.color,
     this.endDate,
     this.verticalLineAt,
+    this.horizontalLineAt,
     Key? key,
   }) : super(key: key);
 
@@ -338,6 +352,7 @@ class LineChartWrapper extends StatelessWidget {
   final Color? color;
   final DateTime? endDate;
   final double? verticalLineAt;
+  final double? horizontalLineAt;
 
   List<Pair> filterPoints(points) {
     List<Pair> pointsOut = [];
@@ -408,6 +423,7 @@ class LineChartWrapper extends StatelessWidget {
           isCurved: isCurved,
           endDate: endDate,
           verticalLineAt: verticalLineAt,
+          horizontalLineAt: horizontalLineAt,
         ),
       ),
     );

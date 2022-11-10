@@ -40,8 +40,8 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
       dragDownToDismissEnabled: dragDownToDismissEnabled,
       title: widget.title,
       navbar: false,
-      floatingActionButton: AnimatedScaleDelayed(
-        child: Padding(
+      floatingActionButton: AnimateFABDelayed(
+        fab: Padding(
           padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
           child: FAB(
             tooltip: "Add Budget",

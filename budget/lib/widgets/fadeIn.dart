@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -298,21 +299,21 @@ class _CountNumberState extends State<CountNumber> {
   }
 }
 
-class AnimatedScaleDelayed extends StatefulWidget {
-  const AnimatedScaleDelayed({
+class AnimateFABDelayed extends StatefulWidget {
+  const AnimateFABDelayed({
     Key? key,
-    required this.child,
-    this.delay = const Duration(milliseconds: 250),
+    required this.fab,
+    this.delay = const Duration(milliseconds: 50),
   }) : super(key: key);
 
-  final Widget child;
+  final Widget fab;
   final Duration delay;
 
   @override
-  State<AnimatedScaleDelayed> createState() => _AnimatedScaleDelayedState();
+  State<AnimateFABDelayed> createState() => _AnimateFABDelayedState();
 }
 
-class _AnimatedScaleDelayedState extends State<AnimatedScaleDelayed> {
+class _AnimateFABDelayedState extends State<AnimateFABDelayed> {
   bool scaleIn = false;
 
   @override
@@ -327,11 +328,9 @@ class _AnimatedScaleDelayedState extends State<AnimatedScaleDelayed> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedScale(
-      duration: Duration(milliseconds: 1100),
-      scale: scaleIn ? 1 : 0,
-      curve: ElasticOutCurve(0.8),
-      child: widget.child,
+    return AnimateFAB(
+      condition: scaleIn,
+      fab: widget.fab,
     );
   }
 }

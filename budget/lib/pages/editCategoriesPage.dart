@@ -44,8 +44,8 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
       dragDownToDismissEnabled: dragDownToDismissEnabled,
       title: widget.title,
       navbar: false,
-      floatingActionButton: AnimatedScaleDelayed(
-        child: Padding(
+      floatingActionButton: AnimateFABDelayed(
+        fab: Padding(
           padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
           child: FAB(
             tooltip: "Add Category",
