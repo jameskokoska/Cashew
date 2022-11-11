@@ -394,10 +394,10 @@ class _BudgetPageState extends State<BudgetPage> {
                           : (budgetRange.end.difference(dateForRange).inDays)
                               .toDouble(),
                       horizontalLineAt: -widget.budget.amount *
-                          (DateTime.now().millisecondsSinceEpoch -
-                              budgetRange.start.millisecondsSinceEpoch) /
-                          (budgetRange.end.millisecondsSinceEpoch -
-                              DateTime.now().millisecondsSinceEpoch),
+                          ((DateTime.now().millisecondsSinceEpoch -
+                                  budgetRange.start.millisecondsSinceEpoch) /
+                              (budgetRange.end.millisecondsSinceEpoch -
+                                  budgetRange.start.millisecondsSinceEpoch)),
                     ),
                   ),
                 ),

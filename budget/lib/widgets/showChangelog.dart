@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Improvements to past budget pages (removed UI elements that don't make sense)
+    Added horizontal line indicating the best point to be at during that current period for spending
     Fixed past budgets bar graph
     Changed the order of execution of startup functions
     New FAB animation
