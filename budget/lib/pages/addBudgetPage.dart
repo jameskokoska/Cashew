@@ -717,11 +717,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 8),
                                   child: Center(
-                                    child: Row(
+                                    child: Wrap(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          WrapCrossAlignment.end,
+                                      runAlignment: WrapAlignment.center,
+                                      alignment: WrapAlignment.center,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(

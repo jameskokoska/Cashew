@@ -152,45 +152,45 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
             }
           },
         ),
-        // SliverPadding(
-        //   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
-        //   sliver: SliverList(
-        //     delegate: SliverChildBuilderDelegate(
-        //       (BuildContext context, int index) {
-        //         DateTime datePast = DateTime(
-        //           DateTime.now().year -
-        //               (widget.budget.reoccurrence == BudgetReoccurence.yearly
-        //                   ? index
-        //                   : 0),
-        //           DateTime.now().month -
-        //               (widget.budget.reoccurrence == BudgetReoccurence.monthly
-        //                   ? index
-        //                   : 0),
-        //           DateTime.now().day -
-        //               (widget.budget.reoccurrence == BudgetReoccurence.daily
-        //                   ? index
-        //                   : 0) -
-        //               (widget.budget.reoccurrence == BudgetReoccurence.weekly
-        //                   ? index * 7
-        //                   : 0),
-        //         );
-        //         return Padding(
-        //           padding: EdgeInsets.only(
-        //               bottom: index == amountLoaded - 1 ? 0 : 16.0),
-        //           child: BudgetContainer(
-        //             budget: widget.budget,
-        //             smallBudgetContainer: true,
-        //             showTodayForSmallBudget: (index == 0 ? true : false),
-        //             dateForRange: datePast,
-        //             isPastBudget: index == 0 ? false : true,
-        //             isPastBudgetButCurrentPeriod: index == 0,
-        //           ),
-        //         );
-        //       },
-        //       childCount: amountLoaded, //snapshot.data?.length
-        //     ),
-        //   ),
-        // ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                DateTime datePast = DateTime(
+                  DateTime.now().year -
+                      (widget.budget.reoccurrence == BudgetReoccurence.yearly
+                          ? index
+                          : 0),
+                  DateTime.now().month -
+                      (widget.budget.reoccurrence == BudgetReoccurence.monthly
+                          ? index
+                          : 0),
+                  DateTime.now().day -
+                      (widget.budget.reoccurrence == BudgetReoccurence.daily
+                          ? index
+                          : 0) -
+                      (widget.budget.reoccurrence == BudgetReoccurence.weekly
+                          ? index * 7
+                          : 0),
+                );
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: index == amountLoaded - 1 ? 0 : 16.0),
+                  child: BudgetContainer(
+                    budget: widget.budget,
+                    smallBudgetContainer: true,
+                    showTodayForSmallBudget: (index == 0 ? true : false),
+                    dateForRange: datePast,
+                    isPastBudget: index == 0 ? false : true,
+                    isPastBudgetButCurrentPeriod: index == 0,
+                  ),
+                );
+              },
+              childCount: amountLoaded, //snapshot.data?.length
+            ),
+          ),
+        ),
         SliverToBoxAdapter(
           child: Center(
             child: Tappable(

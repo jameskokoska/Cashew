@@ -303,7 +303,7 @@ class AnimateFABDelayed extends StatefulWidget {
   const AnimateFABDelayed({
     Key? key,
     required this.fab,
-    this.delay = const Duration(milliseconds: 50),
+    this.delay = const Duration(milliseconds: 250),
   }) : super(key: key);
 
   final Widget fab;

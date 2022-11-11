@@ -262,17 +262,26 @@ class _BudgetPageState extends State<BudgetPage> {
                               budget: widget.budget,
                               large: true,
                               percent: totalSpent / widget.budget.amount * 100,
-                              todayPercent: getPercentBetweenDates(
-                                  budgetRange, dateForRange),
+                              todayPercent: widget.isPastBudget == true
+                                  ? -1
+                                  : getPercentBetweenDates(
+                                      budgetRange, dateForRange),
                             ),
-                            Container(height: 15),
-                            DaySpending(
-                              budget: widget.budget,
-                              amount: (widget.budget.amount - totalSpent) /
-                                  daysBetween(dateForRange, budgetRange.end),
-                              large: true,
-                            ),
-                            Container(height: 10),
+                            widget.isPastBudget == true
+                                ? SizedBox.shrink()
+                                : Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 15, bottom: 5),
+                                    child: DaySpending(
+                                      budget: widget.budget,
+                                      amount: (widget.budget.amount -
+                                              totalSpent) /
+                                          daysBetween(
+                                              dateForRange, budgetRange.end),
+                                      large: true,
+                                    ),
+                                  ),
+                            Container(height: 3),
                           ],
                         ),
                       ),
@@ -384,8 +393,11 @@ class _BudgetPageState extends State<BudgetPage> {
                           ? null
                           : (budgetRange.end.difference(dateForRange).inDays)
                               .toDouble(),
-                      // horizontalLineAt: -((widget.budget.amount) /
-                      //     daysBetween(budgetRange.start, budgetRange.end)),
+                      horizontalLineAt: -widget.budget.amount *
+                          (DateTime.now().millisecondsSinceEpoch -
+                              budgetRange.start.millisecondsSinceEpoch) /
+                          (budgetRange.end.millisecondsSinceEpoch -
+                              DateTime.now().millisecondsSinceEpoch),
                     ),
                   ),
                 ),

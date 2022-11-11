@@ -709,7 +709,7 @@ class BudgetProgress extends StatelessWidget {
           ),
         ),
         todayPercent <= 0
-            ? Container()
+            ? Container(height: 35)
             : TodayIndicator(
                 percent: todayPercent,
                 large: large,

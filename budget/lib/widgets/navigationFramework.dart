@@ -320,9 +320,8 @@ class FadeScaleTransitionFAB extends StatelessWidget {
   final Animation<double> animation;
   final Widget? child;
 
-  static final Animatable<double> _fadeInTransition = Tween<double>(
-    begin: 0.0,
-    end: 1.00,
+  static final Animatable<double> _fadeInTransition = CurveTween(
+    curve: const Interval(0.0, 0.7),
   );
   static final Animatable<double> _scaleInTransition = Tween<double>(
     begin: 0.30,
