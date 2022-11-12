@@ -37,25 +37,11 @@ class PastBudgetsPage extends StatefulWidget {
 GlobalKey<PageFrameworkState> budgetHistoryKey = GlobalKey();
 
 class _PastBudgetsPageState extends State<PastBudgetsPage> {
+  late Stream<List<double?>> mergedStreams;
+  List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 3;
 
-  @override
-  Widget build(BuildContext context) {
-    DateTimeRange budgetRange = getBudgetDate(widget.budget, DateTime.now());
-    ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-      seedColor: HexColor(widget.budget.colour,
-          defaultColor: Theme.of(context).colorScheme.primary),
-      brightness: getSettingConstants(appStateSettings)["theme"] ==
-              ThemeMode.system
-          ? MediaQuery.of(context).platformBrightness
-          : getSettingConstants(appStateSettings)["theme"] == ThemeMode.light
-              ? Brightness.light
-              : getSettingConstants(appStateSettings)["theme"] == ThemeMode.dark
-                  ? Brightness.dark
-                  : Brightness.light,
-    );
-
-    List<DateTimeRange> dateTimeRanges = [];
+  initState() {
     List<Stream<double?>> watchedBudgetTotals = [];
     for (int index = 0; index <= 7; index++) {
       DateTime datePast = DateTime(
@@ -83,7 +69,31 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
           widget.budget.categoryFks,
           widget.budget.allCategoryFks));
     }
-    Stream<List<double?>> mergedStreams = StreamZip(watchedBudgetTotals);
+    mergedStreams = StreamZip(watchedBudgetTotals);
+    mergedStreams.listen(
+      (event) {
+        print("EVENT");
+        print(event.length);
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    DateTimeRange budgetRange = getBudgetDate(widget.budget, DateTime.now());
+    ColorScheme budgetColorScheme = ColorScheme.fromSeed(
+      seedColor: HexColor(widget.budget.colour,
+          defaultColor: Theme.of(context).colorScheme.primary),
+      brightness: getSettingConstants(appStateSettings)["theme"] ==
+              ThemeMode.system
+          ? MediaQuery.of(context).platformBrightness
+          : getSettingConstants(appStateSettings)["theme"] == ThemeMode.light
+              ? Brightness.light
+              : getSettingConstants(appStateSettings)["theme"] == ThemeMode.dark
+                  ? Brightness.dark
+                  : Brightness.light,
+    );
 
     return PageFramework(
       key: budgetHistoryKey,
@@ -112,7 +122,7 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
             if (snapshot.hasData) {
               double maxY = 100;
               List<BarChartGroupData> bars = [];
-              List<BarChartGroupData> initialBars = [];
+              // List<BarChartGroupData> initialBars = [];
 
               for (int i = snapshot.data!.length - 1; i >= 0; i--) {
                 if ((snapshot.data![i] ?? 0).abs() > maxY)
@@ -127,14 +137,14 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                     budgetColorScheme.primary,
                   ),
                 );
-                initialBars.add(
-                  makeGroupData(
-                    i,
-                    0.001,
-                    0,
-                    budgetColorScheme.secondary,
-                  ),
-                );
+                // initialBars.add(
+                //   makeGroupData(
+                //     i,
+                //     0.001,
+                //     0,
+                //     budgetColorScheme.secondary,
+                //   ),
+                // );
               }
 
               return SliverToBoxAdapter(
@@ -143,7 +153,6 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                   dateRanges: dateTimeRanges,
                   maxY: maxY,
                   bars: bars,
-                  initialBars: initialBars,
                   horizontalLineAt: widget.budget.amount,
                 ),
               );
@@ -152,45 +161,45 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
             }
           },
         ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                DateTime datePast = DateTime(
-                  DateTime.now().year -
-                      (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                          ? index
-                          : 0),
-                  DateTime.now().month -
-                      (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                          ? index
-                          : 0),
-                  DateTime.now().day -
-                      (widget.budget.reoccurrence == BudgetReoccurence.daily
-                          ? index
-                          : 0) -
-                      (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                          ? index * 7
-                          : 0),
-                );
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: index == amountLoaded - 1 ? 0 : 16.0),
-                  child: BudgetContainer(
-                    budget: widget.budget,
-                    smallBudgetContainer: true,
-                    showTodayForSmallBudget: (index == 0 ? true : false),
-                    dateForRange: datePast,
-                    isPastBudget: index == 0 ? false : true,
-                    isPastBudgetButCurrentPeriod: index == 0,
-                  ),
-                );
-              },
-              childCount: amountLoaded, //snapshot.data?.length
-            ),
-          ),
-        ),
+        // SliverPadding(
+        //   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
+        //   sliver: SliverList(
+        //     delegate: SliverChildBuilderDelegate(
+        //       (BuildContext context, int index) {
+        //         DateTime datePast = DateTime(
+        //           DateTime.now().year -
+        //               (widget.budget.reoccurrence == BudgetReoccurence.yearly
+        //                   ? index
+        //                   : 0),
+        //           DateTime.now().month -
+        //               (widget.budget.reoccurrence == BudgetReoccurence.monthly
+        //                   ? index
+        //                   : 0),
+        //           DateTime.now().day -
+        //               (widget.budget.reoccurrence == BudgetReoccurence.daily
+        //                   ? index
+        //                   : 0) -
+        //               (widget.budget.reoccurrence == BudgetReoccurence.weekly
+        //                   ? index * 7
+        //                   : 0),
+        //         );
+        //         return Padding(
+        //           padding: EdgeInsets.only(
+        //               bottom: index == amountLoaded - 1 ? 0 : 16.0),
+        //           child: BudgetContainer(
+        //             budget: widget.budget,
+        //             smallBudgetContainer: true,
+        //             showTodayForSmallBudget: (index == 0 ? true : false),
+        //             dateForRange: datePast,
+        //             isPastBudget: index == 0 ? false : true,
+        //             isPastBudgetButCurrentPeriod: index == 0,
+        //           ),
+        //         );
+        //       },
+        //       childCount: amountLoaded, //snapshot.data?.length
+        //     ),
+        //   ),
+        // ),
         SliverToBoxAdapter(
           child: Center(
             child: Tappable(
