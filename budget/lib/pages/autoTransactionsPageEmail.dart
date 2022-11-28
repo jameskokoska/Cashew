@@ -431,6 +431,7 @@ class GmailApiScreen extends StatefulWidget {
 class _GmailApiScreenState extends State<GmailApiScreen> {
   bool loaded = false;
   bool loading = false;
+  String error = "";
   int amountOfEmails =
       appStateSettings["EmailAutoTransactions-amountOfEmails"] ?? 10;
 
@@ -445,30 +446,38 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
   init() async {
     loading = true;
     if (user != null) {
-      final authHeaders = await user!.authHeaders;
-      final authenticateClient = GoogleAuthClient(authHeaders);
-      gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
-      gMail.ListMessagesResponse results = await gmailApi.users.messages
-          .list(user!.id.toString(), maxResults: amountOfEmails);
-      setState(() {
-        loaded = true;
-      });
-      int currentEmailIndex = 0;
-      for (gMail.Message message in results.messages!) {
-        gMail.Message messageData =
-            await gmailApi.users.messages.get(user!.id.toString(), message.id!);
-        // print(DateTime.fromMillisecondsSinceEpoch(
-        //     int.parse(messageData.internalDate ?? "")));
-        messagesList.add(messageData);
-        currentEmailIndex++;
-        loadingProgressKey.currentState!
-            .setProgressPercentage(currentEmailIndex / amountOfEmails);
-        if (mounted) {
-          setState(() {});
-        } else {
-          loadingProgressKey.currentState!.setProgressPercentage(0);
-          break;
+      try {
+        final authHeaders = await user!.authHeaders;
+        final authenticateClient = GoogleAuthClient(authHeaders);
+        gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
+        gMail.ListMessagesResponse results = await gmailApi.users.messages
+            .list(user!.id.toString(), maxResults: amountOfEmails);
+        setState(() {
+          loaded = true;
+          error = "";
+        });
+        int currentEmailIndex = 0;
+        for (gMail.Message message in results.messages!) {
+          gMail.Message messageData = await gmailApi.users.messages
+              .get(user!.id.toString(), message.id!);
+          // print(DateTime.fromMillisecondsSinceEpoch(
+          //     int.parse(messageData.internalDate ?? "")));
+          messagesList.add(messageData);
+          currentEmailIndex++;
+          loadingProgressKey.currentState!
+              .setProgressPercentage(currentEmailIndex / amountOfEmails);
+          if (mounted) {
+            setState(() {});
+          } else {
+            loadingProgressKey.currentState!.setProgressPercentage(0);
+            break;
+          }
         }
+      } catch (e) {
+        setState(() {
+          loaded = true;
+          error = e.toString();
+        });
       }
     }
     loading = false;
@@ -478,8 +487,25 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
   Widget build(BuildContext context) {
     if (user == null) {
       return SizedBox();
-    } else if (loaded == false && loading == false) {
+    } else if (error != "" || (loaded == false && loading == false)) {
       init();
+    }
+    if (error != "") {
+      return Padding(
+        padding: const EdgeInsets.only(
+          top: 28.0,
+          left: 20,
+          right: 20,
+        ),
+        child: Center(
+          child: TextFont(
+            text: error,
+            fontSize: 15,
+            textAlign: TextAlign.center,
+            maxLines: 10,
+          ),
+        ),
+      );
     }
     if (loaded) {
       // If the Future is complete, display the preview.
@@ -562,7 +588,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.only(top: 8.0),
+        padding: const EdgeInsets.only(top: 28.0),
         child: Center(child: CircularProgressIndicator()),
       );
     }

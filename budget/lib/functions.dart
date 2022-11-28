@@ -181,14 +181,19 @@ getWordedDateShortMore(DateTime date,
 }
 
 //e.g. Today/Yesterday/Tomorrow/Tuesday/ Thursday, September 15
-getWordedDate(DateTime date) {
+getWordedDate(DateTime date, {bool includeMonthDate = false}) {
   DateTime now = DateTime.now();
 
   if (checkYesterdayTodayTomorrow(date) != false) {
-    return checkYesterdayTodayTomorrow(date);
+    return checkYesterdayTodayTomorrow(date) +
+        (includeMonthDate
+            ? ", " + DateFormat.MMMMd('en_US').format(date).toString()
+            : "");
   }
 
-  if (now.difference(date).inDays < 4 && now.difference(date).inDays > 0) {
+  if (includeMonthDate == false &&
+      now.difference(date).inDays < 4 &&
+      now.difference(date).inDays > 0) {
     String weekday = DateFormat('EEEE').format(date);
     return weekday;
   }

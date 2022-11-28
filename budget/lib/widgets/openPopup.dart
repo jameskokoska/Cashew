@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:animations/animations.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -96,6 +97,7 @@ Future<T?> openPopup<T extends Object?>(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(22),
+              boxShadow: boxShadowGeneral(context),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -251,6 +253,7 @@ Future<T?> openPopupCustom<T extends Object?>(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.lightDarkAccent,
               borderRadius: BorderRadius.circular(10),
+              boxShadow: boxShadowGeneral(context),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

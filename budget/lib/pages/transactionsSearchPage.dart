@@ -7,6 +7,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -130,80 +131,100 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        //Minimize keyboard when tap non interactive widget
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
+    return WillPopScope(
+      onWillPop: () async {
+        if ((globalSelectedID.value["TransactionsSearch"] ?? []).length > 0) {
+          globalSelectedID.value["TransactionsSearch"] = [];
+          globalSelectedID.notifyListeners();
+          return false;
+        } else {
+          return true;
         }
       },
-      child: PageFramework(
-        navbar: false,
-        dragDownToDismiss: true,
-        onScroll: _scrollListener,
-        title: "Search",
-        slivers: [
-          SliverToBoxAdapter(
-            child: AnimatedBuilder(
-              animation: _animationControllerSearch,
-              builder: (_, child) {
-                return Transform.translate(
-                  offset:
-                      Offset(0, 6.5 - 6.5 * (_animationControllerSearch.value)),
-                  child: child,
-                );
-              },
-              child: Row(
-                children: [
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: TextInput(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      labelText: "Search...",
-                      icon: Icons.search_rounded,
-                      onSubmitted: (value) {
-                        searchTransaction(value, income: selectedIncome);
-                      },
-                      onChanged: (value) =>
-                          searchTransaction(value, income: selectedIncome),
-                      padding: EdgeInsets.all(0),
-                      autoFocus: true,
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              //Minimize keyboard when tap non interactive widget
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: PageFramework(
+              navbar: false,
+              dragDownToDismiss: true,
+              onScroll: _scrollListener,
+              title: "Search",
+              slivers: [
+                SliverToBoxAdapter(
+                  child: AnimatedBuilder(
+                    animation: _animationControllerSearch,
+                    builder: (_, child) {
+                      return Transform.translate(
+                        offset: Offset(
+                            0, 6.5 - 6.5 * (_animationControllerSearch.value)),
+                        child: child,
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: TextInput(
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            labelText: "Search...",
+                            icon: Icons.search_rounded,
+                            onSubmitted: (value) {
+                              searchTransaction(value, income: selectedIncome);
+                            },
+                            onChanged: (value) => searchTransaction(value,
+                                income: selectedIncome),
+                            padding: EdgeInsets.all(0),
+                            autoFocus: true,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ButtonIcon(
+                            onTap: () {
+                              selectDateRange(context);
+                            },
+                            icon: Icons.calendar_month_rounded),
+                        SizedBox(width: 20),
+                      ],
                     ),
                   ),
-                  SizedBox(width: 10),
-                  ButtonIcon(
-                      onTap: () {
-                        selectDateRange(context);
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 13),
+                ),
+                SliverToBoxAdapter(
+                  child: SlidingSelector(
+                      onSelected: (index) {
+                        setState(() {
+                          selectedIncome = index == 1
+                              ? null
+                              : index == 2
+                                  ? false
+                                  : true;
+                        });
+                        searchTransaction(selectedSearch,
+                            income: selectedIncome);
                       },
-                      icon: Icons.calendar_month_rounded),
-                  SizedBox(width: 20),
-                ],
-              ),
+                      alternateTheme: true),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 11),
+                ),
+                ...transactionWidgets,
+              ],
             ),
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: 13),
+          SelectedTransactionsActionBar(
+            pageID: "TransactionsSearch",
           ),
-          SliverToBoxAdapter(
-            child: SlidingSelector(
-                onSelected: (index) {
-                  setState(() {
-                    selectedIncome = index == 1
-                        ? null
-                        : index == 2
-                            ? false
-                            : true;
-                  });
-                  searchTransaction(selectedSearch, income: selectedIncome);
-                },
-                alternateTheme: true),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: 11),
-          ),
-          ...transactionWidgets,
         ],
       ),
     );

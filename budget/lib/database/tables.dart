@@ -1240,6 +1240,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<double?> watchTotalSpentGivenList(List<int> transactionPks) {
+    final totalAmt = transactions.amount.sum();
+    JoinedSelectStatement<$TransactionsTable, Transaction> query;
+
+    query = (selectOnly(transactions)
+      ..addColumns([totalAmt])
+      ..where(transactions.transactionPk.isIn(transactionPks)));
+    return query.map(((row) => row.read(totalAmt))).watchSingle();
+  }
+
   // get total amount spent in each day
   Stream<double?> watchTotalSpentInTimeRangeFromCategories(
       DateTime start, DateTime end, List<int>? categoryFks, bool allCategories,

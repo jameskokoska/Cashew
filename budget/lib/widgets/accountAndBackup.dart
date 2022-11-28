@@ -88,6 +88,14 @@ Future<bool> signInGoogle(context,
   bool isConnected = false;
 
   try {
+    if (gMailPermissions == true && !(await testIfHasGmailAccess())) {
+      await signOutGoogle();
+      googleSignIn = null;
+      settingsPageStateKey.currentState?.refreshState();
+    } else if (user == null) {
+      googleSignIn = null;
+      settingsPageStateKey.currentState?.refreshState();
+    }
     //Check connection
     // isConnected = await checkConnection().timeout(Duration(milliseconds: 2500),
     //     onTimeout: () {
@@ -107,10 +115,10 @@ Future<bool> signInGoogle(context,
       // we can only have one instance of this set (on web at least)
       if (googleSignIn == null) {
         googleSignIn = signIn.GoogleSignIn.standard(scopes: [
-          ...(drivePermissions == true
+          ...(drivePermissions == true || kIsWeb
               ? [drive.DriveApi.driveAppdataScope]
               : []),
-          ...(gMailPermissions == true
+          ...(gMailPermissions == true || kIsWeb
               ? [
                   gMail.GmailApi.gmailReadonlyScope,
                   gMail.GmailApi
@@ -152,6 +160,21 @@ Future<bool> signInGoogle(context,
   }
 }
 
+Future<bool> testIfHasGmailAccess() async {
+  print("TESTING GMAIL");
+  try {
+    final authHeaders = await user!.authHeaders;
+    final authenticateClient = GoogleAuthClient(authHeaders);
+    gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
+    gMail.ListMessagesResponse results =
+        await gmailApi.users.messages.list(user!.id.toString(), maxResults: 1);
+  } catch (e) {
+    print("NO GMAIL");
+    return false;
+  }
+  return true;
+}
+
 Future<bool> signOutGoogle() async {
   await googleSignIn?.signOut();
   user = null;
@@ -174,7 +197,7 @@ Future<void> createBackupInBackground(context) async {
         bool hasSignedIn = false;
         if (user == null) {
           hasSignedIn = await signInGoogle(context,
-              gMailPermissions: true,
+              gMailPermissions: false,
               waitForCompletion: false,
               silentSignIn: true);
         } else {

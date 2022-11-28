@@ -19,7 +19,10 @@ import 'package:animations/animations.dart';
 import '../colors.dart';
 import 'package:intl/intl.dart';
 
-class TransactionEntry extends StatefulWidget {
+ValueNotifier<Map<String, List<int>>> globalSelectedID =
+    ValueNotifier<Map<String, List<int>>>({});
+
+class TransactionEntry extends StatelessWidget {
   TransactionEntry({
     Key? key,
     required this.openPage,
@@ -35,22 +38,12 @@ class TransactionEntry extends StatefulWidget {
   final TransactionCategory? category;
   final Function(Transaction transaction, bool selected)? onSelected;
 
-  @override
-  State<TransactionEntry> createState() => _TransactionEntryState();
-}
-
-ValueNotifier<Map<String, List<int>>> globalSelectedID =
-    ValueNotifier<Map<String, List<int>>>({});
-
-class _TransactionEntryState extends State<TransactionEntry> {
   final double fabSize = 50;
 
-  bool selected = false;
-
-  createNewSubscriptionTransaction(Transaction transaction) {
-    if (widget.transaction.createdAnotherFutureTransaction == false) {
-      if (widget.transaction.type == TransactionSpecialType.subscription ||
-          widget.transaction.type == TransactionSpecialType.repetitive) {
+  createNewSubscriptionTransaction(context, Transaction transaction) {
+    if (transaction.createdAnotherFutureTransaction == false) {
+      if (transaction.type == TransactionSpecialType.subscription ||
+          transaction.type == TransactionSpecialType.repetitive) {
         int yearOffset = 0;
         int monthOffset = 0;
         int dayOffset = 0;
@@ -68,7 +61,7 @@ class _TransactionEntryState extends State<TransactionEntry> {
           transaction.dateCreated.month + monthOffset,
           transaction.dateCreated.day + dayOffset,
         );
-        Transaction newTransaction = widget.transaction.copyWith(
+        Transaction newTransaction = transaction.copyWith(
           paid: false,
           transactionPk: DateTime.now().millisecond,
           dateCreated: newDate,
@@ -97,24 +90,24 @@ class _TransactionEntryState extends State<TransactionEntry> {
 
   @override
   Widget build(BuildContext context) {
-    if (globalSelectedID.value[widget.listID ?? "0"] == null) {
-      globalSelectedID.value[widget.listID ?? "0"] = [];
+    if (globalSelectedID.value[listID ?? "0"] == null) {
+      globalSelectedID.value[listID ?? "0"] = [];
     }
-    if (selected !=
-        globalSelectedID.value[widget.listID ?? "0"]!
-            .contains(widget.transaction.transactionPk))
-      setState(() {
-        selected = globalSelectedID.value[widget.listID ?? "0"]!
-            .contains(widget.transaction.transactionPk);
-      });
+    // if (selected !=
+    //     globalSelectedID.value[listID ?? "0"]!
+    //         .contains(transaction.transactionPk))
+    //   setState(() {
+    //     selected = globalSelectedID.value[listID ?? "0"]!
+    //         .contains(transaction.transactionPk);
+    //   });
 
-    Color textColor = widget.transaction.paid
-        ? widget.transaction.income == true
+    Color textColor = transaction.paid
+        ? transaction.income == true
             ? Theme.of(context).colorScheme.incomeGreen
             : Theme.of(context).colorScheme.black
-        : widget.transaction.skipPaid
+        : transaction.skipPaid
             ? Theme.of(context).colorScheme.textLight
-            : widget.transaction.dateCreated.millisecondsSinceEpoch <=
+            : transaction.dateCreated.millisecondsSinceEpoch <=
                     DateTime.now().millisecondsSinceEpoch
                 ? Theme.of(context).colorScheme.unPaidRed
                 : Theme.of(context).colorScheme.unPaidYellow;
@@ -124,324 +117,329 @@ class _TransactionEntryState extends State<TransactionEntry> {
 
     Color textColorLight = Theme.of(context).colorScheme.textLight;
 
-    return OpenContainerNavigation(
-      borderRadius: 15,
-      button: (openContainer) {
-        return Padding(
-          padding:
-              const EdgeInsets.only(left: 13, right: 13, top: 1, bottom: 2),
-          child: Tappable(
-            borderRadius: 15,
-            onLongPress: () {
-              if (!selected) {
-                globalSelectedID.value[widget.listID ?? "0"]!
-                    .add(widget.transaction.transactionPk);
-              } else {
-                globalSelectedID.value[widget.listID ?? "0"]!
-                    .remove(widget.transaction.transactionPk);
-              }
-              globalSelectedID.notifyListeners();
-              setState(() {
-                selected = !selected;
-              });
-              if (widget.onSelected != null)
-                widget.onSelected!(widget.transaction, selected);
-            },
-            onTap: () async {
-              openContainer();
-            },
-            child: AnimatedContainer(
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeInOutCubicEmphasized,
-              padding: EdgeInsets.only(
-                left: selected ? 15 - 2 : 10 - 2,
-                right: selected ? 15 : 10,
-                top: selected ? 8 : 4,
-                bottom: selected ? 8 : 4,
-              ),
-              decoration: BoxDecoration(
-                color: selected
-                    ? Theme.of(context)
-                        .colorScheme
-                        .lightDarkAccentHeavy
-                        .withAlpha(200)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Row(
-                children: [
-                  CategoryIcon(
-                    categoryPk: widget.transaction.categoryFk,
-                    size: 33,
-                    sizePadding: 15,
-                    margin: EdgeInsets.zero,
-                    borderRadius: 13,
+    return ValueListenableBuilder(
+      valueListenable: globalSelectedID,
+      builder: (context, value, _) {
+        bool selected = globalSelectedID.value[listID ?? "0"]!
+            .contains(transaction.transactionPk);
+        return OpenContainerNavigation(
+          borderRadius: 15,
+          button: (openContainer) {
+            return Padding(
+              padding:
+                  const EdgeInsets.only(left: 13, right: 13, top: 1, bottom: 2),
+              child: Tappable(
+                borderRadius: 15,
+                onLongPress: () {
+                  if (!selected) {
+                    globalSelectedID.value[listID ?? "0"]!
+                        .add(transaction.transactionPk);
+                  } else {
+                    globalSelectedID.value[listID ?? "0"]!
+                        .remove(transaction.transactionPk);
+                  }
+                  globalSelectedID.notifyListeners();
+
+                  if (onSelected != null) onSelected!(transaction, selected);
+                },
+                onTap: () async {
+                  openContainer();
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.easeInOutCubicEmphasized,
+                  padding: EdgeInsets.only(
+                    left: selected ? 15 - 2 : 10 - 2,
+                    right: selected ? 15 : 10,
+                    top: selected ? 8 : 4,
+                    bottom: selected ? 8 : 4,
                   ),
-                  Container(
-                    width: widget.transaction.type != null ? 12 : 15,
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? Theme.of(context)
+                            .colorScheme
+                            .lightDarkAccentHeavy
+                            .withAlpha(200)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                   ),
-                  widget.transaction.type != null
-                      ? Padding(
-                          padding: EdgeInsets.only(right: 8),
-                          child: Icon(
-                            getTransactionTypeIcon(widget.transaction.type),
-                            color: iconColor,
-                            size: 20,
-                          ),
-                        )
-                      : SizedBox(),
-                  Expanded(
-                    child: widget.transaction.name != ""
-                        ? TextFont(
-                            text: widget.transaction.name,
-                            fontSize: 18,
-                          )
-                        : widget.category == null
-                            ? StreamBuilder<TransactionCategory>(
-                                stream: database
-                                    .getCategory(widget.transaction.categoryFk),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return TextFont(
-                                      text: snapshot.data!.name,
-                                      fontSize: 18,
-                                    );
-                                  }
-                                  return Container();
-                                },
-                              )
-                            : TextFont(
-                                text: widget.category!.name,
-                                fontSize: 18,
+                  child: Row(
+                    children: [
+                      CategoryIcon(
+                        categoryPk: transaction.categoryFk,
+                        size: 33,
+                        sizePadding: 15,
+                        margin: EdgeInsets.zero,
+                        borderRadius: 13,
+                      ),
+                      Container(
+                        width: transaction.type != null ? 12 : 15,
+                      ),
+                      transaction.type != null
+                          ? Padding(
+                              padding: EdgeInsets.only(right: 8),
+                              child: Icon(
+                                getTransactionTypeIcon(transaction.type),
+                                color: iconColor,
+                                size: 20,
                               ),
-                  ),
-                  // Expanded(
-                  //   child: Container(
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         transaction.name != ""
-                  //             ? TextFont(
-                  //                 text: transaction.name,
-                  //                 fontSize: 20,
-                  //               )
-                  //             : Container(
-                  //                 height: transaction.note == "" ? 0 : 7),
-                  //         transaction.name == "" &&
-                  //                 (transaction.labelFks?.length ?? 0) > 0
-                  //             ? TagIcon(
-                  //                 tag: TransactionTag(
-                  //                     title: "test",
-                  //                     id: "test",
-                  //                     categoryID: "id"),
-                  //                 size: transaction.note == "" ? 20 : 16)
-                  //             : Container(),
-                  //         transaction.name == "" &&
-                  //                 (transaction.labelFks?.length ?? 0) == 0
-                  //             ? StreamBuilder<TransactionCategory>(
-                  //                 stream: database
-                  //                     .getCategory(transaction.categoryFk),
-                  //                 builder: (context, snapshot) {
-                  //                   if (snapshot.hasData) {
-                  //                     return TextFont(
-                  //                       text: snapshot.data!.name,
-                  //                       fontSize:
-                  //                           transaction.note == "" ? 20 : 20,
-                  //                     );
-                  //                   }
-                  //                   return TextFont(
-                  //                     text: "",
-                  //                     fontSize:
-                  //                         transaction.note == "" ? 20 : 20,
-                  //                   );
-                  //                 })
-                  //             : Container(),
-                  //         transaction.name == "" && transaction.note != ""
-                  //             ? Container(height: 4)
-                  //             : Container(),
-                  //         transaction.note == ""
-                  //             ? Container()
-                  //             : TextFont(
-                  //                 text: transaction.note,
-                  //                 fontSize: 16,
-                  //                 maxLines: 2,
-                  //               ),
-                  //         transaction.note == ""
-                  //             ? Container()
-                  //             : Container(height: 4),
-                  //         //TODO loop through all tags relating to this entry
-                  //         transaction.name != "" &&
-                  //                 (transaction.labelFks?.length ?? 0) > 0
-                  //             ? TagIcon(
-                  //                 tag: TransactionTag(
-                  //                     title: "test",
-                  //                     id: "test",
-                  //                     categoryID: "id"),
-                  //                 size: 12)
-                  //             : Container()
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  widget.transaction.type != null
-                      ? Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 3.0),
-                              child: Tappable(
-                                color: Colors.transparent,
-                                borderRadius: 10,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 3),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 6, horizontal: 7),
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .lightDarkAccent,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: TextFont(
-                                      text: widget.transaction.income
-                                          ? (widget.transaction.paid
-                                              ? "Desposited"
-                                              : widget.transaction.skipPaid
-                                                  ? "Skipped"
-                                                  : "Desposit?")
-                                          : (widget.transaction.paid
-                                              ? "Paid"
-                                              : widget.transaction.skipPaid
-                                                  ? "Skipped"
-                                                  : "Pay?"),
-                                      fontSize: 14,
-                                      textColor: textColorLight,
+                            )
+                          : SizedBox(),
+                      Expanded(
+                        child: transaction.name != ""
+                            ? TextFont(
+                                text: transaction.name,
+                                fontSize: 18,
+                              )
+                            : category == null
+                                ? StreamBuilder<TransactionCategory>(
+                                    stream: database
+                                        .getCategory(transaction.categoryFk),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return TextFont(
+                                          text: snapshot.data!.name,
+                                          fontSize: 18,
+                                        );
+                                      }
+                                      return Container();
+                                    },
+                                  )
+                                : TextFont(
+                                    text: category!.name,
+                                    fontSize: 18,
+                                  ),
+                      ),
+                      // Expanded(
+                      //   child: Container(
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         transaction.name != ""
+                      //             ? TextFont(
+                      //                 text: transaction.name,
+                      //                 fontSize: 20,
+                      //               )
+                      //             : Container(
+                      //                 height: transaction.note == "" ? 0 : 7),
+                      //         transaction.name == "" &&
+                      //                 (transaction.labelFks?.length ?? 0) > 0
+                      //             ? TagIcon(
+                      //                 tag: TransactionTag(
+                      //                     title: "test",
+                      //                     id: "test",
+                      //                     categoryID: "id"),
+                      //                 size: transaction.note == "" ? 20 : 16)
+                      //             : Container(),
+                      //         transaction.name == "" &&
+                      //                 (transaction.labelFks?.length ?? 0) == 0
+                      //             ? StreamBuilder<TransactionCategory>(
+                      //                 stream: database
+                      //                     .getCategory(transaction.categoryFk),
+                      //                 builder: (context, snapshot) {
+                      //                   if (snapshot.hasData) {
+                      //                     return TextFont(
+                      //                       text: snapshot.data!.name,
+                      //                       fontSize:
+                      //                           transaction.note == "" ? 20 : 20,
+                      //                     );
+                      //                   }
+                      //                   return TextFont(
+                      //                     text: "",
+                      //                     fontSize:
+                      //                         transaction.note == "" ? 20 : 20,
+                      //                   );
+                      //                 })
+                      //             : Container(),
+                      //         transaction.name == "" && transaction.note != ""
+                      //             ? Container(height: 4)
+                      //             : Container(),
+                      //         transaction.note == ""
+                      //             ? Container()
+                      //             : TextFont(
+                      //                 text: transaction.note,
+                      //                 fontSize: 16,
+                      //                 maxLines: 2,
+                      //               ),
+                      //         transaction.note == ""
+                      //             ? Container()
+                      //             : Container(height: 4),
+                      //         //TODO loop through all tags relating to this entry
+                      //         transaction.name != "" &&
+                      //                 (transaction.labelFks?.length ?? 0) > 0
+                      //             ? TagIcon(
+                      //                 tag: TransactionTag(
+                      //                     title: "test",
+                      //                     id: "test",
+                      //                     categoryID: "id"),
+                      //                 size: 12)
+                      //             : Container()
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      transaction.type != null
+                          ? Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 3.0),
+                                  child: Tappable(
+                                    color: Colors.transparent,
+                                    borderRadius: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 3),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 6, horizontal: 7),
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .lightDarkAccent,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: TextFont(
+                                          text: transaction.income
+                                              ? (transaction.paid
+                                                  ? "Desposited"
+                                                  : transaction.skipPaid
+                                                      ? "Skipped"
+                                                      : "Desposit?")
+                                              : (transaction.paid
+                                                  ? "Paid"
+                                                  : transaction.skipPaid
+                                                      ? "Skipped"
+                                                      : "Pay?"),
+                                          fontSize: 14,
+                                          textColor: textColorLight,
+                                        ),
+                                      ),
                                     ),
+                                    onTap: () {
+                                      if (transaction.paid == true) {
+                                        openPopup(context,
+                                            icon: Icons.unpublished_rounded,
+                                            title: "Remove Payment?",
+                                            description:
+                                                "Remove the payment on this transaction?",
+                                            onCancelLabel: "Cancel",
+                                            onCancel: () {
+                                              Navigator.pop(context);
+                                            },
+                                            onSubmitLabel: "Remove",
+                                            onSubmit: () {
+                                              Transaction transactionNew =
+                                                  transaction.copyWith(
+                                                      paid: false);
+                                              database
+                                                  .createOrUpdateTransaction(
+                                                      transactionNew);
+                                              Navigator.pop(context);
+                                            });
+                                      } else if (transaction.skipPaid == true) {
+                                        openPopup(context,
+                                            icon: Icons.unpublished_rounded,
+                                            title: "Remove Skip?",
+                                            description:
+                                                "Remove the skipped payment on this transaction?",
+                                            onCancelLabel: "Cancel",
+                                            onCancel: () {
+                                              Navigator.pop(context);
+                                            },
+                                            onSubmitLabel: "Remove",
+                                            onSubmit: () {
+                                              Transaction transactionNew =
+                                                  transaction.copyWith(
+                                                      skipPaid: false);
+                                              database
+                                                  .createOrUpdateTransaction(
+                                                      transactionNew);
+                                              Navigator.pop(context);
+                                            });
+                                      } else {
+                                        openPopup(
+                                          context,
+                                          icon: Icons.payments_rounded,
+                                          title: transaction.income
+                                              ? "Desposit?"
+                                              : "Pay?",
+                                          description: transaction.income
+                                              ? "Desposit this amount?"
+                                              : "Add payment on this transaction?",
+                                          onCancelLabel: "Cancel",
+                                          onCancel: () {
+                                            Navigator.pop(context);
+                                          },
+                                          onExtraLabel: "Skip",
+                                          onExtra: () {
+                                            Transaction transactionNew =
+                                                transaction.copyWith(
+                                                    skipPaid: true,
+                                                    dateCreated: DateTime(
+                                                        DateTime.now().year,
+                                                        DateTime.now().month,
+                                                        DateTime.now().day),
+                                                    createdAnotherFutureTransaction:
+                                                        true);
+                                            database.createOrUpdateTransaction(
+                                                transactionNew);
+                                            createNewSubscriptionTransaction(
+                                                context, transactionNew);
+                                            Navigator.pop(context);
+                                          },
+                                          onSubmitLabel: transaction.income
+                                              ? "Desposit"
+                                              : "Pay",
+                                          onSubmit: () {
+                                            Transaction transactionNew =
+                                                transaction.copyWith(
+                                                    paid: transaction.paid,
+                                                    dateCreated: DateTime(
+                                                        DateTime.now().year,
+                                                        DateTime.now().month,
+                                                        DateTime.now().day),
+                                                    createdAnotherFutureTransaction:
+                                                        true);
+                                            database.createOrUpdateTransaction(
+                                                transactionNew);
+                                            createNewSubscriptionTransaction(
+                                                context, transactionNew);
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
-                                onTap: () {
-                                  if (widget.transaction.paid == true) {
-                                    openPopup(context,
-                                        icon: Icons.unpublished_rounded,
-                                        title: "Remove Payment?",
-                                        description:
-                                            "Remove the payment on this transaction?",
-                                        onCancelLabel: "Cancel",
-                                        onCancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        onSubmitLabel: "Remove",
-                                        onSubmit: () {
-                                          Transaction transaction = widget
-                                              .transaction
-                                              .copyWith(paid: false);
-                                          database.createOrUpdateTransaction(
-                                              transaction);
-                                          Navigator.pop(context);
-                                        });
-                                  } else if (widget.transaction.skipPaid ==
-                                      true) {
-                                    openPopup(context,
-                                        icon: Icons.unpublished_rounded,
-                                        title: "Remove Skip?",
-                                        description:
-                                            "Remove the skipped payment on this transaction?",
-                                        onCancelLabel: "Cancel",
-                                        onCancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        onSubmitLabel: "Remove",
-                                        onSubmit: () {
-                                          Transaction transaction = widget
-                                              .transaction
-                                              .copyWith(skipPaid: false);
-                                          database.createOrUpdateTransaction(
-                                              transaction);
-                                          Navigator.pop(context);
-                                        });
-                                  } else {
-                                    openPopup(
-                                      context,
-                                      icon: Icons.payments_rounded,
-                                      title: widget.transaction.income
-                                          ? "Desposit?"
-                                          : "Pay?",
-                                      description: widget.transaction.income
-                                          ? "Desposit this amount?"
-                                          : "Add payment on this transaction?",
-                                      onCancelLabel: "Cancel",
-                                      onCancel: () {
-                                        Navigator.pop(context);
-                                      },
-                                      onExtraLabel: "Skip",
-                                      onExtra: () {
-                                        Transaction transaction =
-                                            widget.transaction.copyWith(
-                                                skipPaid: true,
-                                                dateCreated: DateTime(
-                                                    DateTime.now().year,
-                                                    DateTime.now().month,
-                                                    DateTime.now().day),
-                                                createdAnotherFutureTransaction:
-                                                    true);
-                                        database.createOrUpdateTransaction(
-                                            transaction);
-                                        createNewSubscriptionTransaction(
-                                            widget.transaction);
-                                        Navigator.pop(context);
-                                      },
-                                      onSubmitLabel: widget.transaction.income
-                                          ? "Desposit"
-                                          : "Pay",
-                                      onSubmit: () {
-                                        Transaction transaction =
-                                            widget.transaction.copyWith(
-                                                paid: !widget.transaction.paid,
-                                                dateCreated: DateTime(
-                                                    DateTime.now().year,
-                                                    DateTime.now().month,
-                                                    DateTime.now().day),
-                                                createdAnotherFutureTransaction:
-                                                    true);
-                                        database.createOrUpdateTransaction(
-                                            transaction);
-                                        createNewSubscriptionTransaction(
-                                            widget.transaction);
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        )
-                      : SizedBox(),
+                              ],
+                            )
+                          : SizedBox(),
 
-                  CountNumber(
-                    count: (widget.transaction.amount.abs()),
-                    duration: Duration(milliseconds: 2000),
-                    dynamicDecimals: true,
-                    initialCount: (widget.transaction.amount.abs()),
-                    textBuilder: (number) {
-                      return TextFont(
-                        textAlign: TextAlign.left,
-                        text: convertToMoney(number),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        textColor: textColor,
-                      );
-                    },
+                      CountNumber(
+                        count: (transaction.amount.abs()),
+                        duration: Duration(milliseconds: 2000),
+                        dynamicDecimals: true,
+                        initialCount: (transaction.amount.abs()),
+                        textBuilder: (number) {
+                          return TextFont(
+                            textAlign: TextAlign.left,
+                            text: convertToMoney(number),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            textColor: textColor,
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
+          openPage: openPage,
+          closedColor: Theme.of(context).canvasColor,
         );
       },
-      openPage: widget.openPage,
-      closedColor: Theme.of(context).canvasColor,
     );
   }
 }
@@ -471,26 +469,26 @@ class _TransactionEntryState extends State<TransactionEntry> {
 //   void initState() {
 //     super.initState();
 //     setState(() {
-//       selected = widget.selected;
+//       selected = selected;
 //     });
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Tappable(
-//       onTap: widget.onTap == null
+//       onTap: onTap == null
 //           ? null
 //           : () {
 //               setState(() {
 //                 selected = !selected;
 //               });
-//               widget.onTap;
+//               onTap;
 //             },
-//       borderRadius: widget.size * 0.8,
+//       borderRadius: size * 0.8,
 //       child: AnimatedContainer(
 //         duration: Duration(milliseconds: 200),
 //         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(widget.size * 0.8),
+//           borderRadius: BorderRadius.circular(size * 0.8),
 //           color: selected
 //               ? Theme.of(context).colorScheme.accentColor.withOpacity(0.8)
 //               : Theme.of(context)
@@ -500,33 +498,33 @@ class _TransactionEntryState extends State<TransactionEntry> {
 //         ),
 //         child: Padding(
 //           padding: EdgeInsets.only(
-//             right: widget.onTap == null
-//                 ? 9 * widget.size / 14
-//                 : 8 * widget.size / 14,
-//             left: widget.onTap == null
-//                 ? 9 * widget.size / 14
-//                 : 6 * widget.size / 14,
+//             right: onTap == null
+//                 ? 9 * size / 14
+//                 : 8 * size / 14,
+//             left: onTap == null
+//                 ? 9 * size / 14
+//                 : 6 * size / 14,
 //           ),
 //           child: Row(
 //               mainAxisSize: MainAxisSize.min,
 //               mainAxisAlignment: MainAxisAlignment.center,
 //               children: [
-//                 widget.onTap != null
+//                 onTap != null
 //                     ? Padding(
-//                         padding: EdgeInsets.only(right: 2 * widget.size / 14),
+//                         padding: EdgeInsets.only(right: 2 * size / 14),
 //                         child: AnimatedContainer(
 //                           duration: Duration(milliseconds: 700),
 //                           width:
-//                               selected ? widget.size * 0.9 : widget.size * 0.75,
+//                               selected ? size * 0.9 : size * 0.75,
 //                           height:
-//                               selected ? widget.size * 0.9 : widget.size * 0.75,
+//                               selected ? size * 0.9 : size * 0.75,
 //                           margin: EdgeInsets.symmetric(
 //                               horizontal: selected
-//                                   ? widget.size * 0.1 / 2
-//                                   : widget.size * 0.25 / 2),
+//                                   ? size * 0.1 / 2
+//                                   : size * 0.25 / 2),
 //                           curve: Curves.elasticOut,
 //                           decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.circular(widget.size),
+//                             borderRadius: BorderRadius.circular(size),
 //                             color: selected
 //                                 ? Theme.of(context)
 //                                     .colorScheme
@@ -542,12 +540,12 @@ class _TransactionEntryState extends State<TransactionEntry> {
 //                     : Container(),
 //                 Padding(
 //                   padding: EdgeInsets.only(
-//                     top: 4 * widget.size / 14,
-//                     bottom: 4 * widget.size / 14,
+//                     top: 4 * size / 14,
+//                     bottom: 4 * size / 14,
 //                   ),
 //                   child: TextFont(
-//                     text: widget.tag.title,
-//                     fontSize: widget.size,
+//                     text: tag.title,
+//                     fontSize: size,
 //                   ),
 //                 ),
 //               ]),
@@ -577,7 +575,7 @@ class DateDivider extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextFont(
-            text: getWordedDate(date),
+            text: getWordedDate(date, includeMonthDate: true),
             fontSize: 14,
             textColor: Theme.of(context).colorScheme.textLight,
           ),

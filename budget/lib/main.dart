@@ -14,6 +14,7 @@ import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
+import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/initializeNotifications.dart';

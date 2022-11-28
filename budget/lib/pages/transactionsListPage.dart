@@ -6,6 +6,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -276,163 +277,175 @@ class TransactionsListPageState extends State<TransactionsListPage>
       openPage: TransactionsSearchPage(),
     );
 
-    return GestureDetector(
-      onTap: () {
-        //Minimize keyboard when tap non interactive widget
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: NestedScrollView(
-        controller: _scrollController,
-        headerSliverBuilder:
-            (BuildContext contextHeader, bool innerBoxIsScrolled) {
-          return <Widget>[
-            PageFrameworkSliverAppBar(
-              title: "Transactions",
-              actions: [
-                Padding(
-                    padding: EdgeInsets.only(top: 10, right: 7),
-                    child: MediaQuery.of(context).padding.top >= 25
-                        ? AnimatedScale(
-                            duration: Duration(milliseconds: 1100),
-                            scale: scaleInSearchIcon ? 1 : 0,
-                            curve: ElasticOutCurve(0.8),
-                            child: searchButton,
-                          )
-                        : searchButton),
-              ],
-            ),
-          ];
-        },
-        body: Builder(
-          builder: (BuildContext context2) {
-            return Scaffold(
-              extendBodyBehindAppBar: false,
-              appBar: AppBar(
-                backgroundColor: Theme.of(context).canvasColor,
-                elevation: 0,
-                title: MediaQuery.of(context).padding.top >= 25
-                    ? FadeTransition(
-                        opacity: _animationControllerSearch,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 18),
-                          child: OpenContainerNavigation(
-                            borderRadius: 10,
-                            button: (openContainer) {
-                              return FakeTextInput(
-                                onTap: openContainer,
-                                label: "Search...",
-                                icon: Icons.search_rounded,
-                                edgeInsetsVertical:
-                                    MediaQuery.of(context).padding.top - 21 <=
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () {
+            //Minimize keyboard when tap non interactive widget
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: NestedScrollView(
+            controller: _scrollController,
+            headerSliverBuilder:
+                (BuildContext contextHeader, bool innerBoxIsScrolled) {
+              return <Widget>[
+                PageFrameworkSliverAppBar(
+                  title: "Transactions",
+                  actions: [
+                    Padding(
+                        padding: EdgeInsets.only(top: 10, right: 7),
+                        child: MediaQuery.of(context).padding.top >= 25
+                            ? AnimatedScale(
+                                duration: Duration(milliseconds: 1100),
+                                scale: scaleInSearchIcon ? 1 : 0,
+                                curve: ElasticOutCurve(0.8),
+                                child: searchButton,
+                              )
+                            : searchButton),
+                  ],
+                ),
+              ];
+            },
+            body: Builder(
+              builder: (BuildContext context2) {
+                return Scaffold(
+                  extendBodyBehindAppBar: false,
+                  appBar: AppBar(
+                    backgroundColor: Theme.of(context).canvasColor,
+                    elevation: 0,
+                    title: MediaQuery.of(context).padding.top >= 25
+                        ? FadeTransition(
+                            opacity: _animationControllerSearch,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 18),
+                              child: OpenContainerNavigation(
+                                borderRadius: 10,
+                                button: (openContainer) {
+                                  return FakeTextInput(
+                                    onTap: openContainer,
+                                    label: "Search...",
+                                    icon: Icons.search_rounded,
+                                    edgeInsetsVertical: MediaQuery.of(context)
+                                                    .padding
+                                                    .top -
+                                                21 <=
                                             15
                                         ? MediaQuery.of(context).padding.top -
                                             21
                                         : 15,
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                              );
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer,
+                                  );
+                                },
+                                openPage: TransactionsSearchPage(),
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    titleSpacing: 0,
+                    primary: false,
+                    toolbarHeight: 65,
+                    bottom: PreferredSize(
+                      child: Column(
+                        children: [
+                          MonthSelector(
+                            key: monthSelectorStateKey,
+                            selectedDateStart: selectedDateStart,
+                            setSelectedDateStart: (DateTime currentDateTime) {
+                              setState(() {
+                                selectedDateStart = currentDateTime;
+                                _loadNewTransactions();
+                              });
+                              transactionsListPageStateKey.currentState!
+                                  .scrollToTop();
                             },
-                            openPage: TransactionsSearchPage(),
                           ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                titleSpacing: 0,
-                primary: false,
-                toolbarHeight: 65,
-                bottom: PreferredSize(
-                  child: Column(
-                    children: [
-                      MonthSelector(
-                        key: monthSelectorStateKey,
-                        selectedDateStart: selectedDateStart,
-                        setSelectedDateStart: (DateTime currentDateTime) {
-                          setState(() {
-                            selectedDateStart = currentDateTime;
-                            _loadNewTransactions();
-                          });
-                          transactionsListPageStateKey.currentState!
-                              .scrollToTop();
-                        },
+                          SizedBox(
+                            height: 10,
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      )
-                    ],
+                      preferredSize: Size.fromHeight(0),
+                    ),
                   ),
-                  preferredSize: Size.fromHeight(0),
-                ),
-              ),
-              body: PageView(
-                physics: AlwaysScrollableScrollPhysics(),
-                controller: _pageController,
-                onPageChanged: (index) {
-                  if (alreadyChanged) {
-                    alreadyChanged = false;
-                    _pageController.animateToPage(
-                      1,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.easeInOutCubicEmphasized,
-                    );
-                  } else {
-                    alreadyChanged = true;
-                    setState(() {
-                      selectedDateStart = DateTime(selectedDateStart.year,
-                          selectedDateStart.month + index - 1);
-                      _loadNewTransactions();
-                    });
-                    _pageController.animateToPage(
-                      1,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.easeInOutCubicEmphasized,
-                    );
-                    double middle =
-                        -MediaQuery.of(context).size.width / 2 + 100 / 2;
-                    int difference =
-                        (DateTime.now().year - selectedDateStart.year) * 12 +
+                  body: PageView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      if (alreadyChanged) {
+                        alreadyChanged = false;
+                        _pageController.animateToPage(
+                          1,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOutCubicEmphasized,
+                        );
+                      } else {
+                        alreadyChanged = true;
+                        setState(() {
+                          selectedDateStart = DateTime(selectedDateStart.year,
+                              selectedDateStart.month + index - 1);
+                          _loadNewTransactions();
+                        });
+                        _pageController.animateToPage(
+                          1,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOutCubicEmphasized,
+                        );
+                        double middle =
+                            -MediaQuery.of(context).size.width / 2 + 100 / 2;
+                        int difference = (DateTime.now().year -
+                                    selectedDateStart.year) *
+                                12 +
                             (DateTime.now().month - selectedDateStart.month) +
                             1;
-                    monthSelectorStateKey.currentState!
-                        .scrollTo(middle - difference * 100 + 100);
-                    transactionsListPageStateKey.currentState!.scrollToTop();
-                  }
-                },
-                children: <Widget>[
-                  appStateSettings["batterySaver"]
-                      ? SizedBox.shrink()
-                      : LoadingShimmer(),
-                  CustomScrollView(
-                    slivers: [
-                      ...transactionWidgets,
-                      SliverToBoxAdapter(
-                        child: CashFlow(
-                          selectedDateStart,
-                          new DateTime(
-                              selectedDateStart.year,
-                              selectedDateStart.month + 1,
-                              selectedDateStart.day - 1),
-                        ),
+                        monthSelectorStateKey.currentState!
+                            .scrollTo(middle - difference * 100 + 100);
+                        transactionsListPageStateKey.currentState!
+                            .scrollToTop();
+                      }
+                    },
+                    children: <Widget>[
+                      appStateSettings["batterySaver"]
+                          ? SizedBox.shrink()
+                          : LoadingShimmer(),
+                      CustomScrollView(
+                        slivers: [
+                          ...transactionWidgets,
+                          SliverToBoxAdapter(
+                            child: CashFlow(
+                              selectedDateStart,
+                              new DateTime(
+                                  selectedDateStart.year,
+                                  selectedDateStart.month + 1,
+                                  selectedDateStart.day - 1),
+                            ),
+                          ),
+                          // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+                          SliverToBoxAdapter(
+                            child: Container(
+                                height: 200,
+                                color: Theme.of(context).canvasColor),
+                          ),
+                        ],
                       ),
-                      // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                      SliverToBoxAdapter(
-                        child: Container(
-                            height: 200, color: Theme.of(context).canvasColor),
-                      ),
+                      appStateSettings["batterySaver"]
+                          ? SizedBox.shrink()
+                          : LoadingShimmer(),
                     ],
                   ),
-                  appStateSettings["batterySaver"]
-                      ? SizedBox.shrink()
-                      : LoadingShimmer(),
-                ],
-              ),
-            );
-          },
+                );
+              },
+            ),
+          ),
         ),
-      ),
+        SelectedTransactionsActionBar(
+          pageID: "Transactions",
+        ),
+      ],
     );
   }
 }
