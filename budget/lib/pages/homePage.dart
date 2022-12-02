@@ -375,8 +375,9 @@ class HomePageState extends State<HomePage>
                   duration: Duration(milliseconds: 300),
                   child: StreamBuilder<List<Transaction>>(
                     stream: database.watchAllUpcomingTransactions(
+                        // upcoming in 3 days
                         endDate: DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day + 1)),
+                            DateTime.now().month, DateTime.now().day + 4)),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.length <= 0) {

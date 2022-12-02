@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Adaptive icon for Android 13+
+    Upcoming transactions now show up on home page (within 3 days)
+
     New dropdown menu when selecting transactions to delete - shows amount selected and total cash flow of transactions
     Selected transactions cleared when using back button
     Today, Yesterday, Days of Week labels now include the month and date
