@@ -9,6 +9,7 @@ class BarGraph extends StatefulWidget {
     required this.color,
     required this.dateRanges,
     required this.bars,
+    required this.initialBars,
     required this.horizontalLineAt,
     required this.maxY,
     Key? key,
@@ -17,6 +18,7 @@ class BarGraph extends StatefulWidget {
   final Color color;
   final List<DateTimeRange> dateRanges;
   final List<BarChartGroupData> bars;
+  final List<BarChartGroupData> initialBars;
 
   final double? horizontalLineAt;
   final double maxY;
@@ -26,6 +28,18 @@ class BarGraph extends StatefulWidget {
 }
 
 class BarGraphState extends State<BarGraph> {
+  bool loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 0), () {
+      setState(() {
+        loaded = true;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,7 +52,8 @@ class BarGraphState extends State<BarGraph> {
       child: Container(
         height: 190,
         child: BarChart(
-          swapAnimationDuration: Duration(milliseconds: 500),
+          swapAnimationCurve: Curves.easeInOutCubicEmphasized,
+          swapAnimationDuration: Duration(milliseconds: 1700),
           BarChartData(
             maxY: widget.maxY,
             minY: -1,
@@ -133,7 +148,7 @@ class BarGraphState extends State<BarGraph> {
             borderData: FlBorderData(
               show: false,
             ),
-            barGroups: widget.bars,
+            barGroups: loaded ? widget.bars : widget.initialBars,
           ),
         ),
       ),

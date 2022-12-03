@@ -1,5 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -39,6 +41,13 @@ class CategoryEntry extends StatelessWidget {
             ? Container()
             : Tappable(
                 onTap: onTap,
+                onLongPress: () => pushRoute(
+                  context,
+                  AddCategoryPage(
+                    title: "Edit Category",
+                    category: category,
+                  ),
+                ),
                 color: Colors.transparent,
                 child: AnimatedScale(
                   curve: ElasticOutCurve(0.6),

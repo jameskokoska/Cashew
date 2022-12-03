@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -527,7 +528,9 @@ class CalculatorButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Material(
-        color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+        color: appStateSettings["materialYou"]
+            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.9)
+            : Theme.of(context).colorScheme.lightDarkAccentHeavy,
         borderRadius: BorderRadius.only(
           topRight: topRight ? Radius.circular(15) : Radius.circular(0),
           topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),

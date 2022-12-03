@@ -10,6 +10,7 @@ Map<String, dynamic> defaultPreferences() {
     "selectedWallet": 0,
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
+    "accentSystemColor": true,
     "showWalletSwitcher": true,
     "showOverdueUpcoming": true,
     "showTotalSpentForBudget": false,
@@ -24,9 +25,11 @@ Map<String, dynamic> defaultPreferences() {
     "AutoTransactions-canReadEmails": false,
     "currencyIcon": "\$",
     "EmailAutoTransactions-amountOfEmails": 10,
-    "autoBackups": true,
+    "autoBackups": false,
+    "hasSignedInOnce": false,
     "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),
     "lastLoginVersion": "",
     "notifications": true,
+    "materialYou": false,
   };
 }

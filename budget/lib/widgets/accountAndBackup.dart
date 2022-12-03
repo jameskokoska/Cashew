@@ -138,6 +138,12 @@ Future<bool> signInGoogle(context,
     }
     if (waitForCompletion == true) Navigator.of(context).pop();
     next != null ? next() : 0;
+
+    if (appStateSettings["hasSignedInOnce"] == false) {
+      updateSettings("hasSignedInOnce", true, updateGlobalState: false);
+      updateSettings("autoBackups", true, updateGlobalState: false);
+    }
+
     return true;
   } catch (e) {
     print(e);
@@ -599,7 +605,8 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                                   assignedColumns[key]!["setHeaderIndex"] =
                                       _getHeaderIndex(headers, setHeaderValue);
                                 },
-                                backgroundColor: Theme.of(context).canvasColor,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
                                 checkInitialValue: true,
                               ),
                             ],
@@ -716,10 +723,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                       waitForCompletion: true,
                       drivePermissions: true, next: () {
                     setState(() {});
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => accountsPage),
-                    );
+                    pushRoute(context, accountsPage);
                   });
                   if (appStateSettings["username"] == "") {
                     updateSettings("username", user!.displayName,

@@ -595,7 +595,7 @@ class AddButton extends StatelessWidget {
         top: 4,
       ),
       child: Tappable(
-        color: Theme.of(context).canvasColor,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: 15,
         child: Container(
           decoration: BoxDecoration(

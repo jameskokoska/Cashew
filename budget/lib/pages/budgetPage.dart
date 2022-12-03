@@ -57,14 +57,7 @@ class _BudgetPageState extends State<BudgetPage> {
     ColorScheme budgetColorScheme = ColorScheme.fromSeed(
       seedColor: HexColor(widget.budget.colour,
           defaultColor: Theme.of(context).colorScheme.primary),
-      brightness: getSettingConstants(appStateSettings)["theme"] ==
-              ThemeMode.system
-          ? MediaQuery.of(context).platformBrightness
-          : getSettingConstants(appStateSettings)["theme"] == ThemeMode.light
-              ? Brightness.light
-              : getSettingConstants(appStateSettings)["theme"] == ThemeMode.dark
-                  ? Brightness.dark
-                  : Brightness.light,
+      brightness: determineBrightnessTheme(context),
     );
     String pageId = budgetRange.start.millisecondsSinceEpoch.toString() +
         widget.budget.name +
@@ -91,13 +84,8 @@ class _BudgetPageState extends State<BudgetPage> {
                       padding: EdgeInsets.only(top: 12.5, right: 5),
                       child: IconButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PastBudgetsPage(budget: widget.budget),
-                            ),
-                          );
+                          pushRoute(
+                              context, PastBudgetsPage(budget: widget.budget));
                         },
                         icon: Icon(Icons.history_rounded),
                       ),
@@ -123,7 +111,13 @@ class _BudgetPageState extends State<BudgetPage> {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0)
                       return SliverToBoxAdapter(
-                        child: NoResults(),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 40),
+                          child: NoResults(
+                            message:
+                                "There are no transactions for this budget",
+                          ),
+                        ),
                       );
 
                     double totalSpent = 0;
@@ -363,13 +357,20 @@ class _BudgetPageState extends State<BudgetPage> {
                 stream: database.getTransactionsInTimeRangeFromCategories(
                   budgetRange.start,
                   budgetRange.end,
-                  [],
-                  true,
+                  widget.budget.categoryFks ?? [],
+                  widget.budget.categoryFks == null ||
+                          (widget.budget.categoryFks ?? []).length <= 0
+                      ? true
+                      : false,
                   true,
                   false,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    if (snapshot.data!.length <= 0)
+                      return SliverToBoxAdapter(
+                        child: SizedBox.shrink(),
+                      );
                     bool cumulative =
                         appStateSettings["showCumulativeSpending"];
                     double cumulativeTotal = 0;
@@ -448,8 +449,8 @@ class _BudgetPageState extends State<BudgetPage> {
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(
-                child:
-                    Container(height: 1, color: Theme.of(context).canvasColor),
+                child: Container(
+                    height: 1, color: Theme.of(context).colorScheme.background),
               ),
               SliverToBoxAdapter(child: SizedBox(height: 10))
             ],

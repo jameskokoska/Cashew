@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animations/animations.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -95,7 +96,11 @@ Future<T?> openPopup<T extends Object?>(
             padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
             margin: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
+              color: appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amount: 0.5)
+                  : Theme.of(context).colorScheme.lightDarkAccent,
               borderRadius: BorderRadius.circular(22),
               boxShadow: boxShadowGeneral(context),
             ),
@@ -251,7 +256,11 @@ Future<T?> openPopupCustom<T extends Object?>(
             padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
             margin: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.lightDarkAccent,
+              color: appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amount: 0.5)
+                  : Theme.of(context).colorScheme.lightDarkAccent,
               borderRadius: BorderRadius.circular(10),
               boxShadow: boxShadowGeneral(context),
             ),
@@ -311,7 +320,11 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             margin: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.lightDarkAccent,
+              color: appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amount: 0.5)
+                  : Theme.of(context).colorScheme.lightDarkAccent,
               borderRadius: BorderRadius.circular(10),
             ),
             child: CircularProgressIndicator(),

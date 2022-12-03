@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/textWidgets.dart';
 
-openSnackbar(SnackbarMessage message) {
-  snackbarKey.currentState!.post(message);
+openSnackbar(SnackbarMessage message, {bool postIfQueue = true}) {
+  snackbarKey.currentState!.post(message, postIfQueue: postIfQueue);
   // ScaffoldMessenger.of(context).showSnackBar(
   //   SnackBar(
   //       behavior: SnackBarBehavior.floating,

@@ -349,13 +349,8 @@ class BudgetContainer extends StatelessWidget {
                               ? SizedBox.shrink()
                               : ButtonIcon(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PastBudgetsPage(budget: budget),
-                                      ),
-                                    );
+                                    pushRoute(context,
+                                        PastBudgetsPage(budget: budget));
                                   },
                                   icon: Icons.history_rounded,
                                   color: dynamicPastel(
@@ -426,13 +421,11 @@ class BudgetContainer extends StatelessWidget {
               openContainer();
             },
             onLongPress: () {
-              Navigator.push(
+              pushRoute(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => AddBudgetPage(
-                    title: "Edit Budget",
-                    budget: budget,
-                  ),
+                AddBudgetPage(
+                  title: "Edit Budget",
+                  budget: budget,
                 ),
               );
             },
@@ -496,7 +489,7 @@ class AnimatedGooBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appStateSettings["batterySaver"]) {
+    if (appStateSettings["batterySaver"] || kIsWeb) {
       return Container(
         decoration: BoxDecoration(
           color:

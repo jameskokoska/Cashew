@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/foundation.dart';
@@ -72,13 +73,16 @@ class BottomNavBarState extends State<BottomNavBar> {
               borderRadius: BorderRadius.circular(15),
               child: NavigationBarTheme(
                 data: NavigationBarThemeData(
-                  // backgroundColor: darkenPastel(
-                  //     Theme.of(context).colorScheme.secondaryContainer,
-                  //     amount: 0.2),
-                  // indicatorColor: Theme.of(context)
-                  //     .colorScheme
-                  //     .secondary
-                  //     .withOpacity(0.24),
+                  backgroundColor: appStateSettings["materialYou"]
+                      ? dynamicPastel(
+                          context, Theme.of(context).colorScheme.primary,
+                          amount: 0.9)
+                      : null,
+                  indicatorColor: appStateSettings["materialYou"]
+                      ? dynamicPastel(
+                          context, Theme.of(context).colorScheme.primary,
+                          amount: 0.6)
+                      : null,
                   labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
                   height: 50,
                 ),

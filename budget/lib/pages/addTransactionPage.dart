@@ -476,9 +476,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   AnimatedContainer(
                     curve: Curves.easeInOut,
                     duration: Duration(milliseconds: 300),
-                    color: HexColor(selectedCategory?.colour,
-                            defaultColor: Theme.of(context).colorScheme.primary)
-                        .withOpacity(0.55),
+                    color: HexColor(
+                      selectedCategory?.colour,
+                      defaultColor: dynamicPastel(
+                        context,
+                        Theme.of(context).colorScheme.primary,
+                        amount: appStateSettings["materialYou"] ? 0.55 : 0.2,
+                      ),
+                    ).withOpacity(0.55),
                     child: Row(
                       children: [
                         Tappable(
@@ -743,7 +748,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             borderRadius: 15,
                             child: kIsWeb
                                 ? TextInput(
-                                    backgroundColor: Colors.transparent,
                                     padding: EdgeInsets.zero,
                                     labelText: "Title",
                                     icon: Icons.title_rounded,
@@ -754,7 +758,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   )
                                 : IgnorePointer(
                                     child: TextInput(
-                                      backgroundColor: Colors.transparent,
                                       padding: EdgeInsets.zero,
                                       readOnly: true,
                                       labelText: "Title",
@@ -785,7 +788,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             borderRadius: 15,
                             child: kIsWeb
                                 ? TextInput(
-                                    backgroundColor: Colors.transparent,
                                     padding: EdgeInsets.zero,
                                     labelText: "Notes",
                                     icon: Icons.edit,
@@ -799,7 +801,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   )
                                 : IgnorePointer(
                                     child: TextInput(
-                                      backgroundColor: Colors.transparent,
                                       padding: EdgeInsets.zero,
                                       readOnly: true,
                                       labelText: "Notes",
@@ -1093,8 +1094,6 @@ class _SelectNotesState extends State<SelectNotes> {
                   width: MediaQuery.of(context).size.width - 36,
                   child: TextInput(
                     // icon: Icons.title_rounded,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.lightDarkAccentHeavy,
                     initialValue: widget.selectedNote,
                     autoFocus: true,
                     onEditingComplete: () {
@@ -1183,8 +1182,6 @@ class _SelectTitleState extends State<SelectTitle> {
                   width: MediaQuery.of(context).size.width - 36,
                   child: TextInput(
                     icon: Icons.title_rounded,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.lightDarkAccentHeavy,
                     initialValue: widget.selectedTitle,
                     autoFocus: true,
                     onEditingComplete: () {
@@ -1421,7 +1418,6 @@ class _SelectTextState extends State<SelectText> {
           width: MediaQuery.of(context).size.width - 36,
           child: TextInput(
             icon: Icons.title_rounded,
-            backgroundColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
             initialValue: widget.selectedText,
             autoFocus: true,
             onEditingComplete: () {
@@ -1505,7 +1501,6 @@ class _EnterTextButtonState extends State<EnterTextButton> {
         borderRadius: 15,
         child: IgnorePointer(
           child: TextInput(
-            backgroundColor: Colors.transparent,
             padding: EdgeInsets.zero,
             readOnly: true,
             labelText: widget.placeholder,

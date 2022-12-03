@@ -172,7 +172,7 @@ class WalletEntryAdd extends StatelessWidget {
         closedColor: Colors.transparent,
         button: (openContainer) {
           return Tappable(
-            color: Theme.of(context).canvasColor,
+            color: Theme.of(context).colorScheme.background,
             borderRadius: 15,
             child: Container(
               decoration: BoxDecoration(

@@ -7,6 +7,20 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Added Material You Theme setting
+    Fixed animation for search button on transactions page
+    Select Category should try and always display at least 4 entries per row
+    Added system theme color option
+    New route pushing management
+    Added back bar graph animation (new route management system removed stutter when navigating)
+    Border radius fix for app bar
+    Added padding between transaction title and amount
+    Animated Goo disabled on web entirely
+    Status bar icons follow light/dark theme properly
+    Added no transactions image when no transactions found for certain month
+    Improved empty budgets page when no transactions found
+    No longer shows failed to sign in when first launch app
+
     Adaptive icon for Android 13+
     Upcoming transactions now show up on home page (within 3 days)
 

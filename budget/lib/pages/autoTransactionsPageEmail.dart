@@ -86,7 +86,7 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
       title: "Auto Transactions",
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
+      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       listWidgets: [
         Padding(
           padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
@@ -180,10 +180,10 @@ Future<void> parseEmailsInBackground(context) async {
             title:
                 "You have not setup the email scanning configuration in settings.",
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AutoTransactionsPageEmail()));
+              pushRoute(
+                context,
+                AutoTransactionsPageEmail(),
+              );
             },
           ),
         );
@@ -251,10 +251,10 @@ Future<void> parseEmailsInBackground(context) async {
               title:
                   "Couldn't find title in email. Check the email settings page for more information.",
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AutoTransactionsPageEmail()));
+                pushRoute(
+                  context,
+                  AutoTransactionsPageEmail(),
+                );
               },
             ),
           );
@@ -266,10 +266,10 @@ Future<void> parseEmailsInBackground(context) async {
               title:
                   "Couldn't find amount in email. Check the email settings page for more information.",
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AutoTransactionsPageEmail()));
+                pushRoute(
+                  context,
+                  AutoTransactionsPageEmail(),
+                );
               },
             ),
           );
@@ -304,10 +304,7 @@ Future<void> parseEmailsInBackground(context) async {
                   "The transaction category cannot be found for this email! " +
                       e.toString(),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AutoTransactionsPageEmail()));
+                pushRoute(context, AutoTransactionsPageEmail());
               },
             ),
           );
@@ -339,14 +336,13 @@ Future<void> parseEmailsInBackground(context) async {
             description: title,
             icon: Icons.payments_rounded,
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddTransactionPage(
-                      title: "Edit Transaction",
-                      transaction: transactionToAdd,
-                    ),
-                  ));
+              pushRoute(
+                context,
+                AddTransactionPage(
+                  title: "Edit Transaction",
+                  transaction: transactionToAdd,
+                ),
+              );
             },
           ),
         );
@@ -384,10 +380,7 @@ Future<void> parseEmailsInBackground(context) async {
               pluralString(newEmailCount == 1, " new email"),
           icon: Icons.mark_email_unread_rounded,
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AutoTransactionsPageEmail()));
+            pushRoute(context, AutoTransactionsPageEmail());
           },
         ),
       );

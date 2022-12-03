@@ -78,7 +78,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
       title: "Subscriptions",
       navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
+      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
@@ -244,7 +244,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
         ),
         // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
         SliverToBoxAdapter(
-          child: Container(height: 70, color: Theme.of(context).canvasColor),
+          child: Container(
+              height: 70, color: Theme.of(context).colorScheme.background),
         ),
       ],
     );

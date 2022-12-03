@@ -74,7 +74,7 @@ class PieChartWrapper extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
+                    color: Theme.of(context).colorScheme.background,
                     shape: BoxShape.circle),
               ),
             ),
@@ -276,7 +276,7 @@ class _Badge extends StatelessWidget {
                           color: color,
                           width: 1.5,
                         ),
-                        color: Theme.of(context).canvasColor,
+                        color: Theme.of(context).colorScheme.background,
                       ),
                       child: Center(
                         child: TextFont(

@@ -48,7 +48,8 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
   List<SnackbarMessage> currentQueue = [];
   SnackbarMessage? currentMessage;
 
-  post(SnackbarMessage message) {
+  post(SnackbarMessage message, {bool postIfQueue = true}) {
+    if (currentQueue.length >= 1 && !postIfQueue) return;
     currentQueue.add(message);
     if (currentQueue.length <= 1) animateIn(message);
   }
@@ -178,7 +179,8 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                 ]),
                 child: Tappable(
                     onTap: () {
-                      currentMessage?.onTap!();
+                      if (currentMessage?.onTap != null)
+                        currentMessage?.onTap!();
                       animateOut();
                     },
                     borderRadius: 13,

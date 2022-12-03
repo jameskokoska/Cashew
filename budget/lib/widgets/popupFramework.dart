@@ -1,3 +1,4 @@
+import 'package:budget/main.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import '../colors.dart';
@@ -21,7 +22,12 @@ class PopupFramework extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: appStateSettings["materialYou"]
+                ? Theme.of(context)
+                    .colorScheme
+                    .secondaryContainer
+                    .withOpacity(0.7)
+                : Theme.of(context).colorScheme.lightDarkAccent,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

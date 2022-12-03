@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -871,7 +872,9 @@ class TappableTextEntry extends StatelessWidget {
             border: Border(
                 bottom: BorderSide(
                     width: 1.5,
-                    color: Theme.of(context).colorScheme.lightDarkAccentHeavy)),
+                    color: appStateSettings["materialYou"]
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.lightDarkAccentHeavy)),
           ),
           child: IntrinsicWidth(
             child: Align(

@@ -16,13 +16,24 @@ extension ColorsDefined on ColorScheme {
   Color get textLightHeavy =>
       brightness == Brightness.light ? Color(0xFF888888) : Color(0xFF1D1D1D);
   Color get lightDarkAccent => brightness == Brightness.light
-      ? const Color(0xFFFAFAFA)
-      : Color(0xFF161616);
+      ? appStateSettings["materialYou"]
+          ? lightenPastel(HexColor(appStateSettings["accentColor"]),
+              amount: 0.8)
+          : Color(0xFFFAFAFA)
+      : appStateSettings["materialYou"]
+          ? darkenPastel(HexColor(appStateSettings["accentColor"]),
+              amount: 0.83)
+          : Color(0xFF161616);
   Color get lightDarkAccentHeavyLight => brightness == Brightness.light
-      ? (appStateSettings["batterySaver"]
-          ? Color(0xFFFAFAFA)
-          : Color(0xFFFFFFFF))
-      : Color(0xFF242424);
+      ? appStateSettings["materialYou"]
+          ? lightenPastel(HexColor(appStateSettings["accentColor"]),
+              amount: 0.92)
+          : (appStateSettings["batterySaver"]
+              ? Color(0xFFFAFAFA)
+              : Color(0xFFFFFFFF))
+      : appStateSettings["materialYou"]
+          ? darkenPastel(HexColor(appStateSettings["accentColor"]), amount: 0.8)
+          : Color(0xFF242424);
   Color get canvasContainer => brightness == Brightness.light
       ? const Color(0xFFEBEBEB)
       : const Color(0xFF242424);
@@ -34,7 +45,9 @@ extension ColorsDefined on ColorScheme {
       : const Color(0x69BDBDBD);
   Color get shadowColorLight => brightness == Brightness.light
       ? const Color(0x2D5A5A5A)
-      : Color(0x28747474);
+      : appStateSettings["materialYou"]
+          ? Colors.transparent
+          : Color(0x28747474);
   // Color get accentColor => brightness == Brightness.light
   //     ? const Color(0xFF4668A8)
   //     : const Color(0xFF1B447A);
@@ -42,7 +55,7 @@ extension ColorsDefined on ColorScheme {
   //     ? const Color(0xFF29457A)
   //     : const Color(0xFF5586C5);
   Color get unPaidYellow =>
-      brightness == Brightness.light ? Color(0xFFEBDB48) : Color(0xFFDED583);
+      brightness == Brightness.light ? Color(0xFFE2CE13) : Color(0xFFDED583);
   Color get unPaidRed =>
       brightness == Brightness.light ? Color(0xFFEB4848) : Color(0xFFDE8383);
   Color get incomeGreen =>

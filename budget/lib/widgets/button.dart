@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,11 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
         child: Tappable(
           color: widget.color != null
               ? widget.color!.withOpacity(0.8)
-              : Theme.of(context).colorScheme.secondaryContainer,
+              : appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.primary,
+                      amount: 0.3)
+                  : Theme.of(context).colorScheme.secondaryContainer,
           onHighlightChanged: (value) {
             setState(() {
               isTapped = value;

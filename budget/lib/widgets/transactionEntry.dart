@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -71,18 +72,17 @@ class TransactionEntry extends StatelessWidget {
 
         openSnackbar(
           SnackbarMessage(
-              title: "Created New Subscription",
-              description: "On " + getWordedDateShort(newDate),
-              icon: Icons.event_repeat_rounded,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddTransactionPage(
-                        title: "Edit Transaction", transaction: newTransaction),
-                  ),
-                );
-              }),
+            title: "Created New Subscription",
+            description: "On " + getWordedDateShort(newDate),
+            icon: Icons.event_repeat_rounded,
+            onTap: () {
+              pushRoute(
+                context,
+                AddTransactionPage(
+                    title: "Edit Transaction", transaction: newTransaction),
+              );
+            },
+          ),
         );
       }
     }
@@ -156,10 +156,15 @@ class TransactionEntry extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: selected
-                        ? Theme.of(context)
-                            .colorScheme
-                            .lightDarkAccentHeavy
-                            .withAlpha(200)
+                        ? appStateSettings["materialYou"]
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.35)
+                            : Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavy
+                                .withAlpha(200)
                         : Colors.transparent,
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                   ),
@@ -209,6 +214,9 @@ class TransactionEntry extends StatelessWidget {
                                     text: category!.name,
                                     fontSize: 18,
                                   ),
+                      ),
+                      SizedBox(
+                        width: 7,
                       ),
                       // Expanded(
                       //   child: Container(
@@ -437,7 +445,7 @@ class TransactionEntry extends StatelessWidget {
             );
           },
           openPage: openPage,
-          closedColor: Theme.of(context).canvasColor,
+          closedColor: Theme.of(context).colorScheme.background,
         );
       },
     );
@@ -568,7 +576,7 @@ class DateDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).canvasColor,
+      color: Theme.of(context).colorScheme.background,
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
       alignment: Alignment.centerLeft,
       child: Row(

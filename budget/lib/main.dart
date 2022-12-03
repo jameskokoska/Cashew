@@ -31,6 +31,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:system_theme/system_theme.dart';
 
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
@@ -167,6 +168,14 @@ Future<bool> initializeSettings() async {
   appStateSettings = userSettings;
 
   packageInfoGlobal = await PackageInfo.fromPlatform();
+
+  // Do some actions based on loaded settings
+  if (appStateSettings["accentSystemColor"] == true) {
+    await SystemTheme.accentColor.load();
+    Color accentColor = SystemTheme.accentColor.accent;
+    appStateSettings["accentColor"] = toHexString(accentColor);
+  }
+
   return true;
 }
 
@@ -294,6 +303,11 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
           brightness: Brightness.light,
+          background: appStateSettings["materialYou"]
+              ? lightenPastel(
+                  getSettingConstants(appStateSettings)["accentColor"],
+                  amount: 0.91)
+              : Colors.white,
         ),
         useMaterial3: true,
         applyElevationOverlayColor: false,
@@ -307,6 +321,11 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
           brightness: Brightness.dark,
+          background: appStateSettings["materialYou"]
+              ? darkenPastel(
+                  getSettingConstants(appStateSettings)["accentColor"],
+                  amount: 0.92)
+              : Colors.black,
         ),
         useMaterial3: true,
         typography: Typography.material2014(),

@@ -47,7 +47,7 @@ class DebugPage extends StatelessWidget {
       title: "Debug",
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
+      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       listWidgets: [
         Button(
             label: "TAPME",

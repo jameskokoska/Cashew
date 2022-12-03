@@ -1,14 +1,17 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/colorPicker.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
+import 'package:system_theme/system_theme.dart';
 
 class SelectColor extends StatefulWidget {
   SelectColor({
@@ -19,6 +22,8 @@ class SelectColor extends StatefulWidget {
     this.horizontalList = false,
     this.supportCustomColors = true,
     this.includeThemeColor = true, // Will return null if theme color is chosen
+    this.useSystemColorPrompt =
+        false, // Will show the option to use the system color (horizontalList must be disabled)
   }) : super(key: key);
   final Function(Color?)? setSelectedColor;
   final Color? selectedColor;
@@ -26,6 +31,7 @@ class SelectColor extends StatefulWidget {
   final bool horizontalList;
   final bool supportCustomColors;
   final bool includeThemeColor;
+  final bool? useSystemColorPrompt;
 
   @override
   _SelectColorState createState() => _SelectColorState();
@@ -34,6 +40,7 @@ class SelectColor extends StatefulWidget {
 class _SelectColorState extends State<SelectColor> {
   Color? selectedColor;
   int? selectedIndex;
+  bool useSystemColor = appStateSettings["accentSystemColor"];
 
   @override
   void initState() {
@@ -153,45 +160,54 @@ class _SelectColorState extends State<SelectColor> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Column(
         children: [
-          Center(
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              children: selectableColorsList
-                  .asMap()
-                  .map(
-                    (index, color) => MapEntry(
-                      index,
-                      widget.supportCustomColors &&
-                              index + 1 == selectableColorsList.length
-                          ? ColorIconCustom(
-                              initialSelectedColor: selectedColor ?? Colors.red,
-                              margin: EdgeInsets.all(5),
-                              size: 55,
-                              onTap: (colorPassed) {
-                                widget.setSelectedColor!(colorPassed);
-                                setState(() {
-                                  selectedColor = color;
-                                  selectedIndex = index;
-                                });
-                                Future.delayed(Duration(milliseconds: 70), () {
-                                  Navigator.pop(context);
-                                  if (widget.next != null) {
-                                    widget.next!();
-                                  }
-                                });
-                              },
-                              outline: selectedIndex ==
-                                  selectableColorsList.length - 1,
-                            )
-                          : ColorIcon(
-                              margin: EdgeInsets.all(5),
-                              color: color,
-                              size: 55,
-                              onTap: () {
-                                if (widget.setSelectedColor != null) {
-                                  widget.setSelectedColor!(color);
+          widget.useSystemColorPrompt == true
+              ? SettingsContainerSwitch(
+                  title: "Use System Color",
+                  onSwitched: (value) async {
+                    if (value == true) {
+                      await SystemTheme.accentColor.load();
+                      Color accentColor = SystemTheme.accentColor.accent;
+                      updateSettings("accentColor", toHexString(accentColor),
+                          updateGlobalState: true);
+                    } else {
+                      widget.setSelectedColor!(selectedColor);
+                    }
+                    updateSettings("accentSystemColor", value,
+                        updateGlobalState: true);
+                    setState(() {
+                      useSystemColor = value;
+                    });
+                  },
+                  initialValue: useSystemColor,
+                  icon: Icons.devices_rounded,
+                )
+              : SizedBox.shrink(),
+          AnimatedOpacity(
+            duration: Duration(milliseconds: 400),
+            opacity:
+                widget.useSystemColorPrompt == true && useSystemColor == false
+                    ? 1
+                    : 0.5,
+            child: Center(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                children: selectableColorsList
+                    .asMap()
+                    .map(
+                      (index, color) => MapEntry(
+                        index,
+                        widget.supportCustomColors &&
+                                index + 1 == selectableColorsList.length
+                            ? ColorIconCustom(
+                                initialSelectedColor:
+                                    selectedColor ?? Colors.red,
+                                margin: EdgeInsets.all(5),
+                                size: 55,
+                                onTap: (colorPassed) {
+                                  widget.setSelectedColor!(colorPassed);
                                   setState(() {
                                     selectedColor = color;
+                                    selectedIndex = index;
                                   });
                                   Future.delayed(Duration(milliseconds: 70),
                                       () {
@@ -200,14 +216,37 @@ class _SelectColorState extends State<SelectColor> {
                                       widget.next!();
                                     }
                                   });
-                                }
-                              },
-                              outline: selectedColor == color,
-                            ),
-                    ),
-                  )
-                  .values
-                  .toList(),
+                                },
+                                outline: selectedIndex == -1 ||
+                                    selectedIndex ==
+                                        selectableColorsList.length - 1,
+                              )
+                            : ColorIcon(
+                                margin: EdgeInsets.all(5),
+                                color: color,
+                                size: 55,
+                                onTap: () {
+                                  if (widget.setSelectedColor != null) {
+                                    widget.setSelectedColor!(color);
+                                    setState(() {
+                                      selectedColor = color;
+                                    });
+                                    Future.delayed(Duration(milliseconds: 70),
+                                        () {
+                                      Navigator.pop(context);
+                                      if (widget.next != null) {
+                                        widget.next!();
+                                      }
+                                    });
+                                  }
+                                },
+                                outline: selectedColor == color,
+                              ),
+                      ),
+                    )
+                    .values
+                    .toList(),
+              ),
             ),
           ),
         ],

@@ -44,6 +44,9 @@ import 'package:universal_html/html.dart' as html;
 import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
 import '../functions.dart';
+import 'package:system_theme/system_theme.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 //To get SHA1 Key run
 // ./gradlew signingReport
@@ -61,7 +64,7 @@ class SettingsPageState extends State<SettingsPage>
     with AutomaticKeepAliveClientMixin {
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
 
-  late Color? selectedColor = Colors.red;
+  late Color? selectedColor = HexColor(appStateSettings["accentColor"]);
   void refreshState() {
     print("refresh settings");
     setState(() {});
@@ -82,7 +85,7 @@ class SettingsPageState extends State<SettingsPage>
       backButton: false,
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
+      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       listWidgets: [
         SettingsContainerOpenPage(
           openPage: AboutPage(),
@@ -140,13 +143,24 @@ class SettingsPageState extends State<SettingsPage>
                   setSelectedColor: (color) {
                     selectedColor = color;
                     updateSettings("accentColor", toHexString(color));
+                    updateSettings("accentSystemColor", false,
+                        pagesNeedingRefresh: [3]);
                   },
+                  useSystemColorPrompt: true,
                 ),
               ),
             );
           },
           title: "Select Accent Color",
           icon: Icons.color_lens_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "Material You",
+          onSwitched: (value) {
+            updateSettings("materialYou", value, updateGlobalState: true);
+          },
+          initialValue: appStateSettings["materialYou"],
+          icon: Icons.format_paint_rounded,
         ),
         SettingsContainerDropdown(
           title: "Theme Mode",
@@ -275,6 +289,11 @@ class SettingsPageState extends State<SettingsPage>
                   updateSettings("notifications", value,
                       updateGlobalState: false);
 
+                  await flutterLocalNotificationsPlugin
+                      .resolvePlatformSpecificImplementation<
+                          AndroidFlutterLocalNotificationsPlugin>()
+                      ?.requestPermission();
+
                   AndroidNotificationDetails androidNotificationDetails =
                       AndroidNotificationDetails(
                     'transactionReminders',
@@ -292,6 +311,30 @@ class SettingsPageState extends State<SettingsPage>
                     notificationDetails,
                     payload: 'addTransaction',
                   );
+
+                  if (kIsWeb || Platform.isLinux) {
+                    return;
+                  }
+                  tz.initializeTimeZones();
+                  DateTime dateTime = DateTime.now();
+
+                  tz.setLocalLocation(tz.getLocation(dateTime.timeZoneName));
+
+                  print(await tz.TZDateTime.now(tz.local));
+
+                  await flutterLocalNotificationsPlugin.zonedSchedule(
+                      0,
+                      'scheduled title',
+                      'scheduled body',
+                      tz.TZDateTime.now(tz.local)
+                          .add(const Duration(seconds: 5)),
+                      const NotificationDetails(
+                          android: AndroidNotificationDetails(
+                              'your channel id', 'your channel name',
+                              channelDescription: 'your channel description')),
+                      androidAllowWhileIdle: true,
+                      uiLocalNotificationDateInterpretation:
+                          UILocalNotificationDateInterpretation.absoluteTime);
                 },
                 initialValue: appStateSettings["notifications"],
                 icon: Icons.notifications_rounded,
@@ -370,4 +413,14 @@ Function enterNameBottomSheet(context) {
       ),
     ),
   );
+}
+
+tz.TZDateTime _nextInstanceOfTenAM() {
+  final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+  tz.TZDateTime scheduledDate =
+      tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
+  if (scheduledDate.isBefore(now)) {
+    scheduledDate = scheduledDate.add(const Duration(days: 1));
+  }
+  return scheduledDate;
 }

@@ -10,6 +10,7 @@ import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -265,16 +266,11 @@ class TransactionsListPageState extends State<TransactionsListPage>
 
   @override
   Widget build(BuildContext context) {
-    Widget searchButton = OpenContainerNavigation(
-      button: (openContainer) {
-        return IconButton(
-          onPressed: () {
-            openContainer();
-          },
-          icon: Icon(Icons.search_rounded),
-        );
+    Widget searchButton = IconButton(
+      onPressed: () {
+        pushRoute(context, TransactionsSearchPage());
       },
-      openPage: TransactionsSearchPage(),
+      icon: Icon(Icons.search_rounded),
     );
 
     return Stack(
@@ -298,11 +294,25 @@ class TransactionsListPageState extends State<TransactionsListPage>
                     Padding(
                         padding: EdgeInsets.only(top: 10, right: 7),
                         child: MediaQuery.of(context).padding.top >= 25
-                            ? AnimatedScale(
+                            ? AnimatedSwitcher(
                                 duration: Duration(milliseconds: 1100),
-                                scale: scaleInSearchIcon ? 1 : 0,
-                                curve: ElasticOutCurve(0.8),
-                                child: searchButton,
+                                switchInCurve: Curves.easeInOutCubicEmphasized,
+                                switchOutCurve: Curves.ease,
+                                transitionBuilder: (Widget child,
+                                    Animation<double> animation) {
+                                  return FadeScaleTransitionButton(
+                                    alignment: Alignment.center,
+                                    animation: animation,
+                                    child: child,
+                                  );
+                                },
+                                child: scaleInSearchIcon
+                                    ? searchButton
+                                    : Container(
+                                        key: ValueKey(1),
+                                        width: 50,
+                                        height: 50,
+                                      ),
                               )
                             : searchButton),
                   ],
@@ -314,34 +324,28 @@ class TransactionsListPageState extends State<TransactionsListPage>
                 return Scaffold(
                   extendBodyBehindAppBar: false,
                   appBar: AppBar(
-                    backgroundColor: Theme.of(context).canvasColor,
+                    backgroundColor: Theme.of(context).colorScheme.background,
                     elevation: 0,
                     title: MediaQuery.of(context).padding.top >= 25
                         ? FadeTransition(
                             opacity: _animationControllerSearch,
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 18),
-                              child: OpenContainerNavigation(
-                                borderRadius: 10,
-                                button: (openContainer) {
-                                  return FakeTextInput(
-                                    onTap: openContainer,
-                                    label: "Search...",
-                                    icon: Icons.search_rounded,
-                                    edgeInsetsVertical: MediaQuery.of(context)
-                                                    .padding
-                                                    .top -
-                                                21 <=
+                              child: FakeTextInput(
+                                onTap: () {
+                                  pushRoute(context, TransactionsSearchPage());
+                                },
+                                label: "Search...",
+                                icon: Icons.search_rounded,
+                                edgeInsetsVertical:
+                                    MediaQuery.of(context).padding.top - 21 <=
                                             15
                                         ? MediaQuery.of(context).padding.top -
                                             21
                                         : 15,
-                                    backgroundColor: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
-                                  );
-                                },
-                                openPage: TransactionsSearchPage(),
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
                               ),
                             ),
                           )
@@ -428,7 +432,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
                           SliverToBoxAdapter(
                             child: Container(
                                 height: 200,
-                                color: Theme.of(context).canvasColor),
+                                color:
+                                    Theme.of(context).colorScheme.background),
                           ),
                         ],
                       ),
@@ -474,7 +479,21 @@ class CashFlow extends StatelessWidget {
             ),
           );
         }
-        return SizedBox.shrink();
+        // return NoResults(
+        //   message: "There are no transactions in this time range.",
+        // );
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 85, right: 15, left: 15),
+            child: TextFont(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              text: "No transactions within time range.",
+              maxLines: 3,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
       },
     );
   }
@@ -731,7 +750,7 @@ class _MonthSelectorState extends State<MonthSelector> {
             bool isToday = currentDateTime.month == DateTime.now().month &&
                 currentDateTime.year == DateTime.now().year;
             return Container(
-              color: Theme.of(context).canvasColor,
+              color: Theme.of(context).colorScheme.background,
               child: Stack(
                 children: [
                   Container(

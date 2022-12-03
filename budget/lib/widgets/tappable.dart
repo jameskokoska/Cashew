@@ -25,7 +25,7 @@ class Tappable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: color,
+      color: color ?? Theme.of(context).colorScheme.background,
       type: type,
       borderRadius: BorderRadius.circular(borderRadius),
       child: InkWell(

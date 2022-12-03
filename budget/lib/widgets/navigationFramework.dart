@@ -128,6 +128,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         child: Stack(children: [
           AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle.light.copyWith(
+                statusBarIconBrightness:
+                    determineBrightnessTheme(context) == Brightness.light
+                        ? Brightness.dark
+                        : Brightness.light,
                 statusBarColor: kIsWeb ? Colors.black : Colors.transparent),
             child: Scaffold(
               body: PageView(
@@ -206,7 +210,11 @@ class AnimateFAB extends StatelessWidget {
       switchInCurve: Curves.easeInOutCubicEmphasized,
       switchOutCurve: Curves.ease,
       transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeScaleTransitionFAB(animation: animation, child: child);
+        return FadeScaleTransitionButton(
+          animation: animation,
+          child: child,
+          alignment: Alignment(0.7, 0.7),
+        );
       },
       child: condition
           ? fab
@@ -219,15 +227,17 @@ class AnimateFAB extends StatelessWidget {
   }
 }
 
-class FadeScaleTransitionFAB extends StatelessWidget {
-  const FadeScaleTransitionFAB({
+class FadeScaleTransitionButton extends StatelessWidget {
+  const FadeScaleTransitionButton({
     Key? key,
     required this.animation,
+    required this.alignment,
     this.child,
   }) : super(key: key);
 
   final Animation<double> animation;
   final Widget? child;
+  final Alignment alignment;
 
   static final Animatable<double> _fadeInTransition = CurveTween(
     curve: const Interval(0.0, 0.7),
@@ -259,7 +269,7 @@ class FadeScaleTransitionFAB extends StatelessWidget {
           child: ScaleTransition(
             scale: _scaleInTransition.animate(animation),
             child: child,
-            alignment: Alignment(0.7, 0.7),
+            alignment: alignment,
           ),
         );
       },
@@ -273,7 +283,7 @@ class FadeScaleTransitionFAB extends StatelessWidget {
           child: ScaleTransition(
             scale: _scaleOutTransition.animate(animation),
             child: child,
-            alignment: Alignment(0.7, 0.7),
+            alignment: alignment,
           ),
         );
       },

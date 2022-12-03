@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -82,13 +83,11 @@ class CategoryIcon extends StatelessWidget {
             onTap: onTap,
             onLongPress: canEditByLongPress
                 ? () {
-                    Navigator.push(
+                    pushRoute(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => AddCategoryPage(
-                          title: "Edit Category",
-                          category: category,
-                        ),
+                      AddCategoryPage(
+                        title: "Edit Category",
+                        category: category,
                       ),
                     );
                   }

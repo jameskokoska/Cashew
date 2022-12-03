@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=C:\Users\James\flutter
-FLUTTER_APPLICATION_PATH=C:\Users\James\Documents\GitHub\Budget-App\budget\sliding_sheet-0.5.2-modified\example
+FLUTTER_ROOT=F:\Android\flutter
+FLUTTER_APPLICATION_PATH=F:\Documents\AppDev\Budget-App\budget\sliding_sheet-0.5.2-modified\example
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib\main.dart
 FLUTTER_BUILD_DIR=build

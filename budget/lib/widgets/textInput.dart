@@ -1,3 +1,4 @@
+import 'package:budget/main.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,9 @@ class TextInput extends StatelessWidget {
           color: bubbly == false
               ? Colors.transparent
               : backgroundColor ??
-                  Theme.of(context).colorScheme.canvasContainer,
+                  (appStateSettings["materialYou"]
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : Theme.of(context).colorScheme.canvasContainer),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class NoResults extends StatelessWidget {
-  const NoResults({Key? key}) : super(key: key);
+  const NoResults({Key? key, required this.message}) : super(key: key);
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class NoResults extends StatelessWidget {
         padding: const EdgeInsets.only(top: 35, right: 30, left: 30),
         child: Column(
           children: [
-            SizedBox(height: 80),
+            SizedBox(height: 30),
             Container(
               constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.height <=
@@ -26,8 +27,8 @@ class NoResults extends StatelessWidget {
             SizedBox(height: 30),
             TextFont(
               maxLines: 4,
-              fontSize: 18,
-              text: "No transactions for this budget",
+              fontSize: 16,
+              text: message,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 80),

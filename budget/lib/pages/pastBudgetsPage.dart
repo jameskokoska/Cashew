@@ -85,14 +85,7 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
     ColorScheme budgetColorScheme = ColorScheme.fromSeed(
       seedColor: HexColor(widget.budget.colour,
           defaultColor: Theme.of(context).colorScheme.primary),
-      brightness: getSettingConstants(appStateSettings)["theme"] ==
-              ThemeMode.system
-          ? MediaQuery.of(context).platformBrightness
-          : getSettingConstants(appStateSettings)["theme"] == ThemeMode.light
-              ? Brightness.light
-              : getSettingConstants(appStateSettings)["theme"] == ThemeMode.dark
-                  ? Brightness.dark
-                  : Brightness.light,
+      brightness: determineBrightnessTheme(context),
     );
 
     return PageFramework(
@@ -114,7 +107,7 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
       textColor: Theme.of(context).colorScheme.black,
       navbar: false,
       dragDownToDismiss: true,
-      dragDownToDissmissBackground: Theme.of(context).canvasColor,
+      dragDownToDissmissBackground: Theme.of(context).colorScheme.background,
       slivers: [
         StreamBuilder<List<double?>>(
           stream: mergedStreams,
@@ -122,7 +115,7 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
             if (snapshot.hasData) {
               double maxY = 100;
               List<BarChartGroupData> bars = [];
-              // List<BarChartGroupData> initialBars = [];
+              List<BarChartGroupData> initialBars = [];
 
               for (int i = snapshot.data!.length - 1; i >= 0; i--) {
                 if ((snapshot.data![i] ?? 0).abs() > maxY)
@@ -137,14 +130,14 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                     budgetColorScheme.primary,
                   ),
                 );
-                // initialBars.add(
-                //   makeGroupData(
-                //     i,
-                //     0.001,
-                //     0,
-                //     budgetColorScheme.secondary,
-                //   ),
-                // );
+                initialBars.add(
+                  makeGroupData(
+                    i,
+                    0.001,
+                    0,
+                    budgetColorScheme.secondary,
+                  ),
+                );
               }
 
               return SliverToBoxAdapter(
@@ -154,6 +147,7 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                   maxY: maxY,
                   bars: bars,
                   horizontalLineAt: widget.budget.amount,
+                  initialBars: initialBars,
                 ),
               );
             } else {
@@ -200,32 +194,32 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
         //     ),
         //   ),
         // ),
-        SliverToBoxAdapter(
-          child: Center(
-            child: Tappable(
-              color: Theme.of(context).colorScheme.lightDarkAccent,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                child: TextFont(
-                  text: "View More",
-                  textAlign: TextAlign.center,
-                  fontSize: 16,
-                  textColor: Theme.of(context).colorScheme.textLight,
-                ),
-              ),
-              onTap: () {
-                setState(() {
-                  amountLoaded += 3;
-                });
-                Future.delayed(Duration(milliseconds: 150), () {
-                  budgetHistoryKey.currentState!.scrollToBottom(duration: 4000);
-                });
-              },
-              borderRadius: 10,
-            ),
-          ),
-        ),
+        // SliverToBoxAdapter(
+        //   child: Center(
+        //     child: Tappable(
+        //       color: Theme.of(context).colorScheme.lightDarkAccent,
+        //       child: Padding(
+        //         padding:
+        //             const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        //         child: TextFont(
+        //           text: "View More",
+        //           textAlign: TextAlign.center,
+        //           fontSize: 16,
+        //           textColor: Theme.of(context).colorScheme.textLight,
+        //         ),
+        //       ),
+        //       onTap: () {
+        //         setState(() {
+        //           amountLoaded += 3;
+        //         });
+        //         Future.delayed(Duration(milliseconds: 150), () {
+        //           budgetHistoryKey.currentState!.scrollToBottom(duration: 4000);
+        //         });
+        //       },
+        //       borderRadius: 10,
+        //     ),
+        //   ),
+        // ),
         SliverToBoxAdapter(child: SizedBox(height: 10)),
       ],
     );

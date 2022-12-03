@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\James\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\James\Documents\GitHub\Budget-App\budget\sliding_sheet-0.5.2-modified\example"
+export "FLUTTER_ROOT=F:\Android\flutter"
+export "FLUTTER_APPLICATION_PATH=F:\Documents\AppDev\Budget-App\budget\sliding_sheet-0.5.2-modified\example"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_BUILD_DIR=build"

@@ -3,6 +3,7 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/services.dart';
 
 class PageFramework extends StatefulWidget {
   const PageFramework({
@@ -343,6 +344,12 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarIconBrightness:
+            determineBrightnessTheme(context) == Brightness.light
+                ? Brightness.dark
+                : Brightness.light,
+      ),
       shadowColor: Theme.of(context).shadowColor.withAlpha(130),
       leading: backButton == true && animationControllerOpacity != null
           ? Container(
@@ -372,83 +379,91 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       expandedHeight: expandedHeight ?? 200,
       collapsedHeight: 65,
       actions: actions,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: false,
-        titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-        title: animationControllerShift == null
-            ? titleWidget ??
-                TextFont(
-                  text: title,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                  textAlign: TextAlign.left,
-                )
-            : customTitleBuilder == null
-                ? AnimatedBuilder(
-                    animation: animationControllerShift!,
-                    builder: (_, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                          backButton ? 40 * animationControllerShift!.value : 0,
-                          -(subtitleSize ?? 0) *
-                              (1 - animationControllerShift!.value),
-                        ),
-                        child: child,
-                      );
-                    },
-                    child: titleWidget ??
-                        TextFont(
-                          text: title,
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          textColor: textColor == null
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer
-                              : textColor,
-                          textAlign: TextAlign.left,
-                        ),
+      flexibleSpace: ClipRRect(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(15),
+        ),
+        child: FlexibleSpaceBar(
+          centerTitle: false,
+          titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+          title: animationControllerShift == null
+              ? titleWidget ??
+                  TextFont(
+                    text: title,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    textColor:
+                        Theme.of(context).colorScheme.onSecondaryContainer,
+                    textAlign: TextAlign.left,
                   )
-                : customTitleBuilder!(animationControllerShift!),
-        background: Stack(
-          children: [
-            Container(
-              color: appBarBackgroundColorStart == null
-                  ? Theme.of(context).canvasColor
-                  : appBarBackgroundColorStart,
-            ),
-            subtitle != null &&
-                    animationControllerShift != null &&
-                    animationController0at50 != null
-                ? AnimatedBuilder(
-                    animation: animationControllerShift!,
-                    builder: (_, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                          0,
-                          -(subtitleSize ?? 0) *
-                              (animationControllerShift!.value) *
-                              subtitleAnimationSpeed,
+              : customTitleBuilder == null
+                  ? AnimatedBuilder(
+                      animation: animationControllerShift!,
+                      builder: (_, child) {
+                        return Transform.translate(
+                          offset: Offset(
+                            backButton
+                                ? 40 * animationControllerShift!.value
+                                : 0,
+                            -(subtitleSize ?? 0) *
+                                (1 - animationControllerShift!.value),
+                          ),
+                          child: child,
+                        );
+                      },
+                      child: titleWidget ??
+                          TextFont(
+                            text: title,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            textColor: textColor == null
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer
+                                : textColor,
+                            textAlign: TextAlign.left,
+                          ),
+                    )
+                  : customTitleBuilder!(animationControllerShift!),
+          background: Stack(
+            children: [
+              Container(
+                color: appBarBackgroundColorStart == null
+                    ? Theme.of(context).colorScheme.background
+                    : appBarBackgroundColorStart,
+              ),
+              subtitle != null &&
+                      animationControllerShift != null &&
+                      animationController0at50 != null
+                  ? AnimatedBuilder(
+                      animation: animationControllerShift!,
+                      builder: (_, child) {
+                        return Transform.translate(
+                          offset: Offset(
+                            0,
+                            -(subtitleSize ?? 0) *
+                                (animationControllerShift!.value) *
+                                subtitleAnimationSpeed,
+                          ),
+                          child: child,
+                        );
+                      },
+                      child: Align(
+                        alignment: subtitleAlignment,
+                        child: FadeTransition(
+                          opacity: animationController0at50!,
+                          child: subtitle,
                         ),
-                        child: child,
-                      );
-                    },
-                    child: Align(
-                      alignment: subtitleAlignment,
-                      child: FadeTransition(
-                        opacity: animationController0at50!,
-                        child: subtitle,
                       ),
-                    ),
-                  )
-                : SizedBox(),
-          ],
+                    )
+                  : SizedBox(),
+            ],
+          ),
         ),
       ),
-      shape: ContinuousRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(30),
+          bottom: Radius.circular(15),
         ),
       ),
     );

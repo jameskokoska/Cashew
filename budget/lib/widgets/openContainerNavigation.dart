@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/foundation.dart';
@@ -24,11 +25,9 @@ class OpenContainerNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     if (appStateSettings["batterySaver"]) {
       Widget child = button(() {
-        Navigator.push(
+        pushRoute(
           context,
-          MaterialPageRoute(
-            builder: (context) => openPage,
-          ),
+          openPage,
         );
       });
       return ClipRRect(

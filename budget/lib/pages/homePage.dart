@@ -89,7 +89,8 @@ class HomePageState extends State<HomePage>
             controller: _scrollController,
             children: [
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-              Container(height: 1, color: Theme.of(context).canvasColor),
+              Container(
+                  height: 1, color: Theme.of(context).colorScheme.background),
               Container(
                 // Subtract one (1) here because of the thickness of the wiper above
                 height: 179 - 1 + MediaQuery.of(context).padding.top,
@@ -463,7 +464,8 @@ class HomePageState extends State<HomePage>
               ),
               Container(height: 135),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-              Container(height: 1, color: Theme.of(context).canvasColor),
+              Container(
+                  height: 1, color: Theme.of(context).colorScheme.background),
             ],
           ),
         ),
@@ -501,7 +503,7 @@ class _SlidingSelectorState extends State<SlidingSelector> {
         innerPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         initialValue: 1,
         isStretch: true,
-        height: widget.alternateTheme ? 33 : 45,
+        height: widget.alternateTheme ? 38 : 45,
         // splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
         // splashColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
         children: {
@@ -528,10 +530,7 @@ class _SlidingSelectorState extends State<SlidingSelector> {
           borderRadius: BorderRadius.circular(15),
         ),
         thumbDecoration: BoxDecoration(
-          color: widget.alternateTheme
-              ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
-                  amountLight: 0.9, amountDark: 0.5)
-              : Theme.of(context).colorScheme.white,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: widget.alternateTheme
               ? BorderRadius.circular(10)
               : BorderRadius.circular(15),
@@ -549,8 +548,8 @@ class _SlidingSelectorState extends State<SlidingSelector> {
             ],
           ),
         ),
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
+        duration: Duration(milliseconds: 800),
+        curve: Curves.easeInOutCubicEmphasized,
         onValueChanged: (index) {
           widget.onSelected(index);
           setState(() {

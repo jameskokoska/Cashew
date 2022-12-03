@@ -40,6 +40,15 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
     value = widget.initialValue;
   }
 
+  @override
+  void didUpdateWidget(Widget oldWidget) {
+    if (widget.initialValue != value) {
+      setState(() {
+        value = widget.initialValue;
+      });
+    }
+  }
+
   void toggleSwitch() async {
     setState(() {
       waiting = true;
@@ -100,7 +109,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenContainerNavigation(
-      closedColor: Theme.of(context).canvasColor,
+      closedColor: Theme.of(context).colorScheme.background,
       borderRadius: 0,
       button: (openContainer) {
         return SettingsContainer(

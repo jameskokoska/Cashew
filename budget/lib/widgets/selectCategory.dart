@@ -149,7 +149,11 @@ class _SelectCategoryState extends State<SelectCategory> {
                               index,
                               CategoryIcon(
                                 categoryPk: category.categoryPk,
-                                size: 50,
+                                size: MediaQuery.of(context).size.width <= 400
+                                    ? (MediaQuery.of(context).size.width -
+                                            200) /
+                                        4
+                                    : 45,
                                 label: true,
                                 onTap: () {
                                   if (widget.setSelectedCategory != null) {

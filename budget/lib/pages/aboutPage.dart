@@ -29,7 +29,7 @@ class AboutPage extends StatelessWidget {
       title: "About",
       navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
+      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       listWidgets: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
@@ -37,11 +37,9 @@ class AboutPage extends StatelessWidget {
             children: [
               Tappable(
                 onLongPress: () {
-                  Navigator.push(
+                  pushRoute(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => DebugPage(),
-                    ),
+                    DebugPage(),
                   );
                 },
                 child: TextFont(
@@ -82,12 +80,9 @@ class AboutPage extends StatelessWidget {
                 child: Button(
                   label: "View App Intro",
                   onTap: () {
-                    Navigator.push(
+                    pushRoute(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            OnBoardingPage(popNavigationWhenDone: true),
-                      ),
+                      OnBoardingPage(popNavigationWhenDone: true),
                     );
                   },
                 ),

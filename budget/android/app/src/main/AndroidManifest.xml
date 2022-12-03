@@ -8,6 +8,10 @@
     <application
         android:label="Budget App"
         android:icon="@mipmap/ic_launcher">
+        <!-- Use the new rendering engine Impeller (experimental) -->
+        <!-- <meta-data
+        android:name="io.flutter.embedding.android.EnableImpeller"
+        android:value="true" /> -->
         <activity
             android:exported="true" 
             android:name=".MainActivity"

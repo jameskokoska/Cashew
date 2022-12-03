@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
@@ -445,7 +446,7 @@ String? getOSInsideWeb() {
   }
 }
 
-restartApp(context) {
+restartApp(context) async {
   if (kIsWeb) {
     openPopup(context,
         title: "Please Restart the Application",
@@ -466,4 +467,43 @@ String filterEmailTitle(string) {
   String title = (position != -1) ? string.substring(0, position) : string;
   title = title.trim();
   return title;
+}
+
+void pushRoute(context, page) {
+  if (appStateSettings["batterySaver"]) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+  } else {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        opaque: false,
+        transitionDuration: Duration(milliseconds: 400),
+        reverseTransitionDuration: Duration(milliseconds: 400),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return SharedAxisTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.vertical,
+            child: child,
+          );
+        },
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return page;
+        },
+      ),
+    );
+  }
+}
+
+Brightness determineBrightnessTheme(context) {
+  return getSettingConstants(appStateSettings)["theme"] == ThemeMode.system
+      ? MediaQuery.of(context).platformBrightness
+      : getSettingConstants(appStateSettings)["theme"] == ThemeMode.light
+          ? Brightness.light
+          : getSettingConstants(appStateSettings)["theme"] == ThemeMode.dark
+              ? Brightness.dark
+              : Brightness.light;
 }

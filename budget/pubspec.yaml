@@ -59,6 +59,7 @@ dependencies:
   pausable_timer: ^1.0.0+6
   animated_fractionally_sized_box: ^2.0.1
   flutter_local_notifications: ^12.0.2
+  system_theme: ^2.0.0
 
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:
