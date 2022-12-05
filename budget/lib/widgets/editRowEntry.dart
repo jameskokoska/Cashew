@@ -13,6 +13,7 @@ class EditRowEntry extends StatelessWidget {
       this.padding,
       this.currentReorder = false,
       this.canReorder = true,
+      this.canDelete = true,
       Key? key})
       : super(key: key);
   final int index;
@@ -23,6 +24,7 @@ class EditRowEntry extends StatelessWidget {
   final EdgeInsets? padding;
   final bool currentReorder;
   final bool canReorder;
+  final bool canDelete;
   final Function()? onTap;
 
   @override
@@ -58,15 +60,17 @@ class EditRowEntry extends StatelessWidget {
                     child: content,
                   ),
                 ),
-                Tappable(
-                  color: Colors.transparent,
-                  borderRadius: 18,
-                  child: Container(
-                      height: double.infinity,
-                      width: 40,
-                      child: Icon(Icons.delete_rounded)),
-                  onTap: onDelete,
-                ),
+                canDelete
+                    ? Tappable(
+                        color: Colors.transparent,
+                        borderRadius: 18,
+                        child: Container(
+                            height: double.infinity,
+                            width: 40,
+                            child: Icon(Icons.delete_rounded)),
+                        onTap: onDelete,
+                      )
+                    : SizedBox.shrink(),
                 canReorder
                     ? ReorderableDragStartListener(
                         index: index,

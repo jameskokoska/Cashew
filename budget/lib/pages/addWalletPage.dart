@@ -14,6 +14,7 @@ import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -49,6 +50,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Color? selectedColor;
   String? selectedIconName;
   List<dynamic> currencies = [];
+  String? searchCurrency = "";
+  dynamic selectedCurrency = "";
 
   late FocusNode _periodLengthFocusNode;
 
@@ -124,6 +127,18 @@ class _AddWalletPageState extends State<AddWalletPage> {
     );
   }
 
+  void populateCurrencies() {
+    Future.delayed(Duration.zero, () async {
+      String response =
+          await rootBundle.loadString('assets/static/currencies.json');
+      setState(() {
+        //Set to false because we can't save until we made some changes
+        canAddWallet = false;
+        currencies = jsonDecode(response);
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -138,16 +153,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
       selectedColor = widget.wallet!.colour == null
           ? null
           : HexColor(widget.wallet!.colour);
-      Future.delayed(Duration.zero, () async {
-        String response =
-            await rootBundle.loadString('assets/static/currencies.json');
-        setState(() {
-          //Set to false because we can't save until we made some changes
-          canAddWallet = false;
-          currencies = jsonDecode(response);
-        });
-      });
     } else {}
+    populateCurrencies();
   }
 
   @override
@@ -222,60 +229,110 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     discardChangesPopup(context);
                   }
                 },
-                listWidgets: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: kIsWeb
-                        ? TextInput(
-                            labelText: "Name",
-                            bubbly: false,
-                            initialValue: selectedTitle,
-                            onChanged: (text) {
-                              setSelectedTitle(text);
-                            },
-                            padding: EdgeInsets.only(left: 7, right: 7),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            topContentPadding: 20,
-                          )
-                        : TappableTextEntry(
-                            title: selectedTitle,
-                            placeholder: "Name",
-                            onTap: () {
-                              selectTitle();
-                            },
-                            autoSizeText: true,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                          ),
-                  ),
-                  SizedBox(height: 14),
-                  Container(
-                    height: 65,
-                    child: SelectColor(
-                      horizontalList: true,
-                      selectedColor: selectedColor,
-                      setSelectedColor: setSelectedColor,
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: kIsWeb
+                          ? TextInput(
+                              labelText: "Name",
+                              bubbly: false,
+                              initialValue: selectedTitle,
+                              onChanged: (text) {
+                                setSelectedTitle(text);
+                              },
+                              padding: EdgeInsets.only(left: 7, right: 7),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              topContentPadding: 20,
+                            )
+                          : TappableTextEntry(
+                              title: selectedTitle,
+                              placeholder: "Name",
+                              onTap: () {
+                                selectTitle();
+                              },
+                              autoSizeText: true,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                            ),
                     ),
                   ),
-                  SizedBox(height: 25),
-                  Container(
-                    height: 300,
-                    child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: currencies.length,
-                      itemBuilder: (context, index) {
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 14),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      height: 65,
+                      child: SelectColor(
+                        horizontalList: true,
+                        selectedColor: selectedColor,
+                        setSelectedColor: setSelectedColor,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 15),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextFont(
+                        text: "Select Currency",
+                        textColor: Theme.of(context).colorScheme.textLight,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 10),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SettingsContainerSwitch(
+                      title: "Custom Icon",
+                      onSwitched: (value) {
+                        if (value == false) {
+                          populateCurrencies();
+                        } else {
+                          setState(() {
+                            currencies = [];
+                          });
+                        }
+                      },
+                      initialValue: false,
+                      syncWithInitialValue: false,
+                      icon: Icons.emoji_symbols_rounded,
+                      verticalPadding: 0,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: currencies.length != 0
+                        ? TextInput(
+                            labelText: "Search currencies...",
+                            icon: Icons.search_rounded,
+                          )
+                        : CustomIconButton(
+                            onTap: () {},
+                            selectedIconDisplay: "",
+                          ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 15),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.only(
                               left: 18.0, right: 18, bottom: 5),
                           child: Tappable(
                             color:
                                 Theme.of(context).colorScheme.lightDarkAccent,
-                            borderRadius: 10,
+                            borderRadius: 13,
                             onTap: () {},
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
+                                  horizontal: 17, vertical: 10),
                               child: Wrap(
                                 alignment: WrapAlignment.spaceBetween,
                                 crossAxisAlignment: WrapCrossAlignment.center,
@@ -283,16 +340,16 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                   IntrinsicWidth(
                                     child: Row(
                                       children: [
-                                        currencies[index]?["Flag"] != null
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 8.0),
-                                                child: Image.network(
-                                                  currencies[index]?["Flag"],
-                                                  height: 20,
-                                                ),
-                                              )
-                                            : SizedBox.shrink(),
+                                        // currencies[index]?["Flag"] != null
+                                        //     ? Padding(
+                                        //         padding: const EdgeInsets.only(
+                                        //             right: 8.0),
+                                        //         child: Image.network(
+                                        //           currencies[index]?["Flag"],
+                                        //           height: 20,
+                                        //         ),
+                                        //       )
+                                        //     : SizedBox.shrink(),
                                         TextFont(
                                             text: currencies[index]
                                                     ?["CountryName"] ??
@@ -306,8 +363,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                         TextFont(
                                             text: currencies[index]["Code"]),
                                         SizedBox(width: 15),
-                                        TextFont(
-                                            text: currencies[index]["Symbol"]),
+                                        Text(currencies[index]["Symbol"]),
                                       ],
                                     ),
                                   )
@@ -317,8 +373,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           ),
                         );
                       },
+                      childCount: currencies.length, //snapshot.data?.length
                     ),
-                  )
+                  ),
+                  SliverToBoxAdapter(child: SizedBox(height: 60)),
                 ],
               ),
               Align(
@@ -348,6 +406,45 @@ class _AddWalletPageState extends State<AddWalletPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomIconButton extends StatelessWidget {
+  const CustomIconButton(
+      {Key? key, required this.onTap, required this.selectedIconDisplay})
+      : super(key: key);
+  final VoidCallback onTap;
+  final String? selectedIconDisplay;
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      borderRadius: 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFont(
+                text: selectedIconDisplay == null
+                    ? "Default transaction"
+                    : "selectedTypeDisplay",
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+                textColor: selectedIconDisplay == null
+                    ? Theme.of(context).colorScheme.textLight
+                    : null,
+              ),
+            ),
+            ButtonIcon(
+              onTap: onTap,
+              icon: Icons.category_rounded,
+              size: 41,
+            ),
+          ],
         ),
       ),
     );

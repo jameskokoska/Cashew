@@ -317,7 +317,10 @@ class AboutInfoBox extends StatelessWidget {
       child: Tappable(
         onTap: () async {
           if (await canLaunchUrl(Uri.parse(link)))
-            await launchUrl(Uri.parse(link));
+            await launchUrl(
+              Uri.parse(link),
+              mode: LaunchMode.externalApplication,
+            );
         },
         color: Theme.of(context).colorScheme.lightDarkAccent,
         borderRadius: 15,

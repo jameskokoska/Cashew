@@ -30,6 +30,8 @@ Map<String, dynamic> defaultPreferences() {
     "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),
     "lastLoginVersion": "",
     "notifications": true,
+    "notificationHour": 20,
+    "notificationMinute": 0,
     "materialYou": false,
   };
 }

@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
@@ -44,6 +45,7 @@ runNotificationPayLoadsNoContext(payloadData) {
       ),
     );
   }
+  notificationPayload = "";
 }
 
 runNotificationPayLoads(context) {
@@ -56,4 +58,15 @@ runNotificationPayLoads(context) {
     );
   }
   notificationPayload = "";
+}
+
+setDailyNotificationOnLaunch(context) async {
+  bool notificationsEnabled = appStateSettings["notifications"];
+  TimeOfDay timeOfDay = TimeOfDay(
+      hour: appStateSettings["notificationHour"],
+      minute: appStateSettings["notificationMinute"]);
+  if (notificationsEnabled) {
+    await initializeNotificationsPlatform();
+    await scheduleDailyNotification(context, timeOfDay);
+  }
 }

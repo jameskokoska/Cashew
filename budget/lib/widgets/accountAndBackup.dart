@@ -723,7 +723,13 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                       waitForCompletion: true,
                       drivePermissions: true, next: () {
                     setState(() {});
-                    pushRoute(context, accountsPage);
+                    // pushRoute(context, accountsPage);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => accountsPage,
+                      ),
+                    );
                   });
                   if (appStateSettings["username"] == "") {
                     updateSettings("username", user!.displayName,

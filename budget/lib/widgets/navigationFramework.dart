@@ -91,6 +91,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     Future.delayed(Duration.zero, () async {
       await showChangelog(context);
       await runNotificationPayLoads(context);
+      await setDailyNotificationOnLaunch(context);
       await parseEmailsInBackground(context);
       await createBackupInBackground(context);
       entireAppLoaded = true;

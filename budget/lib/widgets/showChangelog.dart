@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    First wallet added to the app is protected
+    Fixed routing for first Google login
+    Budget page improved animations and curves
+    Notifications and scheduling
     Added Material You Theme setting
     Fixed animation for search button on transactions page
     Select Category should try and always display at least 4 entries per row

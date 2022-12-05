@@ -102,11 +102,11 @@ class TextInput extends StatelessWidget {
             autofocus: autoFocus,
             onEditingComplete: onEditingComplete,
             style: TextStyle(
-              fontSize:
-                  fontSize != null ? fontSize : (bubbly == false ? 18 : 15),
-              height: kIsWeb ? null : 1.7,
-              fontWeight: fontWeight,
-            ),
+                fontSize:
+                    fontSize != null ? fontSize : (bubbly == false ? 18 : 15),
+                height: kIsWeb ? null : 1.7,
+                fontWeight: fontWeight,
+                fontFamily: "Avenir"),
             cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
             decoration: new InputDecoration(
               alignLabelWithHint: true,

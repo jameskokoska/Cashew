@@ -33,6 +33,7 @@ class PageFramework extends StatefulWidget {
     this.onDragDownToDissmiss,
     this.actions,
     this.expandedHeight = 200,
+    this.syncKeyboardHeight = false,
   }) : super(key: key);
 
   final String title;
@@ -60,6 +61,7 @@ class PageFramework extends StatefulWidget {
   final VoidCallback? onDragDownToDissmiss;
   final List<Widget>? actions;
   final double expandedHeight;
+  final bool syncKeyboardHeight;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -103,11 +105,12 @@ class PageFrameworkState extends State<PageFramework>
   double measurement = 0;
   @override
   void didChangeMetrics() {
-    // if (MediaQuery.of(context).viewInsets.bottom < measurement) {
-    //   // keyboard closed
-    //   _scrollListener();
-    // }
-    // measurement = MediaQuery.of(context).viewInsets.bottom;
+    if (widget.syncKeyboardHeight &&
+        MediaQuery.of(context).viewInsets.bottom < measurement) {
+      // keyboard closed
+      _scrollListener();
+    }
+    measurement = MediaQuery.of(context).viewInsets.bottom;
   }
 
   _scrollListener() {

@@ -325,8 +325,8 @@ class _BudgetPageState extends State<BudgetPage> {
               ),
               SliverToBoxAdapter(
                 child: AnimatedSize(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.easeInOut,
+                  duration: Duration(milliseconds: 1000),
+                  curve: Curves.easeInOutCubicEmphasized,
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
                     child: selectedCategoryPk != -1

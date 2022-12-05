@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
@@ -94,6 +95,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(
+                    canDelete: (wallet.walletPk != 0),
                     canReorder: (snapshot.data ?? []).length != 1,
                     currentReorder:
                         currentReorder != -1 && currentReorder != index,
@@ -173,6 +175,14 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                         onSubmit: () {
                           database.deleteWallet(wallet.walletPk, wallet.order);
                           database.deleteWalletsTransactions(wallet.walletPk);
+
+                          // If we delete the selected wallet, set it back to the default
+                          if (appStateSettings["selectedWallet"] ==
+                              wallet.walletPk) {
+                            updateSettings("selectedWallet", 0,
+                                updateGlobalState: true,
+                                pagesNeedingRefresh: [0, 1, 2, 3]);
+                          }
                           Navigator.pop(context);
                           openSnackbar(
                             SnackbarMessage(

@@ -15,6 +15,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.icon,
     required this.onSwitched,
     this.verticalPadding,
+    this.syncWithInitialValue = true,
     Key? key,
   }) : super(key: key);
 
@@ -24,6 +25,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final IconData? icon;
   final Function(bool) onSwitched;
   final double? verticalPadding;
+  final bool syncWithInitialValue;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -42,7 +44,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
 
   @override
   void didUpdateWidget(Widget oldWidget) {
-    if (widget.initialValue != value) {
+    if (widget.initialValue != value && widget.syncWithInitialValue) {
       setState(() {
         value = widget.initialValue;
       });

@@ -313,7 +313,6 @@ class App extends StatelessWidget {
         applyElevationOverlayColor: false,
         typography: Typography.material2014(),
         canvasColor: Colors.white,
-        fontFamily: 'Avenir',
         appBarTheme:
             AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
       ),
@@ -330,7 +329,6 @@ class App extends StatelessWidget {
         useMaterial3: true,
         typography: Typography.material2014(),
         canvasColor: Colors.black,
-        fontFamily: 'Avenir',
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
       ),
       scrollBehavior: ScrollBehavior(),

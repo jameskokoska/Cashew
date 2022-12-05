@@ -1206,6 +1206,9 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //delete wallet given key
   Future deleteWallet(int walletPk, int order) async {
+    if (walletPk == 0) {
+      throw "Can't delete default wallet";
+    }
     await database.shiftWallets(-1, order);
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
   }

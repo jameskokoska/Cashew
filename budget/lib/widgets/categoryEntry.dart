@@ -33,13 +33,14 @@ class CategoryEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 1000),
+      curve: Curves.easeInOutCubicEmphasized,
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 200),
         child: !selected && !allSelected
             ? Container()
             : Tappable(
+                key: ValueKey(1),
                 onTap: onTap,
                 onLongPress: () => pushRoute(
                   context,

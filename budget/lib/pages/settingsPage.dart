@@ -26,6 +26,7 @@ import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
+import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
@@ -239,12 +240,13 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.show_chart_rounded,
         ),
         AnimatedSize(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 800),
+          curve: Curves.easeInOutCubicEmphasized,
           child: AnimatedSwitcher(
             duration: Duration(milliseconds: 300),
             child: !appStateSettings["showCumulativeSpending"]
                 ? SettingsContainerSwitch(
+                    key: ValueKey(1),
                     title: "Hide Zero Transactions",
                     description: "On the home page spending graph",
                     onSwitched: (value) {
@@ -255,7 +257,7 @@ class SettingsPageState extends State<SettingsPage>
                         appStateSettings["removeZeroTransactionEntries"],
                     icon: Icons.money_off_rounded,
                   )
-                : SizedBox.shrink(),
+                : Container(),
           ),
         ),
         SettingsContainerSwitch(
@@ -280,65 +282,7 @@ class SettingsPageState extends State<SettingsPage>
           initialValue: appStateSettings["batterySaver"],
           icon: Icons.battery_charging_full_rounded,
         ),
-        kIsWeb
-            ? SizedBox.shrink()
-            : SettingsContainerSwitch(
-                title: "Notifications",
-                description: "Send add transaction reminders",
-                onSwitched: (value) async {
-                  updateSettings("notifications", value,
-                      updateGlobalState: false);
-
-                  await flutterLocalNotificationsPlugin
-                      .resolvePlatformSpecificImplementation<
-                          AndroidFlutterLocalNotificationsPlugin>()
-                      ?.requestPermission();
-
-                  AndroidNotificationDetails androidNotificationDetails =
-                      AndroidNotificationDetails(
-                    'transactionReminders',
-                    'Transaction Reminders',
-                    importance: Importance.max,
-                    priority: Priority.high,
-                    color: Theme.of(context).colorScheme.primary,
-                  );
-                  NotificationDetails notificationDetails =
-                      NotificationDetails(android: androidNotificationDetails);
-                  await flutterLocalNotificationsPlugin.show(
-                    0,
-                    'Add Transactions',
-                    'Don\'t forget to add transactions from today!',
-                    notificationDetails,
-                    payload: 'addTransaction',
-                  );
-
-                  if (kIsWeb || Platform.isLinux) {
-                    return;
-                  }
-                  tz.initializeTimeZones();
-                  DateTime dateTime = DateTime.now();
-
-                  tz.setLocalLocation(tz.getLocation(dateTime.timeZoneName));
-
-                  print(await tz.TZDateTime.now(tz.local));
-
-                  await flutterLocalNotificationsPlugin.zonedSchedule(
-                      0,
-                      'scheduled title',
-                      'scheduled body',
-                      tz.TZDateTime.now(tz.local)
-                          .add(const Duration(seconds: 5)),
-                      const NotificationDetails(
-                          android: AndroidNotificationDetails(
-                              'your channel id', 'your channel name',
-                              channelDescription: 'your channel description')),
-                      androidAllowWhileIdle: true,
-                      uiLocalNotificationDateInterpretation:
-                          UILocalNotificationDateInterpretation.absoluteTime);
-                },
-                initialValue: appStateSettings["notifications"],
-                icon: Icons.notifications_rounded,
-              ),
+        kIsWeb ? SizedBox.shrink() : NotificationsSettings(),
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
@@ -413,14 +357,4 @@ Function enterNameBottomSheet(context) {
       ),
     ),
   );
-}
-
-tz.TZDateTime _nextInstanceOfTenAM() {
-  final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-  tz.TZDateTime scheduledDate =
-      tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
-  if (scheduledDate.isBefore(now)) {
-    scheduledDate = scheduledDate.add(const Duration(days: 1));
-  }
-  return scheduledDate;
 }

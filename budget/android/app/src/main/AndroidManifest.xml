@@ -3,8 +3,30 @@
   <!-- <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/> -->
-  <uses-permission android:name="android.permission.INTERNET"/>
   <!-- <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" /> -->
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <queries>
+    <!-- If your app opens https URLs -->
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="https" />
+    </intent>
+    <!-- If your app makes calls -->
+    <intent>
+      <action android:name="android.intent.action.DIAL" />
+      <data android:scheme="tel" />
+    </intent>
+    <!-- If your sends SMS messages -->
+    <intent>
+      <action android:name="android.intent.action.SENDTO" />
+      <data android:scheme="smsto" />
+    </intent>
+    <!-- If your app sends emails -->
+    <intent>
+      <action android:name="android.intent.action.SEND" />
+      <data android:mimeType="*/*" />
+    </intent>
+  </queries>
     <application
         android:label="Budget App"
         android:icon="@mipmap/ic_launcher">
