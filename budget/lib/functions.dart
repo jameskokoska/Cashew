@@ -182,13 +182,21 @@ getWordedDateShortMore(DateTime date,
 }
 
 //e.g. Today/Yesterday/Tomorrow/Tuesday/ Thursday, September 15
-getWordedDate(DateTime date, {bool includeMonthDate = false}) {
+getWordedDate(DateTime date,
+    {bool includeMonthDate = false, bool includeYearIfNotCurrentYear = true}) {
   DateTime now = DateTime.now();
+
+  String extraYear = "";
+  if (includeYearIfNotCurrentYear && now.year != date.year) {
+    extraYear = ", " + date.year.toString();
+  }
 
   if (checkYesterdayTodayTomorrow(date) != false) {
     return checkYesterdayTodayTomorrow(date) +
         (includeMonthDate
-            ? ", " + DateFormat.MMMMd('en_US').format(date).toString()
+            ? ", " +
+                DateFormat.MMMMd('en_US').format(date).toString() +
+                extraYear
             : "");
   }
 
@@ -196,9 +204,9 @@ getWordedDate(DateTime date, {bool includeMonthDate = false}) {
       now.difference(date).inDays < 4 &&
       now.difference(date).inDays > 0) {
     String weekday = DateFormat('EEEE').format(date);
-    return weekday;
+    return weekday + extraYear;
   }
-  return DateFormat.MMMMEEEEd('en_US').format(date).toString();
+  return DateFormat.MMMMEEEEd('en_US').format(date).toString() + extraYear;
 }
 
 setTextInput(inputController, value) {
@@ -447,7 +455,8 @@ String? getOSInsideWeb() {
 }
 
 restartApp(context) async {
-  if (kIsWeb) {
+  // For now, enforce this until better solution found
+  if (kIsWeb || true) {
     openPopup(context,
         title: "Please Restart the Application",
         icon: Icons.restart_alt_rounded);

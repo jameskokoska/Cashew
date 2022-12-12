@@ -588,7 +588,8 @@ class DateDivider extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextFont(
-            text: getWordedDate(date, includeMonthDate: true),
+            text: getWordedDate(date,
+                includeMonthDate: true, includeYearIfNotCurrentYear: true),
             fontSize: 14,
             textColor: Theme.of(context).colorScheme.textLight,
           ),

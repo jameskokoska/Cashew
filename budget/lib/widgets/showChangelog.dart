@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Added year of transaction in sticky header (if not current year)
+    Force restart when loading backup
     Fixed daily notifications schedule time
     Added notifications for upcoming transactions
     First wallet added to the app is protected
