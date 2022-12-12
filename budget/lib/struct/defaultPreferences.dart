@@ -26,6 +26,7 @@ Map<String, dynamic> defaultPreferences() {
     "currencyIcon": "\$",
     "EmailAutoTransactions-amountOfEmails": 10,
     "autoBackups": false,
+    "autoBackupsFrequency": 3, //in days
     "hasSignedInOnce": false,
     "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),
     "lastLoginVersion": "",

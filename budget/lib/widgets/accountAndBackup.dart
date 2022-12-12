@@ -194,10 +194,10 @@ Future<void> createBackupInBackground(context) async {
   if (entireAppLoaded == false) {
     if (appStateSettings["autoBackups"] == true) {
       DateTime lastUpdate = DateTime.parse(appStateSettings["lastBackup"]);
-
-      if (lastUpdate.day != DateTime.now().day ||
-          lastUpdate.month != DateTime.now().month ||
-          lastUpdate.year != DateTime.now().year) {
+      DateTime nextPlannedBackup = lastUpdate
+          .add(Duration(days: appStateSettings["autoBackupsFrequency"]));
+      if (lastUpdate.millisecondsSinceEpoch >=
+          nextPlannedBackup.millisecondsSinceEpoch) {
         print("auto backing up");
 
         bool hasSignedIn = false;
@@ -743,25 +743,6 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                 openPage: accountsPage,
                 title: user!.displayName ?? "",
                 icon: Icons.account_circle),
-        AnimatedSize(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: user == null
-                ? SizedBox.shrink()
-                : SettingsContainerSwitch(
-                    onSwitched: (value) {
-                      updateSettings("autoBackups", value,
-                          pagesNeedingRefresh: [], updateGlobalState: false);
-                    },
-                    initialValue: appStateSettings["autoBackups"],
-                    title: "Auto Backups",
-                    description: "Backup data daily when opened",
-                    icon: Icons.backup_rounded,
-                  ),
-          ),
-        ),
         SettingsContainer(
           onTap: () async {
             await _chooseBackupFile();
@@ -1061,9 +1042,14 @@ class _BackupManagementState extends State<BackupManagement> {
                                     driveApiState!, file.value.id ?? "");
                             },
                             borderRadius: 15,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavy,
+                            color: appStateSettings["materialYou"]
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                    .withOpacity(0.5)
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .lightDarkAccentHeavyLight,
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 15),
