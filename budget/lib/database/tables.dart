@@ -622,6 +622,24 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.watch();
   }
 
+  Future<List<Transaction>> getAllUpcomingTransactions(
+      {int? limit, DateTime? startDate, DateTime? endDate}) {
+    final query = select(transactions)
+      ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
+      ..where((transaction) =>
+          transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
+          transactions.dateCreated
+              .isBiggerThanValue(startDate ?? DateTime.now()) &
+          transactions.dateCreated.isSmallerThanValue(
+              endDate ?? DateTime.now().add(Duration(days: 1000))) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
+              transactions.type
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
+    return query.get();
+  }
+
   Stream<List<Transaction>> watchAllOverdueTransactions(
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)

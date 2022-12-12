@@ -11,6 +11,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -258,6 +259,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         selectedCategory != null &&
         selectedTitle != "")
       await addAssociatedTitles(selectedTitle!, selectedCategory!);
+    Transaction createdTransaction = await createTransaction();
+    if ([
+      TransactionSpecialType.repetitive,
+      TransactionSpecialType.subscription,
+      TransactionSpecialType.upcoming
+    ].contains(createdTransaction.type)) {
+      await setUpcomingNotifications(context);
+    }
     await database.createOrUpdateTransaction(await createTransaction());
   }
 

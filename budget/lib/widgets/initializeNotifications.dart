@@ -70,3 +70,16 @@ setDailyNotificationOnLaunch(context) async {
     await scheduleDailyNotification(context, timeOfDay);
   }
 }
+
+setUpcomingNotifications(context) async {
+  bool upcomingTransactionsNotificationsEnabled =
+      appStateSettings["notificationsUpcomingTransactions"];
+  TimeOfDay upcomingTransactionsTimeOfDay = TimeOfDay(
+      hour: appStateSettings["notificationHourUpcomingTransactions"],
+      minute: appStateSettings["notificationMinuteUpcomingTransactions"]);
+  if (upcomingTransactionsNotificationsEnabled) {
+    await initializeNotificationsPlatform();
+    await scheduleUpcomingTransactionsNotification(
+        context, upcomingTransactionsTimeOfDay);
+  }
+}

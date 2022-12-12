@@ -85,6 +85,7 @@ List<double> randomDouble = [
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;
 
+// setAppStateSettings
 Future<bool> updateSettings(setting, value,
     {List<int> pagesNeedingRefresh: const [],
     bool updateGlobalState = true}) async {

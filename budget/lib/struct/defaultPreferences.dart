@@ -32,6 +32,9 @@ Map<String, dynamic> defaultPreferences() {
     "notifications": true,
     "notificationHour": 20,
     "notificationMinute": 0,
+    "notificationsUpcomingTransactions": true,
+    "notificationHourUpcomingTransactions": 11,
+    "notificationMinuteUpcomingTransactions": 0,
     "materialYou": false,
   };
 }

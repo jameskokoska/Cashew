@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed daily notifications schedule time
+    Added notifications for upcoming transactions
     First wallet added to the app is protected
     Fixed routing for first Google login
     Budget page improved animations and curves

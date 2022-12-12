@@ -282,7 +282,10 @@ class SettingsPageState extends State<SettingsPage>
           initialValue: appStateSettings["batterySaver"],
           icon: Icons.battery_charging_full_rounded,
         ),
-        kIsWeb ? SizedBox.shrink() : NotificationsSettings(),
+        kIsWeb ? SizedBox.shrink() : DailyNotificationsSettings(),
+        kIsWeb
+            ? SizedBox.shrink()
+            : UpcomingTransactionsNotificationsSettings(),
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),

@@ -9,6 +9,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -343,6 +344,7 @@ class TransactionEntry extends StatelessWidget {
                                                   .createOrUpdateTransaction(
                                                       transactionNew);
                                               Navigator.pop(context);
+                                              setUpcomingNotifications(context);
                                             });
                                       } else if (transaction.skipPaid == true) {
                                         openPopup(context,
@@ -363,6 +365,7 @@ class TransactionEntry extends StatelessWidget {
                                                   .createOrUpdateTransaction(
                                                       transactionNew);
                                               Navigator.pop(context);
+                                              setUpcomingNotifications(context);
                                             });
                                       } else {
                                         openPopup(
@@ -394,6 +397,7 @@ class TransactionEntry extends StatelessWidget {
                                             createNewSubscriptionTransaction(
                                                 context, transactionNew);
                                             Navigator.pop(context);
+                                            setUpcomingNotifications(context);
                                           },
                                           onSubmitLabel: transaction.income
                                               ? "Desposit"
@@ -413,6 +417,7 @@ class TransactionEntry extends StatelessWidget {
                                             createNewSubscriptionTransaction(
                                                 context, transactionNew);
                                             Navigator.pop(context);
+                                            setUpcomingNotifications(context);
                                           },
                                         );
                                       }
