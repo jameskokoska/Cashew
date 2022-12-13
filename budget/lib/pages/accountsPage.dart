@@ -107,8 +107,8 @@ class _AccountsPageState extends State<AccountsPage> {
                       : FadeInImage.memoryNetwork(
                           placeholder: kTransparentImage,
                           image: user!.photoUrl.toString(),
-                          height: 100,
-                          width: 100,
+                          height: 95,
+                          width: 95,
                         ),
                 ),
                 SizedBox(height: 10),

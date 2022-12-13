@@ -20,6 +20,7 @@ import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/restartApp.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:system_theme/system_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
@@ -50,7 +52,7 @@ firebase deploy
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  database = await constructDb();
+  await Firebase.initializeApp();
   notificationPayload = await initializeNotifications();
   entireAppLoaded = false;
 
@@ -182,6 +184,8 @@ Future<bool> initializeSettings() async {
 
 //Initialize default values in database
 Future<bool> initializeDatabase() async {
+  database = await constructDb();
+
   //Initialize default categories
   if ((await database.getAllCategories()).length <= 0) {
     for (TransactionCategory category in defaultCategories()) {
