@@ -20,14 +20,10 @@ import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/scheduler.dart';
 import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class BudgetPage extends StatefulWidget {
   const BudgetPage({
@@ -80,122 +76,6 @@ class _BudgetPageState extends State<BudgetPage> {
         children: [
           PageFramework(
             actions: [
-              widget.isPastBudget != true
-                  ? Container(
-                      padding: EdgeInsets.only(top: 12.5, right: 5),
-                      child: IconButton(
-                        onPressed: () async {
-                          GoogleSignInAccount? googleUser =
-                              await GoogleSignIn().signIn();
-
-                          GoogleSignInAuthentication? googleAuth =
-                              await googleUser?.authentication;
-
-                          OAuthCredential credential =
-                              GoogleAuthProvider.credential(
-                            accessToken: googleAuth?.accessToken,
-                            idToken: googleAuth?.idToken,
-                          );
-
-                          await FirebaseAuth.instance
-                              .signInWithCredential(credential);
-
-                          FirebaseFirestore db = FirebaseFirestore.instance;
-
-                          Map<String, dynamic> budgetEntry = {
-                            "budgetPk": "",
-                            "amount": "",
-                            "startDate": "",
-                            "endDate": "",
-                            "periodLength": "",
-                            "reoccurrence": "",
-                            "dateCreated": "",
-                            "colour": "",
-                            "name": "",
-                            "members": [
-                              // FirebaseAuth.instance.currentUser!.email
-                            ],
-                            "owner": FirebaseAuth.instance.currentUser!.uid,
-                          };
-                          DocumentReference budget =
-                              await db.collection("budgets").add(budgetEntry);
-
-                          CollectionReference subCollectionRef =
-                              budget.collection("transactions");
-
-                          subCollectionRef.add({
-                            "transactionPk": "",
-                            "name": "",
-                            "amount": "",
-                            "note": "",
-                            "categoryName": "",
-                            "dateCreated": "",
-                            "income": "",
-                            "owner": FirebaseAuth.instance.currentUser!.email,
-                          });
-
-                          budget.update({
-                            "members":
-                                FieldValue.arrayUnion(["hello@hello.com"])
-                          });
-                        },
-                        icon: Icon(Icons.share_rounded),
-                      ),
-                    )
-                  : SizedBox.shrink(),
-              widget.isPastBudget != true
-                  ? Container(
-                      padding: EdgeInsets.only(top: 12.5, right: 5),
-                      child: IconButton(
-                        onPressed: () async {
-                          GoogleSignInAccount? googleUser =
-                              await GoogleSignIn().signIn();
-
-                          GoogleSignInAuthentication? googleAuth =
-                              await googleUser?.authentication;
-
-                          OAuthCredential credential =
-                              GoogleAuthProvider.credential(
-                            accessToken: googleAuth?.accessToken,
-                            idToken: googleAuth?.idToken,
-                          );
-
-                          await FirebaseAuth.instance
-                              .signInWithCredential(credential);
-
-                          FirebaseFirestore db = FirebaseFirestore.instance;
-
-                          print(await FirebaseAuth.instance.currentUser!.uid);
-                          final Query budgetsMembersOf = db
-                              .collection('budgets')
-                              .where('members',
-                                  arrayContains:
-                                      FirebaseAuth.instance.currentUser!.email);
-                          final QuerySnapshot snapshot =
-                              await budgetsMembersOf.get();
-                          for (DocumentSnapshot budget in snapshot.docs) {
-                            print("YOU ARE A MEMBER OF THIS BUDGET " +
-                                budget.data().toString());
-                          }
-
-                          print(FirebaseAuth.instance.currentUser!.uid);
-                          final Query budgetsOwned = db
-                              .collection('budgets')
-                              .where(
-                                  'owner',
-                                  isEqualTo:
-                                      FirebaseAuth.instance.currentUser!.uid);
-                          final QuerySnapshot snapshotOwned =
-                              await budgetsOwned.get();
-                          for (DocumentSnapshot budget in snapshotOwned.docs) {
-                            print("YOU OWN THIS BUDGET " +
-                                budget.data().toString());
-                          }
-                        },
-                        icon: Icon(Icons.dock),
-                      ),
-                    )
-                  : SizedBox.shrink(),
               widget.budget.reoccurrence == BudgetReoccurence.custom ||
                       widget.isPastBudget == true ||
                       widget.isPastBudgetButCurrentPeriod == true

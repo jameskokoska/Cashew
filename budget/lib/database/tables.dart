@@ -129,6 +129,8 @@ class Categories extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
+  // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
+  TextColumn get sharedKey => text().nullable()();
 }
 
 //If a title is in a smart label, automatically choose this category

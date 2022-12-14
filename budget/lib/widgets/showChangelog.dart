@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed overflow associated title on category page
+    Added spacing at bottom of edit category
+    Fixed adding category color
+    Started shareable categories implementation
     Added backup frequency in account page
     Added year of transaction in sticky header (if not current year)
     Force restart when loading backup

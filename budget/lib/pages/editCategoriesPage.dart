@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:budget/colors.dart';
@@ -22,6 +23,10 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:budget/widgets/editRowEntry.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:budget/struct/firebaseAuthGlobal.dart';
 
 class EditCategoriesPage extends StatefulWidget {
   EditCategoriesPage({
@@ -56,6 +61,102 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         ),
       ),
       slivers: [
+        SliverToBoxAdapter(
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 12.5, right: 5),
+                child: IconButton(
+                  onPressed: () async {
+                    FirebaseFirestore? db = await firebaseGetDBInstance();
+
+                    Map<String, dynamic> categoryEntry = {
+                      "dateShared": DateTime.now(),
+                      "colour": toHexString(Colors.red),
+                      "name": "Food",
+                      "members": [
+                        // FirebaseAuth.instance.currentUser!.email
+                      ],
+                      "income": false,
+                      "owner": FirebaseAuth.instance.currentUser!.uid,
+                      "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+                    };
+                    DocumentReference budget =
+                        await db!.collection("categories").add(categoryEntry);
+
+                    CollectionReference subCollectionRef =
+                        budget.collection("transactions");
+
+                    subCollectionRef.add({
+                      "logType": "CREATE", // create, delete, update
+                      "name": "",
+                      "amount": 15.65,
+                      "note": "This is a note of a transaction",
+                      "dateCreated": DateTime.now(),
+                      "dateUpdated": DateTime.now(),
+                      "income": false,
+                      "owner": FirebaseAuth.instance.currentUser!.email,
+                    });
+
+                    budget.update({
+                      "members": FieldValue.arrayUnion(["hello@hello.com"])
+                    });
+                  },
+                  icon: Icon(Icons.share_rounded),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 12.5, right: 5),
+                child: IconButton(
+                  onPressed: () async {
+                    FirebaseFirestore? db = await firebaseGetDBInstance();
+
+                    print(await FirebaseAuth.instance.currentUser!.uid);
+                    final Query categoryMembersOf = db!
+                        .collection('categories')
+                        .where('members',
+                            arrayContains:
+                                FirebaseAuth.instance.currentUser!.email);
+                    final QuerySnapshot snapshot =
+                        await categoryMembersOf.get();
+                    for (DocumentSnapshot category in snapshot.docs) {
+                      print("YOU ARE A MEMBER OF THIS CATEGORY " +
+                          category.data().toString());
+                    }
+
+                    print(FirebaseAuth.instance.currentUser!.uid);
+                    final Query categoryOwned = db
+                        .collection('categories')
+                        .where('owner',
+                            isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+                    final QuerySnapshot snapshotOwned =
+                        await categoryOwned.get();
+                    for (DocumentSnapshot category in snapshotOwned.docs) {
+                      print("YOU OWN THIS CATEGORY " +
+                          category.data().toString());
+
+                      // get transactions before certain time
+                      final Query transactionsBefore = db
+                          .collection('categories')
+                          .doc(category.id)
+                          .collection('transactions')
+                          .where(FieldPath.fromString("dateUpdated"),
+                              isGreaterThan:
+                                  DateTime.now().subtract(Duration(days: 1)));
+                      final QuerySnapshot snapshot2 =
+                          await transactionsBefore.get();
+                      for (DocumentSnapshot transaction in snapshot2.docs) {
+                        print(transaction.id);
+                        print(transaction.data().toString());
+                      }
+                    }
+                  },
+                  icon: Icon(Icons.dock),
+                ),
+              )
+            ],
+          ),
+        ),
         StreamBuilder<List<TransactionCategory>>(
           stream: database.watchAllCategories(),
           builder: (context, snapshot) {

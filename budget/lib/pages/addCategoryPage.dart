@@ -111,7 +111,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   }
 
   Future addCategory() async {
-    print("Added category");
+    print("Added category" + (await createTransactionCategory()).toString());
     await database.createOrUpdateCategory(await createTransactionCategory());
     Navigator.pop(context);
   }
@@ -136,9 +136,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   @override
   void initState() {
     super.initState();
-    selectedColor = widget.category!.colour == null
-        ? null
-        : HexColor(widget.category!.colour);
+    selectedColor = widget.category != null
+        ? (widget.category!.colour == null
+            ? null
+            : HexColor(widget.category!.colour))
+        : null;
     Future.delayed(Duration.zero, () {
       if (widget.category != null) {
         //We are editing a transaction
@@ -449,6 +451,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         }
                         return SizedBox();
                       }),
+                  SizedBox(height: 80),
                 ],
               ),
               Align(
@@ -537,11 +540,14 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-              child: TextFont(
-                text: widget.title,
-                fontSize: 18,
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                child: TextFont(
+                  text: widget.title,
+                  fontSize: 18,
+                ),
               ),
             ),
             Tappable(
