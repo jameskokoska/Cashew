@@ -45,6 +45,28 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGiaRl72d4k3Ki0dh8ra-gU4v2z04CgIw",
+      authDomain: "budget-app-flutter.firebaseapp.com",
+      projectId: "budget-app-flutter",
+      storageBucket: "budget-app-flutter.appspot.com",
+      messagingSenderId: "267621253497",
+      appId: "1:267621253497:web:12558fe9abebf7fa842fa8"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
   <script defer src="sql-wasm.js"></script>
   <script>
     window.addEventListener('load', function(ev) {

@@ -69,7 +69,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                 child: IconButton(
                   onPressed: () async {
                     FirebaseFirestore? db = await firebaseGetDBInstance();
-
+                    print(FirebaseAuth.instance.currentUser);
                     Map<String, dynamic> categoryEntry = {
                       "dateShared": DateTime.now(),
                       "colour": toHexString(Colors.red),

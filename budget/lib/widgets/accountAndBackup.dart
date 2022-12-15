@@ -80,8 +80,9 @@ class AccountAndBackup extends StatefulWidget {
 signIn.GoogleSignInAccount? user;
 signIn.GoogleSignIn? googleSignIn;
 
-Future<bool> signInGoogle(context,
-    {bool? waitForCompletion,
+Future<bool> signInGoogle(
+    {context,
+    bool? waitForCompletion,
     bool? drivePermissions,
     bool? gMailPermissions,
     bool? silentSignIn,
@@ -154,8 +155,11 @@ Future<bool> signInGoogle(context,
         title: e.toString(),
         icon: Icons.error_rounded,
         onTap: () async {
-          await signInGoogle(context,
-              waitForCompletion: true, drivePermissions: true, next: () {});
+          await signInGoogle(
+              context: context,
+              waitForCompletion: true,
+              drivePermissions: true,
+              next: () {});
           if (appStateSettings["username"] == "") {
             updateSettings("username", user!.displayName,
                 pagesNeedingRefresh: [0]);
@@ -203,7 +207,8 @@ Future<void> createBackupInBackground(context) async {
 
         bool hasSignedIn = false;
         if (user == null) {
-          hasSignedIn = await signInGoogle(context,
+          hasSignedIn = await signInGoogle(
+              context: context,
               gMailPermissions: false,
               waitForCompletion: false,
               silentSignIn: true);
@@ -720,18 +725,20 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
         user == null
             ? SettingsContainer(
                 onTap: () async {
-                  await signInGoogle(context,
+                  await signInGoogle(
+                      context: context,
                       waitForCompletion: true,
-                      drivePermissions: true, next: () {
-                    setState(() {});
-                    // pushRoute(context, accountsPage);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => accountsPage,
-                      ),
-                    );
-                  });
+                      drivePermissions: true,
+                      next: () {
+                        setState(() {});
+                        // pushRoute(context, accountsPage);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => accountsPage,
+                          ),
+                        );
+                      });
                   if (appStateSettings["username"] == "") {
                     updateSettings("username", user!.displayName,
                         pagesNeedingRefresh: [0]);

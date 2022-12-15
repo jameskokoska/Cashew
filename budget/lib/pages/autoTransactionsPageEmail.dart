@@ -70,8 +70,8 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       if (canReadEmails == true && user == null) {
-        await signInGoogle(context,
-            waitForCompletion: true, gMailPermissions: true);
+        await signInGoogle(
+            context: context, waitForCompletion: true, gMailPermissions: true);
         updateSettings("AutoTransactions-canReadEmails", true,
             pagesNeedingRefresh: [3]);
         setState(() {});
@@ -100,8 +100,10 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
         SettingsContainerSwitch(
           onSwitched: (value) async {
             if (value == true) {
-              bool result = await signInGoogle(context,
-                  waitForCompletion: true, gMailPermissions: true);
+              bool result = await signInGoogle(
+                  context: context,
+                  waitForCompletion: true,
+                  gMailPermissions: true);
               if (result == false) {
                 return false;
               }
@@ -147,7 +149,8 @@ Future<void> parseEmailsInBackground(context) async {
 
       bool hasSignedIn = false;
       if (user == null) {
-        hasSignedIn = await signInGoogle(context,
+        hasSignedIn = await signInGoogle(
+            context: context,
             gMailPermissions: true,
             waitForCompletion: false,
             silentSignIn: true);
