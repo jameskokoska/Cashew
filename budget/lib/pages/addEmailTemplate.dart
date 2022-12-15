@@ -379,6 +379,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
       titleTransactionAfter: titleTransactionAfter ?? "",
       titleTransactionBefore: titleTransactionBefore ?? "",
       walletFk: 0,
+      ignore: false,
     );
   }
 

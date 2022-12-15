@@ -348,6 +348,7 @@ class TransactionCategory extends DataClass
   final DateTime dateCreated;
   final int order;
   final bool income;
+  final String? sharedKey;
   TransactionCategory(
       {required this.categoryPk,
       required this.name,
@@ -355,7 +356,8 @@ class TransactionCategory extends DataClass
       this.iconName,
       required this.dateCreated,
       required this.order,
-      required this.income});
+      required this.income,
+      this.sharedKey});
   factory TransactionCategory.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -374,6 +376,8 @@ class TransactionCategory extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}order'])!,
       income: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}income'])!,
+      sharedKey: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}shared_key']),
     );
   }
   @override
@@ -390,6 +394,9 @@ class TransactionCategory extends DataClass
     map['date_created'] = Variable<DateTime>(dateCreated);
     map['order'] = Variable<int>(order);
     map['income'] = Variable<bool>(income);
+    if (!nullToAbsent || sharedKey != null) {
+      map['shared_key'] = Variable<String?>(sharedKey);
+    }
     return map;
   }
 
@@ -405,6 +412,9 @@ class TransactionCategory extends DataClass
       dateCreated: Value(dateCreated),
       order: Value(order),
       income: Value(income),
+      sharedKey: sharedKey == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sharedKey),
     );
   }
 
@@ -419,6 +429,7 @@ class TransactionCategory extends DataClass
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       order: serializer.fromJson<int>(json['order']),
       income: serializer.fromJson<bool>(json['income']),
+      sharedKey: serializer.fromJson<String?>(json['sharedKey']),
     );
   }
   @override
@@ -432,6 +443,7 @@ class TransactionCategory extends DataClass
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'order': serializer.toJson<int>(order),
       'income': serializer.toJson<bool>(income),
+      'sharedKey': serializer.toJson<String?>(sharedKey),
     };
   }
 
@@ -442,7 +454,8 @@ class TransactionCategory extends DataClass
           String? iconName,
           DateTime? dateCreated,
           int? order,
-          bool? income}) =>
+          bool? income,
+          String? sharedKey}) =>
       TransactionCategory(
         categoryPk: categoryPk ?? this.categoryPk,
         name: name ?? this.name,
@@ -451,6 +464,7 @@ class TransactionCategory extends DataClass
         dateCreated: dateCreated ?? this.dateCreated,
         order: order ?? this.order,
         income: income ?? this.income,
+        sharedKey: sharedKey ?? this.sharedKey,
       );
   @override
   String toString() {
@@ -461,14 +475,15 @@ class TransactionCategory extends DataClass
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('order: $order, ')
-          ..write('income: $income')
+          ..write('income: $income, ')
+          ..write('sharedKey: $sharedKey')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      categoryPk, name, colour, iconName, dateCreated, order, income);
+  int get hashCode => Object.hash(categoryPk, name, colour, iconName,
+      dateCreated, order, income, sharedKey);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -479,7 +494,8 @@ class TransactionCategory extends DataClass
           other.iconName == this.iconName &&
           other.dateCreated == this.dateCreated &&
           other.order == this.order &&
-          other.income == this.income);
+          other.income == this.income &&
+          other.sharedKey == this.sharedKey);
 }
 
 class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
@@ -490,6 +506,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<DateTime> dateCreated;
   final Value<int> order;
   final Value<bool> income;
+  final Value<String?> sharedKey;
   const CategoriesCompanion({
     this.categoryPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -498,6 +515,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.dateCreated = const Value.absent(),
     this.order = const Value.absent(),
     this.income = const Value.absent(),
+    this.sharedKey = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.categoryPk = const Value.absent(),
@@ -507,6 +525,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.dateCreated = const Value.absent(),
     required int order,
     this.income = const Value.absent(),
+    this.sharedKey = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionCategory> custom({
@@ -517,6 +536,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<DateTime>? dateCreated,
     Expression<int>? order,
     Expression<bool>? income,
+    Expression<String?>? sharedKey,
   }) {
     return RawValuesInsertable({
       if (categoryPk != null) 'category_pk': categoryPk,
@@ -526,6 +546,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (dateCreated != null) 'date_created': dateCreated,
       if (order != null) 'order': order,
       if (income != null) 'income': income,
+      if (sharedKey != null) 'shared_key': sharedKey,
     });
   }
 
@@ -536,7 +557,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<String?>? iconName,
       Value<DateTime>? dateCreated,
       Value<int>? order,
-      Value<bool>? income}) {
+      Value<bool>? income,
+      Value<String?>? sharedKey}) {
     return CategoriesCompanion(
       categoryPk: categoryPk ?? this.categoryPk,
       name: name ?? this.name,
@@ -545,6 +567,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       dateCreated: dateCreated ?? this.dateCreated,
       order: order ?? this.order,
       income: income ?? this.income,
+      sharedKey: sharedKey ?? this.sharedKey,
     );
   }
 
@@ -572,6 +595,9 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
     }
+    if (sharedKey.present) {
+      map['shared_key'] = Variable<String?>(sharedKey.value);
+    }
     return map;
   }
 
@@ -584,7 +610,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('order: $order, ')
-          ..write('income: $income')
+          ..write('income: $income, ')
+          ..write('sharedKey: $sharedKey')
           ..write(')'))
         .toString();
   }
@@ -643,9 +670,22 @@ class $CategoriesTable extends Categories
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (income IN (0, 1))',
       defaultValue: const Constant(false));
+  final VerificationMeta _sharedKeyMeta = const VerificationMeta('sharedKey');
   @override
-  List<GeneratedColumn> get $columns =>
-      [categoryPk, name, colour, iconName, dateCreated, order, income];
+  late final GeneratedColumn<String?> sharedKey = GeneratedColumn<String?>(
+      'shared_key', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        categoryPk,
+        name,
+        colour,
+        iconName,
+        dateCreated,
+        order,
+        income,
+        sharedKey
+      ];
   @override
   String get aliasedName => _alias ?? 'categories';
   @override
@@ -692,6 +732,10 @@ class $CategoriesTable extends Categories
       context.handle(_incomeMeta,
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
     }
+    if (data.containsKey('shared_key')) {
+      context.handle(_sharedKeyMeta,
+          sharedKey.isAcceptableOrUnknown(data['shared_key']!, _sharedKeyMeta));
+    }
     return context;
   }
 
@@ -718,6 +762,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final int walletFk;
   final List<int>? labelFks;
   final DateTime dateCreated;
+  final DateTime? dateTimeCreated;
   final bool income;
   final int? periodLength;
   final BudgetReoccurence? reoccurrence;
@@ -726,6 +771,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final bool? createdAnotherFutureTransaction;
   final bool skipPaid;
   final MethodAdded? methodAdded;
+  final String? transactionOwnerEmail;
+  final String? sharedKey;
   Transaction(
       {required this.transactionPk,
       required this.name,
@@ -735,6 +782,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.walletFk,
       this.labelFks,
       required this.dateCreated,
+      this.dateTimeCreated,
       required this.income,
       this.periodLength,
       this.reoccurrence,
@@ -742,7 +790,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.paid,
       this.createdAnotherFutureTransaction,
       required this.skipPaid,
-      this.methodAdded});
+      this.methodAdded,
+      this.transactionOwnerEmail,
+      this.sharedKey});
   factory Transaction.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Transaction(
@@ -762,6 +812,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           .mapFromDatabaseResponse(data['${effectivePrefix}label_fks'])),
       dateCreated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}date_created'])!,
+      dateTimeCreated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date_time_created']),
       income: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}income'])!,
       periodLength: const IntType()
@@ -778,6 +830,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           .mapFromDatabaseResponse(data['${effectivePrefix}skip_paid'])!,
       methodAdded: $TransactionsTable.$converter3.mapToDart(const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}method_added'])),
+      transactionOwnerEmail: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}transaction_owner_email']),
+      sharedKey: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}shared_key']),
     );
   }
   @override
@@ -794,6 +850,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       map['label_fks'] = Variable<String?>(converter.mapToSql(labelFks));
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeCreated != null) {
+      map['date_time_created'] = Variable<DateTime?>(dateTimeCreated);
+    }
     map['income'] = Variable<bool>(income);
     if (!nullToAbsent || periodLength != null) {
       map['period_length'] = Variable<int?>(periodLength);
@@ -816,6 +875,12 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       final converter = $TransactionsTable.$converter3;
       map['method_added'] = Variable<int?>(converter.mapToSql(methodAdded));
     }
+    if (!nullToAbsent || transactionOwnerEmail != null) {
+      map['transaction_owner_email'] = Variable<String?>(transactionOwnerEmail);
+    }
+    if (!nullToAbsent || sharedKey != null) {
+      map['shared_key'] = Variable<String?>(sharedKey);
+    }
     return map;
   }
 
@@ -831,6 +896,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ? const Value.absent()
           : Value(labelFks),
       dateCreated: Value(dateCreated),
+      dateTimeCreated: dateTimeCreated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeCreated),
       income: Value(income),
       periodLength: periodLength == null && nullToAbsent
           ? const Value.absent()
@@ -848,6 +916,12 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       methodAdded: methodAdded == null && nullToAbsent
           ? const Value.absent()
           : Value(methodAdded),
+      transactionOwnerEmail: transactionOwnerEmail == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transactionOwnerEmail),
+      sharedKey: sharedKey == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sharedKey),
     );
   }
 
@@ -863,6 +937,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       walletFk: serializer.fromJson<int>(json['walletFk']),
       labelFks: serializer.fromJson<List<int>?>(json['labelFks']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeCreated: serializer.fromJson<DateTime?>(json['dateTimeCreated']),
       income: serializer.fromJson<bool>(json['income']),
       periodLength: serializer.fromJson<int?>(json['periodLength']),
       reoccurrence:
@@ -873,6 +948,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           serializer.fromJson<bool?>(json['createdAnotherFutureTransaction']),
       skipPaid: serializer.fromJson<bool>(json['skipPaid']),
       methodAdded: serializer.fromJson<MethodAdded?>(json['methodAdded']),
+      transactionOwnerEmail:
+          serializer.fromJson<String?>(json['transactionOwnerEmail']),
+      sharedKey: serializer.fromJson<String?>(json['sharedKey']),
     );
   }
   @override
@@ -887,6 +965,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'walletFk': serializer.toJson<int>(walletFk),
       'labelFks': serializer.toJson<List<int>?>(labelFks),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeCreated': serializer.toJson<DateTime?>(dateTimeCreated),
       'income': serializer.toJson<bool>(income),
       'periodLength': serializer.toJson<int?>(periodLength),
       'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
@@ -896,6 +975,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           serializer.toJson<bool?>(createdAnotherFutureTransaction),
       'skipPaid': serializer.toJson<bool>(skipPaid),
       'methodAdded': serializer.toJson<MethodAdded?>(methodAdded),
+      'transactionOwnerEmail':
+          serializer.toJson<String?>(transactionOwnerEmail),
+      'sharedKey': serializer.toJson<String?>(sharedKey),
     };
   }
 
@@ -908,6 +990,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           int? walletFk,
           List<int>? labelFks,
           DateTime? dateCreated,
+          DateTime? dateTimeCreated,
           bool? income,
           int? periodLength,
           BudgetReoccurence? reoccurrence,
@@ -915,7 +998,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           bool? paid,
           bool? createdAnotherFutureTransaction,
           bool? skipPaid,
-          MethodAdded? methodAdded}) =>
+          MethodAdded? methodAdded,
+          String? transactionOwnerEmail,
+          String? sharedKey}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -925,6 +1010,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         walletFk: walletFk ?? this.walletFk,
         labelFks: labelFks ?? this.labelFks,
         dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeCreated: dateTimeCreated ?? this.dateTimeCreated,
         income: income ?? this.income,
         periodLength: periodLength ?? this.periodLength,
         reoccurrence: reoccurrence ?? this.reoccurrence,
@@ -934,6 +1020,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
             this.createdAnotherFutureTransaction,
         skipPaid: skipPaid ?? this.skipPaid,
         methodAdded: methodAdded ?? this.methodAdded,
+        transactionOwnerEmail:
+            transactionOwnerEmail ?? this.transactionOwnerEmail,
+        sharedKey: sharedKey ?? this.sharedKey,
       );
   @override
   String toString() {
@@ -946,6 +1035,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('walletFk: $walletFk, ')
           ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeCreated: $dateTimeCreated, ')
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -954,7 +1044,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write(
               'createdAnotherFutureTransaction: $createdAnotherFutureTransaction, ')
           ..write('skipPaid: $skipPaid, ')
-          ..write('methodAdded: $methodAdded')
+          ..write('methodAdded: $methodAdded, ')
+          ..write('transactionOwnerEmail: $transactionOwnerEmail, ')
+          ..write('sharedKey: $sharedKey')
           ..write(')'))
         .toString();
   }
@@ -969,6 +1061,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       walletFk,
       labelFks,
       dateCreated,
+      dateTimeCreated,
       income,
       periodLength,
       reoccurrence,
@@ -976,7 +1069,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       paid,
       createdAnotherFutureTransaction,
       skipPaid,
-      methodAdded);
+      methodAdded,
+      transactionOwnerEmail,
+      sharedKey);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -989,6 +1084,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.walletFk == this.walletFk &&
           other.labelFks == this.labelFks &&
           other.dateCreated == this.dateCreated &&
+          other.dateTimeCreated == this.dateTimeCreated &&
           other.income == this.income &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
@@ -997,7 +1093,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.createdAnotherFutureTransaction ==
               this.createdAnotherFutureTransaction &&
           other.skipPaid == this.skipPaid &&
-          other.methodAdded == this.methodAdded);
+          other.methodAdded == this.methodAdded &&
+          other.transactionOwnerEmail == this.transactionOwnerEmail &&
+          other.sharedKey == this.sharedKey);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -1009,6 +1107,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<int> walletFk;
   final Value<List<int>?> labelFks;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeCreated;
   final Value<bool> income;
   final Value<int?> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
@@ -1017,6 +1116,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<bool?> createdAnotherFutureTransaction;
   final Value<bool> skipPaid;
   final Value<MethodAdded?> methodAdded;
+  final Value<String?> transactionOwnerEmail;
+  final Value<String?> sharedKey;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -1026,6 +1127,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.walletFk = const Value.absent(),
     this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeCreated = const Value.absent(),
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -1034,6 +1136,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.createdAnotherFutureTransaction = const Value.absent(),
     this.skipPaid = const Value.absent(),
     this.methodAdded = const Value.absent(),
+    this.transactionOwnerEmail = const Value.absent(),
+    this.sharedKey = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.transactionPk = const Value.absent(),
@@ -1044,6 +1148,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required int walletFk,
     this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeCreated = const Value.absent(),
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -1052,6 +1157,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.createdAnotherFutureTransaction = const Value.absent(),
     this.skipPaid = const Value.absent(),
     this.methodAdded = const Value.absent(),
+    this.transactionOwnerEmail = const Value.absent(),
+    this.sharedKey = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         note = Value(note),
@@ -1066,6 +1173,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<int>? walletFk,
     Expression<List<int>?>? labelFks,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime?>? dateTimeCreated,
     Expression<bool>? income,
     Expression<int?>? periodLength,
     Expression<BudgetReoccurence?>? reoccurrence,
@@ -1074,6 +1182,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<bool?>? createdAnotherFutureTransaction,
     Expression<bool>? skipPaid,
     Expression<MethodAdded?>? methodAdded,
+    Expression<String?>? transactionOwnerEmail,
+    Expression<String?>? sharedKey,
   }) {
     return RawValuesInsertable({
       if (transactionPk != null) 'transaction_pk': transactionPk,
@@ -1084,6 +1194,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (walletFk != null) 'wallet_fk': walletFk,
       if (labelFks != null) 'label_fks': labelFks,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeCreated != null) 'date_time_created': dateTimeCreated,
       if (income != null) 'income': income,
       if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
@@ -1093,6 +1204,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
         'created_another_future_transaction': createdAnotherFutureTransaction,
       if (skipPaid != null) 'skip_paid': skipPaid,
       if (methodAdded != null) 'method_added': methodAdded,
+      if (transactionOwnerEmail != null)
+        'transaction_owner_email': transactionOwnerEmail,
+      if (sharedKey != null) 'shared_key': sharedKey,
     });
   }
 
@@ -1105,6 +1219,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<int>? walletFk,
       Value<List<int>?>? labelFks,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeCreated,
       Value<bool>? income,
       Value<int?>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
@@ -1112,7 +1227,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<bool>? paid,
       Value<bool?>? createdAnotherFutureTransaction,
       Value<bool>? skipPaid,
-      Value<MethodAdded?>? methodAdded}) {
+      Value<MethodAdded?>? methodAdded,
+      Value<String?>? transactionOwnerEmail,
+      Value<String?>? sharedKey}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
       name: name ?? this.name,
@@ -1122,6 +1239,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       walletFk: walletFk ?? this.walletFk,
       labelFks: labelFks ?? this.labelFks,
       dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeCreated: dateTimeCreated ?? this.dateTimeCreated,
       income: income ?? this.income,
       periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
@@ -1131,6 +1249,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           this.createdAnotherFutureTransaction,
       skipPaid: skipPaid ?? this.skipPaid,
       methodAdded: methodAdded ?? this.methodAdded,
+      transactionOwnerEmail:
+          transactionOwnerEmail ?? this.transactionOwnerEmail,
+      sharedKey: sharedKey ?? this.sharedKey,
     );
   }
 
@@ -1162,6 +1283,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
     }
+    if (dateTimeCreated.present) {
+      map['date_time_created'] = Variable<DateTime?>(dateTimeCreated.value);
+    }
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
     }
@@ -1192,6 +1316,13 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['method_added'] =
           Variable<int?>(converter.mapToSql(methodAdded.value));
     }
+    if (transactionOwnerEmail.present) {
+      map['transaction_owner_email'] =
+          Variable<String?>(transactionOwnerEmail.value);
+    }
+    if (sharedKey.present) {
+      map['shared_key'] = Variable<String?>(sharedKey.value);
+    }
     return map;
   }
 
@@ -1206,6 +1337,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('walletFk: $walletFk, ')
           ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeCreated: $dateTimeCreated, ')
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -1214,7 +1346,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write(
               'createdAnotherFutureTransaction: $createdAnotherFutureTransaction, ')
           ..write('skipPaid: $skipPaid, ')
-          ..write('methodAdded: $methodAdded')
+          ..write('methodAdded: $methodAdded, ')
+          ..write('transactionOwnerEmail: $transactionOwnerEmail, ')
+          ..write('sharedKey: $sharedKey')
           ..write(')'))
         .toString();
   }
@@ -1281,6 +1415,14 @@ class $TransactionsTable extends Transactions
           type: const IntType(),
           requiredDuringInsert: false,
           clientDefault: () => new DateTime.now());
+  final VerificationMeta _dateTimeCreatedMeta =
+      const VerificationMeta('dateTimeCreated');
+  @override
+  late final GeneratedColumn<DateTime?> dateTimeCreated =
+      GeneratedColumn<DateTime?>('date_time_created', aliasedName, true,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          clientDefault: () => new DateTime.now());
   final VerificationMeta _incomeMeta = const VerificationMeta('income');
   @override
   late final GeneratedColumn<bool?> income = GeneratedColumn<bool?>(
@@ -1343,6 +1485,17 @@ class $TransactionsTable extends Transactions
       GeneratedColumn<int?>('method_added', aliasedName, true,
               type: const IntType(), requiredDuringInsert: false)
           .withConverter<MethodAdded?>($TransactionsTable.$converter3);
+  final VerificationMeta _transactionOwnerEmailMeta =
+      const VerificationMeta('transactionOwnerEmail');
+  @override
+  late final GeneratedColumn<String?> transactionOwnerEmail =
+      GeneratedColumn<String?>('transaction_owner_email', aliasedName, true,
+          type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _sharedKeyMeta = const VerificationMeta('sharedKey');
+  @override
+  late final GeneratedColumn<String?> sharedKey = GeneratedColumn<String?>(
+      'shared_key', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -1353,6 +1506,7 @@ class $TransactionsTable extends Transactions
         walletFk,
         labelFks,
         dateCreated,
+        dateTimeCreated,
         income,
         periodLength,
         reoccurrence,
@@ -1360,7 +1514,9 @@ class $TransactionsTable extends Transactions
         paid,
         createdAnotherFutureTransaction,
         skipPaid,
-        methodAdded
+        methodAdded,
+        transactionOwnerEmail,
+        sharedKey
       ];
   @override
   String get aliasedName => _alias ?? 'transactions';
@@ -1416,6 +1572,12 @@ class $TransactionsTable extends Transactions
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
     }
+    if (data.containsKey('date_time_created')) {
+      context.handle(
+          _dateTimeCreatedMeta,
+          dateTimeCreated.isAcceptableOrUnknown(
+              data['date_time_created']!, _dateTimeCreatedMeta));
+    }
     if (data.containsKey('income')) {
       context.handle(_incomeMeta,
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
@@ -1444,6 +1606,16 @@ class $TransactionsTable extends Transactions
           skipPaid.isAcceptableOrUnknown(data['skip_paid']!, _skipPaidMeta));
     }
     context.handle(_methodAddedMeta, const VerificationResult.success());
+    if (data.containsKey('transaction_owner_email')) {
+      context.handle(
+          _transactionOwnerEmailMeta,
+          transactionOwnerEmail.isAcceptableOrUnknown(
+              data['transaction_owner_email']!, _transactionOwnerEmailMeta));
+    }
+    if (data.containsKey('shared_key')) {
+      context.handle(_sharedKeyMeta,
+          sharedKey.isAcceptableOrUnknown(data['shared_key']!, _sharedKeyMeta));
+    }
     return context;
   }
 
@@ -3000,6 +3172,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   final String amountTransactionAfter;
   final int defaultCategoryFk;
   final int walletFk;
+  final bool ignore;
   ScannerTemplate(
       {required this.scannerTemplatePk,
       required this.dateCreated,
@@ -3010,7 +3183,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       required this.amountTransactionBefore,
       required this.amountTransactionAfter,
       required this.defaultCategoryFk,
-      required this.walletFk});
+      required this.walletFk,
+      required this.ignore});
   factory ScannerTemplate.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -3035,6 +3209,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           data['${effectivePrefix}default_category_fk'])!,
       walletFk: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}wallet_fk'])!,
+      ignore: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}ignore'])!,
     );
   }
   @override
@@ -3051,6 +3227,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     map['amount_transaction_after'] = Variable<String>(amountTransactionAfter);
     map['default_category_fk'] = Variable<int>(defaultCategoryFk);
     map['wallet_fk'] = Variable<int>(walletFk);
+    map['ignore'] = Variable<bool>(ignore);
     return map;
   }
 
@@ -3066,6 +3243,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       amountTransactionAfter: Value(amountTransactionAfter),
       defaultCategoryFk: Value(defaultCategoryFk),
       walletFk: Value(walletFk),
+      ignore: Value(ignore),
     );
   }
 
@@ -3087,6 +3265,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           serializer.fromJson<String>(json['amountTransactionAfter']),
       defaultCategoryFk: serializer.fromJson<int>(json['defaultCategoryFk']),
       walletFk: serializer.fromJson<int>(json['walletFk']),
+      ignore: serializer.fromJson<bool>(json['ignore']),
     );
   }
   @override
@@ -3106,6 +3285,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           serializer.toJson<String>(amountTransactionAfter),
       'defaultCategoryFk': serializer.toJson<int>(defaultCategoryFk),
       'walletFk': serializer.toJson<int>(walletFk),
+      'ignore': serializer.toJson<bool>(ignore),
     };
   }
 
@@ -3119,7 +3299,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           String? amountTransactionBefore,
           String? amountTransactionAfter,
           int? defaultCategoryFk,
-          int? walletFk}) =>
+          int? walletFk,
+          bool? ignore}) =>
       ScannerTemplate(
         scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
         dateCreated: dateCreated ?? this.dateCreated,
@@ -3135,6 +3316,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
             amountTransactionAfter ?? this.amountTransactionAfter,
         defaultCategoryFk: defaultCategoryFk ?? this.defaultCategoryFk,
         walletFk: walletFk ?? this.walletFk,
+        ignore: ignore ?? this.ignore,
       );
   @override
   String toString() {
@@ -3148,7 +3330,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           ..write('amountTransactionBefore: $amountTransactionBefore, ')
           ..write('amountTransactionAfter: $amountTransactionAfter, ')
           ..write('defaultCategoryFk: $defaultCategoryFk, ')
-          ..write('walletFk: $walletFk')
+          ..write('walletFk: $walletFk, ')
+          ..write('ignore: $ignore')
           ..write(')'))
         .toString();
   }
@@ -3164,7 +3347,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       amountTransactionBefore,
       amountTransactionAfter,
       defaultCategoryFk,
-      walletFk);
+      walletFk,
+      ignore);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3178,7 +3362,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           other.amountTransactionBefore == this.amountTransactionBefore &&
           other.amountTransactionAfter == this.amountTransactionAfter &&
           other.defaultCategoryFk == this.defaultCategoryFk &&
-          other.walletFk == this.walletFk);
+          other.walletFk == this.walletFk &&
+          other.ignore == this.ignore);
 }
 
 class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
@@ -3192,6 +3377,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   final Value<String> amountTransactionAfter;
   final Value<int> defaultCategoryFk;
   final Value<int> walletFk;
+  final Value<bool> ignore;
   const ScannerTemplatesCompanion({
     this.scannerTemplatePk = const Value.absent(),
     this.dateCreated = const Value.absent(),
@@ -3203,6 +3389,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     this.amountTransactionAfter = const Value.absent(),
     this.defaultCategoryFk = const Value.absent(),
     this.walletFk = const Value.absent(),
+    this.ignore = const Value.absent(),
   });
   ScannerTemplatesCompanion.insert({
     this.scannerTemplatePk = const Value.absent(),
@@ -3215,6 +3402,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     required String amountTransactionAfter,
     required int defaultCategoryFk,
     required int walletFk,
+    this.ignore = const Value.absent(),
   })  : templateName = Value(templateName),
         contains = Value(contains),
         titleTransactionBefore = Value(titleTransactionBefore),
@@ -3234,6 +3422,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     Expression<String>? amountTransactionAfter,
     Expression<int>? defaultCategoryFk,
     Expression<int>? walletFk,
+    Expression<bool>? ignore,
   }) {
     return RawValuesInsertable({
       if (scannerTemplatePk != null) 'scanner_template_pk': scannerTemplatePk,
@@ -3250,6 +3439,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
         'amount_transaction_after': amountTransactionAfter,
       if (defaultCategoryFk != null) 'default_category_fk': defaultCategoryFk,
       if (walletFk != null) 'wallet_fk': walletFk,
+      if (ignore != null) 'ignore': ignore,
     });
   }
 
@@ -3263,7 +3453,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
       Value<String>? amountTransactionBefore,
       Value<String>? amountTransactionAfter,
       Value<int>? defaultCategoryFk,
-      Value<int>? walletFk}) {
+      Value<int>? walletFk,
+      Value<bool>? ignore}) {
     return ScannerTemplatesCompanion(
       scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
       dateCreated: dateCreated ?? this.dateCreated,
@@ -3279,6 +3470,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
           amountTransactionAfter ?? this.amountTransactionAfter,
       defaultCategoryFk: defaultCategoryFk ?? this.defaultCategoryFk,
       walletFk: walletFk ?? this.walletFk,
+      ignore: ignore ?? this.ignore,
     );
   }
 
@@ -3319,6 +3511,9 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     if (walletFk.present) {
       map['wallet_fk'] = Variable<int>(walletFk.value);
     }
+    if (ignore.present) {
+      map['ignore'] = Variable<bool>(ignore.value);
+    }
     return map;
   }
 
@@ -3334,7 +3529,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
           ..write('amountTransactionBefore: $amountTransactionBefore, ')
           ..write('amountTransactionAfter: $amountTransactionAfter, ')
           ..write('defaultCategoryFk: $defaultCategoryFk, ')
-          ..write('walletFk: $walletFk')
+          ..write('walletFk: $walletFk, ')
+          ..write('ignore: $ignore')
           ..write(')'))
         .toString();
   }
@@ -3424,6 +3620,14 @@ class $ScannerTemplatesTable extends ScannerTemplates
       type: const IntType(),
       requiredDuringInsert: true,
       defaultConstraints: 'REFERENCES wallets (wallet_pk)');
+  final VerificationMeta _ignoreMeta = const VerificationMeta('ignore');
+  @override
+  late final GeneratedColumn<bool?> ignore = GeneratedColumn<bool?>(
+      'ignore', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK ("ignore" IN (0, 1))',
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         scannerTemplatePk,
@@ -3435,7 +3639,8 @@ class $ScannerTemplatesTable extends ScannerTemplates
         amountTransactionBefore,
         amountTransactionAfter,
         defaultCategoryFk,
-        walletFk
+        walletFk,
+        ignore
       ];
   @override
   String get aliasedName => _alias ?? 'scanner_templates';
@@ -3518,6 +3723,10 @@ class $ScannerTemplatesTable extends ScannerTemplates
           walletFk.isAcceptableOrUnknown(data['wallet_fk']!, _walletFkMeta));
     } else if (isInserting) {
       context.missing(_walletFkMeta);
+    }
+    if (data.containsKey('ignore')) {
+      context.handle(_ignoreMeta,
+          ignore.isAcceptableOrUnknown(data['ignore']!, _ignoreMeta));
     }
     return context;
   }

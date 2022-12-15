@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Loading effect when getting backups from drive
+    Backup settings moved under manage page on accounts page
+    Database migration for sync categories feature
     Fixed overflow associated title on category page
     Added spacing at bottom of edit category
     Fixed adding category color

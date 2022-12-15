@@ -328,6 +328,7 @@ Future<void> parseEmailsInBackground(context) async {
           paid: true,
           skipPaid: false,
           methodAdded: MethodAdded.email,
+          dateTimeCreated: DateTime.now(),
         );
         transactionsToAdd.add(transactionToAdd);
         openSnackbar(

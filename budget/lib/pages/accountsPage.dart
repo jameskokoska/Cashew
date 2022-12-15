@@ -81,7 +81,7 @@ class _AccountsPageState extends State<AccountsPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 75),
+                SizedBox(height: 35),
                 ClipOval(
                   child: user!.photoUrl == null
                       ? Container(
@@ -243,28 +243,6 @@ class _AccountsPageState extends State<AccountsPage> {
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 60),
-                SettingsContainerSwitch(
-                  onSwitched: (value) {
-                    updateSettings("autoBackups", value,
-                        pagesNeedingRefresh: [], updateGlobalState: false);
-                  },
-                  initialValue: appStateSettings["autoBackups"],
-                  title: "Auto Backups",
-                  description: "Backup data when app is opened",
-                  icon: Icons.backup_rounded,
-                ),
-                SettingsContainerDropdown(
-                  items: ["1", "2", "3", "7", "10", "14"],
-                  onChanged: (value) {
-                    updateSettings("autoBackupsFrequency", int.parse(value),
-                        pagesNeedingRefresh: [], updateGlobalState: false);
-                  },
-                  initial: appStateSettings["autoBackupsFrequency"].toString(),
-                  title: "Auto Backup Frequency",
-                  description: "Days before a backup is created",
-                  icon: Icons.event_repeat_rounded,
                 ),
                 SizedBox(height: 75),
               ],

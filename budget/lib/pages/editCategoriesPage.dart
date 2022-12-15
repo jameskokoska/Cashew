@@ -73,6 +73,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                     Map<String, dynamic> categoryEntry = {
                       "dateShared": DateTime.now(),
                       "colour": toHexString(Colors.red),
+                      "icon": "icon.png",
                       "name": "Food",
                       "members": [
                         // FirebaseAuth.instance.currentUser!.email
@@ -81,24 +82,26 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                       "owner": FirebaseAuth.instance.currentUser!.uid,
                       "ownerEmail": FirebaseAuth.instance.currentUser!.email,
                     };
-                    DocumentReference budget =
+                    DocumentReference category =
                         await db!.collection("categories").add(categoryEntry);
 
                     CollectionReference subCollectionRef =
-                        budget.collection("transactions");
+                        category.collection("transactions");
 
                     subCollectionRef.add({
-                      "logType": "CREATE", // create, delete, update
+                      "logType": "create", // create, delete, update
                       "name": "",
                       "amount": 15.65,
                       "note": "This is a note of a transaction",
                       "dateCreated": DateTime.now(),
                       "dateUpdated": DateTime.now(),
                       "income": false,
-                      "owner": FirebaseAuth.instance.currentUser!.email,
+                      "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+                      "originalCreatorEmail":
+                          FirebaseAuth.instance.currentUser!.email,
                     });
 
-                    budget.update({
+                    category.update({
                       "members": FieldValue.arrayUnion(["hello@hello.com"])
                     });
                   },

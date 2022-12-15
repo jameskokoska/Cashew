@@ -35,6 +35,7 @@ import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
@@ -883,6 +884,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         income: income,
         paid: true,
         skipPaid: false,
+        dateTimeCreated: DateTime.now(),
       ),
     );
 
@@ -947,12 +949,13 @@ class _BackupManagementState extends State<BackupManagement> {
   List<int> deletedIndices = [];
   drive.DriveApi? driveApiState;
   UniqueKey dropDownKey = UniqueKey();
+  bool isLoading = true;
+  bool autoBackups = appStateSettings["autoBackups"];
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      openLoadingPopup(context);
       final authHeaders = await user!.authHeaders;
       final authenticateClient = GoogleAuthClient(authHeaders);
       drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
@@ -969,9 +972,9 @@ class _BackupManagementState extends State<BackupManagement> {
       setState(() {
         filesState = files;
         driveApiState = driveApi;
+        isLoading = false;
       });
       bottomSheetControllerGlobal.snapToExtent(0);
-      Navigator.of(context).pop();
     });
   }
 
@@ -984,6 +987,53 @@ class _BackupManagementState extends State<BackupManagement> {
           widget.isManaging ? null : "This will overwrite all previous data",
       child: Column(
         children: [
+          widget.isManaging
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 0),
+                  child: SettingsContainerSwitch(
+                    onSwitched: (value) {
+                      updateSettings("autoBackups", value,
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                      setState(() {
+                        autoBackups = value;
+                      });
+                    },
+                    initialValue: appStateSettings["autoBackups"],
+                    title: "Auto Backups",
+                    description: "Backup data when opened",
+                    icon: Icons.backup_rounded,
+                  ),
+                )
+              : SizedBox.shrink(),
+          widget.isManaging
+              ? AnimatedSize(
+                  duration: Duration(milliseconds: 800),
+                  curve: Curves.easeInOutCubicEmphasized,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: autoBackups
+                        ? Padding(
+                            key: ValueKey(1),
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: SettingsContainerDropdown(
+                              items: ["1", "2", "3", "7", "10", "14"],
+                              onChanged: (value) {
+                                updateSettings(
+                                    "autoBackupsFrequency", int.parse(value),
+                                    pagesNeedingRefresh: [],
+                                    updateGlobalState: false);
+                              },
+                              initial: appStateSettings["autoBackupsFrequency"]
+                                  .toString(),
+                              title: "Backup Frequency",
+                              description: "Number of days",
+                              icon: Icons.event_repeat_rounded,
+                            ),
+                          )
+                        : Container(),
+                  ),
+                )
+              : SizedBox.shrink(),
           widget.isManaging
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 15),
@@ -1022,6 +1072,15 @@ class _BackupManagementState extends State<BackupManagement> {
                       }
                     },
                   ),
+                )
+              : SizedBox.shrink(),
+          isLoading
+              ? Column(
+                  children: [
+                    for (int i = 0; i < appStateSettings["backupLimit"]; i++)
+                      LoadingShimmerDriveFiles(
+                          isManaging: widget.isManaging, i: i),
+                  ],
                 )
               : SizedBox.shrink(),
           ...filesState
@@ -1149,6 +1208,89 @@ class _BackupManagementState extends State<BackupManagement> {
               )
               .toList()
         ],
+      ),
+    );
+  }
+}
+
+class LoadingShimmerDriveFiles extends StatelessWidget {
+  const LoadingShimmerDriveFiles({
+    Key? key,
+    required this.isManaging,
+    required this.i,
+  }) : super(key: key);
+
+  final bool isManaging;
+  final int i;
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      period:
+          Duration(milliseconds: (1000 + randomDouble[i % 10] * 520).toInt()),
+      baseColor: Theme.of(context).colorScheme.lightDarkAccent,
+      highlightColor: appStateSettings["materialYou"]
+          ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(1)
+          : Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Tappable(
+          onTap: () {},
+          borderRadius: 15,
+          color: appStateSettings["materialYou"]
+              ? Theme.of(context)
+                  .colorScheme
+                  .secondaryContainer
+                  .withOpacity(0.5)
+              : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+          child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.description_rounded,
+                          color: Theme.of(context).colorScheme.secondary,
+                          size: 30,
+                        ),
+                        SizedBox(width: 13),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.white,
+                                ),
+                                height: 20,
+                                width: 70 + randomDouble[i % 10] * 120,
+                              ),
+                              SizedBox(height: 4),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.white,
+                                ),
+                                height: 18,
+                                width: 90 + randomDouble[i % 10] * 120,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  isManaging
+                      ? ButtonIcon(onTap: () {}, icon: Icons.close_rounded)
+                      : SizedBox.shrink(),
+                ],
+              )),
+        ),
       ),
     );
   }

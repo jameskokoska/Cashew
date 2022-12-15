@@ -566,8 +566,9 @@ class LoadingShimmer extends StatelessWidget {
     return Shimmer.fromColors(
       period: Duration(milliseconds: 1100),
       baseColor: Theme.of(context).colorScheme.lightDarkAccent,
-      highlightColor:
-          Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
+      highlightColor: appStateSettings["materialYou"]
+          ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(1)
+          : Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
       child: Padding(
         padding: const EdgeInsets.only(top: 2),
         child: ListView.builder(

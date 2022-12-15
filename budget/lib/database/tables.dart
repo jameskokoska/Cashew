@@ -10,7 +10,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 14;
+int schemaVersionGlobal = 15;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -36,7 +36,7 @@ enum TransactionSpecialType {
 
 enum ThemeSetting { dark, light }
 
-enum MethodAdded { email }
+enum MethodAdded { email, shared }
 
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
@@ -106,6 +106,8 @@ class Transactions extends Table {
       text().map(const IntListInColumnConverter()).nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeCreated =>
+      dateTime().clientDefault(() => new DateTime.now()).nullable()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
   // Subscriptions and Repetitive payments
   IntColumn get periodLength => integer().nullable()();
@@ -116,8 +118,25 @@ class Transactions extends Table {
   BoolColumn get createdAnotherFutureTransaction =>
       boolean().withDefault(const Constant(false)).nullable()();
   BoolColumn get skipPaid => boolean().withDefault(const Constant(false))();
+  // methodAdded will be shared if downloaded from shared server
   IntColumn get methodAdded => intEnum<MethodAdded>().nullable()();
+  // Attributes to configure sharing of transactions:
+  // Note: a transaction has not been published until methodAdded is shared and sharedKey is not null
+  TextColumn get transactionOwnerEmail => text().nullable()();
+  TextColumn get sharedKey => text().nullable()();
 }
+
+// Server entry: (sub collection in category)
+// "logType": "create", // create, delete, update
+// "name": "transaction",
+// "amount": 15.65,
+// "note": "This is a note of a transaction",
+// "dateCreated": DateTime.now(),
+// "dateUpdated": DateTime.now(),
+// "income": false,
+// "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+// "originalCreatorEmail":
+//     FirebaseAuth.instance.currentUser!.email,
 
 @DataClassName('TransactionCategory')
 class Categories extends Table {
@@ -129,9 +148,20 @@ class Categories extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
+  // Attributes to configure sharing of transactions:
   // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
   TextColumn get sharedKey => text().nullable()();
 }
+
+// Server entry:
+// "dateShared": DateTime.now(),
+// "colour": toHexString(Colors.red),
+// "icon": "icon.png",
+// "name": "Food",
+// "members": ["test@test.com"],
+// "income": false,
+// "owner": FirebaseAuth.instance.currentUser!.uid,
+// "ownerEmail": FirebaseAuth.instance.currentUser!.email,
 
 //If a title is in a smart label, automatically choose this category
 // For e.g. for Food category
@@ -204,6 +234,7 @@ class ScannerTemplates extends Table {
   IntColumn get defaultCategoryFk =>
       integer().references(Categories, #categoryPk)();
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
+  // TODO: if it contains certain keyword ignore these emails
   BoolColumn get ignore => boolean().withDefault(const Constant(false))();
 }
 
@@ -259,6 +290,15 @@ class FinanceDatabase extends _$FinanceDatabase {
           }
           if (from <= 13) {
             await migrator.createTable($ScannerTemplatesTable(database));
+          }
+          if (from <= 14) {
+            await migrator.addColumn(
+                transactions, transactions.transactionOwnerEmail);
+            await migrator.addColumn(transactions, transactions.sharedKey);
+            await migrator.addColumn(scannerTemplates, scannerTemplates.ignore);
+            await migrator.addColumn(categories, categories.sharedKey);
+            await migrator.addColumn(
+                transactions, transactions.dateTimeCreated);
           }
         },
       );
