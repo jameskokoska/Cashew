@@ -49,11 +49,15 @@ class PieChartWrapper extends StatelessWidget {
       {Key? key,
       required this.data,
       required this.totalSpent,
-      required this.setSelectedCategory})
+      required this.setSelectedCategory,
+      required this.isPastBudget,
+      required this.pieChartDisplayStateKey})
       : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
   final Function(int, TransactionCategory?) setSelectedCategory;
+  final bool isPastBudget;
+  final pieChartDisplayStateKey;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +101,7 @@ class PieChartWrapper extends StatelessWidget {
   }
 }
 
-GlobalKey<PieChartDisplayState> pieChartDisplayStateKey = GlobalKey();
+GlobalKey<PieChartDisplayState> pieChartDisplayStatePastBudgetKey = GlobalKey();
 
 class PieChartDisplay extends StatefulWidget {
   PieChartDisplay(

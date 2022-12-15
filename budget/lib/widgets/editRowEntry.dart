@@ -14,6 +14,8 @@ class EditRowEntry extends StatelessWidget {
       this.currentReorder = false,
       this.canReorder = true,
       this.canDelete = true,
+      this.extraIcon,
+      this.onExtra,
       Key? key})
       : super(key: key);
   final int index;
@@ -25,6 +27,8 @@ class EditRowEntry extends StatelessWidget {
   final bool currentReorder;
   final bool canReorder;
   final bool canDelete;
+  final IconData? extraIcon;
+  final VoidCallback? onExtra;
   final Function()? onTap;
 
   @override
@@ -60,6 +64,17 @@ class EditRowEntry extends StatelessWidget {
                     child: content,
                   ),
                 ),
+                extraIcon != null
+                    ? Tappable(
+                        color: Colors.transparent,
+                        borderRadius: 18,
+                        child: Container(
+                            height: double.infinity,
+                            width: 40,
+                            child: Icon(extraIcon)),
+                        onTap: onExtra,
+                      )
+                    : SizedBox.shrink(),
                 canDelete
                     ? Tappable(
                         color: Colors.transparent,

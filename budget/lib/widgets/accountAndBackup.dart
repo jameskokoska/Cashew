@@ -277,7 +277,7 @@ Future<void> createBackup(context,
     var driveFile = new drive.File();
     final timestamp =
         DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
-    driveFile.name = "db-$timestamp.sqlite";
+    driveFile.name = "db-v$schemaVersionGlobal-$timestamp.sqlite";
     driveFile.modifiedTime = DateTime.now().toUtc();
     driveFile.parents = ["appDataFolder"];
 
@@ -1142,7 +1142,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                 TextFont(
                                                   text: (file.value.name ??
                                                       "No name"),
-                                                  fontSize: 15,
+                                                  fontSize: 14,
                                                   maxLines: 2,
                                                 ),
                                               ],
@@ -1152,53 +1152,60 @@ class _BackupManagementState extends State<BackupManagement> {
                                       ),
                                     ),
                                     widget.isManaging
-                                        ? ButtonIcon(
-                                            onTap: () {
-                                              openPopup(
-                                                context,
-                                                icon: Icons.delete_rounded,
-                                                title: "Delete backup?",
-                                                description: "Backup " +
-                                                    (file.value.name ??
-                                                        "No name") +
-                                                    " created " +
-                                                    getWordedDateShortMore(
-                                                        (file.value.modifiedTime ??
-                                                                DateTime.now())
-                                                            .toLocal(),
-                                                        includeTimeIfToday:
-                                                            true),
-                                                onSubmit: () async {
-                                                  Navigator.pop(context);
-                                                  openLoadingPopup(context);
-                                                  await deleteBackup(
-                                                      driveApiState!,
-                                                      file.value.id ?? "");
-                                                  openSnackbar(
-                                                    SnackbarMessage(
-                                                        title: "Deleted Backup",
-                                                        description:
-                                                            (file.value.name ??
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: ButtonIcon(
+                                                onTap: () {
+                                                  openPopup(
+                                                    context,
+                                                    icon: Icons.delete_rounded,
+                                                    title: "Delete backup?",
+                                                    description: "Backup " +
+                                                        (file.value.name ??
+                                                            "No name") +
+                                                        " created " +
+                                                        getWordedDateShortMore(
+                                                            (file.value.modifiedTime ??
+                                                                    DateTime
+                                                                        .now())
+                                                                .toLocal(),
+                                                            includeTimeIfToday:
+                                                                true),
+                                                    onSubmit: () async {
+                                                      Navigator.pop(context);
+                                                      openLoadingPopup(context);
+                                                      await deleteBackup(
+                                                          driveApiState!,
+                                                          file.value.id ?? "");
+                                                      openSnackbar(
+                                                        SnackbarMessage(
+                                                            title:
+                                                                "Deleted Backup",
+                                                            description: (file
+                                                                    .value
+                                                                    .name ??
                                                                 "No name"),
-                                                        icon: Icons
-                                                            .delete_rounded),
+                                                            icon: Icons
+                                                                .delete_rounded),
+                                                      );
+                                                      setState(() {
+                                                        deletedIndices
+                                                            .add(file.key);
+                                                      });
+                                                      // bottomSheetControllerGlobal
+                                                      //     .snapToExtent(0);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    onSubmitLabel: "Delete",
+                                                    onCancel: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    onCancelLabel: "Cancel",
                                                   );
-                                                  setState(() {
-                                                    deletedIndices
-                                                        .add(file.key);
-                                                  });
-                                                  // bottomSheetControllerGlobal
-                                                  //     .snapToExtent(0);
-                                                  Navigator.pop(context);
                                                 },
-                                                onSubmitLabel: "Delete",
-                                                onCancel: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                onCancelLabel: "Cancel",
-                                              );
-                                            },
-                                            icon: Icons.close_rounded)
+                                                icon: Icons.close_rounded),
+                                          )
                                         : SizedBox.shrink(),
                                   ],
                                 )),
@@ -1228,9 +1235,11 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
     return Shimmer.fromColors(
       period:
           Duration(milliseconds: (1000 + randomDouble[i % 10] * 520).toInt()),
-      baseColor: Theme.of(context).colorScheme.lightDarkAccent,
+      baseColor: appStateSettings["materialYou"]
+          ? Theme.of(context).colorScheme.secondaryContainer
+          : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
       highlightColor: appStateSettings["materialYou"]
-          ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(1)
+          ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.2)
           : Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -1242,7 +1251,10 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                   .colorScheme
                   .secondaryContainer
                   .withOpacity(0.5)
-              : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+              : Theme.of(context)
+                  .colorScheme
+                  .lightDarkAccentHeavy
+                  .withOpacity(0.5),
           child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               child: Row(
@@ -1269,14 +1281,14 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                                 height: 20,
                                 width: 70 + randomDouble[i % 10] * 120,
                               ),
-                              SizedBox(height: 4),
+                              SizedBox(height: 6),
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                   color: Colors.white,
                                 ),
-                                height: 18,
+                                height: 14,
                                 width: 90 + randomDouble[i % 10] * 120,
                               ),
                             ],

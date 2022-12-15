@@ -4,6 +4,7 @@ import 'package:animations/animations.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
@@ -13,6 +14,7 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
@@ -52,6 +54,18 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         ),
       ),
       slivers: [
+        SliverToBoxAdapter(
+          child: SettingsContainerSwitch(
+            title: "Total Spent Label",
+            description: "Instead of the remaining amount",
+            onSwitched: (value) {
+              updateSettings("showTotalSpentForBudget", value,
+                  pagesNeedingRefresh: [0, 2], updateGlobalState: false);
+            },
+            initialValue: appStateSettings["showTotalSpentForBudget"],
+            icon: Icons.data_array_rounded,
+          ),
+        ),
         StreamBuilder<List<Budget>>(
           stream: database.watchAllBudgets(),
           builder: (context, snapshot) {
@@ -95,6 +109,14 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                       amountLight: 0.55,
                       amountDark: 0.35);
                   return EditRowEntry(
+                    extraIcon: budget.pinned
+                        ? Icons.push_pin_rounded
+                        : Icons.push_pin_outlined,
+                    onExtra: () async {
+                      Budget updatedBudget =
+                          budget.copyWith(pinned: !budget.pinned);
+                      await database.createOrUpdateBudget(updatedBudget);
+                    },
                     canReorder: (snapshot.data ?? []).length != 1,
                     currentReorder:
                         currentReorder != -1 && currentReorder != index,

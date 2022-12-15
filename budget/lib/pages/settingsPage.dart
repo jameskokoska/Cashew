@@ -10,6 +10,7 @@ import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
+import 'package:budget/pages/notificationsPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -180,6 +181,13 @@ class SettingsPageState extends State<SettingsPage>
         ),
         EnterName(),
         SettingsHeader(title: "Preferences"),
+        kIsWeb
+            ? SizedBox.shrink()
+            : SettingsContainerOpenPage(
+                openPage: NotificationsPage(),
+                title: "Notifications",
+                icon: Icons.notifications_rounded,
+              ),
         // In the future, each wallet will have its own currency
         SettingsContainerDropdown(
           title: "Currency Icon",
@@ -196,16 +204,6 @@ class SettingsPageState extends State<SettingsPage>
           },
         ),
         SettingsContainerSwitch(
-          title: "Show Wallet Switcher",
-          description: "At the top of the home page",
-          onSwitched: (value) {
-            updateSettings("showWalletSwitcher", value,
-                pagesNeedingRefresh: [0], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["showWalletSwitcher"],
-          icon: Icons.account_balance_wallet_rounded,
-        ),
-        SettingsContainerSwitch(
           title: "Overdue and Upcoming",
           description: "Sections on home page",
           onSwitched: (value) {
@@ -214,16 +212,6 @@ class SettingsPageState extends State<SettingsPage>
           },
           initialValue: appStateSettings["showOverdueUpcoming"],
           icon: Icons.upcoming_rounded,
-        ),
-        SettingsContainerSwitch(
-          title: "Total spent label",
-          description: "For budgets instead of the remaining amount",
-          onSwitched: (value) {
-            updateSettings("showTotalSpentForBudget", value,
-                pagesNeedingRefresh: [0, 2], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["showTotalSpentForBudget"],
-          icon: Icons.data_array_rounded,
         ),
         SettingsContainerSwitch(
           title: "Use Cumulative Spending",
@@ -282,10 +270,7 @@ class SettingsPageState extends State<SettingsPage>
           initialValue: appStateSettings["batterySaver"],
           icon: Icons.battery_charging_full_rounded,
         ),
-        kIsWeb ? SizedBox.shrink() : DailyNotificationsSettings(),
-        kIsWeb
-            ? SizedBox.shrink()
-            : UpcomingTransactionsNotificationsSettings(),
+
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
@@ -331,8 +316,6 @@ Function enterNameBottomSheet(context) {
             width: MediaQuery.of(context).size.width - 36,
             child: TextInput(
               icon: Icons.title_rounded,
-              backgroundColor:
-                  Theme.of(context).colorScheme.lightDarkAccentHeavy,
               initialValue: appStateSettings["username"],
               autoFocus: true,
               onSubmitted: (value) {
@@ -342,7 +325,7 @@ Function enterNameBottomSheet(context) {
               onChanged: (text) {
                 name = text;
               },
-              labelText: "Title",
+              labelText: "Username",
               padding: EdgeInsets.zero,
             ),
           ),

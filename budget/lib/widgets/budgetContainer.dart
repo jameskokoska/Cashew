@@ -350,7 +350,8 @@ class BudgetContainer extends StatelessWidget {
                               : ButtonIcon(
                                   onTap: () {
                                     pushRoute(context,
-                                        PastBudgetsPage(budget: budget));
+                                        PastBudgetsPage(budget: budget),
+                                        fancyRoute: true);
                                   },
                                   icon: Icons.history_rounded,
                                   color: dynamicPastel(
@@ -749,33 +750,46 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedFractionallySizedBox(
-      duration: Duration(milliseconds: 1500),
-      curve: Curves.easeInOutCubic,
-      heightFactor: 1,
-      widthFactor:
-          animateIn ? (widget.percent > 100 ? 1 : widget.percent / 100) : 0,
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(50),
-                bottomRight: Radius.circular(50),
+    return Stack(
+      children: [
+        AnimatedFractionallySizedBox(
+          duration: Duration(milliseconds: 1500),
+          curve: Curves.easeInOutCubic,
+          heightFactor: 1,
+          widthFactor:
+              animateIn ? (widget.percent > 100 ? 1 : widget.percent / 100) : 0,
+          child: Stack(
+            children: [
+              Container(
+                color: lightenPastel(widget.color, amount: 0.6),
               ),
-              color: lightenPastel(widget.color, amount: 0.6),
-            ),
+              widget.percent > 40
+                  ? AnimatedOpacity(
+                      opacity: fadeIn ? 1 : 0,
+                      duration: Duration(milliseconds: 300),
+                      child: widget.getPercentText(
+                        darkenPastel(widget.color, amount: 0.6),
+                      ))
+                  : Container(),
+            ],
           ),
-          widget.percent > 40
-              ? AnimatedOpacity(
-                  opacity: fadeIn ? 1 : 0,
-                  duration: Duration(milliseconds: 300),
-                  child: widget.getPercentText(
-                    darkenPastel(widget.color, amount: 0.6),
-                  ))
-              : Container(),
-        ],
-      ),
+        ),
+        // This adds a rounded corner when the percent is small
+        widget.percent / 100 < 0.05
+            ? AnimatedContainer(
+                curve: Curves.easeInOutCubic,
+                duration: Duration(milliseconds: 1500),
+                width: animateIn
+                    ? widget.percent / 100 <= 0
+                        ? 0
+                        : widget.large
+                            ? 15
+                            : 10
+                    : 0,
+                color: lightenPastel(widget.color, amount: 0.6),
+              )
+            : SizedBox.shrink()
+      ],
     );
   }
 }

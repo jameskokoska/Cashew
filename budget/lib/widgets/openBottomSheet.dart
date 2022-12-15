@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -16,8 +17,11 @@ openBottomSheet(context, child,
   showSlidingBottomSheet(context,
       resizeToAvoidBottomInset:
           getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
-      bottomPaddingColor: Theme.of(context).colorScheme.lightDarkAccent,
-      builder: (context) {
+      bottomPaddingColor: appStateSettings["materialYou"]
+          ? dynamicPastel(
+              context, Theme.of(context).colorScheme.secondaryContainer,
+              amount: 0.3)
+          : Theme.of(context).colorScheme.lightDarkAccent, builder: (context) {
     return SlidingSheetDialog(
       controller: bottomSheetControllerGlobal,
       elevation: 0,

@@ -44,7 +44,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
       backButton: false,
       slivers: [
         StreamBuilder<List<Budget>>(
-          stream: database.watchAllPinnedBudgets(),
+          stream: database.watchAllBudgets(),
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
               return SliverToBoxAdapter(

@@ -48,6 +48,7 @@ class _BudgetPageState extends State<BudgetPage> {
   int selectedCategoryPk = -1;
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
+  GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +86,8 @@ class _BudgetPageState extends State<BudgetPage> {
                       child: IconButton(
                         onPressed: () {
                           pushRoute(
-                              context, PastBudgetsPage(budget: widget.budget));
+                              context, PastBudgetsPage(budget: widget.budget),
+                              fancyRoute: true);
                         },
                         icon: Icon(Icons.history_rounded),
                       ),
@@ -141,7 +143,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                 selectedCategoryPk = -1;
                                 selectedCategory = null;
                               });
-                              pieChartDisplayStateKey.currentState!
+                              _pieChartDisplayStateKey.currentState!
                                   .setTouchedIndex(-1);
                             } else {
                               setState(() {
@@ -149,7 +151,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                     category.category.categoryPk;
                                 selectedCategory = category.category;
                               });
-                              pieChartDisplayStateKey.currentState!
+                              _pieChartDisplayStateKey.currentState!
                                   .setTouchedIndex(index);
                             }
                           },
@@ -306,6 +308,7 @@ class _BudgetPageState extends State<BudgetPage> {
                         ),
                         Container(height: 20),
                         PieChartWrapper(
+                            pieChartDisplayStateKey: _pieChartDisplayStateKey,
                             data: snapshot.data ?? [],
                             totalSpent: totalSpent,
                             setSelectedCategory: (categoryPk, category) {
@@ -313,7 +316,8 @@ class _BudgetPageState extends State<BudgetPage> {
                                 selectedCategoryPk = categoryPk;
                                 selectedCategory = category;
                               });
-                            }),
+                            },
+                            isPastBudget: widget.isPastBudget ?? false),
                         Container(height: 35),
                         ...categoryEntries,
                         Container(height: 15),

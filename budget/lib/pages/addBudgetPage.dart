@@ -97,6 +97,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   Color? selectedColor;
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "month";
+  bool selectedPin = true;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -331,6 +332,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     return;
   }
 
+  void setSelectedPin() {
+    setState(() {
+      selectedPin = !selectedPin;
+    });
+    determineBottomButton();
+    return;
+  }
+
   void setSelectedTitle(String title) {
     setState(() {
       selectedTitle = title;
@@ -398,11 +407,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       reoccurrence: mapRecurrence(selectedRecurrence),
       dateCreated:
           widget.budget != null ? widget.budget!.dateCreated : DateTime.now(),
-      pinned: true,
       order: widget.budget != null
           ? widget.budget!.order
           : await database.getAmountOfBudgets(),
       walletFk: 0,
+      pinned: selectedPin,
     );
   }
 
@@ -413,7 +422,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       //We are editing a budget
       //Fill in the information from the passed in budget
       selectedTitle = widget.budget!.name;
-
+      selectedPin = widget.budget!.pinned;
       selectedAllCategories = widget.budget!.allCategoryFks;
       selectedAmount = widget.budget!.amount;
 
@@ -796,6 +805,55 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                   ),
                                 ),
                               )),
+                  ),
+                  Container(height: 13),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextFont(
+                          text: "Pin to Homepage",
+                          textColor: Theme.of(context).colorScheme.textLight,
+                          fontSize: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Tappable(
+                      onTap: () {
+                        setSelectedPin();
+                      },
+                      borderRadius: 10,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 6),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFont(
+                                text:
+                                    selectedPin == true ? "Pinned" : "Unpinned",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 26,
+                              ),
+                            ),
+                            ButtonIcon(
+                              onTap: () {
+                                setSelectedPin();
+                              },
+                              icon: selectedPin
+                                  ? Icons.push_pin_rounded
+                                  : Icons.push_pin_outlined,
+                              size: 41,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   Container(height: 70),
                 ],

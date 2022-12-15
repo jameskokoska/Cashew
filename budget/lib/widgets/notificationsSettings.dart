@@ -52,7 +52,7 @@ class _DailyNotificationsSettingsState
             return true;
           },
           initialValue: appStateSettings["notifications"],
-          icon: Icons.notifications_rounded,
+          icon: Icons.calendar_today_rounded,
         ),
         AnimatedSize(
           duration: Duration(milliseconds: 800),
@@ -200,7 +200,7 @@ class _UpcomingTransactionsNotificationsSettingsState
             return true;
           },
           initialValue: appStateSettings["notificationsUpcomingTransactions"],
-          icon: Icons.notifications_rounded,
+          icon: Icons.calendar_month_rounded,
         ),
         AnimatedSize(
           duration: Duration(milliseconds: 800),

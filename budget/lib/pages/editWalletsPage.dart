@@ -15,6 +15,7 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,18 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         ),
       ),
       slivers: [
+        SliverToBoxAdapter(
+          child: SettingsContainerSwitch(
+            title: "Show Wallet Switcher",
+            description: "At the top of the home page",
+            onSwitched: (value) {
+              updateSettings("showWalletSwitcher", value,
+                  pagesNeedingRefresh: [0], updateGlobalState: false);
+            },
+            initialValue: appStateSettings["showWalletSwitcher"],
+            icon: Icons.account_balance_wallet_rounded,
+          ),
+        ),
         StreamBuilder<List<TransactionWallet>>(
           stream: database.watchAllWallets(),
           builder: (context, snapshot) {

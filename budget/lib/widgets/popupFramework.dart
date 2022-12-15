@@ -23,10 +23,9 @@ class PopupFramework extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
             color: appStateSettings["materialYou"]
-                ? Theme.of(context)
-                    .colorScheme
-                    .secondaryContainer
-                    .withOpacity(0.7)
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amount: 0.3)
                 : Theme.of(context).colorScheme.lightDarkAccent,
           ),
           child: Column(

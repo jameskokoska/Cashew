@@ -302,7 +302,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       createdAnotherFutureTransaction: widget.transaction != null
           ? widget.transaction!.createdAnotherFutureTransaction
           : null,
-      dateTimeCreated: DateTime.now(),
+      dateTimeCreated: widget.transaction != null
+          ? widget.transaction!.dateTimeCreated
+          : DateTime.now(),
     );
   }
 

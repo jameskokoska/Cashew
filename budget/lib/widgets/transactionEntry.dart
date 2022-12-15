@@ -42,7 +42,7 @@ class TransactionEntry extends StatelessWidget {
 
   final double fabSize = 50;
 
-  createNewSubscriptionTransaction(context, Transaction transaction) {
+  createNewSubscriptionTransaction(context, Transaction transaction) async {
     if (transaction.createdAnotherFutureTransaction == false) {
       if (transaction.type == TransactionSpecialType.subscription ||
           transaction.type == TransactionSpecialType.repetitive) {
@@ -69,7 +69,7 @@ class TransactionEntry extends StatelessWidget {
           dateCreated: newDate,
           createdAnotherFutureTransaction: false,
         );
-        database.createOrUpdateTransaction(newTransaction);
+        await database.createOrUpdateTransaction(newTransaction);
 
         openSnackbar(
           SnackbarMessage(
@@ -336,11 +336,11 @@ class TransactionEntry extends StatelessWidget {
                                               Navigator.pop(context);
                                             },
                                             onSubmitLabel: "Remove",
-                                            onSubmit: () {
+                                            onSubmit: () async {
                                               Transaction transactionNew =
                                                   transaction.copyWith(
                                                       paid: false);
-                                              database
+                                              await database
                                                   .createOrUpdateTransaction(
                                                       transactionNew);
                                               Navigator.pop(context);
@@ -357,11 +357,11 @@ class TransactionEntry extends StatelessWidget {
                                               Navigator.pop(context);
                                             },
                                             onSubmitLabel: "Remove",
-                                            onSubmit: () {
+                                            onSubmit: () async {
                                               Transaction transactionNew =
                                                   transaction.copyWith(
                                                       skipPaid: false);
-                                              database
+                                              await database
                                                   .createOrUpdateTransaction(
                                                       transactionNew);
                                               Navigator.pop(context);
@@ -382,7 +382,7 @@ class TransactionEntry extends StatelessWidget {
                                             Navigator.pop(context);
                                           },
                                           onExtraLabel: "Skip",
-                                          onExtra: () {
+                                          onExtra: () async {
                                             Transaction transactionNew =
                                                 transaction.copyWith(
                                                     skipPaid: true,
@@ -392,9 +392,10 @@ class TransactionEntry extends StatelessWidget {
                                                         DateTime.now().day),
                                                     createdAnotherFutureTransaction:
                                                         true);
-                                            database.createOrUpdateTransaction(
-                                                transactionNew);
-                                            createNewSubscriptionTransaction(
+                                            await database
+                                                .createOrUpdateTransaction(
+                                                    transactionNew);
+                                            await createNewSubscriptionTransaction(
                                                 context, transactionNew);
                                             Navigator.pop(context);
                                             setUpcomingNotifications(context);
@@ -402,20 +403,21 @@ class TransactionEntry extends StatelessWidget {
                                           onSubmitLabel: transaction.income
                                               ? "Desposit"
                                               : "Pay",
-                                          onSubmit: () {
+                                          onSubmit: () async {
                                             Transaction transactionNew =
                                                 transaction.copyWith(
-                                                    paid: transaction.paid,
+                                                    paid: !transaction.paid,
                                                     dateCreated: DateTime(
                                                         DateTime.now().year,
                                                         DateTime.now().month,
                                                         DateTime.now().day),
                                                     createdAnotherFutureTransaction:
                                                         true);
-                                            database.createOrUpdateTransaction(
-                                                transactionNew);
-                                            createNewSubscriptionTransaction(
-                                                context, transactionNew);
+                                            await database
+                                                .createOrUpdateTransaction(
+                                                    transactionNew);
+                                            await createNewSubscriptionTransaction(
+                                                context, transaction);
                                             Navigator.pop(context);
                                             setUpcomingNotifications(context);
                                           },

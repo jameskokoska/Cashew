@@ -7,6 +7,16 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed pie chart duplicate key removing pie chart when on past budget page
+    Fixed rounded corner when percentage is small of progress bar in budget container
+    Fixed bottom padding color for popup in material you
+    Notifications setting section
+    Moved show wallet switcher setting to edit wallets page
+    Moved total spent label setting to edit budget page
+    Added DB version to file when exporting to drive
+    Fixed shimmer colors for non material you theme
+    Fixed paying subscription transaction
+    Fix race condition for setting subscription notifications - wait for database first
     Loading effect when getting backups from drive
     Backup settings moved under manage page on accounts page
     Database migration for sync categories feature
