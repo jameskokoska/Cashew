@@ -10,7 +10,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 15;
+int schemaVersionGlobal = 16;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -32,6 +32,11 @@ enum TransactionSpecialType {
   subscription,
   repetitive,
   transactionTab
+}
+
+enum CategoryOwnerMember {
+  owner,
+  member,
 }
 
 enum ThemeSetting { dark, light }
@@ -151,6 +156,9 @@ class Categories extends Table {
   // Attributes to configure sharing of transactions:
   // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
   TextColumn get sharedKey => text().nullable()();
+  IntColumn get sharedOwnerMember =>
+      intEnum<CategoryOwnerMember>().nullable()();
+  DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
 }
 
 // Server entry:
@@ -299,6 +307,10 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.addColumn(categories, categories.sharedKey);
             await migrator.addColumn(
                 transactions, transactions.dateTimeCreated);
+          }
+          if (from <= 15) {
+            await migrator.addColumn(categories, categories.sharedOwnerMember);
+            await migrator.addColumn(categories, categories.sharedDateUpdated);
           }
         },
       );
@@ -1099,6 +1111,71 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     return into(categories).insertOnConflictUpdate(category);
+  }
+
+  Future<int> createOrUpdateSharedCategory(TransactionCategory category) async {
+    if (category.sharedKey != null) {
+      TransactionCategory sharedCategory;
+
+      try {
+        // entry exists, update it
+        sharedCategory = await (select(categories)
+              ..where((t) => t.sharedKey.equals(category.sharedKey)))
+            .getSingle();
+        sharedCategory =
+            category.copyWith(categoryPk: sharedCategory.categoryPk);
+        return into(categories).insertOnConflictUpdate(sharedCategory);
+      } catch (e) {
+        // new entry is needed
+        int numberOfCategories =
+            (await database.getTotalCountOfWallets())[0] ?? 0;
+        sharedCategory = category.copyWith(order: numberOfCategories);
+        return into(categories).insertOnConflictUpdate(sharedCategory);
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  Future<TransactionCategory> getSharedCategory(sharedKey) async {
+    return await (select(categories)
+          ..where((t) => t.sharedKey.equals(sharedKey)))
+        .getSingle();
+  }
+
+  Future<List<Transaction>> getAllTransactionsFromCategory(categoryPk) {
+    return (select(transactions)
+          ..where((tbl) {
+            return tbl.categoryFk.equals(categoryPk) & tbl.paid.equals(true);
+          })
+          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
+        .get();
+  }
+
+  Future<int> createOrUpdateSharedTransaction(Transaction transaction) async {
+    if (transaction.sharedKey != null) {
+      Transaction sharedTransaction;
+      try {
+        // entry exists, update it
+        sharedTransaction = await (select(transactions)
+              ..where((t) => t.sharedKey.equals(transaction.sharedKey)))
+            .getSingle();
+        sharedTransaction = transaction.copyWith(
+            transactionPk: sharedTransaction.transactionPk);
+        return into(transactions).insertOnConflictUpdate(sharedTransaction);
+      } catch (e) {
+        // new entry is needed
+        return into(transactions).insertOnConflictUpdate(transaction);
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  Future<int> deleteSharedTransaction(sharedTransactionKey) async {
+    return (delete(transactions)
+          ..where((t) => t.sharedKey.equals(sharedTransactionKey)))
+        .go();
   }
 
   Future<List<Transaction>> get allTransactions => select(transactions).get();

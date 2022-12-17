@@ -349,6 +349,8 @@ class TransactionCategory extends DataClass
   final int order;
   final bool income;
   final String? sharedKey;
+  final CategoryOwnerMember? sharedOwnerMember;
+  final DateTime? sharedDateUpdated;
   TransactionCategory(
       {required this.categoryPk,
       required this.name,
@@ -357,7 +359,9 @@ class TransactionCategory extends DataClass
       required this.dateCreated,
       required this.order,
       required this.income,
-      this.sharedKey});
+      this.sharedKey,
+      this.sharedOwnerMember,
+      this.sharedDateUpdated});
   factory TransactionCategory.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -378,6 +382,11 @@ class TransactionCategory extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}income'])!,
       sharedKey: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}shared_key']),
+      sharedOwnerMember: $CategoriesTable.$converter0.mapToDart(const IntType()
+          .mapFromDatabaseResponse(
+              data['${effectivePrefix}shared_owner_member'])),
+      sharedDateUpdated: const DateTimeType().mapFromDatabaseResponse(
+          data['${effectivePrefix}shared_date_updated']),
     );
   }
   @override
@@ -397,6 +406,14 @@ class TransactionCategory extends DataClass
     if (!nullToAbsent || sharedKey != null) {
       map['shared_key'] = Variable<String?>(sharedKey);
     }
+    if (!nullToAbsent || sharedOwnerMember != null) {
+      final converter = $CategoriesTable.$converter0;
+      map['shared_owner_member'] =
+          Variable<int?>(converter.mapToSql(sharedOwnerMember));
+    }
+    if (!nullToAbsent || sharedDateUpdated != null) {
+      map['shared_date_updated'] = Variable<DateTime?>(sharedDateUpdated);
+    }
     return map;
   }
 
@@ -415,6 +432,12 @@ class TransactionCategory extends DataClass
       sharedKey: sharedKey == null && nullToAbsent
           ? const Value.absent()
           : Value(sharedKey),
+      sharedOwnerMember: sharedOwnerMember == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sharedOwnerMember),
+      sharedDateUpdated: sharedDateUpdated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sharedDateUpdated),
     );
   }
 
@@ -430,6 +453,10 @@ class TransactionCategory extends DataClass
       order: serializer.fromJson<int>(json['order']),
       income: serializer.fromJson<bool>(json['income']),
       sharedKey: serializer.fromJson<String?>(json['sharedKey']),
+      sharedOwnerMember:
+          serializer.fromJson<CategoryOwnerMember?>(json['sharedOwnerMember']),
+      sharedDateUpdated:
+          serializer.fromJson<DateTime?>(json['sharedDateUpdated']),
     );
   }
   @override
@@ -444,6 +471,9 @@ class TransactionCategory extends DataClass
       'order': serializer.toJson<int>(order),
       'income': serializer.toJson<bool>(income),
       'sharedKey': serializer.toJson<String?>(sharedKey),
+      'sharedOwnerMember':
+          serializer.toJson<CategoryOwnerMember?>(sharedOwnerMember),
+      'sharedDateUpdated': serializer.toJson<DateTime?>(sharedDateUpdated),
     };
   }
 
@@ -455,7 +485,9 @@ class TransactionCategory extends DataClass
           DateTime? dateCreated,
           int? order,
           bool? income,
-          String? sharedKey}) =>
+          String? sharedKey,
+          CategoryOwnerMember? sharedOwnerMember,
+          DateTime? sharedDateUpdated}) =>
       TransactionCategory(
         categoryPk: categoryPk ?? this.categoryPk,
         name: name ?? this.name,
@@ -465,6 +497,8 @@ class TransactionCategory extends DataClass
         order: order ?? this.order,
         income: income ?? this.income,
         sharedKey: sharedKey ?? this.sharedKey,
+        sharedOwnerMember: sharedOwnerMember ?? this.sharedOwnerMember,
+        sharedDateUpdated: sharedDateUpdated ?? this.sharedDateUpdated,
       );
   @override
   String toString() {
@@ -476,14 +510,25 @@ class TransactionCategory extends DataClass
           ..write('dateCreated: $dateCreated, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
-          ..write('sharedKey: $sharedKey')
+          ..write('sharedKey: $sharedKey, ')
+          ..write('sharedOwnerMember: $sharedOwnerMember, ')
+          ..write('sharedDateUpdated: $sharedDateUpdated')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(categoryPk, name, colour, iconName,
-      dateCreated, order, income, sharedKey);
+  int get hashCode => Object.hash(
+      categoryPk,
+      name,
+      colour,
+      iconName,
+      dateCreated,
+      order,
+      income,
+      sharedKey,
+      sharedOwnerMember,
+      sharedDateUpdated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -495,7 +540,9 @@ class TransactionCategory extends DataClass
           other.dateCreated == this.dateCreated &&
           other.order == this.order &&
           other.income == this.income &&
-          other.sharedKey == this.sharedKey);
+          other.sharedKey == this.sharedKey &&
+          other.sharedOwnerMember == this.sharedOwnerMember &&
+          other.sharedDateUpdated == this.sharedDateUpdated);
 }
 
 class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
@@ -507,6 +554,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<int> order;
   final Value<bool> income;
   final Value<String?> sharedKey;
+  final Value<CategoryOwnerMember?> sharedOwnerMember;
+  final Value<DateTime?> sharedDateUpdated;
   const CategoriesCompanion({
     this.categoryPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -516,6 +565,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.order = const Value.absent(),
     this.income = const Value.absent(),
     this.sharedKey = const Value.absent(),
+    this.sharedOwnerMember = const Value.absent(),
+    this.sharedDateUpdated = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.categoryPk = const Value.absent(),
@@ -526,6 +577,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     required int order,
     this.income = const Value.absent(),
     this.sharedKey = const Value.absent(),
+    this.sharedOwnerMember = const Value.absent(),
+    this.sharedDateUpdated = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionCategory> custom({
@@ -537,6 +590,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<int>? order,
     Expression<bool>? income,
     Expression<String?>? sharedKey,
+    Expression<CategoryOwnerMember?>? sharedOwnerMember,
+    Expression<DateTime?>? sharedDateUpdated,
   }) {
     return RawValuesInsertable({
       if (categoryPk != null) 'category_pk': categoryPk,
@@ -547,6 +602,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (order != null) 'order': order,
       if (income != null) 'income': income,
       if (sharedKey != null) 'shared_key': sharedKey,
+      if (sharedOwnerMember != null) 'shared_owner_member': sharedOwnerMember,
+      if (sharedDateUpdated != null) 'shared_date_updated': sharedDateUpdated,
     });
   }
 
@@ -558,7 +615,9 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<DateTime>? dateCreated,
       Value<int>? order,
       Value<bool>? income,
-      Value<String?>? sharedKey}) {
+      Value<String?>? sharedKey,
+      Value<CategoryOwnerMember?>? sharedOwnerMember,
+      Value<DateTime?>? sharedDateUpdated}) {
     return CategoriesCompanion(
       categoryPk: categoryPk ?? this.categoryPk,
       name: name ?? this.name,
@@ -568,6 +627,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       order: order ?? this.order,
       income: income ?? this.income,
       sharedKey: sharedKey ?? this.sharedKey,
+      sharedOwnerMember: sharedOwnerMember ?? this.sharedOwnerMember,
+      sharedDateUpdated: sharedDateUpdated ?? this.sharedDateUpdated,
     );
   }
 
@@ -598,6 +659,14 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     if (sharedKey.present) {
       map['shared_key'] = Variable<String?>(sharedKey.value);
     }
+    if (sharedOwnerMember.present) {
+      final converter = $CategoriesTable.$converter0;
+      map['shared_owner_member'] =
+          Variable<int?>(converter.mapToSql(sharedOwnerMember.value));
+    }
+    if (sharedDateUpdated.present) {
+      map['shared_date_updated'] = Variable<DateTime?>(sharedDateUpdated.value);
+    }
     return map;
   }
 
@@ -611,7 +680,9 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('dateCreated: $dateCreated, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
-          ..write('sharedKey: $sharedKey')
+          ..write('sharedKey: $sharedKey, ')
+          ..write('sharedOwnerMember: $sharedOwnerMember, ')
+          ..write('sharedDateUpdated: $sharedDateUpdated')
           ..write(')'))
         .toString();
   }
@@ -675,6 +746,20 @@ class $CategoriesTable extends Categories
   late final GeneratedColumn<String?> sharedKey = GeneratedColumn<String?>(
       'shared_key', aliasedName, true,
       type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _sharedOwnerMemberMeta =
+      const VerificationMeta('sharedOwnerMember');
+  @override
+  late final GeneratedColumnWithTypeConverter<CategoryOwnerMember?, int?>
+      sharedOwnerMember = GeneratedColumn<int?>(
+              'shared_owner_member', aliasedName, true,
+              type: const IntType(), requiredDuringInsert: false)
+          .withConverter<CategoryOwnerMember?>($CategoriesTable.$converter0);
+  final VerificationMeta _sharedDateUpdatedMeta =
+      const VerificationMeta('sharedDateUpdated');
+  @override
+  late final GeneratedColumn<DateTime?> sharedDateUpdated =
+      GeneratedColumn<DateTime?>('shared_date_updated', aliasedName, true,
+          type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         categoryPk,
@@ -684,7 +769,9 @@ class $CategoriesTable extends Categories
         dateCreated,
         order,
         income,
-        sharedKey
+        sharedKey,
+        sharedOwnerMember,
+        sharedDateUpdated
       ];
   @override
   String get aliasedName => _alias ?? 'categories';
@@ -736,6 +823,13 @@ class $CategoriesTable extends Categories
       context.handle(_sharedKeyMeta,
           sharedKey.isAcceptableOrUnknown(data['shared_key']!, _sharedKeyMeta));
     }
+    context.handle(_sharedOwnerMemberMeta, const VerificationResult.success());
+    if (data.containsKey('shared_date_updated')) {
+      context.handle(
+          _sharedDateUpdatedMeta,
+          sharedDateUpdated.isAcceptableOrUnknown(
+              data['shared_date_updated']!, _sharedDateUpdatedMeta));
+    }
     return context;
   }
 
@@ -751,6 +845,9 @@ class $CategoriesTable extends Categories
   $CategoriesTable createAlias(String alias) {
     return $CategoriesTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<CategoryOwnerMember?, int> $converter0 =
+      const EnumIndexConverter<CategoryOwnerMember>(CategoryOwnerMember.values);
 }
 
 class Transaction extends DataClass implements Insertable<Transaction> {

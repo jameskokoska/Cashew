@@ -51,17 +51,21 @@ firebase deploy
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: "AIzaSyBGiaRl72d4k3Ki0dh8ra-gU4v2z04CgIw",
-      authDomain: "budget-app-flutter.firebaseapp.com",
-      projectId: "budget-app-flutter",
-      storageBucket: "budget-app-flutter.appspot.com",
-      messagingSenderId: "267621253497",
-      appId: "1:267621253497:web:12558fe9abebf7fa842fa8",
-    ),
-  );
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: "AIzaSyBGiaRl72d4k3Ki0dh8ra-gU4v2z04CgIw",
+        authDomain: "budget-app-flutter.firebaseapp.com",
+        projectId: "budget-app-flutter",
+        storageBucket: "budget-app-flutter.appspot.com",
+        messagingSenderId: "267621253497",
+        appId: "1:267621253497:web:12558fe9abebf7fa842fa8",
+      ),
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
+  database = await constructDb();
   notificationPayload = await initializeNotifications();
   entireAppLoaded = false;
 
@@ -193,8 +197,6 @@ Future<bool> initializeSettings() async {
 
 //Initialize default values in database
 Future<bool> initializeDatabase() async {
-  database = await constructDb();
-
   //Initialize default categories
   if ((await database.getAllCategories()).length <= 0) {
     for (TransactionCategory category in defaultCategories()) {

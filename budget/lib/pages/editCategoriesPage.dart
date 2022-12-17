@@ -28,6 +28,173 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 
+Future<bool> shareCategory(
+    TransactionCategory? categoryToShare, context) async {
+  if (categoryToShare == null) {
+    return false;
+  }
+  print("ONE TO SHARE");
+  print(categoryToShare.categoryPk);
+  // Share category information
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  print(FirebaseAuth.instance.currentUser);
+  Map<String, dynamic> categoryEntry = {
+    "dateShared": DateTime.now(),
+    "colour": categoryToShare.colour,
+    "iconName": categoryToShare.iconName,
+    "name": categoryToShare.name,
+    "members": [
+      // FirebaseAuth.instance.currentUser!.email
+    ],
+    "income": categoryToShare.income,
+    "owner": FirebaseAuth.instance.currentUser!.uid,
+    "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+  };
+  DocumentReference categoryCreatedOnCloud =
+      await db!.collection("categories").add(categoryEntry);
+
+  // Share all transactions from this category
+  List<Transaction> transactionsFromCategory =
+      await database.getAllTransactionsFromCategory(categoryToShare.categoryPk);
+  CollectionReference transactionSubCollection =
+      categoryCreatedOnCloud.collection("transactions");
+  WriteBatch batch = db.batch();
+  for (Transaction transactionFromCategory in transactionsFromCategory) {
+    batch.set(transactionSubCollection.doc(), {
+      "logType": "create", // create, delete, update
+      "name": transactionFromCategory.name,
+      "amount": transactionFromCategory.amount,
+      "note": transactionFromCategory.note,
+      "dateCreated": transactionFromCategory.dateCreated,
+      "dateUpdated": DateTime.now(),
+      "income": transactionFromCategory.income,
+      "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+      "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
+    });
+  }
+  batch.commit();
+
+  await database.createOrUpdateCategory(
+      categoryToShare.copyWith(sharedKey: categoryCreatedOnCloud.id));
+
+  openSnackbar(SnackbarMessage(title: "Shared Category"));
+  // CollectionReference subCollectionRef = categoryCreatedOnCloud.collection("transactions");
+
+  // subCollectionRef.add({
+  //   "logType": "create", // create, delete, update
+  //   "name": "",
+  //   "amount": 15.65,
+  //   "note": "This is a note of a transaction",
+  //   "dateCreated": DateTime.now(),
+  //   "dateUpdated": DateTime.now(),
+  //   "income": false,
+  //   "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+  //   "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
+  // });
+
+  // categoryCreatedOnCloud.update({
+  //   "members": FieldValue.arrayUnion(["hello@hello.com"])
+  // });
+  return true;
+}
+
+Future<bool> getCloudCategories() async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+
+  final Query categoryMembersOf = db!.collection('categories').where('members',
+      arrayContains: FirebaseAuth.instance.currentUser!.email);
+  final QuerySnapshot snapshotCategoryMembersOf = await categoryMembersOf.get();
+  for (DocumentSnapshot category in snapshotCategoryMembersOf.docs) {
+    Map<dynamic, dynamic> categoryDecoded = category.data() as Map;
+    await database.createOrUpdateSharedCategory(
+      TransactionCategory(
+        categoryPk: DateTime.now().millisecondsSinceEpoch,
+        name: categoryDecoded["name"],
+        dateCreated: DateTime.now(),
+        order: 0,
+        income: categoryDecoded["income"],
+        sharedKey: category.id,
+        iconName: categoryDecoded["iconName"],
+        colour: categoryDecoded["colour"],
+        sharedOwnerMember: CategoryOwnerMember.member,
+      ),
+    );
+
+    // Get transactions from the server
+    TransactionCategory sharedCategory =
+        await database.getSharedCategory(category.id);
+    Query transactionsFromServer;
+    if (sharedCategory.sharedDateUpdated == null) {
+      transactionsFromServer = db
+          .collection('categories')
+          .doc(category.id)
+          .collection('transactions');
+    } else {
+      transactionsFromServer = db
+          .collection('categories')
+          .doc(category.id)
+          .collection('transactions')
+          .where(FieldPath.fromString("dateUpdated"),
+              isGreaterThan: sharedCategory.sharedDateUpdated);
+    }
+    final QuerySnapshot snapshotTransactionsFromServer =
+        await transactionsFromServer.get();
+    for (DocumentSnapshot transaction in snapshotTransactionsFromServer.docs) {
+      Map<dynamic, dynamic> transactionDecoded = transaction.data() as Map;
+      if (transaction["type"] == "create" || transaction["type"] == "update") {
+        await database.createOrUpdateSharedTransaction(
+          Transaction(
+            transactionPk: DateTime.now().millisecondsSinceEpoch,
+            name: transactionDecoded["name"],
+            amount: transactionDecoded["amount"],
+            note: transactionDecoded["note"],
+            categoryFk: sharedCategory.categoryPk,
+            // TODO should be sharedCategory.walletFk
+            walletFk: 0,
+            dateCreated: transactionDecoded["dateCreated"],
+            income: transactionDecoded["income"],
+            paid: true,
+            skipPaid: false,
+            sharedKey: transaction.id,
+            transactionOwnerEmail: transactionDecoded["ownerEmail"],
+          ),
+        );
+      } else if (transaction["type"] == "delete") {
+        await database.deleteSharedTransaction(transaction.id);
+      }
+
+      print(transaction.id);
+      print(transaction.data().toString());
+    }
+    await database.createOrUpdateSharedCategory(
+        sharedCategory.copyWith(sharedDateUpdated: DateTime.now()));
+    print("YOU ARE A MEMBER OF THIS CATEGORY " + category.data().toString());
+  }
+
+  final Query categoryOwned = db
+      .collection('categories')
+      .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+  final QuerySnapshot snapshotOwned = await categoryOwned.get();
+  for (DocumentSnapshot category in snapshotOwned.docs) {
+    Map<dynamic, dynamic> categoryDecoded = category.data() as Map;
+    database.createOrUpdateSharedCategory(
+      TransactionCategory(
+        categoryPk: DateTime.now().millisecondsSinceEpoch,
+        name: categoryDecoded["name"],
+        dateCreated: DateTime.now(),
+        order: 0,
+        income: categoryDecoded["income"],
+        sharedKey: category.id,
+        iconName: categoryDecoded["iconName"],
+        colour: categoryDecoded["colour"],
+        sharedOwnerMember: CategoryOwnerMember.owner,
+      ),
+    );
+    print("YOU OWN THIS CATEGORY " + category.data().toString());
+  }
+  return true;
+}
+
 class EditCategoriesPage extends StatefulWidget {
   EditCategoriesPage({
     Key? key,
@@ -68,91 +235,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                 padding: EdgeInsets.only(top: 12.5, right: 5),
                 child: IconButton(
                   onPressed: () async {
-                    FirebaseFirestore? db = await firebaseGetDBInstance();
-                    print(FirebaseAuth.instance.currentUser);
-                    Map<String, dynamic> categoryEntry = {
-                      "dateShared": DateTime.now(),
-                      "colour": toHexString(Colors.red),
-                      "icon": "icon.png",
-                      "name": "Food",
-                      "members": [
-                        // FirebaseAuth.instance.currentUser!.email
-                      ],
-                      "income": false,
-                      "owner": FirebaseAuth.instance.currentUser!.uid,
-                      "ownerEmail": FirebaseAuth.instance.currentUser!.email,
-                    };
-                    DocumentReference category =
-                        await db!.collection("categories").add(categoryEntry);
-
-                    CollectionReference subCollectionRef =
-                        category.collection("transactions");
-
-                    subCollectionRef.add({
-                      "logType": "create", // create, delete, update
-                      "name": "",
-                      "amount": 15.65,
-                      "note": "This is a note of a transaction",
-                      "dateCreated": DateTime.now(),
-                      "dateUpdated": DateTime.now(),
-                      "income": false,
-                      "ownerEmail": FirebaseAuth.instance.currentUser!.email,
-                      "originalCreatorEmail":
-                          FirebaseAuth.instance.currentUser!.email,
-                    });
-
-                    category.update({
-                      "members": FieldValue.arrayUnion(["hello@hello.com"])
-                    });
-                  },
-                  icon: Icon(Icons.share_rounded),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 12.5, right: 5),
-                child: IconButton(
-                  onPressed: () async {
-                    FirebaseFirestore? db = await firebaseGetDBInstance();
-
-                    print(await FirebaseAuth.instance.currentUser!.uid);
-                    final Query categoryMembersOf = db!
-                        .collection('categories')
-                        .where('members',
-                            arrayContains:
-                                FirebaseAuth.instance.currentUser!.email);
-                    final QuerySnapshot snapshot =
-                        await categoryMembersOf.get();
-                    for (DocumentSnapshot category in snapshot.docs) {
-                      print("YOU ARE A MEMBER OF THIS CATEGORY " +
-                          category.data().toString());
-                    }
-
-                    print(FirebaseAuth.instance.currentUser!.uid);
-                    final Query categoryOwned = db
-                        .collection('categories')
-                        .where('owner',
-                            isEqualTo: FirebaseAuth.instance.currentUser!.uid);
-                    final QuerySnapshot snapshotOwned =
-                        await categoryOwned.get();
-                    for (DocumentSnapshot category in snapshotOwned.docs) {
-                      print("YOU OWN THIS CATEGORY " +
-                          category.data().toString());
-
-                      // get transactions before certain time
-                      final Query transactionsBefore = db
-                          .collection('categories')
-                          .doc(category.id)
-                          .collection('transactions')
-                          .where(FieldPath.fromString("dateUpdated"),
-                              isGreaterThan:
-                                  DateTime.now().subtract(Duration(days: 1)));
-                      final QuerySnapshot snapshot2 =
-                          await transactionsBefore.get();
-                      for (DocumentSnapshot transaction in snapshot2.docs) {
-                        print(transaction.id);
-                        print(transaction.data().toString());
-                      }
-                    }
+                    getCloudCategories();
                   },
                   icon: Icon(Icons.dock),
                 ),

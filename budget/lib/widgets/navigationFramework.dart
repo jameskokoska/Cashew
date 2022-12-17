@@ -22,6 +22,7 @@ import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/foundation.dart';
@@ -95,6 +96,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);
       await createBackupInBackground(context);
+      await getCloudCategories();
       entireAppLoaded = true;
     });
 

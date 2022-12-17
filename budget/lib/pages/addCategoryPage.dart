@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -210,6 +211,24 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     discardChangesPopup(context);
                   }
                 },
+                actions: [
+                  widget.category != null && widget.category!.sharedKey == null
+                      ? IconButton(
+                          onPressed: () async {
+                            openLoadingPopup(context);
+                            await shareCategory(widget.category, context);
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.share_rounded),
+                        )
+                      : SizedBox.shrink(),
+                  widget.category != null && widget.category!.sharedKey != null
+                      ? IconButton(
+                          onPressed: () async {},
+                          icon: Icon(Icons.people_rounded),
+                        )
+                      : SizedBox.shrink()
+                ],
                 listWidgets: [
                   Row(
                     mainAxisSize: MainAxisSize.max,
