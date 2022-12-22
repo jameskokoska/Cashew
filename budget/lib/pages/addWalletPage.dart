@@ -50,6 +50,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Color? selectedColor;
   String? selectedIconName;
   List<dynamic> currencies = [];
+  bool customCurrencyIcon = false;
   String? searchCurrency = "";
   dynamic selectedCurrency = "";
 
@@ -174,6 +175,32 @@ class _AddWalletPageState extends State<AddWalletPage> {
         this.setState(() {
           canAddWallet = false;
         });
+    }
+  }
+
+  void searchCurrencies(String searchTerm) async {
+    if (searchTerm == "") {
+      populateCurrencies();
+    } else {
+      String response =
+          await rootBundle.loadString('assets/static/currencies.json');
+      List<dynamic> outCurrencies = [];
+      for (dynamic currency in jsonDecode(response)) {
+        if ((currency["CountryName"] != null &&
+                currency["CountryName"]
+                    .toLowerCase()
+                    .contains(searchTerm.toLowerCase())) ||
+            (currency["Currency"] != null &&
+                currency["Currency"]
+                    .toLowerCase()
+                    .contains(searchTerm.toLowerCase()))) {
+          outCurrencies.add(currency);
+        }
+      }
+      print(outCurrencies);
+      setState(() {
+        currencies = outCurrencies;
+      });
     }
   }
 
@@ -306,10 +333,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     ),
                   ),
                   SliverToBoxAdapter(
-                    child: currencies.length != 0
+                    child: customCurrencyIcon == true
                         ? TextInput(
                             labelText: "Search currencies...",
                             icon: Icons.search_rounded,
+                            onChanged: (text) {
+                              searchCurrencies(text);
+                            },
                           )
                         : CustomIconButton(
                             onTap: () {},

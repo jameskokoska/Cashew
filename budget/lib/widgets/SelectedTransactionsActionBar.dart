@@ -348,7 +348,9 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
           children: [
             Button(
               label: "Cancel",
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
             SizedBox(width: 20),
             selectedAmount == null && selectedCategory == null

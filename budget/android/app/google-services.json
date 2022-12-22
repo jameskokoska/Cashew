@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "267621253497-8bql8glub2qobkqe55lioha1c4lggrug.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.budget.tracker_app",
+            "certificate_hash": "6139edafe5c4cdb6dccd5f01222b9db88a1620f9"
+          }
+        },
+        {
+          "client_id": "267621253497-qr0vit1n0l5f2k5h0qnumkrgm6td1fsu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.budget.tracker_app",
+            "certificate_hash": "1066b81467dc8c595807e67062163d24efe8c3b5"
+          }
+        },
+        {
           "client_id": "267621253497-1na8q1lt56qg9177dskkrkdds5jjiqrn.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -42,6 +58,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "267621253497-0h976snjlf34gs8m75bh8nik8gcvr2mk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.budget",
+            "certificate_hash": "1066b81467dc8c595807e67062163d24efe8c3b5"
+          }
+        },
+        {
+          "client_id": "267621253497-2k1kc8gugcq0f85d43niak9ru05o6fi7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.budget",
+            "certificate_hash": "6139edafe5c4cdb6dccd5f01222b9db88a1620f9"
+          }
+        },
         {
           "client_id": "267621253497-1na8q1lt56qg9177dskkrkdds5jjiqrn.apps.googleusercontent.com",
           "client_type": 3

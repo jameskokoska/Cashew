@@ -91,7 +91,7 @@ class _BudgetPageState extends State<BudgetPage> {
                         },
                         icon: Icon(Icons.history_rounded),
                       ),
-                    )
+                    ),
             ],
             title: widget.budget.name,
             appBarBackgroundColor: budgetColorScheme.secondaryContainer,

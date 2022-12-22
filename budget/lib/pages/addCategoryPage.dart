@@ -131,6 +131,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           : await database.getAmountOfCategories(),
       colour: toHexString(selectedColor),
       iconName: selectedImage,
+      sharedKey: widget.category != null ? widget.category!.sharedKey : null,
+      sharedOwnerMember:
+          widget.category != null ? widget.category!.sharedOwnerMember : null,
+      sharedDateUpdated:
+          widget.category != null ? widget.category!.sharedDateUpdated : null,
     );
   }
 

@@ -210,7 +210,6 @@ Future<bool> initializeDatabase() async {
         name: "Wallet",
         dateCreated: DateTime.now(),
         order: 0,
-        colour: toHexString(Colors.green),
       ),
     );
   }

@@ -160,7 +160,7 @@ Future<bool> signInGoogle(
               waitForCompletion: true,
               drivePermissions: true,
               next: () {});
-          if (appStateSettings["username"] == "") {
+          if (appStateSettings["username"] == "" && user != null) {
             updateSettings("username", user!.displayName,
                 pagesNeedingRefresh: [0]);
           }
@@ -739,7 +739,7 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
                           ),
                         );
                       });
-                  if (appStateSettings["username"] == "") {
+                  if (appStateSettings["username"] == "" && user != null) {
                     updateSettings("username", user!.displayName,
                         pagesNeedingRefresh: [0]);
                   }

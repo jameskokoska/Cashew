@@ -101,10 +101,34 @@ Future<bool> shareCategory(
 Future<bool> getCloudCategories() async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
 
+  // aggregate categories users are members of and owners of together
   final Query categoryMembersOf = db!.collection('categories').where('members',
       arrayContains: FirebaseAuth.instance.currentUser!.email);
   final QuerySnapshot snapshotCategoryMembersOf = await categoryMembersOf.get();
+  List<DocumentSnapshot> snapshotsMembers = [];
   for (DocumentSnapshot category in snapshotCategoryMembersOf.docs) {
+    snapshotsMembers.add(category);
+    print("YOU ARE A MEMBER OF THIS CATEGORY " + category.data().toString());
+  }
+  downloadTransactionsFromCategories(db, snapshotsMembers);
+
+  final Query categoryOwned = db
+      .collection('categories')
+      .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+  final QuerySnapshot snapshotOwned = await categoryOwned.get();
+  List<DocumentSnapshot> snapshotsOwners = [];
+  for (DocumentSnapshot category in snapshotOwned.docs) {
+    snapshotsOwners.add(category);
+    print("YOU OWN THIS CATEGORY " + category.data().toString());
+  }
+  downloadTransactionsFromCategories(db, snapshotsOwners);
+
+  return true;
+}
+
+Future<bool> downloadTransactionsFromCategories(
+    FirebaseFirestore db, List<DocumentSnapshot> snapshots) async {
+  for (DocumentSnapshot category in snapshots) {
     Map<dynamic, dynamic> categoryDecoded = category.data() as Map;
     await database.createOrUpdateSharedCategory(
       TransactionCategory(
@@ -141,7 +165,8 @@ Future<bool> getCloudCategories() async {
         await transactionsFromServer.get();
     for (DocumentSnapshot transaction in snapshotTransactionsFromServer.docs) {
       Map<dynamic, dynamic> transactionDecoded = transaction.data() as Map;
-      if (transaction["type"] == "create" || transaction["type"] == "update") {
+      if (transaction["logType"] == "create" ||
+          transaction["logType"] == "update") {
         await database.createOrUpdateSharedTransaction(
           Transaction(
             transactionPk: DateTime.now().millisecondsSinceEpoch,
@@ -168,30 +193,10 @@ Future<bool> getCloudCategories() async {
     }
     await database.createOrUpdateSharedCategory(
         sharedCategory.copyWith(sharedDateUpdated: DateTime.now()));
-    print("YOU ARE A MEMBER OF THIS CATEGORY " + category.data().toString());
+
+    print("DOWNLOADED FROM THIS CATEGORY " + category.data().toString());
   }
 
-  final Query categoryOwned = db
-      .collection('categories')
-      .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
-  final QuerySnapshot snapshotOwned = await categoryOwned.get();
-  for (DocumentSnapshot category in snapshotOwned.docs) {
-    Map<dynamic, dynamic> categoryDecoded = category.data() as Map;
-    database.createOrUpdateSharedCategory(
-      TransactionCategory(
-        categoryPk: DateTime.now().millisecondsSinceEpoch,
-        name: categoryDecoded["name"],
-        dateCreated: DateTime.now(),
-        order: 0,
-        income: categoryDecoded["income"],
-        sharedKey: category.id,
-        iconName: categoryDecoded["iconName"],
-        colour: categoryDecoded["colour"],
-        sharedOwnerMember: CategoryOwnerMember.owner,
-      ),
-    );
-    print("YOU OWN THIS CATEGORY " + category.data().toString());
-  }
   return true;
 }
 
