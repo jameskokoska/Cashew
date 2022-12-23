@@ -22,6 +22,7 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:drift/drift.dart' hide Query, Column;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:budget/widgets/editRowEntry.dart';
@@ -81,8 +82,8 @@ Future<bool> shareCategory(
     });
     await database.createOrUpdateTransaction(
       transactionFromCategory.copyWith(
-        sharedKey: transactionSubCollectionDoc.id,
-        transactionOwnerEmail: FirebaseAuth.instance.currentUser!.email,
+        sharedKey: Value(transactionSubCollectionDoc.id),
+        transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
       ),
       updateSharedEntry: false,
     );
@@ -94,7 +95,7 @@ Future<bool> shareCategory(
   batch.commit();
 
   await database.createOrUpdateCategory(
-      categoryToShare.copyWith(sharedKey: categoryCreatedOnCloud.id));
+      categoryToShare.copyWith(sharedKey: Value(categoryCreatedOnCloud.id)));
 
   openSnackbar(SnackbarMessage(title: "Shared Category"));
   loadingProgressKey.currentState!.setProgressPercentage(0);
@@ -105,20 +106,41 @@ Future<bool> shareCategory(
   return true;
 }
 
+class Wrapped<T> {
+  final T value;
+  const Wrapped.value(this.value);
+}
+
 Future<bool> removedSharedFromCategory(
     TransactionCategory? sharedCategory) async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
-  DocumentReference collectionRef =
-      db!.collection('categories').doc(sharedCategory!.sharedKey);
-  await collectionRef.delete();
+  // DocumentReference collectionRef =
+  //     db!.collection('categories').doc(sharedCategory!.sharedKey);
+  print(sharedCategory!.sharedKey);
+  // await collectionRef.delete();
   List<Transaction> transactionsFromCategory =
       await database.getAllTransactionsFromCategory(sharedCategory.categoryPk);
   for (Transaction transactionFromCategory in transactionsFromCategory) {
     await database.createOrUpdateTransaction(
-        transactionFromCategory.copyWith(sharedKey: null));
+      transactionFromCategory.copyWith(sharedKey: Value(null)),
+      updateSharedEntry: false,
+    );
   }
-  await database.createOrUpdateCategory(sharedCategory.copyWith(
-      sharedDateUpdated: null, sharedKey: null, sharedOwnerMember: null));
+  print(
+    sharedCategory.copyWith(
+      sharedDateUpdated: Value(null),
+      sharedKey: Value(null),
+      sharedOwnerMember: Value(null),
+    ),
+  );
+  await database.createOrUpdateCategory(
+    sharedCategory.copyWith(
+      sharedDateUpdated: Value(null),
+      sharedKey: Value(null),
+      sharedOwnerMember: Value(null),
+    ),
+    updateSharedEntry: false,
+  );
   return true;
 }
 
@@ -126,7 +148,7 @@ Future<bool> getCloudCategories() async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
 
   // aggregate categories users are members of and owners of together
-  final Query categoryMembersOf = db!.collection('categories').where('members',
+  final categoryMembersOf = db!.collection('categories').where('members',
       arrayContains: FirebaseAuth.instance.currentUser!.email);
   final QuerySnapshot snapshotCategoryMembersOf = await categoryMembersOf.get();
   List<DocumentSnapshot> snapshotsMembers = [];
@@ -217,7 +239,7 @@ Future<bool> downloadTransactionsFromCategories(
       print(transaction.data().toString());
     }
     await database.createOrUpdateFromSharedCategory(
-        sharedCategory.copyWith(sharedDateUpdated: DateTime.now()));
+        sharedCategory.copyWith(sharedDateUpdated: Value(DateTime.now())));
 
     print("DOWNLOADED FROM THIS CATEGORY " + category.data().toString());
   }

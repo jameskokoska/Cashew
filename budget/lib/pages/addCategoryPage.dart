@@ -229,7 +229,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       : SizedBox.shrink(),
                   widget.category != null && widget.category!.sharedKey != null
                       ? IconButton(
-                          onPressed: () async {},
+                          onPressed: () async {
+                            await removedSharedFromCategory(widget.category);
+                          },
                           icon: Icon(Icons.people_rounded),
                         )
                       : SizedBox.shrink()

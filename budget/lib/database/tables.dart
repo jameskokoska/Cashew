@@ -13,7 +13,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 16;
+int schemaVersionGlobal = 17;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -49,14 +49,12 @@ enum MethodAdded { email, shared }
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
   @override
-  List<int>? mapToDart(String? string_from_db) {
-    if (string_from_db == null) return null;
+  List<int> fromSql(String string_from_db) {
     return new List<int>.from(json.decode(string_from_db));
   }
 
   @override
-  String? mapToSql(List<int>? ints) {
-    if (ints == null) return null;
+  String toSql(List<int> ints) {
     return json.encode(ints);
   }
 }
@@ -64,14 +62,12 @@ class IntListInColumnConverter extends TypeConverter<List<int>, String> {
 class StringListInColumnConverter extends TypeConverter<List<String>, String> {
   const StringListInColumnConverter();
   @override
-  List<String>? mapToDart(String? string_from_db) {
-    if (string_from_db == null) return null;
+  List<String> fromSql(String string_from_db) {
     return new List<String>.from(json.decode(string_from_db));
   }
 
   @override
-  String? mapToSql(List<String>? strings) {
-    if (strings == null) return null;
+  String toSql(List<String> strings) {
     return json.encode(strings);
   }
 }
@@ -79,14 +75,12 @@ class StringListInColumnConverter extends TypeConverter<List<String>, String> {
 class DoubleListInColumnConverter extends TypeConverter<List<double>, String> {
   const DoubleListInColumnConverter();
   @override
-  List<double>? mapToDart(String? string_from_db) {
-    if (string_from_db == null) return null;
+  List<double> fromSql(String string_from_db) {
     return new List<double>.from(json.decode(string_from_db));
   }
 
   @override
-  String? mapToSql(List<double>? doubles) {
-    if (doubles == null) return null;
+  String toSql(List<double> doubles) {
     return json.encode(doubles);
   }
 }
@@ -1133,7 +1127,13 @@ class FinanceDatabase extends _$FinanceDatabase {
         "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
       });
 
-      transaction = transaction.copyWith(sharedKey: updatedDocument.id);
+      transaction = transaction.copyWith(sharedKey: Value(updatedDocument.id));
+    }
+
+    // We need to ensure the value is set back to null, so insert/replace
+    if (transaction.sharedKey == null) {
+      return into(transactions)
+          .insert(transaction, mode: InsertMode.insertOrReplace);
     }
 
     return into(transactions).insertOnConflictUpdate(transaction);
@@ -1142,12 +1142,6 @@ class FinanceDatabase extends _$FinanceDatabase {
   // create or update a category
   Future<int> createOrUpdateCategory(TransactionCategory category,
       {bool updateSharedEntry = true}) async {
-    // We need to ensure the value is set back to null, so insert/replace
-    if (category.colour == null) {
-      return into(categories)
-          .insert(category, mode: InsertMode.insertOrReplace);
-    }
-
     // update category details on server
     if (updateSharedEntry == true && category.sharedKey != null) {
       FirebaseFirestore? db = await firebaseGetDBInstance();
@@ -1167,6 +1161,14 @@ class FinanceDatabase extends _$FinanceDatabase {
       );
     }
 
+    // We need to ensure the value is set back to null, so insert/replace
+    if (category.colour == null ||
+        category.sharedDateUpdated == null ||
+        category.sharedKey == null ||
+        category.sharedOwnerMember == null) {
+      return into(categories)
+          .insert(category, mode: InsertMode.insertOrReplace);
+    }
     return into(categories).insertOnConflictUpdate(category);
   }
 
@@ -1178,7 +1180,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       try {
         // entry exists, update it
         sharedCategory = await (select(categories)
-              ..where((t) => t.sharedKey.equals(category.sharedKey)))
+              ..where((t) => t.sharedKey.equals(category.sharedKey ?? "")))
             .getSingle();
         sharedCategory =
             category.copyWith(categoryPk: sharedCategory.categoryPk);
@@ -1217,7 +1219,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       try {
         // entry exists, update it
         sharedTransaction = await (select(transactions)
-              ..where((t) => t.sharedKey.equals(transaction.sharedKey)))
+              ..where((t) => t.sharedKey.equals(transaction.sharedKey ?? "")))
             .getSingle();
         sharedTransaction = transaction.copyWith(
             transactionPk: sharedTransaction.transactionPk);
@@ -1536,13 +1538,13 @@ class FinanceDatabase extends _$FinanceDatabase {
             ..groupBy([categories.categoryPk])
             ..orderBy([OrderingTerm.asc(totalAmt)]))
           .map((row) {
-        final category = row.readTable(categories);
-        final total = row.read(totalAmt);
-        final transactionCount = row.read(totalCount);
+        final TransactionCategory category = row.readTable(categories);
+        final double? total = row.read(totalAmt);
+        final int? transactionCount = row.read(totalCount);
         return CategoryWithTotal(
             category: category,
             total: total ?? 0,
-            transactionCount: transactionCount);
+            transactionCount: transactionCount ?? -1);
       }).watch();
     } else {
       final query = (select(transactions)
@@ -1569,7 +1571,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         return CategoryWithTotal(
             category: category,
             total: total ?? 0,
-            transactionCount: transactionCount);
+            transactionCount: transactionCount ?? -1);
       }).watch();
     }
   }

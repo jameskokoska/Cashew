@@ -13,7 +13,11 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
     try {
       await FirebaseAuth.instance.signInWithCredential(_credential!);
       updateSettings(
-          "currentUserEmail", FirebaseAuth.instance.currentUser!.email);
+        "currentUserEmail",
+        FirebaseAuth.instance.currentUser!.email,
+        pagesNeedingRefresh: [],
+        updateGlobalState: false,
+      );
       return FirebaseFirestore.instance;
     } catch (e) {
       print("There was an error with firebase login");

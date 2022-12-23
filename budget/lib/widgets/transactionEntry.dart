@@ -15,6 +15,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
@@ -67,7 +68,7 @@ class TransactionEntry extends StatelessWidget {
           paid: false,
           transactionPk: DateTime.now().millisecond,
           dateCreated: newDate,
-          createdAnotherFutureTransaction: false,
+          createdAnotherFutureTransaction: Value(false),
         );
         await database.createOrUpdateTransaction(newTransaction);
 
@@ -411,7 +412,7 @@ class TransactionEntry extends StatelessWidget {
                                                         DateTime.now().month,
                                                         DateTime.now().day),
                                                     createdAnotherFutureTransaction:
-                                                        true);
+                                                        Value(true));
                                             await database
                                                 .createOrUpdateTransaction(
                                                     transactionNew);
@@ -432,7 +433,7 @@ class TransactionEntry extends StatelessWidget {
                                                         DateTime.now().month,
                                                         DateTime.now().day),
                                                     createdAnotherFutureTransaction:
-                                                        true);
+                                                        Value(true));
                                             await database
                                                 .createOrUpdateTransaction(
                                                     transactionNew);

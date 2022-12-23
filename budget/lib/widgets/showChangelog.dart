@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Upgraded to Drift Database 1.3.0 -> 2.3.0
     Added Firebase login for web
     Fixed pie chart duplicate key removing pie chart when on past budget page
     Fixed rounded corner when percentage is small of progress bar in budget container
