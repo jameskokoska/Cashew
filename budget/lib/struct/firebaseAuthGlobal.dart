@@ -1,3 +1,4 @@
+import 'package:budget/main.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,7 +12,8 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
   if (_credential != null) {
     try {
       await FirebaseAuth.instance.signInWithCredential(_credential!);
-
+      updateSettings(
+          "currentUserEmail", FirebaseAuth.instance.currentUser!.email);
       return FirebaseFirestore.instance;
     } catch (e) {
       print("There was an error with firebase login");
@@ -33,7 +35,8 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
       );
 
       await FirebaseAuth.instance.signInWithCredential(_credential!);
-
+      updateSettings(
+          "currentUserEmail", FirebaseAuth.instance.currentUser!.email);
       return FirebaseFirestore.instance;
     } catch (e) {
       print("There was an error with firebase login");

@@ -12,7 +12,9 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -59,9 +61,15 @@ Future<bool> shareCategory(
   CollectionReference transactionSubCollection =
       categoryCreatedOnCloud.collection("transactions");
   WriteBatch batch = db.batch();
+  loadingProgressKey.currentState!.setProgressPercentage(0);
+  int totalLength = transactionsFromCategory.length;
+  int currentIndex = 0;
   for (Transaction transactionFromCategory in transactionsFromCategory) {
-    batch.set(transactionSubCollection.doc(), {
+    DocumentReference transactionSubCollectionDoc =
+        transactionSubCollection.doc();
+    batch.set(transactionSubCollectionDoc, {
       "logType": "create", // create, delete, update
+      // delete entries will have "deleteSharedKey" of the latest sharedKey transaction
       "name": transactionFromCategory.name,
       "amount": transactionFromCategory.amount,
       "note": transactionFromCategory.note,
@@ -71,6 +79,17 @@ Future<bool> shareCategory(
       "ownerEmail": FirebaseAuth.instance.currentUser!.email,
       "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
     });
+    await database.createOrUpdateTransaction(
+      transactionFromCategory.copyWith(
+        sharedKey: transactionSubCollectionDoc.id,
+        transactionOwnerEmail: FirebaseAuth.instance.currentUser!.email,
+      ),
+      updateSharedEntry: false,
+    );
+    loadingProgressKey.currentState!
+        .setProgressPercentage(currentIndex / totalLength);
+    await Future.delayed(Duration(milliseconds: 1));
+    currentIndex++;
   }
   batch.commit();
 
@@ -78,23 +97,28 @@ Future<bool> shareCategory(
       categoryToShare.copyWith(sharedKey: categoryCreatedOnCloud.id));
 
   openSnackbar(SnackbarMessage(title: "Shared Category"));
+  loadingProgressKey.currentState!.setProgressPercentage(0);
   // CollectionReference subCollectionRef = categoryCreatedOnCloud.collection("transactions");
-
-  // subCollectionRef.add({
-  //   "logType": "create", // create, delete, update
-  //   "name": "",
-  //   "amount": 15.65,
-  //   "note": "This is a note of a transaction",
-  //   "dateCreated": DateTime.now(),
-  //   "dateUpdated": DateTime.now(),
-  //   "income": false,
-  //   "ownerEmail": FirebaseAuth.instance.currentUser!.email,
-  //   "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
-  // });
-
   // categoryCreatedOnCloud.update({
   //   "members": FieldValue.arrayUnion(["hello@hello.com"])
   // });
+  return true;
+}
+
+Future<bool> removedSharedFromCategory(
+    TransactionCategory? sharedCategory) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  DocumentReference collectionRef =
+      db!.collection('categories').doc(sharedCategory!.sharedKey);
+  await collectionRef.delete();
+  List<Transaction> transactionsFromCategory =
+      await database.getAllTransactionsFromCategory(sharedCategory.categoryPk);
+  for (Transaction transactionFromCategory in transactionsFromCategory) {
+    await database.createOrUpdateTransaction(
+        transactionFromCategory.copyWith(sharedKey: null));
+  }
+  await database.createOrUpdateCategory(sharedCategory.copyWith(
+      sharedDateUpdated: null, sharedKey: null, sharedOwnerMember: null));
   return true;
 }
 
@@ -130,7 +154,7 @@ Future<bool> downloadTransactionsFromCategories(
     FirebaseFirestore db, List<DocumentSnapshot> snapshots) async {
   for (DocumentSnapshot category in snapshots) {
     Map<dynamic, dynamic> categoryDecoded = category.data() as Map;
-    await database.createOrUpdateSharedCategory(
+    await database.createOrUpdateFromSharedCategory(
       TransactionCategory(
         categoryPk: DateTime.now().millisecondsSinceEpoch,
         name: categoryDecoded["name"],
@@ -167,7 +191,7 @@ Future<bool> downloadTransactionsFromCategories(
       Map<dynamic, dynamic> transactionDecoded = transaction.data() as Map;
       if (transaction["logType"] == "create" ||
           transaction["logType"] == "update") {
-        await database.createOrUpdateSharedTransaction(
+        await database.createOrUpdateFromSharedTransaction(
           Transaction(
             transactionPk: DateTime.now().millisecondsSinceEpoch,
             name: transactionDecoded["name"],
@@ -176,7 +200,7 @@ Future<bool> downloadTransactionsFromCategories(
             categoryFk: sharedCategory.categoryPk,
             // TODO should be sharedCategory.walletFk
             walletFk: 0,
-            dateCreated: transactionDecoded["dateCreated"],
+            dateCreated: transactionDecoded["dateCreated"].toDate(),
             income: transactionDecoded["income"],
             paid: true,
             skipPaid: false,
@@ -185,13 +209,14 @@ Future<bool> downloadTransactionsFromCategories(
           ),
         );
       } else if (transaction["type"] == "delete") {
-        await database.deleteSharedTransaction(transaction.id);
+        await database
+            .deleteFromSharedTransaction(transactionDecoded["deleteSharedKey"]);
       }
 
       print(transaction.id);
       print(transaction.data().toString());
     }
-    await database.createOrUpdateSharedCategory(
+    await database.createOrUpdateFromSharedCategory(
         sharedCategory.copyWith(sharedDateUpdated: DateTime.now()));
 
     print("DOWNLOADED FROM THIS CATEGORY " + category.data().toString());

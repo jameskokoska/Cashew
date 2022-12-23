@@ -267,10 +267,10 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
         currentDate.year, currentDate.month, budget.startDate.day - 1);
     return DateTimeRange(start: startDate, end: endDate);
   } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
-    DateTime startDate =
-        new DateTime(currentDate.year, budget.startDate.month, currentDate.day);
-    DateTime endDate = new DateTime(
-        currentDate.year, budget.startDate.month + 12, currentDate.day - 1);
+    DateTime startDate = new DateTime(
+        currentDate.year, budget.startDate.month, budget.startDate.day);
+    DateTime endDate = new DateTime(currentDate.year,
+        budget.startDate.month + 12, budget.startDate.day - 1);
     if (startDate.isBefore(currentDate)) {
       return DateTimeRange(start: startDate, end: endDate);
     }

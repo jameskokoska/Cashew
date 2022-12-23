@@ -58,7 +58,7 @@ class _SelectColorState extends State<SelectColor> {
           }
           index++;
         }
-        print("NOT FOUND");
+        print("color not found - must be custom color");
         setState(() {
           selectedIndex = -1;
           selectedColor = widget.selectedColor;

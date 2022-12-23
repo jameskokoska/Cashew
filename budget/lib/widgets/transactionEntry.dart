@@ -171,12 +171,32 @@ class TransactionEntry extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      CategoryIcon(
-                        categoryPk: transaction.categoryFk,
-                        size: 33,
-                        sizePadding: 15,
-                        margin: EdgeInsets.zero,
-                        borderRadius: 13,
+                      Stack(
+                        children: [
+                          CategoryIcon(
+                            categoryPk: transaction.categoryFk,
+                            size: 33,
+                            sizePadding: 15,
+                            margin: EdgeInsets.zero,
+                            borderRadius: 13,
+                          ),
+                          transaction.sharedKey != null
+                              ? Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  child: Transform.translate(
+                                    offset: Offset(-3, 3),
+                                    child: Icon(
+                                        transaction.transactionOwnerEmail !=
+                                                appStateSettings[
+                                                    "currentUserEmail"]
+                                            ? Icons.download_rounded
+                                            : Icons.upload_rounded,
+                                        size: 15),
+                                  ),
+                                )
+                              : SizedBox.shrink()
+                        ],
                       ),
                       Container(
                         width: transaction.type != null ? 12 : 15,

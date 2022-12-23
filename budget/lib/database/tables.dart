@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/firebaseAuthGlobal.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
@@ -1092,28 +1095,83 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // create or update a new transaction
-  Future<int>? createOrUpdateTransaction(Transaction transaction) {
+  Future<int>? createOrUpdateTransaction(Transaction transaction,
+      {bool updateSharedEntry = true}) async {
     if (transaction.amount == double.infinity ||
         transaction.amount == double.negativeInfinity ||
         transaction.amount == double.nan ||
         transaction.amount.isNaN) {
-      return null;
+      return 0;
     }
+
+    // Update the servers entry of the transaction
+    if (updateSharedEntry && transaction.sharedKey != null) {
+      FirebaseFirestore? db = await firebaseGetDBInstance();
+      TransactionCategory category =
+          await database.getCategoryInstance(transaction.categoryFk);
+      CollectionReference subCollectionRef = db!
+          .collection('categories')
+          .doc(category.sharedKey)
+          .collection("transactions");
+      try {
+        subCollectionRef
+            .doc(transaction.sharedKey)
+            .delete(); //remove any previous entries that had this key before, it is no longer needed as this new log entry has the newest information
+      } catch (e) {
+        print(
+            "couldn't find the latest entry that was downloaded, this could be because other user updated before this was pushed to the server?");
+      }
+      DocumentReference updatedDocument = await subCollectionRef.add({
+        "logType": "update", // create, delete, update
+        "name": transaction.name,
+        "amount": transaction.amount,
+        "note": transaction.note,
+        "dateCreated": transaction.dateCreated,
+        "dateUpdated": DateTime.now(),
+        "income": transaction.income,
+        "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+        "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
+      });
+
+      transaction = transaction.copyWith(sharedKey: updatedDocument.id);
+    }
+
     return into(transactions).insertOnConflictUpdate(transaction);
   }
 
   // create or update a category
-  Future<int> createOrUpdateCategory(TransactionCategory category) {
+  Future<int> createOrUpdateCategory(TransactionCategory category,
+      {bool updateSharedEntry = true}) async {
     // We need to ensure the value is set back to null, so insert/replace
     if (category.colour == null) {
       return into(categories)
           .insert(category, mode: InsertMode.insertOrReplace);
     }
 
+    // update category details on server
+    if (updateSharedEntry == true && category.sharedKey != null) {
+      FirebaseFirestore? db = await firebaseGetDBInstance();
+      DocumentReference collectionRef =
+          db!.collection('categories').doc(category.sharedKey);
+      collectionRef.set(
+        {
+          "dateShared": DateTime.now(),
+          "colour": category.colour,
+          "iconName": category.iconName,
+          "name": category.name,
+          // "members": [
+          //   // FirebaseAuth.instance.currentUser!.email
+          // ],
+          "income": category.income,
+        },
+      );
+    }
+
     return into(categories).insertOnConflictUpdate(category);
   }
 
-  Future<int> createOrUpdateSharedCategory(TransactionCategory category) async {
+  Future<int> createOrUpdateFromSharedCategory(
+      TransactionCategory category) async {
     if (category.sharedKey != null) {
       TransactionCategory sharedCategory;
 
@@ -1152,7 +1210,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
-  Future<int> createOrUpdateSharedTransaction(Transaction transaction) async {
+  Future<int> createOrUpdateFromSharedTransaction(
+      Transaction transaction) async {
     if (transaction.sharedKey != null) {
       Transaction sharedTransaction;
       try {
@@ -1172,7 +1231,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
   }
 
-  Future<int> deleteSharedTransaction(sharedTransactionKey) async {
+  Future<int> deleteFromSharedTransaction(sharedTransactionKey) async {
     return (delete(transactions)
           ..where((t) => t.sharedKey.equals(sharedTransactionKey)))
         .go();
@@ -1315,13 +1374,33 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete transaction given key
-  Future deleteTransaction(int transactionPk) {
+  Future deleteTransaction(int transactionPk,
+      {bool updateSharedEntry = true}) async {
+    // Send the delete log to the server
+    if (updateSharedEntry) {
+      Transaction transactionToDelete =
+          await getTransactionFromPk(transactionPk);
+      if (transactionToDelete.sharedKey != null) {
+        FirebaseFirestore? db = await firebaseGetDBInstance();
+        TransactionCategory category =
+            await database.getCategoryInstance(transactionToDelete.categoryFk);
+        CollectionReference subCollectionRef = db!
+            .collection('categories')
+            .doc(category.sharedKey)
+            .collection("transactions");
+        subCollectionRef.add({
+          "logType": "delete", // create, delete, update
+          "deleteSharedKey": transactionToDelete.sharedKey,
+        });
+      }
+    }
+
     return (delete(transactions)
           ..where((t) => t.transactionPk.equals(transactionPk)))
         .go();
   }
 
-  //delete ategory given key
+  //delete category given key
   Future deleteCategory(int categoryPk, int order) async {
     List<TransactionAssociatedTitle> allAssociatedTitles =
         await getAllAssociatedTitles();

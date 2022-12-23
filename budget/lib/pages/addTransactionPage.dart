@@ -305,6 +305,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       dateTimeCreated: widget.transaction != null
           ? widget.transaction!.dateTimeCreated
           : DateTime.now(),
+      sharedKey:
+          widget.transaction != null ? widget.transaction!.sharedKey : null,
+      transactionOwnerEmail: widget.transaction != null
+          ? widget.transaction!.transactionOwnerEmail
+          : null,
     );
   }
 
