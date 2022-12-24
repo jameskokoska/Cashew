@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
+import 'package:budget/pages/sharedCategoryPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -192,6 +193,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           child: Stack(
             children: [
               PageFramework(
+                dragDownToDismiss: true,
                 title: widget.title,
                 navbar: false,
                 onBackButton: () async {
@@ -223,6 +225,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                             openLoadingPopup(context);
                             await shareCategory(widget.category, context);
                             Navigator.pop(context);
+                            if (widget.category != null)
+                              pushRoute(
+                                context,
+                                SharedCategoryPage(category: widget.category!),
+                              );
                           },
                           icon: Icon(Icons.share_rounded),
                         )
@@ -230,7 +237,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   widget.category != null && widget.category!.sharedKey != null
                       ? IconButton(
                           onPressed: () async {
-                            await removedSharedFromCategory(widget.category);
+                            if (widget.category != null)
+                              pushRoute(
+                                context,
+                                SharedCategoryPage(category: widget.category!),
+                              );
                           },
                           icon: Icon(Icons.people_rounded),
                         )

@@ -40,7 +40,9 @@ Future<bool> shareCategory(
   print(categoryToShare.categoryPk);
   // Share category information
   FirebaseFirestore? db = await firebaseGetDBInstance();
-  print(FirebaseAuth.instance.currentUser);
+  if (db == null) {
+    return false;
+  }
   Map<String, dynamic> categoryEntry = {
     "dateShared": DateTime.now(),
     "colour": categoryToShare.colour,
@@ -54,7 +56,7 @@ Future<bool> shareCategory(
     "ownerEmail": FirebaseAuth.instance.currentUser!.email,
   };
   DocumentReference categoryCreatedOnCloud =
-      await db!.collection("categories").add(categoryEntry);
+      await db.collection("categories").add(categoryEntry);
 
   // Share all transactions from this category
   List<Transaction> transactionsFromCategory =
@@ -95,44 +97,62 @@ Future<bool> shareCategory(
   batch.commit();
 
   await database.createOrUpdateCategory(
-      categoryToShare.copyWith(sharedKey: Value(categoryCreatedOnCloud.id)));
+    categoryToShare.copyWith(
+      sharedKey: Value(categoryCreatedOnCloud.id),
+      sharedOwnerMember: Value(CategoryOwnerMember.owner),
+    ),
+    updateSharedEntry: false,
+  );
 
   openSnackbar(SnackbarMessage(title: "Shared Category"));
   loadingProgressKey.currentState!.setProgressPercentage(0);
-  // CollectionReference subCollectionRef = categoryCreatedOnCloud.collection("transactions");
-  // categoryCreatedOnCloud.update({
-  //   "members": FieldValue.arrayUnion(["hello@hello.com"])
-  // });
   return true;
-}
-
-class Wrapped<T> {
-  final T value;
-  const Wrapped.value(this.value);
 }
 
 Future<bool> removedSharedFromCategory(
     TransactionCategory? sharedCategory) async {
-  FirebaseFirestore? db = await firebaseGetDBInstance();
-  // DocumentReference collectionRef =
-  //     db!.collection('categories').doc(sharedCategory!.sharedKey);
-  print(sharedCategory!.sharedKey);
-  // await collectionRef.delete();
+  if (sharedCategory == null) {
+    return false;
+  }
+  try {
+    FirebaseFirestore? db = await firebaseGetDBInstance();
+    if (db == null) {
+      return false;
+    }
+    DocumentReference collectionRef =
+        db!.collection('categories').doc(sharedCategory!.sharedKey);
+    CollectionReference transactionSubCollection = db
+        .collection('categories')
+        .doc(sharedCategory.sharedKey)
+        .collection("transactions");
+
+    WriteBatch batch = db.batch();
+    final QuerySnapshot transactionsOnCloud =
+        await transactionSubCollection.get();
+    print(transactionsOnCloud);
+    for (DocumentSnapshot transaction in transactionsOnCloud.docs) {
+      print(transaction);
+      DocumentReference transactionSubCollectionDoc =
+          transactionSubCollection.doc(transaction.id);
+      batch.delete(transactionSubCollectionDoc);
+    }
+    batch.commit();
+    await collectionRef.delete();
+  } catch (e) {
+    print(e.toString());
+  }
+
   List<Transaction> transactionsFromCategory =
       await database.getAllTransactionsFromCategory(sharedCategory.categoryPk);
   for (Transaction transactionFromCategory in transactionsFromCategory) {
     await database.createOrUpdateTransaction(
-      transactionFromCategory.copyWith(sharedKey: Value(null)),
+      transactionFromCategory.copyWith(
+        sharedKey: Value(null),
+        transactionOwnerEmail: Value(null),
+      ),
       updateSharedEntry: false,
     );
   }
-  print(
-    sharedCategory.copyWith(
-      sharedDateUpdated: Value(null),
-      sharedKey: Value(null),
-      sharedOwnerMember: Value(null),
-    ),
-  );
   await database.createOrUpdateCategory(
     sharedCategory.copyWith(
       sharedDateUpdated: Value(null),
@@ -146,6 +166,9 @@ Future<bool> removedSharedFromCategory(
 
 Future<bool> getCloudCategories() async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    return false;
+  }
 
   // aggregate categories users are members of and owners of together
   final categoryMembersOf = db!.collection('categories').where('members',
@@ -186,7 +209,10 @@ Future<bool> downloadTransactionsFromCategories(
         sharedKey: category.id,
         iconName: categoryDecoded["iconName"],
         colour: categoryDecoded["colour"],
-        sharedOwnerMember: CategoryOwnerMember.member,
+        sharedOwnerMember: FirebaseAuth.instance.currentUser!.email ==
+                categoryDecoded["ownerEmail"]
+            ? CategoryOwnerMember.owner
+            : CategoryOwnerMember.member,
       ),
     );
 
@@ -217,7 +243,7 @@ Future<bool> downloadTransactionsFromCategories(
           Transaction(
             transactionPk: DateTime.now().millisecondsSinceEpoch,
             name: transactionDecoded["name"],
-            amount: transactionDecoded["amount"],
+            amount: transactionDecoded["amount"].toDouble(),
             note: transactionDecoded["note"],
             categoryFk: sharedCategory.categoryPk,
             // TODO should be sharedCategory.walletFk
@@ -228,9 +254,10 @@ Future<bool> downloadTransactionsFromCategories(
             skipPaid: false,
             sharedKey: transaction.id,
             transactionOwnerEmail: transactionDecoded["ownerEmail"],
+            methodAdded: MethodAdded.shared,
           ),
         );
-      } else if (transaction["type"] == "delete") {
+      } else if (transaction["logType"] == "delete") {
         await database
             .deleteFromSharedTransaction(transactionDecoded["deleteSharedKey"]);
       }
@@ -245,6 +272,45 @@ Future<bool> downloadTransactionsFromCategories(
   }
 
   return true;
+}
+
+Future<bool> addMemberToCategory(String sharedKey, String member) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    return false;
+  }
+  DocumentReference categoryCreatedOnCloud =
+      db.collection('categories').doc(sharedKey);
+  categoryCreatedOnCloud.update({
+    "members": FieldValue.arrayUnion([member])
+  });
+  return true;
+}
+
+Future<bool> removeMemberFromCategory(String sharedKey, String member) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    return false;
+  }
+  DocumentReference categoryCreatedOnCloud =
+      db.collection('categories').doc(sharedKey);
+  categoryCreatedOnCloud.update({
+    "members": FieldValue.arrayRemove([member])
+  });
+  return true;
+}
+
+Future<dynamic> getMembersFromCategory(String sharedKey) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    return null;
+  }
+  DocumentReference categoryCreatedOnCloud =
+      db.collection('categories').doc(sharedKey);
+  Map<dynamic, dynamic> categoryDecoded =
+      (await categoryCreatedOnCloud.get()).data() as Map;
+  print(categoryDecoded["members"]);
+  return categoryDecoded["members"];
 }
 
 class EditCategoriesPage extends StatefulWidget {
@@ -289,7 +355,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                   onPressed: () async {
                     getCloudCategories();
                   },
-                  icon: Icon(Icons.dock),
+                  icon: Icon(Icons.refresh_rounded),
                 ),
               )
             ],
@@ -345,11 +411,25 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                     content: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        CategoryIcon(
-                          categoryPk: category.categoryPk,
-                          size: 40,
-                          category: category,
-                          canEditByLongPress: false,
+                        Stack(
+                          children: [
+                            CategoryIcon(
+                              categoryPk: category.categoryPk,
+                              size: 40,
+                              category: category,
+                              canEditByLongPress: false,
+                            ),
+                            category.sharedKey != null
+                                ? Positioned(
+                                    top: 4,
+                                    left: 0,
+                                    child: Icon(
+                                      Icons.people_alt_rounded,
+                                      size: 18,
+                                    ),
+                                  )
+                                : SizedBox.shrink()
+                          ],
                         ),
                         Container(width: 5),
                         Column(

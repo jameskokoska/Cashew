@@ -275,7 +275,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       transactionPk: widget.transaction != null
           ? widget.transaction!.transactionPk
           : DateTime.now().millisecondsSinceEpoch,
-      name: selectedTitle ?? "",
+      name: (selectedTitle ?? "").trim(),
       amount: (selectedIncome
           ? (selectedAmount ?? 0).abs()
           : (selectedAmount ?? 0).abs() * -1),

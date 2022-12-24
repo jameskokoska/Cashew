@@ -1099,7 +1099,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     // Update the servers entry of the transaction
-    if (updateSharedEntry && transaction.sharedKey != null) {
+    if (updateSharedEntry == true) {
       FirebaseFirestore? db = await firebaseGetDBInstance();
       TransactionCategory category =
           await database.getCategoryInstance(transaction.categoryFk);
@@ -1107,28 +1107,36 @@ class FinanceDatabase extends _$FinanceDatabase {
           .collection('categories')
           .doc(category.sharedKey)
           .collection("transactions");
-      try {
-        subCollectionRef
-            .doc(transaction.sharedKey)
-            .delete(); //remove any previous entries that had this key before, it is no longer needed as this new log entry has the newest information
-      } catch (e) {
-        print(
-            "couldn't find the latest entry that was downloaded, this could be because other user updated before this was pushed to the server?");
+      bool updatingTransaction = false;
+      if (transaction.sharedKey != null && category.sharedKey != null) {
+        await subCollectionRef.doc(transaction.sharedKey).set({
+          "logType": "update", // create, delete, update
+          "name": transaction.name,
+          "amount": transaction.amount,
+          "note": transaction.note,
+          "dateCreated": transaction.dateCreated,
+          "dateUpdated": DateTime.now(),
+          "income": transaction.income,
+        }, SetOptions(merge: true));
+      } else if (transaction.sharedKey == null && category.sharedKey != null) {
+        DocumentReference addedDocument = await subCollectionRef.add({
+          "logType": "create", // create, delete, update
+          "name": transaction.name,
+          "amount": transaction.amount,
+          "note": transaction.note,
+          "dateCreated": transaction.dateCreated,
+          "dateUpdated": DateTime.now(),
+          "income": transaction.income,
+          "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+          "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
+        });
+        transaction = transaction.copyWith(
+            sharedKey: Value(addedDocument.id),
+            transactionOwnerEmail:
+                Value(FirebaseAuth.instance.currentUser!.email));
       }
-      DocumentReference updatedDocument = await subCollectionRef.add({
-        "logType": "update", // create, delete, update
-        "name": transaction.name,
-        "amount": transaction.amount,
-        "note": transaction.note,
-        "dateCreated": transaction.dateCreated,
-        "dateUpdated": DateTime.now(),
-        "income": transaction.income,
-        "ownerEmail": FirebaseAuth.instance.currentUser!.email,
-        "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
-      });
-
-      transaction = transaction.copyWith(sharedKey: Value(updatedDocument.id));
     }
+    print(transaction);
 
     // We need to ensure the value is set back to null, so insert/replace
     if (transaction.sharedKey == null) {
@@ -1147,18 +1155,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       FirebaseFirestore? db = await firebaseGetDBInstance();
       DocumentReference collectionRef =
           db!.collection('categories').doc(category.sharedKey);
-      collectionRef.set(
-        {
-          "dateShared": DateTime.now(),
-          "colour": category.colour,
-          "iconName": category.iconName,
-          "name": category.name,
-          // "members": [
-          //   // FirebaseAuth.instance.currentUser!.email
-          // ],
-          "income": category.income,
-        },
-      );
+      collectionRef.set({
+        "colour": category.colour,
+        "iconName": category.iconName,
+        "name": category.name,
+        // "members": [
+        //   // FirebaseAuth.instance.currentUser!.email
+        // ],
+        "income": category.income,
+      }, SetOptions(merge: true));
     }
 
     // We need to ensure the value is set back to null, so insert/replace
@@ -1394,6 +1399,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           "logType": "delete", // create, delete, update
           "deleteSharedKey": transactionToDelete.sharedKey,
         });
+        subCollectionRef.doc(transactionToDelete.sharedKey).delete();
       }
     }
 

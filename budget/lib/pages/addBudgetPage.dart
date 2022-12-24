@@ -523,6 +523,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           child: Stack(
             children: [
               PageFramework(
+                dragDownToDismiss: true,
                 title: widget.title,
                 navbar: false,
                 onBackButton: () async {
