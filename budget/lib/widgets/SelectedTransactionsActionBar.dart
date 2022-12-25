@@ -309,6 +309,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
           mainAxisSize: MainAxisSize.min,
           children: [
             CategoryIcon(
+              sharedIconOffset: 4,
               onTap: () => openBottomSheet(
                 context,
                 PopupFramework(

@@ -172,41 +172,16 @@ class TransactionEntry extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Stack(
-                        children: [
-                          CategoryIcon(
-                            categoryPk: transaction.categoryFk,
-                            size: 33,
-                            sizePadding: 15,
-                            margin: EdgeInsets.zero,
-                            borderRadius: 13,
-                          ),
-                          transaction.sharedKey != null ||
-                                  transaction.sharedStatus ==
-                                      SharedStatus.waiting
-                              ? Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  child: Transform.translate(
-                                    offset: Offset(-3, 3),
-                                    child: Icon(
-                                        transaction.sharedStatus ==
-                                                SharedStatus.waiting
-                                            ? Icons.sync_rounded
-                                            : transaction
-                                                        .transactionOwnerEmail !=
-                                                    appStateSettings[
-                                                        "currentUserEmail"]
-                                                ? Icons.download_rounded
-                                                : Icons.upload_rounded,
-                                        size: 15),
-                                  ),
-                                )
-                              : SizedBox.shrink()
-                        ],
+                      CategoryIcon(
+                        categoryPk: transaction.categoryFk,
+                        size: 33,
+                        sizePadding: 15,
+                        margin: EdgeInsets.zero,
+                        borderRadius: 13,
+                        showSharedIcon: false,
                       ),
                       Container(
-                        width: transaction.type != null ? 12 : 15,
+                        width: 12,
                       ),
                       transaction.type != null
                           ? Padding(
@@ -219,30 +194,80 @@ class TransactionEntry extends StatelessWidget {
                             )
                           : SizedBox(),
                       Expanded(
-                        child: transaction.name != ""
-                            ? TextFont(
-                                text: transaction.name,
-                                fontSize: 18,
-                              )
-                            : category == null
-                                ? StreamBuilder<TransactionCategory>(
-                                    stream: database
-                                        .getCategory(transaction.categoryFk),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return TextFont(
-                                          text: snapshot.data!.name,
-                                          fontSize: 18,
-                                        );
-                                      }
-                                      return Container();
-                                    },
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 3),
+                            child: transaction.name != ""
+                                ? TextFont(
+                                    text: transaction.name,
+                                    fontSize: 17,
                                   )
-                                : TextFont(
-                                    text: category!.name,
-                                    fontSize: 18,
+                                : category == null
+                                    ? StreamBuilder<TransactionCategory>(
+                                        stream: database.getCategory(
+                                            transaction.categoryFk),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return TextFont(
+                                              text: snapshot.data!.name,
+                                              fontSize: 17,
+                                            );
+                                          }
+                                          return Container();
+                                        },
+                                      )
+                                    : TextFont(
+                                        text: category!.name,
+                                        fontSize: 17,
+                                      ),
+                          ),
+                          transaction.sharedKey != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 2.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        transaction.sharedStatus ==
+                                                SharedStatus.waiting
+                                            ? Icons.sync_rounded
+                                            : transaction
+                                                        .transactionOwnerEmail !=
+                                                    appStateSettings[
+                                                        "currentUserEmail"]
+                                                ? Icons.download_rounded
+                                                : Icons.upload_rounded,
+                                        size: 14,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .black
+                                            .withOpacity(0.7),
+                                      ),
+                                      SizedBox(width: 2),
+                                      TextFont(
+                                        text: transaction.transactionOwnerEmail
+                                                    .toString() ==
+                                                appStateSettings[
+                                                    "currentUserEmail"]
+                                            ? "From You"
+                                            : "From " +
+                                                transaction
+                                                    .transactionOwnerEmail
+                                                    .toString(),
+                                        fontSize: 13,
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .black
+                                            .withOpacity(0.7),
+                                      ),
+                                    ],
                                   ),
-                      ),
+                                )
+                              : SizedBox.shrink()
+                        ],
+                      )),
                       SizedBox(
                         width: 7,
                       ),

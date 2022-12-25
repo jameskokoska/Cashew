@@ -129,6 +129,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                           }
                         }
                       },
+                      sharedIconOffset: 13,
                       outline: selectedCategories.contains(category),
                     ),
                   );

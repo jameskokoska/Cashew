@@ -22,12 +22,15 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
     } catch (e) {
       print("There was an error with firebase login");
       print(e.toString());
-      return null;
+      print("will retry with a new credential");
+      _credential = null;
+      user = null;
+      return await firebaseGetDBInstance();
     }
   } else {
     try {
       if (user == null) {
-        signInGoogle();
+        await signInGoogle();
       }
       GoogleSignInAccount? googleUser = user;
 
@@ -43,7 +46,7 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
           "currentUserEmail", FirebaseAuth.instance.currentUser!.email);
       return FirebaseFirestore.instance;
     } catch (e) {
-      print("There was an error with firebase login");
+      print("There was an error with firebase login and possibly google");
       print(e.toString());
       return null;
     }

@@ -1124,7 +1124,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     print(transaction);
 
     // We need to ensure the value is set back to null, so insert/replace
-    if (transaction.sharedKey == null) {
+    if (transaction.sharedKey == null || transaction.type == null) {
       return into(transactions)
           .insert(transaction, mode: InsertMode.insertOrReplace);
     }

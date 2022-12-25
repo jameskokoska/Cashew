@@ -300,6 +300,7 @@ Future<bool> removeMemberFromCategory(String sharedKey, String member) async {
   return true;
 }
 
+// the owner is always the first entry!
 Future<dynamic> getMembersFromCategory(String sharedKey) async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
@@ -309,8 +310,14 @@ Future<dynamic> getMembersFromCategory(String sharedKey) async {
       db.collection('categories').doc(sharedKey);
   Map<dynamic, dynamic> categoryDecoded =
       (await categoryCreatedOnCloud.get()).data() as Map;
-  print(categoryDecoded["members"]);
-  return categoryDecoded["members"];
+  print([
+    categoryDecoded["ownerEmail"].toString(),
+    ...List<String>.from(categoryDecoded["members"])
+  ]);
+  return [
+    categoryDecoded["ownerEmail"].toString(),
+    ...List<String>.from(categoryDecoded["members"])
+  ];
 }
 
 Future<bool> sendTransactionSet(
@@ -606,6 +613,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                               size: 40,
                               category: category,
                               canEditByLongPress: false,
+                              showSharedIcon: false,
                             ),
                             category.sharedKey != null
                                 ? Positioned(
@@ -625,7 +633,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextFont(
-                              text: category.name,
+                              text: category.name +
+                                  " - " +
+                                  category.order.toString(),
                               fontWeight: FontWeight.bold,
                               fontSize: 19,
                             ),

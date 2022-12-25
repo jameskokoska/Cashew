@@ -34,19 +34,19 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-class SharedCategoryPage extends StatefulWidget {
-  SharedCategoryPage({
+class SharedCategorySettings extends StatefulWidget {
+  SharedCategorySettings({
     Key? key,
     required this.category,
   }) : super(key: key);
 
-  final TransactionCategory category;
+  final TransactionCategory? category;
 
   @override
-  _SharedCategoryPageState createState() => _SharedCategoryPageState();
+  _SharedCategorySettingsState createState() => _SharedCategorySettingsState();
 }
 
-class _SharedCategoryPageState extends State<SharedCategoryPage> {
+class _SharedCategorySettingsState extends State<SharedCategorySettings> {
   List<String> members = [];
   bool isLoaded = false;
 
@@ -55,16 +55,16 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       dynamic response =
-          await getMembersFromCategory(widget.category.sharedKey!);
+          await getMembersFromCategory(widget.category!.sharedKey!);
       if (response == null) {
         Navigator.pop(context);
         openSnackbar(SnackbarMessage(title: "Connection error"));
         return;
       }
       print(FirebaseAuth.instance.currentUser!.email);
-      print(widget.category.sharedOwnerMember);
+      print(widget.category!.sharedOwnerMember);
       setState(() {
-        members = List<String>.from(response);
+        members = response;
         isLoaded = true;
       });
     });
@@ -93,15 +93,15 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
     }
     if (updateEntry) {
       await removeMemberFromCategory(
-          widget.category.sharedKey!, originalMember);
-      await addMemberToCategory(widget.category.sharedKey!, member);
+          widget.category!.sharedKey!, originalMember);
+      await addMemberToCategory(widget.category!.sharedKey!, member);
       setState(() {
         int index = members.indexOf(originalMember);
         members.removeAt(index);
         members.add(member);
       });
     } else {
-      await addMemberToCategory(widget.category.sharedKey!, member);
+      await addMemberToCategory(widget.category!.sharedKey!, member);
       setState(() {
         members.add(member);
       });
@@ -109,7 +109,7 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
   }
 
   removeMember(String member) async {
-    await removeMemberFromCategory(widget.category.sharedKey!, member);
+    await removeMemberFromCategory(widget.category!.sharedKey!, member);
     setState(() {
       int index = members.indexOf(member);
       members.removeAt(index);
@@ -118,22 +118,10 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageFramework(
-      dragDownToDismiss: true,
-      title: widget.category.name,
-      subtitleAlignment: Alignment.bottomLeft,
-      listWidgets: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: TextFont(
-            text: widget.category.sharedOwnerMember == CategoryOwnerMember.owner
-                ? "Owner"
-                : "Member",
-            textColor: Theme.of(context).colorScheme.black,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -144,6 +132,30 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
           ),
         ),
         SizedBox(height: 10),
+        widget.category!.sharedOwnerMember == CategoryOwnerMember.owner
+            ? Row(
+                children: [
+                  Expanded(
+                    child: AddButton(onTap: () {
+                      openBottomSheet(
+                        context,
+                        PopupFramework(
+                          title: "Add Member",
+                          subtitle: "Enter the email of the member",
+                          child: SelectText(
+                            setSelectedText: (_) {},
+                            placeholder: "example@example.com",
+                            nextWithInput: (text) async {
+                              addMember(text);
+                            },
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              )
+            : SizedBox.shrink(),
         !isLoaded
             ? Padding(
                 padding: const EdgeInsets.only(
@@ -152,51 +164,41 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
                 ),
                 child: Center(child: CircularProgressIndicator()),
               )
-            : SizedBox.shrink(),
-        ...[
-          for (String member in members)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: CategoryMemberContainer(
-                member: member,
-                setMember: (text) async {
-                  addMember(text, updateEntry: true, originalMember: member);
-                },
-                onDelete: () {
-                  removeMember(member);
-                },
-                isOwner: widget.category.sharedOwnerMember ==
-                    CategoryOwnerMember.owner,
-              ),
-            ),
-        ],
-        widget.category.sharedOwnerMember == CategoryOwnerMember.owner
-            ? AddButton(onTap: () {
-                openBottomSheet(
-                  context,
-                  PopupFramework(
-                    title: "Add Member",
-                    subtitle: "Enter the email of the member",
-                    child: SelectText(
-                      setSelectedText: (_) {},
-                      placeholder: "example@example.com",
-                      nextWithInput: (text) async {
-                        addMember(text);
-                      },
+            : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: CategoryMemberContainerOwner(
+                      member: members[0],
                     ),
                   ),
-                );
-              })
-            : SizedBox.shrink(),
-        SizedBox(height: 20),
-        widget.category.sharedOwnerMember == CategoryOwnerMember.owner
+                  for (String member in members.sublist(1))
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: CategoryMemberContainer(
+                        member: member,
+                        setMember: (text) async {
+                          addMember(text,
+                              updateEntry: true, originalMember: member);
+                        },
+                        onDelete: () {
+                          removeMember(member);
+                        },
+                        isOwner: widget.category!.sharedOwnerMember ==
+                            CategoryOwnerMember.owner,
+                      ),
+                    ),
+                ],
+              ),
+        SizedBox(height: 5),
+        widget.category!.sharedOwnerMember == CategoryOwnerMember.owner
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
                   label: "Stop Sharing",
                   onTap: () async {
                     bool status =
-                        await removedSharedFromCategory(widget.category);
+                        await removedSharedFromCategory(widget.category!);
                     if (status == false) {
                       openSnackbar(
                         SnackbarMessage(
@@ -219,7 +221,7 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
                   label: "Leave Shared Group",
                   onTap: () async {
                     bool status =
-                        await removedSharedFromCategory(widget.category);
+                        await removedSharedFromCategory(widget.category!);
                     if (status == false) {
                       openSnackbar(
                         SnackbarMessage(
@@ -324,6 +326,53 @@ class CategoryMemberContainer extends StatelessWidget {
                     ),
                   )
                 : SizedBox.shrink(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CategoryMemberContainerOwner extends StatelessWidget {
+  const CategoryMemberContainerOwner({
+    Key? key,
+    required this.member,
+  }) : super(key: key);
+
+  final String member;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Tappable(
+        onTap: () {},
+        borderRadius: 15,
+        color: Theme.of(context).colorScheme.lightDarkAccent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFont(
+                      text: "Owner",
+                      fontSize: 15,
+                      textColor: Theme.of(context).colorScheme.secondary,
+                    ),
+                    TextFont(
+                      text: member,
+                      fontSize: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

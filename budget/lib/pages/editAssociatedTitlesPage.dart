@@ -145,6 +145,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                           margin: EdgeInsets.zero,
                           sizePadding: 20,
                           borderRadius: 15,
+                          sharedIconOffset: 2,
                         ),
                         SizedBox(width: 15),
                         Expanded(

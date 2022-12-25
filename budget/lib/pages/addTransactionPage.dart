@@ -535,6 +535,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     categoryPk:
                                         selectedCategory?.categoryPk ?? 0,
                                     size: 60,
+                                    sharedIconOffset: -7,
                                   ),
                                 ),
                               ],
@@ -1286,6 +1287,7 @@ class _SelectTitleState extends State<SelectTitle> {
                                     size: 40,
                                     category: selectedCategory,
                                     margin: EdgeInsets.zero,
+                                    sharedIconOffset: 4,
                                   ),
                                   SizedBox(width: 10),
                                   Column(
