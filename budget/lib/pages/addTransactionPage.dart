@@ -310,6 +310,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       transactionOwnerEmail: widget.transaction != null
           ? widget.transaction!.transactionOwnerEmail
           : null,
+      sharedStatus:
+          widget.transaction != null ? widget.transaction!.sharedStatus : null,
     );
   }
 

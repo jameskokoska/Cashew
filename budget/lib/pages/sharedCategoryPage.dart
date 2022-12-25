@@ -121,21 +121,24 @@ class _SharedCategoryPageState extends State<SharedCategoryPage> {
     return PageFramework(
       dragDownToDismiss: true,
       title: widget.category.name,
-      subtitle: Padding(
-        padding: const EdgeInsets.only(left: 20),
-        child: TextFont(
-          text: "Edit shared properties",
-          textAlign: TextAlign.left,
-          fontSize: 15,
-        ),
-      ),
       subtitleAlignment: Alignment.bottomLeft,
       listWidgets: [
-        SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TextFont(
-            text: "Shared Category Members",
+            text: widget.category.sharedOwnerMember == CategoryOwnerMember.owner
+                ? "Owner"
+                : "Member",
+            textColor: Theme.of(context).colorScheme.black,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextFont(
+            text: "Add Members",
             textColor: Theme.of(context).colorScheme.textLight,
             fontSize: 16,
           ),

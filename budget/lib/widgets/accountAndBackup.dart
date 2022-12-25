@@ -167,7 +167,7 @@ Future<bool> signInGoogle(
         },
       ),
     );
-    return false;
+    throw ("Error signing in");
   }
 }
 

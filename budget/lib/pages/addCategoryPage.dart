@@ -10,8 +10,10 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
@@ -114,8 +116,29 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
 
   Future addCategory() async {
     print("Added category" + (await createTransactionCategory()).toString());
-    await database.createOrUpdateCategory(await createTransactionCategory());
-    Navigator.pop(context);
+    int result = await database.createOrUpdateCategory(
+      await createTransactionCategory(),
+    );
+    if (result == -1) {
+      openPopup(
+        context,
+        title: "No Connection",
+        icon: Icons.signal_wifi_connected_no_internet_4_rounded,
+        description:
+            "You can only update the details of a shared budget online.",
+        onCancel: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        onSubmit: () {
+          Navigator.pop(context);
+        },
+        onSubmitLabel: "OK",
+        onCancelLabel: "Exit Without Saving",
+      );
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   Future<TransactionCategory> createTransactionCategory() async {
@@ -220,30 +243,38 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                 },
                 actions: [
                   widget.category != null && widget.category!.sharedKey == null
-                      ? IconButton(
-                          onPressed: () async {
-                            openLoadingPopup(context);
-                            await shareCategory(widget.category, context);
-                            Navigator.pop(context);
-                            if (widget.category != null)
-                              pushRoute(
-                                context,
-                                SharedCategoryPage(category: widget.category!),
-                              );
-                          },
-                          icon: Icon(Icons.share_rounded),
+                      ? Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: IconButton(
+                            onPressed: () async {
+                              openLoadingPopup(context);
+                              await shareCategory(widget.category, context);
+                              Navigator.pop(context);
+                              if (widget.category != null)
+                                pushRoute(
+                                  context,
+                                  SharedCategoryPage(
+                                      category: widget.category!),
+                                );
+                            },
+                            icon: Icon(Icons.share_rounded),
+                          ),
                         )
                       : SizedBox.shrink(),
                   widget.category != null && widget.category!.sharedKey != null
-                      ? IconButton(
-                          onPressed: () async {
-                            if (widget.category != null)
-                              pushRoute(
-                                context,
-                                SharedCategoryPage(category: widget.category!),
-                              );
-                          },
-                          icon: Icon(Icons.people_rounded),
+                      ? Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: IconButton(
+                            onPressed: () async {
+                              if (widget.category != null)
+                                pushRoute(
+                                  context,
+                                  SharedCategoryPage(
+                                      category: widget.category!),
+                                );
+                            },
+                            icon: Icon(Icons.people_rounded),
+                          ),
                         )
                       : SizedBox.shrink()
                 ],

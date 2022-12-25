@@ -97,6 +97,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await parseEmailsInBackground(context);
       await createBackupInBackground(context);
       await getCloudCategories();
+      await syncPendingQueueOnServer();
       entireAppLoaded = true;
     });
 

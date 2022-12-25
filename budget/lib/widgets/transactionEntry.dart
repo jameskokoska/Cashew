@@ -181,18 +181,24 @@ class TransactionEntry extends StatelessWidget {
                             margin: EdgeInsets.zero,
                             borderRadius: 13,
                           ),
-                          transaction.sharedKey != null
+                          transaction.sharedKey != null ||
+                                  transaction.sharedStatus ==
+                                      SharedStatus.waiting
                               ? Positioned(
                                   bottom: 0,
                                   left: 0,
                                   child: Transform.translate(
                                     offset: Offset(-3, 3),
                                     child: Icon(
-                                        transaction.transactionOwnerEmail !=
-                                                appStateSettings[
-                                                    "currentUserEmail"]
-                                            ? Icons.download_rounded
-                                            : Icons.upload_rounded,
+                                        transaction.sharedStatus ==
+                                                SharedStatus.waiting
+                                            ? Icons.sync_rounded
+                                            : transaction
+                                                        .transactionOwnerEmail !=
+                                                    appStateSettings[
+                                                        "currentUserEmail"]
+                                                ? Icons.download_rounded
+                                                : Icons.upload_rounded,
                                         size: 15),
                                   ),
                                 )

@@ -120,7 +120,7 @@ Future<bool> removedSharedFromCategory(
       return false;
     }
     DocumentReference collectionRef =
-        db!.collection('categories').doc(sharedCategory!.sharedKey);
+        db.collection('categories').doc(sharedCategory.sharedKey);
     CollectionReference transactionSubCollection = db
         .collection('categories')
         .doc(sharedCategory.sharedKey)
@@ -171,7 +171,7 @@ Future<bool> getCloudCategories() async {
   }
 
   // aggregate categories users are members of and owners of together
-  final categoryMembersOf = db!.collection('categories').where('members',
+  final categoryMembersOf = db.collection('categories').where('members',
       arrayContains: FirebaseAuth.instance.currentUser!.email);
   final QuerySnapshot snapshotCategoryMembersOf = await categoryMembersOf.get();
   List<DocumentSnapshot> snapshotsMembers = [];
@@ -313,6 +313,197 @@ Future<dynamic> getMembersFromCategory(String sharedKey) async {
   return categoryDecoded["members"];
 }
 
+Future<bool> sendTransactionSet(
+    Transaction transaction, TransactionCategory category) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
+        appStateSettings["sendTransactionsToServerQueue"];
+    currentSendTransactionsToServerQueue[transaction.transactionPk.toString()] =
+        {
+      "action": "sendTransactionSet",
+      "transactionPk": transaction.transactionPk.toString(),
+      "categoryPk": category.categoryPk.toString(),
+    };
+    print(currentSendTransactionsToServerQueue);
+    updateSettings(
+      "sendTransactionsToServerQueue",
+      currentSendTransactionsToServerQueue,
+      pagesNeedingRefresh: [],
+      updateGlobalState: false,
+    );
+    return false;
+  }
+  await setOnServer(db, transaction, category);
+  return true;
+}
+
+Future<bool> setOnServer(FirebaseFirestore db, Transaction transaction,
+    TransactionCategory category) async {
+  CollectionReference subCollectionRef = db
+      .collection('categories')
+      .doc(category.sharedKey)
+      .collection("transactions");
+  await subCollectionRef.doc(transaction.sharedKey).set({
+    "logType": "update", // create, delete, update
+    "name": transaction.name,
+    "amount": transaction.amount,
+    "note": transaction.note,
+    "dateCreated": transaction.dateCreated,
+    "dateUpdated": DateTime.now(),
+    "income": transaction.income,
+  }, SetOptions(merge: true));
+  transaction = transaction.copyWith(
+    sharedStatus: Value(SharedStatus.shared),
+  );
+  await database.createOrUpdateTransaction(transaction,
+      updateSharedEntry: false);
+  return true;
+}
+
+Future<bool> sendTransactionAdd(
+    Transaction transaction, TransactionCategory category) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
+        appStateSettings["sendTransactionsToServerQueue"];
+    currentSendTransactionsToServerQueue[transaction.transactionPk.toString()] =
+        {
+      "action": "sendTransactionAdd",
+      "transactionPk": transaction.transactionPk.toString(),
+      "categoryPk": category.categoryPk.toString(),
+    };
+    updateSettings(
+      "sendTransactionsToServerQueue",
+      currentSendTransactionsToServerQueue,
+      pagesNeedingRefresh: [],
+      updateGlobalState: false,
+    );
+    print(currentSendTransactionsToServerQueue);
+    return false;
+  }
+  await addOnServer(db, transaction, category);
+  return true;
+}
+
+Future<bool> addOnServer(FirebaseFirestore db, Transaction transaction,
+    TransactionCategory category) async {
+  CollectionReference subCollectionRef = db
+      .collection('categories')
+      .doc(category.sharedKey)
+      .collection("transactions");
+  DocumentReference addedDocument = await subCollectionRef.add({
+    "logType": "create", // create, delete, update
+    "name": transaction.name,
+    "amount": transaction.amount,
+    "note": transaction.note,
+    "dateCreated": transaction.dateCreated,
+    "dateUpdated": DateTime.now(),
+    "income": transaction.income,
+    "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+    "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
+  });
+  transaction = transaction.copyWith(
+    sharedKey: Value(addedDocument.id),
+    transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
+    sharedStatus: Value(SharedStatus.shared),
+  );
+  await database.createOrUpdateTransaction(transaction,
+      updateSharedEntry: false);
+  return true;
+}
+
+Future<bool> sendTransactionDelete(
+    Transaction transaction, TransactionCategory category) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
+        appStateSettings["sendTransactionsToServerQueue"];
+    currentSendTransactionsToServerQueue[transaction.transactionPk.toString()] =
+        {
+      "action": "sendTransactionDelete",
+      "transactionSharedKey": transaction.sharedKey.toString(),
+      "categoryPk": category.categoryPk.toString(),
+    };
+    print(currentSendTransactionsToServerQueue);
+    updateSettings(
+      "sendTransactionsToServerQueue",
+      currentSendTransactionsToServerQueue,
+      pagesNeedingRefresh: [],
+      updateGlobalState: false,
+    );
+    return false;
+  }
+  await deleteOnServer(db, transaction.sharedKey, category);
+  return true;
+}
+
+Future<bool> deleteOnServer(FirebaseFirestore db, String? transactionSharedKey,
+    TransactionCategory category) async {
+  if (transactionSharedKey != null && transactionSharedKey != "null") {
+    CollectionReference subCollectionRef = db
+        .collection('categories')
+        .doc(category.sharedKey)
+        .collection("transactions");
+    subCollectionRef.add({
+      "logType": "delete", // create, delete, update
+      "deleteSharedKey": transactionSharedKey,
+    });
+    subCollectionRef.doc(transactionSharedKey).delete();
+  }
+  return true;
+}
+
+Future<bool> syncPendingQueueOnServer() async {
+  print("syncing pending queue");
+  Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
+      appStateSettings["sendTransactionsToServerQueue"];
+  for (String key in currentSendTransactionsToServerQueue.keys) {
+    FirebaseFirestore? db = await firebaseGetDBInstance();
+    if (db == null) {
+      return false;
+    }
+    try {
+      print("CURRENT:");
+      print(currentSendTransactionsToServerQueue[key]);
+
+      TransactionCategory category;
+      try {
+        category = await database.getCategoryInstance(
+            int.parse(currentSendTransactionsToServerQueue[key]["categoryPk"]));
+      } catch (e) {
+        print(e.toString());
+        // category was probably deleted, we don't need to sync anything...
+        continue;
+      }
+
+      if (currentSendTransactionsToServerQueue[key]["action"] ==
+          "sendTransactionDelete") {
+        await deleteOnServer(
+            db,
+            currentSendTransactionsToServerQueue[key]["transactionSharedKey"],
+            category);
+      }
+
+      Transaction transaction = await database.getTransactionFromPk(int.parse(
+          currentSendTransactionsToServerQueue[key]["transactionPk"]));
+      if (currentSendTransactionsToServerQueue[key]["action"] ==
+          "sendTransactionSet") {
+        await setOnServer(db, transaction, category);
+      } else if (currentSendTransactionsToServerQueue[key]["action"] ==
+          "sendTransactionAdd") {
+        await addOnServer(db, transaction, category);
+      }
+    } catch (e) {
+      print(e.toString());
+      print("skipping syncing this transaction...");
+    }
+  }
+  updateSettings("sendTransactionsToServerQueue", {},
+      pagesNeedingRefresh: [], updateGlobalState: false);
+  return true;
+}
+
 class EditCategoriesPage extends StatefulWidget {
   EditCategoriesPage({
     Key? key,
@@ -345,22 +536,19 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
           ),
         ),
       ),
-      slivers: [
-        SliverToBoxAdapter(
-          child: Row(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 12.5, right: 5),
-                child: IconButton(
-                  onPressed: () async {
-                    getCloudCategories();
-                  },
-                  icon: Icon(Icons.refresh_rounded),
-                ),
-              )
-            ],
+      actions: [
+        Container(
+          padding: EdgeInsets.only(top: 12.5, right: 5),
+          child: IconButton(
+            onPressed: () async {
+              getCloudCategories();
+              syncPendingQueueOnServer();
+            },
+            icon: Icon(Icons.refresh_rounded),
           ),
         ),
+      ],
+      slivers: [
         StreamBuilder<List<TransactionCategory>>(
           stream: database.watchAllCategories(),
           builder: (context, snapshot) {

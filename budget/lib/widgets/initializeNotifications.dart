@@ -9,6 +9,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -49,6 +50,7 @@ runNotificationPayLoadsNoContext(payloadData) {
 }
 
 runNotificationPayLoads(context) {
+  if (kIsWeb) return;
   if (notificationPayload == "addTransaction") {
     Navigator.push(
       context,
@@ -61,6 +63,7 @@ runNotificationPayLoads(context) {
 }
 
 setDailyNotificationOnLaunch(context) async {
+  if (kIsWeb) return;
   bool notificationsEnabled = appStateSettings["notifications"];
   TimeOfDay timeOfDay = TimeOfDay(
       hour: appStateSettings["notificationHour"],
@@ -72,6 +75,7 @@ setDailyNotificationOnLaunch(context) async {
 }
 
 setUpcomingNotifications(context) async {
+  if (kIsWeb) return;
   bool upcomingTransactionsNotificationsEnabled =
       appStateSettings["notificationsUpcomingTransactions"];
   TimeOfDay upcomingTransactionsTimeOfDay = TimeOfDay(

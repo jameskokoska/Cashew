@@ -1,8 +1,11 @@
 import 'dart:developer';
 
 import 'package:budget/main.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,7 +16,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 17;
+int schemaVersionGlobal = 20;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -45,6 +48,8 @@ enum CategoryOwnerMember {
 enum ThemeSetting { dark, light }
 
 enum MethodAdded { email, shared }
+
+enum SharedStatus { waiting, shared, error }
 
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
@@ -126,6 +131,7 @@ class Transactions extends Table {
   // Note: a transaction has not been published until methodAdded is shared and sharedKey is not null
   TextColumn get transactionOwnerEmail => text().nullable()();
   TextColumn get sharedKey => text().nullable()();
+  IntColumn get sharedStatus => intEnum<SharedStatus>().nullable()();
 }
 
 // Server entry: (sub collection in category)
@@ -308,6 +314,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 15) {
             await migrator.addColumn(categories, categories.sharedOwnerMember);
             await migrator.addColumn(categories, categories.sharedDateUpdated);
+          }
+          if (from <= 19) {
+            await migrator.addColumn(transactions, transactions.sharedStatus);
           }
         },
       );
@@ -1100,40 +1109,16 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     // Update the servers entry of the transaction
     if (updateSharedEntry == true) {
-      FirebaseFirestore? db = await firebaseGetDBInstance();
       TransactionCategory category =
           await database.getCategoryInstance(transaction.categoryFk);
-      CollectionReference subCollectionRef = db!
-          .collection('categories')
-          .doc(category.sharedKey)
-          .collection("transactions");
-      bool updatingTransaction = false;
       if (transaction.sharedKey != null && category.sharedKey != null) {
-        await subCollectionRef.doc(transaction.sharedKey).set({
-          "logType": "update", // create, delete, update
-          "name": transaction.name,
-          "amount": transaction.amount,
-          "note": transaction.note,
-          "dateCreated": transaction.dateCreated,
-          "dateUpdated": DateTime.now(),
-          "income": transaction.income,
-        }, SetOptions(merge: true));
+        sendTransactionSet(transaction, category);
+        transaction =
+            transaction.copyWith(sharedStatus: Value(SharedStatus.waiting));
       } else if (transaction.sharedKey == null && category.sharedKey != null) {
-        DocumentReference addedDocument = await subCollectionRef.add({
-          "logType": "create", // create, delete, update
-          "name": transaction.name,
-          "amount": transaction.amount,
-          "note": transaction.note,
-          "dateCreated": transaction.dateCreated,
-          "dateUpdated": DateTime.now(),
-          "income": transaction.income,
-          "ownerEmail": FirebaseAuth.instance.currentUser!.email,
-          "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
-        });
-        transaction = transaction.copyWith(
-            sharedKey: Value(addedDocument.id),
-            transactionOwnerEmail:
-                Value(FirebaseAuth.instance.currentUser!.email));
+        sendTransactionAdd(transaction, category);
+        transaction =
+            transaction.copyWith(sharedStatus: Value(SharedStatus.waiting));
       }
     }
     print(transaction);
@@ -1153,8 +1138,11 @@ class FinanceDatabase extends _$FinanceDatabase {
     // update category details on server
     if (updateSharedEntry == true && category.sharedKey != null) {
       FirebaseFirestore? db = await firebaseGetDBInstance();
+      if (db == null) {
+        return -1;
+      }
       DocumentReference collectionRef =
-          db!.collection('categories').doc(category.sharedKey);
+          db.collection('categories').doc(category.sharedKey);
       collectionRef.set({
         "colour": category.colour,
         "iconName": category.iconName,
@@ -1386,21 +1374,10 @@ class FinanceDatabase extends _$FinanceDatabase {
     // Send the delete log to the server
     if (updateSharedEntry) {
       Transaction transactionToDelete =
-          await getTransactionFromPk(transactionPk);
-      if (transactionToDelete.sharedKey != null) {
-        FirebaseFirestore? db = await firebaseGetDBInstance();
-        TransactionCategory category =
-            await database.getCategoryInstance(transactionToDelete.categoryFk);
-        CollectionReference subCollectionRef = db!
-            .collection('categories')
-            .doc(category.sharedKey)
-            .collection("transactions");
-        subCollectionRef.add({
-          "logType": "delete", // create, delete, update
-          "deleteSharedKey": transactionToDelete.sharedKey,
-        });
-        subCollectionRef.doc(transactionToDelete.sharedKey).delete();
-      }
+          await database.getTransactionFromPk(transactionPk);
+      TransactionCategory category =
+          await database.getCategoryInstance(transactionToDelete.categoryFk);
+      sendTransactionDelete(transactionToDelete, category);
     }
 
     return (delete(transactions)
