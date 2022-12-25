@@ -246,21 +246,41 @@ class TransactionEntry extends StatelessWidget {
                                             .withOpacity(0.7),
                                       ),
                                       SizedBox(width: 2),
-                                      TextFont(
-                                        text: transaction.transactionOwnerEmail
-                                                    .toString() ==
-                                                appStateSettings[
-                                                    "currentUserEmail"]
-                                            ? "From You"
-                                            : "From " +
-                                                transaction
-                                                    .transactionOwnerEmail
-                                                    .toString(),
-                                        fontSize: 13,
-                                        textColor: Theme.of(context)
-                                            .colorScheme
-                                            .black
-                                            .withOpacity(0.7),
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            TextFont(
+                                              autoSizeText: true,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              text: "From ",
+                                              fontSize: 13,
+                                              textColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .black
+                                                  .withOpacity(0.7),
+                                            ),
+                                            Expanded(
+                                              child: TextFont(
+                                                overflow: TextOverflow.ellipsis,
+                                                text: transaction
+                                                            .transactionOwnerEmail
+                                                            .toString() ==
+                                                        appStateSettings[
+                                                            "currentUserEmail"]
+                                                    ? "You"
+                                                    : transaction
+                                                        .transactionOwnerEmail
+                                                        .toString(),
+                                                fontSize: 13,
+                                                textColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .black
+                                                    .withOpacity(0.7),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),

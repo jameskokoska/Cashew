@@ -7,6 +7,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -109,8 +110,19 @@ Future<bool> shareCategory(
   return true;
 }
 
+Future<bool> leaveSharedCategory(TransactionCategory sharedCategory) async {
+  FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (db == null) {
+    return false;
+  }
+  removeMemberFromCategory(
+      sharedCategory.sharedKey!, FirebaseAuth.instance.currentUser!.email!);
+  removedSharedFromCategory(sharedCategory);
+  return true;
+}
+
 Future<bool> removedSharedFromCategory(
-    TransactionCategory? sharedCategory) async {
+    TransactionCategory sharedCategory) async {
   if (sharedCategory == null) {
     return false;
   }
@@ -257,6 +269,9 @@ Future<bool> downloadTransactionsFromCategories(
             methodAdded: MethodAdded.shared,
           ),
         );
+        if (transactionDecoded["name"] != null &&
+            transactionDecoded["name"] != "")
+          await addAssociatedTitles(transactionDecoded["name"], sharedCategory);
       } else if (transaction["logType"] == "delete") {
         await database
             .deleteFromSharedTransaction(transactionDecoded["deleteSharedKey"]);

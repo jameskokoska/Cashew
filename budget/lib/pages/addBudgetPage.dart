@@ -807,7 +807,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                 ),
                               )),
                   ),
-                  Container(height: 13),
+                  SizedBox(height: 13),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
@@ -821,7 +821,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       ],
                     ),
                   ),
-                  Container(height: 5),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Tappable(
@@ -838,6 +838,56 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               child: TextFont(
                                 text:
                                     selectedPin == true ? "Pinned" : "Unpinned",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 26,
+                              ),
+                            ),
+                            ButtonIcon(
+                              onTap: () {
+                                setSelectedPin();
+                              },
+                              icon: selectedPin
+                                  ? Icons.push_pin_rounded
+                                  : Icons.push_pin_outlined,
+                              size: 41,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 13),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextFont(
+                          text: "Transactions to Include for Shared Categories",
+                          textColor: Theme.of(context).colorScheme.textLight,
+                          fontSize: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Tappable(
+                      onTap: () {
+                        setSelectedPin();
+                      },
+                      borderRadius: 10,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 6),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFont(
+                                text: selectedPin == true
+                                    ? "By Everyone"
+                                    : "By Me",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 26,
                               ),

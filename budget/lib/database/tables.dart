@@ -1181,7 +1181,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       } catch (e) {
         // new entry is needed
         int numberOfCategories =
-            (await database.getTotalCountOfWallets())[0] ?? 0;
+            (await database.getTotalCountOfCategories())[0] ?? 0;
         sharedCategory = category.copyWith(order: numberOfCategories);
         return into(categories).insertOnConflictUpdate(sharedCategory);
       }

@@ -40,7 +40,7 @@ class SharedCategorySettings extends StatefulWidget {
     required this.category,
   }) : super(key: key);
 
-  final TransactionCategory? category;
+  final TransactionCategory category;
 
   @override
   _SharedCategorySettingsState createState() => _SharedCategorySettingsState();
@@ -55,14 +55,14 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       dynamic response =
-          await getMembersFromCategory(widget.category!.sharedKey!);
+          await getMembersFromCategory(widget.category.sharedKey!);
       if (response == null) {
         Navigator.pop(context);
         openSnackbar(SnackbarMessage(title: "Connection error"));
         return;
       }
       print(FirebaseAuth.instance.currentUser!.email);
-      print(widget.category!.sharedOwnerMember);
+      print(widget.category.sharedOwnerMember);
       setState(() {
         members = response;
         isLoaded = true;
@@ -93,15 +93,15 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
     }
     if (updateEntry) {
       await removeMemberFromCategory(
-          widget.category!.sharedKey!, originalMember);
-      await addMemberToCategory(widget.category!.sharedKey!, member);
+          widget.category.sharedKey!, originalMember);
+      await addMemberToCategory(widget.category.sharedKey!, member);
       setState(() {
         int index = members.indexOf(originalMember);
         members.removeAt(index);
         members.add(member);
       });
     } else {
-      await addMemberToCategory(widget.category!.sharedKey!, member);
+      await addMemberToCategory(widget.category.sharedKey!, member);
       setState(() {
         members.add(member);
       });
@@ -109,7 +109,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
   }
 
   removeMember(String member) async {
-    await removeMemberFromCategory(widget.category!.sharedKey!, member);
+    await removeMemberFromCategory(widget.category.sharedKey!, member);
     setState(() {
       int index = members.indexOf(member);
       members.removeAt(index);
@@ -126,13 +126,25 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TextFont(
-            text: "Add Members",
+            text: widget.category.sharedOwnerMember == CategoryOwnerMember.owner
+                ? "Add Members"
+                : "Members",
             textColor: Theme.of(context).colorScheme.textLight,
             fontSize: 16,
           ),
         ),
+        SizedBox(height: 5),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: TextFont(
+            text: "Only group owners can edit members",
+            textColor: Theme.of(context).colorScheme.textLight,
+            fontSize: 13,
+            maxLines: 10,
+          ),
+        ),
         SizedBox(height: 10),
-        widget.category!.sharedOwnerMember == CategoryOwnerMember.owner
+        widget.category.sharedOwnerMember == CategoryOwnerMember.owner
             ? Row(
                 children: [
                   Expanded(
@@ -168,8 +180,13 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: CategoryMemberContainerOwner(
+                    child: CategoryMemberContainer(
                       member: members[0],
+                      setMember: (_) {},
+                      onDelete: () {},
+                      canModify: false,
+                      isOwner: true,
+                      isYou: members[0] == appStateSettings["currentUserEmail"],
                     ),
                   ),
                   for (String member in members.sublist(1))
@@ -184,21 +201,23 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                         onDelete: () {
                           removeMember(member);
                         },
-                        isOwner: widget.category!.sharedOwnerMember ==
+                        canModify: widget.category.sharedOwnerMember ==
                             CategoryOwnerMember.owner,
+                        isOwner: false, //only the first entry is the owner
+                        isYou: member == appStateSettings["currentUserEmail"],
                       ),
                     ),
                 ],
               ),
         SizedBox(height: 5),
-        widget.category!.sharedOwnerMember == CategoryOwnerMember.owner
+        widget.category.sharedOwnerMember == CategoryOwnerMember.owner
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
                   label: "Stop Sharing",
                   onTap: () async {
                     bool status =
-                        await removedSharedFromCategory(widget.category!);
+                        await removedSharedFromCategory(widget.category);
                     if (status == false) {
                       openSnackbar(
                         SnackbarMessage(
@@ -220,8 +239,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                 child: Button(
                   label: "Leave Shared Group",
                   onTap: () async {
-                    bool status =
-                        await removedSharedFromCategory(widget.category!);
+                    bool status = await leaveSharedCategory(widget.category);
                     if (status == false) {
                       openSnackbar(
                         SnackbarMessage(
@@ -232,7 +250,33 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                       );
                       return;
                     }
-                    Navigator.pop(context);
+                    // openPopup(
+                    //   context,
+                    //   title: "Delete " + widget.category.name + " category?",
+                    //   description:
+                    //       "This will delete all transactions associated with this category. This will only delete the transactions on your device.",
+                    //   icon: Icons.delete_rounded,
+                    //   onCancel: () {
+                    //     Navigator.pop(context);
+                    //     Navigator.pop(context);
+                    //   },
+                    //   onCancelLabel: "Cancel",
+                    //   onSubmit: () {
+                    //     database.deleteCategory(
+                    //         widget.category.categoryPk, widget.category.order);
+                    //     database.deleteCategoryTransactions(
+                    //         widget.category.categoryPk);
+                    //     Navigator.pop(context);
+                    //     openSnackbar(
+                    //       SnackbarMessage(
+                    //         title: "Deleted " + widget.category.name,
+                    //         icon: Icons.delete,
+                    //       ),
+                    //     );
+                    //     Navigator.pop(context);
+                    //   },
+                    //   onSubmitLabel: "Delete",
+                    // );
                   },
                   color: Theme.of(context).colorScheme.onErrorContainer,
                   textColor: Theme.of(context).colorScheme.errorContainer,
@@ -250,12 +294,16 @@ class CategoryMemberContainer extends StatelessWidget {
     required this.setMember,
     required this.onDelete,
     required this.isOwner,
+    required this.isYou,
+    required this.canModify,
   }) : super(key: key);
 
   final String member;
   final Function(String) setMember;
   final VoidCallback onDelete;
   final bool isOwner;
+  final bool isYou;
+  final bool canModify;
 
   @override
   Widget build(BuildContext context) {
@@ -263,6 +311,7 @@ class CategoryMemberContainer extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Tappable(
         onTap: () {
+          if (!canModify) return;
           openBottomSheet(
             context,
             PopupFramework(
@@ -288,13 +337,31 @@ class CategoryMemberContainer extends StatelessWidget {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                child: TextFont(
-                  text: member,
-                  fontSize: 18,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    !isOwner && !isYou
+                        ? SizedBox.shrink()
+                        : TextFont(
+                            text: isOwner
+                                ? isYou
+                                    ? "Owner (You)"
+                                    : "Owner"
+                                : isYou
+                                    ? "You"
+                                    : "Member",
+                            fontSize: 15,
+                            textColor: Theme.of(context).colorScheme.secondary,
+                          ),
+                    TextFont(
+                      text: member,
+                      fontSize: 16,
+                    ),
+                  ],
                 ),
               ),
             ),
-            isOwner
+            canModify
                 ? Tappable(
                     onTap: () async {
                       await openPopup(
@@ -326,53 +393,6 @@ class CategoryMemberContainer extends StatelessWidget {
                     ),
                   )
                 : SizedBox.shrink(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CategoryMemberContainerOwner extends StatelessWidget {
-  const CategoryMemberContainerOwner({
-    Key? key,
-    required this.member,
-  }) : super(key: key);
-
-  final String member;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Tappable(
-        onTap: () {},
-        borderRadius: 15,
-        color: Theme.of(context).colorScheme.lightDarkAccent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFont(
-                      text: "Owner",
-                      fontSize: 15,
-                      textColor: Theme.of(context).colorScheme.secondary,
-                    ),
-                    TextFont(
-                      text: member,
-                      fontSize: 18,
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),

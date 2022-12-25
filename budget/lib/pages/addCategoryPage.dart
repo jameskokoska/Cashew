@@ -429,7 +429,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                             icon: Icon(Icons.share_rounded),
                           ),
                         )
-                      : SharedCategorySettings(category: widget.category),
+                      : SharedCategorySettings(category: widget.category!),
                   SizedBox(height: 13),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
