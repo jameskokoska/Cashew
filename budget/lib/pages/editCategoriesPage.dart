@@ -87,6 +87,8 @@ Future<bool> shareCategory(
       transactionFromCategory.copyWith(
         sharedKey: Value(transactionSubCollectionDoc.id),
         transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
+        sharedStatus: Value(SharedStatus.shared),
+        sharedDateUpdated: Value(DateTime.now()),
       ),
       updateSharedEntry: false,
     );
@@ -101,6 +103,7 @@ Future<bool> shareCategory(
     categoryToShare.copyWith(
       sharedKey: Value(categoryCreatedOnCloud.id),
       sharedOwnerMember: Value(CategoryOwnerMember.owner),
+      sharedDateUpdated: Value(DateTime.now()),
     ),
     updateSharedEntry: false,
   );
@@ -161,6 +164,8 @@ Future<bool> removedSharedFromCategory(
       transactionFromCategory.copyWith(
         sharedKey: Value(null),
         transactionOwnerEmail: Value(null),
+        sharedDateUpdated: Value(null),
+        sharedStatus: Value(null),
       ),
       updateSharedEntry: false,
     );
@@ -225,6 +230,7 @@ Future<bool> downloadTransactionsFromCategories(
                 categoryDecoded["ownerEmail"]
             ? CategoryOwnerMember.owner
             : CategoryOwnerMember.member,
+        sharedDateUpdated: DateTime.now(),
       ),
     );
 
@@ -267,6 +273,8 @@ Future<bool> downloadTransactionsFromCategories(
             sharedKey: transaction.id,
             transactionOwnerEmail: transactionDecoded["ownerEmail"],
             methodAdded: MethodAdded.shared,
+            sharedDateUpdated: DateTime.now(),
+            sharedStatus: SharedStatus.shared,
           ),
         );
         if (transactionDecoded["name"] != null &&
@@ -429,6 +437,7 @@ Future<bool> addOnServer(FirebaseFirestore db, Transaction transaction,
     sharedKey: Value(addedDocument.id),
     transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
     sharedStatus: Value(SharedStatus.shared),
+    sharedDateUpdated: Value(DateTime.now()),
   );
   await database.createOrUpdateTransaction(transaction,
       updateSharedEntry: false);

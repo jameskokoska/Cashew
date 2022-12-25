@@ -224,27 +224,47 @@ class TransactionEntry extends StatelessWidget {
                                         fontSize: 17,
                                       ),
                           ),
-                          transaction.sharedKey != null
+                          transaction.sharedKey != null ||
+                                  transaction.sharedStatus ==
+                                      SharedStatus.waiting
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 2.0),
                                   child: Row(
                                     children: [
-                                      Icon(
-                                        transaction.sharedStatus ==
-                                                SharedStatus.waiting
-                                            ? Icons.sync_rounded
-                                            : transaction
-                                                        .transactionOwnerEmail !=
-                                                    appStateSettings[
-                                                        "currentUserEmail"]
-                                                ? Icons.download_rounded
-                                                : Icons.upload_rounded,
-                                        size: 14,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .black
-                                            .withOpacity(0.7),
-                                      ),
+                                      transaction.sharedStatus ==
+                                              SharedStatus.waiting
+                                          ? InfiniteRotationAnimation(
+                                              duration:
+                                                  Duration(milliseconds: 5000),
+                                              child: Icon(
+                                                transaction.sharedStatus ==
+                                                        SharedStatus.waiting
+                                                    ? Icons.sync_rounded
+                                                    : transaction
+                                                                .transactionOwnerEmail !=
+                                                            appStateSettings[
+                                                                "currentUserEmail"]
+                                                        ? Icons.download_rounded
+                                                        : Icons.upload_rounded,
+                                                size: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .black
+                                                    .withOpacity(0.7),
+                                              ),
+                                            )
+                                          : Icon(
+                                              transaction.transactionOwnerEmail !=
+                                                      appStateSettings[
+                                                          "currentUserEmail"]
+                                                  ? Icons.download_rounded
+                                                  : Icons.upload_rounded,
+                                              size: 14,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .black
+                                                  .withOpacity(0.7),
+                                            ),
                                       SizedBox(width: 2),
                                       Expanded(
                                         child: Row(
@@ -270,8 +290,12 @@ class TransactionEntry extends StatelessWidget {
                                                             "currentUserEmail"]
                                                     ? "You"
                                                     : transaction
-                                                        .transactionOwnerEmail
-                                                        .toString(),
+                                                                .sharedStatus ==
+                                                            SharedStatus.waiting
+                                                        ? "You"
+                                                        : transaction
+                                                            .transactionOwnerEmail
+                                                            .toString(),
                                                 fontSize: 13,
                                                 textColor: Theme.of(context)
                                                     .colorScheme
@@ -527,6 +551,62 @@ class TransactionEntry extends StatelessWidget {
           closedColor: Theme.of(context).colorScheme.background,
         );
       },
+    );
+  }
+}
+
+class InfiniteRotationAnimation extends StatefulWidget {
+  final Widget child;
+  final Duration duration;
+
+  InfiniteRotationAnimation({
+    required this.child,
+    this.duration = const Duration(milliseconds: 2000),
+  });
+
+  @override
+  _InfiniteRotationAnimationState createState() =>
+      _InfiniteRotationAnimationState();
+}
+
+class _InfiniteRotationAnimationState extends State<InfiniteRotationAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    );
+    animation = Tween<double>(
+      begin: 0,
+      end: -12.5664, // 2Radians (360 degrees)
+    ).animate(animationController);
+    animationController.forward();
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationController.repeat();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) => Transform.rotate(
+        angle: animation.value,
+        child: widget.child,
+      ),
     );
   }
 }

@@ -878,6 +878,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final String? transactionOwnerEmail;
   final String? sharedKey;
   final SharedStatus? sharedStatus;
+  final DateTime? sharedDateUpdated;
   const Transaction(
       {required this.transactionPk,
       required this.name,
@@ -898,7 +899,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.methodAdded,
       this.transactionOwnerEmail,
       this.sharedKey,
-      this.sharedStatus});
+      this.sharedStatus,
+      this.sharedDateUpdated});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -948,6 +950,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       final converter = $TransactionsTable.$convertersharedStatusn;
       map['shared_status'] = Variable<int>(converter.toSql(sharedStatus));
     }
+    if (!nullToAbsent || sharedDateUpdated != null) {
+      map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated);
+    }
     return map;
   }
 
@@ -992,6 +997,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       sharedStatus: sharedStatus == null && nullToAbsent
           ? const Value.absent()
           : Value(sharedStatus),
+      sharedDateUpdated: sharedDateUpdated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sharedDateUpdated),
     );
   }
 
@@ -1022,6 +1030,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           serializer.fromJson<String?>(json['transactionOwnerEmail']),
       sharedKey: serializer.fromJson<String?>(json['sharedKey']),
       sharedStatus: serializer.fromJson<SharedStatus?>(json['sharedStatus']),
+      sharedDateUpdated:
+          serializer.fromJson<DateTime?>(json['sharedDateUpdated']),
     );
   }
   @override
@@ -1050,6 +1060,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           serializer.toJson<String?>(transactionOwnerEmail),
       'sharedKey': serializer.toJson<String?>(sharedKey),
       'sharedStatus': serializer.toJson<SharedStatus?>(sharedStatus),
+      'sharedDateUpdated': serializer.toJson<DateTime?>(sharedDateUpdated),
     };
   }
 
@@ -1073,7 +1084,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Value<MethodAdded?> methodAdded = const Value.absent(),
           Value<String?> transactionOwnerEmail = const Value.absent(),
           Value<String?> sharedKey = const Value.absent(),
-          Value<SharedStatus?> sharedStatus = const Value.absent()}) =>
+          Value<SharedStatus?> sharedStatus = const Value.absent(),
+          Value<DateTime?> sharedDateUpdated = const Value.absent()}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -1104,6 +1116,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         sharedKey: sharedKey.present ? sharedKey.value : this.sharedKey,
         sharedStatus:
             sharedStatus.present ? sharedStatus.value : this.sharedStatus,
+        sharedDateUpdated: sharedDateUpdated.present
+            ? sharedDateUpdated.value
+            : this.sharedDateUpdated,
       );
   @override
   String toString() {
@@ -1128,33 +1143,36 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('methodAdded: $methodAdded, ')
           ..write('transactionOwnerEmail: $transactionOwnerEmail, ')
           ..write('sharedKey: $sharedKey, ')
-          ..write('sharedStatus: $sharedStatus')
+          ..write('sharedStatus: $sharedStatus, ')
+          ..write('sharedDateUpdated: $sharedDateUpdated')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      transactionPk,
-      name,
-      amount,
-      note,
-      categoryFk,
-      walletFk,
-      labelFks,
-      dateCreated,
-      dateTimeCreated,
-      income,
-      periodLength,
-      reoccurrence,
-      type,
-      paid,
-      createdAnotherFutureTransaction,
-      skipPaid,
-      methodAdded,
-      transactionOwnerEmail,
-      sharedKey,
-      sharedStatus);
+  int get hashCode => Object.hashAll([
+        transactionPk,
+        name,
+        amount,
+        note,
+        categoryFk,
+        walletFk,
+        labelFks,
+        dateCreated,
+        dateTimeCreated,
+        income,
+        periodLength,
+        reoccurrence,
+        type,
+        paid,
+        createdAnotherFutureTransaction,
+        skipPaid,
+        methodAdded,
+        transactionOwnerEmail,
+        sharedKey,
+        sharedStatus,
+        sharedDateUpdated
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1179,7 +1197,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.methodAdded == this.methodAdded &&
           other.transactionOwnerEmail == this.transactionOwnerEmail &&
           other.sharedKey == this.sharedKey &&
-          other.sharedStatus == this.sharedStatus);
+          other.sharedStatus == this.sharedStatus &&
+          other.sharedDateUpdated == this.sharedDateUpdated);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -1203,6 +1222,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<String?> transactionOwnerEmail;
   final Value<String?> sharedKey;
   final Value<SharedStatus?> sharedStatus;
+  final Value<DateTime?> sharedDateUpdated;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -1224,6 +1244,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.transactionOwnerEmail = const Value.absent(),
     this.sharedKey = const Value.absent(),
     this.sharedStatus = const Value.absent(),
+    this.sharedDateUpdated = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.transactionPk = const Value.absent(),
@@ -1246,6 +1267,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.transactionOwnerEmail = const Value.absent(),
     this.sharedKey = const Value.absent(),
     this.sharedStatus = const Value.absent(),
+    this.sharedDateUpdated = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         note = Value(note),
@@ -1272,6 +1294,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<String>? transactionOwnerEmail,
     Expression<String>? sharedKey,
     Expression<int>? sharedStatus,
+    Expression<DateTime>? sharedDateUpdated,
   }) {
     return RawValuesInsertable({
       if (transactionPk != null) 'transaction_pk': transactionPk,
@@ -1296,6 +1319,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
         'transaction_owner_email': transactionOwnerEmail,
       if (sharedKey != null) 'shared_key': sharedKey,
       if (sharedStatus != null) 'shared_status': sharedStatus,
+      if (sharedDateUpdated != null) 'shared_date_updated': sharedDateUpdated,
     });
   }
 
@@ -1319,7 +1343,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<MethodAdded?>? methodAdded,
       Value<String?>? transactionOwnerEmail,
       Value<String?>? sharedKey,
-      Value<SharedStatus?>? sharedStatus}) {
+      Value<SharedStatus?>? sharedStatus,
+      Value<DateTime?>? sharedDateUpdated}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
       name: name ?? this.name,
@@ -1343,6 +1368,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           transactionOwnerEmail ?? this.transactionOwnerEmail,
       sharedKey: sharedKey ?? this.sharedKey,
       sharedStatus: sharedStatus ?? this.sharedStatus,
+      sharedDateUpdated: sharedDateUpdated ?? this.sharedDateUpdated,
     );
   }
 
@@ -1416,6 +1442,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       final converter = $TransactionsTable.$convertersharedStatusn;
       map['shared_status'] = Variable<int>(converter.toSql(sharedStatus.value));
     }
+    if (sharedDateUpdated.present) {
+      map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated.value);
+    }
     return map;
   }
 
@@ -1442,7 +1471,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('methodAdded: $methodAdded, ')
           ..write('transactionOwnerEmail: $transactionOwnerEmail, ')
           ..write('sharedKey: $sharedKey, ')
-          ..write('sharedStatus: $sharedStatus')
+          ..write('sharedStatus: $sharedStatus, ')
+          ..write('sharedDateUpdated: $sharedDateUpdated')
           ..write(')'))
         .toString();
   }
@@ -1625,6 +1655,12 @@ class $TransactionsTable extends Transactions
               type: DriftSqlType.int, requiredDuringInsert: false)
           .withConverter<SharedStatus?>(
               $TransactionsTable.$convertersharedStatusn);
+  static const VerificationMeta _sharedDateUpdatedMeta =
+      const VerificationMeta('sharedDateUpdated');
+  @override
+  late final GeneratedColumn<DateTime> sharedDateUpdated =
+      GeneratedColumn<DateTime>('shared_date_updated', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -1646,7 +1682,8 @@ class $TransactionsTable extends Transactions
         methodAdded,
         transactionOwnerEmail,
         sharedKey,
-        sharedStatus
+        sharedStatus,
+        sharedDateUpdated
       ];
   @override
   String get aliasedName => _alias ?? 'transactions';
@@ -1747,6 +1784,12 @@ class $TransactionsTable extends Transactions
           sharedKey.isAcceptableOrUnknown(data['shared_key']!, _sharedKeyMeta));
     }
     context.handle(_sharedStatusMeta, const VerificationResult.success());
+    if (data.containsKey('shared_date_updated')) {
+      context.handle(
+          _sharedDateUpdatedMeta,
+          sharedDateUpdated.isAcceptableOrUnknown(
+              data['shared_date_updated']!, _sharedDateUpdatedMeta));
+    }
     return context;
   }
 
@@ -1803,6 +1846,8 @@ class $TransactionsTable extends Transactions
       sharedStatus: $TransactionsTable.$convertersharedStatusn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}shared_status'])),
+      sharedDateUpdated: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}shared_date_updated']),
     );
   }
 
@@ -2492,6 +2537,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final bool pinned;
   final int order;
   final int walletFk;
+  final SharedTrsnactionsShow? sharedTransactionsShow;
   const Budget(
       {required this.budgetPk,
       required this.name,
@@ -2506,7 +2552,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.dateCreated,
       required this.pinned,
       required this.order,
-      required this.walletFk});
+      required this.walletFk,
+      this.sharedTransactionsShow});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2532,6 +2579,11 @@ class Budget extends DataClass implements Insertable<Budget> {
     map['pinned'] = Variable<bool>(pinned);
     map['order'] = Variable<int>(order);
     map['wallet_fk'] = Variable<int>(walletFk);
+    if (!nullToAbsent || sharedTransactionsShow != null) {
+      final converter = $BudgetsTable.$convertersharedTransactionsShown;
+      map['shared_transactions_show'] =
+          Variable<int>(converter.toSql(sharedTransactionsShow));
+    }
     return map;
   }
 
@@ -2556,6 +2608,9 @@ class Budget extends DataClass implements Insertable<Budget> {
       pinned: Value(pinned),
       order: Value(order),
       walletFk: Value(walletFk),
+      sharedTransactionsShow: sharedTransactionsShow == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sharedTransactionsShow),
     );
   }
 
@@ -2578,6 +2633,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       pinned: serializer.fromJson<bool>(json['pinned']),
       order: serializer.fromJson<int>(json['order']),
       walletFk: serializer.fromJson<int>(json['walletFk']),
+      sharedTransactionsShow: serializer
+          .fromJson<SharedTrsnactionsShow?>(json['sharedTransactionsShow']),
     );
   }
   @override
@@ -2598,6 +2655,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       'pinned': serializer.toJson<bool>(pinned),
       'order': serializer.toJson<int>(order),
       'walletFk': serializer.toJson<int>(walletFk),
+      'sharedTransactionsShow':
+          serializer.toJson<SharedTrsnactionsShow?>(sharedTransactionsShow),
     };
   }
 
@@ -2615,7 +2674,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           DateTime? dateCreated,
           bool? pinned,
           int? order,
-          int? walletFk}) =>
+          int? walletFk,
+          Value<SharedTrsnactionsShow?> sharedTransactionsShow =
+              const Value.absent()}) =>
       Budget(
         budgetPk: budgetPk ?? this.budgetPk,
         name: name ?? this.name,
@@ -2632,6 +2693,9 @@ class Budget extends DataClass implements Insertable<Budget> {
         pinned: pinned ?? this.pinned,
         order: order ?? this.order,
         walletFk: walletFk ?? this.walletFk,
+        sharedTransactionsShow: sharedTransactionsShow.present
+            ? sharedTransactionsShow.value
+            : this.sharedTransactionsShow,
       );
   @override
   String toString() {
@@ -2649,7 +2713,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('dateCreated: $dateCreated, ')
           ..write('pinned: $pinned, ')
           ..write('order: $order, ')
-          ..write('walletFk: $walletFk')
+          ..write('walletFk: $walletFk, ')
+          ..write('sharedTransactionsShow: $sharedTransactionsShow')
           ..write(')'))
         .toString();
   }
@@ -2669,7 +2734,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       dateCreated,
       pinned,
       order,
-      walletFk);
+      walletFk,
+      sharedTransactionsShow);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2687,7 +2753,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.dateCreated == this.dateCreated &&
           other.pinned == this.pinned &&
           other.order == this.order &&
-          other.walletFk == this.walletFk);
+          other.walletFk == this.walletFk &&
+          other.sharedTransactionsShow == this.sharedTransactionsShow);
 }
 
 class BudgetsCompanion extends UpdateCompanion<Budget> {
@@ -2705,6 +2772,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<bool> pinned;
   final Value<int> order;
   final Value<int> walletFk;
+  final Value<SharedTrsnactionsShow?> sharedTransactionsShow;
   const BudgetsCompanion({
     this.budgetPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -2720,6 +2788,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.pinned = const Value.absent(),
     this.order = const Value.absent(),
     this.walletFk = const Value.absent(),
+    this.sharedTransactionsShow = const Value.absent(),
   });
   BudgetsCompanion.insert({
     this.budgetPk = const Value.absent(),
@@ -2736,6 +2805,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.pinned = const Value.absent(),
     required int order,
     required int walletFk,
+    this.sharedTransactionsShow = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         startDate = Value(startDate),
@@ -2759,6 +2829,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<bool>? pinned,
     Expression<int>? order,
     Expression<int>? walletFk,
+    Expression<int>? sharedTransactionsShow,
   }) {
     return RawValuesInsertable({
       if (budgetPk != null) 'budget_pk': budgetPk,
@@ -2775,6 +2846,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (pinned != null) 'pinned': pinned,
       if (order != null) 'order': order,
       if (walletFk != null) 'wallet_fk': walletFk,
+      if (sharedTransactionsShow != null)
+        'shared_transactions_show': sharedTransactionsShow,
     });
   }
 
@@ -2792,7 +2865,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<DateTime>? dateCreated,
       Value<bool>? pinned,
       Value<int>? order,
-      Value<int>? walletFk}) {
+      Value<int>? walletFk,
+      Value<SharedTrsnactionsShow?>? sharedTransactionsShow}) {
     return BudgetsCompanion(
       budgetPk: budgetPk ?? this.budgetPk,
       name: name ?? this.name,
@@ -2808,6 +2882,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       pinned: pinned ?? this.pinned,
       order: order ?? this.order,
       walletFk: walletFk ?? this.walletFk,
+      sharedTransactionsShow:
+          sharedTransactionsShow ?? this.sharedTransactionsShow,
     );
   }
 
@@ -2859,6 +2935,11 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     if (walletFk.present) {
       map['wallet_fk'] = Variable<int>(walletFk.value);
     }
+    if (sharedTransactionsShow.present) {
+      final converter = $BudgetsTable.$convertersharedTransactionsShown;
+      map['shared_transactions_show'] =
+          Variable<int>(converter.toSql(sharedTransactionsShow.value));
+    }
     return map;
   }
 
@@ -2878,7 +2959,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('dateCreated: $dateCreated, ')
           ..write('pinned: $pinned, ')
           ..write('order: $order, ')
-          ..write('walletFk: $walletFk')
+          ..write('walletFk: $walletFk, ')
+          ..write('sharedTransactionsShow: $sharedTransactionsShow')
           ..write(')'))
         .toString();
   }
@@ -2997,6 +3079,15 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES wallets (wallet_pk)'));
+  static const VerificationMeta _sharedTransactionsShowMeta =
+      const VerificationMeta('sharedTransactionsShow');
+  @override
+  late final GeneratedColumnWithTypeConverter<SharedTrsnactionsShow?, int>
+      sharedTransactionsShow = GeneratedColumn<int>(
+              'shared_transactions_show', aliasedName, true,
+              type: DriftSqlType.int, requiredDuringInsert: false)
+          .withConverter<SharedTrsnactionsShow?>(
+              $BudgetsTable.$convertersharedTransactionsShown);
   @override
   List<GeneratedColumn> get $columns => [
         budgetPk,
@@ -3012,7 +3103,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         dateCreated,
         pinned,
         order,
-        walletFk
+        walletFk,
+        sharedTransactionsShow
       ];
   @override
   String get aliasedName => _alias ?? 'budgets';
@@ -3095,6 +3187,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     } else if (isInserting) {
       context.missing(_walletFkMeta);
     }
+    context.handle(
+        _sharedTransactionsShowMeta, const VerificationResult.success());
     return context;
   }
 
@@ -3134,6 +3228,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       walletFk: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}wallet_fk'])!,
+      sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShown
+          .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.int,
+              data['${effectivePrefix}shared_transactions_show'])),
     );
   }
 
@@ -3150,6 +3247,13 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
   static TypeConverter<BudgetReoccurence?, int?> $converterreoccurrencen =
       NullAwareTypeConverter.wrap($converterreoccurrence);
+  static TypeConverter<SharedTrsnactionsShow, int>
+      $convertersharedTransactionsShow =
+      const EnumIndexConverter<SharedTrsnactionsShow>(
+          SharedTrsnactionsShow.values);
+  static TypeConverter<SharedTrsnactionsShow?, int?>
+      $convertersharedTransactionsShown =
+      NullAwareTypeConverter.wrap($convertersharedTransactionsShow);
 }
 
 class AppSetting extends DataClass implements Insertable<AppSetting> {

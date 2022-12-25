@@ -16,7 +16,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 20;
+int schemaVersionGlobal = 21;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -43,6 +43,11 @@ enum TransactionSpecialType {
 enum CategoryOwnerMember {
   owner,
   member,
+}
+
+enum SharedTrsnactionsShow {
+  fromEveryone,
+  onlyIfOwner,
 }
 
 enum ThemeSetting { dark, light }
@@ -132,6 +137,7 @@ class Transactions extends Table {
   TextColumn get transactionOwnerEmail => text().nullable()();
   TextColumn get sharedKey => text().nullable()();
   IntColumn get sharedStatus => intEnum<SharedStatus>().nullable()();
+  DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
 }
 
 // Server entry: (sub collection in category)
@@ -219,6 +225,8 @@ class Budgets extends Table {
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
   IntColumn get order => integer()();
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
+  IntColumn get sharedTransactionsShow =>
+      intEnum<SharedTrsnactionsShow>().nullable()();
 }
 
 @DataClassName('AppSetting')
@@ -317,6 +325,11 @@ class FinanceDatabase extends _$FinanceDatabase {
           }
           if (from <= 19) {
             await migrator.addColumn(transactions, transactions.sharedStatus);
+          }
+          if (from <= 20) {
+            await migrator.addColumn(
+                transactions, transactions.sharedDateUpdated);
+            await migrator.addColumn(budgets, budgets.sharedTransactionsShow);
           }
         },
       );

@@ -312,6 +312,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           : null,
       sharedStatus:
           widget.transaction != null ? widget.transaction!.sharedStatus : null,
+      sharedDateUpdated: widget.transaction != null
+          ? widget.transaction!.sharedDateUpdated
+          : null,
     );
   }
 
@@ -833,6 +836,25 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   ),
                           ),
                         ),
+                        widget.transaction == null ||
+                                widget.transaction!.sharedDateUpdated == null
+                            ? SizedBox.shrink()
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 20),
+                                child: TextFont(
+                                  text: "Synced on \n" +
+                                      getWordedDateShortMore(
+                                        widget.transaction!.sharedDateUpdated!,
+                                        includeTime: true,
+                                        includeTimeIfToday: true,
+                                      ),
+                                  fontSize: 14,
+                                  textColor:
+                                      Theme.of(context).colorScheme.textLight,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
 
                         // Padding(
                         //   padding: EdgeInsets.symmetric(horizontal: 24),
