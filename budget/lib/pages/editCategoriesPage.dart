@@ -230,7 +230,6 @@ Future<bool> downloadTransactionsFromCategories(
                 categoryDecoded["ownerEmail"]
             ? CategoryOwnerMember.owner
             : CategoryOwnerMember.member,
-        sharedDateUpdated: DateTime.now(),
       ),
     );
 
@@ -385,6 +384,7 @@ Future<bool> setOnServer(FirebaseFirestore db, Transaction transaction,
   }, SetOptions(merge: true));
   transaction = transaction.copyWith(
     sharedStatus: Value(SharedStatus.shared),
+    sharedDateUpdated: Value(DateTime.now()),
   );
   await database.createOrUpdateTransaction(transaction,
       updateSharedEntry: false);

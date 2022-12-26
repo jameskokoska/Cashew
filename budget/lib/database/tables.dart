@@ -45,7 +45,7 @@ enum CategoryOwnerMember {
   member,
 }
 
-enum SharedTrsnactionsShow {
+enum SharedTransactionsShow {
   fromEveryone,
   onlyIfOwner,
 }
@@ -226,7 +226,7 @@ class Budgets extends Table {
   IntColumn get order => integer()();
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
   IntColumn get sharedTransactionsShow =>
-      intEnum<SharedTrsnactionsShow>().nullable()();
+      intEnum<SharedTransactionsShow>().withDefault(const Constant(0))();
 }
 
 @DataClassName('AppSetting')
@@ -395,6 +395,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
     bool? income,
+    required SharedTransactionsShow sharedTransactionsShow,
   }) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
     if (categoryFks.length > 0) {
@@ -402,13 +403,15 @@ class FinanceDatabase extends _$FinanceDatabase {
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
               if (income == null)
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
                     tbl.categoryFk.isIn(categoryFks);
               else
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -424,12 +427,14 @@ class FinanceDatabase extends _$FinanceDatabase {
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
               if (income == null)
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day);
               else
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -444,12 +449,14 @@ class FinanceDatabase extends _$FinanceDatabase {
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
               if (income == null)
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day);
               else
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -1137,7 +1144,10 @@ class FinanceDatabase extends _$FinanceDatabase {
     print(transaction);
 
     // We need to ensure the value is set back to null, so insert/replace
-    if (transaction.sharedKey == null || transaction.type == null) {
+    if (transaction.sharedKey == null ||
+        transaction.type == null ||
+        transaction.sharedDateUpdated == null ||
+        transaction.sharedStatus == null) {
       return into(transactions)
           .insert(transaction, mode: InsertMode.insertOrReplace);
     }
@@ -1505,12 +1515,27 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map(((row) => row.read(totalAmt))).watchSingle();
   }
 
+  Expression<bool> onlyShowIfOwner(
+      $TransactionsTable tbl, SharedTransactionsShow sharedTransactionsShow) {
+    return (sharedTransactionsShow == SharedTransactionsShow.onlyIfOwner
+        ? (tbl.sharedKey.isNotNull() &
+                tbl.transactionOwnerEmail
+                    .equals(appStateSettings["currentUserEmail"])) |
+            tbl.sharedKey.isNull()
+        : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull());
+  }
+
   // The total amount of that category will always be that last column
   // print(snapshot.data![0].rawData.data["transactions.category_fk"]);
   // print(snapshot.data![0].rawData.data["c" + (snapshot.data![0].rawData.data.length).toString()]);
   Stream<List<CategoryWithTotal>>
-      watchTotalSpentInEachCategoryInTimeRangeFromCategories(DateTime start,
-          DateTime end, List<int> categoryFks, bool allCategories) {
+      watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+    DateTime start,
+    DateTime end,
+    List<int> categoryFks,
+    bool allCategories,
+    SharedTransactionsShow sharedTransactionsShow,
+  ) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     final totalAmt = transactions.amount.sum();
@@ -1523,7 +1548,8 @@ class FinanceDatabase extends _$FinanceDatabase {
           return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
               dateCreated.isBetweenValues(startDate, endDate) &
               tbl.paid.equals(true) &
-              tbl.income.equals(false);
+              tbl.income.equals(false) &
+              onlyShowIfOwner(tbl, sharedTransactionsShow);
         })
         ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
       return (query.join([
@@ -1550,7 +1576,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               dateCreated.isBetweenValues(startDate, endDate) &
               tbl.categoryFk.isIn(categoryFks) &
               tbl.paid.equals(true) &
-              tbl.income.equals(false);
+              tbl.income.equals(false) &
+              onlyShowIfOwner(tbl, sharedTransactionsShow);
         }));
       return (query.join([
         leftOuterJoin(categories,
@@ -1713,12 +1740,14 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // get all transactions that occurred in a given time period that belong to categories
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
-      DateTime start,
-      DateTime end,
-      List<int> categoryFks,
-      bool allCategories,
-      bool isPaidOnly,
-      bool? isIncome) {
+    DateTime start,
+    DateTime end,
+    List<int> categoryFks,
+    bool allCategories,
+    bool isPaidOnly,
+    bool? isIncome,
+    SharedTransactionsShow sharedTransactionsShow,
+  ) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     if (allCategories) {
@@ -1727,37 +1756,37 @@ class FinanceDatabase extends _$FinanceDatabase {
               final dateCreated = tbl.dateCreated;
               if (isPaidOnly) {
                 if (isIncome == true) {
-                  return tbl.walletFk
-                          .equals(appStateSettings["selectedWallet"]) &
+                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(true);
                 } else if (isIncome == false) {
-                  return tbl.walletFk
-                          .equals(appStateSettings["selectedWallet"]) &
+                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(false);
                 } else {
-                  return tbl.walletFk
-                          .equals(appStateSettings["selectedWallet"]) &
+                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true);
                 }
               } else {
                 if (isIncome == true) {
-                  return tbl.walletFk
-                          .equals(appStateSettings["selectedWallet"]) &
+                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.income.equals(true);
                 } else if (isIncome == false) {
-                  return tbl.walletFk
-                          .equals(appStateSettings["selectedWallet"]) &
+                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.income.equals(false);
                 } else {
-                  return tbl.walletFk
-                          .equals(appStateSettings["selectedWallet"]) &
+                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate);
                 }
               }

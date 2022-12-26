@@ -38,5 +38,6 @@ Map<String, dynamic> defaultPreferences() {
     "notificationMinuteUpcomingTransactions": 0,
     "materialYou": false,
     "sendTransactionsToServerQueue": {},
+    "currentUserEmail": "",
   };
 }

@@ -480,7 +480,7 @@ String filterEmailTitle(string) {
 
 // When we use fancyRoute, the bottom sheet causes screen to go black
 // we will use this sparingly - but keep in mind the normal material page route causes a lag spike for animation / screen loading
-void pushRoute(context, page, {bool fancyRoute = false}) {
+pushRoute(context, page, {bool fancyRoute = false}) {
   if (appStateSettings["batterySaver"] || !fancyRoute) {
     Navigator.push(
       context,

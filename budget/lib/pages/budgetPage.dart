@@ -108,6 +108,7 @@ class _BudgetPageState extends State<BudgetPage> {
                   budgetRange.end,
                   widget.budget.categoryFks ?? [],
                   widget.budget.allCategoryFks,
+                  widget.budget.sharedTransactionsShow,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -368,6 +369,7 @@ class _BudgetPageState extends State<BudgetPage> {
                       : false,
                   true,
                   false,
+                  widget.budget.sharedTransactionsShow,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -450,6 +452,7 @@ class _BudgetPageState extends State<BudgetPage> {
                     : widget.budget.categoryFks ?? [],
                 income: false,
                 listID: pageId,
+                sharedTransactionsShow: widget.budget.sharedTransactionsShow,
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

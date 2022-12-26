@@ -57,6 +57,7 @@ class BudgetContainer extends StatelessWidget {
         budgetRange.end,
         budget.categoryFks ?? [],
         budget.allCategoryFks,
+        budget.sharedTransactionsShow,
       ),
       builder: (context, snapshot) {
         double smallContainerHeight = showTodayForSmallBudget ? 150 : 140;

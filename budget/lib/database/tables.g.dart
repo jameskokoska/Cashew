@@ -2537,7 +2537,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final bool pinned;
   final int order;
   final int walletFk;
-  final SharedTrsnactionsShow? sharedTransactionsShow;
+  final SharedTransactionsShow sharedTransactionsShow;
   const Budget(
       {required this.budgetPk,
       required this.name,
@@ -2553,7 +2553,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.pinned,
       required this.order,
       required this.walletFk,
-      this.sharedTransactionsShow});
+      required this.sharedTransactionsShow});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2579,8 +2579,8 @@ class Budget extends DataClass implements Insertable<Budget> {
     map['pinned'] = Variable<bool>(pinned);
     map['order'] = Variable<int>(order);
     map['wallet_fk'] = Variable<int>(walletFk);
-    if (!nullToAbsent || sharedTransactionsShow != null) {
-      final converter = $BudgetsTable.$convertersharedTransactionsShown;
+    {
+      final converter = $BudgetsTable.$convertersharedTransactionsShow;
       map['shared_transactions_show'] =
           Variable<int>(converter.toSql(sharedTransactionsShow));
     }
@@ -2608,9 +2608,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       pinned: Value(pinned),
       order: Value(order),
       walletFk: Value(walletFk),
-      sharedTransactionsShow: sharedTransactionsShow == null && nullToAbsent
-          ? const Value.absent()
-          : Value(sharedTransactionsShow),
+      sharedTransactionsShow: Value(sharedTransactionsShow),
     );
   }
 
@@ -2634,7 +2632,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       order: serializer.fromJson<int>(json['order']),
       walletFk: serializer.fromJson<int>(json['walletFk']),
       sharedTransactionsShow: serializer
-          .fromJson<SharedTrsnactionsShow?>(json['sharedTransactionsShow']),
+          .fromJson<SharedTransactionsShow>(json['sharedTransactionsShow']),
     );
   }
   @override
@@ -2656,7 +2654,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       'order': serializer.toJson<int>(order),
       'walletFk': serializer.toJson<int>(walletFk),
       'sharedTransactionsShow':
-          serializer.toJson<SharedTrsnactionsShow?>(sharedTransactionsShow),
+          serializer.toJson<SharedTransactionsShow>(sharedTransactionsShow),
     };
   }
 
@@ -2675,8 +2673,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           bool? pinned,
           int? order,
           int? walletFk,
-          Value<SharedTrsnactionsShow?> sharedTransactionsShow =
-              const Value.absent()}) =>
+          SharedTransactionsShow? sharedTransactionsShow}) =>
       Budget(
         budgetPk: budgetPk ?? this.budgetPk,
         name: name ?? this.name,
@@ -2693,9 +2690,8 @@ class Budget extends DataClass implements Insertable<Budget> {
         pinned: pinned ?? this.pinned,
         order: order ?? this.order,
         walletFk: walletFk ?? this.walletFk,
-        sharedTransactionsShow: sharedTransactionsShow.present
-            ? sharedTransactionsShow.value
-            : this.sharedTransactionsShow,
+        sharedTransactionsShow:
+            sharedTransactionsShow ?? this.sharedTransactionsShow,
       );
   @override
   String toString() {
@@ -2772,7 +2768,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<bool> pinned;
   final Value<int> order;
   final Value<int> walletFk;
-  final Value<SharedTrsnactionsShow?> sharedTransactionsShow;
+  final Value<SharedTransactionsShow> sharedTransactionsShow;
   const BudgetsCompanion({
     this.budgetPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -2866,7 +2862,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<bool>? pinned,
       Value<int>? order,
       Value<int>? walletFk,
-      Value<SharedTrsnactionsShow?>? sharedTransactionsShow}) {
+      Value<SharedTransactionsShow>? sharedTransactionsShow}) {
     return BudgetsCompanion(
       budgetPk: budgetPk ?? this.budgetPk,
       name: name ?? this.name,
@@ -2936,7 +2932,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['wallet_fk'] = Variable<int>(walletFk.value);
     }
     if (sharedTransactionsShow.present) {
-      final converter = $BudgetsTable.$convertersharedTransactionsShown;
+      final converter = $BudgetsTable.$convertersharedTransactionsShow;
       map['shared_transactions_show'] =
           Variable<int>(converter.toSql(sharedTransactionsShow.value));
     }
@@ -3082,12 +3078,14 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static const VerificationMeta _sharedTransactionsShowMeta =
       const VerificationMeta('sharedTransactionsShow');
   @override
-  late final GeneratedColumnWithTypeConverter<SharedTrsnactionsShow?, int>
+  late final GeneratedColumnWithTypeConverter<SharedTransactionsShow, int>
       sharedTransactionsShow = GeneratedColumn<int>(
-              'shared_transactions_show', aliasedName, true,
-              type: DriftSqlType.int, requiredDuringInsert: false)
-          .withConverter<SharedTrsnactionsShow?>(
-              $BudgetsTable.$convertersharedTransactionsShown);
+              'shared_transactions_show', aliasedName, false,
+              type: DriftSqlType.int,
+              requiredDuringInsert: false,
+              defaultValue: const Constant(0))
+          .withConverter<SharedTransactionsShow>(
+              $BudgetsTable.$convertersharedTransactionsShow);
   @override
   List<GeneratedColumn> get $columns => [
         budgetPk,
@@ -3228,9 +3226,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       walletFk: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}wallet_fk'])!,
-      sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShown
+      sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShow
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.int,
-              data['${effectivePrefix}shared_transactions_show'])),
+              data['${effectivePrefix}shared_transactions_show'])!),
     );
   }
 
@@ -3247,13 +3245,10 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
   static TypeConverter<BudgetReoccurence?, int?> $converterreoccurrencen =
       NullAwareTypeConverter.wrap($converterreoccurrence);
-  static TypeConverter<SharedTrsnactionsShow, int>
+  static TypeConverter<SharedTransactionsShow, int>
       $convertersharedTransactionsShow =
-      const EnumIndexConverter<SharedTrsnactionsShow>(
-          SharedTrsnactionsShow.values);
-  static TypeConverter<SharedTrsnactionsShow?, int?>
-      $convertersharedTransactionsShown =
-      NullAwareTypeConverter.wrap($convertersharedTransactionsShow);
+      const EnumIndexConverter<SharedTransactionsShow>(
+          SharedTransactionsShow.values);
 }
 
 class AppSetting extends DataClass implements Insertable<AppSetting> {

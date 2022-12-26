@@ -98,6 +98,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "month";
   bool selectedPin = true;
+  SharedTransactionsShow selectedSharedTransactionsShow =
+      SharedTransactionsShow.fromEveryone;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -340,6 +342,19 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     return;
   }
 
+  void setSelectedSharedTransactionsShow() {
+    if (selectedSharedTransactionsShow == SharedTransactionsShow.fromEveryone)
+      setState(() {
+        selectedSharedTransactionsShow = SharedTransactionsShow.onlyIfOwner;
+      });
+    else
+      setState(() {
+        selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
+      });
+    determineBottomButton();
+    return;
+  }
+
   void setSelectedTitle(String title) {
     setState(() {
       selectedTitle = title;
@@ -412,6 +427,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : await database.getAmountOfBudgets(),
       walletFk: 0,
       pinned: selectedPin,
+      sharedTransactionsShow: selectedSharedTransactionsShow,
     );
   }
 
@@ -423,6 +439,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       //Fill in the information from the passed in budget
       selectedTitle = widget.budget!.name;
       selectedPin = widget.budget!.pinned;
+      selectedSharedTransactionsShow = widget.budget!.sharedTransactionsShow;
       selectedAllCategories = widget.budget!.allCategoryFks;
       selectedAmount = widget.budget!.amount;
 
@@ -621,6 +638,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       horizontalList: true,
                       selectedCategories: selectedCategories,
                       setSelectedCategories: setSelectedCategories,
+                      showSelectedAllCategoriesIfNoneSelected: true,
                     ),
                   ),
                   Container(height: 23),
@@ -875,7 +893,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Tappable(
                       onTap: () {
-                        setSelectedPin();
+                        setSelectedSharedTransactionsShow();
                       },
                       borderRadius: 10,
                       child: Padding(
@@ -885,16 +903,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           children: [
                             Expanded(
                               child: TextFont(
-                                text: selectedPin == true
+                                text: selectedSharedTransactionsShow ==
+                                        SharedTransactionsShow.fromEveryone
                                     ? "By Everyone"
-                                    : "By Me",
+                                    : selectedSharedTransactionsShow ==
+                                            SharedTransactionsShow.onlyIfOwner
+                                        ? "By Me"
+                                        : "",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 26,
                               ),
                             ),
                             ButtonIcon(
                               onTap: () {
-                                setSelectedPin();
+                                setSelectedSharedTransactionsShow();
                               },
                               icon: selectedPin
                                   ? Icons.push_pin_rounded

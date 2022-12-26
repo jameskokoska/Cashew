@@ -41,6 +41,8 @@ List<Widget> getTransactionsSlivers(
   bool? income,
   bool sticky = true,
   bool slivers = true,
+  SharedTransactionsShow sharedTransactionsShow =
+      SharedTransactionsShow.fromEveryone,
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
@@ -55,7 +57,10 @@ List<Widget> getTransactionsSlivers(
     transactionsWidgets.add(
       StreamBuilder<List<TransactionWithCategory>>(
         stream: database.getTransactionCategoryWithDay(date,
-            search: search, categoryFks: categoryFks, income: income),
+            search: search,
+            categoryFks: categoryFks,
+            income: income,
+            sharedTransactionsShow: sharedTransactionsShow),
         builder: (context, snapshot) {
           if (snapshot.data != null &&
               snapshot.hasData &&

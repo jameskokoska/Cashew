@@ -12,6 +12,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -669,20 +670,30 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
 }
 
 class AddButton extends StatelessWidget {
-  const AddButton({Key? key, required this.onTap}) : super(key: key);
+  const AddButton({
+    Key? key,
+    required this.onTap,
+    this.padding = const EdgeInsets.only(
+      left: 15,
+      right: 15,
+      bottom: 9,
+      top: 4,
+    ),
+    this.width = 110,
+    this.height = 52,
+    this.openPage,
+  }) : super(key: key);
 
   final VoidCallback onTap;
+  final EdgeInsets padding;
+  final double width;
+  final double height;
+  final Widget? openPage;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 15,
-        right: 15,
-        bottom: 9,
-        top: 4,
-      ),
-      child: Tappable(
+    Widget getButton(onTap) {
+      return Tappable(
         color: Theme.of(context).colorScheme.background,
         borderRadius: 15,
         child: Container(
@@ -693,8 +704,8 @@ class AddButton extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(15),
           ),
-          width: 110,
-          height: 52,
+          width: width,
+          height: height,
           child: Center(
             child: TextFont(
               text: "+",
@@ -706,7 +717,22 @@ class AddButton extends StatelessWidget {
         onTap: () {
           onTap();
         },
-      ),
+      );
+    }
+
+    if (openPage != null) {
+      return OpenContainerNavigation(
+        openPage: openPage!,
+        button: (openPage) {
+          return getButton(openPage);
+        },
+        borderRadius: 5,
+      );
+    }
+    Widget button = getButton(onTap);
+    return Padding(
+      padding: padding,
+      child: button,
     );
   }
 }

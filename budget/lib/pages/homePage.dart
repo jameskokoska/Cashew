@@ -308,7 +308,8 @@ class HomePageState extends State<HomePage>
                           ? false
                           : selectedSlidingSelector == 3
                               ? true
-                              : null),
+                              : null,
+                      SharedTransactionsShow.fromEveryone),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       bool cumulative =

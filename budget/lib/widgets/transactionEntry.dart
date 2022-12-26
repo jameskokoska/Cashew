@@ -289,9 +289,15 @@ class TransactionEntry extends StatelessWidget {
                                                         appStateSettings[
                                                             "currentUserEmail"]
                                                     ? "You"
-                                                    : transaction
-                                                                .sharedStatus ==
-                                                            SharedStatus.waiting
+                                                    : transaction.sharedStatus ==
+                                                                SharedStatus
+                                                                    .waiting &&
+                                                            (transaction.transactionOwnerEmail ==
+                                                                    appStateSettings[
+                                                                        "currentUserEmail"] ||
+                                                                transaction
+                                                                        .transactionOwnerEmail ==
+                                                                    null)
                                                         ? "You"
                                                         : transaction
                                                             .transactionOwnerEmail

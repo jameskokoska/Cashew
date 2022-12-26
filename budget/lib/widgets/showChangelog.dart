@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Budget can select to show only transactions created by you
+    Add category button when selecting categories
+    All category selector when selecting categories for budget
+    Shared categories
     Upgraded to Drift Database 1.3.0 -> 2.3.0
     Added Firebase login for web
     Fixed pie chart duplicate key removing pie chart when on past budget page
