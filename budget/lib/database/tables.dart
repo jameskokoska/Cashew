@@ -1525,6 +1525,35 @@ class FinanceDatabase extends _$FinanceDatabase {
         : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull());
   }
 
+  Stream<double?> watchTotalSpentByCurrentUserOnly(
+    DateTime start,
+    DateTime end,
+    List<int> categoryFks,
+    bool allCategories,
+  ) {
+    DateTime startDate = DateTime(start.year, start.month, start.day);
+    DateTime endDate = DateTime(end.year, end.month, end.day);
+    final totalAmt = transactions.amount.sum();
+    JoinedSelectStatement<$TransactionsTable, Transaction> query;
+
+    query = (selectOnly(transactions)
+      ..addColumns([totalAmt])
+      ..where(transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
+          transactions.dateCreated.isBetweenValues(startDate, endDate) &
+          transactions.paid.equals(true) &
+          transactions.income.equals(false) &
+          isInCategory(transactions, allCategories, categoryFks) &
+          onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner)));
+    return query.map(((row) => row.read(totalAmt))).watchSingle();
+  }
+
+  Expression<bool> isInCategory(
+      $TransactionsTable tbl, bool allCategories, List<int> categoryFks) {
+    return allCategories
+        ? tbl.categoryFk.isNotNull()
+        : tbl.categoryFk.isIn(categoryFks);
+  }
+
   // The total amount of that category will always be that last column
   // print(snapshot.data![0].rawData.data["transactions.category_fk"]);
   // print(snapshot.data![0].rawData.data["c" + (snapshot.data![0].rawData.data.length).toString()]);
@@ -1541,62 +1570,33 @@ class FinanceDatabase extends _$FinanceDatabase {
     final totalAmt = transactions.amount.sum();
     final totalCount = transactions.transactionPk.count();
 
-    if (allCategories) {
-      final query = (select(transactions)
-        ..where((tbl) {
-          final dateCreated = tbl.dateCreated;
-          return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-              dateCreated.isBetweenValues(startDate, endDate) &
-              tbl.paid.equals(true) &
-              tbl.income.equals(false) &
-              onlyShowIfOwner(tbl, sharedTransactionsShow);
-        })
-        ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
-      return (query.join([
-        leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ])
-            ..addColumns([totalAmt, totalCount])
-            ..groupBy([categories.categoryPk])
-            ..orderBy([OrderingTerm.asc(totalAmt)]))
-          .map((row) {
-        final TransactionCategory category = row.readTable(categories);
-        final double? total = row.read(totalAmt);
-        final int? transactionCount = row.read(totalCount);
-        return CategoryWithTotal(
-            category: category,
-            total: total ?? 0,
-            transactionCount: transactionCount ?? -1);
-      }).watch();
-    } else {
-      final query = (select(transactions)
-        ..where((tbl) {
-          final dateCreated = tbl.dateCreated;
-          return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-              dateCreated.isBetweenValues(startDate, endDate) &
-              tbl.categoryFk.isIn(categoryFks) &
-              tbl.paid.equals(true) &
-              tbl.income.equals(false) &
-              onlyShowIfOwner(tbl, sharedTransactionsShow);
-        }));
-      return (query.join([
-        leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ])
-            ..addColumns([totalAmt, totalCount])
-            ..groupBy([categories.categoryPk])
-            ..orderBy([OrderingTerm.asc(totalAmt)]))
-          .map((row) {
-        final category = row.readTable(categories);
-        final total = row.read(totalAmt);
-        final transactionCount = row.read(totalCount);
-
-        return CategoryWithTotal(
-            category: category,
-            total: total ?? 0,
-            transactionCount: transactionCount ?? -1);
-      }).watch();
-    }
+    final query = (select(transactions)
+      ..where((tbl) {
+        final dateCreated = tbl.dateCreated;
+        return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
+            dateCreated.isBetweenValues(startDate, endDate) &
+            isInCategory(tbl, allCategories, categoryFks) &
+            tbl.paid.equals(true) &
+            tbl.income.equals(false) &
+            onlyShowIfOwner(tbl, sharedTransactionsShow);
+      })
+      ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
+    return (query.join([
+      leftOuterJoin(
+          categories, categories.categoryPk.equalsExp(transactions.categoryFk))
+    ])
+          ..addColumns([totalAmt, totalCount])
+          ..groupBy([categories.categoryPk])
+          ..orderBy([OrderingTerm.asc(totalAmt)]))
+        .map((row) {
+      final TransactionCategory category = row.readTable(categories);
+      final double? total = row.read(totalAmt);
+      final int? transactionCount = row.read(totalCount);
+      return CategoryWithTotal(
+          category: category,
+          total: total ?? 0,
+          transactionCount: transactionCount ?? -1);
+    }).watch();
   }
 
   // get total amount spent in each day

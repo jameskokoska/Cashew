@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -570,13 +571,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
       actions: [
         Container(
           padding: EdgeInsets.only(top: 12.5, right: 5),
-          child: IconButton(
-            onPressed: () async {
-              getCloudCategories();
-              syncPendingQueueOnServer();
-            },
-            icon: Icon(Icons.refresh_rounded),
-          ),
+          child: RefreshButton(),
         ),
       ],
       slivers: [
@@ -752,6 +747,78 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
           },
         ),
       ],
+    );
+  }
+}
+
+class RefreshButton extends StatefulWidget {
+  @override
+  _RefreshButtonState createState() => _RefreshButtonState();
+}
+
+class _RefreshButtonState extends State<RefreshButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  late Tween<double> _tween;
+  bool _isEnabled = true;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 3),
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOutCubicEmphasized,
+    );
+    _tween = Tween<double>(begin: 0.0, end: 12.5664 / 2);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation() {
+    _animationController.forward(from: 0.0);
+  }
+
+  void _onTap() {
+    if (_isEnabled) {
+      _startAnimation();
+      setState(() {
+        _isEnabled = false;
+      });
+      Timer(Duration(seconds: 5), () {
+        setState(() {
+          _isEnabled = true;
+        });
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: _tween.evaluate(_animation),
+          child: AnimatedOpacity(
+            opacity: _isEnabled ? 1 : 0.3,
+            duration: Duration(milliseconds: 500),
+            child: IconButton(
+              icon: Icon(Icons.refresh_rounded),
+              color: Theme.of(context).colorScheme.secondary,
+              onPressed: () => _onTap(),
+            ),
+          ),
+        );
+      },
     );
   }
 }
