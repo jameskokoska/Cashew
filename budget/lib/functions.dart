@@ -181,6 +181,33 @@ getWordedDateShortMore(DateTime date,
   }
 }
 
+String getTimeAgo(DateTime time) {
+  final duration = DateTime.now().difference(time);
+  if (duration.inDays >= 7) {
+    return getWordedDateShortMore(
+      time,
+      includeTime: false,
+      includeTimeIfToday: true,
+    );
+  } else if (duration.inDays >= 1) {
+    if (duration.inDays == 1) {
+      return '1 day ago';
+    }
+    return '${duration.inDays} days ago';
+  } else if (duration.inHours >= 1) {
+    if (duration.inHours == 1) {
+      return '1 hour ago';
+    }
+    return '${duration.inHours} hours ago';
+  } else if (duration.inMinutes >= 1) {
+    if (duration.inMinutes == 1) {
+      return '1 minute ago';
+    }
+    return '${duration.inMinutes} minutes ago';
+  }
+  return 'Just now';
+}
+
 //e.g. Today/Yesterday/Tomorrow/Tuesday/ Thursday, September 15
 getWordedDate(DateTime date,
     {bool includeMonthDate = false, bool includeYearIfNotCurrentYear = true}) {

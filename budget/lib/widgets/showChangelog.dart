@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Original creator of transaction shown under sync
+    If time of backup and sync less than 7 days, it shows time ago difference it was updated
+    Sharing a category properly updates the UI
+    Offline transaction updates happen before downloading updates from server
     Budget can select to show only transactions created by you
     Add category button when selecting categories
     All category selector when selecting categories for budget

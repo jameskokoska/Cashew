@@ -16,7 +16,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 21;
+int schemaVersionGlobal = 22;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -135,6 +135,7 @@ class Transactions extends Table {
   // Attributes to configure sharing of transactions:
   // Note: a transaction has not been published until methodAdded is shared and sharedKey is not null
   TextColumn get transactionOwnerEmail => text().nullable()();
+  TextColumn get transactionOriginalOwnerEmail => text().nullable()();
   TextColumn get sharedKey => text().nullable()();
   IntColumn get sharedStatus => intEnum<SharedStatus>().nullable()();
   DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
@@ -168,6 +169,8 @@ class Categories extends Table {
   IntColumn get sharedOwnerMember =>
       intEnum<CategoryOwnerMember>().nullable()();
   DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
+  TextColumn get sharedMembers =>
+      text().map(const StringListInColumnConverter()).nullable()();
 }
 
 // Server entry:
@@ -330,6 +333,11 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.addColumn(
                 transactions, transactions.sharedDateUpdated);
             await migrator.addColumn(budgets, budgets.sharedTransactionsShow);
+          }
+          if (from <= 21) {
+            await migrator.addColumn(
+                transactions, transactions.transactionOriginalOwnerEmail);
+            await migrator.addColumn(categories, categories.sharedMembers);
           }
         },
       );
@@ -1147,10 +1155,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (transaction.sharedKey == null ||
         transaction.type == null ||
         transaction.sharedDateUpdated == null ||
-        transaction.sharedStatus == null) {
-      return into(transactions)
-          .insert(transaction, mode: InsertMode.insertOrReplace);
-    }
+        transaction.sharedStatus == null) {}
 
     return into(transactions).insertOnConflictUpdate(transaction);
   }

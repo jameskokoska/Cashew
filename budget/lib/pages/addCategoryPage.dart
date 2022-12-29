@@ -53,6 +53,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   bool selectedIncome = false;
   int setCategoryPk = DateTime.now().millisecondsSinceEpoch;
   bool? canAddCategory;
+  TransactionCategory? widgetCategory;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -161,12 +162,15 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           widget.category != null ? widget.category!.sharedOwnerMember : null,
       sharedDateUpdated:
           widget.category != null ? widget.category!.sharedDateUpdated : null,
+      sharedMembers:
+          widget.category != null ? widget.category!.sharedMembers : null,
     );
   }
 
   @override
   void initState() {
     super.initState();
+    widgetCategory = widget.category;
     selectedColor = widget.category != null
         ? (widget.category!.colour == null
             ? null
@@ -418,19 +422,33 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       ),
                     ),
                   ),
-                  widget.category == null || widget.category!.sharedKey == null
-                      ? Container(
-                          padding: EdgeInsets.only(top: 12.5, right: 5),
-                          child: IconButton(
-                            onPressed: () async {
-                              openLoadingPopup(context);
-                              await shareCategory(widget.category, context);
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(Icons.share_rounded),
-                          ),
-                        )
-                      : SharedCategorySettings(category: widget.category!),
+                  widgetCategory == null
+                      ? SizedBox.shrink()
+                      : widgetCategory!.sharedKey == null
+                          ? Container(
+                              padding: EdgeInsets.only(top: 12.5, right: 5),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Button(
+                                  icon: Icons.share_rounded,
+                                  label: "Share Category",
+                                  onTap: () async {
+                                    openLoadingPopup(context);
+                                    await shareCategory(
+                                        widget.category, context);
+                                    TransactionCategory newCategory =
+                                        await database.getCategoryInstance(
+                                            widget.category!.categoryPk);
+                                    setState(() {
+                                      widgetCategory = newCategory;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            )
+                          : SharedCategorySettings(category: widgetCategory!),
                   SizedBox(height: 13),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -762,8 +780,8 @@ class IncomeTypeButton extends StatelessWidget {
             ButtonIcon(
               onTap: onTap,
               icon: selectedIncome
-                  ? Icons.move_to_inbox_rounded
-                  : Icons.exit_to_app_rounded,
+                  ? Icons.exit_to_app_rounded
+                  : Icons.logout_rounded,
               size: 41,
             ),
           ],

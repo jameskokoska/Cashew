@@ -57,7 +57,6 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
       dynamic response =
           await getMembersFromCategory(widget.category.sharedKey!);
       if (response == null) {
-        Navigator.pop(context);
         openSnackbar(SnackbarMessage(title: "Connection error"));
         return;
       }
@@ -214,6 +213,8 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
+                  icon: Icons.block,
+                  iconColor: Theme.of(context).colorScheme.errorContainer,
                   label: "Stop Sharing",
                   onTap: () async {
                     bool status =
@@ -237,6 +238,8 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
+                  icon: Icons.logout_rounded,
+                  iconColor: Theme.of(context).colorScheme.errorContainer,
                   label: "Leave Shared Group",
                   onTap: () async {
                     bool status = await leaveSharedCategory(widget.category);

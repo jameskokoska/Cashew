@@ -88,6 +88,8 @@ Future<bool> shareCategory(
       transactionFromCategory.copyWith(
         sharedKey: Value(transactionSubCollectionDoc.id),
         transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
+        transactionOriginalOwnerEmail:
+            Value(FirebaseAuth.instance.currentUser!.email),
         sharedStatus: Value(SharedStatus.shared),
         sharedDateUpdated: Value(DateTime.now()),
       ),
@@ -105,6 +107,7 @@ Future<bool> shareCategory(
       sharedKey: Value(categoryCreatedOnCloud.id),
       sharedOwnerMember: Value(CategoryOwnerMember.owner),
       sharedDateUpdated: Value(DateTime.now()),
+      sharedMembers: Value([]),
     ),
     updateSharedEntry: false,
   );
@@ -165,6 +168,7 @@ Future<bool> removedSharedFromCategory(
       transactionFromCategory.copyWith(
         sharedKey: Value(null),
         transactionOwnerEmail: Value(null),
+        transactionOriginalOwnerEmail: Value(null),
         sharedDateUpdated: Value(null),
         sharedStatus: Value(null),
       ),
@@ -176,6 +180,7 @@ Future<bool> removedSharedFromCategory(
       sharedDateUpdated: Value(null),
       sharedKey: Value(null),
       sharedOwnerMember: Value(null),
+      sharedMembers: Value(null),
     ),
     updateSharedEntry: false,
   );
@@ -231,6 +236,7 @@ Future<bool> downloadTransactionsFromCategories(
                 categoryDecoded["ownerEmail"]
             ? CategoryOwnerMember.owner
             : CategoryOwnerMember.member,
+        sharedMembers: categoryDecoded["members"],
       ),
     );
 
@@ -272,6 +278,8 @@ Future<bool> downloadTransactionsFromCategories(
             skipPaid: false,
             sharedKey: transaction.id,
             transactionOwnerEmail: transactionDecoded["ownerEmail"],
+            transactionOriginalOwnerEmail:
+                transactionDecoded["originalCreatorEmail"],
             methodAdded: MethodAdded.shared,
             sharedDateUpdated: DateTime.now(),
             sharedStatus: SharedStatus.shared,
@@ -437,6 +445,8 @@ Future<bool> addOnServer(FirebaseFirestore db, Transaction transaction,
   transaction = transaction.copyWith(
     sharedKey: Value(addedDocument.id),
     transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
+    transactionOriginalOwnerEmail:
+        Value(FirebaseAuth.instance.currentUser!.email),
     sharedStatus: Value(SharedStatus.shared),
     sharedDateUpdated: Value(DateTime.now()),
   );
@@ -519,6 +529,8 @@ Future<bool> syncPendingQueueOnServer() async {
 
       Transaction transaction = await database.getTransactionFromPk(int.parse(
           currentSendTransactionsToServerQueue[key]["transactionPk"]));
+      print("UPLOADING THIS TRANSACTION");
+      print(transaction);
       if (currentSendTransactionsToServerQueue[key]["action"] ==
           "sendTransactionSet") {
         await setOnServer(db, transaction, category);

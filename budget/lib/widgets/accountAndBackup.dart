@@ -201,6 +201,7 @@ Future<void> createBackupInBackground(context) async {
       DateTime lastUpdate = DateTime.parse(appStateSettings["lastBackup"]);
       DateTime nextPlannedBackup = lastUpdate
           .add(Duration(days: appStateSettings["autoBackupsFrequency"]));
+      print("next backup planned on " + nextPlannedBackup.toString());
       if (lastUpdate.millisecondsSinceEpoch >=
           nextPlannedBackup.millisecondsSinceEpoch) {
         print("auto backing up");
@@ -1138,11 +1139,11 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 TextFont(
-                                                  text: getWordedDateShortMore(
-                                                      (file.value.modifiedTime ??
-                                                              DateTime.now())
-                                                          .toLocal(),
-                                                      includeTimeIfToday: true),
+                                                  text: getTimeAgo(
+                                                    (file.value.modifiedTime ??
+                                                            DateTime.now())
+                                                        .toLocal(),
+                                                  ),
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold,
                                                 ),

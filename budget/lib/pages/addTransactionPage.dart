@@ -310,6 +310,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       transactionOwnerEmail: widget.transaction != null
           ? widget.transaction!.transactionOwnerEmail
           : null,
+      transactionOriginalOwnerEmail: widget.transaction != null
+          ? widget.transaction!.transactionOriginalOwnerEmail
+          : null,
       sharedStatus:
           widget.transaction != null ? widget.transaction!.sharedStatus : null,
       sharedDateUpdated: widget.transaction != null
@@ -749,6 +752,41 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             selectedIncome: selectedIncome,
                           ),
                         ),
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: selectedCategory != null &&
+                                    selectedCategory!.sharedKey != null
+                                ? AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 400),
+                                    child: TransactionOwnerButton(
+                                      key: ValueKey(selectedIncome),
+                                      onTap: () => openBottomSheet(
+                                        context,
+                                        PopupFramework(
+                                          title: "Select Payer",
+                                          child: RadioItems(
+                                            items: selectedCategory!
+                                                    .sharedMembers ??
+                                                [],
+                                            initial: selectedTypeDisplay,
+                                            onChanged: (value) {
+                                              setSelectedType(value);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      selectedOwner: widget
+                                          .transaction!.transactionOwnerEmail!,
+                                    ),
+                                  )
+                                : Container(),
+                          ),
+                        ),
+
                         Container(height: 20),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
@@ -841,18 +879,21 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             ? SizedBox.shrink()
                             : Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 20),
+                                    horizontal: 10, vertical: 28),
                                 child: TextFont(
-                                  text: "Synced on \n" +
-                                      getWordedDateShortMore(
+                                  text: "Synced " +
+                                      getTimeAgo(
                                         widget.transaction!.sharedDateUpdated!,
-                                        includeTime: true,
-                                        includeTimeIfToday: true,
-                                      ),
-                                  fontSize: 14,
+                                      ).toLowerCase() +
+                                      "\n Created by " +
+                                      (widget.transaction!
+                                              .transactionOriginalOwnerEmail ??
+                                          ""),
+                                  fontSize: 13,
                                   textColor:
                                       Theme.of(context).colorScheme.textLight,
                                   textAlign: TextAlign.center,
+                                  maxLines: 4,
                                 ),
                               ),
 
@@ -978,6 +1019,43 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class TransactionOwnerButton extends StatelessWidget {
+  const TransactionOwnerButton({
+    Key? key,
+    required this.onTap,
+    required this.selectedOwner,
+  }) : super(key: key);
+  final VoidCallback onTap;
+  final String selectedOwner;
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      borderRadius: 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFont(
+                text: selectedOwner,
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+                textColor: Theme.of(context).colorScheme.textLight,
+              ),
+            ),
+            ButtonIcon(
+              onTap: onTap,
+              icon: Icons.person_rounded,
+              size: 41,
+            ),
+          ],
         ),
       ),
     );

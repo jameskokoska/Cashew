@@ -8,18 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class Button extends StatefulWidget {
-  Button({
-    Key? key,
-    required this.label,
-    this.width,
-    this.height,
-    this.fontSize = 16,
-    required this.onTap,
-    this.color,
-    this.textColor,
-    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    this.hasBottomExtraSafeArea = false,
-  }) : super(key: key);
+  Button(
+      {Key? key,
+      required this.label,
+      this.width,
+      this.height,
+      this.fontSize = 16,
+      required this.onTap,
+      this.color,
+      this.textColor,
+      this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      this.hasBottomExtraSafeArea = false,
+      this.icon,
+      this.iconColor})
+      : super(key: key);
   final String label;
   final double? width;
   final double? height;
@@ -29,6 +31,8 @@ class Button extends StatefulWidget {
   final Color? textColor;
   final EdgeInsets padding;
   final bool hasBottomExtraSafeArea;
+  final IconData? icon;
+  final Color? iconColor;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -88,13 +92,33 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             height: widget.height,
             padding: widget.padding,
             child: Center(
-              child: TextFont(
-                text: widget.label,
-                fontSize: widget.fontSize,
-                textColor: widget.textColor ??
-                    Theme.of(context).colorScheme.onSecondaryContainer,
-                maxLines: 5,
-                textAlign: TextAlign.center,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  widget.icon != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: Icon(
+                            widget.icon,
+                            size: 21,
+                            color: widget.iconColor == null
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer
+                                : widget.iconColor,
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  TextFont(
+                    text: widget.label,
+                    fontSize: widget.fontSize,
+                    textColor: widget.textColor ??
+                        Theme.of(context).colorScheme.onSecondaryContainer,
+                    maxLines: 5,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           ),
