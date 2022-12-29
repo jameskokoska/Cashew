@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed ordering of synced catgories
+    When deleting a category, asks for leave group, or delete on server
+    When leaving a category group, asks for delete
+    Can select and change payer in transaction
+    Removed list of categories on edit budgets page
     Original creator of transaction shown under sync
     If time of backup and sync less than 7 days, it shows time ago difference it was updated
     Sharing a category properly updates the UI

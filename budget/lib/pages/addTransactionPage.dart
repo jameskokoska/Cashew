@@ -79,6 +79,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   String selectedRecurrenceDisplay = "months";
   BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
   bool selectedIncome = false;
+  String? selectedPayer;
 
   String? textAddTransaction = "Add Transaction";
 
@@ -126,6 +127,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     setState(() {
       selectedCategory = category;
       selectedIncome = category.income;
+      if (category.sharedKey != null) {
+        selectedPayer = appStateSettings["currentUserEmail"];
+      }
     });
     return;
   }
@@ -176,6 +180,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     setState(() {
       selectedType = transactionTypeDisplayToEnum[type];
       selectedTypeDisplay = type;
+    });
+    return;
+  }
+
+  void setSelectedPayer(String payer) {
+    setState(() {
+      selectedPayer = payer;
     });
     return;
   }
@@ -308,8 +319,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       sharedKey:
           widget.transaction != null ? widget.transaction!.sharedKey : null,
       transactionOwnerEmail: widget.transaction != null
-          ? widget.transaction!.transactionOwnerEmail
-          : null,
+          ? selectedPayer
+          : selectedCategory?.sharedKey != null
+              ? selectedPayer
+              : null,
       transactionOriginalOwnerEmail: widget.transaction != null
           ? widget.transaction!.transactionOriginalOwnerEmail
           : null,
@@ -351,6 +364,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
       }
       selectedIncome = widget.transaction!.income;
+      selectedPayer = widget.transaction!.transactionOwnerEmail;
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -762,7 +776,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 ? AnimatedSwitcher(
                                     duration: Duration(milliseconds: 400),
                                     child: TransactionOwnerButton(
-                                      key: ValueKey(selectedIncome),
+                                      key: ValueKey(selectedPayer),
                                       onTap: () => openBottomSheet(
                                         context,
                                         PopupFramework(
@@ -771,16 +785,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                             items: selectedCategory!
                                                     .sharedMembers ??
                                                 [],
-                                            initial: selectedTypeDisplay,
+                                            initial: selectedPayer ?? "",
                                             onChanged: (value) {
-                                              setSelectedType(value);
+                                              setSelectedPayer(value);
                                               Navigator.of(context).pop();
                                             },
                                           ),
                                         ),
                                       ),
-                                      selectedOwner: widget
-                                          .transaction!.transactionOwnerEmail!,
+                                      selectedOwner: selectedPayer ?? "",
                                     ),
                                   )
                                 : Container(),
@@ -1047,7 +1060,7 @@ class TransactionOwnerButton extends StatelessWidget {
                 text: selectedOwner,
                 fontWeight: FontWeight.bold,
                 fontSize: 26,
-                textColor: Theme.of(context).colorScheme.textLight,
+                textColor: Theme.of(context).colorScheme.black,
               ),
             ),
             ButtonIcon(

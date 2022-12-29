@@ -38,9 +38,11 @@ class SharedCategorySettings extends StatefulWidget {
   SharedCategorySettings({
     Key? key,
     required this.category,
+    required this.setSelectedMembers,
   }) : super(key: key);
 
   final TransactionCategory category;
+  final Function(List<String>?) setSelectedMembers;
 
   @override
   _SharedCategorySettingsState createState() => _SharedCategorySettingsState();
@@ -49,15 +51,19 @@ class SharedCategorySettings extends StatefulWidget {
 class _SharedCategorySettingsState extends State<SharedCategorySettings> {
   List<String> members = [];
   bool isLoaded = false;
+  bool isErrored = false;
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      dynamic response =
-          await getMembersFromCategory(widget.category.sharedKey!);
+      dynamic response = await getMembersFromCategory(
+          widget.category.sharedKey!, widget.category);
       if (response == null) {
         openSnackbar(SnackbarMessage(title: "Connection error"));
+        setState(() {
+          isErrored = true;
+        });
         return;
       }
       print(FirebaseAuth.instance.currentUser!.email);
@@ -66,6 +72,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
         members = response;
         isLoaded = true;
       });
+      widget.setSelectedMembers(members);
     });
   }
 
@@ -92,31 +99,73 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
     }
     if (updateEntry) {
       await removeMemberFromCategory(
-          widget.category.sharedKey!, originalMember);
-      await addMemberToCategory(widget.category.sharedKey!, member);
+          widget.category.sharedKey!, originalMember, widget.category);
+      await addMemberToCategory(
+          widget.category.sharedKey!, member, widget.category);
       setState(() {
         int index = members.indexOf(originalMember);
         members.removeAt(index);
         members.add(member);
       });
     } else {
-      await addMemberToCategory(widget.category.sharedKey!, member);
+      await addMemberToCategory(
+          widget.category.sharedKey!, member, widget.category);
       setState(() {
         members.add(member);
       });
     }
+    widget.setSelectedMembers(members);
   }
 
   removeMember(String member) async {
-    await removeMemberFromCategory(widget.category.sharedKey!, member);
+    await removeMemberFromCategory(
+        widget.category.sharedKey!, member, widget.category);
     setState(() {
       int index = members.indexOf(member);
       members.removeAt(index);
     });
+    widget.setSelectedMembers(members);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isErrored) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TextFont(
+              text:
+                  widget.category.sharedOwnerMember == CategoryOwnerMember.owner
+                      ? "Add Members"
+                      : "Members",
+              textColor: Theme.of(context).colorScheme.textLight,
+              fontSize: 16,
+            ),
+          ),
+          SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TextFont(
+              text: "Only group owners can edit members",
+              textColor: Theme.of(context).colorScheme.textLight,
+              fontSize: 13,
+              maxLines: 10,
+            ),
+          ),
+          SizedBox(height: 10),
+          Center(
+            child: TextFont(
+              text: "Connection Error",
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      );
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,33 +302,33 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                       );
                       return;
                     }
-                    // openPopup(
-                    //   context,
-                    //   title: "Delete " + widget.category.name + " category?",
-                    //   description:
-                    //       "This will delete all transactions associated with this category. This will only delete the transactions on your device.",
-                    //   icon: Icons.delete_rounded,
-                    //   onCancel: () {
-                    //     Navigator.pop(context);
-                    //     Navigator.pop(context);
-                    //   },
-                    //   onCancelLabel: "Cancel",
-                    //   onSubmit: () {
-                    //     database.deleteCategory(
-                    //         widget.category.categoryPk, widget.category.order);
-                    //     database.deleteCategoryTransactions(
-                    //         widget.category.categoryPk);
-                    //     Navigator.pop(context);
-                    //     openSnackbar(
-                    //       SnackbarMessage(
-                    //         title: "Deleted " + widget.category.name,
-                    //         icon: Icons.delete,
-                    //       ),
-                    //     );
-                    //     Navigator.pop(context);
-                    //   },
-                    //   onSubmitLabel: "Delete",
-                    // );
+                    openPopup(
+                      context,
+                      title: "Delete " + widget.category.name + " category?",
+                      description:
+                          "This will delete all transactions associated with this category. This will only delete the transactions on your device.",
+                      icon: Icons.delete_rounded,
+                      onCancel: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      onCancelLabel: "Cancel",
+                      onSubmit: () {
+                        database.deleteCategory(
+                            widget.category.categoryPk, widget.category.order);
+                        database.deleteCategoryTransactions(
+                            widget.category.categoryPk);
+                        Navigator.pop(context);
+                        openSnackbar(
+                          SnackbarMessage(
+                            title: "Deleted " + widget.category.name,
+                            icon: Icons.delete,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      },
+                      onSubmitLabel: "Delete",
+                    );
                   },
                   color: Theme.of(context).colorScheme.onErrorContainer,
                   textColor: Theme.of(context).colorScheme.errorContainer,

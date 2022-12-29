@@ -1171,7 +1171,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       }
       DocumentReference collectionRef =
           db.collection('categories').doc(category.sharedKey);
-      collectionRef.set({
+      collectionRef.update({
         "colour": category.colour,
         "iconName": category.iconName,
         "name": category.name,
@@ -1179,14 +1179,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         //   // FirebaseAuth.instance.currentUser!.email
         // ],
         "income": category.income,
-      }, SetOptions(merge: true));
+      });
     }
 
     // We need to ensure the value is set back to null, so insert/replace
     if (category.colour == null ||
         category.sharedDateUpdated == null ||
         category.sharedKey == null ||
-        category.sharedOwnerMember == null) {
+        category.sharedOwnerMember == null ||
+        category.sharedMembers == null) {
       return into(categories)
           .insert(category, mode: InsertMode.insertOrReplace);
     }
@@ -1203,8 +1204,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         sharedCategory = await (select(categories)
               ..where((t) => t.sharedKey.equals(category.sharedKey ?? "")))
             .getSingle();
-        sharedCategory =
-            category.copyWith(categoryPk: sharedCategory.categoryPk);
+        sharedCategory = category.copyWith(
+            categoryPk: sharedCategory.categoryPk, order: sharedCategory.order);
         return into(categories).insertOnConflictUpdate(sharedCategory);
       } catch (e) {
         // new entry is needed

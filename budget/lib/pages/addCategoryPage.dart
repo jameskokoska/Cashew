@@ -54,6 +54,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   int setCategoryPk = DateTime.now().millisecondsSinceEpoch;
   bool? canAddCategory;
   TransactionCategory? widgetCategory;
+  List<String>? selectedMembers;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -99,6 +100,16 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       selectedIncome = income;
     });
     determineBottomButton();
+    return;
+  }
+
+  void setSelectedMembers(List<String>? members) {
+    if (selectedMembers != null) {
+      determineBottomButton();
+    }
+    setState(() {
+      selectedMembers = members;
+    });
     return;
   }
 
@@ -162,8 +173,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           widget.category != null ? widget.category!.sharedOwnerMember : null,
       sharedDateUpdated:
           widget.category != null ? widget.category!.sharedDateUpdated : null,
-      sharedMembers:
-          widget.category != null ? widget.category!.sharedMembers : null,
+      sharedMembers: selectedMembers,
     );
   }
 
@@ -448,7 +458,10 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                 ),
                               ),
                             )
-                          : SharedCategorySettings(category: widgetCategory!),
+                          : SharedCategorySettings(
+                              category: widgetCategory!,
+                              setSelectedMembers: setSelectedMembers,
+                            ),
                   SizedBox(height: 13),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),

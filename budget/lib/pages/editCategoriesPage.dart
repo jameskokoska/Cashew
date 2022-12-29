@@ -107,7 +107,7 @@ Future<bool> shareCategory(
       sharedKey: Value(categoryCreatedOnCloud.id),
       sharedOwnerMember: Value(CategoryOwnerMember.owner),
       sharedDateUpdated: Value(DateTime.now()),
-      sharedMembers: Value([]),
+      sharedMembers: Value([FirebaseAuth.instance.currentUser!.email!]),
     ),
     updateSharedEntry: false,
   );
@@ -122,44 +122,42 @@ Future<bool> leaveSharedCategory(TransactionCategory sharedCategory) async {
   if (db == null) {
     return false;
   }
-  removeMemberFromCategory(
-      sharedCategory.sharedKey!, FirebaseAuth.instance.currentUser!.email!);
-  removedSharedFromCategory(sharedCategory);
+  removeMemberFromCategory(sharedCategory.sharedKey!,
+      FirebaseAuth.instance.currentUser!.email!, sharedCategory);
+  removedSharedFromCategory(sharedCategory, removeFromServer: false);
   return true;
 }
 
-Future<bool> removedSharedFromCategory(
-    TransactionCategory sharedCategory) async {
-  if (sharedCategory == null) {
-    return false;
-  }
-  try {
-    FirebaseFirestore? db = await firebaseGetDBInstance();
-    if (db == null) {
-      return false;
-    }
-    DocumentReference collectionRef =
-        db.collection('categories').doc(sharedCategory.sharedKey);
-    CollectionReference transactionSubCollection = db
-        .collection('categories')
-        .doc(sharedCategory.sharedKey)
-        .collection("transactions");
+Future<bool> removedSharedFromCategory(TransactionCategory sharedCategory,
+    {bool removeFromServer = true}) async {
+  if (removeFromServer)
+    try {
+      FirebaseFirestore? db = await firebaseGetDBInstance();
+      if (db == null) {
+        return false;
+      }
+      DocumentReference collectionRef =
+          db.collection('categories').doc(sharedCategory.sharedKey);
+      CollectionReference transactionSubCollection = db
+          .collection('categories')
+          .doc(sharedCategory.sharedKey)
+          .collection("transactions");
 
-    WriteBatch batch = db.batch();
-    final QuerySnapshot transactionsOnCloud =
-        await transactionSubCollection.get();
-    print(transactionsOnCloud);
-    for (DocumentSnapshot transaction in transactionsOnCloud.docs) {
-      print(transaction);
-      DocumentReference transactionSubCollectionDoc =
-          transactionSubCollection.doc(transaction.id);
-      batch.delete(transactionSubCollectionDoc);
+      WriteBatch batch = db.batch();
+      final QuerySnapshot transactionsOnCloud =
+          await transactionSubCollection.get();
+      print(transactionsOnCloud);
+      for (DocumentSnapshot transaction in transactionsOnCloud.docs) {
+        print(transaction);
+        DocumentReference transactionSubCollectionDoc =
+            transactionSubCollection.doc(transaction.id);
+        batch.delete(transactionSubCollectionDoc);
+      }
+      batch.commit();
+      await collectionRef.delete();
+    } catch (e) {
+      print(e.toString());
     }
-    batch.commit();
-    await collectionRef.delete();
-  } catch (e) {
-    print(e.toString());
-  }
 
   List<Transaction> transactionsFromCategory =
       await database.getAllTransactionsFromCategory(sharedCategory.categoryPk);
@@ -202,7 +200,7 @@ Future<bool> getCloudCategories() async {
     snapshotsMembers.add(category);
     print("YOU ARE A MEMBER OF THIS CATEGORY " + category.data().toString());
   }
-  downloadTransactionsFromCategories(db, snapshotsMembers);
+  await downloadTransactionsFromCategories(db, snapshotsMembers);
 
   final Query categoryOwned = db
       .collection('categories')
@@ -213,7 +211,13 @@ Future<bool> getCloudCategories() async {
     snapshotsOwners.add(category);
     print("YOU OWN THIS CATEGORY " + category.data().toString());
   }
-  downloadTransactionsFromCategories(db, snapshotsOwners);
+  await downloadTransactionsFromCategories(db, snapshotsOwners);
+  openSnackbar(SnackbarMessage(
+      icon: Icons.cloud_sync_rounded,
+      title: "Updated Categories",
+      description: "Synced " +
+          (snapshotsMembers.length + snapshotsOwners.length).toString() +
+          " categories"));
 
   return true;
 }
@@ -236,7 +240,10 @@ Future<bool> downloadTransactionsFromCategories(
                 categoryDecoded["ownerEmail"]
             ? CategoryOwnerMember.owner
             : CategoryOwnerMember.member,
-        sharedMembers: categoryDecoded["members"],
+        sharedMembers: [
+          categoryDecoded["ownerEmail"],
+          ...List<String>.from(categoryDecoded["members"])
+        ],
       ),
     );
 
@@ -305,7 +312,8 @@ Future<bool> downloadTransactionsFromCategories(
   return true;
 }
 
-Future<bool> addMemberToCategory(String sharedKey, String member) async {
+Future<bool> addMemberToCategory(
+    String sharedKey, String member, TransactionCategory category) async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     return false;
@@ -315,10 +323,18 @@ Future<bool> addMemberToCategory(String sharedKey, String member) async {
   categoryCreatedOnCloud.update({
     "members": FieldValue.arrayUnion([member])
   });
+  TransactionCategory categoryFromDB =
+      await database.getCategoryInstance(category.categoryPk);
+  List<String> memberList = categoryFromDB.sharedMembers ?? [];
+  memberList.add(member);
+  await database.createOrUpdateCategory(
+      categoryFromDB.copyWith(sharedMembers: Value(memberList)),
+      updateSharedEntry: false);
   return true;
 }
 
-Future<bool> removeMemberFromCategory(String sharedKey, String member) async {
+Future<bool> removeMemberFromCategory(
+    String sharedKey, String member, TransactionCategory category) async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     return false;
@@ -328,11 +344,19 @@ Future<bool> removeMemberFromCategory(String sharedKey, String member) async {
   categoryCreatedOnCloud.update({
     "members": FieldValue.arrayRemove([member])
   });
+  TransactionCategory categoryFromDB =
+      await database.getCategoryInstance(category.categoryPk);
+  List<String> memberList = categoryFromDB.sharedMembers ?? [];
+  memberList.add(member);
+  await database.createOrUpdateCategory(
+      categoryFromDB.copyWith(sharedMembers: Value(memberList)),
+      updateSharedEntry: false);
   return true;
 }
 
 // the owner is always the first entry!
-Future<dynamic> getMembersFromCategory(String sharedKey) async {
+Future<dynamic> getMembersFromCategory(
+    String sharedKey, TransactionCategory category) async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     return null;
@@ -345,10 +369,15 @@ Future<dynamic> getMembersFromCategory(String sharedKey) async {
     categoryDecoded["ownerEmail"].toString(),
     ...List<String>.from(categoryDecoded["members"])
   ]);
-  return [
+  List<String> memberList = [
     categoryDecoded["ownerEmail"].toString(),
     ...List<String>.from(categoryDecoded["members"])
   ];
+  await database.createOrUpdateCategory(
+    category.copyWith(sharedMembers: Value(memberList)),
+    updateSharedEntry: false,
+  );
+  return memberList;
 }
 
 Future<bool> sendTransactionSet(
@@ -376,6 +405,7 @@ Future<bool> sendTransactionSet(
   return true;
 }
 
+// update the entry on the server
 Future<bool> setOnServer(FirebaseFirestore db, Transaction transaction,
     TransactionCategory category) async {
   CollectionReference subCollectionRef = db
@@ -390,6 +420,7 @@ Future<bool> setOnServer(FirebaseFirestore db, Transaction transaction,
     "dateCreated": transaction.dateCreated,
     "dateUpdated": DateTime.now(),
     "income": transaction.income,
+    "ownerEmail": transaction.transactionOwnerEmail, //ownerEmail is the payer
   }, SetOptions(merge: true));
   transaction = transaction.copyWith(
     sharedStatus: Value(SharedStatus.shared),
@@ -439,12 +470,12 @@ Future<bool> addOnServer(FirebaseFirestore db, Transaction transaction,
     "dateCreated": transaction.dateCreated,
     "dateUpdated": DateTime.now(),
     "income": transaction.income,
-    "ownerEmail": FirebaseAuth.instance.currentUser!.email,
+    "ownerEmail": transaction.transactionOwnerEmail, //ownerEmail is the payer
     "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
   });
   transaction = transaction.copyWith(
     sharedKey: Value(addedDocument.id),
-    transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
+    transactionOwnerEmail: Value(transaction.transactionOwnerEmail),
     transactionOriginalOwnerEmail:
         Value(FirebaseAuth.instance.currentUser!.email),
     sharedStatus: Value(SharedStatus.shared),
@@ -583,7 +614,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
       actions: [
         Container(
           padding: EdgeInsets.only(top: 12.5, right: 5),
-          child: RefreshButton(),
+          child: RefreshButton(onTap: () async {
+            await getCloudCategories();
+          }),
         ),
       ],
       slivers: [
@@ -717,17 +750,94 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                           Navigator.pop(context);
                         },
                         onCancelLabel: "Cancel",
-                        onSubmit: () {
-                          database.deleteCategory(
-                              category.categoryPk, category.order);
-                          database
-                              .deleteCategoryTransactions(category.categoryPk);
-                          Navigator.pop(context);
-                          openSnackbar(
-                            SnackbarMessage(
-                                title: "Deleted " + category.name,
-                                icon: Icons.delete),
-                          );
+                        onSubmit: () async {
+                          if (category.sharedKey != null) {
+                            Navigator.pop(context);
+                            if (category.sharedOwnerMember ==
+                                CategoryOwnerMember.owner) {
+                              openPopup(
+                                context,
+                                title: "Delete Shared Category?",
+                                description:
+                                    "You own this category. Deleting it will remove it from the server.",
+                                icon: Icons.delete_rounded,
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                                onCancelLabel: "Cancel",
+                                onSubmit: () async {
+                                  bool result =
+                                      await removedSharedFromCategory(category);
+                                  if (result == false) {
+                                    openSnackbar(
+                                      SnackbarMessage(
+                                          title: "Error deleting on server",
+                                          icon: Icons.delete),
+                                    );
+                                    return;
+                                  }
+                                  database.deleteCategory(
+                                      category.categoryPk, category.order);
+                                  database.deleteCategoryTransactions(
+                                      category.categoryPk);
+                                  Navigator.pop(context);
+                                  openSnackbar(
+                                    SnackbarMessage(
+                                        title: "Deleted " + category.name,
+                                        icon: Icons.delete),
+                                  );
+                                },
+                                onSubmitLabel: "Delete",
+                              );
+                            } else if (category.sharedOwnerMember ==
+                                CategoryOwnerMember.member) {
+                              openPopup(
+                                context,
+                                title: "Leave Shared Category?",
+                                description:
+                                    "You are a member of this category. Deleting it will remove you from the shared group.",
+                                icon: Icons.delete_rounded,
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                                onCancelLabel: "Cancel",
+                                onSubmit: () async {
+                                  bool result =
+                                      await leaveSharedCategory(category);
+                                  if (result == false) {
+                                    openSnackbar(
+                                      SnackbarMessage(
+                                          title: "Error leaving group",
+                                          icon: Icons.delete),
+                                    );
+                                    return;
+                                  }
+                                  await database.deleteCategory(
+                                      category.categoryPk, category.order);
+                                  await database.deleteCategoryTransactions(
+                                      category.categoryPk);
+                                  Navigator.pop(context);
+                                  openSnackbar(
+                                    SnackbarMessage(
+                                        title: "Deleted " + category.name,
+                                        icon: Icons.delete),
+                                  );
+                                },
+                                onSubmitLabel: "Delete",
+                              );
+                            }
+                          } else {
+                            await database.deleteCategory(
+                                category.categoryPk, category.order);
+                            await database.deleteCategoryTransactions(
+                                category.categoryPk);
+                            Navigator.pop(context);
+                            openSnackbar(
+                              SnackbarMessage(
+                                  title: "Deleted " + category.name,
+                                  icon: Icons.delete),
+                            );
+                          }
                         },
                         onSubmitLabel: "Delete",
                       );
@@ -764,6 +874,10 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
 }
 
 class RefreshButton extends StatefulWidget {
+  final Function onTap;
+
+  RefreshButton({required this.onTap});
+
   @override
   _RefreshButtonState createState() => _RefreshButtonState();
 }
@@ -799,16 +913,18 @@ class _RefreshButtonState extends State<RefreshButton>
     _animationController.forward(from: 0.0);
   }
 
-  void _onTap() {
+  void _onTap() async {
     if (_isEnabled) {
       _startAnimation();
       setState(() {
         _isEnabled = false;
       });
+      await widget.onTap();
       Timer(Duration(seconds: 5), () {
-        setState(() {
-          _isEnabled = true;
-        });
+        if (mounted)
+          setState(() {
+            _isEnabled = true;
+          });
       });
     }
   }

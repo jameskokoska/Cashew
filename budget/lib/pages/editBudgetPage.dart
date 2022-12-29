@@ -199,46 +199,47 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                   " category budget",
                           fontSize: 14,
                         ),
-                        Wrap(
-                          spacing: 0,
-                          runSpacing: 0,
-                          children: [
-                            ...budget.categoryFks!
-                                .asMap()
-                                .entries
-                                .map((categoryFk) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 1.4),
-                                child: FutureBuilder(
-                                    future: database
-                                        .getCategoryInstance(categoryFk.value),
-                                    builder: (context,
-                                        AsyncSnapshot<TransactionCategory>
-                                            snapshot) {
-                                      if (snapshot.hasData) {
-                                        return Opacity(
-                                          opacity: 0.4,
-                                          child: TextFont(
-                                            text: (snapshot.data?.name ?? "") +
-                                                (budget.categoryFks!.length -
-                                                            1 ==
-                                                        categoryFk.key.toInt()
-                                                    ? ""
-                                                    : ", "),
-                                            fontSize: 13,
-                                          ),
-                                        );
-                                      } else {
-                                        return TextFont(
-                                          text: " ",
-                                          fontSize: 13,
-                                        );
-                                      }
-                                    }),
-                              );
-                            }).toList(),
-                          ],
-                        ),
+                        // List transaction category names on edit budgets page
+                        // Wrap(
+                        //   spacing: 0,
+                        //   runSpacing: 0,
+                        //   children: [
+                        //     ...budget.categoryFks!
+                        //         .asMap()
+                        //         .entries
+                        //         .map((categoryFk) {
+                        //       return Padding(
+                        //         padding: const EdgeInsets.only(top: 1.4),
+                        //         child: FutureBuilder(
+                        //             future: database
+                        //                 .getCategoryInstance(categoryFk.value),
+                        //             builder: (context,
+                        //                 AsyncSnapshot<TransactionCategory>
+                        //                     snapshot) {
+                        //               if (snapshot.hasData) {
+                        //                 return Opacity(
+                        //                   opacity: 0.4,
+                        //                   child: TextFont(
+                        //                     text: (snapshot.data?.name ?? "") +
+                        //                         (budget.categoryFks!.length -
+                        //                                     1 ==
+                        //                                 categoryFk.key.toInt()
+                        //                             ? ""
+                        //                             : ", "),
+                        //                     fontSize: 13,
+                        //                   ),
+                        //                 );
+                        //               } else {
+                        //                 return TextFont(
+                        //                   text: " ",
+                        //                   fontSize: 13,
+                        //                 );
+                        //               }
+                        //             }),
+                        //       );
+                        //     }).toList(),
+                        //   ],
+                        // ),
                       ],
                     ),
                     index: index,
