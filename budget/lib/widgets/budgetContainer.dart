@@ -842,7 +842,8 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: darkenPastel(widget.color, amount: 0.1),
+                          color: dynamicPastel(context, widget.color,
+                              amountDark: 0.1, amountLight: 0.3),
                         ),
                       ),
                     ),

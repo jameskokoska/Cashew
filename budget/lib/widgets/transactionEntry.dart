@@ -546,6 +546,22 @@ class TransactionEntry extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .lightDarkAccent,
+                                boxShadow: boxShadowCheck(
+                                  [
+                                    BoxShadow(
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .shadowColorLight
+                                              .withOpacity(0.3)
+                                          : Colors.black.withOpacity(0.5),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 9,
+                                    ),
+                                  ],
+                                ),
                               ),
                               textStyle: TextStyle(
                                   color: Theme.of(context).colorScheme.black,

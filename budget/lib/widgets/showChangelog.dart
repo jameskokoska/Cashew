@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed your progress bar on budget container color
+    Added box shadow to note popup
     Added note tooltip - can view note on homepage
     Added keep alive on home page when scrolling it doesn't push things down if long list of transactions
     Added nicknames for shared category users
