@@ -185,7 +185,7 @@ class TransactionEntry extends StatelessWidget {
                       ),
                       transaction.type != null
                           ? Padding(
-                              padding: EdgeInsets.only(right: 8),
+                              padding: EdgeInsets.only(right: 5),
                               child: Icon(
                                 getTransactionTypeIcon(transaction.type),
                                 color: iconColor,
@@ -288,7 +288,9 @@ class TransactionEntry extends StatelessWidget {
                                                             .toString() ==
                                                         appStateSettings[
                                                             "currentUserEmail"]
-                                                    ? "You"
+                                                    ? getMemberNickname(
+                                                        appStateSettings[
+                                                            "currentUserEmail"])
                                                     : transaction.sharedStatus ==
                                                                 SharedStatus
                                                                     .waiting &&
@@ -298,10 +300,13 @@ class TransactionEntry extends StatelessWidget {
                                                                 transaction
                                                                         .transactionOwnerEmail ==
                                                                     null)
-                                                        ? "You"
-                                                        : transaction
-                                                            .transactionOwnerEmail
-                                                            .toString(),
+                                                        ? getMemberNickname(
+                                                            appStateSettings[
+                                                                "currentUserEmail"])
+                                                        : getMemberNickname(
+                                                            transaction
+                                                                .transactionOwnerEmail
+                                                                .toString()),
                                                 fontSize: 13,
                                                 textColor: Theme.of(context)
                                                     .colorScheme
@@ -531,7 +536,34 @@ class TransactionEntry extends StatelessWidget {
                               ],
                             )
                           : SizedBox(),
-
+                      transaction.note.toString().trim() != ""
+                          ? Tooltip(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              margin: EdgeInsets.symmetric(horizontal: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .lightDarkAccent,
+                              ),
+                              textStyle: TextStyle(
+                                  color: Theme.of(context).colorScheme.black,
+                                  fontFamily: 'Avenir'),
+                              triggerMode: TooltipTriggerMode.tap,
+                              showDuration: Duration(milliseconds: 10000),
+                              message: transaction.note,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 7, vertical: 10),
+                                child: Icon(
+                                  Icons.edit_note_rounded,
+                                  size: 22,
+                                  color: iconColor,
+                                ),
+                              ),
+                            )
+                          : SizedBox.shrink(),
                       CountNumber(
                         count: (transaction.amount.abs()),
                         duration: Duration(milliseconds: 2000),

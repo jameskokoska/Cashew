@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
-    Fixed ordering of synced catgories
+    Added note tooltip - can view note on homepage
+    Added keep alive on home page when scrolling it doesn't push things down if long list of transactions
+    Added nicknames for shared category users
+    Fixed ordering of synced categories
     When deleting a category, asks for leave group, or delete on server
     When leaving a category group, asks for delete
     Can select and change payer in transaction

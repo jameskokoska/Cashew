@@ -545,3 +545,19 @@ Brightness determineBrightnessTheme(context) {
               ? Brightness.dark
               : Brightness.light;
 }
+
+String getMemberNickname(member) {
+  if (member == appStateSettings["currentUserEmail"]) {
+    if (appStateSettings["usersNicknames"][member] != null &&
+        appStateSettings["usersNicknames"][member].toString().trim() != "") {
+      return appStateSettings["usersNicknames"][member];
+    } else {
+      return "Me";
+    }
+  } else if (appStateSettings["usersNicknames"][member] != null &&
+      appStateSettings["usersNicknames"][member].toString().trim() != "") {
+    return appStateSettings["usersNicknames"][member];
+  } else {
+    return member;
+  }
+}

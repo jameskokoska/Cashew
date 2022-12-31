@@ -39,5 +39,6 @@ Map<String, dynamic> defaultPreferences() {
     "materialYou": false,
     "sendTransactionsToServerQueue": {},
     "currentUserEmail": "",
+    "usersNicknames": {},
   };
 }

@@ -785,6 +785,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                             items: selectedCategory!
                                                     .sharedMembers ??
                                                 [],
+                                            displayFilter: (member) {
+                                              return getMemberNickname(member);
+                                            },
                                             initial: selectedPayer ?? "",
                                             onChanged: (value) {
                                               setSelectedPayer(value);
@@ -1057,7 +1060,7 @@ class TransactionOwnerButton extends StatelessWidget {
           children: [
             Expanded(
               child: TextFont(
-                text: selectedOwner,
+                text: getMemberNickname(selectedOwner),
                 fontWeight: FontWeight.bold,
                 fontSize: 26,
                 textColor: Theme.of(context).colorScheme.black,
@@ -1522,6 +1525,9 @@ class SelectText extends StatefulWidget {
     this.next,
     this.nextWithInput,
     this.placeholder,
+    this.icon,
+    this.autoFocus = true,
+    this.readOnly = false,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -1529,6 +1535,9 @@ class SelectText extends StatefulWidget {
   final Function(String)? nextWithInput;
   final String labelText;
   final String? placeholder;
+  final IconData? icon;
+  final bool autoFocus;
+  final bool readOnly;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -1551,9 +1560,10 @@ class _SelectTextState extends State<SelectText> {
         Container(
           width: MediaQuery.of(context).size.width - 36,
           child: TextInput(
-            icon: Icons.title_rounded,
+            icon: widget.icon != null ? widget.icon : Icons.title_rounded,
             initialValue: widget.selectedText,
-            autoFocus: true,
+            autoFocus: widget.autoFocus,
+            readOnly: widget.readOnly,
             onEditingComplete: () {
               widget.setSelectedText(input ?? "");
               Navigator.pop(context);

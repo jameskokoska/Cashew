@@ -7,12 +7,14 @@ class RadioItems extends StatefulWidget {
   final String initial;
   final List<String> items;
   final Function(String) onChanged;
+  final Function(String)? displayFilter;
 
   const RadioItems({
     Key? key,
     required this.initial,
     required this.items,
     required this.onChanged,
+    this.displayFilter,
   }) : super(key: key);
 
   @override
@@ -45,7 +47,10 @@ class _RadioItemsState extends State<RadioItems> {
             child: ListTile(
               title: Transform.translate(
                 offset: Offset(-12, 0),
-                child: TextFont(text: item),
+                child: TextFont(
+                    text: widget.displayFilter == null
+                        ? item
+                        : widget.displayFilter!(item)),
               ),
               dense: true,
               leading: Radio<String>(

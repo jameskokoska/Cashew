@@ -363,22 +363,78 @@ class CategoryMemberContainer extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Tappable(
         onTap: () {
-          if (!canModify) return;
-          openBottomSheet(
-            context,
-            PopupFramework(
-              title: "Edit Member",
-              subtitle: "Edit the email of the member",
-              child: SelectText(
-                setSelectedText: (_) {},
-                nextWithInput: (text) {
-                  setMember(text);
-                },
-                selectedText: member,
-                placeholder: "example@gmail.com",
+          if (!canModify)
+            openBottomSheet(
+              context,
+              PopupFramework(
+                title: "Edit Member",
+                subtitle: "Edit the nickname of the member",
+                child: Column(
+                  children: [
+                    Opacity(
+                      opacity: 0.4,
+                      child: SelectText(
+                        icon: Icons.person_rounded,
+                        setSelectedText: (_) {},
+                        selectedText: member,
+                        placeholder: "example@gmail.com",
+                        autoFocus: false,
+                        readOnly: true,
+                      ),
+                    ),
+                    SelectText(
+                      icon: Icons.sell_rounded,
+                      setSelectedText: (_) {},
+                      nextWithInput: (text) {
+                        Map<dynamic, dynamic> nicknames =
+                            appStateSettings["usersNicknames"];
+                        nicknames[member] = text;
+                        updateSettings("usersNicknames", nicknames,
+                            pagesNeedingRefresh: [], updateGlobalState: false);
+                      },
+                      selectedText:
+                          appStateSettings["usersNicknames"][member] ?? "",
+                      placeholder: "Nickname",
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
+          else
+            openBottomSheet(
+              context,
+              PopupFramework(
+                title: "Edit Member",
+                subtitle: "Edit the email of the member",
+                child: Column(
+                  children: [
+                    SelectText(
+                      icon: Icons.person_rounded,
+                      setSelectedText: (_) {},
+                      nextWithInput: (text) {
+                        setMember(text);
+                      },
+                      selectedText: member,
+                      placeholder: "example@gmail.com",
+                    ),
+                    SelectText(
+                      icon: Icons.sell_rounded,
+                      setSelectedText: (_) {},
+                      nextWithInput: (text) {
+                        Map<dynamic, dynamic> nicknames =
+                            appStateSettings["usersNicknames"];
+                        nicknames[member] = text;
+                        updateSettings("usersNicknames", nicknames,
+                            pagesNeedingRefresh: [], updateGlobalState: false);
+                      },
+                      selectedText:
+                          appStateSettings["usersNicknames"][member] ?? "",
+                      placeholder: "Nickname",
+                    ),
+                  ],
+                ),
+              ),
+            );
         },
         borderRadius: 15,
         color: Theme.of(context).colorScheme.lightDarkAccent,
@@ -392,19 +448,25 @@ class CategoryMemberContainer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    !isOwner && !isYou
-                        ? SizedBox.shrink()
-                        : TextFont(
-                            text: isOwner
-                                ? isYou
-                                    ? "Owner (You)"
-                                    : "Owner"
-                                : isYou
-                                    ? "You"
-                                    : "Member",
-                            fontSize: 15,
-                            textColor: Theme.of(context).colorScheme.secondary,
-                          ),
+                    TextFont(
+                      text: isOwner
+                          ? isYou
+                              ? getMemberNickname(member) == member
+                                  ? "Owner (You)"
+                                  : getMemberNickname(member) + " (Owner - You)"
+                              : getMemberNickname(member) == member
+                                  ? "Owner"
+                                  : getMemberNickname(member) + " (Owner)"
+                          : isYou
+                              ? getMemberNickname(member) != "Me"
+                                  ? getMemberNickname(member) + " (Member - Me)"
+                                  : "Me (Member)"
+                              : getMemberNickname(member) == member
+                                  ? "Member"
+                                  : getMemberNickname(member) + " (Member)",
+                      fontSize: 15,
+                      textColor: Theme.of(context).colorScheme.secondary,
+                    ),
                     TextFont(
                       text: member,
                       fontSize: 16,

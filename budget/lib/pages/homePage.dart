@@ -176,47 +176,50 @@ class HomePageState extends State<HomePage>
                 ),
               ),
               appStateSettings["showWalletSwitcher"] == true
-                  ? Padding(
-                      padding: const EdgeInsets.only(bottom: 13.0),
-                      child: Container(
-                        height: 85.0,
-                        child: StreamBuilder<List<TransactionWallet>>(
-                          stream: database.watchAllWallets(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              List<Widget> children = [];
-                              int index = 0;
-                              for (TransactionWallet wallet in snapshot.data!) {
-                                children.add(
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: (index == 0 ? 7 : 0.0),
+                  ? KeepAlive(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 13.0),
+                        child: Container(
+                          height: 85.0,
+                          child: StreamBuilder<List<TransactionWallet>>(
+                            stream: database.watchAllWallets(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                List<Widget> children = [];
+                                int index = 0;
+                                for (TransactionWallet wallet
+                                    in snapshot.data!) {
+                                  children.add(
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        left: (index == 0 ? 7 : 0.0),
+                                      ),
+                                      child: WalletEntry(
+                                        selected: appStateSettings[
+                                                "selectedWallet"] ==
+                                            wallet.walletPk,
+                                        wallet: wallet,
+                                      ),
                                     ),
-                                    child: WalletEntry(
-                                      selected:
-                                          appStateSettings["selectedWallet"] ==
-                                              wallet.walletPk,
-                                      wallet: wallet,
-                                    ),
-                                  ),
-                                );
-                                index++;
-                              }
+                                  );
+                                  index++;
+                                }
 
-                              return ListView(
-                                addAutomaticKeepAlives: true,
-                                clipBehavior: Clip.none,
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  ...children,
-                                  WalletEntryAdd(
-                                    key: ValueKey(1),
-                                  ),
-                                ],
-                              );
-                            }
-                            return Container();
-                          },
+                                return ListView(
+                                  addAutomaticKeepAlives: true,
+                                  clipBehavior: Clip.none,
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    ...children,
+                                    WalletEntryAdd(
+                                      key: ValueKey(1),
+                                    ),
+                                  ],
+                                );
+                              }
+                              return Container();
+                            },
+                          ),
                         ),
                       ),
                     )
@@ -364,50 +367,56 @@ class HomePageState extends State<HomePage>
                   },
                 ),
               ),
-              SlidingSelector(onSelected: (index) {
-                setState(() {
-                  selectedSlidingSelector = index;
-                });
-              }),
-              Container(height: 8),
-              AnimatedSize(
-                duration: Duration(milliseconds: 600),
-                curve: Curves.easeInOutCubicEmphasized,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300),
-                  child: StreamBuilder<List<Transaction>>(
-                    stream: database.watchAllUpcomingTransactions(
-                        // upcoming in 3 days
-                        endDate: DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day + 4)),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.length <= 0) {
-                          return SizedBox.shrink();
-                        }
-                        List<Widget> children = [];
-                        for (Transaction transaction in snapshot.data!) {
-                          children.add(Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              UpcomingTransactionDateHeader(
-                                  transaction: transaction, small: true),
-                              TransactionEntry(
-                                openPage: AddTransactionPage(
-                                  title: "Edit Transaction",
+              KeepAlive(
+                child: SlidingSelector(onSelected: (index) {
+                  setState(() {
+                    selectedSlidingSelector = index;
+                  });
+                }),
+              ),
+              KeepAlive(
+                child: Container(height: 8),
+              ),
+              KeepAlive(
+                child: AnimatedSize(
+                  duration: Duration(milliseconds: 600),
+                  curve: Curves.easeInOutCubicEmphasized,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: StreamBuilder<List<Transaction>>(
+                      stream: database.watchAllUpcomingTransactions(
+                          // upcoming in 3 days
+                          endDate: DateTime(DateTime.now().year,
+                              DateTime.now().month, DateTime.now().day + 4)),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.length <= 0) {
+                            return SizedBox.shrink();
+                          }
+                          List<Widget> children = [];
+                          for (Transaction transaction in snapshot.data!) {
+                            children.add(Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                UpcomingTransactionDateHeader(
+                                    transaction: transaction, small: true),
+                                TransactionEntry(
+                                  openPage: AddTransactionPage(
+                                    title: "Edit Transaction",
+                                    transaction: transaction,
+                                  ),
                                   transaction: transaction,
                                 ),
-                                transaction: transaction,
-                              ),
-                              SizedBox(height: 5),
-                            ],
-                          ));
+                                SizedBox(height: 5),
+                              ],
+                            ));
+                          }
+                          return Column(children: children);
+                        } else {
+                          return SizedBox.shrink();
                         }
-                        return Column(children: children);
-                      } else {
-                        return SizedBox.shrink();
-                      }
-                    },
+                      },
+                    ),
                   ),
                 ),
               ),
