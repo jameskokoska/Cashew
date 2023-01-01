@@ -8,12 +8,14 @@ class RadioItems extends StatefulWidget {
   final List<String> items;
   final Function(String) onChanged;
   final Function(String)? displayFilter;
+  final Function(String)? onLongPress;
 
   const RadioItems({
     Key? key,
     required this.initial,
     required this.items,
     required this.onChanged,
+    this.onLongPress,
     this.displayFilter,
   }) : super(key: key);
 
@@ -36,6 +38,9 @@ class _RadioItemsState extends State<RadioItems> {
       children: <Widget>[
         for (var item in widget.items)
           Tappable(
+            onLongPress: widget.onLongPress != null
+                ? () => widget.onLongPress!(item)
+                : null,
             borderRadius: 20,
             color: Colors.transparent,
             onTap: () {

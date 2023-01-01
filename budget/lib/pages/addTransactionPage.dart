@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/SharedCategorySettings.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -264,7 +265,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     });
   }
 
-  Future addTransaction() async {
+  Future<bool> addTransaction() async {
     print("Added transaction");
     if (selectedTitle != null &&
         selectedCategory != null &&
@@ -278,10 +279,43 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     ].contains(createdTransaction.type)) {
       await setUpcomingNotifications(context);
     }
+    if (widget.transaction != null) {
+      TransactionCategory oldCategory =
+          await database.getCategoryInstance(widget.transaction!.categoryFk);
+      if (oldCategory.categoryPk != selectedCategory!.categoryPk) {
+        final result = await openPopup(
+          context,
+          title: "Changing shared category",
+          description:
+              "Transaction may be shared or deleted from the server based on the selected category.",
+          icon: Icons.person_pin_rounded,
+          onSubmit: () async {
+            await database.deleteTransaction(widget.transaction!.transactionPk);
+            // the shared will get generated accordingly again
+            await database.createOrUpdateTransaction(
+                await createTransaction(removeShared: true));
+            Navigator.pop(context);
+          },
+          onSubmitLabel: "Change Category",
+          onCancelLabel: "Cancel",
+          onCancel: () {
+            Navigator.pop(context, false);
+          },
+        );
+        print("CHANGED CATEGORY");
+        if (result == false) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+
     await database.createOrUpdateTransaction(await createTransaction());
+    return true;
   }
 
-  Future<Transaction> createTransaction() async {
+  Future<Transaction> createTransaction({bool removeShared = false}) async {
     return Transaction(
       transactionPk: widget.transaction != null
           ? widget.transaction!.transactionPk
@@ -316,19 +350,22 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       dateTimeCreated: widget.transaction != null
           ? widget.transaction!.dateTimeCreated
           : DateTime.now(),
-      sharedKey:
-          widget.transaction != null ? widget.transaction!.sharedKey : null,
-      transactionOwnerEmail: widget.transaction != null
+      sharedKey: removeShared == false && widget.transaction != null
+          ? widget.transaction!.sharedKey
+          : null,
+      transactionOwnerEmail: removeShared == false && widget.transaction != null
           ? selectedPayer
           : selectedCategory?.sharedKey != null
               ? selectedPayer
               : null,
-      transactionOriginalOwnerEmail: widget.transaction != null
-          ? widget.transaction!.transactionOriginalOwnerEmail
+      transactionOriginalOwnerEmail:
+          removeShared == false && widget.transaction != null
+              ? widget.transaction!.transactionOriginalOwnerEmail
+              : null,
+      sharedStatus: removeShared == false && widget.transaction != null
+          ? widget.transaction!.sharedStatus
           : null,
-      sharedStatus:
-          widget.transaction != null ? widget.transaction!.sharedStatus : null,
-      sharedDateUpdated: widget.transaction != null
+      sharedDateUpdated: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedDateUpdated
           : null,
     );
@@ -782,6 +819,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                         PopupFramework(
                                           title: "Select Payer",
                                           child: RadioItems(
+                                            onLongPress: (member) async {
+                                              setSelectedPayer(member);
+                                              Navigator.pop(context);
+                                              memberPopup(context, member);
+                                            },
                                             items: selectedCategory!
                                                     .sharedMembers ??
                                                 [],
@@ -1027,8 +1069,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             width: MediaQuery.of(context).size.width,
                             height: 50,
                             onTap: () async {
-                              await addTransaction();
-                              Navigator.of(context).pop();
+                              bool result = await addTransaction();
+                              if (result) Navigator.of(context).pop();
                             },
                             hasBottomExtraSafeArea: true,
                           ),

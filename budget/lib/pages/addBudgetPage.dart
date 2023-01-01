@@ -681,27 +681,28 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           child: Row(
                             children: [
                               selectedRecurrence != "Custom"
-                                  ? TextFont(
-                                      text: " /",
+                                  ?
+                                  // TextFont(
+                                  //     text: " /",
+                                  //     fontSize: 25,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   )
+                                  // Disable the custom period length for now...
+                                  TappableTextEntry(
+                                      title: "/ " +
+                                          selectedPeriodLength.toString(),
+                                      placeholder: "/ 0",
+                                      showPlaceHolderWhenTextEquals: "/ 0",
+                                      onTap: () {
+                                        selectPeriodLength(context);
+                                      },
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
+                                      internalPadding: EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 4),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 3),
                                     )
-                                  // Disable the custom period length for now...
-                                  // TappableTextEntry(
-                                  //   title: "/ " +
-                                  //       selectedPeriodLength.toString(),
-                                  //   placeholder: "/ 0",
-                                  //   showPlaceHolderWhenTextEquals: "/ 0",
-                                  //   onTap: () {
-                                  //     selectPeriodLength(context);
-                                  //   },
-                                  //   fontSize: 25,
-                                  //   fontWeight: FontWeight.bold,
-                                  //   internalPadding: EdgeInsets.symmetric(
-                                  //       vertical: 4, horizontal: 4),
-                                  //   padding: EdgeInsets.symmetric(
-                                  //       vertical: 10, horizontal: 3),
-                                  // )
                                   : TextFont(
                                       text: " /",
                                       fontSize: 25,

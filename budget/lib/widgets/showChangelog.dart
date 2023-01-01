@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Can edit nickname in transaction select payer bottomsheet
+    Fixed reoccurrence for budgets and budget time periods
     Fixed your progress bar on budget container color
     Added box shadow to note popup
     Added note tooltip - can view note on homepage

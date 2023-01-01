@@ -401,40 +401,7 @@ class CategoryMemberContainer extends StatelessWidget {
               ),
             );
           else
-            openBottomSheet(
-              context,
-              PopupFramework(
-                title: "Edit Member",
-                subtitle: "Edit the email of the member",
-                child: Column(
-                  children: [
-                    SelectText(
-                      icon: Icons.person_rounded,
-                      setSelectedText: (_) {},
-                      nextWithInput: (text) {
-                        setMember(text);
-                      },
-                      selectedText: member,
-                      placeholder: "example@gmail.com",
-                    ),
-                    SelectText(
-                      icon: Icons.sell_rounded,
-                      setSelectedText: (_) {},
-                      nextWithInput: (text) {
-                        Map<dynamic, dynamic> nicknames =
-                            appStateSettings["usersNicknames"];
-                        nicknames[member] = text;
-                        updateSettings("usersNicknames", nicknames,
-                            pagesNeedingRefresh: [], updateGlobalState: false);
-                      },
-                      selectedText:
-                          appStateSettings["usersNicknames"][member] ?? "",
-                      placeholder: "Nickname",
-                    ),
-                  ],
-                ),
-              ),
-            );
+            memberPopup(context, member);
         },
         borderRadius: 15,
         color: Theme.of(context).colorScheme.lightDarkAccent,
@@ -512,4 +479,42 @@ class CategoryMemberContainer extends StatelessWidget {
       ),
     );
   }
+}
+
+memberPopup(context, String member) {
+  openBottomSheet(
+    context,
+    PopupFramework(
+      title: "Edit Nickname",
+      subtitle: "Edit the nickname of the member",
+      child: Column(
+        children: [
+          Opacity(
+            opacity: 0.4,
+            child: SelectText(
+              icon: Icons.person_rounded,
+              setSelectedText: (_) {},
+              selectedText: member,
+              placeholder: "example@gmail.com",
+              autoFocus: false,
+              readOnly: true,
+            ),
+          ),
+          SelectText(
+            icon: Icons.sell_rounded,
+            setSelectedText: (_) {},
+            nextWithInput: (text) {
+              Map<dynamic, dynamic> nicknames =
+                  appStateSettings["usersNicknames"];
+              nicknames[member] = text;
+              updateSettings("usersNicknames", nicknames,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+            },
+            selectedText: appStateSettings["usersNicknames"][member] ?? "",
+            placeholder: "Nickname",
+          ),
+        ],
+      ),
+    ),
+  );
 }

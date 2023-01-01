@@ -1550,7 +1550,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           transactions.income.equals(false) &
           isInCategory(transactions, allCategories, categoryFks) &
           onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner)));
-    return query.map(((row) => row.read(totalAmt))).watchSingle();
+    return query.map(((row) => row.read(totalAmt))).watchSingleOrNull();
   }
 
   Expression<bool> isInCategory(

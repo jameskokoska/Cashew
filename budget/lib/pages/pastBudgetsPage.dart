@@ -47,18 +47,18 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
       DateTime datePast = DateTime(
         DateTime.now().year -
             (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                ? index
+                ? index * widget.budget.periodLength
                 : 0),
         DateTime.now().month -
             (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                ? index
+                ? index * widget.budget.periodLength
                 : 0),
         DateTime.now().day -
             (widget.budget.reoccurrence == BudgetReoccurence.daily
-                ? index
+                ? index * widget.budget.periodLength
                 : 0) -
             (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                ? index * 7
+                ? index * 7 * widget.budget.periodLength
                 : 0),
       );
       DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
@@ -163,18 +163,18 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                 DateTime datePast = DateTime(
                   DateTime.now().year -
                       (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                          ? index
+                          ? index * widget.budget.periodLength
                           : 0),
                   DateTime.now().month -
                       (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                          ? index
+                          ? index * widget.budget.periodLength
                           : 0),
                   DateTime.now().day -
                       (widget.budget.reoccurrence == BudgetReoccurence.daily
-                          ? index
+                          ? index * widget.budget.periodLength
                           : 0) -
                       (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                          ? index * 7
+                          ? index * 7 * widget.budget.periodLength
                           : 0),
                 );
                 return Padding(
