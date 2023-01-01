@@ -15,6 +15,7 @@ import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -619,17 +620,25 @@ class ScannerTemplateEntry extends StatelessWidget {
             onTap: openContainer,
             child: Padding(
               padding: const EdgeInsets.only(
-                left: 25,
+                left: 7,
                 right: 15,
-                top: 10,
-                bottom: 10,
+                top: 5,
+                bottom: 5,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextFont(
-                    text: scannerTemplate.templateName,
-                    fontWeight: FontWeight.bold,
+                  Row(
+                    children: [
+                      CategoryIcon(
+                          categoryPk: scannerTemplate.defaultCategoryFk,
+                          size: 25),
+                      SizedBox(width: 7),
+                      TextFont(
+                        text: scannerTemplate.templateName,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ],
                   ),
                   ButtonIcon(
                     onTap: () async {

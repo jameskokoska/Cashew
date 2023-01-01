@@ -35,6 +35,9 @@ class _SelectAmountState extends State<SelectAmount> {
   void initState() {
     super.initState();
     amount = widget.amountPassed;
+    if (amount.endsWith(".0")) {
+      amount = widget.amountPassed.replaceAll(".0", "");
+    }
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
       if (fired) {
         fired = false;

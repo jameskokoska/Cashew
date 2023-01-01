@@ -1128,6 +1128,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   // create or update a new transaction
   Future<int>? createOrUpdateTransaction(Transaction transaction,
       {bool updateSharedEntry = true}) async {
+    double maxAmount = 10000000;
+    if (transaction.amount >= maxAmount)
+      transaction = transaction.copyWith(amount: maxAmount);
+    else if (transaction.amount <= -maxAmount)
+      transaction = transaction.copyWith(amount: -maxAmount);
+
     if (transaction.amount == double.infinity ||
         transaction.amount == double.negativeInfinity ||
         transaction.amount == double.nan ||

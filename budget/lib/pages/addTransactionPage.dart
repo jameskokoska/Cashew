@@ -409,7 +409,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       // } else {
       //   selectedAmountCalculation = amountString;
       // }
-      textAddTransaction = "Edit Transaction";
+      textAddTransaction = "Save Changes";
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
@@ -608,8 +608,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 PopupFramework(
                                   title: "Enter Amount",
                                   child: SelectAmount(
-                                    amountPassed:
-                                        selectedAmountCalculation ?? "",
+                                    amountPassed: selectedAmountCalculation ??
+                                        (selectedAmount ?? "0").toString(),
                                     setSelectedAmount: setSelectedAmount,
                                     next: () async {
                                       if (selectedCategory == null) {
