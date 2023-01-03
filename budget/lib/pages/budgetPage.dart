@@ -46,6 +46,7 @@ class BudgetPage extends StatefulWidget {
 class _BudgetPageState extends State<BudgetPage> {
   double budgetHeaderHeight = 0;
   int selectedCategoryPk = -1;
+  String? selectedMember = null;
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
@@ -117,6 +118,7 @@ class _BudgetPageState extends State<BudgetPage> {
                       widget.budget.categoryFks ?? [],
                       widget.budget.allCategoryFks,
                       widget.budget.sharedTransactionsShow,
+                      member: selectedMember,
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -130,7 +132,6 @@ class _BudgetPageState extends State<BudgetPage> {
                               ),
                             ),
                           );
-
                         double totalSpent = 0;
                         List<Widget> categoryEntries = [];
                         snapshot.data!.forEach((category) {
@@ -330,10 +331,26 @@ class _BudgetPageState extends State<BudgetPage> {
                                               ),
                                             ),
                                       Container(height: 3),
-                                      HorizontalBarChart(),
                                     ],
                                   ),
                                 ),
+                              ),
+                            ),
+                            Transform.translate(
+                              offset: Offset(0, -10),
+                              child: BudgetSpenderSummary(
+                                budget: widget.budget,
+                                budgetRange: budgetRange,
+                                budgetColorScheme: budgetColorScheme,
+                                setSelectedMember: (member) {
+                                  setState(() {
+                                    selectedMember = member;
+                                    selectedCategory = null;
+                                    selectedCategoryPk = -1;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(-1);
+                                },
                               ),
                             ),
                             Container(height: 20),
@@ -402,6 +419,7 @@ class _BudgetPageState extends State<BudgetPage> {
                   true,
                   false,
                   widget.budget.sharedTransactionsShow,
+                  member: selectedMember,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -485,6 +503,7 @@ class _BudgetPageState extends State<BudgetPage> {
                 income: false,
                 listID: pageId,
                 sharedTransactionsShow: widget.budget.sharedTransactionsShow,
+                member: selectedMember,
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

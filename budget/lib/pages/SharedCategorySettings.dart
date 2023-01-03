@@ -395,6 +395,7 @@ class CategoryMemberContainer extends StatelessWidget {
                       selectedText:
                           appStateSettings["usersNicknames"][member] ?? "",
                       placeholder: "Nickname",
+                      textCapitalization: TextCapitalization.words,
                     ),
                   ],
                 ),

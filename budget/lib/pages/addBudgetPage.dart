@@ -85,7 +85,7 @@ dynamic enumRecurrence = {
 class _AddBudgetPageState extends State<AddBudgetPage> {
   bool? canAddBudget;
 
-  List<TransactionCategory>? selectedCategories;
+  List<int>? selectedCategories;
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
@@ -291,7 +291,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     );
   }
 
-  void setSelectedCategories(List<TransactionCategory> categories) {
+  void setSelectedCategories(List<int> categories) {
     if (categories.length <= 0) {
       setState(() {
         selectedCategories = categories;
@@ -403,10 +403,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 
   Future<Budget> createBudget() async {
-    List<int> categoryFks = [];
-    for (TransactionCategory category in selectedCategories ?? []) {
-      categoryFks.add(category.categoryPk);
-    }
     return await Budget(
       budgetPk: widget.budget != null
           ? widget.budget!.budgetPk
@@ -416,7 +412,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       colour: toHexString(selectedColor),
       startDate: selectedStartDate,
       endDate: selectedEndDate ?? DateTime.now(),
-      categoryFks: categoryFks,
+      categoryFks: selectedCategories,
       allCategoryFks: selectedAllCategories,
       periodLength: selectedPeriodLength,
       reoccurrence: mapRecurrence(selectedRecurrence),
@@ -477,11 +473,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   updateInitial() async {
     if (widget.budget != null) {
-      List<TransactionCategory> categories = [];
-      for (int categoryPk in widget.budget!.categoryFks ?? []) {
-        categories.add(await database.getCategoryInstance(categoryPk));
-      }
-      setSelectedCategories(categories);
+      setSelectedCategories(widget.budget!.categoryFks!);
     }
     //Set to false because we can't save until we made some changes
     setState(() {

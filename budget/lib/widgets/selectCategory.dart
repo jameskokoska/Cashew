@@ -25,9 +25,9 @@ class SelectCategory extends StatefulWidget {
     this.showSelectedAllCategoriesIfNoneSelected = false,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
-  final Function(List<TransactionCategory>)? setSelectedCategories;
+  final Function(List<int>)? setSelectedCategories;
   final TransactionCategory? selectedCategory;
-  final List<TransactionCategory>? selectedCategories;
+  final List<int>? selectedCategories;
   final VoidCallback? next;
   final bool? skipIfSet;
   final String? nextLabel;
@@ -40,7 +40,7 @@ class SelectCategory extends StatefulWidget {
 }
 
 class _SelectCategoryState extends State<SelectCategory> {
-  List<TransactionCategory> selectedCategories = [];
+  List<int> selectedCategories = [];
   bool updatedInitial = false;
 
   @override
@@ -64,16 +64,7 @@ class _SelectCategoryState extends State<SelectCategory> {
       });
     } else if (widget.selectedCategory != null) {
       setState(() {
-        selectedCategories.add(
-          widget.selectedCategory ??
-              TransactionCategory(
-                categoryPk: 1,
-                name: "",
-                dateCreated: DateTime.now(),
-                income: false,
-                order: 0,
-              ),
-        );
+        selectedCategories.add(-1);
       });
     }
   }
@@ -116,7 +107,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                         widget.setSelectedCategory!(category);
                         setState(() {
                           selectedCategories = [];
-                          selectedCategories.add(category);
+                          selectedCategories.add(category.categoryPk);
                         });
                         Future.delayed(Duration(milliseconds: 70), () {
                           if (widget.popRoute) Navigator.pop(context);
@@ -125,21 +116,22 @@ class _SelectCategoryState extends State<SelectCategory> {
                           }
                         });
                       } else if (widget.setSelectedCategories != null) {
-                        if (selectedCategories.contains(category)) {
+                        print(selectedCategories);
+                        if (selectedCategories.contains(category.categoryPk)) {
                           setState(() {
-                            selectedCategories.remove(category);
+                            selectedCategories.remove(category.categoryPk);
                           });
                           widget.setSelectedCategories!(selectedCategories);
                         } else {
                           setState(() {
-                            selectedCategories.add(category);
+                            selectedCategories.add(category.categoryPk);
                           });
                           widget.setSelectedCategories!(selectedCategories);
                         }
                       }
                     },
                     sharedIconOffset: 13,
-                    outline: selectedCategories.contains(category),
+                    outline: selectedCategories.contains(category.categoryPk),
                   ),
                 ));
                 index++;
@@ -268,7 +260,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                                       widget.setSelectedCategory!(category);
                                       setState(() {
                                         selectedCategories = [];
-                                        selectedCategories.add(category);
+                                        selectedCategories
+                                            .add(category.categoryPk);
                                       });
                                       Future.delayed(Duration(milliseconds: 70),
                                           () {
@@ -281,23 +274,25 @@ class _SelectCategoryState extends State<SelectCategory> {
                                     } else if (widget.setSelectedCategories !=
                                         null) {
                                       if (selectedCategories
-                                          .contains(category)) {
+                                          .contains(category.categoryPk)) {
                                         setState(() {
-                                          selectedCategories.remove(category);
+                                          selectedCategories
+                                              .remove(category.categoryPk);
                                         });
                                         widget.setSelectedCategories!(
                                             selectedCategories);
                                       } else {
                                         setState(() {
-                                          selectedCategories.add(category);
+                                          selectedCategories
+                                              .add(category.categoryPk);
                                         });
                                         widget.setSelectedCategories!(
                                             selectedCategories);
                                       }
                                     }
                                   },
-                                  outline:
-                                      selectedCategories.contains(category),
+                                  outline: selectedCategories
+                                      .contains(category.categoryPk),
                                 ),
                               ),
                             )

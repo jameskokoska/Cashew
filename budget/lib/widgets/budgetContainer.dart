@@ -1,5 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/SharedCategorySettings.dart';
+import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:animations/animations.dart';
@@ -16,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
 import '../colors.dart';
 import '../functions.dart';
+import 'package:async/async.dart' show StreamZip;
 
 class BudgetContainerUI extends StatelessWidget {
   const BudgetContainerUI({super.key});
@@ -747,14 +750,16 @@ class BudgetProgress extends StatelessWidget {
                       ),
                     ),
                   ),
-                  percent <= 40
-                      ? getPercentText(
-                          lightenPastel(
-                              dynamicPastel(context, color,
-                                  inverse: true, amount: 0.7),
-                              amount: 0.3),
-                        )
-                      : Container(),
+                  AnimatedOpacity(
+                    duration: Duration(milliseconds: 500),
+                    opacity: percent <= 40 ? 1 : 0,
+                    child: getPercentText(
+                      lightenPastel(
+                          dynamicPastel(context, color,
+                              inverse: true, amount: 0.7),
+                          amount: 0.3),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -836,33 +841,39 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
                       ),
                     ),
                     // there are no other shared category entries from other users - it is all by the current user
-                    widget.otherPercent >= 99.99999
-                        ? SizedBox.shrink()
-                        : AnimatedFractionallySizedBox(
-                            duration: Duration(milliseconds: 1500),
-                            curve: Curves.easeInOutCubic,
-                            heightFactor: 1,
-                            widthFactor: animateIn
-                                ? (widget.otherPercent > 100
-                                    ? 1
-                                    : widget.otherPercent / 100)
-                                : 0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: dynamicPastel(context, widget.color,
-                                    amountDark: 0.1, amountLight: 0.3),
-                              ),
-                            ),
+                    AnimatedOpacity(
+                      opacity: widget.otherPercent >= 99.99999 ? 0 : 1,
+                      duration: Duration(milliseconds: 500),
+                      child: AnimatedFractionallySizedBox(
+                        duration: Duration(milliseconds: 1500),
+                        curve: Curves.easeInOutCubic,
+                        heightFactor: 1,
+                        widthFactor: animateIn
+                            ? (widget.otherPercent > 100
+                                ? 1
+                                : widget.otherPercent / 100)
+                            : 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: dynamicPastel(context, widget.color,
+                                amountDark: 0.1, amountLight: 0.3),
                           ),
-                    widget.percent > 40
-                        ? AnimatedOpacity(
-                            opacity: fadeIn ? 1 : 0,
-                            duration: Duration(milliseconds: 300),
-                            child: widget.getPercentText(
-                              darkenPastel(widget.color, amount: 0.6),
-                            ))
-                        : Container(),
+                        ),
+                      ),
+                    ),
+
+                    AnimatedOpacity(
+                      opacity: widget.percent > 40
+                          ? fadeIn
+                              ? 1
+                              : 0
+                          : 0,
+                      duration: Duration(milliseconds: 500),
+                      child: widget.getPercentText(
+                        darkenPastel(widget.color, amount: 0.6),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -948,6 +959,269 @@ class TodayIndicator extends StatelessWidget {
   }
 }
 
+class BudgetSpenderSummary extends StatefulWidget {
+  const BudgetSpenderSummary({
+    required this.budget,
+    required this.budgetRange,
+    required this.budgetColorScheme,
+    required this.setSelectedMember,
+    super.key,
+  });
+
+  final Budget budget;
+  final DateTimeRange budgetRange;
+  final ColorScheme budgetColorScheme;
+  final Function(String?) setSelectedMember;
+
+  @override
+  State<BudgetSpenderSummary> createState() => _BudgetSpenderSummaryState();
+}
+
+class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
+  Stream<List<double?>>? mergedStreams;
+  Set<String> members = {};
+  String? selectedMember = null;
+
+  initState() {
+    List<Stream<double?>> watchedSpenderTotals = [];
+    Future.delayed(Duration.zero, () async {
+      List<TransactionCategory> allCategories = await database.getAllCategories(
+          allCategories: widget.budget.allCategoryFks,
+          categoryFks: widget.budget.categoryFks,
+          sharedCategory: true);
+      for (TransactionCategory category in allCategories) {
+        for (String member in category.sharedMembers ?? []) {
+          members.add(member);
+        }
+      }
+      for (String member in members) {
+        watchedSpenderTotals.add(database.watchTotalSpentByUser(
+          widget.budgetRange.start,
+          widget.budgetRange.end,
+          widget.budget.categoryFks ?? [],
+          widget.budget.allCategoryFks,
+          member,
+        ));
+      }
+      mergedStreams = StreamZip(watchedSpenderTotals);
+      setState(() {});
+    });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.budget.sharedTransactionsShow ==
+        SharedTransactionsShow.onlyIfOwner) return SizedBox.shrink();
+    if (mergedStreams == null) return SizedBox.shrink();
+    return StreamBuilder<List<double?>>(
+      stream: mergedStreams,
+      builder: (context, snapshot) {
+        List<Widget> memberWidgets = [];
+        if (snapshot.hasData && snapshot.data != null) {
+          List<Color> colors = selectableColors(context);
+          // List<HorizontalBarChartPair> chartData = [];
+          double totalSpent = 0;
+          for (int i = 0; i < (snapshot.data ?? []).length; i++) {
+            double units = snapshot.data![i]!.abs().toDouble();
+            // chartData.add(HorizontalBarChartPair(
+            //     units, colors[random.nextInt(colors.length)]));
+            totalSpent += units;
+          }
+          for (int i = 0; i < (snapshot.data ?? []).length; i++) {
+            if (members.length > i) {
+              double spent = snapshot.data![i]!.abs().toDouble();
+              String member = members.elementAt(i);
+              memberWidgets.add(
+                Tappable(
+                  onTap: () {
+                    if (selectedMember == member) {
+                      widget.setSelectedMember(null);
+                      setState(() {
+                        selectedMember = null;
+                      });
+                    } else {
+                      widget.setSelectedMember(member);
+                      setState(() {
+                        selectedMember = member;
+                      });
+                    }
+                  },
+                  onLongPress: () {
+                    memberPopup(context, member);
+                  },
+                  color: Colors.transparent,
+                  child: AnimatedContainer(
+                    curve: Curves.easeInOut,
+                    duration: Duration(milliseconds: 500),
+                    color: selectedMember == member
+                        ? dynamicPastel(
+                                context, widget.budgetColorScheme.primary,
+                                amount: 0.3)
+                            .withAlpha(80)
+                        : Colors.transparent,
+                    padding: EdgeInsets.only(
+                        left: 20, right: 25, top: 11, bottom: 11),
+                    child: Row(
+                      children: [
+                        // CategoryIcon(
+                        //   category: category,
+                        //   size: 30,
+                        //   margin: EdgeInsets.zero,
+                        // ),
+                        MemberSpendingPercent(
+                          displayLetter: getMemberNickname(
+                              (members.elementAt(i))
+                                  .capitalizeFirst
+                                  .substring(0, 1)),
+                          percent: spent / totalSpent * 100,
+                          progressBackgroundColor: Theme.of(context)
+                              .colorScheme
+                              .lightDarkAccentHeavy,
+                          color: widget.budgetColorScheme.primary,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextFont(
+                                  text:
+                                      getMemberNickname((members.elementAt(i))),
+                                  fontSize: 20,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                TextFont(
+                                  maxLines: 5,
+                                  text: (spent / totalSpent * 100)
+                                          .toStringAsFixed(0) +
+                                      "% of shared",
+                                  fontSize: 15,
+                                  textColor: selectedMember == member
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .black
+                                          .withOpacity(0.4)
+                                      : Theme.of(context).colorScheme.textLight,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextFont(
+                              fontWeight: FontWeight.bold,
+                              text: convertToMoney(spent),
+                              fontSize: 23,
+                            ),
+                            SizedBox(
+                              height: 1,
+                            ),
+                            StreamBuilder<List<Transaction>>(
+                                stream: database.watchAllTransactionsByUser(
+                                    start: widget.budgetRange.start,
+                                    end: widget.budgetRange.end,
+                                    categoryFks:
+                                        widget.budget.categoryFks ?? [],
+                                    allCategories: widget.budget.allCategoryFks,
+                                    userEmail: member),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return TextFont(
+                                      text: snapshot.data!.length.toString() +
+                                          pluralString(
+                                              snapshot.data!.length == 1,
+                                              " transaction"),
+                                      fontSize: 15,
+                                      textColor: selectedMember == member
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .black
+                                              .withOpacity(0.4)
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .textLight,
+                                    );
+                                  }
+                                  return SizedBox.shrink();
+                                }),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+          }
+
+          return Column(children: [
+            // HorizontalBarChart(data: chartData),
+            ...memberWidgets
+          ]);
+        }
+        return SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class MemberSpendingPercent extends StatelessWidget {
+  MemberSpendingPercent({
+    Key? key,
+    required this.displayLetter,
+    this.size = 30,
+    required this.percent,
+    this.insetPadding = 23,
+    required this.progressBackgroundColor,
+    required this.color,
+  }) : super(key: key);
+
+  final String displayLetter;
+  final double size;
+  final double percent;
+  final double insetPadding;
+  final Color progressBackgroundColor;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(alignment: Alignment.center, children: [
+      Padding(
+        padding: EdgeInsets.all(insetPadding / 2),
+        child: TextFont(
+          text: displayLetter,
+          fontWeight: FontWeight.bold,
+          fontSize: 25,
+        ),
+      ),
+      AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        child: Container(
+          key: ValueKey(progressBackgroundColor.toString()),
+          height: size + insetPadding,
+          width: size + insetPadding,
+          child: AnimatedCircularProgress(
+            percent: percent / 100,
+            backgroundColor: progressBackgroundColor,
+            foregroundColor: color,
+          ),
+        ),
+      ),
+    ]);
+  }
+}
+
 class HorizontalBarChartPair {
   HorizontalBarChartPair(this.units, this.color);
 
@@ -956,20 +1230,10 @@ class HorizontalBarChartPair {
 }
 
 class HorizontalBarChart extends StatelessWidget {
-  const HorizontalBarChart({Key? key}) : super(key: key);
-
+  const HorizontalBarChart({required this.data, Key? key}) : super(key: key);
+  final List<HorizontalBarChartPair> data;
   @override
   Widget build(BuildContext context) {
-    List<HorizontalBarChartPair> chartData = [
-      HorizontalBarChartPair(50, Colors.red),
-      HorizontalBarChartPair(100, Colors.green),
-      HorizontalBarChartPair(200, Colors.orange),
-    ];
-    double totalUnits = 0;
-    for (HorizontalBarChartPair horizontalBarChartPair in chartData) {
-      totalUnits += horizontalBarChartPair.units;
-    }
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(90),
       child: SizedBox(
@@ -977,14 +1241,13 @@ class HorizontalBarChart extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            for (int i = 0; i < chartData.length; i++)
+            for (int i = 0; i < data.length; i++)
               Expanded(
-                flex: (chartData[i].units * 100).toInt(),
+                flex: (data[i].units * 100).toInt(),
                 child: Padding(
-                  padding:
-                      EdgeInsets.only(right: i == chartData.length - 1 ? 0 : 5),
+                  padding: EdgeInsets.only(right: i == data.length - 1 ? 0 : 5),
                   child: Container(
-                    color: chartData[i].color,
+                    color: data[i].color,
                   ),
                 ),
               )

@@ -96,8 +96,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);
       await createBackupInBackground(context);
-      await syncPendingQueueOnServer(); //sync before download
-      await getCloudCategories();
+      if (appStateSettings["currentUserEmail"] != "") {
+        await syncPendingQueueOnServer(); //sync before download
+        await getCloudCategories();
+      }
       entireAppLoaded = true;
     });
 

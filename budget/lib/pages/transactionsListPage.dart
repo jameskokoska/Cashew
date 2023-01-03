@@ -43,6 +43,7 @@ List<Widget> getTransactionsSlivers(
   bool slivers = true,
   SharedTransactionsShow sharedTransactionsShow =
       SharedTransactionsShow.fromEveryone,
+  String? member,
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
@@ -56,11 +57,14 @@ List<Widget> getTransactionsSlivers(
   for (DateTime date in dates.reversed) {
     transactionsWidgets.add(
       StreamBuilder<List<TransactionWithCategory>>(
-        stream: database.getTransactionCategoryWithDay(date,
-            search: search,
-            categoryFks: categoryFks,
-            income: income,
-            sharedTransactionsShow: sharedTransactionsShow),
+        stream: database.getTransactionCategoryWithDay(
+          date,
+          search: search,
+          categoryFks: categoryFks,
+          income: income,
+          sharedTransactionsShow: sharedTransactionsShow,
+          member: member,
+        ),
         builder: (context, snapshot) {
           if (snapshot.data != null &&
               snapshot.hasData &&

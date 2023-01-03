@@ -212,6 +212,9 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             );
           },
         ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 85),
+        ),
       ],
     );
   }

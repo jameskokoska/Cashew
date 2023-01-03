@@ -52,7 +52,7 @@ firebase deploy
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
-    if (Firebase.apps.length == 0) {
+    try {
       await Firebase.initializeApp(
         options: FirebaseOptions(
           apiKey: "AIzaSyBGiaRl72d4k3Ki0dh8ra-gU4v2z04CgIw",
@@ -63,7 +63,7 @@ void main() async {
           appId: "1:267621253497:web:12558fe9abebf7fa842fa8",
         ),
       );
-    } else {
+    } catch (e) {
       Firebase.app();
     }
   } else {

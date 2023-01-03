@@ -70,12 +70,12 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
           widget.budget.allCategoryFks));
     }
     mergedStreams = StreamZip(watchedBudgetTotals);
-    mergedStreams.listen(
-      (event) {
-        print("EVENT");
-        print(event.length);
-      },
-    );
+    // mergedStreams.listen(
+    //   (event) {
+    //     print("EVENT");
+    //     print(event.length);
+    //   },
+    // );
     super.initState();
   }
 

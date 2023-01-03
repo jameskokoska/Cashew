@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
@@ -472,7 +473,7 @@ class HomePageState extends State<HomePage>
                   borderRadius: 10,
                 ),
               ),
-              Container(height: 135),
+              SizedBox(height: 65),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               Container(
                   height: 1, color: Theme.of(context).colorScheme.background),
@@ -632,126 +633,8 @@ class UpcomingTransactions extends StatelessWidget {
           BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
       child: OpenContainerNavigation(
         closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
-        openPage: PageFramework(
-          navbar: false,
-          title: overdueTransactions ? "Overdue" : "Upcoming",
-          dragDownToDismiss: true,
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    StreamBuilder<List<double?>>(
-                      stream: overdueTransactions
-                          ? database.watchTotalOfOverdue()
-                          : database.watchTotalOfUpcoming(),
-                      builder: (context, snapshot) {
-                        return CountNumber(
-                          count: snapshot.hasData == false ||
-                                  snapshot.data![0] == null
-                              ? 0
-                              : (snapshot.data![0] ?? 0).abs(),
-                          duration: Duration(milliseconds: 700),
-                          dynamicDecimals: true,
-                          initialCount: (0),
-                          textBuilder: (number) {
-                            return TextFont(
-                              text: convertToMoney(number),
-                              fontSize: 25,
-                              textColor: overdueTransactions
-                                  ? Theme.of(context).colorScheme.unPaidRed
-                                  : Theme.of(context).colorScheme.unPaidYellow,
-                              fontWeight: FontWeight.bold,
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    SizedBox(width: 8),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
-                      child: StreamBuilder<List<int?>>(
-                        stream: overdueTransactions
-                            ? database.watchCountOfOverdue()
-                            : database.watchCountOfUpcoming(),
-                        builder: (context, snapshot) {
-                          return TextFont(
-                            text: snapshot.hasData == false ||
-                                    snapshot.data![0] == null
-                                ? "/"
-                                : snapshot.data![0].toString() +
-                                    pluralString(
-                                        snapshot.data![0] == 1, " transaction"),
-                            fontSize: 15,
-                            textColor: Theme.of(context).colorScheme.textLight,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 20),
-            ),
-            StreamBuilder<List<Transaction>>(
-              stream: overdueTransactions
-                  ? database.watchAllOverdueTransactions()
-                  : database.watchAllUpcomingTransactions(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.length <= 0) {
-                    return SliverToBoxAdapter(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 35, right: 30, left: 30),
-                          child: TextFont(
-                            maxLines: 4,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            text: "No " +
-                                (overdueTransactions ? "overdue" : "upcoming") +
-                                " transactions.",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        Transaction transaction = snapshot.data![index];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            UpcomingTransactionDateHeader(
-                                transaction: transaction),
-                            TransactionEntry(
-                              openPage: AddTransactionPage(
-                                title: "Edit Transaction",
-                                transaction: transaction,
-                              ),
-                              transaction: transaction,
-                            ),
-                            SizedBox(height: 12),
-                          ],
-                        );
-                      },
-                      childCount: snapshot.data?.length,
-                    ),
-                  );
-                } else {
-                  return SliverToBoxAdapter();
-                }
-              },
-            ),
-          ],
-        ),
+        openPage: UpcomingOverdueTransactions(
+            overdueTransactions: overdueTransactions),
         borderRadius: 15,
         button: (openContainer) {
           return Tappable(

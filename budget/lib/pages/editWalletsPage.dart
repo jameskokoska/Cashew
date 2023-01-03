@@ -232,6 +232,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             );
           },
         ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 85),
+        ),
       ],
     );
   }

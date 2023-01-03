@@ -1570,6 +1570,7 @@ class SelectText extends StatefulWidget {
     this.icon,
     this.autoFocus = true,
     this.readOnly = false,
+    this.textCapitalization = TextCapitalization.none,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -1580,6 +1581,7 @@ class SelectText extends StatefulWidget {
   final IconData? icon;
   final bool autoFocus;
   final bool readOnly;
+  final TextCapitalization textCapitalization;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -1602,6 +1604,7 @@ class _SelectTextState extends State<SelectText> {
         Container(
           width: MediaQuery.of(context).size.width - 36,
           child: TextInput(
+            textCapitalization: widget.textCapitalization,
             icon: widget.icon != null ? widget.icon : Icons.title_rounded,
             initialValue: widget.selectedText,
             autoFocus: widget.autoFocus,

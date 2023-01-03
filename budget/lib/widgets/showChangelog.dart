@@ -7,6 +7,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed multiple category selector with shared categories
+    Added bottom padding to edit lists
+    New circular progress ring
+    Can select transactions on overdue/upcoming pages
+    Upcoming transactions can no longer be shared
+    Can see how much each user has spent if shared category of spending
+    When user gets removed from category or a becomes part of one a notification is shown
     When editing transaction amount, prefilled with existing value
     Added default category to auto transactions page
     Can edit nickname in transaction select payer bottom sheet

@@ -268,6 +268,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
             );
           },
         ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 85),
+        ),
       ],
     );
   }

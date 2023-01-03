@@ -11,8 +11,13 @@ extension ColorsDefined on ColorScheme {
       brightness == Brightness.light ? Colors.white : Colors.black;
   Color get black =>
       brightness == Brightness.light ? Colors.black : Colors.white;
-  Color get textLight =>
-      brightness == Brightness.light ? Color(0xFF888888) : Color(0xFF494949);
+  Color get textLight => brightness == Brightness.light
+      ? appStateSettings["materialYou"]
+          ? Colors.black.withOpacity(0.4)
+          : Color(0xFF888888)
+      : appStateSettings["materialYou"]
+          ? Colors.white.withOpacity(0.25)
+          : Color(0xFF494949);
   Color get textLightHeavy =>
       brightness == Brightness.light ? Color(0xFF888888) : Color(0xFF1D1D1D);
   Color get lightDarkAccent => brightness == Brightness.light

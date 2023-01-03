@@ -185,38 +185,82 @@ Future<bool> removedSharedFromCategory(TransactionCategory sharedCategory,
   return true;
 }
 
+Future<bool> compareSharedToCurrentCategories(
+    List<QueryDocumentSnapshot<Object?>> categorySnapshot) async {
+  print("Found a matching category!");
+
+  List<TransactionCategory> categories = await database.getAllCategories();
+  for (TransactionCategory category in categories) {
+    if (category.sharedKey != null) {
+      bool found = false;
+      for (DocumentSnapshot categoryCloud in categorySnapshot) {
+        if (categoryCloud.id == category.sharedKey) {
+          print("Found a matching category!");
+          found = true;
+          break;
+        }
+      }
+      if (found == false) {
+        openSnackbar(SnackbarMessage(
+            icon: Icons.remove_circle_outline_rounded,
+            title: category.name,
+            description: "Is no longer shared with you"));
+        print("You have lost permission to this category: " + category.name);
+        removedSharedFromCategory(category);
+      }
+    }
+  }
+  for (DocumentSnapshot categoryCloud in categorySnapshot) {
+    bool found = false;
+    for (TransactionCategory category in categories) {
+      if (category.sharedKey != null &&
+          categoryCloud.id == category.sharedKey) {
+        found = true;
+        break;
+      }
+    }
+    if (found == false) {
+      Map<dynamic, dynamic> categoryDecoded = categoryCloud.data() as Map;
+      openSnackbar(SnackbarMessage(
+        title: categoryCloud["name"] + " was shared with you",
+        description: "From " + categoryDecoded["ownerEmail"],
+        icon: Icons.share_rounded,
+      ));
+    }
+  }
+  return true;
+}
+
 Future<bool> getCloudCategories() async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     return false;
   }
 
-  // aggregate categories users are members of and owners of together
   final categoryMembersOf = db.collection('categories').where('members',
       arrayContains: FirebaseAuth.instance.currentUser!.email);
   final QuerySnapshot snapshotCategoryMembersOf = await categoryMembersOf.get();
-  List<DocumentSnapshot> snapshotsMembers = [];
-  for (DocumentSnapshot category in snapshotCategoryMembersOf.docs) {
-    snapshotsMembers.add(category);
-    print("YOU ARE A MEMBER OF THIS CATEGORY " + category.data().toString());
-  }
-  await downloadTransactionsFromCategories(db, snapshotsMembers);
-
+  // for (DocumentSnapshot category in snapshotCategoryMembersOf.docs) {
+  //   print("YOU ARE A MEMBER OF THIS CATEGORY " + category.data().toString());
+  // }
   final Query categoryOwned = db
       .collection('categories')
       .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
   final QuerySnapshot snapshotOwned = await categoryOwned.get();
-  List<DocumentSnapshot> snapshotsOwners = [];
-  for (DocumentSnapshot category in snapshotOwned.docs) {
-    snapshotsOwners.add(category);
-    print("YOU OWN THIS CATEGORY " + category.data().toString());
-  }
-  await downloadTransactionsFromCategories(db, snapshotsOwners);
+  // for (DocumentSnapshot category in snapshotOwned.docs) {
+  //   print("YOU OWN THIS CATEGORY " + category.data().toString());
+  // }
+  await compareSharedToCurrentCategories(
+      [...snapshotCategoryMembersOf.docs, ...snapshotOwned.docs]);
+
+  await downloadTransactionsFromCategories(db, snapshotCategoryMembersOf.docs);
+  await downloadTransactionsFromCategories(db, snapshotOwned.docs);
   openSnackbar(SnackbarMessage(
       icon: Icons.cloud_sync_rounded,
       title: "Updated Categories",
       description: "Synced " +
-          (snapshotsMembers.length + snapshotsOwners.length).toString() +
+          (snapshotCategoryMembersOf.docs.length + snapshotOwned.docs.length)
+              .toString() +
           " categories"));
 
   return true;
@@ -867,6 +911,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
               child: Container(),
             );
           },
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 85),
         ),
       ],
     );

@@ -6,6 +6,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/widgets/animatedCircularProgress.dart';
 import '../colors.dart';
 
 class CategoryEntry extends StatelessWidget {
@@ -38,7 +39,9 @@ class CategoryEntry extends StatelessWidget {
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 200),
         child: !selected && !allSelected
-            ? Container()
+            ? Container(
+                key: ValueKey(2),
+              )
             : Tappable(
                 key: ValueKey(1),
                 onTap: onTap,
@@ -50,109 +53,98 @@ class CategoryEntry extends StatelessWidget {
                   ),
                 ),
                 color: Colors.transparent,
-                child: AnimatedScale(
-                  curve: ElasticOutCurve(0.6),
-                  duration: Duration(milliseconds: 1300),
-                  scale: allSelected
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: allSelected
                       ? 1
                       : selected
                           ? 1
-                          : 0.95,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: allSelected
-                        ? 1
-                        : selected
-                            ? 1
-                            : 0.3,
-                    child: AnimatedContainer(
-                      curve: Curves.easeInOut,
-                      duration: Duration(milliseconds: 500),
-                      color: selected
-                          ? dynamicPastel(context, budgetColorScheme.primary,
-                                  amount: 0.3)
-                              .withAlpha(80)
-                          : Colors.transparent,
-                      padding: EdgeInsets.only(
-                          left: 20, right: 25, top: 11, bottom: 11),
-                      child: Row(
-                        children: [
-                          // CategoryIcon(
-                          //   category: category,
-                          //   size: 30,
-                          //   margin: EdgeInsets.zero,
-                          // ),
-                          CategoryIconPercent(
-                            category: category,
-                            percent: categorySpent / totalSpent * 100,
-                            progressBackgroundColor: selected
-                                ? Theme.of(context).colorScheme.white
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .lightDarkAccentHeavy,
-                          ),
-                          Container(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextFont(
-                                    text: category.name,
-                                    fontSize: 20,
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  TextFont(
-                                    text: (categorySpent / totalSpent * 100)
-                                            .toStringAsFixed(0) +
-                                        "% of budget",
-                                    fontSize: 15,
-                                    textColor: selected
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .black
-                                            .withOpacity(0.4)
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .textLight,
-                                  )
-                                ],
-                              ),
+                          : 0.3,
+                  child: AnimatedContainer(
+                    curve: Curves.easeInOut,
+                    duration: Duration(milliseconds: 500),
+                    color: selected
+                        ? dynamicPastel(context, budgetColorScheme.primary,
+                                amount: 0.3)
+                            .withAlpha(80)
+                        : Colors.transparent,
+                    padding: EdgeInsets.only(
+                        left: 20, right: 25, top: 11, bottom: 11),
+                    child: Row(
+                      children: [
+                        // CategoryIcon(
+                        //   category: category,
+                        //   size: 30,
+                        //   margin: EdgeInsets.zero,
+                        // ),
+                        CategoryIconPercent(
+                          category: category,
+                          percent: categorySpent / totalSpent * 100,
+                          progressBackgroundColor: selected
+                              ? Theme.of(context).colorScheme.white
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .lightDarkAccentHeavy,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextFont(
+                                  text: category.name,
+                                  fontSize: 20,
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                TextFont(
+                                  text: (categorySpent / totalSpent * 100)
+                                          .toStringAsFixed(0) +
+                                      "% of budget",
+                                  fontSize: 15,
+                                  textColor: selected
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .black
+                                          .withOpacity(0.4)
+                                      : Theme.of(context).colorScheme.textLight,
+                                )
+                              ],
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextFont(
-                                fontWeight: FontWeight.bold,
-                                text: convertToMoney(categorySpent),
-                                fontSize: 23,
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              TextFont(
-                                text: transactionCount.toString() +
-                                    pluralString(
-                                        transactionCount == 1, " transaction"),
-                                fontSize: 15,
-                                textColor: selected
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .black
-                                        .withOpacity(0.4)
-                                    : Theme.of(context).colorScheme.textLight,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextFont(
+                              fontWeight: FontWeight.bold,
+                              text: convertToMoney(categorySpent),
+                              fontSize: 23,
+                            ),
+                            SizedBox(
+                              height: 1,
+                            ),
+                            TextFont(
+                              text: transactionCount.toString() +
+                                  pluralString(
+                                      transactionCount == 1, " transaction"),
+                              fontSize: 15,
+                              textColor: selected
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .black
+                                      .withOpacity(0.4)
+                                  : Theme.of(context).colorScheme.textLight,
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -194,11 +186,10 @@ class CategoryIconPercent extends StatelessWidget {
           key: ValueKey(progressBackgroundColor.toString()),
           height: size + insetPadding,
           width: size + insetPadding,
-          child: CircularProgressIndicator(
-            value: percent / 100,
+          child: AnimatedCircularProgress(
+            percent: percent / 100,
             backgroundColor: progressBackgroundColor,
-            strokeWidth: 3,
-            color: HexColor(category.colour,
+            foregroundColor: HexColor(category.colour,
                 defaultColor: Theme.of(context).colorScheme.primary),
           ),
         ),
