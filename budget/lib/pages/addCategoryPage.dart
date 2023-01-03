@@ -25,6 +25,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -113,6 +114,24 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return;
   }
 
+  discardChangesPopupIfCategory() async {
+    TransactionCategory? currentInstance;
+    if (widget.category != null) {
+      currentInstance =
+          await database.getCategoryInstance(widget.category!.categoryPk);
+    }
+    discardChangesPopup(
+      context,
+      previousObject: widget.category!.copyWith(
+        sharedKey: Value(currentInstance!.sharedKey),
+        sharedOwnerMember: Value(currentInstance.sharedOwnerMember),
+        sharedDateUpdated: Value(currentInstance.sharedDateUpdated),
+        sharedMembers: Value(currentInstance.sharedMembers),
+      ),
+      currentObject: await createTransactionCategory(),
+    );
+  }
+
   determineBottomButton() {
     if (selectedTitle != null) {
       if (canAddCategory != true)
@@ -154,7 +173,24 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     }
   }
 
+  Future<bool> shareCategoryOnPage() async {
+    openLoadingPopup(context);
+    await shareCategory(widget.category, context);
+    TransactionCategory newCategory =
+        await database.getCategoryInstance(widget.category!.categoryPk);
+    setState(() {
+      widgetCategory = newCategory;
+    });
+    Navigator.pop(context);
+    return true;
+  }
+
   Future<TransactionCategory> createTransactionCategory() async {
+    TransactionCategory? currentInstance;
+    if (widget.category != null) {
+      currentInstance =
+          await database.getCategoryInstance(widget.category!.categoryPk);
+    }
     return TransactionCategory(
       categoryPk:
           widget.category != null ? widget.category!.categoryPk : setCategoryPk,
@@ -168,12 +204,12 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           : await database.getAmountOfCategories(),
       colour: toHexString(selectedColor),
       iconName: selectedImage,
-      sharedKey: widget.category != null ? widget.category!.sharedKey : null,
+      sharedKey: widget.category != null ? currentInstance!.sharedKey : null,
       sharedOwnerMember:
-          widget.category != null ? widget.category!.sharedOwnerMember : null,
+          widget.category != null ? currentInstance!.sharedOwnerMember : null,
       sharedDateUpdated:
-          widget.category != null ? widget.category!.sharedDateUpdated : null,
-      sharedMembers: selectedMembers,
+          widget.category != null ? currentInstance!.sharedDateUpdated : null,
+      sharedMembers: currentInstance!.sharedMembers,
     );
   }
 
@@ -208,11 +244,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return WillPopScope(
       onWillPop: () async {
         if (widget.category != null) {
-          discardChangesPopup(
-            context,
-            previousObject: widget.category,
-            currentObject: await createTransactionCategory(),
-          );
+          discardChangesPopupIfCategory();
         } else {
           discardChangesPopup(context);
         }
@@ -236,46 +268,32 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                 navbar: false,
                 onBackButton: () async {
                   if (widget.category != null) {
-                    discardChangesPopup(
-                      context,
-                      previousObject: widget.category,
-                      currentObject: await createTransactionCategory(),
-                    );
+                    discardChangesPopupIfCategory();
                   } else {
                     discardChangesPopup(context);
                   }
                 },
                 onDragDownToDissmiss: () async {
                   if (widget.category != null) {
-                    discardChangesPopup(
-                      context,
-                      previousObject: widget.category,
-                      currentObject: await createTransactionCategory(),
-                    );
+                    discardChangesPopupIfCategory();
                   } else {
                     discardChangesPopup(context);
                   }
                 },
                 actions: [
-                  // widget.category != null && widget.category!.sharedKey == null
-                  //     ? Container(
-                  //         padding: EdgeInsets.only(top: 12.5, right: 5),
-                  //         child: IconButton(
-                  //           onPressed: () async {
-                  //             openLoadingPopup(context);
-                  //             await shareCategory(widget.category, context);
-                  //             Navigator.pop(context);
-                  //             if (widget.category != null)
-                  //               pushRoute(
-                  //                 context,
-                  //                 SharedCategoryPage(
-                  //                     category: widget.category!),
-                  //               );
-                  //           },
-                  //           icon: Icon(Icons.share_rounded),
-                  //         ),
-                  //       )
-                  //     : SizedBox.shrink(),
+                  widget.category != null &&
+                          widget.category!.sharedKey == null &&
+                          widgetCategory!.sharedKey == null
+                      ? Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: IconButton(
+                            onPressed: () async {
+                              shareCategoryOnPage();
+                            },
+                            icon: Icon(Icons.share_rounded),
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   // widget.category != null && widget.category!.sharedKey != null
                   //     ? Container(
                   //         padding: EdgeInsets.only(top: 12.5, right: 5),
@@ -444,16 +462,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                   icon: Icons.share_rounded,
                                   label: "Share Category",
                                   onTap: () async {
-                                    openLoadingPopup(context);
-                                    await shareCategory(
-                                        widget.category, context);
-                                    TransactionCategory newCategory =
-                                        await database.getCategoryInstance(
-                                            widget.category!.categoryPk);
-                                    setState(() {
-                                      widgetCategory = newCategory;
-                                    });
-                                    Navigator.pop(context);
+                                    shareCategoryOnPage();
                                   },
                                 ),
                               ),

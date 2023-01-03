@@ -20,15 +20,6 @@ import '../colors.dart';
 import '../functions.dart';
 import 'package:async/async.dart' show StreamZip;
 
-class BudgetContainerUI extends StatelessWidget {
-  const BudgetContainerUI({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({
     Key? key,
@@ -959,6 +950,13 @@ class TodayIndicator extends StatelessWidget {
   }
 }
 
+class BudgetSpender {
+  BudgetSpender(this.member, this.amount);
+
+  String member;
+  double amount;
+}
+
 class BudgetSpenderSummary extends StatefulWidget {
   const BudgetSpenderSummary({
     required this.budget,
@@ -1020,157 +1018,155 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
       builder: (context, snapshot) {
         List<Widget> memberWidgets = [];
         if (snapshot.hasData && snapshot.data != null) {
-          List<Color> colors = selectableColors(context);
-          // List<HorizontalBarChartPair> chartData = [];
+          List<BudgetSpender> budgetSpenderList = [];
           double totalSpent = 0;
           for (int i = 0; i < (snapshot.data ?? []).length; i++) {
-            double units = snapshot.data![i]!.abs().toDouble();
-            // chartData.add(HorizontalBarChartPair(
-            //     units, colors[random.nextInt(colors.length)]));
-            totalSpent += units;
+            double spent;
+            if (snapshot.data![i] == null) {
+              spent = 0;
+            } else {
+              spent = snapshot.data![i]!.abs().toDouble();
+            }
+            budgetSpenderList.add(BudgetSpender(members.elementAt(i), spent));
+            totalSpent += spent;
           }
-          for (int i = 0; i < (snapshot.data ?? []).length; i++) {
-            if (members.length > i) {
-              double spent = snapshot.data![i]!.abs().toDouble();
-              String member = members.elementAt(i);
-              memberWidgets.add(
-                Tappable(
-                  onTap: () {
-                    if (selectedMember == member) {
-                      widget.setSelectedMember(null);
-                      setState(() {
-                        selectedMember = null;
-                      });
-                    } else {
-                      widget.setSelectedMember(member);
-                      setState(() {
-                        selectedMember = member;
-                      });
-                    }
-                  },
-                  onLongPress: () {
-                    memberPopup(context, member);
-                  },
-                  color: Colors.transparent,
-                  child: AnimatedContainer(
-                    curve: Curves.easeInOut,
-                    duration: Duration(milliseconds: 500),
-                    color: selectedMember == member
-                        ? dynamicPastel(
-                                context, widget.budgetColorScheme.primary,
-                                amount: 0.3)
-                            .withAlpha(80)
-                        : Colors.transparent,
-                    padding: EdgeInsets.only(
-                        left: 20, right: 25, top: 11, bottom: 11),
-                    child: Row(
-                      children: [
-                        // CategoryIcon(
-                        //   category: category,
-                        //   size: 30,
-                        //   margin: EdgeInsets.zero,
-                        // ),
-                        MemberSpendingPercent(
-                          displayLetter: getMemberNickname(
-                              (members.elementAt(i))
-                                  .capitalizeFirst
-                                  .substring(0, 1)),
-                          percent: spent / totalSpent * 100,
-                          progressBackgroundColor: Theme.of(context)
-                              .colorScheme
-                              .lightDarkAccentHeavy,
-                          color: widget.budgetColorScheme.primary,
-                        ),
-                        Container(
-                          width: 15,
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextFont(
-                                  text:
-                                      getMemberNickname((members.elementAt(i))),
-                                  fontSize: 20,
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                TextFont(
-                                  maxLines: 5,
-                                  text: (spent / totalSpent * 100)
-                                          .toStringAsFixed(0) +
-                                      "% of shared",
-                                  fontSize: 15,
-                                  textColor: selectedMember == member
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .black
-                                          .withOpacity(0.4)
-                                      : Theme.of(context).colorScheme.textLight,
-                                )
-                              ],
-                            ),
+          budgetSpenderList.sort((a, b) => b.amount.compareTo(a.amount));
+
+          for (BudgetSpender spender in budgetSpenderList) {
+            memberWidgets.add(
+              Tappable(
+                onTap: () {
+                  if (selectedMember == spender.member || spender.amount == 0) {
+                    widget.setSelectedMember(null);
+                    setState(() {
+                      selectedMember = null;
+                    });
+                  } else {
+                    widget.setSelectedMember(spender.member);
+                    setState(() {
+                      selectedMember = spender.member;
+                    });
+                  }
+                },
+                onLongPress: () {
+                  memberPopup(context, spender.member);
+                },
+                color: Colors.transparent,
+                child: AnimatedContainer(
+                  curve: Curves.easeInOut,
+                  duration: Duration(milliseconds: 500),
+                  color: selectedMember == spender.member
+                      ? dynamicPastel(context, widget.budgetColorScheme.primary,
+                              amount: 0.3)
+                          .withAlpha(80)
+                      : Colors.transparent,
+                  padding:
+                      EdgeInsets.only(left: 20, right: 25, top: 11, bottom: 11),
+                  child: Row(
+                    children: [
+                      // CategoryIcon(
+                      //   category: category,
+                      //   size: 30,
+                      //   margin: EdgeInsets.zero,
+                      // ),
+                      MemberSpendingPercent(
+                        displayLetter: getMemberNickname(spender.member)
+                            .capitalizeFirst
+                            .substring(0, 1),
+                        percent: totalSpent == 0
+                            ? 0
+                            : spender.amount / totalSpent * 100,
+                        progressBackgroundColor:
+                            Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                        color: widget.budgetColorScheme.primary,
+                      ),
+                      Container(
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextFont(
+                                text: getMemberNickname(spender.member),
+                                fontSize: 20,
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              TextFont(
+                                maxLines: 5,
+                                text: (totalSpent == 0
+                                        ? "0"
+                                        : (spender.amount / totalSpent * 100)
+                                            .toStringAsFixed(0)) +
+                                    "% of shared",
+                                fontSize: 15,
+                                textColor: selectedMember == spender.member
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .black
+                                        .withOpacity(0.4)
+                                    : Theme.of(context).colorScheme.textLight,
+                              )
+                            ],
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextFont(
-                              fontWeight: FontWeight.bold,
-                              text: convertToMoney(spent),
-                              fontSize: 23,
-                            ),
-                            SizedBox(
-                              height: 1,
-                            ),
-                            StreamBuilder<List<Transaction>>(
-                                stream: database.watchAllTransactionsByUser(
-                                    start: widget.budgetRange.start,
-                                    end: widget.budgetRange.end,
-                                    categoryFks:
-                                        widget.budget.categoryFks ?? [],
-                                    allCategories: widget.budget.allCategoryFks,
-                                    userEmail: member),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return TextFont(
-                                      text: snapshot.data!.length.toString() +
-                                          pluralString(
-                                              snapshot.data!.length == 1,
-                                              " transaction"),
-                                      fontSize: 15,
-                                      textColor: selectedMember == member
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .black
-                                              .withOpacity(0.4)
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .textLight,
-                                    );
-                                  }
-                                  return SizedBox.shrink();
-                                }),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextFont(
+                            fontWeight: FontWeight.bold,
+                            text: convertToMoney(spender.amount),
+                            fontSize: 23,
+                          ),
+                          SizedBox(
+                            height: 1,
+                          ),
+                          StreamBuilder<List<Transaction>>(
+                              stream: database.watchAllTransactionsByUser(
+                                  start: widget.budgetRange.start,
+                                  end: widget.budgetRange.end,
+                                  categoryFks: widget.budget.categoryFks ?? [],
+                                  allCategories: widget.budget.allCategoryFks,
+                                  userEmail: spender.member),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return TextFont(
+                                    text: snapshot.data!.length.toString() +
+                                        pluralString(snapshot.data!.length == 1,
+                                            " transaction"),
+                                    fontSize: 15,
+                                    textColor: selectedMember == spender.member
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .black
+                                            .withOpacity(0.4)
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .textLight,
+                                  );
+                                }
+                                return SizedBox.shrink();
+                              }),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              );
-            }
+              ),
+            );
           }
-
-          return Column(children: [
-            // HorizontalBarChart(data: chartData),
-            ...memberWidgets
-          ]);
         }
-        return SizedBox.shrink();
+
+        return Column(children: [
+          // HorizontalBarChart(data: chartData),
+          ...memberWidgets
+        ]);
       },
     );
   }

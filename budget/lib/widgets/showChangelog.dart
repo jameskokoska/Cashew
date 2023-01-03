@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Started changing past budgets page
+    Fixed discard changes popup when editing shared properties
+    Added share action on category page
+    Delayed the input for nickname setting as it would close the popup on prod
+    Users are sorted based on who spent more
     Fixed multiple category selector with shared categories
     Added bottom padding to edit lists
     New circular progress ring

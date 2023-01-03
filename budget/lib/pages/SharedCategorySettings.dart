@@ -364,6 +364,8 @@ class CategoryMemberContainer extends StatelessWidget {
       child: Tappable(
         onTap: () {
           if (!canModify)
+            memberPopup(context, member);
+          else
             openBottomSheet(
               context,
               PopupFramework(
@@ -371,16 +373,13 @@ class CategoryMemberContainer extends StatelessWidget {
                 subtitle: "Edit the nickname of the member",
                 child: Column(
                   children: [
-                    Opacity(
-                      opacity: 0.4,
-                      child: SelectText(
-                        icon: Icons.person_rounded,
-                        setSelectedText: (_) {},
-                        selectedText: member,
-                        placeholder: "example@gmail.com",
-                        autoFocus: false,
-                        readOnly: true,
-                      ),
+                    SelectText(
+                      icon: Icons.person_rounded,
+                      setSelectedText: (_) {},
+                      nextWithInput: setMember,
+                      selectedText: member,
+                      placeholder: "example@gmail.com",
+                      autoFocus: false,
                     ),
                     SelectText(
                       icon: Icons.sell_rounded,
@@ -401,8 +400,6 @@ class CategoryMemberContainer extends StatelessWidget {
                 ),
               ),
             );
-          else
-            memberPopup(context, member);
         },
         borderRadius: 15,
         color: Theme.of(context).colorScheme.lightDarkAccent,
@@ -513,6 +510,8 @@ memberPopup(context, String member) {
             },
             selectedText: appStateSettings["usersNicknames"][member] ?? "",
             placeholder: "Nickname",
+            autoFocus: false,
+            requestLateAutoFocus: true,
           ),
         ],
       ),

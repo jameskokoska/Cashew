@@ -1,17 +1,20 @@
 import 'dart:math';
 
+import 'package:budget/colors.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedCircularProgress extends StatefulWidget {
   final double percent;
   final Color backgroundColor;
   final Color foregroundColor;
+  final Color? overageColor;
 
   AnimatedCircularProgress({
     Key? key,
     required this.percent,
     required this.backgroundColor,
     required this.foregroundColor,
+    this.overageColor,
   }) : super(key: key);
 
   @override
@@ -66,6 +69,7 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
             value: _animation.value,
             backgroundColor: widget.backgroundColor,
             foregroundColor: widget.foregroundColor,
+            overageColor: widget.overageColor ?? Colors.transparent,
             strokeWidth: 3.5,
             valueStrokeWidth: 5,
             cornerRadius: 4,
@@ -80,6 +84,7 @@ class _RoundedCircularProgressPainter extends CustomPainter {
   final double value;
   final Color backgroundColor;
   final Color foregroundColor;
+  final Color overageColor;
   final double strokeWidth;
   final double valueStrokeWidth;
   final double cornerRadius;
@@ -88,6 +93,7 @@ class _RoundedCircularProgressPainter extends CustomPainter {
     required this.value,
     required this.backgroundColor,
     required this.foregroundColor,
+    required this.overageColor,
     required this.strokeWidth,
     required this.valueStrokeWidth,
     required this.cornerRadius,
@@ -98,7 +104,8 @@ class _RoundedCircularProgressPainter extends CustomPainter {
     final center = size.center(Offset.zero);
     final radius = min(size.width, size.height) / 2;
     final startAngle = -pi / 2;
-    final progressSweepAngle = 2 * pi * value;
+    final progressSweepAngle = 2 * pi * value.clamp(0.0, 1.0);
+    final overageSweepAngle = 2 * pi * (value - 1);
     final backgroundSweepAngle = 2 * pi;
 
     final backgroundPaint = Paint()
@@ -111,6 +118,18 @@ class _RoundedCircularProgressPainter extends CustomPainter {
       ..strokeWidth = valueStrokeWidth
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
+    final overagePaint = Paint()
+      ..color = overageColor
+      ..strokeWidth = valueStrokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    final overagePaintShadow = Paint()
+      ..color = Colors.black.withOpacity(0.6)
+      ..strokeWidth = valueStrokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2);
+    ;
 
     final startAngleRadians = startAngle;
     final rect = Rect.fromCircle(center: center, radius: radius);
@@ -118,6 +137,13 @@ class _RoundedCircularProgressPainter extends CustomPainter {
         rect, startAngleRadians, backgroundSweepAngle, false, backgroundPaint);
     canvas.drawArc(
         rect, startAngleRadians, progressSweepAngle, false, valuePaint);
+    if (value > 1.0) {
+      if (value < 2.0)
+        canvas.drawArc(rect, progressSweepAngle - startAngleRadians * 3,
+            overageSweepAngle, false, overagePaintShadow);
+      canvas.drawArc(rect, progressSweepAngle - startAngleRadians * 3,
+          overageSweepAngle, false, overagePaint);
+    }
   }
 
   @override

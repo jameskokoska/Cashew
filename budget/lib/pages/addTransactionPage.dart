@@ -1571,6 +1571,7 @@ class SelectText extends StatefulWidget {
     this.autoFocus = true,
     this.readOnly = false,
     this.textCapitalization = TextCapitalization.none,
+    this.requestLateAutoFocus = false,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -1582,6 +1583,7 @@ class SelectText extends StatefulWidget {
   final bool autoFocus;
   final bool readOnly;
   final TextCapitalization textCapitalization;
+  final bool requestLateAutoFocus;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -1589,11 +1591,17 @@ class SelectText extends StatefulWidget {
 
 class _SelectTextState extends State<SelectText> {
   String? input = "";
+  late FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     input = widget.selectedText;
+    _focusNode = new FocusNode();
+    if (widget.requestLateAutoFocus)
+      Future.delayed(Duration(milliseconds: 200), () {
+        _focusNode.requestFocus();
+      });
   }
 
   @override
@@ -1604,6 +1612,7 @@ class _SelectTextState extends State<SelectText> {
         Container(
           width: MediaQuery.of(context).size.width - 36,
           child: TextInput(
+            focusNode: _focusNode,
             textCapitalization: widget.textCapitalization,
             icon: widget.icon != null ? widget.icon : Icons.title_rounded,
             initialValue: widget.selectedText,

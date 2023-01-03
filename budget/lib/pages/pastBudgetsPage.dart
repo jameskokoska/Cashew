@@ -1,11 +1,15 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/widgets/barGraph.dart';
 import 'package:budget/widgets/budgetContainer.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -180,13 +184,14 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
                 return Padding(
                   padding: EdgeInsets.only(
                       bottom: index == amountLoaded - 1 ? 0 : 16.0),
-                  child: BudgetContainer(
+                  child: PastBudgetContainer(
                     budget: widget.budget,
                     smallBudgetContainer: true,
                     showTodayForSmallBudget: (index == 0 ? true : false),
                     dateForRange: datePast,
                     isPastBudget: index == 0 ? false : true,
                     isPastBudgetButCurrentPeriod: index == 0,
+                    budgetColorScheme: budgetColorScheme,
                   ),
                 );
               },
@@ -222,6 +227,258 @@ class _PastBudgetsPageState extends State<PastBudgetsPage> {
         ),
         SliverToBoxAdapter(child: SizedBox(height: 10)),
       ],
+    );
+  }
+}
+
+class PastBudgetContainer extends StatelessWidget {
+  PastBudgetContainer({
+    Key? key,
+    required this.budget,
+    this.smallBudgetContainer = false,
+    this.showTodayForSmallBudget = true,
+    this.dateForRange,
+    this.isPastBudget = false,
+    this.isPastBudgetButCurrentPeriod = false,
+    required this.budgetColorScheme,
+  }) : super(key: key);
+
+  final Budget budget;
+  final bool smallBudgetContainer;
+  final bool showTodayForSmallBudget;
+  final DateTime? dateForRange;
+  final bool? isPastBudget;
+  final bool? isPastBudgetButCurrentPeriod;
+  final ColorScheme budgetColorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime dateForRangeLocal =
+        dateForRange == null ? DateTime.now() : dateForRange!;
+    DateTimeRange budgetRange = getBudgetDate(budget, dateForRangeLocal);
+    var widget = StreamBuilder<double?>(
+        stream: database.watchTotalSpentByCurrentUserOnly(
+          budgetRange.start,
+          budgetRange.end,
+          budget.categoryFks ?? [],
+          budget.allCategoryFks,
+        ),
+        builder: (context, snapshotTotalSpentByCurrentUserOnly) {
+          double smallContainerHeight = 100;
+          return StreamBuilder<List<CategoryWithTotal>>(
+            stream:
+                database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+              budgetRange.start,
+              budgetRange.end,
+              budget.categoryFks ?? [],
+              budget.allCategoryFks,
+              budget.sharedTransactionsShow,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                double totalSpent = 0;
+
+                snapshot.data!.forEach((category) {
+                  totalSpent = totalSpent + category.total.abs();
+                  totalSpent = totalSpent.abs();
+                });
+                return Container(
+                  height: smallContainerHeight,
+                  child: ClipRRect(
+                    clipBehavior: Clip.antiAlias,
+                    borderRadius: BorderRadius.circular(15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Stack(
+                          children: [
+                            Stack(alignment: Alignment.center, children: [
+                              Padding(
+                                padding: EdgeInsets.all(5 / 2),
+                                child: Container(
+                                  width: 50,
+                                  child: TextFont(
+                                    autoSizeText: true,
+                                    text: (totalSpent / budget.amount * 100)
+                                            .toStringAsFixed(0) +
+                                        "%",
+                                    fontSize: 18,
+                                    textAlign: TextAlign.center,
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.fade,
+                                    softWrap: false,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 70,
+                                width: 70,
+                                child: AnimatedCircularProgress(
+                                  percent: (totalSpent / budget.amount).abs(),
+                                  backgroundColor:
+                                      budgetColorScheme.secondaryContainer,
+                                  foregroundColor: budgetColorScheme.primary,
+                                  overageColor: budgetColorScheme.secondary,
+                                ),
+                              ),
+                            ]),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 23, right: 23, bottom: 13, top: 13),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  budget.amount - totalSpent >= 0
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              child: CountUp(
+                                                count: appStateSettings[
+                                                        "showTotalSpentForBudget"]
+                                                    ? totalSpent
+                                                    : budget.amount -
+                                                        totalSpent,
+                                                prefix: getCurrencyString(),
+                                                duration:
+                                                    Duration(milliseconds: 700),
+                                                fontSize: 18,
+                                                textAlign: TextAlign.left,
+                                                fontWeight: FontWeight.bold,
+                                                decimals: moneyDecimals(
+                                                    budget.amount),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 1.7),
+                                              child: Container(
+                                                child: TextFont(
+                                                  text: (appStateSettings[
+                                                              "showTotalSpentForBudget"]
+                                                          ? " spent of "
+                                                          : " left of ") +
+                                                      convertToMoney(
+                                                          budget.amount),
+                                                  fontSize: 14,
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              child: CountUp(
+                                                count: appStateSettings[
+                                                        "showTotalSpentForBudget"]
+                                                    ? totalSpent
+                                                    : -1 *
+                                                        (budget.amount -
+                                                            totalSpent),
+                                                prefix: getCurrencyString(),
+                                                duration:
+                                                    Duration(milliseconds: 700),
+                                                fontSize: 18,
+                                                textAlign: TextAlign.left,
+                                                fontWeight: FontWeight.bold,
+                                                decimals: moneyDecimals(
+                                                    budget.amount),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 1.5),
+                                              child: TextFont(
+                                                text: (appStateSettings[
+                                                            "showTotalSpentForBudget"]
+                                                        ? " spent of "
+                                                        : " overspent of ") +
+                                                    convertToMoney(
+                                                        budget.amount),
+                                                fontSize: 13,
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 20),
+                        //   child: BudgetTimeline(
+                        //     budget: budget,
+                        //     percent: (totalSpent / budget.amount * 100).abs(),
+                        //     yourPercent: totalSpent == 0
+                        //         ? 0
+                        //         : (snapshotTotalSpentByCurrentUserOnly.data! /
+                        //                 budget.amount *
+                        //                 100)
+                        //             .abs(),
+                        //     todayPercent: showTodayForSmallBudget
+                        //         ? getPercentBetweenDates(
+                        //             budgetRange, dateForRangeLocal)
+                        //         : -1,
+                        //     dateForRange: dateForRangeLocal,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                return Container(
+                    height: smallContainerHeight, width: double.infinity);
+              }
+            },
+          );
+        });
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+      ),
+      child: OpenContainerNavigation(
+        borderRadius: 20,
+        closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+        button: (openContainer) {
+          return Tappable(
+            onTap: () {
+              openContainer();
+            },
+            onLongPress: () {
+              pushRoute(
+                context,
+                AddBudgetPage(
+                  title: "Edit Budget",
+                  budget: budget,
+                ),
+              );
+            },
+            borderRadius: 20,
+            child: widget,
+            color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+          );
+        },
+        openPage: BudgetPage(
+          budget: budget,
+          dateForRange: dateForRangeLocal,
+          isPastBudget: isPastBudget,
+          isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
+        ),
+      ),
     );
   }
 }
