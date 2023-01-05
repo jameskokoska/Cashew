@@ -378,17 +378,18 @@ Future<void> parseEmailsInBackground(context) async {
         emails, // Keep 10 extra in case maybe the user deleted some emails recently
         updateGlobalState: false,
       );
-      openSnackbar(
-        SnackbarMessage(
-          title: "Scanned " + results.messages!.length.toString() + " emails",
-          description: newEmailCount.toString() +
-              pluralString(newEmailCount == 1, " new email"),
-          icon: Icons.mark_email_unread_rounded,
-          onTap: () {
-            pushRoute(context, AutoTransactionsPageEmail());
-          },
-        ),
-      );
+      if (newEmailCount > 0)
+        openSnackbar(
+          SnackbarMessage(
+            title: "Scanned " + results.messages!.length.toString() + " emails",
+            description: newEmailCount.toString() +
+                pluralString(newEmailCount == 1, " new email"),
+            icon: Icons.mark_email_unread_rounded,
+            onTap: () {
+              pushRoute(context, AutoTransactionsPageEmail());
+            },
+          ),
+        );
     }
   }
 }

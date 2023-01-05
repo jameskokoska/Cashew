@@ -100,7 +100,7 @@ Future<bool> shareCategory(
     await Future.delayed(Duration(milliseconds: 1));
     currentIndex++;
   }
-  batch.commit();
+  await batch.commit();
 
   await database.createOrUpdateCategory(
     categoryToShare.copyWith(
@@ -146,14 +146,14 @@ Future<bool> removedSharedFromCategory(TransactionCategory sharedCategory,
       WriteBatch batch = db.batch();
       final QuerySnapshot transactionsOnCloud =
           await transactionSubCollection.get();
-      print(transactionsOnCloud);
+      // print(transactionsOnCloud);
       for (DocumentSnapshot transaction in transactionsOnCloud.docs) {
         print(transaction);
         DocumentReference transactionSubCollectionDoc =
             transactionSubCollection.doc(transaction.id);
         batch.delete(transactionSubCollectionDoc);
       }
-      batch.commit();
+      await batch.commit();
       await collectionRef.delete();
     } catch (e) {
       print(e.toString());
@@ -161,18 +161,17 @@ Future<bool> removedSharedFromCategory(TransactionCategory sharedCategory,
 
   List<Transaction> transactionsFromCategory =
       await database.getAllTransactionsFromCategory(sharedCategory.categoryPk);
+  List<Transaction> allTransactionsToUpdate = [];
   for (Transaction transactionFromCategory in transactionsFromCategory) {
-    await database.createOrUpdateTransaction(
-      transactionFromCategory.copyWith(
-        sharedKey: Value(null),
-        transactionOwnerEmail: Value(null),
-        transactionOriginalOwnerEmail: Value(null),
-        sharedDateUpdated: Value(null),
-        sharedStatus: Value(null),
-      ),
-      updateSharedEntry: false,
-    );
+    allTransactionsToUpdate.add(transactionFromCategory.copyWith(
+      sharedKey: Value(null),
+      transactionOwnerEmail: Value(null),
+      transactionOriginalOwnerEmail: Value(null),
+      sharedDateUpdated: Value(null),
+      sharedStatus: Value(null),
+    ));
   }
+  await database.createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
   await database.createOrUpdateCategory(
     sharedCategory.copyWith(
       sharedDateUpdated: Value(null),
@@ -266,13 +265,14 @@ Future<bool> getCloudCategories() async {
   await downloadTransactionsFromCategories(db, snapshotOwned.docs);
   int amountSynced =
       snapshotCategoryMembersOf.docs.length + snapshotOwned.docs.length;
-  openSnackbar(SnackbarMessage(
-      icon: Icons.cloud_sync_rounded,
-      title: "Updated Categories",
-      description: "Synced " +
-          amountSynced.toString() +
-          " " +
-          (amountSynced == 1 ? "category" : "categories")));
+  if (amountSynced > 0)
+    openSnackbar(SnackbarMessage(
+        icon: Icons.cloud_sync_rounded,
+        title: "Updated Categories",
+        description: "Synced " +
+            amountSynced.toString() +
+            " " +
+            (amountSynced == 1 ? "category" : "categories")));
 
   return true;
 }
@@ -525,12 +525,13 @@ Future<bool> addOnServer(FirebaseFirestore db, Transaction transaction,
     "dateCreated": transaction.dateCreated,
     "dateUpdated": DateTime.now(),
     "income": transaction.income,
-    "ownerEmail": transaction.transactionOwnerEmail, //ownerEmail is the payer
+    "ownerEmail":
+        FirebaseAuth.instance.currentUser!.email, //ownerEmail is the payer
     "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
   });
   transaction = transaction.copyWith(
     sharedKey: Value(addedDocument.id),
-    transactionOwnerEmail: Value(transaction.transactionOwnerEmail),
+    transactionOwnerEmail: Value(FirebaseAuth.instance.currentUser!.email),
     transactionOriginalOwnerEmail:
         Value(FirebaseAuth.instance.currentUser!.email),
     sharedStatus: Value(SharedStatus.shared),
@@ -749,49 +750,52 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                           ],
                         ),
                         Container(width: 5),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextFont(
-                              text: category.name +
-                                  " - " +
-                                  category.order.toString(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19,
-                            ),
-                            StreamBuilder<List<int?>>(
-                              stream: database
-                                  .watchTotalCountOfTransactionsInWalletInCategory(
-                                      appStateSettings["selectedWallet"],
-                                      category.categoryPk),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData && snapshot.data != null) {
-                                  return TextFont(
-                                    textAlign: TextAlign.left,
-                                    text: snapshot.data![0].toString() +
-                                        pluralString(snapshot.data![0] == 1,
-                                            " transaction"),
-                                    fontSize: 14,
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .black
-                                        .withOpacity(0.65),
-                                  );
-                                } else {
-                                  return TextFont(
-                                    textAlign: TextAlign.left,
-                                    text: "/ transactions",
-                                    fontSize: 14,
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .black
-                                        .withOpacity(0.65),
-                                  );
-                                }
-                              },
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFont(
+                                text: category.name +
+                                    " - " +
+                                    category.order.toString(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 19,
+                              ),
+                              StreamBuilder<List<int?>>(
+                                stream: database
+                                    .watchTotalCountOfTransactionsInWalletInCategory(
+                                        appStateSettings["selectedWallet"],
+                                        category.categoryPk),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data != null) {
+                                    return TextFont(
+                                      textAlign: TextAlign.left,
+                                      text: snapshot.data![0].toString() +
+                                          pluralString(snapshot.data![0] == 1,
+                                              " transaction"),
+                                      fontSize: 14,
+                                      textColor: Theme.of(context)
+                                          .colorScheme
+                                          .black
+                                          .withOpacity(0.65),
+                                    );
+                                  } else {
+                                    return TextFont(
+                                      textAlign: TextAlign.left,
+                                      text: "/ transactions",
+                                      fontSize: 14,
+                                      textColor: Theme.of(context)
+                                          .colorScheme
+                                          .black
+                                          .withOpacity(0.65),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

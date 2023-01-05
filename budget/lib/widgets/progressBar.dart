@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:flutter/material.dart';
 
 class ProgressBar extends StatelessWidget {
@@ -23,7 +24,7 @@ class ProgressBar extends StatelessWidget {
               width: x,
               height: height,
               decoration: BoxDecoration(
-                color: Color(0xffd3d3d3),
+                color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
                 borderRadius: BorderRadius.circular(100),
               ),
             ),

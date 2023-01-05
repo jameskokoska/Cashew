@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+56
+version: 2.0.0+57
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -43,7 +43,7 @@ dependencies:
   auto_size_text: ^3.0.0
   shared_preferences: ^2.0.13
   csv: ^5.0.1
-  sliding_sheet: 
+  sliding_sheet:
     path: ./sliding_sheet-0.5.2-modified/
   shimmer: ^2.0.0
   carousel_slider: ^4.1.1
@@ -76,7 +76,6 @@ flutter_icons:
     background_color: "#ffffff"
     theme_color: "#5f85c2"
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -88,7 +87,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -112,7 +110,6 @@ flutter:
     - assets/animations/
     - assets/images/
     - assets/static/
-    
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
@@ -140,6 +137,6 @@ flutter:
         - asset: assets/fonts/AvenirLTStd-Roman.otf
         - asset: assets/fonts/AvenirLTStd-Black.otf
           weight: 700
-    - family:  Icons
+    - family: Icons
       fonts:
         - asset: assets/icons/Icons.ttf

@@ -1,8 +1,10 @@
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class PageFramework extends StatefulWidget {
@@ -34,6 +36,7 @@ class PageFramework extends StatefulWidget {
     this.actions,
     this.expandedHeight = 200,
     this.syncKeyboardHeight = false,
+    this.listID,
   }) : super(key: key);
 
   final String title;
@@ -62,6 +65,7 @@ class PageFramework extends StatefulWidget {
   final List<Widget>? actions;
   final double expandedHeight;
   final bool syncKeyboardHeight;
+  final String? listID;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -161,7 +165,7 @@ class PageFrameworkState extends State<PageFramework>
   bool swipeDownToDismiss = false;
 
   _onPointerMove(PointerMoveEvent ptr) {
-    if (widget.dragDownToDismissEnabled) {
+    if (widget.dragDownToDismissEnabled && selectingTransactionsActive == 0) {
       if (swipeDownToDismiss) {
         totalDragX = totalDragX + ptr.delta.dx;
         totalDragY = totalDragY + ptr.delta.dy;
@@ -282,20 +286,26 @@ class PageFrameworkState extends State<PageFramework>
     }
 
     if (widget.floatingActionButton != null) {
-      return Stack(
-        children: [
-          dragDownToDissmissScaffold ?? scaffold,
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 15, right: 15),
-              child: widget.floatingActionButton ?? Container(),
+      return SwipeToSelectTransactions(
+        listID: widget.listID ?? "0",
+        child: Stack(
+          children: [
+            dragDownToDissmissScaffold ?? scaffold,
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15, right: 15),
+                child: widget.floatingActionButton ?? Container(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     } else {
-      return dragDownToDissmissScaffold ?? scaffold;
+      return SwipeToSelectTransactions(
+        listID: widget.listID ?? "0",
+        child: dragDownToDissmissScaffold ?? scaffold,
+      );
     }
   }
 }

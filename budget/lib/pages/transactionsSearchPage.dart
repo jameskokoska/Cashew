@@ -143,8 +143,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       },
       child: Stack(
         children: [
-          GestureDetector(
-            onTap: () {
+          Listener(
+            onPointerDown: (_) {
               //Minimize keyboard when tap non interactive widget
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
@@ -152,6 +152,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               }
             },
             child: PageFramework(
+              listID: "TransactionsSearch",
               navbar: false,
               dragDownToDismiss: true,
               onScroll: _scrollListener,
@@ -219,6 +220,34 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   child: SizedBox(height: 11),
                 ),
                 ...transactionWidgets,
+                SliverToBoxAdapter(
+                  child: GestureDetector(
+                    onTap: () {
+                      selectDateRange(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 40,
+                      ),
+                      child: TextFont(
+                        fontSize: 14,
+                        textAlign: TextAlign.center,
+                        textColor:
+                            Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                        text: "Showing transactions from" +
+                            "\n" +
+                            getWordedDateShortMore(selectedStartDate,
+                                includeYear: true) +
+                            " - " +
+                            getWordedDateShortMore(selectedEndDate,
+                                includeYear: true),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -438,7 +438,9 @@ class PastBudgetContainer extends StatelessWidget {
                             child: Container(
                               width: 50,
                               child: CountNumber(
-                                count: (totalSpent / budget.amount * 100),
+                                count: budget.amount == 0
+                                    ? 0
+                                    : (totalSpent / budget.amount * 100),
                                 duration: Duration(milliseconds: 1000),
                                 dynamicDecimals: false,
                                 initialCount: (0),

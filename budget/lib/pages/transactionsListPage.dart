@@ -430,26 +430,30 @@ class TransactionsListPageState extends State<TransactionsListPage>
                         appStateSettings["batterySaver"]
                             ? SizedBox.shrink()
                             : LoadingShimmer(),
-                        CustomScrollView(
-                          slivers: [
-                            ...transactionWidgets,
-                            SliverToBoxAdapter(
-                              child: CashFlow(
-                                selectedDateStart,
-                                new DateTime(
-                                    selectedDateStart.year,
-                                    selectedDateStart.month + 1,
-                                    selectedDateStart.day - 1),
+                        SwipeToSelectTransactions(
+                          listID: "Transactions",
+                          child: CustomScrollView(
+                            slivers: [
+                              ...transactionWidgets,
+                              SliverToBoxAdapter(
+                                child: CashFlow(
+                                  selectedDateStart,
+                                  new DateTime(
+                                      selectedDateStart.year,
+                                      selectedDateStart.month + 1,
+                                      selectedDateStart.day - 1),
+                                ),
                               ),
-                            ),
-                            // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                            SliverToBoxAdapter(
-                              child: Container(
-                                  height: 200,
-                                  color:
-                                      Theme.of(context).colorScheme.background),
-                            ),
-                          ],
+                              // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+                              SliverToBoxAdapter(
+                                child: Container(
+                                    height: 200,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                              ),
+                            ],
+                          ),
                         ),
                         appStateSettings["batterySaver"]
                             ? SizedBox.shrink()

@@ -28,6 +28,13 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
   late AnimationController _animationController;
   late Animation<double> _animation;
 
+  double capPercentage(double percent) {
+    if (percent > 3) {
+      return 3;
+    } else
+      return percent;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -35,8 +42,8 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
       vsync: this,
       duration: Duration(milliseconds: 2500),
     );
-    _animation = Tween<double>(begin: 0, end: widget.percent).animate(
-        new CurvedAnimation(
+    _animation = Tween<double>(begin: 0, end: capPercentage(widget.percent))
+        .animate(new CurvedAnimation(
             parent: _animationController,
             curve: Curves.easeInOutCubicEmphasized));
     _animationController.forward();
@@ -52,8 +59,8 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
   void didUpdateWidget(AnimatedCircularProgress oldWidget) {
     if (oldWidget.percent != widget.percent) {
       _animationController.forward(from: 0);
-      _animation = Tween<double>(begin: 0, end: widget.percent).animate(
-          new CurvedAnimation(
+      _animation = Tween<double>(begin: 0, end: capPercentage(widget.percent))
+          .animate(new CurvedAnimation(
               parent: _animationController,
               curve: Curves.easeInOutCubicEmphasized));
     }

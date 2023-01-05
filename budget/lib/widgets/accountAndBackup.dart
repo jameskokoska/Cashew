@@ -806,40 +806,42 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       selectedCategory = await database.getCategoryInstanceGivenName(
           row[assignedColumns["category"]!["setHeaderIndex"]]);
     } catch (_) {
+      // just make a new category, no point in checking associated titles - doesn't make much sense!
+
       // category not found, check titles
-      try {
-        if (name != "") {
-          List result = await getRelatingAssociatedTitle(name);
-          TransactionAssociatedTitle? associatedTitle = result[0];
-          if (associatedTitle == null) {
-            throw ("Can't find a category that matched this title: " + name);
-          }
-          selectedCategory =
-              await database.getCategoryInstance(associatedTitle.categoryFk);
-        } else {
-          throw ("error, just make a new category");
-        }
-      } catch (e) {
-        // print(e.toString());
-        // just create a category
-        int numberOfCategories =
-            (await database.getTotalCountOfCategories())[0] ?? 0;
-        await database.createOrUpdateCategory(
-          TransactionCategory(
-            categoryPk: DateTime.now().millisecondsSinceEpoch,
-            name: row[assignedColumns["category"]!["setHeaderIndex"]],
-            dateCreated: DateTime.now(),
-            order: numberOfCategories,
-            colour: toHexString(
-                getSettingConstants(appStateSettings)["accentColor"]),
-            income: amount > 0,
-            iconName: "image.png",
-            // smartLabels: [],
-          ),
-        );
-        selectedCategory = await database.getCategoryInstanceGivenName(
-            row[assignedColumns["category"]!["setHeaderIndex"]]);
-      }
+      // try {
+      //   if (name != "") {
+      //     List result = await getRelatingAssociatedTitle(name);
+      //     TransactionAssociatedTitle? associatedTitle = result[0];
+      //     if (associatedTitle == null) {
+      //       throw ("Can't find a category that matched this title: " + name);
+      //     }
+      //     selectedCategory =
+      //         await database.getCategoryInstance(associatedTitle.categoryFk);
+      //   } else {
+      //     throw ("error, just make a new category");
+      //   }
+      // } catch (e) {
+      // print(e.toString());
+      // just create a category
+      int numberOfCategories =
+          (await database.getTotalCountOfCategories())[0] ?? 0;
+      await database.createOrUpdateCategory(
+        TransactionCategory(
+          categoryPk: DateTime.now().millisecondsSinceEpoch,
+          name: row[assignedColumns["category"]!["setHeaderIndex"]],
+          dateCreated: DateTime.now(),
+          order: numberOfCategories,
+          colour:
+              toHexString(getSettingConstants(appStateSettings)["accentColor"]),
+          income: amount > 0,
+          iconName: "image.png",
+          // smartLabels: [],
+        ),
+      );
+      selectedCategory = await database.getCategoryInstanceGivenName(
+          row[assignedColumns["category"]!["setHeaderIndex"]]);
+      // }
     }
     categoryFk = selectedCategory.categoryPk;
 
@@ -927,7 +929,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
   Widget build(BuildContext context) {
     return ProgressBar(
       currentPercent: currentPercent,
-      color: Colors.black,
+      color: Theme.of(context).colorScheme.primary,
     );
   }
 }
@@ -1095,10 +1097,27 @@ class _BackupManagementState extends State<BackupManagement> {
                       : Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Tappable(
-                            onTap: () {
-                              if (!widget.isManaging)
-                                widget.loadBackup(
-                                    driveApiState!, file.value.id ?? "");
+                            onTap: () async {
+                              if (!widget.isManaging) {
+                                final result = await openPopup(
+                                  context,
+                                  title: "Load Backup?",
+                                  description:
+                                      "This will replace all your data!",
+                                  icon: Icons.warning_amber_rounded,
+                                  onSubmit: () async {
+                                    Navigator.pop(context, true);
+                                  },
+                                  onSubmitLabel: "Load",
+                                  onCancelLabel: "Cancel",
+                                  onCancel: () {
+                                    Navigator.pop(context);
+                                  },
+                                );
+                                if (result == true)
+                                  widget.loadBackup(
+                                      driveApiState!, file.value.id ?? "");
+                              }
                             },
                             borderRadius: 15,
                             color: appStateSettings["materialYou"]

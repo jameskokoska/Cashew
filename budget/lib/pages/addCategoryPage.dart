@@ -161,7 +161,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         title: "No Connection",
         icon: Icons.signal_wifi_connected_no_internet_4_rounded,
         description:
-            "You can only update the details of a shared budget online.",
+            "You can only update the details of a shared category online.",
         onCancel: () {
           Navigator.pop(context);
           Navigator.pop(context);
@@ -468,6 +468,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 13),
                   widgetCategory == null
                       ? SizedBox.shrink()
                       : widgetCategory!.sharedKey == null
@@ -482,6 +483,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                   onTap: () async {
                                     shareCategoryOnPage();
                                   },
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
                                 ),
                               ),
                             )
@@ -489,7 +493,126 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                               category: widgetCategory!,
                               setSelectedMembers: setSelectedMembers,
                             ),
-                  SizedBox(height: 13),
+                  widgetCategory == null
+                      ? SizedBox.shrink()
+                      : Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Button(
+                              icon: Icons.merge_rounded,
+                              label: "Merge Category",
+                              onTap: () async {
+                                openBottomSheet(
+                                  context,
+                                  PopupFramework(
+                                    title: "Select Category",
+                                    subtitle:
+                                        "Category to transfer all transactions to",
+                                    child: SelectCategory(
+                                      popRoute: true,
+                                      setSelectedCategory: (category) async {
+                                        // TODO This code is very similar to modify of categories code on sharedTransactionsActionBar
+                                        // This should somehow be brought into a function and combined with that!
+                                        Future.delayed(
+                                            Duration(milliseconds: 90),
+                                            () async {
+                                          final result = await openPopup(
+                                            context,
+                                            title: "Merge into " +
+                                                category.name +
+                                                "?",
+                                            description:
+                                                "This will erase this category and all transactions",
+                                            icon: Icons.warning_amber_rounded,
+                                            onSubmit: () async {
+                                              Navigator.pop(context, true);
+                                            },
+                                            onSubmitLabel: "Merge",
+                                            onCancelLabel: "Cancel",
+                                            onCancel: () {
+                                              Navigator.pop(context);
+                                            },
+                                          );
+                                          if (result == true) {
+                                            openLoadingPopup(context);
+                                            List<Transaction>
+                                                transactionsToUpdate =
+                                                await database
+                                                    .getAllTransactionsFromCategory(
+                                                        widget.category!
+                                                            .categoryPk);
+                                            if (widget.category!.sharedKey !=
+                                                null) {
+                                              bool result =
+                                                  await removedSharedFromCategory(
+                                                      widget.category!);
+                                              if (result == false) {
+                                                openSnackbar(SnackbarMessage(
+                                                    title:
+                                                        "Error removing category"));
+                                                Navigator.pop(context);
+                                                return;
+                                              }
+                                            }
+                                            for (Transaction transaction
+                                                in transactionsToUpdate) {
+                                              await Future.delayed(
+                                                  Duration(milliseconds: 1));
+                                              if (transaction.sharedKey !=
+                                                  null) {
+                                                await database
+                                                    .deleteTransaction(
+                                                        transaction
+                                                            .transactionPk);
+                                                Transaction transactionEdited =
+                                                    transaction.copyWith(
+                                                  categoryFk:
+                                                      category.categoryPk,
+                                                  sharedKey: Value(null),
+                                                  transactionOwnerEmail:
+                                                      Value(null),
+                                                  transactionOriginalOwnerEmail:
+                                                      Value(null),
+                                                  sharedStatus: Value(null),
+                                                  sharedDateUpdated:
+                                                      Value(null),
+                                                );
+                                                await database
+                                                    .createOrUpdateTransaction(
+                                                        transactionEdited);
+                                              } else {
+                                                Transaction transactionEdited =
+                                                    transaction.copyWith(
+                                                        categoryFk: category
+                                                            .categoryPk);
+                                                await database
+                                                    .createOrUpdateTransaction(
+                                                        transactionEdited);
+                                              }
+                                            }
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            await database.deleteCategory(
+                                                widget.category!.categoryPk,
+                                                widget.category!.order);
+                                            openSnackbar(SnackbarMessage(
+                                                title: "Merged into " +
+                                                    category.name));
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                            ),
+                          ),
+                        ),
+                  SizedBox(height: 23),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextFont(

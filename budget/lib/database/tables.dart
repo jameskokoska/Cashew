@@ -485,7 +485,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ]))
-        ..where(categories.name.like("%" + search + "%") |
+        ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
             transactions.name.like("%" + search + "%"));
     }
 
@@ -543,7 +543,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ]))
-        ..where(categories.name.like("%" + search + "%") |
+        ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
             transactions.name.like("%" + search + "%"));
     }
 
@@ -657,7 +657,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ]))
-        ..where(categories.name.like("%" + search + "%") |
+        ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
             transactions.name.like("%" + search + "%"));
       DateTime previousDate = DateTime.now();
       return query.watch().map((rows) => rows.map((row) {
@@ -1206,6 +1206,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     return into(transactions).insertOnConflictUpdate(transaction);
   }
 
+  // This doesn't handle shared transactions!
+  // updateShared is always false
+  Future<bool> createOrUpdateBatchTransactionsOnly(
+      List<Transaction> transactionsInserting) async {
+    await batch((batch) {
+      batch.insertAll(transactions, transactionsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
   // create or update a category
   Future<int> createOrUpdateCategory(TransactionCategory category,
       {bool updateSharedEntry = true}) async {
@@ -1256,7 +1267,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       } catch (e) {
         // new entry is needed
         int numberOfCategories =
-            (await database.getTotalCountOfCategories())[0] ?? 0;
+            (await database.getTotalCountOfCategories())[0] ?? 1;
         sharedCategory = category.copyWith(order: numberOfCategories);
         return into(categories).insertOnConflictUpdate(sharedCategory);
       }

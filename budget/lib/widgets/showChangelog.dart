@@ -7,6 +7,17 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Shows date transactions are from on search page
+    Can search category even if lowercase
+    Fixed select multiple transactions and edit category to shared one
+    Sped up mass remove from shared category with batch
+    Are you sure to restore cloud backup popup
+    Fixed timings of batch commits to Firebase
+    Drag to select multiple transactions
+    Scanned and synced snackbar only shows up if greater than 0
+    Pull to refresh only enabled if logged in before
+    Fixed infinite percent on budget history
+    Fixed paint lag on large percentage number for animated circular progress
     Fixed memory leak for shake animation
     Prevented spamming of export to drive
     Completed past budgets page

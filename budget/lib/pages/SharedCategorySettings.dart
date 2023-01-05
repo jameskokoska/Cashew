@@ -538,7 +538,8 @@ class _SharedCategoryRefreshState extends State<SharedCategoryRefresh> {
   bool swipeDownToRefresh = false;
 
   _onPointerMove(PointerMoveEvent ptr) {
-    if (swipeDownToRefresh) {
+    // want to make sure user isn't selecting transactions
+    if (swipeDownToRefresh && selectingTransactionsActive == 0) {
       totalDragY = totalDragY + ptr.delta.dy;
     }
   }
@@ -559,10 +560,12 @@ class _SharedCategoryRefreshState extends State<SharedCategoryRefresh> {
   }
 
   _refreshCategories() async {
-    loadingIndeterminateKey.currentState!.setVisibility(true);
-    await syncPendingQueueOnServer();
-    await getCloudCategories();
-    loadingIndeterminateKey.currentState!.setVisibility(false);
+    if (appStateSettings["currentUserEmail"] != "") {
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      await syncPendingQueueOnServer();
+      await getCloudCategories();
+      loadingIndeterminateKey.currentState!.setVisibility(false);
+    }
   }
 
   @override

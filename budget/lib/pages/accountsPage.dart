@@ -156,9 +156,10 @@ class _AccountsPageState extends State<AccountsPage> {
                                     currentlyExporting = true;
                                   });
                                   await widget.exportData();
-                                  setState(() {
-                                    currentlyExporting = false;
-                                  });
+                                  if (mounted)
+                                    setState(() {
+                                      currentlyExporting = false;
+                                    });
                                 },
                                 borderRadius: 15,
                                 color: Theme.of(context)

@@ -442,14 +442,54 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                             }
                           }
                           if (selectedCategory != null) {
+                            // TODO This code is very similar to merging of categories code on addCategoryPage
+                            // This should somehow be brought into a function and combined with that!
+                            if (selectedCategory!.sharedKey != null) {
+                              final result = await openPopup(
+                                context,
+                                title: "Changing shared category",
+                                description:
+                                    "Transaction may be shared or deleted from the server based on the selected category.",
+                                icon: Icons.person_pin_rounded,
+                                onSubmit: () async {
+                                  Navigator.pop(context, true);
+                                },
+                                onSubmitLabel: "Change Category",
+                                onCancelLabel: "Cancel",
+                                onCancel: () {
+                                  Navigator.pop(context, false);
+                                },
+                              );
+                              print("CHANGED CATEGORY");
+                              if (result == false) {
+                                return;
+                              }
+                            }
                             for (int transactionID in widget.transactionIDs) {
                               Transaction transaction = await database
                                   .getTransactionFromPk(transactionID);
-                              Transaction transactionEdited =
-                                  transaction.copyWith(
-                                      categoryFk: selectedCategory!.categoryPk);
-                              await database
-                                  .createOrUpdateTransaction(transactionEdited);
+                              if (transaction.sharedKey != null) {
+                                await database.deleteTransaction(
+                                    transaction.transactionPk);
+                                Transaction transactionEdited =
+                                    transaction.copyWith(
+                                  categoryFk: selectedCategory!.categoryPk,
+                                  sharedKey: Value(null),
+                                  transactionOwnerEmail: Value(null),
+                                  transactionOriginalOwnerEmail: Value(null),
+                                  sharedStatus: Value(null),
+                                  sharedDateUpdated: Value(null),
+                                );
+                                await database.createOrUpdateTransaction(
+                                    transactionEdited);
+                              } else {
+                                Transaction transactionEdited =
+                                    transaction.copyWith(
+                                        categoryFk:
+                                            selectedCategory!.categoryPk);
+                                await database.createOrUpdateTransaction(
+                                    transactionEdited);
+                              }
                             }
                           }
 
