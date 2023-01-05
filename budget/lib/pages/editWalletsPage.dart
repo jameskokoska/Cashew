@@ -175,36 +175,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                       ],
                     ),
                     onDelete: () {
-                      openPopup(
-                        context,
-                        title: "Delete " + wallet.name + " wallet?",
-                        description:
-                            "This will delete all transactions associated with this wallet.",
-                        icon: Icons.delete_rounded,
-                        onCancel: () {
-                          Navigator.pop(context);
-                        },
-                        onCancelLabel: "Cancel",
-                        onSubmit: () {
-                          database.deleteWallet(wallet.walletPk, wallet.order);
-                          database.deleteWalletsTransactions(wallet.walletPk);
-
-                          // If we delete the selected wallet, set it back to the default
-                          if (appStateSettings["selectedWallet"] ==
-                              wallet.walletPk) {
-                            updateSettings("selectedWallet", 0,
-                                updateGlobalState: true,
-                                pagesNeedingRefresh: [0, 1, 2, 3]);
-                          }
-                          Navigator.pop(context);
-                          openSnackbar(
-                            SnackbarMessage(
-                                title: "Deleted " + wallet.name,
-                                icon: Icons.delete),
-                          );
-                        },
-                        onSubmitLabel: "Delete",
-                      );
+                      deleteWalletPopup(context, wallet);
                     },
                     openPage: AddWalletPage(
                       title: "Edit Wallet",
@@ -238,4 +209,35 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
       ],
     );
   }
+}
+
+void deleteWalletPopup(context, TransactionWallet wallet,
+    {Function? afterDelete}) {
+  openPopup(
+    context,
+    title: "Delete " + wallet.name + " wallet?",
+    description:
+        "This will delete all transactions associated with this wallet.",
+    icon: Icons.delete_rounded,
+    onCancel: () {
+      Navigator.pop(context);
+    },
+    onCancelLabel: "Cancel",
+    onSubmit: () {
+      database.deleteWallet(wallet.walletPk, wallet.order);
+      database.deleteWalletsTransactions(wallet.walletPk);
+
+      // If we delete the selected wallet, set it back to the default
+      if (appStateSettings["selectedWallet"] == wallet.walletPk) {
+        updateSettings("selectedWallet", 0,
+            updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+      }
+      Navigator.pop(context);
+      openSnackbar(
+        SnackbarMessage(title: "Deleted " + wallet.name, icon: Icons.delete),
+      );
+      if (afterDelete != null) afterDelete();
+    },
+    onSubmitLabel: "Delete",
+  );
 }

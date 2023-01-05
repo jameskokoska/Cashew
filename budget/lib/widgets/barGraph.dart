@@ -1,11 +1,14 @@
 import 'package:budget/colors.dart';
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/admob/v1.dart';
+import 'package:intl/intl.dart';
 
 class BarGraph extends StatefulWidget {
   BarGraph({
+    required this.budget,
     required this.color,
     required this.dateRanges,
     required this.bars,
@@ -19,6 +22,7 @@ class BarGraph extends StatefulWidget {
   final List<DateTimeRange> dateRanges;
   final List<BarChartGroupData> bars;
   final List<BarChartGroupData> initialBars;
+  final Budget budget;
 
   final double? horizontalLineAt;
   final double maxY;
@@ -46,7 +50,6 @@ class BarGraphState extends State<BarGraph> {
       padding: const EdgeInsets.only(
         left: 10,
         right: 30,
-        bottom: 10,
         top: 5,
       ),
       child: Container(
@@ -115,11 +118,14 @@ class BarGraphState extends State<BarGraph> {
                 },
                 margin: 7,
                 getTitles: (value) {
-                  return getWordedDateShort(
-                    widget.dateRanges[value.toInt()].start,
-                    showTodayTomorrow: false,
-                    newLineDay: true,
-                  );
+                  return widget.budget.reoccurrence == BudgetReoccurence.monthly
+                      ? DateFormat('MMM')
+                          .format(widget.dateRanges[value.toInt()].start)
+                      : widget.budget.reoccurrence == BudgetReoccurence.yearly
+                          ? DateFormat('yyyy')
+                              .format(widget.dateRanges[value.toInt()].start)
+                          : DateFormat('MMM\nd')
+                              .format(widget.dateRanges[value.toInt()].start);
                 },
               ),
               rightTitles: SideTitles(showTitles: false),

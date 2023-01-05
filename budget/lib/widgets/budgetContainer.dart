@@ -30,6 +30,7 @@ class BudgetContainer extends StatelessWidget {
     this.dateForRange,
     this.isPastBudget = false,
     this.isPastBudgetButCurrentPeriod = false,
+    this.longPressToEdit = true,
   }) : super(key: key);
 
   final Budget budget;
@@ -39,6 +40,7 @@ class BudgetContainer extends StatelessWidget {
   final DateTime? dateForRange;
   final bool? isPastBudget;
   final bool? isPastBudgetButCurrentPeriod;
+  final bool longPressToEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -378,8 +380,10 @@ class BudgetContainer extends StatelessWidget {
                                     ? SizedBox.shrink()
                                     : ButtonIcon(
                                         onTap: () {
-                                          pushRoute(context,
-                                              PastBudgetsPage(budget: budget),
+                                          pushRoute(
+                                              context,
+                                              PastBudgetsPage(
+                                                  budgetPk: budget.budgetPk),
                                               fancyRoute: true);
                                         },
                                         icon: Icons.history_rounded,
@@ -459,22 +463,24 @@ class BudgetContainer extends StatelessWidget {
             onTap: () {
               openContainer();
             },
-            onLongPress: () {
-              pushRoute(
-                context,
-                AddBudgetPage(
-                  title: "Edit Budget",
-                  budget: budget,
-                ),
-              );
-            },
+            onLongPress: longPressToEdit
+                ? () {
+                    pushRoute(
+                      context,
+                      AddBudgetPage(
+                        title: "Edit Budget",
+                        budget: budget,
+                      ),
+                    );
+                  }
+                : null,
             borderRadius: 20,
             child: widget,
             color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
           );
         },
         openPage: BudgetPage(
-          budget: budget,
+          budgetPk: budget.budgetPk,
           dateForRange: dateForRangeLocal,
           isPastBudget: isPastBudget,
           isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
@@ -1077,7 +1083,11 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                             ? 0
                             : spender.amount / totalSpent * 100,
                         progressBackgroundColor:
-                            Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                            selectedMember == spender.member
+                                ? Theme.of(context).colorScheme.white
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .lightDarkAccentHeavy,
                         color: widget.budgetColorScheme.primary,
                       ),
                       Container(
@@ -1199,6 +1209,13 @@ class MemberSpendingPercent extends StatelessWidget {
           text: displayLetter,
           fontWeight: FontWeight.bold,
           fontSize: 25,
+          textColor: dynamicPastel(
+            context,
+            Theme.of(context).colorScheme.primary,
+            amount: 0.4,
+            amountLight: 0.7,
+            inverse: true,
+          ),
         ),
       ),
       AnimatedSwitcher(

@@ -266,6 +266,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                   iconColor: Theme.of(context).colorScheme.errorContainer,
                   label: "Stop Sharing",
                   onTap: () async {
+                    openLoadingPopup(context);
                     bool status =
                         await removedSharedFromCategory(widget.category);
                     if (status == false) {
@@ -279,6 +280,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                       return;
                     }
                     Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   color: Theme.of(context).colorScheme.onErrorContainer,
                   textColor: Theme.of(context).colorScheme.errorContainer,
@@ -291,6 +293,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                   iconColor: Theme.of(context).colorScheme.errorContainer,
                   label: "Leave Shared Group",
                   onTap: () async {
+                    openLoadingPopup(context);
                     bool status = await leaveSharedCategory(widget.category);
                     if (status == false) {
                       openSnackbar(
@@ -302,6 +305,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                       );
                       return;
                     }
+                    Navigator.pop(context);
                     openPopup(
                       context,
                       title: "Delete " + widget.category.name + " category?",
@@ -517,4 +521,57 @@ memberPopup(context, String member) {
       ),
     ),
   );
+}
+
+class SharedCategoryRefresh extends StatefulWidget {
+  const SharedCategoryRefresh(
+      {required this.child, required this.scrollController, super.key});
+  final Widget child;
+  final ScrollController scrollController;
+
+  @override
+  State<SharedCategoryRefresh> createState() => _SharedCategoryRefreshState();
+}
+
+class _SharedCategoryRefreshState extends State<SharedCategoryRefresh> {
+  double totalDragY = 0;
+  bool swipeDownToRefresh = false;
+
+  _onPointerMove(PointerMoveEvent ptr) {
+    if (swipeDownToRefresh) {
+      totalDragY = totalDragY + ptr.delta.dy;
+    }
+  }
+
+  _onPointerUp(PointerUpEvent event) {
+    if (totalDragY > 125 && swipeDownToRefresh) {
+      _refreshCategories();
+    }
+    totalDragY = 0;
+  }
+
+  _onPointerDown(PointerDownEvent event) {
+    if (widget.scrollController.offset != 0) {
+      swipeDownToRefresh = false;
+    } else {
+      swipeDownToRefresh = true;
+    }
+  }
+
+  _refreshCategories() async {
+    loadingIndeterminateKey.currentState!.setVisibility(true);
+    await syncPendingQueueOnServer();
+    await getCloudCategories();
+    loadingIndeterminateKey.currentState!.setVisibility(false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+        onPointerMove: (ptr) => {_onPointerMove(ptr)},
+        onPointerUp: (ptr) => {_onPointerUp(ptr)},
+        onPointerDown: (ptr) => {_onPointerDown(ptr)},
+        behavior: HitTestBehavior.opaque,
+        child: widget.child);
+  }
 }

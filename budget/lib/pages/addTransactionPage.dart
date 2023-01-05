@@ -12,6 +12,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -316,7 +317,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   }
 
   Future<Transaction> createTransaction({bool removeShared = false}) async {
-    return Transaction(
+    Transaction createdTransaction = Transaction(
       transactionPk: widget.transaction != null
           ? widget.transaction!.transactionPk
           : DateTime.now().millisecondsSinceEpoch,
@@ -369,6 +370,14 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           ? widget.transaction!.sharedDateUpdated
           : null,
     );
+
+    if (widget.transaction != null &&
+        widget.transaction!.type != null &&
+        createdTransaction.type == null) {
+      createdTransaction = createdTransaction.copyWith(paid: true);
+    }
+
+    return createdTransaction;
   }
 
   late TextEditingController _titleInputController;
@@ -548,6 +557,42 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     Navigator.pop(context);
                   }
                 },
+                actions: [
+                  widget.transaction != null
+                      ? Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: IconButton(
+                            onPressed: () {
+                              openPopup(
+                                context,
+                                title: "Delete transaction?",
+                                description:
+                                    "Are you sure you want to delete this transaction?",
+                                icon: Icons.delete_rounded,
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                                onCancelLabel: "Cancel",
+                                onSubmit: () {
+                                  database.deleteTransaction(
+                                      widget.transaction!.transactionPk);
+                                  openSnackbar(
+                                    SnackbarMessage(
+                                      title: "Deleted transaction",
+                                      icon: Icons.delete_rounded,
+                                    ),
+                                  );
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                onSubmitLabel: "Delete",
+                              );
+                            },
+                            icon: Icon(Icons.delete_rounded),
+                          ),
+                        )
+                      : SizedBox.shrink()
+                ],
                 listWidgets: [
                   AnimatedContainer(
                     curve: Curves.easeInOut,
@@ -909,7 +954,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 ? TextInput(
                                     padding: EdgeInsets.zero,
                                     labelText: "Notes",
-                                    icon: Icons.edit,
+                                    icon: Icons.sticky_note_2_rounded,
                                     controller: _noteInputController,
                                     keyboardType: TextInputType.multiline,
                                     maxLines: null,
@@ -923,7 +968,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                       padding: EdgeInsets.zero,
                                       readOnly: true,
                                       labelText: "Notes",
-                                      icon: Icons.edit,
+                                      icon: Icons.sticky_note_2_rounded,
                                       controller: _noteInputController,
                                       keyboardType: TextInputType.multiline,
                                       maxLines: null,
@@ -1020,7 +1065,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                             selectedAmountCalculation ?? "",
                                         setSelectedAmount: setSelectedAmount,
                                         next: () async {
-                                          print("HELLO");
                                           await addTransaction();
                                           Navigator.pop(context);
                                           Navigator.pop(context);

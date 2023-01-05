@@ -573,7 +573,7 @@ class TransactionEntry extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 7, vertical: 10),
                                 child: Icon(
-                                  Icons.edit_note_rounded,
+                                  Icons.sticky_note_2_rounded,
                                   size: 22,
                                   color: iconColor,
                                 ),

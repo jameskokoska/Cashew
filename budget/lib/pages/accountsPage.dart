@@ -62,6 +62,8 @@ class AccountsPage extends StatefulWidget {
 }
 
 class _AccountsPageState extends State<AccountsPage> {
+  bool currentlyExporting = false;
+
   @override
   Widget build(BuildContext context) {
     return PageFramework(
@@ -143,29 +145,45 @@ class _AccountsPageState extends State<AccountsPage> {
                           decoration: BoxDecoration(
                               boxShadow:
                                   boxShadowCheck(boxShadowGeneral(context))),
-                          child: Tappable(
-                            onTap: widget.exportData,
-                            borderRadius: 15,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavyLight,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 30),
-                                Icon(
-                                  Icons.upload_rounded,
-                                  size: 35,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                          child: IgnorePointer(
+                            ignoring: currentlyExporting,
+                            child: AnimatedOpacity(
+                              opacity: currentlyExporting ? 0.4 : 1,
+                              duration: Duration(milliseconds: 200),
+                              child: Tappable(
+                                onTap: () async {
+                                  setState(() {
+                                    currentlyExporting = true;
+                                  });
+                                  await widget.exportData();
+                                  setState(() {
+                                    currentlyExporting = false;
+                                  });
+                                },
+                                borderRadius: 15,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .lightDarkAccentHeavyLight,
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 30),
+                                    Icon(
+                                      Icons.upload_rounded,
+                                      size: 35,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                    SizedBox(height: 10),
+                                    TextFont(
+                                      text: "Export",
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    SizedBox(height: 30),
+                                  ],
                                 ),
-                                SizedBox(height: 10),
-                                TextFont(
-                                  text: "Export",
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                SizedBox(height: 30),
-                              ],
+                              ),
                             ),
                           ),
                         ),

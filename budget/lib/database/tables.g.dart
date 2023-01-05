@@ -11,13 +11,15 @@ class TransactionWallet extends DataClass
   final String? iconName;
   final DateTime dateCreated;
   final int order;
+  final String? currency;
   const TransactionWallet(
       {required this.walletPk,
       required this.name,
       this.colour,
       this.iconName,
       required this.dateCreated,
-      required this.order});
+      required this.order,
+      this.currency});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -31,6 +33,9 @@ class TransactionWallet extends DataClass
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
     map['order'] = Variable<int>(order);
+    if (!nullToAbsent || currency != null) {
+      map['currency'] = Variable<String>(currency);
+    }
     return map;
   }
 
@@ -45,6 +50,9 @@ class TransactionWallet extends DataClass
           : Value(iconName),
       dateCreated: Value(dateCreated),
       order: Value(order),
+      currency: currency == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currency),
     );
   }
 
@@ -58,6 +66,7 @@ class TransactionWallet extends DataClass
       iconName: serializer.fromJson<String?>(json['iconName']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       order: serializer.fromJson<int>(json['order']),
+      currency: serializer.fromJson<String?>(json['currency']),
     );
   }
   @override
@@ -70,6 +79,7 @@ class TransactionWallet extends DataClass
       'iconName': serializer.toJson<String?>(iconName),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'order': serializer.toJson<int>(order),
+      'currency': serializer.toJson<String?>(currency),
     };
   }
 
@@ -79,7 +89,8 @@ class TransactionWallet extends DataClass
           Value<String?> colour = const Value.absent(),
           Value<String?> iconName = const Value.absent(),
           DateTime? dateCreated,
-          int? order}) =>
+          int? order,
+          Value<String?> currency = const Value.absent()}) =>
       TransactionWallet(
         walletPk: walletPk ?? this.walletPk,
         name: name ?? this.name,
@@ -87,6 +98,7 @@ class TransactionWallet extends DataClass
         iconName: iconName.present ? iconName.value : this.iconName,
         dateCreated: dateCreated ?? this.dateCreated,
         order: order ?? this.order,
+        currency: currency.present ? currency.value : this.currency,
       );
   @override
   String toString() {
@@ -96,14 +108,15 @@ class TransactionWallet extends DataClass
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order')
+          ..write('order: $order, ')
+          ..write('currency: $currency')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(walletPk, name, colour, iconName, dateCreated, order);
+  int get hashCode => Object.hash(
+      walletPk, name, colour, iconName, dateCreated, order, currency);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -113,7 +126,8 @@ class TransactionWallet extends DataClass
           other.colour == this.colour &&
           other.iconName == this.iconName &&
           other.dateCreated == this.dateCreated &&
-          other.order == this.order);
+          other.order == this.order &&
+          other.currency == this.currency);
 }
 
 class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
@@ -123,6 +137,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
   final Value<String?> iconName;
   final Value<DateTime> dateCreated;
   final Value<int> order;
+  final Value<String?> currency;
   const WalletsCompanion({
     this.walletPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -130,6 +145,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.iconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.order = const Value.absent(),
+    this.currency = const Value.absent(),
   });
   WalletsCompanion.insert({
     this.walletPk = const Value.absent(),
@@ -138,6 +154,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.iconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
     required int order,
+    this.currency = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionWallet> custom({
@@ -147,6 +164,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     Expression<String>? iconName,
     Expression<DateTime>? dateCreated,
     Expression<int>? order,
+    Expression<String>? currency,
   }) {
     return RawValuesInsertable({
       if (walletPk != null) 'wallet_pk': walletPk,
@@ -155,6 +173,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       if (iconName != null) 'icon_name': iconName,
       if (dateCreated != null) 'date_created': dateCreated,
       if (order != null) 'order': order,
+      if (currency != null) 'currency': currency,
     });
   }
 
@@ -164,7 +183,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       Value<String?>? colour,
       Value<String?>? iconName,
       Value<DateTime>? dateCreated,
-      Value<int>? order}) {
+      Value<int>? order,
+      Value<String?>? currency}) {
     return WalletsCompanion(
       walletPk: walletPk ?? this.walletPk,
       name: name ?? this.name,
@@ -172,6 +192,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       iconName: iconName ?? this.iconName,
       dateCreated: dateCreated ?? this.dateCreated,
       order: order ?? this.order,
+      currency: currency ?? this.currency,
     );
   }
 
@@ -196,6 +217,9 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     if (order.present) {
       map['order'] = Variable<int>(order.value);
     }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
     return map;
   }
 
@@ -207,7 +231,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order')
+          ..write('order: $order, ')
+          ..write('currency: $currency')
           ..write(')'))
         .toString();
   }
@@ -262,9 +287,15 @@ class $WalletsTable extends Wallets
   late final GeneratedColumn<int> order = GeneratedColumn<int>(
       'order', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _currencyMeta =
+      const VerificationMeta('currency');
+  @override
+  late final GeneratedColumn<String> currency = GeneratedColumn<String>(
+      'currency', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [walletPk, name, colour, iconName, dateCreated, order];
+      [walletPk, name, colour, iconName, dateCreated, order, currency];
   @override
   String get aliasedName => _alias ?? 'wallets';
   @override
@@ -304,6 +335,10 @@ class $WalletsTable extends Wallets
     } else if (isInserting) {
       context.missing(_orderMeta);
     }
+    if (data.containsKey('currency')) {
+      context.handle(_currencyMeta,
+          currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
+    }
     return context;
   }
 
@@ -325,6 +360,8 @@ class $WalletsTable extends Wallets
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       order: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+      currency: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}currency']),
     );
   }
 
@@ -430,8 +467,8 @@ class TransactionCategory extends DataClass
       order: serializer.fromJson<int>(json['order']),
       income: serializer.fromJson<bool>(json['income']),
       sharedKey: serializer.fromJson<String?>(json['sharedKey']),
-      sharedOwnerMember:
-          serializer.fromJson<CategoryOwnerMember?>(json['sharedOwnerMember']),
+      sharedOwnerMember: $CategoriesTable.$convertersharedOwnerMembern
+          .fromJson(serializer.fromJson<int?>(json['sharedOwnerMember'])),
       sharedDateUpdated:
           serializer.fromJson<DateTime?>(json['sharedDateUpdated']),
       sharedMembers: serializer.fromJson<List<String>?>(json['sharedMembers']),
@@ -449,8 +486,9 @@ class TransactionCategory extends DataClass
       'order': serializer.toJson<int>(order),
       'income': serializer.toJson<bool>(income),
       'sharedKey': serializer.toJson<String?>(sharedKey),
-      'sharedOwnerMember':
-          serializer.toJson<CategoryOwnerMember?>(sharedOwnerMember),
+      'sharedOwnerMember': serializer.toJson<int?>($CategoriesTable
+          .$convertersharedOwnerMembern
+          .toJson(sharedOwnerMember)),
       'sharedDateUpdated': serializer.toJson<DateTime?>(sharedDateUpdated),
       'sharedMembers': serializer.toJson<List<String>?>(sharedMembers),
     };
@@ -894,11 +932,12 @@ class $CategoriesTable extends Categories
     return $CategoriesTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<CategoryOwnerMember, int> $convertersharedOwnerMember =
+  static JsonTypeConverter2<CategoryOwnerMember, int, int>
+      $convertersharedOwnerMember =
       const EnumIndexConverter<CategoryOwnerMember>(CategoryOwnerMember.values);
-  static TypeConverter<CategoryOwnerMember?, int?>
+  static JsonTypeConverter2<CategoryOwnerMember?, int?, int?>
       $convertersharedOwnerMembern =
-      NullAwareTypeConverter.wrap($convertersharedOwnerMember);
+      JsonTypeConverter2.asNullable($convertersharedOwnerMember);
   static TypeConverter<List<String>, String> $convertersharedMembers =
       const StringListInColumnConverter();
   static TypeConverter<List<String>?, String?> $convertersharedMembersn =
@@ -1076,20 +1115,23 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       dateTimeCreated: serializer.fromJson<DateTime?>(json['dateTimeCreated']),
       income: serializer.fromJson<bool>(json['income']),
       periodLength: serializer.fromJson<int?>(json['periodLength']),
-      reoccurrence:
-          serializer.fromJson<BudgetReoccurence?>(json['reoccurrence']),
-      type: serializer.fromJson<TransactionSpecialType?>(json['type']),
+      reoccurrence: $TransactionsTable.$converterreoccurrencen
+          .fromJson(serializer.fromJson<int?>(json['reoccurrence'])),
+      type: $TransactionsTable.$convertertypen
+          .fromJson(serializer.fromJson<int?>(json['type'])),
       paid: serializer.fromJson<bool>(json['paid']),
       createdAnotherFutureTransaction:
           serializer.fromJson<bool?>(json['createdAnotherFutureTransaction']),
       skipPaid: serializer.fromJson<bool>(json['skipPaid']),
-      methodAdded: serializer.fromJson<MethodAdded?>(json['methodAdded']),
+      methodAdded: $TransactionsTable.$convertermethodAddedn
+          .fromJson(serializer.fromJson<int?>(json['methodAdded'])),
       transactionOwnerEmail:
           serializer.fromJson<String?>(json['transactionOwnerEmail']),
       transactionOriginalOwnerEmail:
           serializer.fromJson<String?>(json['transactionOriginalOwnerEmail']),
       sharedKey: serializer.fromJson<String?>(json['sharedKey']),
-      sharedStatus: serializer.fromJson<SharedStatus?>(json['sharedStatus']),
+      sharedStatus: $TransactionsTable.$convertersharedStatusn
+          .fromJson(serializer.fromJson<int?>(json['sharedStatus'])),
       sharedDateUpdated:
           serializer.fromJson<DateTime?>(json['sharedDateUpdated']),
     );
@@ -1109,19 +1151,23 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'dateTimeCreated': serializer.toJson<DateTime?>(dateTimeCreated),
       'income': serializer.toJson<bool>(income),
       'periodLength': serializer.toJson<int?>(periodLength),
-      'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
-      'type': serializer.toJson<TransactionSpecialType?>(type),
+      'reoccurrence': serializer.toJson<int?>(
+          $TransactionsTable.$converterreoccurrencen.toJson(reoccurrence)),
+      'type': serializer
+          .toJson<int?>($TransactionsTable.$convertertypen.toJson(type)),
       'paid': serializer.toJson<bool>(paid),
       'createdAnotherFutureTransaction':
           serializer.toJson<bool?>(createdAnotherFutureTransaction),
       'skipPaid': serializer.toJson<bool>(skipPaid),
-      'methodAdded': serializer.toJson<MethodAdded?>(methodAdded),
+      'methodAdded': serializer.toJson<int?>(
+          $TransactionsTable.$convertermethodAddedn.toJson(methodAdded)),
       'transactionOwnerEmail':
           serializer.toJson<String?>(transactionOwnerEmail),
       'transactionOriginalOwnerEmail':
           serializer.toJson<String?>(transactionOriginalOwnerEmail),
       'sharedKey': serializer.toJson<String?>(sharedKey),
-      'sharedStatus': serializer.toJson<SharedStatus?>(sharedStatus),
+      'sharedStatus': serializer.toJson<int?>(
+          $TransactionsTable.$convertersharedStatusn.toJson(sharedStatus)),
       'sharedDateUpdated': serializer.toJson<DateTime?>(sharedDateUpdated),
     };
   }
@@ -1964,23 +2010,25 @@ class $TransactionsTable extends Transactions
       const IntListInColumnConverter();
   static TypeConverter<List<int>?, String?> $converterlabelFksn =
       NullAwareTypeConverter.wrap($converterlabelFks);
-  static TypeConverter<BudgetReoccurence, int> $converterreoccurrence =
+  static JsonTypeConverter2<BudgetReoccurence, int, int>
+      $converterreoccurrence =
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
-  static TypeConverter<BudgetReoccurence?, int?> $converterreoccurrencen =
-      NullAwareTypeConverter.wrap($converterreoccurrence);
-  static TypeConverter<TransactionSpecialType, int> $convertertype =
+  static JsonTypeConverter2<BudgetReoccurence?, int?, int?>
+      $converterreoccurrencen =
+      JsonTypeConverter2.asNullable($converterreoccurrence);
+  static JsonTypeConverter2<TransactionSpecialType, int, int> $convertertype =
       const EnumIndexConverter<TransactionSpecialType>(
           TransactionSpecialType.values);
-  static TypeConverter<TransactionSpecialType?, int?> $convertertypen =
-      NullAwareTypeConverter.wrap($convertertype);
-  static TypeConverter<MethodAdded, int> $convertermethodAdded =
+  static JsonTypeConverter2<TransactionSpecialType?, int?, int?>
+      $convertertypen = JsonTypeConverter2.asNullable($convertertype);
+  static JsonTypeConverter2<MethodAdded, int, int> $convertermethodAdded =
       const EnumIndexConverter<MethodAdded>(MethodAdded.values);
-  static TypeConverter<MethodAdded?, int?> $convertermethodAddedn =
-      NullAwareTypeConverter.wrap($convertermethodAdded);
-  static TypeConverter<SharedStatus, int> $convertersharedStatus =
+  static JsonTypeConverter2<MethodAdded?, int?, int?> $convertermethodAddedn =
+      JsonTypeConverter2.asNullable($convertermethodAdded);
+  static JsonTypeConverter2<SharedStatus, int, int> $convertersharedStatus =
       const EnumIndexConverter<SharedStatus>(SharedStatus.values);
-  static TypeConverter<SharedStatus?, int?> $convertersharedStatusn =
-      NullAwareTypeConverter.wrap($convertersharedStatus);
+  static JsonTypeConverter2<SharedStatus?, int?, int?> $convertersharedStatusn =
+      JsonTypeConverter2.asNullable($convertersharedStatus);
 }
 
 class TransactionLabel extends DataClass
@@ -2729,14 +2777,14 @@ class Budget extends DataClass implements Insertable<Budget> {
       categoryFks: serializer.fromJson<List<int>?>(json['categoryFks']),
       allCategoryFks: serializer.fromJson<bool>(json['allCategoryFks']),
       periodLength: serializer.fromJson<int>(json['periodLength']),
-      reoccurrence:
-          serializer.fromJson<BudgetReoccurence?>(json['reoccurrence']),
+      reoccurrence: $BudgetsTable.$converterreoccurrencen
+          .fromJson(serializer.fromJson<int?>(json['reoccurrence'])),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       pinned: serializer.fromJson<bool>(json['pinned']),
       order: serializer.fromJson<int>(json['order']),
       walletFk: serializer.fromJson<int>(json['walletFk']),
-      sharedTransactionsShow: serializer
-          .fromJson<SharedTransactionsShow>(json['sharedTransactionsShow']),
+      sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShow
+          .fromJson(serializer.fromJson<int>(json['sharedTransactionsShow'])),
     );
   }
   @override
@@ -2752,13 +2800,15 @@ class Budget extends DataClass implements Insertable<Budget> {
       'categoryFks': serializer.toJson<List<int>?>(categoryFks),
       'allCategoryFks': serializer.toJson<bool>(allCategoryFks),
       'periodLength': serializer.toJson<int>(periodLength),
-      'reoccurrence': serializer.toJson<BudgetReoccurence?>(reoccurrence),
+      'reoccurrence': serializer.toJson<int?>(
+          $BudgetsTable.$converterreoccurrencen.toJson(reoccurrence)),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'pinned': serializer.toJson<bool>(pinned),
       'order': serializer.toJson<int>(order),
       'walletFk': serializer.toJson<int>(walletFk),
-      'sharedTransactionsShow':
-          serializer.toJson<SharedTransactionsShow>(sharedTransactionsShow),
+      'sharedTransactionsShow': serializer.toJson<int>($BudgetsTable
+          .$convertersharedTransactionsShow
+          .toJson(sharedTransactionsShow)),
     };
   }
 
@@ -3345,11 +3395,13 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       const IntListInColumnConverter();
   static TypeConverter<List<int>?, String?> $convertercategoryFksn =
       NullAwareTypeConverter.wrap($convertercategoryFks);
-  static TypeConverter<BudgetReoccurence, int> $converterreoccurrence =
+  static JsonTypeConverter2<BudgetReoccurence, int, int>
+      $converterreoccurrence =
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
-  static TypeConverter<BudgetReoccurence?, int?> $converterreoccurrencen =
-      NullAwareTypeConverter.wrap($converterreoccurrence);
-  static TypeConverter<SharedTransactionsShow, int>
+  static JsonTypeConverter2<BudgetReoccurence?, int?, int?>
+      $converterreoccurrencen =
+      JsonTypeConverter2.asNullable($converterreoccurrence);
+  static JsonTypeConverter2<SharedTransactionsShow, int, int>
       $convertersharedTransactionsShow =
       const EnumIndexConverter<SharedTransactionsShow>(
           SharedTransactionsShow.values);

@@ -152,19 +152,11 @@ Future<bool> signInGoogle(
     if (waitForCompletion == true) Navigator.of(context).pop();
     openSnackbar(
       SnackbarMessage(
-        title: e.toString(),
+        title: "Sign-in Error",
+        description: "Check your connection and try again",
         icon: Icons.error_rounded,
-        onTap: () async {
-          await signInGoogle(
-              context: context,
-              waitForCompletion: true,
-              drivePermissions: true,
-              next: () {});
-          if (appStateSettings["username"] == "" && user != null) {
-            updateSettings("username", user!.displayName,
-                pagesNeedingRefresh: [0]);
-          }
-        },
+        onTap: () async {},
+        timeout: Duration(milliseconds: 1400),
       ),
     );
     throw ("Error signing in");
@@ -233,7 +225,7 @@ Future<void> createBackup(context,
   // Backup user settings
   try {
     if (silentBackup == false || silentBackup == null) {
-      openLoadingPopup(context);
+      loadingIndeterminateKey.currentState!.setVisibility(true);
     }
     final prefs = await SharedPreferences.getInstance();
     String userSettings = prefs.getString('userSettings') ?? "";
@@ -299,11 +291,11 @@ Future<void> createBackup(context,
         pagesNeedingRefresh: [], updateGlobalState: false);
 
     if (silentBackup == false || silentBackup == null) {
-      Navigator.of(context).pop();
+      loadingIndeterminateKey.currentState!.setVisibility(false);
     }
   } catch (e) {
     if (silentBackup == false || silentBackup == null) {
-      Navigator.of(context).pop();
+      loadingIndeterminateKey.currentState!.setVisibility(false);
     }
     openSnackbar(
       SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
@@ -315,7 +307,7 @@ Future<void> deleteRecentBackups(context, amountToKeep,
     {bool? silentDelete}) async {
   try {
     if (silentDelete == false || silentDelete == null) {
-      openLoadingPopup(context);
+      loadingIndeterminateKey.currentState!.setVisibility(true);
     }
 
     final authHeaders = await user!.authHeaders;
@@ -341,11 +333,11 @@ Future<void> deleteRecentBackups(context, amountToKeep,
       index++;
     });
     if (silentDelete == false || silentDelete == null) {
-      Navigator.of(context).pop();
+      loadingIndeterminateKey.currentState!.setVisibility(false);
     }
   } catch (e) {
     if (silentDelete == false || silentDelete == null) {
-      Navigator.of(context).pop();
+      loadingIndeterminateKey.currentState!.setVisibility(false);
     }
     openSnackbar(
       SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
@@ -1182,7 +1174,9 @@ class _BackupManagementState extends State<BackupManagement> {
                                                                 true),
                                                     onSubmit: () async {
                                                       Navigator.pop(context);
-                                                      openLoadingPopup(context);
+                                                      loadingIndeterminateKey
+                                                          .currentState!
+                                                          .setVisibility(true);
                                                       await deleteBackup(
                                                           driveApiState!,
                                                           file.value.id ?? "");
@@ -1203,7 +1197,9 @@ class _BackupManagementState extends State<BackupManagement> {
                                                       });
                                                       // bottomSheetControllerGlobal
                                                       //     .snapToExtent(0);
-                                                      Navigator.pop(context);
+                                                      loadingIndeterminateKey
+                                                          .currentState!
+                                                          .setVisibility(false);
                                                     },
                                                     onSubmitLabel: "Delete",
                                                     onCancel: () {

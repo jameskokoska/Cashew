@@ -365,6 +365,7 @@ class App extends StatelessWidget {
             // The persistent global Widget stack (stays on navigation change)
             GlobalSnackbar(key: snackbarKey),
             GlobalLoadingProgress(key: loadingProgressKey),
+            GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
           ],
         );
       },

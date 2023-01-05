@@ -4,13 +4,16 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
@@ -472,7 +475,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 
   updateInitial() async {
-    if (widget.budget != null) {
+    if (widget.budget != null && widget.budget!.categoryFks != null) {
       setSelectedCategories(widget.budget!.categoryFks!);
     }
     //Set to false because we can't save until we made some changes
@@ -557,6 +560,22 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     discardChangesPopup(context);
                   }
                 },
+                actions: [
+                  widget.budget != null
+                      ? Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: IconButton(
+                            onPressed: () {
+                              deleteBudgetPopup(context, widget.budget!,
+                                  afterDelete: () {
+                                Navigator.pop(context);
+                              });
+                            },
+                            icon: Icon(Icons.delete_rounded),
+                          ),
+                        )
+                      : SizedBox.shrink()
+                ],
                 listWidgets: [
                   Container(height: 20),
                   Padding(

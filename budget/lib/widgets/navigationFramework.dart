@@ -54,6 +54,8 @@ GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
 GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
 GlobalKey<BottomNavBarState> navbarStateKey = GlobalKey();
 GlobalKey<GlobalLoadingProgressState> loadingProgressKey = GlobalKey();
+GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
+    GlobalKey();
 GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
@@ -95,11 +97,13 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);
+      loadingIndeterminateKey.currentState!.setVisibility(true);
       await createBackupInBackground(context);
       if (appStateSettings["currentUserEmail"] != "") {
         await syncPendingQueueOnServer(); //sync before download
         await getCloudCategories();
       }
+      loadingIndeterminateKey.currentState!.setVisibility(false);
       entireAppLoaded = true;
     });
 

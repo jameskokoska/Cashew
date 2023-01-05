@@ -75,23 +75,23 @@ class PieChartWrapper extends StatelessWidget {
           IgnorePointer(
             child: Center(
               child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                    shape: BoxShape.circle),
-              ),
-            ),
-          ),
-          IgnorePointer(
-            child: Center(
-              child: Container(
                 width: 105,
                 height: 105,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.white.withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: Center(
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.background,
+                    shape: BoxShape.circle),
               ),
             ),
           ),

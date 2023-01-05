@@ -58,9 +58,7 @@ class OpenTestPage extends StatelessWidget {
         title: Text('Test page'),
       ),
       body: GestureDetector(
-        onDoubleTap: () {
-          print("hello");
-        },
+        onDoubleTap: () {},
         onPanUpdate: (details) {
           if (details.delta.dy > 10 || details.delta.dx > 10) {
             Navigator.of(context).pop();

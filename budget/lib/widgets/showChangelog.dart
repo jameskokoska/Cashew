@@ -7,6 +7,18 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed memory leak for shake animation
+    Prevented spamming of export to drive
+    Completed past budgets page
+    Budget edits and changes are now watched on budget page 
+    Added edit budget icon on budget page
+    Added delete category, transaction, wallet button when on editing page
+    Changed reorder animation to opacity instead of scale down
+    Past budget bar graph labels correspond to budget time period
+    Swipe down on home page/transaction page to refresh cloud transaction
+    Fixed changing upcoming transaction to default transaction type - marks it as paid
+    Fixed background of circular progress when selecting shared transaction member on budget page
+    Added new global loading indeterminate progress bar
     Started changing past budgets page
     Fixed discard changes popup when editing shared properties
     Added share action on category page

@@ -122,26 +122,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                         currentReorder != -1 && currentReorder != index,
                     backgroundColor: backgroundColor,
                     onDelete: () {
-                      openPopup(
-                        context,
-                        title: "Delete " + budget.name + "?",
-                        icon: Icons.delete_rounded,
-                        onCancel: () {
-                          Navigator.pop(context);
-                        },
-                        onCancelLabel: "Cancel",
-                        onSubmit: () {
-                          database.deleteBudget(budget.budgetPk, budget.order);
-                          Navigator.pop(context);
-                          openSnackbar(
-                            SnackbarMessage(
-                              title: "Deleted " + budget.name,
-                              icon: Icons.delete,
-                            ),
-                          );
-                        },
-                        onSubmitLabel: "Delete",
-                      );
+                      deleteBudgetPopup(context, budget);
                     },
                     openPage: AddBudgetPage(
                       title: "Edit Budget",
@@ -274,4 +255,28 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
       ],
     );
   }
+}
+
+void deleteBudgetPopup(context, Budget budget, {Function? afterDelete}) {
+  openPopup(
+    context,
+    title: "Delete " + budget.name + "?",
+    icon: Icons.delete_rounded,
+    onCancel: () {
+      Navigator.pop(context);
+    },
+    onCancelLabel: "Cancel",
+    onSubmit: () {
+      database.deleteBudget(budget.budgetPk, budget.order);
+      Navigator.pop(context);
+      openSnackbar(
+        SnackbarMessage(
+          title: "Deleted " + budget.name,
+          icon: Icons.delete,
+        ),
+      );
+      if (afterDelete != null) afterDelete();
+    },
+    onSubmitLabel: "Delete",
+  );
 }

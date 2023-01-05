@@ -104,6 +104,7 @@ class Wallets extends Table {
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
+  TextColumn get currency => text().nullable()();
 }
 
 @DataClassName('Transaction')
@@ -338,6 +339,9 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.addColumn(
                 transactions, transactions.transactionOriginalOwnerEmail);
             await migrator.addColumn(categories, categories.sharedMembers);
+          }
+          if (from <= 22) {
+            await migrator.addColumn(wallets, wallets.currency);
           }
         },
       );
@@ -805,6 +809,12 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  // watch category given key
+  Stream<Budget> getBudget(int budgetPk) {
+    return (select(budgets)..where((b) => b.budgetPk.equals(budgetPk)))
+        .watchSingle();
+  }
+
   Future<int> getAmountOfBudgets() async {
     return (await select(budgets).get()).length;
   }
@@ -1167,7 +1177,6 @@ class FinanceDatabase extends _$FinanceDatabase {
       }
     }
     if (transaction.paid == false && transaction.sharedKey != null) {
-      print("HELLO!!");
       TransactionCategory category =
           await database.getCategoryInstance(transaction.categoryFk);
       await database.deleteTransaction(transaction.transactionPk);
@@ -1185,10 +1194,14 @@ class FinanceDatabase extends _$FinanceDatabase {
     print(transaction);
 
     // We need to ensure the value is set back to null, so insert/replace
-    if (transaction.sharedKey == null ||
+    if (transaction.type == null ||
+        transaction.sharedKey == null ||
         transaction.type == null ||
         transaction.sharedDateUpdated == null ||
-        transaction.sharedStatus == null) {}
+        transaction.sharedStatus == null) {
+      return into(transactions)
+          .insert(transaction, mode: InsertMode.insertOrReplace);
+    }
 
     return into(transactions).insertOnConflictUpdate(transaction);
   }
@@ -1274,7 +1287,9 @@ class FinanceDatabase extends _$FinanceDatabase {
       try {
         // entry exists, update it
         sharedTransaction = await (select(transactions)
-              ..where((t) => t.sharedKey.equals(transaction.sharedKey ?? "")))
+              ..where((t) =>
+                  t.sharedKey.equals(transaction.sharedKey ?? "") &
+                  t.categoryFk.equals(transaction.categoryFk)))
             .getSingle();
         sharedTransaction = transaction.copyWith(
             transactionPk: sharedTransaction.transactionPk);

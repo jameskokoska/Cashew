@@ -11,6 +11,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -147,10 +148,13 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   }
 
   Future addCategory() async {
-    print("Added category" + (await createTransactionCategory()).toString());
-    int result = await database.createOrUpdateCategory(
-      await createTransactionCategory(),
-    );
+    TransactionCategory createdCategory = await createTransactionCategory();
+    print("Added category" + (createdCategory).toString());
+    if (createdCategory.sharedKey != null) {
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+    }
+    int result = await database.createOrUpdateCategory(createdCategory);
+    loadingIndeterminateKey.currentState!.setVisibility(false);
     if (result == -1) {
       openPopup(
         context,
@@ -294,6 +298,20 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                           ),
                         )
                       : SizedBox.shrink(),
+                  widget.category != null
+                      ? Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: IconButton(
+                            onPressed: () {
+                              deleteCategoryPopup(context, widgetCategory!,
+                                  afterDelete: () {
+                                Navigator.pop(context);
+                              });
+                            },
+                            icon: Icon(Icons.delete_rounded),
+                          ),
+                        )
+                      : SizedBox.shrink()
                   // widget.category != null && widget.category!.sharedKey != null
                   //     ? Container(
                   //         padding: EdgeInsets.only(top: 12.5, right: 5),

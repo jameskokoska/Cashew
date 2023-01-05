@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:budget/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 
 class AnimatedCircularProgress extends StatefulWidget {
   final double percent;

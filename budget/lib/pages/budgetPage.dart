@@ -25,8 +25,40 @@ import 'package:budget/colors.dart';
 import 'package:flutter/scheduler.dart';
 import 'dart:developer';
 
-class BudgetPage extends StatefulWidget {
+class BudgetPage extends StatelessWidget {
   const BudgetPage({
+    super.key,
+    required int this.budgetPk,
+    this.dateForRange,
+    this.isPastBudget = false,
+    this.isPastBudgetButCurrentPeriod = false,
+  });
+  final int budgetPk;
+  final DateTime? dateForRange;
+  final bool? isPastBudget;
+  final bool? isPastBudgetButCurrentPeriod;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Budget>(
+        stream: database.getBudget(budgetPk),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _BudgetPageContent(
+              budget: snapshot.data!,
+              dateForRange: dateForRange,
+              isPastBudget: isPastBudget,
+              isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
+            );
+          }
+          return SizedBox.shrink();
+        });
+    ;
+  }
+}
+
+class _BudgetPageContent extends StatefulWidget {
+  const _BudgetPageContent({
     Key? key,
     required Budget this.budget,
     this.dateForRange,
@@ -40,10 +72,10 @@ class BudgetPage extends StatefulWidget {
   final bool? isPastBudgetButCurrentPeriod;
 
   @override
-  State<BudgetPage> createState() => _BudgetPageState();
+  State<_BudgetPageContent> createState() => __BudgetPageContentState();
 }
 
-class _BudgetPageState extends State<BudgetPage> {
+class __BudgetPageContentState extends State<_BudgetPageContent> {
   double budgetHeaderHeight = 0;
   int selectedCategoryPk = -1;
   String? selectedMember = null;
@@ -86,13 +118,28 @@ class _BudgetPageState extends State<BudgetPage> {
                       padding: EdgeInsets.only(top: 12.5, right: 5),
                       child: IconButton(
                         onPressed: () {
-                          pushRoute(
-                              context, PastBudgetsPage(budget: widget.budget),
+                          pushRoute(context,
+                              PastBudgetsPage(budgetPk: widget.budget.budgetPk),
                               fancyRoute: true);
                         },
                         icon: Icon(Icons.history_rounded),
                       ),
                     ),
+              Container(
+                padding: EdgeInsets.only(top: 12.5, right: 5),
+                child: IconButton(
+                  onPressed: () {
+                    pushRoute(
+                      context,
+                      AddBudgetPage(
+                        title: "Edit Budget",
+                        budget: widget.budget,
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.edit_rounded),
+                ),
+              ),
             ],
             title: widget.budget.name,
             appBarBackgroundColor: budgetColorScheme.secondaryContainer,

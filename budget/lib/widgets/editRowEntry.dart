@@ -121,10 +121,9 @@ class EditRowEntry extends StatelessWidget {
         child: container,
       );
     }
-    return AnimatedScale(
-      duration: Duration(milliseconds: 800),
-      curve: Curves.elasticOut,
-      scale: currentReorder ? 0.95 : 1,
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 200),
+      opacity: currentReorder ? 0.6 : 1,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: ReorderableDelayedDragStartListener(

@@ -231,8 +231,17 @@ Future<bool> compareSharedToCurrentCategories(
   return true;
 }
 
+Timer? cloudTimeoutTimer;
 Future<bool> getCloudCategories() async {
   FirebaseFirestore? db = await firebaseGetDBInstance();
+  if (cloudTimeoutTimer?.isActive == true) {
+    // openSnackbar(SnackbarMessage(title: "Please wait..."));
+    return false;
+  } else {
+    cloudTimeoutTimer = Timer(Duration(milliseconds: 5000), () {
+      cloudTimeoutTimer!.cancel();
+    });
+  }
   if (db == null) {
     return false;
   }
@@ -255,13 +264,15 @@ Future<bool> getCloudCategories() async {
 
   await downloadTransactionsFromCategories(db, snapshotCategoryMembersOf.docs);
   await downloadTransactionsFromCategories(db, snapshotOwned.docs);
+  int amountSynced =
+      snapshotCategoryMembersOf.docs.length + snapshotOwned.docs.length;
   openSnackbar(SnackbarMessage(
       icon: Icons.cloud_sync_rounded,
       title: "Updated Categories",
       description: "Synced " +
-          (snapshotCategoryMembersOf.docs.length + snapshotOwned.docs.length)
-              .toString() +
-          " categories"));
+          amountSynced.toString() +
+          " " +
+          (amountSynced == 1 ? "category" : "categories")));
 
   return true;
 }
@@ -659,7 +670,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         Container(
           padding: EdgeInsets.only(top: 12.5, right: 5),
           child: RefreshButton(onTap: () async {
+            loadingIndeterminateKey.currentState!.setVisibility(true);
             await getCloudCategories();
+            loadingIndeterminateKey.currentState!.setVisibility(false);
           }),
         ),
       ],
@@ -784,107 +797,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                     ),
                     index: index,
                     onDelete: () {
-                      openPopup(
-                        context,
-                        title: "Delete " + category.name + " category?",
-                        description:
-                            "This will delete all transactions associated with this category.",
-                        icon: Icons.delete_rounded,
-                        onCancel: () {
-                          Navigator.pop(context);
-                        },
-                        onCancelLabel: "Cancel",
-                        onSubmit: () async {
-                          if (category.sharedKey != null) {
-                            Navigator.pop(context);
-                            if (category.sharedOwnerMember ==
-                                CategoryOwnerMember.owner) {
-                              openPopup(
-                                context,
-                                title: "Delete Shared Category?",
-                                description:
-                                    "You own this category. Deleting it will remove it from the server.",
-                                icon: Icons.delete_rounded,
-                                onCancel: () {
-                                  Navigator.pop(context);
-                                },
-                                onCancelLabel: "Cancel",
-                                onSubmit: () async {
-                                  bool result =
-                                      await removedSharedFromCategory(category);
-                                  if (result == false) {
-                                    openSnackbar(
-                                      SnackbarMessage(
-                                          title: "Error deleting on server",
-                                          icon: Icons.delete),
-                                    );
-                                    return;
-                                  }
-                                  database.deleteCategory(
-                                      category.categoryPk, category.order);
-                                  database.deleteCategoryTransactions(
-                                      category.categoryPk);
-                                  Navigator.pop(context);
-                                  openSnackbar(
-                                    SnackbarMessage(
-                                        title: "Deleted " + category.name,
-                                        icon: Icons.delete),
-                                  );
-                                },
-                                onSubmitLabel: "Delete",
-                              );
-                            } else if (category.sharedOwnerMember ==
-                                CategoryOwnerMember.member) {
-                              openPopup(
-                                context,
-                                title: "Leave Shared Category?",
-                                description:
-                                    "You are a member of this category. Deleting it will remove you from the shared group.",
-                                icon: Icons.delete_rounded,
-                                onCancel: () {
-                                  Navigator.pop(context);
-                                },
-                                onCancelLabel: "Cancel",
-                                onSubmit: () async {
-                                  bool result =
-                                      await leaveSharedCategory(category);
-                                  if (result == false) {
-                                    openSnackbar(
-                                      SnackbarMessage(
-                                          title: "Error leaving group",
-                                          icon: Icons.delete),
-                                    );
-                                    return;
-                                  }
-                                  await database.deleteCategory(
-                                      category.categoryPk, category.order);
-                                  await database.deleteCategoryTransactions(
-                                      category.categoryPk);
-                                  Navigator.pop(context);
-                                  openSnackbar(
-                                    SnackbarMessage(
-                                        title: "Deleted " + category.name,
-                                        icon: Icons.delete),
-                                  );
-                                },
-                                onSubmitLabel: "Delete",
-                              );
-                            }
-                          } else {
-                            await database.deleteCategory(
-                                category.categoryPk, category.order);
-                            await database.deleteCategoryTransactions(
-                                category.categoryPk);
-                            Navigator.pop(context);
-                            openSnackbar(
-                              SnackbarMessage(
-                                  title: "Deleted " + category.name,
-                                  icon: Icons.delete),
-                            );
-                          }
-                        },
-                        onSubmitLabel: "Delete",
-                      );
+                      deleteCategoryPopup(context, category);
                     },
                     openPage: AddCategoryPage(
                       title: "Edit Category",
@@ -996,4 +909,100 @@ class _RefreshButtonState extends State<RefreshButton>
       },
     );
   }
+}
+
+void deleteCategoryPopup(context, TransactionCategory category,
+    {Function? afterDelete}) {
+  openPopup(
+    context,
+    title: "Delete " + category.name + " category?",
+    description:
+        "This will delete all transactions associated with this category.",
+    icon: Icons.delete_rounded,
+    onCancel: () {
+      Navigator.pop(context);
+    },
+    onCancelLabel: "Cancel",
+    onSubmit: () async {
+      if (category.sharedKey != null) {
+        Navigator.pop(context);
+        if (category.sharedOwnerMember == CategoryOwnerMember.owner) {
+          openPopup(
+            context,
+            title: "Delete Shared Category?",
+            description:
+                "You own this category. Deleting it will remove it from the server.",
+            icon: Icons.delete_rounded,
+            onCancel: () {
+              Navigator.pop(context);
+            },
+            onCancelLabel: "Cancel",
+            onSubmit: () async {
+              bool result = await removedSharedFromCategory(category);
+              if (result == false) {
+                openSnackbar(
+                  SnackbarMessage(
+                      title: "Error deleting on server", icon: Icons.delete),
+                );
+                return;
+              }
+              database.deleteCategory(category.categoryPk, category.order);
+              database.deleteCategoryTransactions(category.categoryPk);
+              Navigator.pop(context);
+              openSnackbar(
+                SnackbarMessage(
+                    title: "Deleted " + category.name, icon: Icons.delete),
+              );
+              if (afterDelete != null) afterDelete();
+            },
+            onSubmitLabel: "Delete",
+          );
+        } else if (category.sharedOwnerMember == CategoryOwnerMember.member) {
+          openPopup(
+            context,
+            title: "Leave Shared Category?",
+            description:
+                "You are a member of this category. Deleting it will remove you from the shared group.",
+            icon: Icons.delete_rounded,
+            onCancel: () {
+              Navigator.pop(context);
+            },
+            onCancelLabel: "Cancel",
+            onSubmit: () async {
+              Navigator.pop(context);
+              if (afterDelete != null) afterDelete();
+              loadingIndeterminateKey.currentState!.setVisibility(true);
+              bool result = await leaveSharedCategory(category);
+              if (result == false) {
+                openSnackbar(
+                  SnackbarMessage(
+                      title: "Error leaving group", icon: Icons.delete),
+                );
+                return;
+              }
+              await database.deleteCategory(
+                  category.categoryPk, category.order);
+              await database.deleteCategoryTransactions(category.categoryPk);
+              openSnackbar(
+                SnackbarMessage(
+                    title: "Deleted " + category.name, icon: Icons.delete),
+              );
+              loadingIndeterminateKey.currentState!.setVisibility(false);
+            },
+            onSubmitLabel: "Delete",
+          );
+        }
+      } else {
+        await database.deleteCategory(category.categoryPk, category.order);
+        await database.deleteCategoryTransactions(category.categoryPk);
+        Navigator.pop(context);
+        openSnackbar(
+          SnackbarMessage(
+              title: "Deleted " + category.name, icon: Icons.delete),
+        );
+        if (afterDelete != null) afterDelete();
+      }
+    },
+    onSubmitLabel: "Delete",
+  );
 }

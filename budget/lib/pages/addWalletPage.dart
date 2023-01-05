@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -124,7 +125,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
       dateCreated:
           widget.wallet != null ? widget.wallet!.dateCreated : DateTime.now(),
       order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
-      iconName: selectedIconName,
+      currency: "USD",
     );
   }
 
@@ -232,6 +233,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           child: Stack(
             children: [
               PageFramework(
+                dragDownToDismiss: true,
                 title: widget.title,
                 navbar: false,
                 onBackButton: () async {
@@ -256,6 +258,22 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     discardChangesPopup(context);
                   }
                 },
+                actions: [
+                  widget.wallet != null && widget.wallet!.walletPk != 0
+                      ? Container(
+                          padding: EdgeInsets.only(top: 12.5, right: 5),
+                          child: IconButton(
+                            onPressed: () {
+                              deleteWalletPopup(context, widget.wallet!,
+                                  afterDelete: () {
+                                Navigator.pop(context);
+                              });
+                            },
+                            icon: Icon(Icons.delete_rounded),
+                          ),
+                        )
+                      : SizedBox.shrink()
+                ],
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
@@ -315,24 +333,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     child: SizedBox(height: 10),
                   ),
                   SliverToBoxAdapter(
-                    child: SettingsContainerSwitch(
-                      title: "Custom Icon",
-                      onSwitched: (value) {
-                        if (value == false) {
-                          populateCurrencies();
-                        } else {
-                          setState(() {
-                            currencies = [];
-                          });
-                        }
-                      },
-                      initialValue: false,
-                      syncWithInitialValue: false,
-                      icon: Icons.emoji_symbols_rounded,
-                      verticalPadding: 0,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
                     child: customCurrencyIcon == true
                         ? TextInput(
                             labelText: "Search currencies...",
@@ -390,10 +390,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                   IntrinsicWidth(
                                     child: Row(
                                       children: [
+                                        Text(currencies[index]["Symbol"]),
+                                        SizedBox(width: 15),
                                         TextFont(
                                             text: currencies[index]["Code"]),
-                                        SizedBox(width: 15),
-                                        Text(currencies[index]["Symbol"]),
                                       ],
                                     ),
                                   )
