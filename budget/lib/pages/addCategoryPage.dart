@@ -213,7 +213,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           widget.category != null ? currentInstance!.sharedOwnerMember : null,
       sharedDateUpdated:
           widget.category != null ? currentInstance!.sharedDateUpdated : null,
-      sharedMembers: currentInstance!.sharedMembers,
+      sharedMembers:
+          widget.category != null ? currentInstance!.sharedMembers : null,
     );
   }
 

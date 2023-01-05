@@ -836,11 +836,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           name: row[assignedColumns["category"]!["setHeaderIndex"]],
           dateCreated: DateTime.now(),
           order: numberOfCategories,
-          colour:
-              toHexString(getSettingConstants(appStateSettings)["accentColor"]),
           income: amount > 0,
           iconName: "image.png",
-          // smartLabels: [],
         ),
       );
       selectedCategory = await database.getCategoryInstanceGivenName(
