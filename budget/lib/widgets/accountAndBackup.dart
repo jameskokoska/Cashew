@@ -718,24 +718,28 @@ class _AccountAndBackupState extends State<AccountAndBackup> {
         user == null
             ? SettingsContainer(
                 onTap: () async {
-                  await signInGoogle(
-                      context: context,
-                      waitForCompletion: true,
-                      drivePermissions: true,
-                      next: () {
-                        setState(() {});
-                        // pushRoute(context, accountsPage);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => accountsPage,
-                          ),
-                        );
-                      });
-                  if (appStateSettings["username"] == "" && user != null) {
-                    updateSettings("username", user!.displayName,
-                        pagesNeedingRefresh: [0]);
-                  }
+                  loadingIndeterminateKey.currentState!.setVisibility(true);
+                  try {
+                    await signInGoogle(
+                        context: context,
+                        waitForCompletion: false,
+                        drivePermissions: true,
+                        next: () {
+                          setState(() {});
+                          // pushRoute(context, accountsPage);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => accountsPage,
+                            ),
+                          );
+                        });
+                    if (appStateSettings["username"] == "" && user != null) {
+                      updateSettings("username", user!.displayName,
+                          pagesNeedingRefresh: [0]);
+                    }
+                  } catch (e) {}
+                  loadingIndeterminateKey.currentState!.setVisibility(false);
                 },
                 title: "Login",
                 icon: MoreIcons.google,
@@ -887,6 +891,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         paid: true,
         skipPaid: false,
         dateTimeCreated: DateTime.now(),
+        methodAdded: MethodAdded.csv,
       ),
     );
 

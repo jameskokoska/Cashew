@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed drag to select on upcoming, overdue and subscriptions page
+    New loading bar for google login
+    If added ny csv, method added is set to csv internally
     Shows date transactions are from on search page
     Can search category even if lowercase
     Fixed select multiple transactions and edit category to shared one

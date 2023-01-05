@@ -52,7 +52,7 @@ enum SharedTransactionsShow {
 
 enum ThemeSetting { dark, light }
 
-enum MethodAdded { email, shared }
+enum MethodAdded { email, shared, csv }
 
 enum SharedStatus { waiting, shared, error }
 
