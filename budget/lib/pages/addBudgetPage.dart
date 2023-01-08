@@ -5,12 +5,15 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -24,6 +27,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +105,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "month";
   bool selectedPin = true;
+  bool selectedShared = false;
   SharedTransactionsShow selectedSharedTransactionsShow =
       SharedTransactionsShow.fromEveryone;
 
@@ -232,6 +237,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       });
     }
     determineBottomButton();
+  }
+
+  setSelectedShared(bool shared) {
+    setState(() {
+      selectedShared = shared;
+    });
   }
 
   Future<void> selectDateRange(BuildContext context) async {
@@ -399,13 +410,61 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 
   Future addBudget() async {
+    loadingIndeterminateKey.currentState!.setVisibility(true);
+    Budget createdBudget = await createBudget();
     print("Added budget");
-    await database.createOrUpdateBudget(await createBudget());
-    print(await database.getAmountOfBudgets());
-    Navigator.pop(context);
+    int result = await database.createOrUpdateBudget(createdBudget);
+    if (selectedShared == true && widget.budget == null) {
+      openLoadingPopup(context);
+      bool result2 = await shareBudget(createdBudget, context);
+      Navigator.pop(context);
+      if (result2 == false) {
+        Future.delayed(Duration.zero, () {
+          openPopup(
+            context,
+            title: "No Connection",
+            icon: Icons.signal_wifi_connected_no_internet_4_rounded,
+            description:
+                "You can only update the details of a shared budget online.",
+            onSubmit: () {
+              Navigator.pop(context);
+            },
+            onSubmitLabel: "OK",
+          );
+        });
+        loadingIndeterminateKey.currentState!.setVisibility(false);
+        return;
+      }
+    }
+    loadingIndeterminateKey.currentState!.setVisibility(false);
+    if (result == -1) {
+      openPopup(
+        context,
+        title: "No Connection",
+        icon: Icons.signal_wifi_connected_no_internet_4_rounded,
+        description:
+            "You can only update the details of a shared category online.",
+        onCancel: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        onSubmit: () {
+          Navigator.pop(context);
+        },
+        onSubmitLabel: "OK",
+        onCancelLabel: "Exit Without Saving",
+      );
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   Future<Budget> createBudget() async {
+    Budget? currentInstance;
+    if (widget.budget != null) {
+      currentInstance =
+          await database.getBudgetInstance(widget.budget!.budgetPk);
+    }
     return await Budget(
       budgetPk: widget.budget != null
           ? widget.budget!.budgetPk
@@ -427,6 +486,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       walletFk: 0,
       pinned: selectedPin,
       sharedTransactionsShow: selectedSharedTransactionsShow,
+      sharedKey: widget.budget != null ? currentInstance!.sharedKey : null,
+      sharedOwnerMember:
+          widget.budget != null ? currentInstance!.sharedOwnerMember : null,
+      sharedDateUpdated:
+          widget.budget != null ? currentInstance!.sharedDateUpdated : null,
+      sharedMembers:
+          widget.budget != null ? currentInstance!.sharedMembers : null,
+      sharedAllMembersEver:
+          widget.budget != null ? currentInstance!.sharedAllMembersEver : null,
     );
   }
 
@@ -507,16 +575,30 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     }
   }
 
+  discardChangesPopupIfBudgetPassed() async {
+    Budget? currentInstance;
+    if (widget.budget != null) {
+      currentInstance =
+          await database.getBudgetInstance(widget.budget!.budgetPk);
+    }
+    discardChangesPopup(
+      context,
+      previousObject: widget.budget!.copyWith(
+          sharedKey: Value(currentInstance!.sharedKey),
+          sharedOwnerMember: Value(currentInstance.sharedOwnerMember),
+          sharedDateUpdated: Value(currentInstance.sharedDateUpdated),
+          sharedMembers: Value(currentInstance.sharedMembers),
+          sharedAllMembersEver: Value(currentInstance.sharedAllMembersEver)),
+      currentObject: await createBudget(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         if (widget.budget != null) {
-          discardChangesPopup(
-            context,
-            previousObject: widget.budget,
-            currentObject: await createBudget(),
-          );
+          discardChangesPopupIfBudgetPassed();
         } else {
           discardChangesPopup(context);
         }
@@ -535,27 +617,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           child: Stack(
             children: [
               PageFramework(
+                syncKeyboardHeight: true,
                 dragDownToDismiss: true,
                 title: widget.title,
                 navbar: false,
                 onBackButton: () async {
                   if (widget.budget != null) {
-                    discardChangesPopup(
-                      context,
-                      previousObject: widget.budget,
-                      currentObject: await createBudget(),
-                    );
+                    discardChangesPopupIfBudgetPassed();
                   } else {
                     discardChangesPopup(context);
                   }
                 },
                 onDragDownToDissmiss: () async {
                   if (widget.budget != null) {
-                    discardChangesPopup(
-                      context,
-                      previousObject: widget.budget,
-                      currentObject: await createBudget(),
-                    );
+                    discardChangesPopupIfBudgetPassed();
                   } else {
                     discardChangesPopup(context);
                   }
@@ -574,7 +649,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             icon: Icon(Icons.delete_rounded),
                           ),
                         )
-                      : SizedBox.shrink()
+                      : SizedBox.shrink(),
                 ],
                 listWidgets: [
                   Container(height: 20),
@@ -604,70 +679,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                 vertical: 10, horizontal: 10),
                           ),
                   ),
-                  Container(height: 17),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextFont(
-                      text: "Select Color",
-                      textColor: Theme.of(context).colorScheme.textLight,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Container(height: 10),
-                  Container(
-                    height: 65,
-                    child: SelectColor(
-                      horizontalList: true,
-                      selectedColor: selectedColor,
-                      setSelectedColor: setSelectedColor,
-                    ),
-                  ),
-                  Container(height: 17),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextFont(
-                      text: "Select Categories",
-                      textColor: Theme.of(context).colorScheme.textLight,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Container(height: 2),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextFont(
-                      text: selectedCategoriesText + " Budget",
-                      textColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(height: 10),
-                  Container(
-                    height: 100,
-                    child: SelectCategory(
-                      horizontalList: true,
-                      selectedCategories: selectedCategories,
-                      setSelectedCategories: setSelectedCategories,
-                      showSelectedAllCategoriesIfNoneSelected: true,
-                    ),
-                  ),
-                  Container(height: 23),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextFont(
-                          text: "Amount and Period",
-                          textColor: Theme.of(context).colorScheme.textLight,
-                          fontSize: 16,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.end,
                       alignment: WrapAlignment.center,
@@ -837,7 +850,137 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                 ),
                               )),
                   ),
-                  SizedBox(height: 13),
+                  SizedBox(height: 17),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text: "Select Color",
+                      textColor: Theme.of(context).colorScheme.textLight,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(height: 10),
+                  Container(
+                    height: 65,
+                    child: SelectColor(
+                      horizontalList: true,
+                      selectedColor: selectedColor,
+                      setSelectedColor: setSelectedColor,
+                    ),
+                  ),
+                  Container(height: 17),
+                  widget.budget != null && widget.budget!.sharedKey != null
+                      ? SharedBudgetSettings(
+                          budget: widget.budget!,
+                        )
+                      : widget.budget == null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextFont(
+                                    text: "Share Group Budget",
+                                    textColor:
+                                        Theme.of(context).colorScheme.textLight,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Container(height: 2),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Tappable(
+                                    onTap: () {
+                                      setSelectedShared(!selectedShared);
+                                    },
+                                    borderRadius: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 6),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFont(
+                                              text: selectedShared == false
+                                                  ? "Personal"
+                                                  : "Shared",
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 26,
+                                            ),
+                                          ),
+                                          ButtonIcon(
+                                            onTap: () {
+                                              setSelectedShared(
+                                                  !selectedShared);
+                                            },
+                                            icon: selectedPin
+                                                ? Icons.share_rounded
+                                                : Icons.share_rounded,
+                                            size: 41,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(height: 10),
+                                AnimatedOpacity(
+                                  duration: Duration(milliseconds: 250),
+                                  opacity: selectedShared == true ? 0.2 : 1,
+                                  child: IgnorePointer(
+                                    ignoring: selectedShared == true,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: TextFont(
+                                            text: "Select Categories",
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .textLight,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Container(height: 2),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: TextFont(
+                                            text: selectedCategoriesText +
+                                                " Budget",
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Container(height: 10),
+                                        Container(
+                                          height: 100,
+                                          child: SelectCategory(
+                                            horizontalList: true,
+                                            selectedCategories:
+                                                selectedCategories,
+                                            setSelectedCategories:
+                                                setSelectedCategories,
+                                            showSelectedAllCategoriesIfNoneSelected:
+                                                true,
+                                          ),
+                                        ),
+                                        Container(height: 23),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : SizedBox.shrink(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
@@ -887,59 +1030,72 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     ),
                   ),
                   SizedBox(height: 13),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextFont(
-                          text: "Transactions to Include for Shared Categories",
-                          textColor: Theme.of(context).colorScheme.textLight,
-                          fontSize: 16,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Tappable(
-                      onTap: () {
-                        setSelectedSharedTransactionsShow();
-                      },
-                      borderRadius: 10,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 6),
-                        child: Row(
+                  widget.budget != null && widget.budget!.sharedKey == null
+                      ? Column(
                           children: [
-                            Expanded(
-                              child: TextFont(
-                                text: selectedSharedTransactionsShow ==
-                                        SharedTransactionsShow.fromEveryone
-                                    ? "By Everyone"
-                                    : selectedSharedTransactionsShow ==
-                                            SharedTransactionsShow.onlyIfOwner
-                                        ? "By Me"
-                                        : "",
-                                fontWeight: FontWeight.bold,
-                                fontSize: 26,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextFont(
+                                    text:
+                                        "Transactions Shared to Another Budget",
+                                    textColor:
+                                        Theme.of(context).colorScheme.textLight,
+                                    fontSize: 16,
+                                  ),
+                                ],
                               ),
                             ),
-                            ButtonIcon(
-                              onTap: () {
-                                setSelectedSharedTransactionsShow();
-                              },
-                              icon: selectedPin
-                                  ? Icons.push_pin_rounded
-                                  : Icons.push_pin_outlined,
-                              size: 41,
+                            SizedBox(height: 5),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Tappable(
+                                onTap: () {
+                                  setSelectedSharedTransactionsShow();
+                                },
+                                borderRadius: 10,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 6),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFont(
+                                          text: selectedSharedTransactionsShow ==
+                                                  SharedTransactionsShow
+                                                      .fromEveryone
+                                              ? "Include All"
+                                              : selectedSharedTransactionsShow ==
+                                                      SharedTransactionsShow
+                                                          .onlyIfOwner
+                                                  ? "By Me Only"
+                                                  : "",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 26,
+                                        ),
+                                      ),
+                                      ButtonIcon(
+                                        onTap: () {
+                                          setSelectedSharedTransactionsShow();
+                                        },
+                                        icon: selectedPin
+                                            ? Icons.push_pin_rounded
+                                            : Icons.push_pin_outlined,
+                                        size: 41,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox.shrink(),
                   Container(height: 70),
                 ],
               ),

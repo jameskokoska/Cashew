@@ -8,23 +8,21 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
 class CategoryIcon extends StatelessWidget {
-  CategoryIcon(
-      {Key? key,
-      required this.categoryPk,
-      required this.size,
-      this.onTap,
-      this.label = false,
-      this.labelSize = 10,
-      this.margin,
-      this.sizePadding = 20,
-      this.outline = false,
-      this.noBackground = false,
-      this.category, //pass this in to not look it up again
-      this.borderRadius = 18,
-      this.canEditByLongPress = true,
-      this.showSharedIcon = true,
-      this.sharedIconOffset = 13})
-      : super(key: key);
+  CategoryIcon({
+    Key? key,
+    required this.categoryPk,
+    required this.size,
+    this.onTap,
+    this.label = false,
+    this.labelSize = 10,
+    this.margin,
+    this.sizePadding = 20,
+    this.outline = false,
+    this.noBackground = false,
+    this.category, //pass this in to not look it up again
+    this.borderRadius = 18,
+    this.canEditByLongPress = true,
+  }) : super(key: key);
 
   final int categoryPk;
   final double size;
@@ -38,8 +36,6 @@ class CategoryIcon extends StatelessWidget {
   final TransactionCategory? category;
   final double borderRadius;
   final bool canEditByLongPress;
-  final bool showSharedIcon;
-  final double sharedIconOffset;
 
   categoryIconWidget(context, TransactionCategory? category) {
     return Column(
@@ -114,18 +110,6 @@ class CategoryIcon extends StatelessWidget {
                 ),
               ),
             ),
-            showSharedIcon == true &&
-                    category != null &&
-                    category.sharedKey != null
-                ? Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Transform.translate(
-                      offset: Offset(sharedIconOffset, sharedIconOffset),
-                      child: Icon(Icons.people_alt_rounded, size: 15),
-                    ),
-                  )
-                : SizedBox.shrink(),
           ],
         ),
         label

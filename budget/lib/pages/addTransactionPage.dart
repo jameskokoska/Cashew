@@ -4,9 +4,9 @@ import 'dart:math';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/SharedCategorySettings.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -14,6 +14,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -54,12 +55,14 @@ class AddTransactionPage extends StatefulWidget {
     required this.title,
     this.transaction,
     this.subscription,
+    this.selectedBudget,
   }) : super(key: key);
   final String title;
 
   //When a transaction is passed in, we are editing that transaction
   final Transaction? transaction;
   final bool? subscription;
+  final Budget? selectedBudget;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -82,6 +85,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
   bool selectedIncome = false;
   String? selectedPayer;
+  int? selectedBudgetPk;
+  Budget? selectedBudget;
 
   String? textAddTransaction = "Add Transaction";
 
@@ -129,9 +134,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     setState(() {
       selectedCategory = category;
       selectedIncome = category.income;
-      if (category.sharedKey != null) {
-        selectedPayer = appStateSettings["currentUserEmail"];
-      }
     });
     return;
   }
@@ -189,6 +191,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   void setSelectedPayer(String payer) {
     setState(() {
       selectedPayer = payer;
+    });
+    return;
+  }
+
+  void setSelectedBudgetPk(Budget? selectedBudgetPassed) {
+    setState(() {
+      selectedBudgetPk =
+          selectedBudgetPassed == null ? null : selectedBudgetPassed.budgetPk;
+      selectedBudget = selectedBudgetPassed;
+      if (selectedBudgetPk != null)
+        selectedPayer = appStateSettings["currentUserEmail"];
     });
     return;
   }
@@ -280,37 +293,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     ].contains(createdTransaction.type)) {
       await setUpcomingNotifications(context);
     }
-    if (widget.transaction != null) {
-      TransactionCategory oldCategory =
-          await database.getCategoryInstance(widget.transaction!.categoryFk);
-      if (oldCategory.categoryPk != selectedCategory!.categoryPk) {
-        final result = await openPopup(
-          context,
-          title: "Changing shared category",
-          description:
-              "Transaction may be shared or deleted from the server based on the selected category.",
-          icon: Icons.person_pin_rounded,
-          onSubmit: () async {
-            await database.deleteTransaction(widget.transaction!.transactionPk);
-            // the shared will get generated accordingly again
-            await database.createOrUpdateTransaction(
-                await createTransaction(removeShared: true));
-            Navigator.pop(context);
-          },
-          onSubmitLabel: "Change Category",
-          onCancelLabel: "Cancel",
-          onCancel: () {
-            Navigator.pop(context, false);
-          },
-        );
-        print("CHANGED CATEGORY");
-        if (result == false) {
-          return false;
-        } else {
-          return true;
-        }
-      }
-    }
 
     await database.createOrUpdateTransaction(await createTransaction());
     return true;
@@ -354,11 +336,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       sharedKey: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedKey
           : null,
-      transactionOwnerEmail: removeShared == false && widget.transaction != null
-          ? selectedPayer
-          : selectedCategory?.sharedKey != null
-              ? selectedPayer
-              : null,
+      sharedOldKey:
+          widget.transaction != null ? widget.transaction!.sharedOldKey : null,
+      transactionOwnerEmail: selectedPayer,
       transactionOriginalOwnerEmail:
           removeShared == false && widget.transaction != null
               ? widget.transaction!.transactionOriginalOwnerEmail
@@ -369,6 +349,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       sharedDateUpdated: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedDateUpdated
           : null,
+      sharedReferenceBudgetPk: selectedBudgetPk,
     );
 
     if (widget.transaction != null &&
@@ -382,6 +363,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
 
   late TextEditingController _titleInputController;
   late TextEditingController _noteInputController;
+  List<Budget> allSharedBudgets = [];
 
   @override
   void initState() {
@@ -411,6 +393,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       }
       selectedIncome = widget.transaction!.income;
       selectedPayer = widget.transaction!.transactionOwnerEmail;
+      selectedBudgetPk = widget.transaction!.sharedReferenceBudgetPk;
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -451,6 +434,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                 : afterSetTitle(),
             snap: appStateSettings["askForTransactionTitle"] != true);
       });
+    }
+    Future.delayed(Duration.zero, () async {
+      allSharedBudgets = await database.getAllBudgets(sharedBudgetsOnly: true);
+      setState(() {});
+    });
+    if (widget.selectedBudget != null) {
+      selectedBudget = widget.selectedBudget;
+      selectedBudgetPk = widget.selectedBudget!.budgetPk;
+      selectedPayer = appStateSettings["currentUserEmail"];
     }
   }
 
@@ -498,8 +490,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     if (widget.transaction != null) {
       TransactionCategory? getSelectedCategory =
           await database.getCategoryInstance(widget.transaction!.categoryFk);
+      Budget? getBudget;
+      try {
+        getBudget = await database.getBudgetInstance(
+            widget.transaction!.sharedReferenceBudgetPk ?? -1);
+      } catch (e) {}
+
       setState(() {
         selectedCategory = getSelectedCategory;
+        selectedBudget = getBudget;
       });
     }
   }
@@ -637,7 +636,6 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     categoryPk:
                                         selectedCategory?.categoryPk ?? 0,
                                     size: 60,
-                                    sharedIconOffset: -7,
                                   ),
                                 ),
                               ],
@@ -848,41 +846,115 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             selectedIncome: selectedIncome,
                           ),
                         ),
+                        allSharedBudgets.length != 0
+                            ? AnimatedSize(
+                                duration: Duration(milliseconds: 400),
+                                curve: Curves.easeInOut,
+                                child: AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 400),
+                                  child: SelectedBudgetButton(
+                                    selectedBudgetName: selectedBudget == null
+                                        ? "None"
+                                        : selectedBudget!.name.toString(),
+                                    key: ValueKey(selectedBudgetPk),
+                                    onTap: () async {
+                                      openBottomSheet(
+                                        context,
+                                        PopupFramework(
+                                          title: "Select Shared Budget",
+                                          child: RadioItems(
+                                            items: [
+                                              "None",
+                                              ...[
+                                                for (Budget budget
+                                                    in allSharedBudgets)
+                                                  budget.budgetPk.toString()
+                                              ]
+                                            ],
+                                            displayFilter: (budgetPk) {
+                                              for (Budget budget
+                                                  in allSharedBudgets)
+                                                if (budget.budgetPk
+                                                        .toString() ==
+                                                    budgetPk.toString()) {
+                                                  return budget.name;
+                                                }
+                                              return "None";
+                                            },
+                                            initial: selectedBudgetPk == null
+                                                ? "None"
+                                                : selectedBudgetPk.toString(),
+                                            onChanged: (value) {
+                                              if (value == "None") {
+                                                setSelectedBudgetPk(null);
+                                                Navigator.pop(context);
+                                                return;
+                                              }
+                                              Budget? budgetFound = null;
+                                              for (Budget budget
+                                                  in allSharedBudgets)
+                                                if (budget.budgetPk
+                                                        .toString() ==
+                                                    value.toString()) {
+                                                  budgetFound = budget;
+                                                  break;
+                                                }
+                                              setSelectedBudgetPk(budgetFound);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
                         AnimatedSize(
                           duration: Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
                           child: AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
-                            child: selectedCategory != null &&
-                                    selectedCategory!.sharedKey != null
+                            child: selectedBudgetPk != null
                                 ? AnimatedSwitcher(
                                     duration: Duration(milliseconds: 400),
                                     child: TransactionOwnerButton(
                                       key: ValueKey(selectedPayer),
-                                      onTap: () => openBottomSheet(
-                                        context,
-                                        PopupFramework(
-                                          title: "Select Payer",
-                                          child: RadioItems(
-                                            onLongPress: (member) async {
-                                              setSelectedPayer(member);
-                                              Navigator.pop(context);
-                                              memberPopup(context, member);
-                                            },
-                                            items: selectedCategory!
-                                                    .sharedMembers ??
-                                                [],
-                                            displayFilter: (member) {
-                                              return getMemberNickname(member);
-                                            },
-                                            initial: selectedPayer ?? "",
-                                            onChanged: (value) {
-                                              setSelectedPayer(value);
-                                              Navigator.of(context).pop();
-                                            },
+                                      onTap: () {
+                                        Set<dynamic> members = [
+                                          appStateSettings["currentUserEmail"],
+                                          ...(selectedBudget == null
+                                              ? []
+                                              : selectedBudget!.sharedMembers ??
+                                                  [])
+                                        ].toSet();
+                                        openBottomSheet(
+                                          context,
+                                          PopupFramework(
+                                            title: "Select Payer",
+                                            child: RadioItems(
+                                              onLongPress: (member) async {
+                                                setSelectedPayer(member);
+                                                Navigator.pop(context);
+                                                memberPopup(context, member);
+                                              },
+                                              items: members
+                                                  .toList()
+                                                  .map((item) => item as String)
+                                                  .toList(),
+                                              displayFilter: (member) {
+                                                return getMemberNickname(
+                                                    member);
+                                              },
+                                              initial: selectedPayer ?? "",
+                                              onChanged: (value) {
+                                                setSelectedPayer(value);
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                       selectedOwner: selectedPayer ?? "",
                                     ),
                                   )
@@ -1121,6 +1193,47 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SelectedBudgetButton extends StatelessWidget {
+  const SelectedBudgetButton({
+    Key? key,
+    required this.onTap,
+    required this.selectedBudgetName,
+  }) : super(key: key);
+  final VoidCallback onTap;
+  final String selectedBudgetName;
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      borderRadius: 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFont(
+                text: selectedBudgetName == "None"
+                    ? "Select Budget"
+                    : selectedBudgetName,
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+                textColor: selectedBudgetName == "None"
+                    ? Theme.of(context).colorScheme.textLight
+                    : null,
+              ),
+            ),
+            ButtonIcon(
+              onTap: onTap,
+              icon: MoreIcons.chart_pie,
+              size: 41,
+            ),
+          ],
         ),
       ),
     );
@@ -1489,7 +1602,6 @@ class _SelectTitleState extends State<SelectTitle> {
                                     size: 40,
                                     category: selectedCategory,
                                     margin: EdgeInsets.zero,
-                                    sharedIconOffset: 4,
                                   ),
                                   SizedBox(width: 10),
                                   Column(

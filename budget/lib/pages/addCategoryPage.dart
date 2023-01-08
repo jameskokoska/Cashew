@@ -4,7 +4,6 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
-import 'package:budget/pages/sharedCategorySettings.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -115,24 +114,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return;
   }
 
-  discardChangesPopupIfCategory() async {
-    TransactionCategory? currentInstance;
-    if (widget.category != null) {
-      currentInstance =
-          await database.getCategoryInstance(widget.category!.categoryPk);
-    }
-    discardChangesPopup(
-      context,
-      previousObject: widget.category!.copyWith(
-        sharedKey: Value(currentInstance!.sharedKey),
-        sharedOwnerMember: Value(currentInstance.sharedOwnerMember),
-        sharedDateUpdated: Value(currentInstance.sharedDateUpdated),
-        sharedMembers: Value(currentInstance.sharedMembers),
-      ),
-      currentObject: await createTransactionCategory(),
-    );
-  }
-
   determineBottomButton() {
     if (selectedTitle != null) {
       if (canAddCategory != true)
@@ -149,44 +130,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
 
   Future addCategory() async {
     TransactionCategory createdCategory = await createTransactionCategory();
-    print("Added category" + (createdCategory).toString());
-    if (createdCategory.sharedKey != null) {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
-    }
-    int result = await database.createOrUpdateCategory(createdCategory);
-    loadingIndeterminateKey.currentState!.setVisibility(false);
-    if (result == -1) {
-      openPopup(
-        context,
-        title: "No Connection",
-        icon: Icons.signal_wifi_connected_no_internet_4_rounded,
-        description:
-            "You can only update the details of a shared category online.",
-        onCancel: () {
-          Navigator.pop(context);
-          Navigator.pop(context);
-        },
-        onSubmit: () {
-          Navigator.pop(context);
-        },
-        onSubmitLabel: "OK",
-        onCancelLabel: "Exit Without Saving",
-      );
-    } else {
-      Navigator.pop(context);
-    }
-  }
-
-  Future<bool> shareCategoryOnPage() async {
-    openLoadingPopup(context);
-    await shareCategory(widget.category, context);
-    TransactionCategory newCategory =
-        await database.getCategoryInstance(widget.category!.categoryPk);
-    setState(() {
-      widgetCategory = newCategory;
-    });
+    await database.createOrUpdateCategory(createdCategory);
     Navigator.pop(context);
-    return true;
   }
 
   Future<TransactionCategory> createTransactionCategory() async {
@@ -198,7 +143,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return TransactionCategory(
       categoryPk:
           widget.category != null ? widget.category!.categoryPk : setCategoryPk,
-      name: selectedTitle ?? "",
+      name: (selectedTitle ?? "").trim(),
       dateCreated: widget.category != null
           ? widget.category!.dateCreated
           : DateTime.now(),
@@ -208,6 +153,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           : await database.getAmountOfCategories(),
       colour: toHexString(selectedColor),
       iconName: selectedImage,
+      methodAdded:
+          widget.category != null ? widget.category!.methodAdded : null,
       sharedKey: widget.category != null ? currentInstance!.sharedKey : null,
       sharedOwnerMember:
           widget.category != null ? currentInstance!.sharedOwnerMember : null,
@@ -249,7 +196,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return WillPopScope(
       onWillPop: () async {
         if (widget.category != null) {
-          discardChangesPopupIfCategory();
+          discardChangesPopup(context,
+              previousObject: widget.category!,
+              currentObject: await createTransactionCategory());
         } else {
           discardChangesPopup(context);
         }
@@ -273,32 +222,23 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                 navbar: false,
                 onBackButton: () async {
                   if (widget.category != null) {
-                    discardChangesPopupIfCategory();
+                    discardChangesPopup(context,
+                        previousObject: widget.category!,
+                        currentObject: await createTransactionCategory());
                   } else {
                     discardChangesPopup(context);
                   }
                 },
                 onDragDownToDissmiss: () async {
                   if (widget.category != null) {
-                    discardChangesPopupIfCategory();
+                    discardChangesPopup(context,
+                        previousObject: widget.category!,
+                        currentObject: await createTransactionCategory());
                   } else {
                     discardChangesPopup(context);
                   }
                 },
                 actions: [
-                  widget.category != null &&
-                          widget.category!.sharedKey == null &&
-                          widgetCategory!.sharedKey == null
-                      ? Container(
-                          padding: EdgeInsets.only(top: 12.5, right: 5),
-                          child: IconButton(
-                            onPressed: () async {
-                              shareCategoryOnPage();
-                            },
-                            icon: Icon(Icons.share_rounded),
-                          ),
-                        )
-                      : SizedBox.shrink(),
                   widget.category != null
                       ? Container(
                           padding: EdgeInsets.only(top: 12.5, right: 5),
@@ -313,22 +253,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                           ),
                         )
                       : SizedBox.shrink()
-                  // widget.category != null && widget.category!.sharedKey != null
-                  //     ? Container(
-                  //         padding: EdgeInsets.only(top: 12.5, right: 5),
-                  //         child: IconButton(
-                  //           onPressed: () async {
-                  //             if (widget.category != null)
-                  //               pushRoute(
-                  //                 context,
-                  //                 SharedCategoryPage(
-                  //                     category: widget.category!),
-                  //               );
-                  //           },
-                  //           icon: Icon(Icons.people_rounded),
-                  //         ),
-                  //       )
-                  //     : SizedBox.shrink()
                 ],
                 listWidgets: [
                   Row(
@@ -373,7 +297,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                   size: 60,
                                   sizePadding: 25,
                                   canEditByLongPress: false,
-                                  showSharedIcon: false,
                                 ),
                               ),
                             ],
@@ -472,30 +395,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   SizedBox(height: 13),
                   widgetCategory == null
                       ? SizedBox.shrink()
-                      : widgetCategory!.sharedKey == null
-                          ? Container(
-                              padding: EdgeInsets.only(top: 12.5, right: 5),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Button(
-                                  icon: Icons.share_rounded,
-                                  label: "Share Category",
-                                  onTap: () async {
-                                    shareCategoryOnPage();
-                                  },
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer,
-                                ),
-                              ),
-                            )
-                          : SharedCategorySettings(
-                              category: widgetCategory!,
-                              setSelectedMembers: setSelectedMembers,
-                            ),
-                  widgetCategory == null
-                      ? SizedBox.shrink()
                       : Container(
                           padding: EdgeInsets.only(top: 12.5, right: 5),
                           child: Padding(
@@ -513,8 +412,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                     child: SelectCategory(
                                       popRoute: true,
                                       setSelectedCategory: (category) async {
-                                        // TODO This code is very similar to modify of categories code on sharedTransactionsActionBar
-                                        // This should somehow be brought into a function and combined with that!
                                         Future.delayed(
                                             Duration(milliseconds: 90),
                                             () async {
@@ -543,54 +440,17 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                                     .getAllTransactionsFromCategory(
                                                         widget.category!
                                                             .categoryPk);
-                                            if (widget.category!.sharedKey !=
-                                                null) {
-                                              bool result =
-                                                  await removedSharedFromCategory(
-                                                      widget.category!);
-                                              if (result == false) {
-                                                openSnackbar(SnackbarMessage(
-                                                    title:
-                                                        "Error removing category"));
-                                                Navigator.pop(context);
-                                                return;
-                                              }
-                                            }
                                             for (Transaction transaction
                                                 in transactionsToUpdate) {
                                               await Future.delayed(
                                                   Duration(milliseconds: 1));
-                                              if (transaction.sharedKey !=
-                                                  null) {
-                                                await database
-                                                    .deleteTransaction(
-                                                        transaction
-                                                            .transactionPk);
-                                                Transaction transactionEdited =
-                                                    transaction.copyWith(
-                                                  categoryFk:
-                                                      category.categoryPk,
-                                                  sharedKey: Value(null),
-                                                  transactionOwnerEmail:
-                                                      Value(null),
-                                                  transactionOriginalOwnerEmail:
-                                                      Value(null),
-                                                  sharedStatus: Value(null),
-                                                  sharedDateUpdated:
-                                                      Value(null),
-                                                );
-                                                await database
-                                                    .createOrUpdateTransaction(
-                                                        transactionEdited);
-                                              } else {
-                                                Transaction transactionEdited =
-                                                    transaction.copyWith(
-                                                        categoryFk: category
-                                                            .categoryPk);
-                                                await database
-                                                    .createOrUpdateTransaction(
-                                                        transactionEdited);
-                                              }
+                                              Transaction transactionEdited =
+                                                  transaction.copyWith(
+                                                      categoryFk:
+                                                          category.categoryPk);
+                                              await database
+                                                  .createOrUpdateTransaction(
+                                                      transactionEdited);
                                             }
                                             Navigator.pop(context);
                                             Navigator.pop(context);

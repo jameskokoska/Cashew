@@ -1,10 +1,14 @@
 import 'dart:developer';
 
 import 'package:budget/main.dart';
+import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +20,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 22;
+int schemaVersionGlobal = 25;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -40,7 +44,7 @@ enum TransactionSpecialType {
   transactionTab
 }
 
-enum CategoryOwnerMember {
+enum SharedOwnerMember {
   owner,
   member,
 }
@@ -138,21 +142,13 @@ class Transactions extends Table {
   TextColumn get transactionOwnerEmail => text().nullable()();
   TextColumn get transactionOriginalOwnerEmail => text().nullable()();
   TextColumn get sharedKey => text().nullable()();
+  TextColumn get sharedOldKey => text()
+      .nullable()(); // when a transaction removed shared, this will be sharedKey
   IntColumn get sharedStatus => intEnum<SharedStatus>().nullable()();
   DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
+  // the budget this transaction belongs to
+  IntColumn get sharedReferenceBudgetPk => integer().nullable()();
 }
-
-// Server entry: (sub collection in category)
-// "logType": "create", // create, delete, update
-// "name": "transaction",
-// "amount": 15.65,
-// "note": "This is a note of a transaction",
-// "dateCreated": DateTime.now(),
-// "dateUpdated": DateTime.now(),
-// "income": false,
-// "ownerEmail": FirebaseAuth.instance.currentUser!.email,
-// "originalCreatorEmail":
-//     FirebaseAuth.instance.currentUser!.email,
 
 @DataClassName('TransactionCategory')
 class Categories extends Table {
@@ -164,25 +160,15 @@ class Categories extends Table {
       dateTime().clientDefault(() => new DateTime.now())();
   IntColumn get order => integer()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
+  IntColumn get methodAdded => intEnum<MethodAdded>().nullable()();
   // Attributes to configure sharing of transactions:
   // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
   TextColumn get sharedKey => text().nullable()();
-  IntColumn get sharedOwnerMember =>
-      intEnum<CategoryOwnerMember>().nullable()();
+  IntColumn get sharedOwnerMember => intEnum<SharedOwnerMember>().nullable()();
   DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
   TextColumn get sharedMembers =>
       text().map(const StringListInColumnConverter()).nullable()();
 }
-
-// Server entry:
-// "dateShared": DateTime.now(),
-// "colour": toHexString(Colors.red),
-// "icon": "icon.png",
-// "name": "Food",
-// "members": ["test@test.com"],
-// "income": false,
-// "owner": FirebaseAuth.instance.currentUser!.uid,
-// "ownerEmail": FirebaseAuth.instance.currentUser!.email,
 
 //If a title is in a smart label, automatically choose this category
 // For e.g. for Food category
@@ -231,7 +217,17 @@ class Budgets extends Table {
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
   IntColumn get sharedTransactionsShow =>
       intEnum<SharedTransactionsShow>().withDefault(const Constant(0))();
+  // Attributes to configure sharing of transactions:
+  // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
+  TextColumn get sharedKey => text().nullable()();
+  IntColumn get sharedOwnerMember => intEnum<SharedOwnerMember>().nullable()();
+  DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
+  TextColumn get sharedMembers =>
+      text().map(const StringListInColumnConverter()).nullable()();
+  TextColumn get sharedAllMembersEver =>
+      text().map(const StringListInColumnConverter()).nullable()();
 }
+// Server entry
 
 @DataClassName('AppSetting')
 class AppSettings extends Table {
@@ -343,6 +339,19 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 22) {
             await migrator.addColumn(wallets, wallets.currency);
           }
+          if (from <= 23) {
+            await migrator.addColumn(budgets, budgets.sharedKey);
+            await migrator.addColumn(budgets, budgets.sharedOwnerMember);
+            await migrator.addColumn(budgets, budgets.sharedDateUpdated);
+            await migrator.addColumn(budgets, budgets.sharedMembers);
+            await migrator.addColumn(
+                transactions, transactions.sharedReferenceBudgetPk);
+            await migrator.addColumn(transactions, transactions.sharedOldKey);
+            await migrator.addColumn(categories, categories.methodAdded);
+          }
+          if (from <= 24) {
+            await migrator.addColumn(budgets, budgets.sharedAllMembersEver);
+          }
         },
       );
 
@@ -375,22 +384,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  // get all filtered transactions from a given budget ordered by date and paginated
-  // Stream<List<Transaction>> watchAllTransactionsFromBudgetFiltered(int budgetPk,
-  //     {int? categoryPk, String? itemPk, int? limit, int? offset}) {
-  //   return (categoryPk != null
-  //           ? (select(transactions)
-  //             ..where((tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]) & tbl.categoryFk.equals(categoryPk)))
-  //           : itemPk != null
-  //               ? (select(transactions)
-  //                 ..where((tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]) & tbl.labelFks.contains(itemPk)))
-  //               : select(transactions)
-  //         ..where((tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]) & tbl.budgetFk.equals(budgetPk))
-  //         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
-  //         ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-  //       .watch();
-  // }
-
   //get transactions that occurred on a given date
   Stream<List<Transaction>> getTransactionWithDate(DateTime date) {
     return (select(transactions)
@@ -409,6 +402,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     bool? income,
     required SharedTransactionsShow sharedTransactionsShow,
     String? member,
+    int? onlyShowTransactionsBelongingToBudget,
   }) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
     if (categoryFks.length > 0) {
@@ -422,7 +416,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
                     tbl.categoryFk.isIn(categoryFks) &
-                    onlyShowIfMember(tbl, member);
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget);
               else
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
                     tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
@@ -431,8 +427,11 @@ class FinanceDatabase extends _$FinanceDatabase {
                     dateCreated.day.equals(date.day) &
                     tbl.categoryFk.isIn(categoryFks) &
                     tbl.income.equals(income) &
-                    onlyShowIfMember(tbl, member);
-            }))
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget);
+            })
+            ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)]))
           .join([
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
@@ -447,7 +446,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
-                    onlyShowIfMember(tbl, member);
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget);
               else
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
                     tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
@@ -455,8 +456,11 @@ class FinanceDatabase extends _$FinanceDatabase {
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
                     tbl.income.equals(income) &
-                    onlyShowIfMember(tbl, member);
-            }))
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget);
+            })
+            ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)]))
           .join([
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
@@ -471,7 +475,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
-                    onlyShowIfMember(tbl, member);
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget);
               else
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
                     tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
@@ -479,8 +485,11 @@ class FinanceDatabase extends _$FinanceDatabase {
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
                     tbl.income.equals(income) &
-                    onlyShowIfMember(tbl, member);
-            }))
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget);
+            })
+            ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)]))
           .join([
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
@@ -553,36 +562,6 @@ class FinanceDatabase extends _$FinanceDatabase {
               transaction: row.readTable(transactions));
         }).toList());
   }
-
-  // //get days that transactions occurred on
-  // Stream<List<DateTime?>> getDatesOfTransaction({
-  //   String search = "",
-  //   // Search will be ignored... if these params are passed in
-  //   List<int> categoryFks = const [],
-  // }) {
-  //   final query = selectOnly(transactions, distinct: true)
-  //     ..addColumns([transactions.dateCreated]);
-
-  //   return query.map((row) => row.read(transactions.dateCreated)).watch();
-  // }
-
-  // Stream<List<DateTime?>> getDatesOfTransaction(
-  //     {int? limit,
-  //     String search = "",
-  //     DateTime? startDate,
-  //     DateTime? endDate}) {
-  //   final query = (selectOnly(transactions)
-  //     ..where(transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
-  //         transactions.dateCreated.isBiggerOrEqualValue(startDate) &
-  //         transactions.dateCreated.isSmallerOrEqualValue(endDate))
-  //     ..limit(limit ?? DEFAULT_LIMIT)
-  //     ..addColumns([transactions.dateCreated])
-  //     ..orderBy([
-  //       OrderingTerm(
-  //           expression: transactions.dateCreated, mode: OrderingMode.asc)
-  //     ]));
-  //   return query.map((row) => row.read(transactions.dateCreated)).watch();
-  // }
 
   //get the days that a transaction occurs on, specify search term, categories, or time period to list these
   Stream<List<DateTime?>> watchDatesOfTransaction(
@@ -1164,34 +1143,36 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     // Update the servers entry of the transaction
     if (transaction.paid && updateSharedEntry == true) {
-      TransactionCategory category =
-          await database.getCategoryInstance(transaction.categoryFk);
-      if (transaction.sharedKey != null && category.sharedKey != null) {
-        sendTransactionSet(transaction, category);
-        transaction =
-            transaction.copyWith(sharedStatus: Value(SharedStatus.waiting));
-      } else if (transaction.sharedKey == null && category.sharedKey != null) {
-        sendTransactionAdd(transaction, category);
-        transaction =
-            transaction.copyWith(sharedStatus: Value(SharedStatus.waiting));
+      if (transaction.sharedReferenceBudgetPk != null) {
+        Budget budget = await database
+            .getBudgetInstance(transaction.sharedReferenceBudgetPk!);
+        if (transaction.sharedKey != null && budget.sharedKey != null) {
+          sendTransactionSet(transaction, budget);
+          transaction =
+              transaction.copyWith(sharedStatus: Value(SharedStatus.waiting));
+        } else if (transaction.sharedKey == null && budget.sharedKey != null) {
+          sendTransactionAdd(transaction, budget);
+          transaction =
+              transaction.copyWith(sharedStatus: Value(SharedStatus.waiting));
+        }
+      } else {
+        print("REMOVING SHARED");
+        // if theres a previous transaction and a shared budget is not selected remove it.
+        try {
+          await deleteTransaction(transaction.transactionPk);
+          transaction = transaction.copyWith(
+            sharedKey: Value(null),
+            transactionOwnerEmail: Value(null),
+            transactionOriginalOwnerEmail: Value(null),
+            sharedDateUpdated: Value(null),
+            sharedStatus: Value(null),
+            sharedReferenceBudgetPk: Value(null),
+          );
+        } catch (e) {
+          print(e.toString());
+        }
       }
     }
-    if (transaction.paid == false && transaction.sharedKey != null) {
-      TransactionCategory category =
-          await database.getCategoryInstance(transaction.categoryFk);
-      await database.deleteTransaction(transaction.transactionPk);
-      await database.createOrUpdateTransaction(
-        transaction.copyWith(
-          sharedKey: Value(null),
-          transactionOriginalOwnerEmail: Value(null),
-          sharedDateUpdated: Value(null),
-          sharedStatus: Value(null),
-        ),
-        updateSharedEntry: false,
-      );
-      return -1;
-    }
-    print(transaction);
 
     // We need to ensure the value is set back to null, so insert/replace
     if (transaction.type == null ||
@@ -1220,65 +1201,40 @@ class FinanceDatabase extends _$FinanceDatabase {
   // create or update a category
   Future<int> createOrUpdateCategory(TransactionCategory category,
       {bool updateSharedEntry = true}) async {
-    // update category details on server
-    if (updateSharedEntry == true && category.sharedKey != null) {
-      FirebaseFirestore? db = await firebaseGetDBInstance();
-      if (db == null) {
-        return -1;
-      }
-      DocumentReference collectionRef =
-          db.collection('categories').doc(category.sharedKey);
-      collectionRef.update({
-        "colour": category.colour,
-        "iconName": category.iconName,
-        "name": category.name,
-        // "members": [
-        //   // FirebaseAuth.instance.currentUser!.email
-        // ],
-        "income": category.income,
-      });
-    }
-
     // We need to ensure the value is set back to null, so insert/replace
-    if (category.colour == null ||
-        category.sharedDateUpdated == null ||
-        category.sharedKey == null ||
-        category.sharedOwnerMember == null ||
-        category.sharedMembers == null) {
-      return into(categories)
-          .insert(category, mode: InsertMode.insertOrReplace);
-    }
-    return into(categories).insertOnConflictUpdate(category);
+    int result = await into(categories)
+        .insert(category, mode: InsertMode.insertOrReplace);
+    updateTransactionOnServerAfterChangingCategoryInformation(category);
+    return result;
   }
 
-  Future<int> createOrUpdateFromSharedCategory(
-      TransactionCategory category) async {
-    if (category.sharedKey != null) {
-      TransactionCategory sharedCategory;
+  Future<int> createOrUpdateFromSharedBudget(Budget budget) async {
+    if (budget.sharedKey != null) {
+      Budget sharedBudget;
 
       try {
         // entry exists, update it
-        sharedCategory = await (select(categories)
-              ..where((t) => t.sharedKey.equals(category.sharedKey ?? "")))
+        sharedBudget = await (select(budgets)
+              ..where((t) => t.sharedKey.equals(budget.sharedKey ?? "")))
             .getSingle();
-        sharedCategory = category.copyWith(
-            categoryPk: sharedCategory.categoryPk, order: sharedCategory.order);
-        return into(categories).insertOnConflictUpdate(sharedCategory);
+        sharedBudget = budget.copyWith(
+            budgetPk: sharedBudget.budgetPk,
+            order: sharedBudget.order,
+            pinned: sharedBudget.pinned);
+        return into(budgets).insertOnConflictUpdate(sharedBudget);
       } catch (e) {
         // new entry is needed
-        int numberOfCategories =
-            (await database.getTotalCountOfCategories())[0] ?? 1;
-        sharedCategory = category.copyWith(order: numberOfCategories);
-        return into(categories).insertOnConflictUpdate(sharedCategory);
+        int numberOfBudgets = (await database.getAmountOfBudgets());
+        sharedBudget = budget.copyWith(order: numberOfBudgets);
+        return into(budgets).insertOnConflictUpdate(sharedBudget);
       }
     } else {
       return 0;
     }
   }
 
-  Future<TransactionCategory> getSharedCategory(sharedKey) async {
-    return await (select(categories)
-          ..where((t) => t.sharedKey.equals(sharedKey)))
+  Future<Budget> getSharedBudget(sharedKey) async {
+    return await (select(budgets)..where((t) => t.sharedKey.equals(sharedKey)))
         .getSingle();
   }
 
@@ -1286,6 +1242,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(transactions)
           ..where((tbl) {
             return tbl.categoryFk.equals(categoryPk) & tbl.paid.equals(true);
+          })
+          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
+        .get();
+  }
+
+  Future<List<Transaction>> getAllTransactionsBelongingToSharedBudget(
+      budgetPk) {
+    return (select(transactions)
+          ..where((tbl) {
+            return tbl.sharedReferenceBudgetPk.equals(budgetPk) &
+                tbl.paid.equals(true);
           })
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
         .get();
@@ -1299,8 +1266,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         // entry exists, update it
         sharedTransaction = await (select(transactions)
               ..where((t) =>
-                  t.sharedKey.equals(transaction.sharedKey ?? "") &
-                  t.categoryFk.equals(transaction.categoryFk)))
+                  t.sharedKey.equals(transaction.sharedKey ?? "") |
+                  t.sharedOldKey.equals(transaction.sharedKey ?? "")))
             .getSingle();
         sharedTransaction = transaction.copyWith(
             transactionPk: sharedTransaction.transactionPk);
@@ -1328,12 +1295,28 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // create or update a budget
-  Future<int> createOrUpdateBudget(Budget budget) {
-    if (budget.colour == null) {
-      return into(budgets).insert(budget, mode: InsertMode.replace);
+  Future<int> createOrUpdateBudget(Budget budget,
+      {bool updateSharedEntry = true}) async {
+    print(budget);
+    if (budget.sharedKey != null && updateSharedEntry == true) {
+      FirebaseFirestore? db = await firebaseGetDBInstance();
+      if (db == null) {
+        return -1;
+      }
+      DocumentReference collectionRef =
+          db.collection('budgets').doc(budget.sharedKey);
+      collectionRef.update({
+        "name": budget.name,
+        "amount": budget.amount,
+        "colour": budget.colour,
+        "startDate": budget.startDate,
+        "endDate": budget.endDate,
+        "periodLength": budget.periodLength,
+        "reoccurrence": enumRecurrence[budget.reoccurrence],
+      });
     }
 
-    return into(budgets).insertOnConflictUpdate(budget);
+    return into(budgets).insert(budget, mode: InsertMode.replace);
   }
 
   // watch category given key
@@ -1345,6 +1328,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get category given key
   Future<TransactionCategory> getCategoryInstance(int categoryPk) {
     return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
+        .getSingle();
+  }
+
+  // get budget given key
+  Future<Budget> getBudgetInstance(int budgetPk) {
+    return (select(budgets)..where((t) => t.budgetPk.equals(budgetPk)))
         .getSingle();
   }
 
@@ -1362,23 +1351,24 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<List<TransactionCategory>> getAllCategories(
-      {int? limit,
-      int? offset,
-      List<int>? categoryFks,
-      bool? allCategories,
-      bool? sharedCategory}) {
+      {int? limit, int? offset, List<int>? categoryFks, bool? allCategories}) {
     return (select(categories)
-          ..where((c) =>
-              (allCategories != false
-                  ? c.categoryPk.isNotNull()
-                  : c.categoryPk.isIn(categoryFks ?? [])) &
-              (sharedCategory == null
-                  ? c.sharedKey.isNotNull() | c.sharedKey.isNull()
-                  : sharedCategory == true
-                      ? c.sharedKey.isNotNull()
-                      : c.sharedKey.isNull()))
+          ..where((c) => (allCategories != false
+              ? c.categoryPk.isNotNull()
+              : c.categoryPk.isIn(categoryFks ?? [])))
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .get();
+  }
+
+  Future<List<Budget>> getAllBudgets({bool? sharedBudgetsOnly}) {
+    return (select(budgets)
+          ..where((b) => ((sharedBudgetsOnly == null
+              ? b.sharedKey.isNotNull() | b.sharedKey.isNull()
+              : sharedBudgetsOnly == true
+                  ? b.sharedKey.isNotNull()
+                  : b.sharedKey.isNull())))
+          ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
   }
 
@@ -1464,9 +1454,24 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // delete budget given key
-  Future deleteBudget(int budgetPk, int order) async {
-    await shiftBudgets(-1, order);
-    return (delete(budgets)..where((b) => b.budgetPk.equals(budgetPk))).go();
+  Future deleteBudget(context, Budget budget) async {
+    if (budget.sharedKey != null) {
+      dynamic response = await deleteSharedBudgetPopup(context, budget);
+      if (response == false) {
+        return -1;
+      }
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      if (budget.sharedOwnerMember == SharedOwnerMember.owner) {
+        bool result = await removedSharedFromBudget(budget);
+      } else {
+        bool result = await leaveSharedBudget(budget);
+      }
+      loadingIndeterminateKey.currentState!.setVisibility(false);
+    }
+
+    await shiftBudgets(-1, budget.order);
+    return (delete(budgets)..where((b) => b.budgetPk.equals(budget.budgetPk)))
+        .go();
   }
 
   //delete transaction given key
@@ -1476,13 +1481,36 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (updateSharedEntry) {
       Transaction transactionToDelete =
           await database.getTransactionFromPk(transactionPk);
-      TransactionCategory category =
-          await database.getCategoryInstance(transactionToDelete.categoryFk);
-      sendTransactionDelete(transactionToDelete, category);
+      if (transactionToDelete.sharedKey != null &&
+          transactionToDelete.sharedReferenceBudgetPk != null) {
+        Budget budget = await database
+            .getBudgetInstance(transactionToDelete.sharedReferenceBudgetPk!);
+        sendTransactionDelete(transactionToDelete, budget);
+      }
+    }
+    return (delete(transactions)
+          ..where((t) => t.transactionPk.equals(transactionPk)))
+        .go();
+  }
+
+  Future deleteTransactions(List<int> transactionPks,
+      {bool updateSharedEntry = true}) async {
+    // Send the delete log to the server
+    for (int transactionPk in transactionPks) {
+      if (updateSharedEntry) {
+        Transaction transactionToDelete =
+            await database.getTransactionFromPk(transactionPk);
+        if (transactionToDelete.sharedKey != null &&
+            transactionToDelete.sharedReferenceBudgetPk != null) {
+          Budget budget = await database
+              .getBudgetInstance(transactionToDelete.sharedReferenceBudgetPk!);
+          sendTransactionDelete(transactionToDelete, budget);
+        }
+      }
     }
 
     return (delete(transactions)
-          ..where((t) => t.transactionPk.equals(transactionPk)))
+          ..where((t) => t.transactionPk.isIn(transactionPks)))
         .go();
   }
 
@@ -1495,13 +1523,30 @@ class FinanceDatabase extends _$FinanceDatabase {
         await deleteAssociatedTitle(
             associatedTitle.associatedTitlePk, associatedTitle.order);
     }
+    List<Transaction> sharedTransactionsInCategory =
+        await getAllTransactionsSharedInCategory(categoryPk);
+    print(sharedTransactionsInCategory);
+    await Future.wait([
+      for (Transaction transaction in sharedTransactionsInCategory)
+        // delete shared transactions one by one, need to update the server
+        deleteTransaction(transaction.transactionPk)
+    ]);
     await shiftCategories(-1, order);
     return (delete(categories)..where((c) => c.categoryPk.equals(categoryPk)))
         .go();
   }
 
+  Future<List<Transaction>> getAllTransactionsSharedInCategory(categoryFk) {
+    return (select(transactions)
+          ..where((tbl) {
+            return tbl.sharedKey.isNotNull() &
+                tbl.categoryFk.equals(categoryFk);
+          }))
+        .get();
+  }
+
   //delete transactions that belong to specific category key
-  Future deleteCategoryTransactions(int categoryPk) {
+  Future deleteCategoryTransactions(int categoryPk) async {
     return (delete(transactions)..where((t) => t.categoryFk.equals(categoryPk)))
         .go();
   }
@@ -1558,7 +1603,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get total amount spent in each day
   Stream<double?> watchTotalSpentInTimeRangeFromCategories(
       DateTime start, DateTime end, List<int>? categoryFks, bool allCategories,
-      {bool allCashFlow = false}) {
+      {bool allCashFlow = false, int? onlyShowTransactionsBelongingToBudget}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     final totalAmt = transactions.amount.sum();
@@ -1574,7 +1619,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               transactions.paid.equals(true) &
               (allCashFlow
                   ? transactions.income.isIn([true, false])
-                  : transactions.income.equals(false)),
+                  : transactions.income.equals(false)) &
+              onlyShowIfCertainBudget(
+                  transactions, onlyShowTransactionsBelongingToBudget),
         ));
     } else {
       query = (selectOnly(transactions)
@@ -1586,7 +1633,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               transactions.paid.equals(true) &
               (allCashFlow
                   ? transactions.income.isIn([true, false])
-                  : transactions.income.equals(false)),
+                  : transactions.income.equals(false)) &
+              onlyShowIfCertainBudget(
+                  transactions, onlyShowTransactionsBelongingToBudget),
         ));
     }
 
@@ -1606,8 +1655,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<double?> watchTotalSpentByCurrentUserOnly(
     DateTime start,
     DateTime end,
-    List<int> categoryFks,
-    bool allCategories,
+    int budgetPk,
   ) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -1620,18 +1668,18 @@ class FinanceDatabase extends _$FinanceDatabase {
           transactions.dateCreated.isBetweenValues(startDate, endDate) &
           transactions.paid.equals(true) &
           transactions.income.equals(false) &
-          isInCategory(transactions, allCategories, categoryFks) &
-          onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner)));
+          onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner) &
+          transactions.sharedReferenceBudgetPk.equals(budgetPk)));
     return query.map(((row) => row.read(totalAmt))).watchSingleOrNull();
   }
 
   Stream<double?> watchTotalSpentByUser(
-    DateTime start,
-    DateTime end,
-    List<int> categoryFks,
-    bool allCategories,
-    String userEmail,
-  ) {
+      DateTime start,
+      DateTime end,
+      List<int> categoryFks,
+      bool allCategories,
+      String userEmail,
+      int onlyShowTransactionsBelongingToBudget) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     final totalAmt = transactions.amount.sum();
@@ -1644,7 +1692,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           transactions.paid.equals(true) &
           transactions.income.equals(false) &
           isInCategory(transactions, allCategories, categoryFks) &
-          transactions.transactionOwnerEmail.equals(userEmail)));
+          transactions.transactionOwnerEmail.equals(userEmail) &
+          transactions.sharedReferenceBudgetPk
+              .equals(onlyShowTransactionsBelongingToBudget)));
     return query.map(((row) => row.read(totalAmt))).watchSingleOrNull();
   }
 
@@ -1685,17 +1735,27 @@ class FinanceDatabase extends _$FinanceDatabase {
             tbl.transactionOwnerEmail.isNotNull());
   }
 
+  Expression<bool> onlyShowIfCertainBudget(
+      $TransactionsTable tbl, int? budgetPk) {
+    return (budgetPk != null
+        ? tbl.sharedReferenceBudgetPk.equals(budgetPk)
+        : tbl.sharedReferenceBudgetPk.isNull() |
+            tbl.sharedReferenceBudgetPk.isNotNull());
+  }
+
   // The total amount of that category will always be that last column
   // print(snapshot.data![0].rawData.data["transactions.category_fk"]);
   // print(snapshot.data![0].rawData.data["c" + (snapshot.data![0].rawData.data.length).toString()]);
   Stream<List<CategoryWithTotal>>
       watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-          DateTime start,
-          DateTime end,
-          List<int> categoryFks,
-          bool allCategories,
-          SharedTransactionsShow sharedTransactionsShow,
-          {String? member}) {
+    DateTime start,
+    DateTime end,
+    List<int> categoryFks,
+    bool allCategories,
+    SharedTransactionsShow sharedTransactionsShow, {
+    String? member,
+    int? onlyShowTransactionsBelongingToBudget,
+  }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     final totalAmt = transactions.amount.sum();
@@ -1710,7 +1770,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             tbl.paid.equals(true) &
             tbl.income.equals(false) &
             onlyShowIfOwner(tbl, sharedTransactionsShow) &
-            onlyShowIfMember(tbl, member);
+            onlyShowIfMember(tbl, member) &
+            onlyShowIfCertainBudget(tbl, onlyShowTransactionsBelongingToBudget);
       })
       ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
     return (query.join([
@@ -1872,16 +1933,26 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Future<List<int?>> getTotalCountOfTransactionsInBudget(int budgetPk) async {
+    final totalCount = transactions.transactionPk.count();
+    final query = selectOnly(transactions)
+      ..where(transactions.sharedReferenceBudgetPk.equals(budgetPk))
+      ..addColumns([totalCount]);
+    return query.map((row) => row.read(totalCount)).get();
+  }
+
   // get all transactions that occurred in a given time period that belong to categories
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
-      DateTime start,
-      DateTime end,
-      List<int> categoryFks,
-      bool allCategories,
-      bool isPaidOnly,
-      bool? isIncome,
-      SharedTransactionsShow sharedTransactionsShow,
-      {String? member}) {
+    DateTime start,
+    DateTime end,
+    List<int> categoryFks,
+    bool allCategories,
+    bool isPaidOnly,
+    bool? isIncome,
+    SharedTransactionsShow sharedTransactionsShow, {
+    String? member,
+    int? onlyShowTransactionsBelongingToBudget,
+  }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     if (allCategories) {
@@ -1895,20 +1966,26 @@ class FinanceDatabase extends _$FinanceDatabase {
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(true) &
-                      onlyShowIfMember(tbl, member);
+                      onlyShowIfMember(tbl, member) &
+                      onlyShowIfCertainBudget(
+                          tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
                       tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(false) &
-                      onlyShowIfMember(tbl, member);
+                      onlyShowIfMember(tbl, member) &
+                      onlyShowIfCertainBudget(
+                          tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
                       tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
-                      onlyShowIfMember(tbl, member);
+                      onlyShowIfMember(tbl, member) &
+                      onlyShowIfCertainBudget(
+                          tbl, onlyShowTransactionsBelongingToBudget);
                 }
               } else {
                 if (isIncome == true) {
@@ -1916,18 +1993,24 @@ class FinanceDatabase extends _$FinanceDatabase {
                       tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.income.equals(true) &
-                      onlyShowIfMember(tbl, member);
+                      onlyShowIfMember(tbl, member) &
+                      onlyShowIfCertainBudget(
+                          tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
                       tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.income.equals(false) &
-                      onlyShowIfMember(tbl, member);
+                      onlyShowIfMember(tbl, member) &
+                      onlyShowIfCertainBudget(
+                          tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
                       tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
-                      onlyShowIfMember(tbl, member);
+                      onlyShowIfMember(tbl, member) &
+                      onlyShowIfCertainBudget(
+                          tbl, onlyShowTransactionsBelongingToBudget);
                 }
               }
             })
@@ -1940,7 +2023,9 @@ class FinanceDatabase extends _$FinanceDatabase {
             return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                 dateCreated.isBetweenValues(startDate, endDate) &
                 tbl.categoryFk.isIn(categoryFks) &
-                onlyShowIfMember(tbl, member);
+                onlyShowIfMember(tbl, member) &
+                onlyShowIfCertainBudget(
+                    tbl, onlyShowTransactionsBelongingToBudget);
           }))
         .watch();
   }
@@ -1950,16 +2035,4 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..where((t) => t.transactionPk.equals(transactionPk)))
         .getSingle();
   }
-  // TODO: total spent in each month
-  // Stream<List<Transaction>> watchTotalSpentEachMonth() {
-  //   final totalAmt = transactions.amount.sum();
-  //   final month = transactions.dateCreated.date;
-  //   return (select(transactions)
-  //         ..where((tbl) {
-  //           return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
-  //         })
-  //         ..addColumns([totalAmt, month]).join([]).groupBy([])
-  //         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
-  //       .watch();
-  // }
 }

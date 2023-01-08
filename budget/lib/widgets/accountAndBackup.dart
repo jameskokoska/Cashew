@@ -838,6 +838,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           order: numberOfCategories,
           income: amount > 0,
           iconName: "image.png",
+          methodAdded: MethodAdded.csv,
         ),
       );
       selectedCategory = await database.getCategoryInstanceGivenName(

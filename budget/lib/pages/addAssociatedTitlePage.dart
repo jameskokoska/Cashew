@@ -182,7 +182,6 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                       ),
                     );
                   },
-                  sharedIconOffset: 12,
                 ),
               ),
               Expanded(

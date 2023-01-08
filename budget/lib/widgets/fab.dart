@@ -7,12 +7,20 @@ import 'package:animations/animations.dart';
 import 'package:budget/colors.dart';
 
 class FAB extends StatelessWidget {
-  FAB({Key? key, required this.openPage, this.onTap, this.tooltip = ""})
+  FAB(
+      {Key? key,
+      required this.openPage,
+      this.onTap,
+      this.tooltip = "",
+      this.color,
+      this.colorPlus})
       : super(key: key);
 
   final Widget openPage;
   final String tooltip;
   final Function()? onTap;
+  final Color? color;
+  final Color? colorPlus;
 
   final double fabSize = 60;
   @override
@@ -20,12 +28,14 @@ class FAB extends StatelessWidget {
     return OpenContainerNavigation(
       closedElevation: 10,
       borderRadius: 18,
-      closedColor: Theme.of(context).colorScheme.secondary,
+      closedColor:
+          color != null ? color : Theme.of(context).colorScheme.secondary,
       button: (openContainer) {
         return Tooltip(
           message: tooltip,
           child: Tappable(
-            color: Theme.of(context).colorScheme.secondary,
+            color:
+                color != null ? color : Theme.of(context).colorScheme.secondary,
             onTap: () {
               if (onTap != null)
                 onTap!();
@@ -38,7 +48,9 @@ class FAB extends StatelessWidget {
               child: Center(
                 child: Icon(
                   Icons.add_rounded,
-                  color: Theme.of(context).colorScheme.onSecondary,
+                  color: colorPlus != null
+                      ? colorPlus
+                      : Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
             ),

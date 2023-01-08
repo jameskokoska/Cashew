@@ -99,12 +99,12 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   prefix: getCurrencyString(),
                                   count: snapshot.hasData ? snapshot.data! : 0,
                                   duration: Duration(milliseconds: 250),
-                                  fontSize: 18,
+                                  fontSize: 17,
                                 );
                               },
                             ),
                             TextFont(
-                                fontSize: 18,
+                                fontSize: 17,
                                 text: " (" +
                                     listOfIDs.length.toString() +
                                     " selected)"),
@@ -155,11 +155,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                     Navigator.pop(context);
                                   },
                                   onCancelLabel: "Cancel",
-                                  onSubmit: () {
-                                    for (int transactionID
-                                        in (value as Map)[pageID]) {
-                                      database.deleteTransaction(transactionID);
-                                    }
+                                  onSubmit: () async {
+                                    await database.deleteTransactions(
+                                        (value as Map)[pageID]);
                                     openSnackbar(
                                       SnackbarMessage(
                                         title: "Deleted " +
@@ -309,7 +307,6 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
           mainAxisSize: MainAxisSize.min,
           children: [
             CategoryIcon(
-              sharedIconOffset: 4,
               onTap: () => openBottomSheet(
                 context,
                 PopupFramework(
@@ -442,29 +439,6 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                             }
                           }
                           if (selectedCategory != null) {
-                            // TODO This code is very similar to merging of categories code on addCategoryPage
-                            // This should somehow be brought into a function and combined with that!
-                            if (selectedCategory!.sharedKey != null) {
-                              final result = await openPopup(
-                                context,
-                                title: "Changing shared category",
-                                description:
-                                    "Transaction may be shared or deleted from the server based on the selected category.",
-                                icon: Icons.person_pin_rounded,
-                                onSubmit: () async {
-                                  Navigator.pop(context, true);
-                                },
-                                onSubmitLabel: "Change Category",
-                                onCancelLabel: "Cancel",
-                                onCancel: () {
-                                  Navigator.pop(context, false);
-                                },
-                              );
-                              print("CHANGED CATEGORY");
-                              if (result == false) {
-                                return;
-                              }
-                            }
                             for (int transactionID in widget.transactionIDs) {
                               Transaction transaction = await database
                                   .getTransactionFromPk(transactionID);

@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -37,6 +38,7 @@ class PageFramework extends StatefulWidget {
     this.expandedHeight = 200,
     this.syncKeyboardHeight = false,
     this.listID,
+    this.sharedBudgetRefresh = false,
   }) : super(key: key);
 
   final String title;
@@ -66,6 +68,7 @@ class PageFramework extends StatefulWidget {
   final double expandedHeight;
   final bool syncKeyboardHeight;
   final String? listID;
+  final bool? sharedBudgetRefresh;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -285,27 +288,36 @@ class PageFrameworkState extends State<PageFramework>
       );
     }
 
+    Widget child;
     if (widget.floatingActionButton != null) {
-      return SwipeToSelectTransactions(
-        listID: widget.listID ?? "0",
-        child: Stack(
-          children: [
-            dragDownToDissmissScaffold ?? scaffold,
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 15, right: 15),
-                child: widget.floatingActionButton ?? Container(),
-              ),
+      child = Stack(
+        children: [
+          dragDownToDissmissScaffold ?? scaffold,
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15, right: 15),
+              child: widget.floatingActionButton ?? Container(),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     } else {
-      return SwipeToSelectTransactions(
-        listID: widget.listID ?? "0",
-        child: dragDownToDissmissScaffold ?? scaffold,
+      child = dragDownToDissmissScaffold ?? scaffold;
+    }
+
+    child = SwipeToSelectTransactions(
+      listID: widget.listID ?? "0",
+      child: child,
+    );
+
+    if (widget.sharedBudgetRefresh == true) {
+      return SharedBudgetRefresh(
+        child: child,
+        scrollController: _scrollController,
       );
+    } else {
+      return child;
     }
   }
 }

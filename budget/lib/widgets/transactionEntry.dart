@@ -208,7 +208,6 @@ class TransactionEntry extends StatelessWidget {
                           sizePadding: 15,
                           margin: EdgeInsets.zero,
                           borderRadius: 13,
-                          showSharedIcon: false,
                         ),
                         Container(
                           width: 12,

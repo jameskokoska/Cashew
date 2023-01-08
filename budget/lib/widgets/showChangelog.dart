@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Rewrote all shared code - now shares a budget
     Fixed adding category
     Fixed drag to select on upcoming, overdue and subscriptions page
     New loading bar for google login

@@ -1,12 +1,12 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/SharedCategorySettings.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
@@ -86,7 +86,7 @@ class HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return SwipeToSelectTransactions(
       listID: "0",
-      child: SharedCategoryRefresh(
+      child: SharedBudgetRefresh(
         scrollController: _scrollController,
         child: Stack(
           children: [

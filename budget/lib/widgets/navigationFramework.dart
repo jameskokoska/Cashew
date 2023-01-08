@@ -11,6 +11,7 @@ import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/button.dart';
@@ -101,7 +102,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await createBackupInBackground(context);
       if (appStateSettings["currentUserEmail"] != "") {
         await syncPendingQueueOnServer(); //sync before download
-        await getCloudCategories();
+        await getCloudBudgets();
       }
       loadingIndeterminateKey.currentState!.setVisibility(false);
       entireAppLoaded = true;

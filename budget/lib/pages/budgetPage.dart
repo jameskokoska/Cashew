@@ -110,6 +110,20 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
         children: [
           PageFramework(
             listID: pageId,
+            floatingActionButton: AnimateFABDelayed(
+              fab: Padding(
+                padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+                child: FAB(
+                  tooltip: "Add Title",
+                  openPage: AddTransactionPage(
+                    title: "Add Transaction",
+                    selectedBudget: widget.budget,
+                  ),
+                  color: budgetColorScheme.secondaryContainer,
+                  colorPlus: budgetColorScheme.onSecondaryContainer,
+                ),
+              ),
+            ),
             actions: [
               widget.budget.reoccurrence == BudgetReoccurence.custom ||
                       widget.isPastBudget == true ||
@@ -154,8 +168,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                 stream: database.watchTotalSpentByCurrentUserOnly(
                   budgetRange.start,
                   budgetRange.end,
-                  widget.budget.categoryFks ?? [],
-                  widget.budget.allCategoryFks,
+                  widget.budget.budgetPk,
                 ),
                 builder: (context, snapshotTotalSpentByCurrentUserOnly) {
                   return StreamBuilder<List<CategoryWithTotal>>(
@@ -167,6 +180,10 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                       widget.budget.allCategoryFks,
                       widget.budget.sharedTransactionsShow,
                       member: selectedMember,
+                      onlyShowTransactionsBelongingToBudget:
+                          widget.budget.sharedKey != null
+                              ? widget.budget.budgetPk
+                              : null,
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -352,11 +369,15 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                             100,
                                         yourPercent: totalSpent == 0
                                             ? 0
-                                            : (snapshotTotalSpentByCurrentUserOnly
-                                                        .data! /
-                                                    totalSpent *
-                                                    100)
-                                                .abs(),
+                                            : snapshotTotalSpentByCurrentUserOnly
+                                                        .data ==
+                                                    null
+                                                ? 0
+                                                : (snapshotTotalSpentByCurrentUserOnly
+                                                            .data! /
+                                                        totalSpent *
+                                                        100)
+                                                    .abs(),
                                         todayPercent:
                                             widget.isPastBudget == true
                                                 ? -1
@@ -468,6 +489,10 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                   false,
                   widget.budget.sharedTransactionsShow,
                   member: selectedMember,
+                  onlyShowTransactionsBelongingToBudget:
+                      widget.budget.sharedKey != null
+                          ? widget.budget.budgetPk
+                          : null,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -552,6 +577,31 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                 listID: pageId,
                 sharedTransactionsShow: widget.budget.sharedTransactionsShow,
                 member: selectedMember,
+                onlyShowTransactionsBelongingToBudget:
+                    widget.budget.sharedKey != null
+                        ? widget.budget.budgetPk
+                        : null,
+              ),
+              SliverToBoxAdapter(
+                child: widget.budget.sharedDateUpdated == null
+                    ? SizedBox.shrink()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 28),
+                        child: TextFont(
+                          text: "Synced " +
+                              getTimeAgo(
+                                widget.budget.sharedDateUpdated!,
+                              ).toLowerCase() +
+                              "\n Created by " +
+                              getMemberNickname(
+                                  (widget.budget.sharedMembers ?? [""])[0]),
+                          fontSize: 13,
+                          textColor: Theme.of(context).colorScheme.textLight,
+                          textAlign: TextAlign.center,
+                          maxLines: 4,
+                        ),
+                      ),
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

@@ -87,10 +87,13 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
       dateTimeRanges.add(budgetRange);
       watchedBudgetTotals.add(database.watchTotalSpentInTimeRangeFromCategories(
-          budgetRange.start,
-          budgetRange.end,
-          widget.budget.categoryFks,
-          widget.budget.allCategoryFks));
+        budgetRange.start,
+        budgetRange.end,
+        widget.budget.categoryFks,
+        widget.budget.allCategoryFks,
+        onlyShowTransactionsBelongingToBudget:
+            widget.budget.sharedKey == null ? null : widget.budget.budgetPk,
+      ));
     }
     mergedStreams = StreamZip(watchedBudgetTotals);
     // mergedStreams.listen(
@@ -284,8 +287,7 @@ class PastBudgetContainer extends StatelessWidget {
         stream: database.watchTotalSpentByCurrentUserOnly(
           budgetRange.start,
           budgetRange.end,
-          budget.categoryFks ?? [],
-          budget.allCategoryFks,
+          budget.budgetPk,
         ),
         builder: (context, snapshotTotalSpentByCurrentUserOnly) {
           double smallContainerHeight = 100;
@@ -297,6 +299,8 @@ class PastBudgetContainer extends StatelessWidget {
               budget.categoryFks ?? [],
               budget.allCategoryFks,
               budget.sharedTransactionsShow,
+              onlyShowTransactionsBelongingToBudget:
+                  budget.sharedKey != null ? budget.budgetPk : null,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {

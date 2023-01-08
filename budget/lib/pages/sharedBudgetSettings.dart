@@ -8,6 +8,7 @@ import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -34,21 +35,19 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-class SharedCategorySettings extends StatefulWidget {
-  SharedCategorySettings({
+class SharedBudgetSettings extends StatefulWidget {
+  SharedBudgetSettings({
     Key? key,
-    required this.category,
-    required this.setSelectedMembers,
+    required this.budget,
   }) : super(key: key);
 
-  final TransactionCategory category;
-  final Function(List<String>?) setSelectedMembers;
+  final Budget budget;
 
   @override
-  _SharedCategorySettingsState createState() => _SharedCategorySettingsState();
+  _SharedBudgetSettingsState createState() => _SharedBudgetSettingsState();
 }
 
-class _SharedCategorySettingsState extends State<SharedCategorySettings> {
+class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
   List<String> members = [];
   bool isLoaded = false;
   bool isErrored = false;
@@ -57,8 +56,8 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      dynamic response = await getMembersFromCategory(
-          widget.category.sharedKey!, widget.category);
+      dynamic response =
+          await getMembersFromBudget(widget.budget.sharedKey!, widget.budget);
       if (response == null) {
         openSnackbar(SnackbarMessage(title: "Connection error"));
         setState(() {
@@ -67,12 +66,11 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
         return;
       }
       print(FirebaseAuth.instance.currentUser!.email);
-      print(widget.category.sharedOwnerMember);
+      print(widget.budget.sharedOwnerMember);
       setState(() {
         members = response;
         isLoaded = true;
       });
-      widget.setSelectedMembers(members);
     });
   }
 
@@ -98,33 +96,29 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
       );
     }
     if (updateEntry) {
-      await removeMemberFromCategory(
-          widget.category.sharedKey!, originalMember, widget.category);
-      await addMemberToCategory(
-          widget.category.sharedKey!, member, widget.category);
+      await removeMemberFromBudget(
+          widget.budget.sharedKey!, originalMember, widget.budget);
+      await addMemberToBudget(widget.budget.sharedKey!, member, widget.budget);
       setState(() {
         int index = members.indexOf(originalMember);
         members.removeAt(index);
         members.add(member);
       });
     } else {
-      await addMemberToCategory(
-          widget.category.sharedKey!, member, widget.category);
+      await addMemberToBudget(widget.budget.sharedKey!, member, widget.budget);
       setState(() {
         members.add(member);
       });
     }
-    widget.setSelectedMembers(members);
   }
 
   removeMember(String member) async {
-    await removeMemberFromCategory(
-        widget.category.sharedKey!, member, widget.category);
+    await removeMemberFromBudget(
+        widget.budget.sharedKey!, member, widget.budget);
     setState(() {
       int index = members.indexOf(member);
       members.removeAt(index);
     });
-    widget.setSelectedMembers(members);
   }
 
   @override
@@ -138,10 +132,9 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextFont(
-              text:
-                  widget.category.sharedOwnerMember == CategoryOwnerMember.owner
-                      ? "Add Members"
-                      : "Members",
+              text: widget.budget.sharedOwnerMember == SharedOwnerMember.owner
+                  ? "Add Members"
+                  : "Members",
               textColor: Theme.of(context).colorScheme.textLight,
               fontSize: 16,
             ),
@@ -170,11 +163,11 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15),
+        SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TextFont(
-            text: widget.category.sharedOwnerMember == CategoryOwnerMember.owner
+            text: widget.budget.sharedOwnerMember == SharedOwnerMember.owner
                 ? "Add Members"
                 : "Members",
             textColor: Theme.of(context).colorScheme.textLight,
@@ -192,7 +185,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
           ),
         ),
         SizedBox(height: 10),
-        widget.category.sharedOwnerMember == CategoryOwnerMember.owner
+        widget.budget.sharedOwnerMember == SharedOwnerMember.owner
             ? Row(
                 children: [
                   Expanded(
@@ -249,8 +242,8 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                         onDelete: () {
                           removeMember(member);
                         },
-                        canModify: widget.category.sharedOwnerMember ==
-                            CategoryOwnerMember.owner,
+                        canModify: widget.budget.sharedOwnerMember ==
+                            SharedOwnerMember.owner,
                         isOwner: false, //only the first entry is the owner
                         isYou: member == appStateSettings["currentUserEmail"],
                       ),
@@ -258,7 +251,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                 ],
               ),
         SizedBox(height: 5),
-        widget.category.sharedOwnerMember == CategoryOwnerMember.owner
+        widget.budget.sharedOwnerMember == SharedOwnerMember.owner
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
@@ -267,14 +260,13 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                   label: "Stop Sharing",
                   onTap: () async {
                     openLoadingPopup(context);
-                    bool status =
-                        await removedSharedFromCategory(widget.category);
+                    bool status = await removedSharedFromBudget(widget.budget);
                     if (status == false) {
                       openSnackbar(
                         SnackbarMessage(
                           icon: Icons.warning_rounded,
                           description:
-                              "There was a problem removing the shared category from the server. Please Try again later.",
+                              "There was a problem removing the shared budget from the server. Please try again later.",
                         ),
                       );
                       return;
@@ -294,13 +286,13 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                   label: "Leave Shared Group",
                   onTap: () async {
                     openLoadingPopup(context);
-                    bool status = await leaveSharedCategory(widget.category);
+                    bool status = await leaveSharedBudget(widget.budget);
                     if (status == false) {
                       openSnackbar(
                         SnackbarMessage(
                           icon: Icons.warning_rounded,
                           description:
-                              "There was a problem removing the shared category from the server. Please Try again later.",
+                              "There was a problem removing the shared budget from the server. Please Try again later.",
                         ),
                       );
                       return;
@@ -308,7 +300,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                     Navigator.pop(context);
                     openPopup(
                       context,
-                      title: "Delete " + widget.category.name + " category?",
+                      title: "Delete " + widget.budget.name + " budget?",
                       description:
                           "This will delete all transactions associated with this category. This will only delete the transactions on your device.",
                       icon: Icons.delete_rounded,
@@ -318,14 +310,13 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                       },
                       onCancelLabel: "Cancel",
                       onSubmit: () {
-                        database.deleteCategory(
-                            widget.category.categoryPk, widget.category.order);
-                        database.deleteCategoryTransactions(
-                            widget.category.categoryPk);
+                        database.deleteBudget(context, widget.budget);
+                        // database.deleteBudgetTransactions(
+                        //     widget.category.categoryPk);
                         Navigator.pop(context);
                         openSnackbar(
                           SnackbarMessage(
-                            title: "Deleted " + widget.category.name,
+                            title: "Deleted " + widget.budget.name,
                             icon: Icons.delete,
                           ),
                         );
@@ -338,6 +329,7 @@ class _SharedCategorySettingsState extends State<SharedCategorySettings> {
                   textColor: Theme.of(context).colorScheme.errorContainer,
                 ),
               ),
+        SizedBox(height: 25),
       ],
     );
   }
@@ -521,60 +513,4 @@ memberPopup(context, String member) {
       ),
     ),
   );
-}
-
-class SharedCategoryRefresh extends StatefulWidget {
-  const SharedCategoryRefresh(
-      {required this.child, required this.scrollController, super.key});
-  final Widget child;
-  final ScrollController scrollController;
-
-  @override
-  State<SharedCategoryRefresh> createState() => _SharedCategoryRefreshState();
-}
-
-class _SharedCategoryRefreshState extends State<SharedCategoryRefresh> {
-  double totalDragY = 0;
-  bool swipeDownToRefresh = false;
-
-  _onPointerMove(PointerMoveEvent ptr) {
-    // want to make sure user isn't selecting transactions
-    if (swipeDownToRefresh && selectingTransactionsActive == 0) {
-      totalDragY = totalDragY + ptr.delta.dy;
-    }
-  }
-
-  _onPointerUp(PointerUpEvent event) {
-    if (totalDragY > 125 && swipeDownToRefresh) {
-      _refreshCategories();
-    }
-    totalDragY = 0;
-  }
-
-  _onPointerDown(PointerDownEvent event) {
-    if (widget.scrollController.offset != 0) {
-      swipeDownToRefresh = false;
-    } else {
-      swipeDownToRefresh = true;
-    }
-  }
-
-  _refreshCategories() async {
-    if (appStateSettings["currentUserEmail"] != "") {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
-      await syncPendingQueueOnServer();
-      await getCloudCategories();
-      loadingIndeterminateKey.currentState!.setVisibility(false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Listener(
-        onPointerMove: (ptr) => {_onPointerMove(ptr)},
-        onPointerUp: (ptr) => {_onPointerUp(ptr)},
-        onPointerDown: (ptr) => {_onPointerDown(ptr)},
-        behavior: HitTestBehavior.opaque,
-        child: widget.child);
-  }
 }

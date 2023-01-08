@@ -39,6 +39,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      sharedBudgetRefresh: true,
       key: pageState,
       title: "Budgets",
       backButton: false,

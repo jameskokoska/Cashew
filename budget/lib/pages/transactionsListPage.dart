@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/SharedCategorySettings.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
@@ -45,6 +45,7 @@ List<Widget> getTransactionsSlivers(
   SharedTransactionsShow sharedTransactionsShow =
       SharedTransactionsShow.fromEveryone,
   String? member,
+  int? onlyShowTransactionsBelongingToBudget,
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
@@ -65,6 +66,8 @@ List<Widget> getTransactionsSlivers(
           income: income,
           sharedTransactionsShow: sharedTransactionsShow,
           member: member,
+          onlyShowTransactionsBelongingToBudget:
+              onlyShowTransactionsBelongingToBudget,
         ),
         builder: (context, snapshot) {
           if (snapshot.data != null &&
@@ -283,7 +286,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
       icon: Icon(Icons.search_rounded),
     );
 
-    return SharedCategoryRefresh(
+    return SharedBudgetRefresh(
       scrollController: _scrollController,
       child: Stack(
         children: [

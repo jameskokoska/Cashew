@@ -1,6 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/SharedCategorySettings.dart';
+import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
@@ -51,8 +51,7 @@ class BudgetContainer extends StatelessWidget {
         stream: database.watchTotalSpentByCurrentUserOnly(
           budgetRange.start,
           budgetRange.end,
-          budget.categoryFks ?? [],
-          budget.allCategoryFks,
+          budget.budgetPk,
         ),
         builder: (context, snapshotTotalSpentByCurrentUserOnly) {
           double smallContainerHeight = showTodayForSmallBudget ? 150 : 140;
@@ -64,6 +63,8 @@ class BudgetContainer extends StatelessWidget {
               budget.categoryFks ?? [],
               budget.allCategoryFks,
               budget.sharedTransactionsShow,
+              onlyShowTransactionsBelongingToBudget:
+                  budget.sharedKey != null ? budget.budgetPk : null,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -413,12 +414,16 @@ class BudgetContainer extends StatelessWidget {
                           child: BudgetTimeline(
                             budget: budget,
                             percent: (totalSpent / budget.amount * 100).abs(),
-                            yourPercent: totalSpent == 0
-                                ? 0
-                                : (snapshotTotalSpentByCurrentUserOnly.data! /
-                                        totalSpent *
-                                        100)
-                                    .abs(),
+                            yourPercent:
+                                snapshotTotalSpentByCurrentUserOnly.data == null
+                                    ? 0
+                                    : totalSpent == 0
+                                        ? 0
+                                        : (snapshotTotalSpentByCurrentUserOnly
+                                                    .data! /
+                                                totalSpent *
+                                                100)
+                                            .abs(),
                             todayPercent: getPercentBetweenDates(
                                 budgetRange, dateForRangeLocal),
                             dateForRange: dateForRangeLocal,
@@ -796,6 +801,7 @@ class AnimatedProgress extends StatefulWidget {
 class _AnimatedProgressState extends State<AnimatedProgress> {
   bool animateIn = false;
   bool fadeIn = false;
+  Future? _future;
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
@@ -803,12 +809,19 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
         animateIn = true;
       });
     });
-    Future.delayed(Duration(milliseconds: 500), () {
-      setState(() {
-        fadeIn = true;
-      });
+    _future = Future.delayed(Duration(milliseconds: 500), () {
+      if (mounted)
+        setState(() {
+          fadeIn = true;
+        });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _future = null;
+    super.dispose();
   }
 
   @override
@@ -989,15 +1002,8 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
   initState() {
     List<Stream<double?>> watchedSpenderTotals = [];
     Future.delayed(Duration.zero, () async {
-      List<TransactionCategory> allCategories = await database.getAllCategories(
-          allCategories: widget.budget.allCategoryFks,
-          categoryFks: widget.budget.categoryFks,
-          sharedCategory: true);
-      for (TransactionCategory category in allCategories) {
-        for (String member in category.sharedMembers ?? []) {
-          members.add(member);
-        }
-      }
+      members = (widget.budget.sharedAllMembersEver ?? []).toSet();
+      print(widget.budget.sharedAllMembersEver);
       for (String member in members) {
         watchedSpenderTotals.add(database.watchTotalSpentByUser(
           widget.budgetRange.start,
@@ -1005,6 +1011,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
           widget.budget.categoryFks ?? [],
           widget.budget.allCategoryFks,
           member,
+          widget.budget.budgetPk,
         ));
       }
       mergedStreams = StreamZip(watchedSpenderTotals);
@@ -1032,6 +1039,9 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
               spent = 0;
             } else {
               spent = snapshot.data![i]!.abs().toDouble();
+            }
+            if (spent == 0) {
+              continue;
             }
             budgetSpenderList.add(BudgetSpender(members.elementAt(i), spent));
             totalSpent += spent;
@@ -1112,7 +1122,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                         ? "0"
                                         : (spender.amount / totalSpent * 100)
                                             .toStringAsFixed(0)) +
-                                    "% of shared",
+                                    "% of budget",
                                 fontSize: 15,
                                 textColor: selectedMember == spender.member
                                     ? Theme.of(context)
