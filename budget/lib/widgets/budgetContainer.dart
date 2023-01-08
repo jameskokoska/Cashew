@@ -1013,6 +1013,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
           member,
           widget.budget.budgetPk,
         ));
+        print(member);
       }
       mergedStreams = StreamZip(watchedSpenderTotals);
       setState(() {});

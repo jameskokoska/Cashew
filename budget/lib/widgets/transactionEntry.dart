@@ -311,41 +311,56 @@ class TransactionEntry extends StatelessWidget {
                                                     .black
                                                     .withOpacity(0.7),
                                               ),
-                                              Expanded(
-                                                child: TextFont(
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  text: transaction
-                                                              .transactionOwnerEmail
-                                                              .toString() ==
-                                                          appStateSettings[
-                                                              "currentUserEmail"]
-                                                      ? getMemberNickname(
-                                                          appStateSettings[
-                                                              "currentUserEmail"])
-                                                      : transaction.sharedStatus ==
-                                                                  SharedStatus
-                                                                      .waiting &&
-                                                              (transaction.transactionOwnerEmail ==
-                                                                      appStateSettings[
-                                                                          "currentUserEmail"] ||
-                                                                  transaction
-                                                                          .transactionOwnerEmail ==
-                                                                      null)
-                                                          ? getMemberNickname(
-                                                              appStateSettings[
-                                                                  "currentUserEmail"])
-                                                          : getMemberNickname(
-                                                              transaction
-                                                                  .transactionOwnerEmail
-                                                                  .toString()),
-                                                  fontSize: 13,
-                                                  textColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .black
-                                                      .withOpacity(0.7),
-                                                ),
-                                              ),
+                                              transaction.sharedReferenceBudgetPk ==
+                                                      null
+                                                  ? SizedBox.shrink()
+                                                  : Expanded(
+                                                      child:
+                                                          StreamBuilder<Budget>(
+                                                        stream: database
+                                                            .getBudget(transaction
+                                                                .sharedReferenceBudgetPk!),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          if (snapshot
+                                                              .hasData) {
+                                                            return TextFont(
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              text: (transaction
+                                                                              .transactionOwnerEmail
+                                                                              .toString() ==
+                                                                          appStateSettings[
+                                                                              "currentUserEmail"]
+                                                                      ? getMemberNickname(
+                                                                          appStateSettings[
+                                                                              "currentUserEmail"])
+                                                                      : transaction.sharedStatus == SharedStatus.waiting &&
+                                                                              (transaction.transactionOwnerEmail == appStateSettings["currentUserEmail"] ||
+                                                                                  transaction.transactionOwnerEmail ==
+                                                                                      null)
+                                                                          ? getMemberNickname(appStateSettings[
+                                                                              "currentUserEmail"])
+                                                                          : getMemberNickname(transaction
+                                                                              .transactionOwnerEmail
+                                                                              .toString())) +
+                                                                  " for " +
+                                                                  snapshot.data!
+                                                                      .name,
+                                                              fontSize: 13,
+                                                              textColor: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                            );
+                                                          }
+                                                          return Container();
+                                                        },
+                                                      ),
+                                                    ),
                                             ],
                                           ),
                                         ),

@@ -330,9 +330,16 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       createdAnotherFutureTransaction: widget.transaction != null
           ? widget.transaction!.createdAnotherFutureTransaction
           : null,
-      dateTimeCreated: widget.transaction != null
-          ? widget.transaction!.dateTimeCreated
-          : DateTime.now(),
+      dateTimeCreated: DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        DateTime.now().hour,
+        DateTime.now().minute,
+        DateTime.now().second,
+        DateTime.now().millisecond,
+        DateTime.now().microsecond,
+      ),
       sharedKey: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedKey
           : null,
