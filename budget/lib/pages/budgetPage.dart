@@ -114,13 +114,13 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
               fab: Padding(
                 padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
                 child: FAB(
-                  tooltip: "Add Title",
+                  tooltip: "Add Transaction",
                   openPage: AddTransactionPage(
                     title: "Add Transaction",
                     selectedBudget: widget.budget,
                   ),
-                  color: budgetColorScheme.secondaryContainer,
-                  colorPlus: budgetColorScheme.onSecondaryContainer,
+                  color: budgetColorScheme.secondary,
+                  colorPlus: budgetColorScheme.onSecondary,
                 ),
               ),
             ),

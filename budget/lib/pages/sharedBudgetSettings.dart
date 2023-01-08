@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SharedBudgetSettings extends StatefulWidget {
   SharedBudgetSettings({
@@ -186,36 +187,149 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
         ),
         SizedBox(height: 10),
         widget.budget.sharedOwnerMember == SharedOwnerMember.owner
-            ? Row(
-                children: [
-                  Expanded(
-                    child: AddButton(onTap: () {
-                      openBottomSheet(
-                        context,
-                        PopupFramework(
-                          title: "Add Member",
-                          subtitle: "Enter the email of the member",
-                          child: SelectText(
-                            setSelectedText: (_) {},
-                            placeholder: "example@example.com",
-                            nextWithInput: (text) async {
-                              addMember(text);
-                            },
+            ? isLoaded
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: AddButton(onTap: () {
+                          openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "Add Member",
+                              subtitle: "Enter the email of the member",
+                              child: SelectText(
+                                setSelectedText: (_) {},
+                                placeholder: "example@example.com",
+                                nextWithInput: (text) async {
+                                  addMember(text);
+                                },
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ],
+                  )
+                : Shimmer.fromColors(
+                    period: Duration(milliseconds: 1000),
+                    baseColor: appStateSettings["materialYou"]
+                        ? Theme.of(context).colorScheme.secondaryContainer
+                        : Theme.of(context)
+                            .colorScheme
+                            .lightDarkAccentHeavyLight,
+                    highlightColor: appStateSettings["materialYou"]
+                        ? Theme.of(context)
+                            .colorScheme
+                            .secondaryContainer
+                            .withOpacity(0.2)
+                        : Theme.of(context)
+                            .colorScheme
+                            .lightDarkAccentHeavy
+                            .withAlpha(20),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Container(
+                        padding: EdgeInsets.only(
+                          left: 15,
+                          right: 15,
+                          bottom: 9,
+                          top: 10,
+                        ),
+                        height: 52,
+                        margin: const EdgeInsets.only(bottom: 8.0, top: 4.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .lightDarkAccent
+                              .withOpacity(0.5),
+                          border: Border.all(
+                            width: 1.5,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavy,
                           ),
                         ),
-                      );
-                    }),
-                  ),
-                ],
-              )
+                        child: Center(
+                          child: TextFont(
+                            text: "+",
+                            fontWeight: FontWeight.bold,
+                            textColor: Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavy,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
             : SizedBox.shrink(),
         !isLoaded
-            ? Padding(
-                padding: const EdgeInsets.only(
-                  top: 28.0,
-                  bottom: 10,
-                ),
-                child: Center(child: CircularProgressIndicator()),
+            ? Column(
+                children: [
+                  for (int i = 0;
+                      i < (widget.budget.sharedMembers ?? []).length;
+                      i++)
+                    Shimmer.fromColors(
+                      period: Duration(
+                          milliseconds:
+                              (1000 + randomDouble[i % 10] * 520).toInt()),
+                      baseColor: appStateSettings["materialYou"]
+                          ? Theme.of(context).colorScheme.secondaryContainer
+                          : Theme.of(context)
+                              .colorScheme
+                              .lightDarkAccentHeavyLight,
+                      highlightColor: appStateSettings["materialYou"]
+                          ? Theme.of(context)
+                              .colorScheme
+                              .secondaryContainer
+                              .withOpacity(0.2)
+                          : Theme.of(context)
+                              .colorScheme
+                              .lightDarkAccentHeavy
+                              .withAlpha(20),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Container(
+                          width: double.infinity,
+                          height: 70,
+                          margin: const EdgeInsets.only(bottom: 8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25, vertical: 15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccent
+                                .withOpacity(0.5),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.white,
+                                ),
+                                height: 15,
+                                width: 85 + randomDouble[i % 10] * 40,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.white,
+                                ),
+                                height: 17,
+                                width: 175 + randomDouble[i % 10] * 80,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                ],
               )
             : Column(
                 children: [

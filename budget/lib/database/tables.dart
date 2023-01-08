@@ -336,7 +336,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 transactions, transactions.transactionOriginalOwnerEmail);
             await migrator.addColumn(categories, categories.sharedMembers);
           }
-          if (from <= 22) {
+          if (from <= 21) {
             await migrator.addColumn(wallets, wallets.currency);
           }
           if (from <= 23) {
