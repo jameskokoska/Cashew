@@ -233,10 +233,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         bottom: 40,
                       ),
                       child: TextFont(
-                        fontSize: 14,
+                        fontSize: 13,
                         textAlign: TextAlign.center,
-                        textColor:
-                            Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                        textColor: Theme.of(context).colorScheme.textLight,
                         text: "Showing transactions from" +
                             "\n" +
                             getWordedDateShortMore(selectedStartDate,

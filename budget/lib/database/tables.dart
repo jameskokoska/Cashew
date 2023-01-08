@@ -999,6 +999,18 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
+  Future<TransactionAssociatedTitle> getRelatingAssociatedTitleWithCategory(
+      String searchFor, int categoryFk,
+      {int? limit, int? offset}) {
+    return (select(associatedTitles)
+          ..where((t) =>
+              t.title.lower().like(searchFor.toLowerCase().trim()) &
+              t.categoryFk.equals(categoryFk))
+        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
+        )
+        .getSingle();
+  }
+
   Future<TransactionAssociatedTitle> getRelatingAssociatedTitle(
       String searchFor,
       {int? limit,

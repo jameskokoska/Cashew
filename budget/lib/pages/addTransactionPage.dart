@@ -1954,8 +1954,20 @@ addAssociatedTitles(
     String selectedTitle, TransactionCategory selectedCategory) async {
   if (appStateSettings["autoAddAssociatedTitles"]) {
     List result = await getRelatingAssociatedTitle(selectedTitle);
-
     TransactionAssociatedTitle? foundTitle = result[0];
+    int length = await database.getAmountOfAssociatedTitles();
+
+    try {
+      TransactionAssociatedTitle checkIfAlreadyExists =
+          await database.getRelatingAssociatedTitleWithCategory(
+              selectedTitle, selectedCategory.categoryPk);
+      await database.moveAssociatedTitle(checkIfAlreadyExists.associatedTitlePk,
+          length - 1, checkIfAlreadyExists.order);
+      print("already has this title, move to top");
+      return;
+    } catch (e) {
+      print(e.toString());
+    }
 
     if (foundTitle == null ||
         (foundTitle.categoryFk != selectedCategory.categoryPk ||
@@ -1968,7 +1980,6 @@ addAssociatedTitles(
       // I think it also fixes race conditions when writing quickly to the db
       // print("successfully added title " + selectedTitle);
       //it makes sense to add a new title if the exisitng one is from a different category, it will bump this one down and take priority
-      int length = await database.getAmountOfAssociatedTitles();
 
       await database.createOrUpdateAssociatedTitle(
         TransactionAssociatedTitle(

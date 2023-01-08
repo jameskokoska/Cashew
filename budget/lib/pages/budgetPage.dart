@@ -463,7 +463,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                     "Showing transactions from selected category",
                                 maxLines: 10,
                                 textAlign: TextAlign.center,
-                                fontSize: 14,
+                                fontSize: 13,
                                 textColor:
                                     Theme.of(context).colorScheme.textLight,
                                 // fontWeight: FontWeight.bold,
