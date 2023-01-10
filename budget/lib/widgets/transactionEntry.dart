@@ -491,9 +491,20 @@ class TransactionEntry extends StatelessWidget {
                                               },
                                               onSubmitLabel: "Remove",
                                               onSubmit: () async {
+                                                await database
+                                                    .deleteTransaction(
+                                                        transaction
+                                                            .transactionPk);
                                                 Transaction transactionNew =
                                                     transaction.copyWith(
-                                                        paid: false);
+                                                  paid: false,
+                                                  sharedKey: Value(null),
+                                                  transactionOriginalOwnerEmail:
+                                                      Value(null),
+                                                  sharedDateUpdated:
+                                                      Value(null),
+                                                  sharedStatus: Value(null),
+                                                );
                                                 await database
                                                     .createOrUpdateTransaction(
                                                         transactionNew);
@@ -553,7 +564,7 @@ class TransactionEntry extends StatelessWidget {
                                                   .createOrUpdateTransaction(
                                                       transactionNew);
                                               await createNewSubscriptionTransaction(
-                                                  context, transactionNew);
+                                                  context, transaction);
                                               Navigator.pop(context);
                                               setUpcomingNotifications(context);
                                             },

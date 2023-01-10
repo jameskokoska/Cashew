@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed the way upcoming transactions work with shared budgets
+    Firestore silent signin
     Rewrote all shared code - now shares a budget
     Fixed adding category
     Fixed drag to select on upcoming, overdue and subscriptions page

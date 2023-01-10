@@ -30,7 +30,7 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
   } else {
     try {
       if (user == null) {
-        await signInGoogle();
+        await signInGoogle(silentSignIn: true);
       }
       GoogleSignInAccount? googleUser = user;
 
