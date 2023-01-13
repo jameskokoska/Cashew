@@ -284,7 +284,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     if (selectedTitle != null &&
         selectedCategory != null &&
         selectedTitle != "")
-      await addAssociatedTitles(selectedTitle!, selectedCategory!);
+      addAssociatedTitles(selectedTitle!, selectedCategory!);
     Transaction createdTransaction = await createTransaction();
     if ([
       TransactionSpecialType.repetitive,
@@ -298,7 +298,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     return true;
   }
 
-  Future<Transaction> createTransaction({bool removeShared = false}) async {
+  Future<Transaction> createTransaction(
+      {bool removeShared = false, bool addInNewTime = true}) async {
     Transaction createdTransaction = Transaction(
       transactionPk: widget.transaction != null
           ? widget.transaction!.transactionPk
@@ -330,16 +331,18 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       createdAnotherFutureTransaction: widget.transaction != null
           ? widget.transaction!.createdAnotherFutureTransaction
           : null,
-      dateTimeCreated: DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        DateTime.now().hour,
-        DateTime.now().minute,
-        DateTime.now().second,
-        DateTime.now().millisecond,
-        DateTime.now().microsecond,
-      ),
+      dateTimeCreated: addInNewTime == false && widget.transaction != null
+          ? widget.transaction!.dateTimeCreated
+          : DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              DateTime.now().hour,
+              DateTime.now().minute,
+              DateTime.now().second,
+              DateTime.now().millisecond,
+              DateTime.now().microsecond,
+            ),
       sharedKey: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedKey
           : null,
@@ -518,7 +521,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           discardChangesPopup(
             context,
             previousObject: widget.transaction,
-            currentObject: await createTransaction(),
+            currentObject: await createTransaction(addInNewTime: false),
           );
         } else {
           return true;
@@ -546,7 +549,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     discardChangesPopup(
                       context,
                       previousObject: widget.transaction,
-                      currentObject: await createTransaction(),
+                      currentObject:
+                          await createTransaction(addInNewTime: false),
                     );
                   } else {
                     Navigator.pop(context);
@@ -557,7 +561,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     discardChangesPopup(
                       context,
                       previousObject: widget.transaction,
-                      currentObject: await createTransaction(),
+                      currentObject:
+                          await createTransaction(addInNewTime: false),
                     );
                   } else {
                     Navigator.pop(context);
@@ -1958,12 +1963,17 @@ addAssociatedTitles(
     int length = await database.getAmountOfAssociatedTitles();
 
     try {
+      // Should this check be moved directly into createOrUpdateAssociatedTitle?
       TransactionAssociatedTitle checkIfAlreadyExists =
           await database.getRelatingAssociatedTitleWithCategory(
               selectedTitle, selectedCategory.categoryPk);
-      await database.moveAssociatedTitle(checkIfAlreadyExists.associatedTitlePk,
-          length - 1, checkIfAlreadyExists.order);
-      print("already has this title, move to top");
+      // This is more efficient than shifting the associated title since this uses batching
+      await database.deleteAssociatedTitle(
+          checkIfAlreadyExists.associatedTitlePk, checkIfAlreadyExists.order);
+      int length = await database.getAmountOfAssociatedTitles();
+      await database.createOrUpdateAssociatedTitle(
+          checkIfAlreadyExists.copyWith(order: length));
+      print("already has this title, moved to top");
       return;
     } catch (e) {
       print(e.toString());

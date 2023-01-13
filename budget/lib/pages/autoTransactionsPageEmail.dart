@@ -88,6 +88,17 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      actions: [
+        Container(
+          padding: EdgeInsets.only(top: 12.5, right: 5),
+          child: RefreshButton(onTap: () async {
+            loadingIndeterminateKey.currentState!.setVisibility(true);
+            await parseEmailsInBackground(context,
+                sayUpdates: true, forceParse: true);
+            loadingIndeterminateKey.currentState!.setVisibility(false);
+          }),
+        ),
+      ],
       listWidgets: [
         Padding(
           padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
@@ -139,10 +150,11 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
   }
 }
 
-Future<void> parseEmailsInBackground(context) async {
+Future<void> parseEmailsInBackground(context,
+    {bool sayUpdates = false, bool forceParse = false}) async {
   print(entireAppLoaded);
   //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
-  if (entireAppLoaded == false) {
+  if (entireAppLoaded == false || forceParse) {
     if (appStateSettings["AutoTransactions-canReadEmails"] == true) {
       List<Transaction> transactionsToAdd = [];
       Stopwatch stopwatch = new Stopwatch()..start();
@@ -378,7 +390,7 @@ Future<void> parseEmailsInBackground(context) async {
         emails, // Keep 10 extra in case maybe the user deleted some emails recently
         updateGlobalState: false,
       );
-      if (newEmailCount > 0)
+      if (newEmailCount > 0 || sayUpdates == true)
         openSnackbar(
           SnackbarMessage(
             title: "Scanned " + results.messages!.length.toString() + " emails",

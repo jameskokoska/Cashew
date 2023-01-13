@@ -97,7 +97,7 @@ class CategoryEntry extends StatelessWidget {
                               children: [
                                 TextFont(
                                   text: category.name,
-                                  fontSize: 20,
+                                  fontSize: 19,
                                 ),
                                 SizedBox(
                                   height: 3,
@@ -106,7 +106,7 @@ class CategoryEntry extends StatelessWidget {
                                   text: (categorySpent / totalSpent * 100)
                                           .toStringAsFixed(0) +
                                       "% of budget",
-                                  fontSize: 15,
+                                  fontSize: 14,
                                   textColor: selected
                                       ? Theme.of(context)
                                           .colorScheme
@@ -125,7 +125,7 @@ class CategoryEntry extends StatelessWidget {
                             TextFont(
                               fontWeight: FontWeight.bold,
                               text: convertToMoney(categorySpent),
-                              fontSize: 23,
+                              fontSize: 22,
                             ),
                             SizedBox(
                               height: 1,
@@ -134,7 +134,7 @@ class CategoryEntry extends StatelessWidget {
                               text: transactionCount.toString() +
                                   pluralString(
                                       transactionCount == 1, " transaction"),
-                              fontSize: 15,
+                              fontSize: 14,
                               textColor: selected
                                   ? Theme.of(context)
                                       .colorScheme
@@ -172,12 +172,12 @@ class CategoryIconPercent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Stack(alignment: Alignment.center, children: [
       Padding(
         padding: EdgeInsets.all(insetPadding / 2),
         child: Image(
           image: AssetImage("assets/categories/" + (category.iconName ?? "")),
-          width: size,
+          width: size - 3,
         ),
       ),
       AnimatedSwitcher(

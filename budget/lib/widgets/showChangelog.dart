@@ -7,8 +7,17 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Changed synced snackbar message
+    Can't add transactions to budget not shared from budget page
+    Selected category properly selected when editing transaction and changing category
+    Circular progress indicator white shadow on light mode
+    Category Icon size and color changes on budget page
+    Rounded Category Icon for transactions
+    Increased efficiency of shifting associated title
+    Back button on subscription page properly deselects transactions
+    Fixed discard popup and removed sorting by date and time created
     Fixed the way upcoming transactions work with shared budgets
-    Firestore silent signin
+    FireStore silent sign-in
     Rewrote all shared code - now shares a budget
     Fixed adding category
     Fixed drag to select on upcoming, overdue and subscriptions page

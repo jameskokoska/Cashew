@@ -431,7 +431,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                     onlyShowIfCertainBudget(
                         tbl, onlyShowTransactionsBelongingToBudget);
             })
-            ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)]))
+          // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
+          )
           .join([
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
@@ -460,7 +461,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                     onlyShowIfCertainBudget(
                         tbl, onlyShowTransactionsBelongingToBudget);
             })
-            ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)]))
+          // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
+          )
           .join([
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
@@ -489,7 +491,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                     onlyShowIfCertainBudget(
                         tbl, onlyShowTransactionsBelongingToBudget);
             })
-            ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)]))
+          // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
+          )
           .join([
         innerJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
@@ -1045,17 +1048,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   //create or update a new associatedTitle
   Future<int> createOrUpdateAssociatedTitle(
       TransactionAssociatedTitle associatedTitle) {
-    return into(associatedTitles).insertOnConflictUpdate(associatedTitle);
-  }
-
-  //create or update a new associatedTitle
-  Future<int> createOrUpdateAssociatedTitleIfNew(
-      TransactionAssociatedTitle associatedTitle) async {
-    List<TransactionAssociatedTitle> associatedTitlesList =
-        await (select(associatedTitles)
-              ..orderBy([(t) => OrderingTerm.asc(t.order)]))
-            .get();
-    return into(associatedTitles).insertOnConflictUpdate(associatedTitle);
+    return into(associatedTitles)
+        .insert(associatedTitle, mode: InsertMode.insertOrReplace);
   }
 
   Future moveAssociatedTitle(
@@ -1171,7 +1165,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         print("REMOVING SHARED");
         // if theres a previous transaction and a shared budget is not selected remove it.
         try {
-          await deleteTransaction(transaction.transactionPk);
           transaction = transaction.copyWith(
             sharedKey: Value(null),
             transactionOwnerEmail: Value(null),
@@ -1185,18 +1178,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         }
       }
     }
-
-    // We need to ensure the value is set back to null, so insert/replace
-    if (transaction.type == null ||
-        transaction.sharedKey == null ||
-        transaction.type == null ||
-        transaction.sharedDateUpdated == null ||
-        transaction.sharedStatus == null) {
-      return into(transactions)
-          .insert(transaction, mode: InsertMode.insertOrReplace);
-    }
-
-    return into(transactions).insertOnConflictUpdate(transaction);
+    return into(transactions)
+        .insert(transaction, mode: InsertMode.insertOrReplace);
   }
 
   // This doesn't handle shared transactions!

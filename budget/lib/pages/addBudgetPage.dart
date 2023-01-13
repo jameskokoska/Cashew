@@ -1172,7 +1172,7 @@ class TappableTextEntry extends StatelessWidget {
                 bottom: BorderSide(
                     width: 1.5,
                     color: appStateSettings["materialYou"]
-                        ? Theme.of(context).colorScheme.primary
+                        ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
                         : Theme.of(context).colorScheme.lightDarkAccentHeavy)),
           ),
           child: IntrinsicWidth(

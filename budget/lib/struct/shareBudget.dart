@@ -311,16 +311,19 @@ Future<bool> getCloudBudgets() async {
   int amountSynced =
       snapshotBudgetMembersOf.docs.length + snapshotOwned.docs.length;
   if (amountSynced > 0 && totalTransactionsUpdated > 0)
-    openSnackbar(SnackbarMessage(
+    openSnackbar(
+      SnackbarMessage(
         icon: Icons.cloud_sync_rounded,
-        title: amountSynced.toString() +
-            " " +
-            pluralString(amountSynced == 1, "Budget") +
-            " Synced",
-        description: "Downloaded " +
+        title: "Synced " +
             totalTransactionsUpdated.toString() +
             " " +
-            pluralString(totalTransactionsUpdated == 1, "transaction")));
+            pluralString(totalTransactionsUpdated == 1, "change"),
+        description: "From " +
+            amountSynced.toString() +
+            " shared " +
+            pluralString(amountSynced == 1, "budget"),
+      ),
+    );
   // else if (amountSynced > 0 && totalTransactionsUpdated == 0) {
   //   openSnackbar(SnackbarMessage(
   //     title: "No updates",
@@ -437,13 +440,14 @@ Future<int> downloadTransactionsFromBudgets(
             sharedReferenceBudgetPk: sharedBudget.budgetPk,
           ),
         );
-        allMembersEver.add(transactionDecoded["ownerEmail"]);
+        if (transactionDecoded["ownerEmail"] != null)
+          allMembersEver.add(transactionDecoded["ownerEmail"]);
         if (transactionDecoded["name"] != null &&
             transactionDecoded["name"] != "")
           await addAssociatedTitles(
               transactionDecoded["name"], selectedCategory);
       } else if (transaction["logType"] == "delete") {
-        print("DELETEING");
+        print("DELETING");
         await database
             .deleteFromSharedTransaction(transactionDecoded["deleteSharedKey"]);
       }

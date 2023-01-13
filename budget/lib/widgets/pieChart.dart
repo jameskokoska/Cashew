@@ -296,12 +296,13 @@ class _Badge extends StatelessWidget {
               ),
             ),
             Container(
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.lightDarkAccent),
               child: Center(
                 child: Image(
                   image: assetImage,
-                  width: 25,
+                  width: 23,
                 ),
               ),
             ),

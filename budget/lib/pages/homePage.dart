@@ -667,7 +667,7 @@ class UpcomingTransactions extends StatelessWidget {
                   children: [
                     TextFont(
                       text: overdueTransactions ? "Overdue" : "Upcoming",
-                      fontSize: 19,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                     SizedBox(height: 6),
@@ -687,7 +687,7 @@ class UpcomingTransactions extends StatelessWidget {
                           textBuilder: (number) {
                             return TextFont(
                               text: convertToMoney(number),
-                              fontSize: 25,
+                              fontSize: 24,
                               textColor: overdueTransactions
                                   ? Theme.of(context).colorScheme.unPaidRed
                                   : Theme.of(context).colorScheme.unPaidYellow,
@@ -710,7 +710,7 @@ class UpcomingTransactions extends StatelessWidget {
                               : snapshot.data![0].toString() +
                                   pluralString(
                                       snapshot.data![0] == 1, " transaction"),
-                          fontSize: 15,
+                          fontSize: 13,
                           textColor: Theme.of(context).colorScheme.textLight,
                         );
                       },

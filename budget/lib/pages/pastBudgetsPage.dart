@@ -472,6 +472,8 @@ class PastBudgetContainer extends StatelessWidget {
                                   budgetColorScheme.secondaryContainer,
                               foregroundColor: budgetColorScheme.primary,
                               overageColor: budgetColorScheme.tertiary,
+                              overageShadowColor:
+                                  Theme.of(context).colorScheme.white,
                             ),
                           ),
                         ],

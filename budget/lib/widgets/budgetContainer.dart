@@ -595,6 +595,7 @@ class BudgetTimeline extends StatelessWidget {
     this.todayPercent = 0,
     this.dateForRange,
     this.yourPercent = 0,
+    this.budgetColorScheme,
   }) : super(key: key);
 
   final Budget budget;
@@ -603,6 +604,7 @@ class BudgetTimeline extends StatelessWidget {
   final double percent;
   final double yourPercent;
   final DateTime? dateForRange;
+  final ColorScheme? budgetColorScheme;
 
   @override
   Widget build(BuildContext context) {
@@ -625,8 +627,10 @@ class BudgetTimeline extends StatelessWidget {
                   ),
             Expanded(
               child: BudgetProgress(
-                color: HexColor(budget.colour,
-                    defaultColor: Theme.of(context).colorScheme.primary),
+                color: budgetColorScheme != null
+                    ? budgetColorScheme!.primary
+                    : HexColor(budget.colour,
+                        defaultColor: Theme.of(context).colorScheme.primary),
                 percent: percent,
                 yourPercent: yourPercent,
                 todayPercent: todayPercent,
@@ -677,14 +681,14 @@ class BudgetTimeline extends StatelessWidget {
 }
 
 class BudgetProgress extends StatelessWidget {
-  BudgetProgress(
-      {Key? key,
-      required this.color,
-      required this.percent,
-      required this.todayPercent,
-      required this.yourPercent,
-      this.large = false})
-      : super(key: key);
+  BudgetProgress({
+    Key? key,
+    required this.color,
+    required this.percent,
+    required this.todayPercent,
+    required this.yourPercent,
+    this.large = false,
+  }) : super(key: key);
 
   final Color color;
   final double percent;
@@ -867,7 +871,8 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: dynamicPastel(context, widget.color,
-                                amountDark: 0.1, amountLight: 0.3),
+                                    amountDark: 0.1, amountLight: 0.3)
+                                .withOpacity(0.8),
                           ),
                         ),
                       ),
@@ -1112,7 +1117,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                             children: [
                               TextFont(
                                 text: getMemberNickname(spender.member),
-                                fontSize: 20,
+                                fontSize: 19,
                               ),
                               SizedBox(
                                 height: 3,
@@ -1124,7 +1129,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                         : (spender.amount / totalSpent * 100)
                                             .toStringAsFixed(0)) +
                                     "% of budget",
-                                fontSize: 15,
+                                fontSize: 14,
                                 textColor: selectedMember == spender.member
                                     ? Theme.of(context)
                                         .colorScheme
@@ -1143,7 +1148,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                           TextFont(
                             fontWeight: FontWeight.bold,
                             text: convertToMoney(spender.amount),
-                            fontSize: 23,
+                            fontSize: 22,
                           ),
                           SizedBox(
                             height: 1,
@@ -1161,7 +1166,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                     text: snapshot.data!.length.toString() +
                                         pluralString(snapshot.data!.length == 1,
                                             " transaction"),
-                                    fontSize: 15,
+                                    fontSize: 14,
                                     textColor: selectedMember == spender.member
                                         ? Theme.of(context)
                                             .colorScheme

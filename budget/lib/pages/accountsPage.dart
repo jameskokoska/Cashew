@@ -111,6 +111,7 @@ class _AccountsPageState extends State<AccountsPage> {
                           image: user!.photoUrl.toString(),
                           height: 95,
                           width: 95,
+                          fadeInDuration: Duration(milliseconds: 200),
                         ),
                 ),
                 SizedBox(height: 10),

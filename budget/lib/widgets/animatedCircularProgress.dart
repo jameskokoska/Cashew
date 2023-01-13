@@ -9,6 +9,7 @@ class AnimatedCircularProgress extends StatefulWidget {
   final Color backgroundColor;
   final Color foregroundColor;
   final Color? overageColor;
+  final Color? overageShadowColor;
 
   AnimatedCircularProgress({
     Key? key,
@@ -16,6 +17,7 @@ class AnimatedCircularProgress extends StatefulWidget {
     required this.backgroundColor,
     required this.foregroundColor,
     this.overageColor,
+    this.overageShadowColor,
   }) : super(key: key);
 
   @override
@@ -78,6 +80,7 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
             backgroundColor: widget.backgroundColor,
             foregroundColor: widget.foregroundColor,
             overageColor: widget.overageColor ?? Colors.transparent,
+            overageShadowColor: widget.overageShadowColor ?? Colors.transparent,
             strokeWidth: 3.5,
             valueStrokeWidth: 5,
             cornerRadius: 4,
@@ -93,6 +96,7 @@ class _RoundedCircularProgressPainter extends CustomPainter {
   final Color backgroundColor;
   final Color foregroundColor;
   final Color overageColor;
+  final Color overageShadowColor;
   final double strokeWidth;
   final double valueStrokeWidth;
   final double cornerRadius;
@@ -102,6 +106,7 @@ class _RoundedCircularProgressPainter extends CustomPainter {
     required this.backgroundColor,
     required this.foregroundColor,
     required this.overageColor,
+    required this.overageShadowColor,
     required this.strokeWidth,
     required this.valueStrokeWidth,
     required this.cornerRadius,
@@ -132,7 +137,7 @@ class _RoundedCircularProgressPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
     final overagePaintShadow = Paint()
-      ..color = Colors.black.withOpacity(0.6)
+      ..color = overageShadowColor
       ..strokeWidth = valueStrokeWidth
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round

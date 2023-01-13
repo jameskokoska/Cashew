@@ -390,8 +390,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                   IntrinsicWidth(
                                     child: Row(
                                       children: [
-                                        Text(currencies[index]["Symbol"]),
-                                        SizedBox(width: 15),
+                                        Text(
+                                          currencies[index]["Symbol"],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
                                         TextFont(
                                             text: currencies[index]["Code"]),
                                       ],

@@ -1,2 +1,3 @@
 https://gist.github.com/manishtiwari25/d3984385b1cb200b98bcde6902671599
 https://github.com/yonilevy/crypto-currency-symbols/blob/master/symbols.json
+https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json

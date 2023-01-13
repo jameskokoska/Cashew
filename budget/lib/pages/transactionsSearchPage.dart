@@ -65,6 +65,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       selectedEndDate,
       onSelected: onSelected,
       listID: "TransactionsSearch",
+      simpleListRender: true,
     );
     _animationControllerSearch = AnimationController(vsync: this, value: 1);
   }
@@ -80,6 +81,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         onSelected: onSelected,
         listID: "TransactionsSearch",
         income: income,
+        simpleListRender: true,
       );
     });
   }

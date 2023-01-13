@@ -53,6 +53,11 @@ class _SelectCategoryState extends State<SelectCategory> {
           widget.next!();
         }
       }
+      if (widget.selectedCategory != null) {
+        setState(() {
+          selectedCategories.add(widget.selectedCategory!.categoryPk);
+        });
+      }
     });
     setInitialCategories();
   }

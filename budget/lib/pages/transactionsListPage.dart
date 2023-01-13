@@ -31,6 +31,8 @@ import 'dart:math';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
 List<Widget> getTransactionsSlivers(
   DateTime startDay,
@@ -46,6 +48,7 @@ List<Widget> getTransactionsSlivers(
       SharedTransactionsShow.fromEveryone,
   String? member,
   int? onlyShowTransactionsBelongingToBudget,
+  bool simpleListRender = false,
 }) {
   List<Widget> transactionsWidgets = [];
   List<DateTime> dates = [];
@@ -70,9 +73,10 @@ List<Widget> getTransactionsSlivers(
               onlyShowTransactionsBelongingToBudget,
         ),
         builder: (context, snapshot) {
-          if (snapshot.data != null &&
-              snapshot.hasData &&
-              (snapshot.data ?? []).length > 0) {
+          if (snapshot.data != null && snapshot.hasData) {
+            if (slivers == false && snapshot.data!.length <= 0) {
+              return SizedBox.shrink();
+            }
             List<TransactionWithCategory> transactionList =
                 snapshot.data!.reversed.toList();
             double totalSpentForDay = 0;
@@ -118,45 +122,137 @@ List<Widget> getTransactionsSlivers(
                 children: children,
               );
             }
-            Widget sliverList = SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  int realIndex = index - 1;
-                  if (realIndex == -1) {
-                    if (sticky)
-                      return SizedBox.shrink();
-                    else
-                      return DateDivider(
-                          date: date,
-                          info: transactionList.length > 1
-                              ? convertToMoney(totalSpentForDay)
-                              : "");
-                  }
-                  return TransactionEntry(
-                    key: ValueKey(
-                        transactionList[realIndex].transaction.transactionPk),
-                    category: transactionList[realIndex].category,
-                    openPage: AddTransactionPage(
-                      title: "Edit Transaction",
+            Widget sliverList;
+            if (appStateSettings["batterySaver"] == true ||
+                simpleListRender == true) {
+              sliverList = SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: transactionList.length + 1,
+                  (BuildContext context, int index) {
+                    int realIndex = index - 1;
+                    if (realIndex == -1) {
+                      if (sticky)
+                        return SizedBox.shrink();
+                      else
+                        return DateDivider(
+                            date: date,
+                            info: transactionList.length > 1
+                                ? convertToMoney(totalSpentForDay)
+                                : "");
+                    }
+                    return TransactionEntry(
+                      key: ValueKey(
+                          transactionList[realIndex].transaction.transactionPk),
+                      category: transactionList[realIndex].category,
+                      openPage: AddTransactionPage(
+                        title: "Edit Transaction",
+                        transaction: transactionList[realIndex].transaction,
+                      ),
                       transaction: transactionList[realIndex].transaction,
+                      onSelected: (Transaction transaction, bool selected) {
+                        if (onSelected != null)
+                          onSelected(transaction, selected);
+                      },
+                      listID: listID,
+                    );
+                  },
+                ),
+              );
+            } else {
+              sliverList =
+                  SliverImplicitlyAnimatedList<TransactionWithCategory>(
+                items: transactionList,
+                areItemsTheSame: (a, b) =>
+                    a.transaction.transactionPk == b.transaction.transactionPk,
+                insertDuration: Duration(milliseconds: 500),
+                removeDuration: Duration(milliseconds: 500),
+                updateDuration: Duration(milliseconds: 500),
+                itemBuilder: (BuildContext context, Animation<double> animation,
+                    TransactionWithCategory item, int index) {
+                  return SizeFadeTransition(
+                    sizeFraction: 0.7,
+                    curve: Curves.easeInOut,
+                    animation: animation,
+                    child: TransactionEntry(
+                      key: ValueKey(item.transaction.transactionPk),
+                      category: item.category,
+                      openPage: AddTransactionPage(
+                        title: "Edit Transaction",
+                        transaction: item.transaction,
+                      ),
+                      transaction: item.transaction,
+                      onSelected: (Transaction transaction, bool selected) {
+                        if (onSelected != null)
+                          onSelected(transaction, selected);
+                      },
+                      listID: listID,
                     ),
-                    transaction: transactionList[realIndex].transaction,
-                    onSelected: (Transaction transaction, bool selected) {
-                      if (onSelected != null) onSelected(transaction, selected);
-                    },
-                    listID: listID,
                   );
                 },
-                childCount: transactionList.length + 1,
-              ),
-            );
+              );
+            }
+
+            // SliverList(
+            //   delegate: SliverChildBuilderDelegate(
+            //     (BuildContext context, int index) {
+            //       int realIndex = index - 1;
+            //       if (realIndex == -1) {
+            //         if (sticky)
+            //           return SizedBox.shrink();
+            //         else
+            //           return DateDivider(
+            //               date: date,
+            //               info: transactionList.length > 1
+            //                   ? convertToMoney(totalSpentForDay)
+            //                   : "");
+            //       }
+            //       return TransactionEntry(
+            //         key: ValueKey(
+            //             transactionList[realIndex].transaction.transactionPk),
+            //         category: transactionList[realIndex].category,
+            //         openPage: AddTransactionPage(
+            //           title: "Edit Transaction",
+            //           transaction: transactionList[realIndex].transaction,
+            //         ),
+            //         transaction: transactionList[realIndex].transaction,
+            //         onSelected: (Transaction transaction, bool selected) {
+            //           if (onSelected != null) onSelected(transaction, selected);
+            //         },
+            //         listID: listID,
+            //       );
+            //     },
+            //     childCount: transactionList.length + 1,
+            //   ),
+            // );
             if (sticky) {
               return SliverStickyHeader(
-                header: DateDivider(
-                    date: date,
-                    info: transactionList.length > 1
-                        ? convertToMoney(totalSpentForDay)
-                        : ""),
+                header: appStateSettings["batterySaver"] == true ||
+                        simpleListRender == true
+                    ? transactionList.length > 0
+                        ? DateDivider(
+                            key: ValueKey(date),
+                            date: date,
+                            info: transactionList.length > 1
+                                ? convertToMoney(totalSpentForDay)
+                                : "")
+                        : SizedBox.shrink()
+                    : AnimatedSize(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        child: transactionList.length > 0
+                            ? AnimatedSwitcher(
+                                duration: Duration(milliseconds: 300),
+                                child: DateDivider(
+                                    key: ValueKey(date),
+                                    date: date,
+                                    info: transactionList.length > 1
+                                        ? convertToMoney(totalSpentForDay)
+                                        : ""),
+                              )
+                            : Container(
+                                key: ValueKey(2),
+                              ),
+                      ),
                 sticky: true,
                 sliver: sliverList,
               );
@@ -506,9 +602,9 @@ class CashFlow extends StatelessWidget {
         // );
         return Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 85, right: 15, left: 15),
+            padding: const EdgeInsets.only(top: 85, right: 35, left: 35),
             child: TextFont(
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               text: "No transactions within time range.",
               maxLines: 3,

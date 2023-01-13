@@ -204,10 +204,10 @@ class TransactionEntry extends StatelessWidget {
                       children: [
                         CategoryIcon(
                           categoryPk: transaction.categoryFk,
-                          size: 33,
-                          sizePadding: 15,
+                          size: 27,
+                          sizePadding: 20,
                           margin: EdgeInsets.zero,
-                          borderRadius: 13,
+                          borderRadius: 100,
                         ),
                         Container(
                           width: 12,
@@ -232,7 +232,7 @@ class TransactionEntry extends StatelessWidget {
                               child: transaction.name != ""
                                   ? TextFont(
                                       text: transaction.name,
-                                      fontSize: 17,
+                                      fontSize: 16,
                                     )
                                   : category == null
                                       ? StreamBuilder<TransactionCategory>(
@@ -242,7 +242,7 @@ class TransactionEntry extends StatelessWidget {
                                             if (snapshot.hasData) {
                                               return TextFont(
                                                 text: snapshot.data!.name,
-                                                fontSize: 17,
+                                                fontSize: 16,
                                               );
                                             }
                                             return Container();
@@ -250,14 +250,14 @@ class TransactionEntry extends StatelessWidget {
                                         )
                                       : TextFont(
                                           text: category!.name,
-                                          fontSize: 17,
+                                          fontSize: 16,
                                         ),
                             ),
                             transaction.sharedKey != null ||
                                     transaction.sharedStatus ==
                                         SharedStatus.waiting
                                 ? Padding(
-                                    padding: const EdgeInsets.only(top: 2.0),
+                                    padding: const EdgeInsets.only(top: 1.0),
                                     child: Row(
                                       children: [
                                         transaction.sharedStatus ==
@@ -265,52 +265,50 @@ class TransactionEntry extends StatelessWidget {
                                             ? InfiniteRotationAnimation(
                                                 duration: Duration(
                                                     milliseconds: 5000),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 2),
+                                                  child: Icon(
+                                                    transaction.sharedStatus ==
+                                                            SharedStatus.waiting
+                                                        ? Icons.sync_rounded
+                                                        : transaction
+                                                                    .transactionOwnerEmail !=
+                                                                appStateSettings[
+                                                                    "currentUserEmail"]
+                                                            ? Icons
+                                                                .download_rounded
+                                                            : Icons
+                                                                .upload_rounded,
+                                                    size: 14,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .black
+                                                        .withOpacity(0.7),
+                                                  ),
+                                                ),
+                                              )
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 2),
                                                 child: Icon(
-                                                  transaction.sharedStatus ==
-                                                          SharedStatus.waiting
-                                                      ? Icons.sync_rounded
-                                                      : transaction
-                                                                  .transactionOwnerEmail !=
-                                                              appStateSettings[
-                                                                  "currentUserEmail"]
-                                                          ? Icons
-                                                              .download_rounded
-                                                          : Icons
-                                                              .upload_rounded,
+                                                  transaction.transactionOwnerEmail !=
+                                                          appStateSettings[
+                                                              "currentUserEmail"]
+                                                      ? Icons.download_rounded
+                                                      : Icons.upload_rounded,
                                                   size: 14,
                                                   color: Theme.of(context)
                                                       .colorScheme
                                                       .black
                                                       .withOpacity(0.7),
                                                 ),
-                                              )
-                                            : Icon(
-                                                transaction.transactionOwnerEmail !=
-                                                        appStateSettings[
-                                                            "currentUserEmail"]
-                                                    ? Icons.download_rounded
-                                                    : Icons.upload_rounded,
-                                                size: 14,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .black
-                                                    .withOpacity(0.7),
                                               ),
                                         SizedBox(width: 2),
                                         Expanded(
                                           child: Row(
                                             children: [
-                                              TextFont(
-                                                autoSizeText: true,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                text: "From ",
-                                                fontSize: 13,
-                                                textColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .black
-                                                    .withOpacity(0.7),
-                                              ),
                                               transaction.sharedReferenceBudgetPk ==
                                                       null
                                                   ? SizedBox.shrink()
@@ -348,7 +346,7 @@ class TransactionEntry extends StatelessWidget {
                                                                   " for " +
                                                                   snapshot.data!
                                                                       .name,
-                                                              fontSize: 13,
+                                                              fontSize: 12.5,
                                                               textColor: Theme.of(
                                                                       context)
                                                                   .colorScheme
@@ -650,7 +648,7 @@ class TransactionEntry extends StatelessWidget {
                             return TextFont(
                               textAlign: TextAlign.left,
                               text: convertToMoney(number),
-                              fontSize: 20,
+                              fontSize: 19,
                               fontWeight: FontWeight.bold,
                               textColor: textColor,
                             );

@@ -117,7 +117,8 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                   tooltip: "Add Transaction",
                   openPage: AddTransactionPage(
                     title: "Add Transaction",
-                    selectedBudget: widget.budget,
+                    selectedBudget:
+                        widget.budget.sharedKey != null ? widget.budget : null,
                   ),
                   color: budgetColorScheme.secondary,
                   colorPlus: budgetColorScheme.onSecondary,
