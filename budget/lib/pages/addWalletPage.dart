@@ -50,7 +50,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   String? selectedTitle;
   Color? selectedColor;
   String? selectedIconName;
-  List<dynamic> currencies = [];
+  Map<String, dynamic> currencies = {};
   bool customCurrencyIcon = false;
   String? searchCurrency = "";
   dynamic selectedCurrency = "";
@@ -131,8 +131,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   void populateCurrencies() {
     Future.delayed(Duration.zero, () async {
-      String response =
-          await rootBundle.loadString('assets/static/currencies.json');
+      String response = await rootBundle
+          .loadString('assets/static/generated/currencies.json');
       setState(() {
         //Set to false because we can't save until we made some changes
         canAddWallet = false;
@@ -183,10 +183,11 @@ class _AddWalletPageState extends State<AddWalletPage> {
     if (searchTerm == "") {
       populateCurrencies();
     } else {
-      String response =
-          await rootBundle.loadString('assets/static/currencies.json');
-      List<dynamic> outCurrencies = [];
-      for (dynamic currency in jsonDecode(response)) {
+      String response = await rootBundle
+          .loadString('assets/static/generated/currencies.json');
+      Map<String, dynamic> outCurrencies = {};
+      for (String key in jsonDecode(response).keys) {
+        dynamic currency = jsonDecode(response)[key];
         if ((currency["CountryName"] != null &&
                 currency["CountryName"]
                     .toLowerCase()
@@ -194,11 +195,14 @@ class _AddWalletPageState extends State<AddWalletPage> {
             (currency["Currency"] != null &&
                 currency["Currency"]
                     .toLowerCase()
+                    .contains(searchTerm.toLowerCase())) ||
+            (currency["Code"] != null &&
+                currency["Code"]
+                    .toLowerCase()
                     .contains(searchTerm.toLowerCase()))) {
-          outCurrencies.add(currency);
+          outCurrencies[key] = currency;
         }
       }
-      print(outCurrencies);
       setState(() {
         currencies = outCurrencies;
       });
@@ -333,18 +337,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     child: SizedBox(height: 10),
                   ),
                   SliverToBoxAdapter(
-                    child: customCurrencyIcon == true
-                        ? TextInput(
-                            labelText: "Search currencies...",
-                            icon: Icons.search_rounded,
-                            onChanged: (text) {
-                              searchCurrencies(text);
-                            },
-                          )
-                        : CustomIconButton(
-                            onTap: () {},
-                            selectedIconDisplay: "",
-                          ),
+                    child: TextInput(
+                      labelText: "Search currencies...",
+                      icon: Icons.search_rounded,
+                      onChanged: (text) {
+                        searchCurrencies(text);
+                      },
+                    ),
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(height: 15),
@@ -352,6 +351,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
+                        String key = currencies.keys.toList()[index];
                         return Padding(
                           padding: const EdgeInsets.only(
                               left: 18.0, right: 18, bottom: 5),
@@ -381,9 +381,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                         //       )
                                         //     : SizedBox.shrink(),
                                         TextFont(
-                                            text: currencies[index]
+                                            text: currencies[key]
                                                     ?["CountryName"] ??
-                                                currencies[index]?["Currency"]),
+                                                currencies[key]?["Currency"]),
                                       ],
                                     ),
                                   ),
@@ -391,14 +391,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          currencies[index]["Symbol"],
+                                          currencies[key]["Symbol"],
                                           style: TextStyle(
                                             fontSize: 18,
                                           ),
                                         ),
                                         SizedBox(width: 10),
-                                        TextFont(
-                                            text: currencies[index]["Code"]),
+                                        TextFont(text: currencies[key]["Code"]),
                                       ],
                                     ),
                                   )
@@ -408,7 +407,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           ),
                         );
                       },
-                      childCount: currencies.length, //snapshot.data?.length
+                      childCount:
+                          currencies.keys.length, //snapshot.data?.length
                     ),
                   ),
                   SliverToBoxAdapter(child: SizedBox(height: 60)),
@@ -441,45 +441,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomIconButton extends StatelessWidget {
-  const CustomIconButton(
-      {Key? key, required this.onTap, required this.selectedIconDisplay})
-      : super(key: key);
-  final VoidCallback onTap;
-  final String? selectedIconDisplay;
-  @override
-  Widget build(BuildContext context) {
-    return Tappable(
-      onTap: onTap,
-      borderRadius: 10,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFont(
-                text: selectedIconDisplay == null
-                    ? "Default transaction"
-                    : "selectedTypeDisplay",
-                fontWeight: FontWeight.bold,
-                fontSize: 26,
-                textColor: selectedIconDisplay == null
-                    ? Theme.of(context).colorScheme.textLight
-                    : null,
-              ),
-            ),
-            ButtonIcon(
-              onTap: onTap,
-              icon: Icons.category_rounded,
-              size: 41,
-            ),
-          ],
         ),
       ),
     );

@@ -92,7 +92,10 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         widget.budget.categoryFks,
         widget.budget.allCategoryFks,
         onlyShowTransactionsBelongingToBudget:
-            widget.budget.sharedKey == null ? null : widget.budget.budgetPk,
+            widget.budget.sharedKey != null ||
+                    widget.budget.addedTransactionsOnly == true
+                ? widget.budget.budgetPk
+                : null,
       ));
     }
     mergedStreams = StreamZip(watchedBudgetTotals);
@@ -299,8 +302,10 @@ class PastBudgetContainer extends StatelessWidget {
               budget.categoryFks ?? [],
               budget.allCategoryFks,
               budget.sharedTransactionsShow,
-              onlyShowTransactionsBelongingToBudget:
-                  budget.sharedKey != null ? budget.budgetPk : null,
+              onlyShowTransactionsBelongingToBudget: budget.sharedKey != null ||
+                      budget.addedTransactionsOnly == true
+                  ? budget.budgetPk
+                  : null,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {

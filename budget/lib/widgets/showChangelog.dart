@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Added wallet picker in add transaction
+    Added exclude other transactions that are added to another budget option
+    Editing budget page fixes
+    Added only option for budgets - need to explicitly add a transaction to these types of budgets
+    Fixed switching shared budgets when editing transaction
+    Removed wallets limitation
     Changed synced snackbar message
     Can't add transactions to budget not shared from budget page
     Selected category properly selected when editing transaction and changing category

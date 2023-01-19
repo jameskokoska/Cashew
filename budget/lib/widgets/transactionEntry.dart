@@ -253,6 +253,63 @@ class TransactionEntry extends StatelessWidget {
                                           fontSize: 16,
                                         ),
                             ),
+                            transaction.sharedReferenceBudgetPk != null &&
+                                    transaction.sharedKey == null &&
+                                    transaction.sharedStatus == null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 1.0),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Row(
+                                            children: [
+                                              transaction.sharedReferenceBudgetPk ==
+                                                      null
+                                                  ? SizedBox.shrink()
+                                                  : Expanded(
+                                                      child:
+                                                          StreamBuilder<Budget>(
+                                                        stream: database
+                                                            .getBudget(transaction
+                                                                .sharedReferenceBudgetPk!),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          if (snapshot
+                                                              .hasData) {
+                                                            return Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 3),
+                                                              child: TextFont(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                text: "For " +
+                                                                    snapshot
+                                                                        .data!
+                                                                        .name,
+                                                                fontSize: 12.5,
+                                                                textColor: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.7),
+                                                              ),
+                                                            );
+                                                          }
+                                                          return Container();
+                                                        },
+                                                      ),
+                                                    ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
                             transaction.sharedKey != null ||
                                     transaction.sharedStatus ==
                                         SharedStatus.waiting
@@ -262,13 +319,13 @@ class TransactionEntry extends StatelessWidget {
                                       children: [
                                         transaction.sharedStatus ==
                                                 SharedStatus.waiting
-                                            ? InfiniteRotationAnimation(
-                                                duration: Duration(
-                                                    milliseconds: 5000),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 2),
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 2.0),
+                                                child:
+                                                    InfiniteRotationAnimation(
+                                                  duration: Duration(
+                                                      milliseconds: 5000),
                                                   child: Icon(
                                                     transaction.sharedStatus ==
                                                             SharedStatus.waiting

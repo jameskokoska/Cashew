@@ -20,7 +20,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 25;
+int schemaVersionGlobal = 26;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -52,6 +52,7 @@ enum SharedOwnerMember {
 enum SharedTransactionsShow {
   fromEveryone,
   onlyIfOwner,
+  excludeOther,
 }
 
 enum ThemeSetting { dark, light }
@@ -208,6 +209,8 @@ class Budgets extends Table {
   TextColumn get categoryFks =>
       text().map(const IntListInColumnConverter()).nullable()();
   BoolColumn get allCategoryFks => boolean()();
+  BoolColumn get addedTransactionsOnly =>
+      boolean().withDefault(const Constant(false))();
   IntColumn get periodLength => integer()();
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
   DateTimeColumn get dateCreated =>
@@ -352,6 +355,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 24) {
             await migrator.addColumn(budgets, budgets.sharedAllMembersEver);
           }
+          if (from <= 25) {
+            await migrator.addColumn(budgets, budgets.addedTransactionsOnly);
+          }
         },
       );
 
@@ -368,17 +374,11 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? categoryPk, String? itemPk, int? limit, int? offset}) {
     return (categoryPk != null
             ? (select(transactions)
-              ..where((tbl) =>
-                  tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  tbl.categoryFk.equals(categoryPk)))
+              ..where((tbl) => tbl.categoryFk.equals(categoryPk)))
             : itemPk != null
                 ? (select(transactions)
-                  ..where((tbl) =>
-                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                      tbl.labelFks.contains(itemPk)))
+                  ..where((tbl) => tbl.labelFks.contains(itemPk)))
                 : select(transactions)
-          ..where(
-              (tbl) => tbl.walletFk.equals(appStateSettings["selectedWallet"]))
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -386,10 +386,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //get transactions that occurred on a given date
   Stream<List<Transaction>> getTransactionWithDate(DateTime date) {
-    return (select(transactions)
-          ..where((tbl) =>
-              tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-              tbl.dateCreated.equals(date)))
+    return (select(transactions)..where((tbl) => tbl.dateCreated.equals(date)))
         .watch();
   }
 
@@ -411,7 +408,6 @@ class FinanceDatabase extends _$FinanceDatabase {
               final dateCreated = tbl.dateCreated;
               if (income == null)
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -421,7 +417,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                         tbl, onlyShowTransactionsBelongingToBudget);
               else
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -443,7 +438,6 @@ class FinanceDatabase extends _$FinanceDatabase {
               final dateCreated = tbl.dateCreated;
               if (income == null)
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -452,7 +446,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                         tbl, onlyShowTransactionsBelongingToBudget);
               else
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -473,7 +466,6 @@ class FinanceDatabase extends _$FinanceDatabase {
               final dateCreated = tbl.dateCreated;
               if (income == null)
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -482,7 +474,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                         tbl, onlyShowTransactionsBelongingToBudget);
               else
                 return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                     dateCreated.year.equals(date.year) &
                     dateCreated.month.equals(date.month) &
                     dateCreated.day.equals(date.day) &
@@ -519,8 +510,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  dateCreated.year.equals(date.year) &
+              return dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day) &
                   tbl.categoryFk.isIn(categoryFks);
@@ -533,8 +523,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  dateCreated.year.equals(date.year) &
+              return dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day);
             }))
@@ -546,8 +535,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = ((select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  dateCreated.year.equals(date.year) &
+              return dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day);
             }))
@@ -577,13 +565,11 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = (select(transactions)
         ..where((tbl) {
           if (startDate != null && endDate != null) {
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+            return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
                 tbl.dateCreated.isSmallerOrEqualValue(endDate) &
                 tbl.categoryFk.isIn(categoryFks);
           } else {
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                tbl.categoryFk.isIn(categoryFks);
+            return tbl.categoryFk.isIn(categoryFks);
           }
         })
         ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
@@ -603,11 +589,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = (select(transactions)
         ..where((tbl) {
           if (startDate != null && endDate != null) {
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+            return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
                 tbl.dateCreated.isSmallerOrEqualValue(endDate);
           } else {
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+            return tbl.walletFk.isNotNull();
           }
         })
         ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
@@ -627,11 +612,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = ((select(transactions)
             ..where((tbl) {
               if (startDate != null && endDate != null) {
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                    tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+                return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
                     tbl.dateCreated.isSmallerOrEqualValue(endDate);
               } else {
-                return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+                return tbl.walletFk.isNotNull();
               }
             })
             ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]))
@@ -664,11 +648,10 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(transactions)
           ..where((tbl) {
             if (startDate != null && endDate != null) {
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                  tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+              return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
                   tbl.dateCreated.isSmallerOrEqualValue(endDate);
             } else {
-              return tbl.walletFk.equals(appStateSettings["selectedWallet"]);
+              return tbl.walletFk.isNotNull();
             }
           })
           ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
@@ -680,7 +663,6 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
       ..where((transaction) =>
-          transaction.walletFk.equals(appStateSettings["selectedWallet"]) &
           transactions.paid.equals(false) &
           transactions.type.equals(TransactionSpecialType.subscription.index));
     return query.watch();
@@ -691,7 +673,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = select(transactions)
       ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
       ..where((transaction) =>
-          transaction.walletFk.equals(appStateSettings["selectedWallet"]) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated
@@ -710,7 +691,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = select(transactions)
       ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
       ..where((transaction) =>
-          transaction.walletFk.equals(appStateSettings["selectedWallet"]) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated
@@ -729,7 +709,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = select(transactions)
       ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
       ..where((transaction) =>
-          transaction.walletFk.equals(appStateSettings["selectedWallet"]) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
@@ -745,8 +724,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = (select(transactions)
       ..where((tbl) {
         final dateCreated = tbl.dateCreated;
-        return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-            dateCreated.year.equals(date.year) &
+        return dateCreated.year.equals(date.year) &
             dateCreated.month.equals(date.month);
       }));
 
@@ -1133,7 +1111,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // create or update a new transaction
   Future<int>? createOrUpdateTransaction(Transaction transaction,
-      {bool updateSharedEntry = true}) async {
+      {bool updateSharedEntry = true, Transaction? originalTransaction}) async {
     double maxAmount = 10000000;
     if (transaction.amount >= maxAmount)
       transaction = transaction.copyWith(amount: maxAmount);
@@ -1152,6 +1130,25 @@ class FinanceDatabase extends _$FinanceDatabase {
       if (transaction.sharedReferenceBudgetPk != null) {
         Budget budget = await database
             .getBudgetInstance(transaction.sharedReferenceBudgetPk!);
+        if (originalTransaction != null) {
+          if (originalTransaction.sharedReferenceBudgetPk !=
+              transaction.sharedReferenceBudgetPk) {
+            await deleteTransaction(transaction.transactionPk);
+            await createOrUpdateTransaction(
+              transaction.copyWith(
+                transactionPk: DateTime.now().millisecondsSinceEpoch,
+                sharedKey: Value(null),
+                // transactionOwnerEmail: Value(null),
+                // transactionOriginalOwnerEmail: Value(null),
+                sharedDateUpdated: Value(null),
+                sharedStatus: Value(null),
+                // sharedReferenceBudgetPk: Value(null),
+              ),
+            );
+            return 1;
+          }
+        }
+
         if (transaction.sharedKey != null && budget.sharedKey != null) {
           sendTransactionSet(transaction, budget);
           transaction =
@@ -1163,19 +1160,23 @@ class FinanceDatabase extends _$FinanceDatabase {
         }
       } else {
         print("REMOVING SHARED");
-        // if theres a previous transaction and a shared budget is not selected remove it.
         try {
-          transaction = transaction.copyWith(
-            sharedKey: Value(null),
-            transactionOwnerEmail: Value(null),
-            transactionOriginalOwnerEmail: Value(null),
-            sharedDateUpdated: Value(null),
-            sharedStatus: Value(null),
-            sharedReferenceBudgetPk: Value(null),
-          );
+          await deleteTransaction(transaction.transactionPk);
         } catch (e) {
           print(e.toString());
         }
+        await createOrUpdateTransaction(
+            transaction.copyWith(
+              transactionPk: DateTime.now().millisecondsSinceEpoch,
+              sharedKey: Value(null),
+              transactionOwnerEmail: Value(null),
+              transactionOriginalOwnerEmail: Value(null),
+              sharedDateUpdated: Value(null),
+              sharedStatus: Value(null),
+              sharedReferenceBudgetPk: Value(null),
+            ),
+            updateSharedEntry: false);
+        return 1;
       }
     }
     return into(transactions)
@@ -1363,6 +1364,14 @@ class FinanceDatabase extends _$FinanceDatabase {
               : sharedBudgetsOnly == true
                   ? b.sharedKey.isNotNull()
                   : b.sharedKey.isNull())))
+          ..orderBy([(c) => OrderingTerm.asc(c.order)]))
+        .get();
+  }
+
+  Future<List<Budget>> getAllBudgetsAddedTransactionsOnly() {
+    return (select(budgets)
+          ..where((b) =>
+              (b.addedTransactionsOnly.equals(true) & b.sharedKey.isNull()))
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
   }
@@ -1609,8 +1618,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (selectOnly(transactions)
         ..addColumns([totalAmt])
         ..where(
-          transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
-              transactions.dateCreated.isBetweenValues(startDate, endDate) &
+          transactions.dateCreated.isBetweenValues(startDate, endDate) &
               transactions.paid.equals(true) &
               (allCashFlow
                   ? transactions.income.isIn([true, false])
@@ -1622,8 +1630,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (selectOnly(transactions)
         ..addColumns([totalAmt])
         ..where(
-          transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
-              transactions.dateCreated.isBetweenValues(startDate, endDate) &
+          transactions.dateCreated.isBetweenValues(startDate, endDate) &
               transactions.categoryFk.isIn(categoryFks ?? []) &
               transactions.paid.equals(true) &
               (allCashFlow
@@ -1644,7 +1651,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                 tbl.transactionOwnerEmail
                     .equals(appStateSettings["currentUserEmail"])) |
             tbl.sharedKey.isNull()
-        : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull());
+        : (sharedTransactionsShow == SharedTransactionsShow.excludeOther)
+            ? (tbl.sharedReferenceBudgetPk.isNull())
+            : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull());
   }
 
   Stream<double?> watchTotalSpentByCurrentUserOnly(
@@ -1659,8 +1668,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     query = (selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
-          transactions.dateCreated.isBetweenValues(startDate, endDate) &
+      ..where(transactions.dateCreated.isBetweenValues(startDate, endDate) &
           transactions.paid.equals(true) &
           transactions.income.equals(false) &
           onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner) &
@@ -1682,8 +1690,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     query = (selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
-          transactions.dateCreated.isBetweenValues(startDate, endDate) &
+      ..where(transactions.dateCreated.isBetweenValues(startDate, endDate) &
           transactions.paid.equals(true) &
           transactions.income.equals(false) &
           isInCategory(transactions, allCategories, categoryFks) &
@@ -1704,8 +1711,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime endDate = DateTime(end.year, end.month, end.day);
     return (select(transactions)
           ..where((tbl) {
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                tbl.dateCreated.isBetweenValues(startDate, endDate) &
+            return tbl.dateCreated.isBetweenValues(startDate, endDate) &
                 tbl.paid.equals(true) &
                 tbl.income.equals(false) &
                 isInCategory(tbl, allCategories, categoryFks) &
@@ -1759,8 +1765,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = (select(transactions)
       ..where((tbl) {
         final dateCreated = tbl.dateCreated;
-        return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-            dateCreated.isBetweenValues(startDate, endDate) &
+        return dateCreated.isBetweenValues(startDate, endDate) &
             isInCategory(tbl, allCategories, categoryFks) &
             tbl.paid.equals(true) &
             tbl.income.equals(false) &
@@ -1794,7 +1799,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     final date = transactions.dateCreated.date;
     return (select(transactions)
           ..where((tbl) =>
-              tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
               tbl.dateCreated.isBiggerOrEqualValue(startDate) &
               tbl.dateCreated.isSmallerOrEqualValue(endDate) &
               tbl.paid.equals(true))
@@ -1826,8 +1830,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
-          transactions.income.equals(false) &
+      ..where(transactions.income.equals(false) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
@@ -1843,8 +1846,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.walletFk.equals(appStateSettings["selectedWallet"]) &
-          transactions.income.equals(false) &
+      ..where(transactions.income.equals(false) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
@@ -1920,8 +1922,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     final date = transactions.dateCreated.date;
     return (select(transactions)
           ..where((tbl) {
-            return tbl.walletFk.equals(
-                appStateSettings["selectedWallet"] & tbl.paid.equals(true));
+            return tbl.paid.equals(true);
           })
           ..addColumns([totalAmt, date]).join([]).groupBy([date])
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
@@ -1957,7 +1958,6 @@ class FinanceDatabase extends _$FinanceDatabase {
               if (isPaidOnly) {
                 if (isIncome == true) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(true) &
@@ -1966,7 +1966,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(false) &
@@ -1975,7 +1974,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.paid.equals(true) &
                       onlyShowIfMember(tbl, member) &
@@ -1985,7 +1983,6 @@ class FinanceDatabase extends _$FinanceDatabase {
               } else {
                 if (isIncome == true) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.income.equals(true) &
                       onlyShowIfMember(tbl, member) &
@@ -1993,7 +1990,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       tbl.income.equals(false) &
                       onlyShowIfMember(tbl, member) &
@@ -2001,7 +1997,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
                       dateCreated.isBetweenValues(startDate, endDate) &
                       onlyShowIfMember(tbl, member) &
                       onlyShowIfCertainBudget(
@@ -2015,8 +2010,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(transactions)
           ..where((tbl) {
             final dateCreated = tbl.dateCreated;
-            return tbl.walletFk.equals(appStateSettings["selectedWallet"]) &
-                dateCreated.isBetweenValues(startDate, endDate) &
+            return dateCreated.isBetweenValues(startDate, endDate) &
                 tbl.categoryFk.isIn(categoryFks) &
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(

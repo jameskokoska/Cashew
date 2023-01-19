@@ -106,6 +106,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String selectedRecurrenceDisplay = "month";
   bool selectedPin = true;
   bool selectedShared = false;
+  bool selectedAddedTransactionsOnly = false;
   SharedTransactionsShow selectedSharedTransactionsShow =
       SharedTransactionsShow.fromEveryone;
 
@@ -136,24 +137,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             Navigator.pop(context);
           },
           nextLabel: "Set Amount",
-        ),
-      ),
-    );
-  }
-
-  Future<void> selectCategories(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Select Categories",
-        child: SelectCategory(
-          selectedCategories: selectedCategories,
-          setSelectedCategories: setSelectedCategories,
-          nextLabel: "Set Categories",
-          next: () {
-            Navigator.pop(context);
-            setSelectedCategories(selectedCategories ?? []);
-          },
         ),
       ),
     );
@@ -242,6 +225,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   setSelectedShared(bool shared) {
     setState(() {
       selectedShared = shared;
+      selectedAddedTransactionsOnly = true;
+      selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
+    });
+  }
+
+  setAddedTransactionsOnly(bool addedOnly) {
+    setState(() {
+      selectedAddedTransactionsOnly = addedOnly;
+      if (selectedShared && !addedOnly) {
+        selectedShared = false;
+      }
+      if (addedOnly) {
+        selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
+      }
     });
   }
 
@@ -357,13 +354,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 
   void setSelectedSharedTransactionsShow() {
-    if (selectedSharedTransactionsShow == SharedTransactionsShow.fromEveryone)
+    if (selectedSharedTransactionsShow == SharedTransactionsShow.excludeOther)
       setState(() {
         selectedSharedTransactionsShow = SharedTransactionsShow.onlyIfOwner;
       });
-    else
+    else if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.onlyIfOwner)
       setState(() {
         selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
+      });
+    else
+      setState(() {
+        selectedSharedTransactionsShow = SharedTransactionsShow.excludeOther;
       });
     determineBottomButton();
     return;
@@ -476,6 +478,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       endDate: selectedEndDate ?? DateTime.now(),
       categoryFks: selectedCategories,
       allCategoryFks: selectedAllCategories,
+      addedTransactionsOnly: selectedAddedTransactionsOnly,
+      // TODO make this work excludeAddedTransactions
       periodLength: selectedPeriodLength,
       reoccurrence: mapRecurrence(selectedRecurrence),
       dateCreated:
@@ -509,7 +513,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       selectedSharedTransactionsShow = widget.budget!.sharedTransactionsShow;
       selectedAllCategories = widget.budget!.allCategoryFks;
       selectedAmount = widget.budget!.amount;
-
+      selectedAddedTransactionsOnly = widget.budget!.addedTransactionsOnly;
       selectedPeriodLength = widget.budget!.periodLength;
       selectedRecurrence = enumRecurrence[widget.budget!.reoccurrence];
       if (selectedPeriodLength == 1) {
@@ -926,61 +930,141 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                   ),
                                 ),
                                 Container(height: 10),
-                                AnimatedOpacity(
-                                  duration: Duration(milliseconds: 250),
-                                  opacity: selectedShared == true ? 0.2 : 1,
-                                  child: IgnorePointer(
-                                    ignoring: selectedShared == true,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: TextFont(
-                                            text: "Select Categories",
-                                            textColor: Theme.of(context)
-                                                .colorScheme
-                                                .textLight,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Container(height: 2),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: TextFont(
-                                            text: selectedCategoriesText +
-                                                " Budget",
-                                            textColor: Theme.of(context)
-                                                .colorScheme
-                                                .secondaryContainer,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Container(height: 10),
-                                        Container(
-                                          height: 100,
-                                          child: SelectCategory(
-                                            horizontalList: true,
-                                            selectedCategories:
-                                                selectedCategories,
-                                            setSelectedCategories:
-                                                setSelectedCategories,
-                                            showSelectedAllCategoriesIfNoneSelected:
-                                                true,
-                                          ),
-                                        ),
-                                        Container(height: 23),
-                                      ],
-                                    ),
-                                  ),
-                                ),
                               ],
                             )
                           : SizedBox.shrink(),
+                  (widget.budget != null &&
+                              widget.budget!.sharedKey == null &&
+                              widget.budget!.addedTransactionsOnly == true) ||
+                          widget.budget == null
+                      ? AnimatedOpacity(
+                          duration: Duration(milliseconds: 250),
+                          opacity: selectedShared == true ||
+                                  (widget.budget != null &&
+                                      widget.budget!.addedTransactionsOnly ==
+                                          true)
+                              ? 0.2
+                              : 1,
+                          child: IgnorePointer(
+                            ignoring: selectedShared == true ||
+                                (widget.budget != null &&
+                                    widget.budget!.addedTransactionsOnly ==
+                                        true),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextFont(
+                                    text: "Added transactions only",
+                                    textColor:
+                                        Theme.of(context).colorScheme.textLight,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Container(height: 2),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Tappable(
+                                    onTap: () {
+                                      setAddedTransactionsOnly(
+                                          !selectedAddedTransactionsOnly);
+                                    },
+                                    borderRadius: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 6),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFont(
+                                              text:
+                                                  selectedAddedTransactionsOnly ==
+                                                          false
+                                                      ? "All"
+                                                      : "Added Only",
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 26,
+                                            ),
+                                          ),
+                                          ButtonIcon(
+                                            onTap: () {
+                                              setSelectedShared(
+                                                  !selectedShared);
+                                            },
+                                            icon: Icons.select_all,
+                                            size: 41,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(height: 10),
+                              ],
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  (widget.budget != null &&
+                              widget.budget!.sharedKey == null &&
+                              widget.budget!.addedTransactionsOnly == false) ||
+                          widget.budget == null
+                      ? AnimatedOpacity(
+                          duration: Duration(milliseconds: 250),
+                          opacity: selectedShared == true ||
+                                  selectedAddedTransactionsOnly
+                              ? 0.2
+                              : 1,
+                          child: IgnorePointer(
+                            ignoring: selectedShared == true ||
+                                selectedAddedTransactionsOnly,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextFont(
+                                    text: "Select Categories",
+                                    textColor:
+                                        Theme.of(context).colorScheme.textLight,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Container(height: 2),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextFont(
+                                    text: selectedCategoriesText + " Budget",
+                                    textColor: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(height: 10),
+                                Container(
+                                  height: 100,
+                                  child: SelectCategory(
+                                    horizontalList: true,
+                                    selectedCategories: selectedCategories,
+                                    setSelectedCategories:
+                                        setSelectedCategories,
+                                    showSelectedAllCategoriesIfNoneSelected:
+                                        true,
+                                  ),
+                                ),
+                                Container(height: 23),
+                              ],
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
@@ -1030,70 +1114,89 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     ),
                   ),
                   SizedBox(height: 13),
-                  widget.budget != null && widget.budget!.sharedKey == null
-                      ? Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextFont(
-                                    text:
-                                        "Transactions Shared to Another Budget",
-                                    textColor:
-                                        Theme.of(context).colorScheme.textLight,
-                                    fontSize: 16,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Tappable(
-                                onTap: () {
-                                  setSelectedSharedTransactionsShow();
-                                },
-                                borderRadius: 10,
-                                child: Padding(
+                  (widget.budget != null &&
+                              widget.budget!.sharedKey == null &&
+                              widget.budget!.addedTransactionsOnly == false) ||
+                          widget.budget == null
+                      ? AnimatedOpacity(
+                          duration: Duration(milliseconds: 250),
+                          opacity: selectedShared == true ||
+                                  selectedAddedTransactionsOnly
+                              ? 0.2
+                              : 1,
+                          child: IgnorePointer(
+                            ignoring: selectedShared == true ||
+                                selectedAddedTransactionsOnly,
+                            child: Column(
+                              children: [
+                                Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 6),
+                                      horizontal: 20),
                                   child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Expanded(
-                                        child: TextFont(
-                                          text: selectedSharedTransactionsShow ==
-                                                  SharedTransactionsShow
-                                                      .fromEveryone
-                                              ? "Include All"
-                                              : selectedSharedTransactionsShow ==
-                                                      SharedTransactionsShow
-                                                          .onlyIfOwner
-                                                  ? "By Me Only"
-                                                  : "",
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 26,
-                                        ),
-                                      ),
-                                      ButtonIcon(
-                                        onTap: () {
-                                          setSelectedSharedTransactionsShow();
-                                        },
-                                        icon: selectedPin
-                                            ? Icons.push_pin_rounded
-                                            : Icons.push_pin_outlined,
-                                        size: 41,
+                                      TextFont(
+                                        text:
+                                            "Transactions Added to Another Budget",
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .textLight,
+                                        fontSize: 16,
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
+                                SizedBox(height: 5),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Tappable(
+                                    onTap: () {
+                                      setSelectedSharedTransactionsShow();
+                                    },
+                                    borderRadius: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 6),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFont(
+                                              text: selectedSharedTransactionsShow ==
+                                                      SharedTransactionsShow
+                                                          .fromEveryone
+                                                  ? "Include All"
+                                                  : selectedSharedTransactionsShow ==
+                                                          SharedTransactionsShow
+                                                              .onlyIfOwner
+                                                      ? "By Me Only"
+                                                      : selectedSharedTransactionsShow ==
+                                                              SharedTransactionsShow
+                                                                  .excludeOther
+                                                          ? "Exclude Others"
+                                                          : "",
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 26,
+                                            ),
+                                          ),
+                                          ButtonIcon(
+                                            onTap: () {
+                                              setSelectedSharedTransactionsShow();
+                                            },
+                                            icon: selectedPin
+                                                ? Icons.push_pin_rounded
+                                                : Icons.push_pin_outlined,
+                                            size: 41,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         )
                       : SizedBox.shrink(),
                   Container(height: 70),

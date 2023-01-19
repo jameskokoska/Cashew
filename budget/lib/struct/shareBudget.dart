@@ -264,7 +264,7 @@ Future<bool> compareSharedToCurrentBudgets(
       Map<dynamic, dynamic> budgetDecoded = budgetCloud.data() as Map;
       openSnackbar(SnackbarMessage(
         title: budgetCloud["name"] + " was shared with you",
-        description: "From " + budgetDecoded["ownerEmail"],
+        description: "From " + getMemberNickname(budgetDecoded["ownerEmail"]),
         icon: Icons.share_rounded,
       ));
     }
@@ -348,6 +348,7 @@ Future<int> downloadTransactionsFromBudgets(
         endDate: budgetDecoded["endDate"].toDate(),
         categoryFks: null,
         allCategoryFks: true,
+        addedTransactionsOnly: true,
         periodLength: budgetDecoded["periodLength"],
         reoccurrence: mapRecurrence(budgetDecoded["reoccurrence"]),
         dateCreated: DateTime.now(),

@@ -182,7 +182,8 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                       widget.budget.sharedTransactionsShow,
                       member: selectedMember,
                       onlyShowTransactionsBelongingToBudget:
-                          widget.budget.sharedKey != null
+                          widget.budget.sharedKey != null ||
+                                  widget.budget.addedTransactionsOnly == true
                               ? widget.budget.budgetPk
                               : null,
                     ),
@@ -491,7 +492,8 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                   widget.budget.sharedTransactionsShow,
                   member: selectedMember,
                   onlyShowTransactionsBelongingToBudget:
-                      widget.budget.sharedKey != null
+                      widget.budget.sharedKey != null ||
+                              widget.budget.addedTransactionsOnly == true
                           ? widget.budget.budgetPk
                           : null,
                 ),
@@ -579,7 +581,8 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                 sharedTransactionsShow: widget.budget.sharedTransactionsShow,
                 member: selectedMember,
                 onlyShowTransactionsBelongingToBudget:
-                    widget.budget.sharedKey != null
+                    widget.budget.sharedKey != null ||
+                            widget.budget.addedTransactionsOnly == true
                         ? widget.budget.budgetPk
                         : null,
               ),

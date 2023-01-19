@@ -87,6 +87,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   String? selectedPayer;
   int? selectedBudgetPk;
   Budget? selectedBudget;
+  bool selectedBudgetIsShared = false;
+  int? selectedWalletPk;
+  TransactionWallet? selectedWallet;
 
   String? textAddTransaction = "Add Transaction";
 
@@ -195,11 +198,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     return;
   }
 
-  void setSelectedBudgetPk(Budget? selectedBudgetPassed) {
+  void setSelectedBudgetPk(Budget? selectedBudgetPassed,
+      {bool isSharedBudget = false}) {
     setState(() {
       selectedBudgetPk =
           selectedBudgetPassed == null ? null : selectedBudgetPassed.budgetPk;
       selectedBudget = selectedBudgetPassed;
+      selectedBudgetIsShared = isSharedBudget;
       if (selectedBudgetPk != null)
         selectedPayer = appStateSettings["currentUserEmail"];
     });
@@ -279,6 +284,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     });
   }
 
+  void setSelectedWalletPk(TransactionWallet selectedWalletPassed) {
+    setState(() {
+      selectedWalletPk = selectedWalletPassed.walletPk;
+      selectedWallet = selectedWalletPassed;
+    });
+  }
+
   Future<bool> addTransaction() async {
     print("Added transaction");
     if (selectedTitle != null &&
@@ -294,7 +306,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       await setUpcomingNotifications(context);
     }
 
-    await database.createOrUpdateTransaction(await createTransaction());
+    await database.createOrUpdateTransaction(
+      await createTransaction(),
+      originalTransaction: widget.transaction,
+    );
     return true;
   }
 
@@ -312,7 +327,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       categoryFk: selectedCategory?.categoryPk ?? 0,
       dateCreated: selectedDate,
       income: selectedIncome,
-      walletFk: appStateSettings["selectedWallet"],
+      walletFk: widget.transaction != null
+          ? widget.transaction!.walletFk
+          : selectedWalletPk ?? appStateSettings["selectedWallet"],
       paid: widget.transaction != null
           ? widget.transaction!.paid
           : selectedType == null,
@@ -374,6 +391,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   late TextEditingController _titleInputController;
   late TextEditingController _noteInputController;
   List<Budget> allSharedBudgets = [];
+  List<Budget> allAddedTransactionBudgets = [];
+  List<TransactionWallet> allWallets = [];
 
   @override
   void initState() {
@@ -447,6 +466,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     }
     Future.delayed(Duration.zero, () async {
       allSharedBudgets = await database.getAllBudgets(sharedBudgetsOnly: true);
+      allAddedTransactionBudgets =
+          await database.getAllBudgetsAddedTransactionsOnly();
+      allWallets = await database.getAllWallets();
+      selectedWallet = await database.getWalletInstance(
+          widget.transaction == null
+              ? appStateSettings["selectedWallet"]
+              : widget.transaction!.walletFk);
       setState(() {});
     });
     if (widget.selectedBudget != null) {
@@ -509,6 +535,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       setState(() {
         selectedCategory = getSelectedCategory;
         selectedBudget = getBudget;
+        selectedBudgetIsShared =
+            getBudget == null ? false : getBudget.sharedKey != null;
       });
     }
   }
@@ -858,7 +886,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                             selectedIncome: selectedIncome,
                           ),
                         ),
-                        allSharedBudgets.length != 0
+                        allSharedBudgets.length != 0 ||
+                                allAddedTransactionBudgets.length != 0
                             ? AnimatedSize(
                                 duration: Duration(milliseconds: 400),
                                 curve: Curves.easeInOut,
@@ -873,7 +902,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                       openBottomSheet(
                                         context,
                                         PopupFramework(
-                                          title: "Select Shared Budget",
+                                          title: "Select Budget",
                                           child: RadioItems(
                                             items: [
                                               "None",
@@ -881,11 +910,23 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                                 for (Budget budget
                                                     in allSharedBudgets)
                                                   budget.budgetPk.toString()
+                                              ],
+                                              ...[
+                                                for (Budget budget
+                                                    in allAddedTransactionBudgets)
+                                                  budget.budgetPk.toString()
                                               ]
                                             ],
                                             displayFilter: (budgetPk) {
                                               for (Budget budget
                                                   in allSharedBudgets)
+                                                if (budget.budgetPk
+                                                        .toString() ==
+                                                    budgetPk.toString()) {
+                                                  return budget.name;
+                                                }
+                                              for (Budget budget
+                                                  in allAddedTransactionBudgets)
                                                 if (budget.budgetPk
                                                         .toString() ==
                                                     budgetPk.toString()) {
@@ -909,9 +950,23 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                                         .toString() ==
                                                     value.toString()) {
                                                   budgetFound = budget;
+                                                  setSelectedBudgetPk(
+                                                      budgetFound,
+                                                      isSharedBudget: true);
                                                   break;
                                                 }
-                                              setSelectedBudgetPk(budgetFound);
+                                              for (Budget budget
+                                                  in allAddedTransactionBudgets)
+                                                if (budget.budgetPk
+                                                        .toString() ==
+                                                    value.toString()) {
+                                                  budgetFound = budget;
+                                                  print("FALSE");
+                                                  setSelectedBudgetPk(
+                                                      budgetFound,
+                                                      isSharedBudget: false);
+                                                  break;
+                                                }
                                               Navigator.of(context).pop();
                                             },
                                           ),
@@ -927,7 +982,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                           curve: Curves.easeInOut,
                           child: AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
-                            child: selectedBudgetPk != null
+                            child: selectedBudgetPk != null &&
+                                    selectedBudgetIsShared == true
                                 ? AnimatedSwitcher(
                                     duration: Duration(milliseconds: 400),
                                     child: TransactionOwnerButton(
@@ -971,6 +1027,53 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     ),
                                   )
                                 : Container(),
+                          ),
+                        ),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 400),
+                          child: SelectedWalletButton(
+                            selectedWalletName: selectedWallet != null
+                                ? selectedWallet!.name
+                                : "",
+                            key: ValueKey(selectedWalletPk),
+                            onTap: () async {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Select Wallet",
+                                  child: RadioItems(
+                                    items: [
+                                      for (TransactionWallet wallet
+                                          in allWallets)
+                                        wallet.walletPk.toString()
+                                    ],
+                                    displayFilter: (walletPk) {
+                                      for (TransactionWallet wallet
+                                          in allWallets)
+                                        if (wallet.walletPk.toString() ==
+                                            walletPk.toString()) {
+                                          return wallet.name;
+                                        }
+                                      return "";
+                                    },
+                                    initial: selectedWalletPk == null
+                                        ? appStateSettings["selectedWallet"]
+                                            .toString()
+                                        : selectedWalletPk.toString(),
+                                    onChanged: (value) {
+                                      for (TransactionWallet wallet
+                                          in allWallets)
+                                        if (wallet.walletPk.toString() ==
+                                            value.toString()) {
+                                          setSelectedWalletPk(wallet);
+                                          break;
+                                        }
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
 
@@ -1205,6 +1308,42 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SelectedWalletButton extends StatelessWidget {
+  const SelectedWalletButton({
+    Key? key,
+    required this.onTap,
+    required this.selectedWalletName,
+  }) : super(key: key);
+  final VoidCallback onTap;
+  final String selectedWalletName;
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      borderRadius: 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFont(
+                text: selectedWalletName,
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+              ),
+            ),
+            ButtonIcon(
+              onTap: onTap,
+              icon: Icons.account_balance_wallet_rounded,
+              size: 41,
+            ),
+          ],
         ),
       ),
     );

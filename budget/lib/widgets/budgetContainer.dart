@@ -63,8 +63,10 @@ class BudgetContainer extends StatelessWidget {
               budget.categoryFks ?? [],
               budget.allCategoryFks,
               budget.sharedTransactionsShow,
-              onlyShowTransactionsBelongingToBudget:
-                  budget.sharedKey != null ? budget.budgetPk : null,
+              onlyShowTransactionsBelongingToBudget: budget.sharedKey != null ||
+                      budget.addedTransactionsOnly == true
+                  ? budget.budgetPk
+                  : null,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
