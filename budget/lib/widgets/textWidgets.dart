@@ -1,3 +1,7 @@
+import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -16,6 +20,7 @@ class TextFont extends StatelessWidget {
   final double? maxFontSize;
   final TextOverflow? overflow;
   final bool? softWrap;
+  final int? walletPkForCurrency;
 
   const TextFont({
     Key? key,
@@ -32,6 +37,7 @@ class TextFont extends StatelessWidget {
     this.minFontSize,
     this.overflow,
     this.softWrap,
+    this.walletPkForCurrency,
   }) : super(key: key);
 
   @override
@@ -61,28 +67,47 @@ class TextFont extends StatelessWidget {
             ]
           : [],
     );
-    return Transform.translate(
-      offset: Offset(0, this.fontSize * 0.1),
-      child: autoSizeText
-          ? AutoSizeText(
-              "$text",
-              maxLines: maxLines,
-              textAlign: textAlign,
-              overflow: overflow ?? TextOverflow.ellipsis,
-              style: textStyle,
-              minFontSize: minFontSize ?? fontSize - 10,
-              maxFontSize: maxFontSize ?? fontSize + 10,
-              softWrap: softWrap,
-            )
-          : Text(
-              "$text",
-              maxLines: maxLines,
-              textAlign: textAlign,
-              overflow: overflow ?? TextOverflow.ellipsis,
-              style: textStyle,
-              softWrap: softWrap,
-            ),
-    );
+    Widget textWidget(textPassed) {
+      return Transform.translate(
+        offset: Offset(0, this.fontSize * 0.1),
+        child: autoSizeText
+            ? AutoSizeText(
+                textPassed,
+                maxLines: maxLines,
+                textAlign: textAlign,
+                overflow: overflow ?? TextOverflow.ellipsis,
+                style: textStyle,
+                minFontSize: minFontSize ?? fontSize - 10,
+                maxFontSize: maxFontSize ?? fontSize + 10,
+                softWrap: softWrap,
+              )
+            : Text(
+                textPassed,
+                maxLines: maxLines,
+                textAlign: textAlign,
+                overflow: overflow ?? TextOverflow.ellipsis,
+                style: textStyle,
+                softWrap: softWrap,
+              ),
+      );
+    }
+
+    if (walletPkForCurrency != null) {
+      return FutureBuilder(
+        future: database.getWalletInstance(walletPkForCurrency!),
+        builder: (context, AsyncSnapshot<TransactionWallet> snapshot) {
+          if (snapshot.hasData) {
+            return textWidget(currenciesJSON[snapshot.data!.currency!]
+                    ["Symbol"] +
+                text +
+                " " +
+                snapshot.data!.currency!.allCaps);
+          }
+          return textWidget(text);
+        },
+      );
+    }
+    return textWidget(text);
   }
 }
 

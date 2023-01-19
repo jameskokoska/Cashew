@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
@@ -53,7 +54,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Map<String, dynamic> currencies = {};
   bool customCurrencyIcon = false;
   String? searchCurrency = "";
-  dynamic selectedCurrency = "";
+  String selectedCurrency = "";
 
   late FocusNode _periodLengthFocusNode;
 
@@ -101,6 +102,14 @@ class _AddWalletPageState extends State<AddWalletPage> {
     return;
   }
 
+  void setSelectedCurrency(String currencyKey) {
+    setState(() {
+      selectedCurrency = currencyKey;
+    });
+    determineBottomButton();
+    return;
+  }
+
   void setSelectedIconName(String iconName) {
     setState(() {
       selectedIconName = iconName;
@@ -125,18 +134,16 @@ class _AddWalletPageState extends State<AddWalletPage> {
       dateCreated:
           widget.wallet != null ? widget.wallet!.dateCreated : DateTime.now(),
       order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
-      currency: "USD",
+      currency: selectedCurrency,
     );
   }
 
   void populateCurrencies() {
     Future.delayed(Duration.zero, () async {
-      String response = await rootBundle
-          .loadString('assets/static/generated/currencies.json');
       setState(() {
         //Set to false because we can't save until we made some changes
         canAddWallet = false;
-        currencies = jsonDecode(response);
+        currencies = currenciesJSON;
       });
     });
   }
@@ -155,6 +162,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
       selectedColor = widget.wallet!.colour == null
           ? null
           : HexColor(widget.wallet!.colour);
+      selectedCurrency = widget.wallet!.currency ?? "USD";
     } else {}
     populateCurrencies();
   }
@@ -183,11 +191,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
     if (searchTerm == "") {
       populateCurrencies();
     } else {
-      String response = await rootBundle
-          .loadString('assets/static/generated/currencies.json');
       Map<String, dynamic> outCurrencies = {};
-      for (String key in jsonDecode(response).keys) {
-        dynamic currency = jsonDecode(response)[key];
+      for (String key in currenciesJSON.keys) {
+        dynamic currency = currenciesJSON[key];
         if ((currency["CountryName"] != null &&
                 currency["CountryName"]
                     .toLowerCase()
@@ -356,10 +362,15 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           padding: const EdgeInsets.only(
                               left: 18.0, right: 18, bottom: 5),
                           child: Tappable(
-                            color:
-                                Theme.of(context).colorScheme.lightDarkAccent,
+                            color: selectedCurrency == key
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                : Theme.of(context).colorScheme.lightDarkAccent,
                             borderRadius: 13,
-                            onTap: () {},
+                            onTap: () {
+                              setSelectedCurrency(key);
+                            },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 17, vertical: 10),
@@ -370,16 +381,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                   IntrinsicWidth(
                                     child: Row(
                                       children: [
-                                        // currencies[index]?["Flag"] != null
-                                        //     ? Padding(
-                                        //         padding: const EdgeInsets.only(
-                                        //             right: 8.0),
-                                        //         child: Image.network(
-                                        //           currencies[index]?["Flag"],
-                                        //           height: 20,
-                                        //         ),
-                                        //       )
-                                        //     : SizedBox.shrink(),
                                         TextFont(
                                             text: currencies[key]
                                                     ?["CountryName"] ??

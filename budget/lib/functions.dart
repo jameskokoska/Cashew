@@ -31,7 +31,9 @@ extension CapExtension on String {
       .join(" ");
 }
 
-String convertToMoney(double amount, {bool withCurrency = true}) {
+String convertToMoney(
+  double amount,
+) {
   if (amount == -0.0) {
     amount = amount.abs();
   }
@@ -41,11 +43,10 @@ String convertToMoney(double amount, {bool withCurrency = true}) {
   final currency = new NumberFormat("#,##0.00", "en_US");
   String formatOutput = currency.format(amount);
   if (formatOutput.substring(formatOutput.length - 2) == "00") {
-    return (withCurrency ? getCurrencyString() : "") +
-        formatOutput.replaceRange(
-            formatOutput.length - 3, formatOutput.length, '');
+    return formatOutput.replaceRange(
+        formatOutput.length - 3, formatOutput.length, '');
   }
-  return (withCurrency ? getCurrencyString() : "") + currency.format(amount);
+  return currency.format(amount);
 }
 
 int moneyDecimals(double amount) {
@@ -57,8 +58,11 @@ int moneyDecimals(double amount) {
   return 2;
 }
 
-String getCurrencyString() {
-  return appStateSettings["currencyIcon"];
+String getCurrencyString(String currencyKey) {
+  return currenciesJSON[currencyKey] != null &&
+          currenciesJSON[currencyKey]["Currency"] != null
+      ? currenciesJSON[currencyKey]["Currency"]
+      : "";
 }
 
 getMonth(int currentMonth) {
@@ -384,13 +388,17 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           budget.startDate.day));
 }
 
-String getWordedNumber(double value) {
+String getWordedNumber(double value, String currencyKey) {
   if (value >= 1000) {
-    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
+    return getCurrencyString(currencyKey) +
+        (value / 1000).toStringAsFixed(1) +
+        "K";
   } else if (value <= -1000) {
-    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
+    return getCurrencyString(currencyKey) +
+        (value / 1000).toStringAsFixed(1) +
+        "K";
   } else {
-    return getCurrencyString() + value.toInt().toString();
+    return getCurrencyString(currencyKey) + value.toInt().toString();
   }
 }
 

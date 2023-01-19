@@ -76,6 +76,7 @@ void main() async {
   runApp(RestartApp(child: InitializeDatabase()));
 }
 
+late Map<String, dynamic> currenciesJSON;
 Random random = new Random();
 List<int> randomInt = [
   random.nextInt(100),
@@ -188,6 +189,8 @@ Future<bool> initializeSettings() async {
   appStateSettings = userSettings;
 
   packageInfoGlobal = await PackageInfo.fromPlatform();
+  currenciesJSON = json.decode(
+      await rootBundle.loadString('assets/static/generated/currencies.json'));
 
   // Do some actions based on loaded settings
   if (appStateSettings["accentSystemColor"] == true) {

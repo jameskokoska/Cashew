@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -96,7 +97,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   listOfIDs = listOfIDs),
                               builder: (context, snapshot) {
                                 return CountUp(
-                                  prefix: getCurrencyString(),
+                                  walletPkForCurrency:
+                                      appStateSettings["selectedWallet"],
                                   count: snapshot.hasData ? snapshot.data! : 0,
                                   duration: Duration(milliseconds: 250),
                                   fontSize: 17,

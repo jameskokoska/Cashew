@@ -88,7 +88,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   int? selectedBudgetPk;
   Budget? selectedBudget;
   bool selectedBudgetIsShared = false;
-  int? selectedWalletPk;
+  int selectedWalletPk = appStateSettings["selectedWallet"];
   TransactionWallet? selectedWallet;
 
   String? textAddTransaction = "Add Transaction";
@@ -329,7 +329,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       income: selectedIncome,
       walletFk: widget.transaction != null
           ? widget.transaction!.walletFk
-          : selectedWalletPk ?? appStateSettings["selectedWallet"],
+          : selectedWalletPk,
       paid: widget.transaction != null
           ? widget.transaction!.paid
           : selectedType == null,
@@ -497,6 +497,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                 PopupFramework(
                   title: "Enter Amount",
                   child: SelectAmount(
+                    walletPkForCurrency: selectedWalletPk,
                     amountPassed: selectedAmountCalculation ?? "",
                     setSelectedAmount: setSelectedAmount,
                     next: () async {
@@ -691,6 +692,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 PopupFramework(
                                   title: "Enter Amount",
                                   child: SelectAmount(
+                                    walletPkForCurrency: selectedWalletPk,
                                     amountPassed: selectedAmountCalculation ??
                                         (selectedAmount ?? "0").toString(),
                                     setSelectedAmount: setSelectedAmount,
@@ -734,20 +736,25 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(height: 5),
-                                  CountNumber(
-                                    count: selectedAmount ?? 0,
-                                    duration: Duration(milliseconds: 1000),
-                                    dynamicDecimals: true,
-                                    initialCount: selectedAmount ?? 0,
-                                    textBuilder: (number) {
-                                      return TextFont(
-                                        textAlign: TextAlign.right,
-                                        text: convertToMoney(number),
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.bold,
-                                        maxLines: 1,
-                                      );
-                                    },
+                                  AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 350),
+                                    child: CountNumber(
+                                      key: ValueKey(selectedWalletPk),
+                                      count: selectedAmount ?? 0,
+                                      duration: Duration(milliseconds: 1000),
+                                      dynamicDecimals: true,
+                                      initialCount: selectedAmount ?? 0,
+                                      textBuilder: (number) {
+                                        return TextFont(
+                                          textAlign: TextAlign.right,
+                                          text: convertToMoney(number),
+                                          walletPkForCurrency: selectedWalletPk,
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                          maxLines: 1,
+                                        );
+                                      },
+                                    ),
                                   ),
                                   AnimatedSwitcher(
                                     duration: Duration(milliseconds: 350),
@@ -1052,7 +1059,10 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                           in allWallets)
                                         if (wallet.walletPk.toString() ==
                                             walletPk.toString()) {
-                                          return wallet.name;
+                                          return wallet.name +
+                                              " " +
+                                              (wallet.currency ?? "")
+                                                  .toUpperCase();
                                         }
                                       return "";
                                     },
@@ -1248,6 +1258,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     PopupFramework(
                                       title: "Enter Amount",
                                       child: SelectAmount(
+                                        walletPkForCurrency: selectedWalletPk,
                                         amountPassed:
                                             selectedAmountCalculation ?? "",
                                         setSelectedAmount: setSelectedAmount,
@@ -1278,6 +1289,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 PopupFramework(
                                   title: "Enter Amount",
                                   child: SelectAmount(
+                                    walletPkForCurrency: selectedWalletPk,
                                     amountPassed:
                                         selectedAmountCalculation ?? "",
                                     setSelectedAmount: setSelectedAmount,

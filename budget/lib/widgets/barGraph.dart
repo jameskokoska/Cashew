@@ -144,7 +144,7 @@ class BarGraphState extends State<BarGraph> {
                   );
                 },
                 getTitles: (value) {
-                  return getWordedNumber(value);
+                  return getWordedNumber(value, "");
                 },
                 interval: (widget.maxY / 3.8),
                 margin: 6,

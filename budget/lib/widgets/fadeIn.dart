@@ -155,6 +155,7 @@ class CountUp extends StatefulWidget {
     this.duration = const Duration(milliseconds: 3000),
     this.decimals = 2,
     this.curve = Curves.easeOutExpo,
+    this.walletPkForCurrency,
   }) : super(key: key);
 
   final double count;
@@ -168,6 +169,7 @@ class CountUp extends StatefulWidget {
   final Duration duration;
   final int decimals;
   final Curve curve;
+  final int? walletPkForCurrency;
 
   @override
   State<CountUp> createState() => _CountUpState();
@@ -186,6 +188,7 @@ class _CountUpState extends State<CountUp> {
         textAlign: widget.textAlign,
         textColor: widget.textColor,
         maxLines: widget.maxLines,
+        walletPkForCurrency: widget.walletPkForCurrency,
       );
     }
     return TweenAnimationBuilder<int>(
@@ -211,6 +214,7 @@ class _CountUpState extends State<CountUp> {
           textAlign: widget.textAlign,
           textColor: widget.textColor,
           maxLines: widget.maxLines,
+          walletPkForCurrency: widget.walletPkForCurrency,
         );
       },
     );

@@ -276,8 +276,9 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                             : widget.budget
                                                                     .amount -
                                                                 totalSpent,
-                                                        prefix:
-                                                            getCurrencyString(),
+                                                        walletPkForCurrency:
+                                                            appStateSettings[
+                                                                "selectedWallet"],
                                                         duration: Duration(
                                                             milliseconds: 700),
                                                         fontSize: 25,
@@ -330,7 +331,9 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                             (widget.budget
                                                                     .amount -
                                                                 totalSpent),
-                                                    prefix: getCurrencyString(),
+                                                    walletPkForCurrency:
+                                                        appStateSettings[
+                                                            "selectedWallet"],
                                                     duration: Duration(
                                                         milliseconds: 700),
                                                     fontSize: 25,

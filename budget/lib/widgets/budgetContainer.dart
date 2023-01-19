@@ -153,7 +153,9 @@ class BudgetContainer extends StatelessWidget {
                                                       ? totalSpent
                                                       : budget.amount -
                                                           totalSpent,
-                                                  prefix: getCurrencyString(),
+                                                  walletPkForCurrency:
+                                                      appStateSettings[
+                                                          "selectedWallet"],
                                                   duration: Duration(
                                                       milliseconds: 700),
                                                   fontSize: 18,
@@ -195,7 +197,9 @@ class BudgetContainer extends StatelessWidget {
                                                       : -1 *
                                                           (budget.amount -
                                                               totalSpent),
-                                                  prefix: getCurrencyString(),
+                                                  walletPkForCurrency:
+                                                      appStateSettings[
+                                                          "selectedWallet"],
                                                   duration: Duration(
                                                       milliseconds: 700),
                                                   fontSize: 18,
@@ -303,7 +307,9 @@ class BudgetContainer extends StatelessWidget {
                                                     ? totalSpent
                                                     : budget.amount -
                                                         totalSpent,
-                                                prefix: getCurrencyString(),
+                                                walletPkForCurrency:
+                                                    appStateSettings[
+                                                        "selectedWallet"],
                                                 duration:
                                                     Duration(milliseconds: 700),
                                                 fontSize: 18,
@@ -345,7 +351,9 @@ class BudgetContainer extends StatelessWidget {
                                                     : -1 *
                                                         (budget.amount -
                                                             totalSpent),
-                                                prefix: getCurrencyString(),
+                                                walletPkForCurrency:
+                                                    appStateSettings[
+                                                        "selectedWallet"],
                                                 duration:
                                                     Duration(milliseconds: 700),
                                                 fontSize: 18,

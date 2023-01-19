@@ -8,17 +8,21 @@ import 'package:math_expressions/math_expressions.dart';
 import 'package:budget/colors.dart';
 
 class SelectAmount extends StatefulWidget {
-  SelectAmount(
-      {Key? key,
-      required this.setSelectedAmount,
-      this.amountPassed = "", //the string of calculations
-      this.next,
-      this.nextLabel})
-      : super(key: key);
+  SelectAmount({
+    Key? key,
+    required this.setSelectedAmount,
+    this.amountPassed = "", //the string of calculations
+    this.next,
+    this.nextLabel,
+    this.currencyKey,
+    this.walletPkForCurrency,
+  }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
   final VoidCallback? next;
   final String? nextLabel;
+  final String? currencyKey;
+  final int? walletPkForCurrency;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -315,7 +319,7 @@ class _SelectAmountState extends State<SelectAmount> {
                   child: FractionallySizedBox(
                     key: ValueKey(
                       amount == ""
-                          ? getCurrencyString() + "0"
+                          ? getCurrencyString(widget.currencyKey ?? "") + "0"
                           : includesOperations(amount, false)
                               ? convertToMoney(calculateResult(amount))
                               : convertToMoney(double.tryParse(amount.substring(
@@ -343,8 +347,10 @@ class _SelectAmountState extends State<SelectAmount> {
                       autoSizeText: true,
                       maxLines: 1,
                       minFontSize: 16,
+                      walletPkForCurrency: widget.walletPkForCurrency ??
+                          appStateSettings["selectedWallet"],
                       text: amount == ""
-                          ? getCurrencyString() + "0"
+                          ? getCurrencyString(widget.currencyKey ?? "") + "0"
                           : includesOperations(amount, false)
                               ? convertToMoney(calculateResult(amount))
                               : convertToMoney(double.tryParse(amount.substring(
