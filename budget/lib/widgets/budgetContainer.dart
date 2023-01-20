@@ -67,6 +67,7 @@ class BudgetContainer extends StatelessWidget {
                       budget.addedTransactionsOnly == true
                   ? budget.budgetPk
                   : null,
+                  budget: budget
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -170,12 +171,8 @@ class BudgetContainer extends StatelessWidget {
                                                     bottom: 1.7),
                                                 child: Container(
                                                   child: TextFont(
-                                                    text: (appStateSettings[
-                                                                "showTotalSpentForBudget"]
-                                                            ? " spent of "
-                                                            : " left of ") +
-                                                        convertToMoney(
-                                                            budget.amount),
+                                                    text: convertToMoney(
+                                                        budget.amount),
                                                     fontSize: 14,
                                                     textAlign: TextAlign.left,
                                                   ),

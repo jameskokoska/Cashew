@@ -52,7 +52,12 @@ enum SharedOwnerMember {
 enum SharedTransactionsShow {
   fromEveryone,
   onlyIfOwner,
+  onlyIfOwnerIfShared,
+  onlyIfShared,
+  onlyIfNotShared,
   excludeOther,
+  excludeOtherIfShared,
+  excludeOtherIfNotShared,
 }
 
 enum ThemeSetting { dark, light }
@@ -406,25 +411,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              if (income == null)
-                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    dateCreated.year.equals(date.year) &
-                    dateCreated.month.equals(date.month) &
-                    dateCreated.day.equals(date.day) &
-                    tbl.categoryFk.isIn(categoryFks) &
-                    onlyShowIfMember(tbl, member) &
-                    onlyShowIfCertainBudget(
-                        tbl, onlyShowTransactionsBelongingToBudget);
-              else
-                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    dateCreated.year.equals(date.year) &
-                    dateCreated.month.equals(date.month) &
-                    dateCreated.day.equals(date.day) &
-                    tbl.categoryFk.isIn(categoryFks) &
-                    tbl.income.equals(income) &
-                    onlyShowIfMember(tbl, member) &
-                    onlyShowIfCertainBudget(
-                        tbl, onlyShowTransactionsBelongingToBudget);
+              return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day) &
+                  onlyShowBasedOnCategoryFks(tbl, categoryFks) &
+                  onlyShowBasedOnIncome(tbl, income) &
+                  onlyShowIfMember(tbl, member) &
+                  onlyShowIfCertainBudget(
+                      tbl, onlyShowTransactionsBelongingToBudget);
             })
           // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
           )
@@ -436,23 +431,14 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              if (income == null)
-                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    dateCreated.year.equals(date.year) &
-                    dateCreated.month.equals(date.month) &
-                    dateCreated.day.equals(date.day) &
-                    onlyShowIfMember(tbl, member) &
-                    onlyShowIfCertainBudget(
-                        tbl, onlyShowTransactionsBelongingToBudget);
-              else
-                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    dateCreated.year.equals(date.year) &
-                    dateCreated.month.equals(date.month) &
-                    dateCreated.day.equals(date.day) &
-                    tbl.income.equals(income) &
-                    onlyShowIfMember(tbl, member) &
-                    onlyShowIfCertainBudget(
-                        tbl, onlyShowTransactionsBelongingToBudget);
+              return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day) &
+                  onlyShowBasedOnIncome(tbl, income) &
+                  onlyShowIfMember(tbl, member) &
+                  onlyShowIfCertainBudget(
+                      tbl, onlyShowTransactionsBelongingToBudget);
             })
           // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
           )
@@ -464,23 +450,14 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = ((select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              if (income == null)
-                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    dateCreated.year.equals(date.year) &
-                    dateCreated.month.equals(date.month) &
-                    dateCreated.day.equals(date.day) &
-                    onlyShowIfMember(tbl, member) &
-                    onlyShowIfCertainBudget(
-                        tbl, onlyShowTransactionsBelongingToBudget);
-              else
-                return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                    dateCreated.year.equals(date.year) &
-                    dateCreated.month.equals(date.month) &
-                    dateCreated.day.equals(date.day) &
-                    tbl.income.equals(income) &
-                    onlyShowIfMember(tbl, member) &
-                    onlyShowIfCertainBudget(
-                        tbl, onlyShowTransactionsBelongingToBudget);
+              return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  dateCreated.year.equals(date.year) &
+                  dateCreated.month.equals(date.month) &
+                  dateCreated.day.equals(date.day) &
+                  onlyShowBasedOnIncome(tbl, income) &
+                  onlyShowIfMember(tbl, member) &
+                  onlyShowIfCertainBudget(
+                      tbl, onlyShowTransactionsBelongingToBudget);
             })
           // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
           )
@@ -497,6 +474,37 @@ class FinanceDatabase extends _$FinanceDatabase {
               category: row.readTable(categories),
               transaction: row.readTable(transactions));
         }).toList());
+  }
+
+  Stream<List<DateTime?>> getUniqueDates({
+    required DateTime start,
+    required DateTime end,
+    String search = "",
+    // Search will be ignored... if these params are passed in
+    List<int> categoryFks = const [],
+    bool? income,
+    required SharedTransactionsShow sharedTransactionsShow,
+    String? member,
+    int? onlyShowTransactionsBelongingToBudget,
+    Budget? budget,
+  }) {
+    DateTime startDate = DateTime(start.year, start.month, start.day);
+    DateTime endDate = DateTime(end.year, end.month, end.day);
+
+    final query = selectOnly(transactions, distinct: true)
+      ..orderBy([OrderingTerm.asc(transactions.dateCreated)])
+      ..where(onlyShowIfOwner(transactions, sharedTransactionsShow) &
+          onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
+          onlyShowBasedOnCategoryFks(transactions, categoryFks) &
+          onlyShowBasedOnIncome(transactions, income) &
+          onlyShowIfMember(transactions, member) &
+          onlyShowIfCertainBudget(
+              transactions, onlyShowTransactionsBelongingToBudget))
+      ..addColumns([transactions.dateCreated])
+      ..where(transactions.dateCreated.isNotNull());
+    ;
+
+    return query.map((row) => row.read(transactions.dateCreated)).watch();
   }
 
   Stream<List<TransactionWithCategory>> getTransactionCategoryWithMonth(
@@ -1607,7 +1615,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get total amount spent in each day
   Stream<double?> watchTotalSpentInTimeRangeFromCategories(
       DateTime start, DateTime end, List<int>? categoryFks, bool allCategories,
-      {bool allCashFlow = false, int? onlyShowTransactionsBelongingToBudget}) {
+      {bool allCashFlow = false,
+      int? onlyShowTransactionsBelongingToBudget,
+      Budget? budget}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     final totalAmt = transactions.amount.sum();
@@ -1618,7 +1628,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (selectOnly(transactions)
         ..addColumns([totalAmt])
         ..where(
-          transactions.dateCreated.isBetweenValues(startDate, endDate) &
+          onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
               transactions.paid.equals(true) &
               (allCashFlow
                   ? transactions.income.isIn([true, false])
@@ -1630,7 +1640,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (selectOnly(transactions)
         ..addColumns([totalAmt])
         ..where(
-          transactions.dateCreated.isBetweenValues(startDate, endDate) &
+          onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
               transactions.categoryFk.isIn(categoryFks ?? []) &
               transactions.paid.equals(true) &
               (allCashFlow
@@ -1653,7 +1663,28 @@ class FinanceDatabase extends _$FinanceDatabase {
             tbl.sharedKey.isNull()
         : (sharedTransactionsShow == SharedTransactionsShow.excludeOther)
             ? (tbl.sharedReferenceBudgetPk.isNull())
-            : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull());
+            : (sharedTransactionsShow ==
+                    SharedTransactionsShow.excludeOtherIfShared)
+                ? (tbl.sharedReferenceBudgetPk.isNull() |
+                    tbl.sharedKey.isNull())
+                : (sharedTransactionsShow ==
+                        SharedTransactionsShow.excludeOtherIfNotShared)
+                    ? (tbl.sharedReferenceBudgetPk.isNull() |
+                        tbl.sharedKey.isNotNull())
+                    : (sharedTransactionsShow ==
+                            SharedTransactionsShow.onlyIfShared)
+                        ? (tbl.sharedKey.isNotNull())
+                        : (sharedTransactionsShow ==
+                                SharedTransactionsShow.onlyIfNotShared)
+                            ? (tbl.sharedKey.isNull())
+                            : (sharedTransactionsShow ==
+                                    SharedTransactionsShow.onlyIfOwnerIfShared)
+                                ? (tbl.sharedReferenceBudgetPk.isNotNull() &
+                                    tbl.sharedKey.isNotNull() &
+                                    tbl.transactionOwnerEmail.equals(
+                                        appStateSettings["currentUserEmail"]))
+                                : tbl.sharedKey.isNotNull() |
+                                    tbl.sharedKey.isNull());
   }
 
   Stream<double?> watchTotalSpentByCurrentUserOnly(
@@ -1668,8 +1699,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     query = (selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.dateCreated.isBetweenValues(startDate, endDate) &
-          transactions.paid.equals(true) &
+      ..where(transactions.paid.equals(true) &
           transactions.income.equals(false) &
           onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner) &
           transactions.sharedReferenceBudgetPk.equals(budgetPk)));
@@ -1736,6 +1766,30 @@ class FinanceDatabase extends _$FinanceDatabase {
             tbl.transactionOwnerEmail.isNotNull());
   }
 
+  Expression<bool> onlyShowBasedOnIncome($TransactionsTable tbl, bool? income) {
+    return (income != null
+        ? tbl.income.equals(income)
+        : tbl.income.isNull() | tbl.income.isNotNull());
+  }
+
+  Expression<bool> onlyShowBasedOnCategoryFks(
+      $TransactionsTable tbl, List<int> categoryFks) {
+    return (categoryFks.length >= 1
+        ? tbl.categoryFk.isIn(categoryFks)
+        : tbl.categoryFk.isNotNull());
+  }
+
+  Expression<bool> onlyShowBasedOnTimeRange($TransactionsTable tbl,
+      DateTime startDate, DateTime endDate, Budget? budget) {
+    return (budget != null &&
+            // Only if an Added only, Custom budget -> show all transactions belonging to it, even if outside the date range
+            (budget.addedTransactionsOnly == true &&
+                budget.sharedKey == null &&
+                budget.reoccurrence == BudgetReoccurence.custom)
+        ? transactions.dateCreated.isNotNull()
+        : transactions.dateCreated.isBetweenValues(startDate, endDate));
+  }
+
   Expression<bool> onlyShowIfCertainBudget(
       $TransactionsTable tbl, int? budgetPk) {
     return (budgetPk != null
@@ -1756,6 +1810,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     SharedTransactionsShow sharedTransactionsShow, {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
+    Budget? budget,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -1765,7 +1820,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     final query = (select(transactions)
       ..where((tbl) {
         final dateCreated = tbl.dateCreated;
-        return dateCreated.isBetweenValues(startDate, endDate) &
+        return onlyShowBasedOnTimeRange(
+                transactions, startDate, endDate, budget) &
             isInCategory(tbl, allCategories, categoryFks) &
             tbl.paid.equals(true) &
             tbl.income.equals(false) &
@@ -1948,6 +2004,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     SharedTransactionsShow sharedTransactionsShow, {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
+    Budget? budget,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -1958,7 +2015,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               if (isPaidOnly) {
                 if (isIncome == true) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      dateCreated.isBetweenValues(startDate, endDate) &
+                      onlyShowBasedOnTimeRange(
+                          transactions, startDate, endDate, budget) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(true) &
                       onlyShowIfMember(tbl, member) &
@@ -1966,7 +2024,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      dateCreated.isBetweenValues(startDate, endDate) &
+                      onlyShowBasedOnTimeRange(
+                          transactions, startDate, endDate, budget) &
                       tbl.paid.equals(true) &
                       tbl.income.equals(false) &
                       onlyShowIfMember(tbl, member) &
@@ -1974,7 +2033,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      dateCreated.isBetweenValues(startDate, endDate) &
+                      onlyShowBasedOnTimeRange(
+                          transactions, startDate, endDate, budget) &
                       tbl.paid.equals(true) &
                       onlyShowIfMember(tbl, member) &
                       onlyShowIfCertainBudget(
@@ -1983,21 +2043,24 @@ class FinanceDatabase extends _$FinanceDatabase {
               } else {
                 if (isIncome == true) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      dateCreated.isBetweenValues(startDate, endDate) &
+                      onlyShowBasedOnTimeRange(
+                          transactions, startDate, endDate, budget) &
                       tbl.income.equals(true) &
                       onlyShowIfMember(tbl, member) &
                       onlyShowIfCertainBudget(
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      dateCreated.isBetweenValues(startDate, endDate) &
+                      onlyShowBasedOnTimeRange(
+                          transactions, startDate, endDate, budget) &
                       tbl.income.equals(false) &
                       onlyShowIfMember(tbl, member) &
                       onlyShowIfCertainBudget(
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
                   return onlyShowIfOwner(tbl, sharedTransactionsShow) &
-                      dateCreated.isBetweenValues(startDate, endDate) &
+                      onlyShowBasedOnTimeRange(
+                          transactions, startDate, endDate, budget) &
                       onlyShowIfMember(tbl, member) &
                       onlyShowIfCertainBudget(
                           tbl, onlyShowTransactionsBelongingToBudget);
@@ -2009,8 +2072,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
     return (select(transactions)
           ..where((tbl) {
-            final dateCreated = tbl.dateCreated;
-            return dateCreated.isBetweenValues(startDate, endDate) &
+            return  onlyShowBasedOnTimeRange(
+                          transactions, startDate, endDate, budget) &
                 tbl.categoryFk.isIn(categoryFks) &
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(

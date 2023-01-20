@@ -354,19 +354,50 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 
   void setSelectedSharedTransactionsShow() {
-    if (selectedSharedTransactionsShow == SharedTransactionsShow.excludeOther)
+    if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.excludeOtherIfNotShared)
       setState(() {
         selectedSharedTransactionsShow = SharedTransactionsShow.onlyIfOwner;
       });
     else if (selectedSharedTransactionsShow ==
         SharedTransactionsShow.onlyIfOwner)
       setState(() {
+        selectedSharedTransactionsShow =
+            SharedTransactionsShow.onlyIfOwnerIfShared;
+      });
+    else if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.onlyIfOwnerIfShared)
+      setState(() {
         selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
       });
-    else
+    else if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.fromEveryone)
+      setState(() {
+        selectedSharedTransactionsShow = SharedTransactionsShow.onlyIfShared;
+      });
+    else if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.onlyIfShared)
+      setState(() {
+        selectedSharedTransactionsShow = SharedTransactionsShow.onlyIfNotShared;
+      });
+    else if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.onlyIfNotShared)
       setState(() {
         selectedSharedTransactionsShow = SharedTransactionsShow.excludeOther;
       });
+    else if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.excludeOther)
+      setState(() {
+        selectedSharedTransactionsShow =
+            SharedTransactionsShow.excludeOtherIfShared;
+      });
+    else if (selectedSharedTransactionsShow ==
+        SharedTransactionsShow.excludeOtherIfShared)
+      setState(() {
+        selectedSharedTransactionsShow =
+            SharedTransactionsShow.excludeOtherIfNotShared;
+      });
+
     determineBottomButton();
     return;
   }
@@ -991,8 +1022,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                           ),
                                           ButtonIcon(
                                             onTap: () {
-                                              setSelectedShared(
-                                                  !selectedShared);
+                                              setAddedTransactionsOnly(
+                                                  !selectedAddedTransactionsOnly);
                                             },
                                             icon: Icons.select_all,
                                             size: 41,
@@ -1138,7 +1169,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                     children: [
                                       TextFont(
                                         text:
-                                            "Transactions Added to Another Budget",
+                                            "Transactions To Include From Other Budgets",
                                         textColor: Theme.of(context)
                                             .colorScheme
                                             .textLight,
@@ -1162,31 +1193,53 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                       child: Row(
                                         children: [
                                           Expanded(
-                                            child: TextFont(
-                                              text: selectedSharedTransactionsShow ==
-                                                      SharedTransactionsShow
-                                                          .fromEveryone
-                                                  ? "Include All"
-                                                  : selectedSharedTransactionsShow ==
-                                                          SharedTransactionsShow
-                                                              .onlyIfOwner
-                                                      ? "By Me Only"
-                                                      : selectedSharedTransactionsShow ==
-                                                              SharedTransactionsShow
-                                                                  .excludeOther
-                                                          ? "Exclude Others"
-                                                          : "",
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 26,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 4,
+                                              ),
+                                              child: TextFont(
+                                                autoSizeText: true,
+                                                maxLines: 1,
+                                                text: selectedSharedTransactionsShow ==
+                                                        SharedTransactionsShow
+                                                            .fromEveryone
+                                                    ? "All"
+                                                    : selectedSharedTransactionsShow ==
+                                                            SharedTransactionsShow
+                                                                .onlyIfOwner
+                                                        ? "From Me"
+                                                        : selectedSharedTransactionsShow ==
+                                                                SharedTransactionsShow
+                                                                    .onlyIfShared
+                                                            ? "All If Shared"
+                                                            : selectedSharedTransactionsShow ==
+                                                                    SharedTransactionsShow
+                                                                        .onlyIfNotShared
+                                                                ? "All If Not Shared"
+                                                                : selectedSharedTransactionsShow ==
+                                                                        SharedTransactionsShow
+                                                                            .onlyIfOwnerIfShared
+                                                                    ? "From Me If Shared"
+                                                                    : selectedSharedTransactionsShow ==
+                                                                            SharedTransactionsShow
+                                                                                .excludeOther
+                                                                        ? "Exclude Others"
+                                                                        : selectedSharedTransactionsShow ==
+                                                                                SharedTransactionsShow.excludeOtherIfNotShared
+                                                                            ? "Exclude If Not Shared"
+                                                                            : selectedSharedTransactionsShow == SharedTransactionsShow.excludeOtherIfShared
+                                                                                ? "Exclude If Shared"
+                                                                                : "",
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 26,
+                                              ),
                                             ),
                                           ),
                                           ButtonIcon(
                                             onTap: () {
                                               setSelectedSharedTransactionsShow();
                                             },
-                                            icon: selectedPin
-                                                ? Icons.push_pin_rounded
-                                                : Icons.push_pin_outlined,
+                                            icon: Icons.import_export_rounded,
                                             size: 41,
                                           ),
                                         ],

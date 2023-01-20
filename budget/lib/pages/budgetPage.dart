@@ -186,6 +186,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                   widget.budget.addedTransactionsOnly == true
                               ? widget.budget.budgetPk
                               : null,
+                      budget: widget.budget,
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -195,7 +196,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                               padding: const EdgeInsets.only(top: 40),
                               child: NoResults(
                                 message:
-                                    "There are no transactions for this budget",
+                                    "There are no transactions for this budget within the current dates.",
                               ),
                             ),
                           );
@@ -499,6 +500,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                               widget.budget.addedTransactionsOnly == true
                           ? widget.budget.budgetPk
                           : null,
+                  budget: widget.budget,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -588,6 +590,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                             widget.budget.addedTransactionsOnly == true
                         ? widget.budget.budgetPk
                         : null,
+                budget: widget.budget,
               ),
               SliverToBoxAdapter(
                 child: widget.budget.sharedDateUpdated == null
@@ -615,7 +618,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                 child: Container(
                     height: 1, color: Theme.of(context).colorScheme.background),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 10))
+              SliverToBoxAdapter(child: SizedBox(height: 80)),
             ],
           ),
           SelectedTransactionsActionBar(

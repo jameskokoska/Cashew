@@ -65,6 +65,7 @@ dependencies:
   cloud_firestore: ^4.2.0
   firebase_core: ^2.4.0
   firebase_auth: ^4.2.0
+  sliver_tools: ^0.2.8
 
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:

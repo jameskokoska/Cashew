@@ -105,6 +105,8 @@ class _WalletEntryState extends State<WalletEntry>
                                   initialCount: (snapshot.data![0] ?? 0 * -1),
                                   textBuilder: (number) {
                                     return TextFont(
+                                      walletPkForCurrency:
+                                          widget.wallet.walletPk,
                                       textAlign: TextAlign.left,
                                       text: convertToMoney(number),
                                       fontSize: 17,

@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed Date Created for import from csv transactions
+    If transactions are added out of time range to custom ranged budget for added transactions only, they appear and are added to the total
+    Fixed tapping Added transactions icon changed shared status of budget when adding budget
+    Transactions are only rendered the day that a transaction exists on, optimization
+    This also allows the view of transactions out of a time range - for example when an added only budget has transactions out of a custom time perios range
+    Added more budget transaction added filters: fromEveryone, onlyIfOwner, onlyIfOwnerIfShared, onlyIfShared, onlyIfNotShared, excludeOther, excludeOtherIfShared, excludeOtherIfNotShared
     Added wallet picker in add transaction
     Added exclude other transactions that are added to another budget option
     Editing budget page fixes

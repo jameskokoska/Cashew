@@ -96,7 +96,7 @@ class TextFont extends StatelessWidget {
       return FutureBuilder(
         future: database.getWalletInstance(walletPkForCurrency!),
         builder: (context, AsyncSnapshot<TransactionWallet> snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data!.currency != null) {
             return textWidget(currenciesJSON[snapshot.data!.currency!]
                     ["Symbol"] +
                 text +

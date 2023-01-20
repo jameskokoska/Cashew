@@ -33,6 +33,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 List<Widget> getTransactionsSlivers(
   DateTime startDay,
@@ -49,226 +50,284 @@ List<Widget> getTransactionsSlivers(
   String? member,
   int? onlyShowTransactionsBelongingToBudget,
   bool simpleListRender = false,
+  Budget? budget,
 }) {
-  List<Widget> transactionsWidgets = [];
-  List<DateTime> dates = [];
-  for (DateTime indexDay = startDay;
-      indexDay.millisecondsSinceEpoch <= endDay.millisecondsSinceEpoch;
-      indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
-    // we do indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)
-    // instead of indexDay = indexDay.add(Duration(days:1)) because of the time change
-    dates.add(indexDay);
-  }
-  for (DateTime date in dates.reversed) {
-    transactionsWidgets.add(
-      StreamBuilder<List<TransactionWithCategory>>(
-        stream: database.getTransactionCategoryWithDay(
-          date,
-          search: search,
-          categoryFks: categoryFks,
-          income: income,
-          sharedTransactionsShow: sharedTransactionsShow,
-          member: member,
-          onlyShowTransactionsBelongingToBudget:
-              onlyShowTransactionsBelongingToBudget,
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.data != null && snapshot.hasData) {
-            if (slivers == false && snapshot.data!.length <= 0) {
-              return SizedBox.shrink();
+  return [
+    StreamBuilder<List<DateTime?>>(
+      stream: database.getUniqueDates(
+        start: startDay,
+        end: endDay,
+        search: search,
+        categoryFks: categoryFks,
+        income: income,
+        sharedTransactionsShow: sharedTransactionsShow,
+        member: member,
+        onlyShowTransactionsBelongingToBudget:
+            onlyShowTransactionsBelongingToBudget,
+        budget: budget,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<Widget> transactionsWidgets = [];
+          // List<DateTime> dates = [];
+          // for (DateTime indexDay = startDay;
+          //     indexDay.millisecondsSinceEpoch <= endDay.millisecondsSinceEpoch;
+          //     indexDay =
+          //         DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
+          //   // we do indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)
+          //   // instead of indexDay = indexDay.add(Duration(days:1)) because of the time change
+          //   dates.add(indexDay);
+          // }
+          DateTime previousDate = DateTime(1900);
+          for (DateTime? dateNullable in snapshot.data!.reversed) {
+            DateTime date = dateNullable ?? DateTime.now();
+            if (previousDate.day == date.day &&
+                previousDate.month == date.month &&
+                previousDate.year == date.year) {
+              continue;
             }
-            List<TransactionWithCategory> transactionList =
-                snapshot.data!.reversed.toList();
-            double totalSpentForDay = 0;
-            transactionList.forEach((transaction) {
-              if (transaction.transaction.paid)
-                totalSpentForDay += transaction.transaction.amount;
-            });
-            if (slivers == false) {
-              List<Widget> children = [];
-              for (int index = 0; index < transactionList.length + 1; index++) {
-                int realIndex = index - 1;
-                if (realIndex == -1) {
-                  children.add(DateDivider(
-                      date: date,
-                      info: transactionList.length > 1
-                          ? convertToMoney(totalSpentForDay)
-                          : ""));
-                } else {
-                  children.add(
-                    AnimatedSwitcher(
-                      duration: Duration(milliseconds: 300),
-                      child: TransactionEntry(
-                        key: ValueKey(transactionList[realIndex]
-                            .transaction
-                            .transactionPk),
-                        category: transactionList[realIndex].category,
-                        openPage: AddTransactionPage(
-                          title: "Edit Transaction",
-                          transaction: transactionList[realIndex].transaction,
-                        ),
-                        transaction: transactionList[realIndex].transaction,
-                        onSelected: (Transaction transaction, bool selected) {
-                          if (onSelected != null)
-                            onSelected(transaction, selected);
-                        },
-                        listID: listID,
-                      ),
-                    ),
-                  );
-                }
-              }
-              return Column(
-                children: children,
-              );
-            }
-            Widget sliverList;
-            if (appStateSettings["batterySaver"] == true ||
-                simpleListRender == true) {
-              sliverList = SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  childCount: transactionList.length + 1,
-                  (BuildContext context, int index) {
-                    int realIndex = index - 1;
-                    if (realIndex == -1) {
-                      if (sticky)
-                        return SizedBox.shrink();
-                      else
-                        return DateDivider(
-                            date: date,
-                            info: transactionList.length > 1
-                                ? convertToMoney(totalSpentForDay)
-                                : "");
-                    }
-                    return TransactionEntry(
-                      key: ValueKey(
-                          transactionList[realIndex].transaction.transactionPk),
-                      category: transactionList[realIndex].category,
-                      openPage: AddTransactionPage(
-                        title: "Edit Transaction",
-                        transaction: transactionList[realIndex].transaction,
-                      ),
-                      transaction: transactionList[realIndex].transaction,
-                      onSelected: (Transaction transaction, bool selected) {
-                        if (onSelected != null)
-                          onSelected(transaction, selected);
-                      },
-                      listID: listID,
-                    );
-                  },
-                ),
-              );
-            } else {
-              sliverList =
-                  SliverImplicitlyAnimatedList<TransactionWithCategory>(
-                items: transactionList,
-                areItemsTheSame: (a, b) =>
-                    a.transaction.transactionPk == b.transaction.transactionPk,
-                insertDuration: Duration(milliseconds: 500),
-                removeDuration: Duration(milliseconds: 500),
-                updateDuration: Duration(milliseconds: 500),
-                itemBuilder: (BuildContext context, Animation<double> animation,
-                    TransactionWithCategory item, int index) {
-                  return SizeFadeTransition(
-                    sizeFraction: 0.7,
-                    curve: Curves.easeInOut,
-                    animation: animation,
-                    child: TransactionEntry(
-                      key: ValueKey(item.transaction.transactionPk),
-                      category: item.category,
-                      openPage: AddTransactionPage(
-                        title: "Edit Transaction",
-                        transaction: item.transaction,
-                      ),
-                      transaction: item.transaction,
-                      onSelected: (Transaction transaction, bool selected) {
-                        if (onSelected != null)
-                          onSelected(transaction, selected);
-                      },
-                      listID: listID,
-                    ),
-                  );
-                },
-              );
-            }
+            previousDate = date;
 
-            // SliverList(
-            //   delegate: SliverChildBuilderDelegate(
-            //     (BuildContext context, int index) {
-            //       int realIndex = index - 1;
-            //       if (realIndex == -1) {
-            //         if (sticky)
-            //           return SizedBox.shrink();
-            //         else
-            //           return DateDivider(
-            //               date: date,
-            //               info: transactionList.length > 1
-            //                   ? convertToMoney(totalSpentForDay)
-            //                   : "");
-            //       }
-            //       return TransactionEntry(
-            //         key: ValueKey(
-            //             transactionList[realIndex].transaction.transactionPk),
-            //         category: transactionList[realIndex].category,
-            //         openPage: AddTransactionPage(
-            //           title: "Edit Transaction",
-            //           transaction: transactionList[realIndex].transaction,
-            //         ),
-            //         transaction: transactionList[realIndex].transaction,
-            //         onSelected: (Transaction transaction, bool selected) {
-            //           if (onSelected != null) onSelected(transaction, selected);
-            //         },
-            //         listID: listID,
-            //       );
-            //     },
-            //     childCount: transactionList.length + 1,
-            //   ),
-            // );
-            if (sticky) {
-              return SliverStickyHeader(
-                header: appStateSettings["batterySaver"] == true ||
-                        simpleListRender == true
-                    ? transactionList.length > 0
-                        ? DateDivider(
-                            key: ValueKey(date),
-                            date: date,
-                            info: transactionList.length > 1
-                                ? convertToMoney(totalSpentForDay)
-                                : "")
-                        : SizedBox.shrink()
-                    : AnimatedSize(
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                        child: transactionList.length > 0
-                            ? AnimatedSwitcher(
-                                duration: Duration(milliseconds: 300),
-                                child: DateDivider(
+            transactionsWidgets.add(
+              StreamBuilder<List<TransactionWithCategory>>(
+                stream: database.getTransactionCategoryWithDay(
+                  date,
+                  search: search,
+                  categoryFks: categoryFks,
+                  income: income,
+                  sharedTransactionsShow: sharedTransactionsShow,
+                  member: member,
+                  onlyShowTransactionsBelongingToBudget:
+                      onlyShowTransactionsBelongingToBudget,
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.data != null && snapshot.hasData) {
+                    if (slivers == false && snapshot.data!.length <= 0) {
+                      return SizedBox.shrink();
+                    }
+                    List<TransactionWithCategory> transactionList =
+                        snapshot.data!.reversed.toList();
+                    double totalSpentForDay = 0;
+                    transactionList.forEach((transaction) {
+                      if (transaction.transaction.paid)
+                        totalSpentForDay += transaction.transaction.amount;
+                    });
+                    if (slivers == false) {
+                      List<Widget> children = [];
+                      for (int index = 0;
+                          index < transactionList.length + 1;
+                          index++) {
+                        int realIndex = index - 1;
+                        if (realIndex == -1) {
+                          children.add(DateDivider(
+                              date: date,
+                              info: transactionList.length > 1
+                                  ? convertToMoney(totalSpentForDay)
+                                  : ""));
+                        } else {
+                          children.add(
+                            AnimatedSwitcher(
+                              duration: Duration(milliseconds: 300),
+                              child: TransactionEntry(
+                                key: ValueKey(transactionList[realIndex]
+                                    .transaction
+                                    .transactionPk),
+                                category: transactionList[realIndex].category,
+                                openPage: AddTransactionPage(
+                                  title: "Edit Transaction",
+                                  transaction:
+                                      transactionList[realIndex].transaction,
+                                ),
+                                transaction:
+                                    transactionList[realIndex].transaction,
+                                onSelected:
+                                    (Transaction transaction, bool selected) {
+                                  if (onSelected != null)
+                                    onSelected(transaction, selected);
+                                },
+                                listID: listID,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                      return Column(
+                        children: children,
+                      );
+                    }
+                    Widget sliverList;
+                    if (appStateSettings["batterySaver"] == true ||
+                        simpleListRender == true) {
+                      sliverList = SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          childCount: transactionList.length + 1,
+                          (BuildContext context, int index) {
+                            int realIndex = index - 1;
+                            if (realIndex == -1) {
+                              if (sticky)
+                                return SizedBox.shrink();
+                              else
+                                return DateDivider(
+                                    date: date,
+                                    info: transactionList.length > 1
+                                        ? convertToMoney(totalSpentForDay)
+                                        : "");
+                            }
+                            return TransactionEntry(
+                              key: ValueKey(transactionList[realIndex]
+                                  .transaction
+                                  .transactionPk),
+                              category: transactionList[realIndex].category,
+                              openPage: AddTransactionPage(
+                                title: "Edit Transaction",
+                                transaction:
+                                    transactionList[realIndex].transaction,
+                              ),
+                              transaction:
+                                  transactionList[realIndex].transaction,
+                              onSelected:
+                                  (Transaction transaction, bool selected) {
+                                if (onSelected != null)
+                                  onSelected(transaction, selected);
+                              },
+                              listID: listID,
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      sliverList =
+                          SliverImplicitlyAnimatedList<TransactionWithCategory>(
+                        items: transactionList,
+                        areItemsTheSame: (a, b) =>
+                            a.transaction.transactionPk ==
+                            b.transaction.transactionPk,
+                        insertDuration: Duration(milliseconds: 500),
+                        removeDuration: Duration(milliseconds: 500),
+                        updateDuration: Duration(milliseconds: 500),
+                        itemBuilder: (BuildContext context,
+                            Animation<double> animation,
+                            TransactionWithCategory item,
+                            int index) {
+                          return SizeFadeTransition(
+                            sizeFraction: 0.7,
+                            curve: Curves.easeInOut,
+                            animation: animation,
+                            child: TransactionEntry(
+                              key: ValueKey(item.transaction.transactionPk),
+                              category: item.category,
+                              openPage: AddTransactionPage(
+                                title: "Edit Transaction",
+                                transaction: item.transaction,
+                              ),
+                              transaction: item.transaction,
+                              onSelected:
+                                  (Transaction transaction, bool selected) {
+                                if (onSelected != null)
+                                  onSelected(transaction, selected);
+                              },
+                              listID: listID,
+                            ),
+                          );
+                        },
+                      );
+                    }
+
+                    // SliverList(
+                    //   delegate: SliverChildBuilderDelegate(
+                    //     (BuildContext context, int index) {
+                    //       int realIndex = index - 1;
+                    //       if (realIndex == -1) {
+                    //         if (sticky)
+                    //           return SizedBox.shrink();
+                    //         else
+                    //           return DateDivider(
+                    //               date: date,
+                    //               info: transactionList.length > 1
+                    //                   ? convertToMoney(totalSpentForDay)
+                    //                   : "");
+                    //       }
+                    //       return TransactionEntry(
+                    //         key: ValueKey(
+                    //             transactionList[realIndex].transaction.transactionPk),
+                    //         category: transactionList[realIndex].category,
+                    //         openPage: AddTransactionPage(
+                    //           title: "Edit Transaction",
+                    //           transaction: transactionList[realIndex].transaction,
+                    //         ),
+                    //         transaction: transactionList[realIndex].transaction,
+                    //         onSelected: (Transaction transaction, bool selected) {
+                    //           if (onSelected != null) onSelected(transaction, selected);
+                    //         },
+                    //         listID: listID,
+                    //       );
+                    //     },
+                    //     childCount: transactionList.length + 1,
+                    //   ),
+                    // );
+                    if (sticky) {
+                      return SliverStickyHeader(
+                        header: appStateSettings["batterySaver"] == true ||
+                                simpleListRender == true
+                            ? transactionList.length > 0
+                                ? DateDivider(
                                     key: ValueKey(date),
                                     date: date,
                                     info: transactionList.length > 1
                                         ? convertToMoney(totalSpentForDay)
-                                        : ""),
-                              )
-                            : Container(
-                                key: ValueKey(2),
+                                        : "")
+                                : SizedBox.shrink()
+                            : AnimatedSize(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                                child: transactionList.length > 0
+                                    ? AnimatedSwitcher(
+                                        duration: Duration(milliseconds: 300),
+                                        child: DateDivider(
+                                            key: ValueKey(date),
+                                            date: date,
+                                            info: transactionList.length > 1
+                                                ? convertToMoney(
+                                                    totalSpentForDay)
+                                                : ""),
+                                      )
+                                    : Container(
+                                        key: ValueKey(2),
+                                      ),
                               ),
-                      ),
-                sticky: true,
-                sliver: sliverList,
-              );
-            } else {
-              return sliverList;
-            }
+                        sticky: true,
+                        sliver: sliverList,
+                      );
+                    } else {
+                      return sliverList;
+                    }
+                  }
+                  if (slivers == false) {
+                    return SizedBox.shrink();
+                  }
+                  return SliverToBoxAdapter(child: SizedBox());
+                },
+              ),
+            );
           }
-          if (slivers == false) {
-            return SizedBox.shrink();
+          if (slivers) {
+            return MultiSliver(
+              children: transactionsWidgets,
+            );
+          } else {
+            return Column(
+              children: transactionsWidgets,
+            );
           }
-          return SliverToBoxAdapter(child: SizedBox());
-        },
-      ),
-    );
-  }
-  return transactionsWidgets;
+        }
+        if (slivers) {
+          return SliverToBoxAdapter(child: SizedBox.shrink());
+        } else {
+          return SizedBox.shrink();
+        }
+      },
+    )
+  ];
 }
 
 class TransactionsListPage extends StatefulWidget {

@@ -96,6 +96,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     widget.budget.addedTransactionsOnly == true
                 ? widget.budget.budgetPk
                 : null,
+        budget: widget.budget,
       ));
     }
     mergedStreams = StreamZip(watchedBudgetTotals);
@@ -306,6 +307,7 @@ class PastBudgetContainer extends StatelessWidget {
                       budget.addedTransactionsOnly == true
                   ? budget.budgetPk
                   : null,
+              budget: budget,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {

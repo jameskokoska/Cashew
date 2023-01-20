@@ -217,6 +217,7 @@ Future<bool> initializeDatabase() async {
         name: "Wallet",
         dateCreated: DateTime.now(),
         order: 0,
+        currency: "usd",
       ),
     );
   }
