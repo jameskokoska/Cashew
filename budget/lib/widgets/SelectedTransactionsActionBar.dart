@@ -97,8 +97,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   listOfIDs = listOfIDs),
                               builder: (context, snapshot) {
                                 return CountUp(
-                                  walletPkForCurrency:
-                                      appStateSettings["selectedWallet"],
+                                  prefix: getCurrencyString(),
                                   count: snapshot.hasData ? snapshot.data! : 0,
                                   duration: Duration(milliseconds: 250),
                                   fontSize: 17,

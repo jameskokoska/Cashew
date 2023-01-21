@@ -58,17 +58,17 @@ class BudgetContainer extends StatelessWidget {
           return StreamBuilder<List<CategoryWithTotal>>(
             stream:
                 database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-              budgetRange.start,
-              budgetRange.end,
-              budget.categoryFks ?? [],
-              budget.allCategoryFks,
-              budget.sharedTransactionsShow,
-              onlyShowTransactionsBelongingToBudget: budget.sharedKey != null ||
-                      budget.addedTransactionsOnly == true
-                  ? budget.budgetPk
-                  : null,
-                  budget: budget
-            ),
+                    budgetRange.start,
+                    budgetRange.end,
+                    budget.categoryFks ?? [],
+                    budget.allCategoryFks,
+                    budget.sharedTransactionsShow,
+                    onlyShowTransactionsBelongingToBudget:
+                        budget.sharedKey != null ||
+                                budget.addedTransactionsOnly == true
+                            ? budget.budgetPk
+                            : null,
+                    budget: budget),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 double totalSpent = 0;
@@ -149,14 +149,12 @@ class BudgetContainer extends StatelessWidget {
                                             children: [
                                               Container(
                                                 child: CountUp(
+                                                  prefix: getCurrencyString(),
                                                   count: appStateSettings[
                                                           "showTotalSpentForBudget"]
                                                       ? totalSpent
                                                       : budget.amount -
                                                           totalSpent,
-                                                  walletPkForCurrency:
-                                                      appStateSettings[
-                                                          "selectedWallet"],
                                                   duration: Duration(
                                                       milliseconds: 700),
                                                   fontSize: 18,
@@ -188,15 +186,13 @@ class BudgetContainer extends StatelessWidget {
                                             children: [
                                               Container(
                                                 child: CountUp(
+                                                  prefix: getCurrencyString(),
                                                   count: appStateSettings[
                                                           "showTotalSpentForBudget"]
                                                       ? totalSpent
                                                       : -1 *
                                                           (budget.amount -
                                                               totalSpent),
-                                                  walletPkForCurrency:
-                                                      appStateSettings[
-                                                          "selectedWallet"],
                                                   duration: Duration(
                                                       milliseconds: 700),
                                                   fontSize: 18,
@@ -299,14 +295,12 @@ class BudgetContainer extends StatelessWidget {
                                           children: [
                                             Container(
                                               child: CountUp(
+                                                prefix: getCurrencyString(),
                                                 count: appStateSettings[
                                                         "showTotalSpentForBudget"]
                                                     ? totalSpent
                                                     : budget.amount -
                                                         totalSpent,
-                                                walletPkForCurrency:
-                                                    appStateSettings[
-                                                        "selectedWallet"],
                                                 duration:
                                                     Duration(milliseconds: 700),
                                                 fontSize: 18,
@@ -342,15 +336,13 @@ class BudgetContainer extends StatelessWidget {
                                           children: [
                                             Container(
                                               child: CountUp(
+                                                prefix: getCurrencyString(),
                                                 count: appStateSettings[
                                                         "showTotalSpentForBudget"]
                                                     ? totalSpent
                                                     : -1 *
                                                         (budget.amount -
                                                             totalSpent),
-                                                walletPkForCurrency:
-                                                    appStateSettings[
-                                                        "selectedWallet"],
                                                 duration:
                                                     Duration(milliseconds: 700),
                                                 fontSize: 18,

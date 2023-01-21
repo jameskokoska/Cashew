@@ -31,22 +31,25 @@ extension CapExtension on String {
       .join(" ");
 }
 
-String convertToMoney(
-  double amount,
-) {
-  if (amount == -0.0) {
-    amount = amount.abs();
+String convertToMoney(double amount,
+    {String? currencyKey, bool showCurrency = true}) {
+  {
+    if (amount == -0.0) {
+      amount = amount.abs();
+    }
+    if (amount == double.infinity) {
+      return "Infinity";
+    }
+    final currency = new NumberFormat("#,##0.00", "en_US");
+    String formatOutput = currency.format(amount);
+    if (formatOutput.substring(formatOutput.length - 2) == "00") {
+      return (showCurrency ? getCurrencyString(currencyKey: currencyKey) : '') +
+          formatOutput.replaceRange(
+              formatOutput.length - 3, formatOutput.length, '');
+    }
+    return (showCurrency ? getCurrencyString(currencyKey: currencyKey) : '') +
+        currency.format(amount);
   }
-  if (amount == double.infinity) {
-    return "Infinity";
-  }
-  final currency = new NumberFormat("#,##0.00", "en_US");
-  String formatOutput = currency.format(amount);
-  if (formatOutput.substring(formatOutput.length - 2) == "00") {
-    return formatOutput.replaceRange(
-        formatOutput.length - 3, formatOutput.length, '');
-  }
-  return currency.format(amount);
 }
 
 int moneyDecimals(double amount) {
@@ -58,11 +61,13 @@ int moneyDecimals(double amount) {
   return 2;
 }
 
-String getCurrencyString(String currencyKey) {
-  return currenciesJSON[currencyKey] != null &&
-          currenciesJSON[currencyKey]["Currency"] != null
-      ? currenciesJSON[currencyKey]["Currency"]
-      : "";
+// assume selected wallets currency
+String getCurrencyString({String? currencyKey}) {
+  return currencyKey != null &&
+          currenciesJSON[currencyKey] != null &&
+          currenciesJSON[currencyKey]["Symbol"] != null
+      ? currenciesJSON[currencyKey]["Symbol"]
+      : currenciesJSON[appStateSettings["selectedWalletCurrency"]]["Symbol"];
 }
 
 getMonth(int currentMonth) {
@@ -388,17 +393,13 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           budget.startDate.day));
 }
 
-String getWordedNumber(double value, String currencyKey) {
+String getWordedNumber(double value) {
   if (value >= 1000) {
-    return getCurrencyString(currencyKey) +
-        (value / 1000).toStringAsFixed(1) +
-        "K";
+    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
   } else if (value <= -1000) {
-    return getCurrencyString(currencyKey) +
-        (value / 1000).toStringAsFixed(1) +
-        "K";
+    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
   } else {
-    return getCurrencyString(currencyKey) + value.toInt().toString();
+    return getCurrencyString() + value.toInt().toString();
   }
 }
 

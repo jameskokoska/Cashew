@@ -319,7 +319,8 @@ class _SelectAmountState extends State<SelectAmount> {
                   child: FractionallySizedBox(
                     key: ValueKey(
                       amount == ""
-                          ? getCurrencyString(widget.currencyKey ?? "") + "0"
+                          ? getCurrencyString(currencyKey: widget.currencyKey) +
+                              "0"
                           : includesOperations(amount, false)
                               ? convertToMoney(calculateResult(amount))
                               : convertToMoney(double.tryParse(amount.substring(
@@ -350,20 +351,24 @@ class _SelectAmountState extends State<SelectAmount> {
                       walletPkForCurrency: widget.walletPkForCurrency ??
                           appStateSettings["selectedWallet"],
                       text: amount == ""
-                          ? getCurrencyString(widget.currencyKey ?? "") + "0"
+                          ? "0"
                           : includesOperations(amount, false)
-                              ? convertToMoney(calculateResult(amount))
-                              : convertToMoney(double.tryParse(amount.substring(
-                                                      amount.length - 1) ==
-                                                  "." ||
-                                              (amount.length > 2 &&
-                                                  amount.substring(
-                                                          amount.length - 2) ==
-                                                      ".0")
-                                          ? amount.substring(
-                                              0, amount.length - 1)
-                                          : amount) ??
-                                      0) +
+                              ? convertToMoney(calculateResult(amount),
+                                  showCurrency: false)
+                              : convertToMoney(
+                                      double.tryParse(amount.substring(
+                                                          amount.length - 1) ==
+                                                      "." ||
+                                                  (amount.length > 2 &&
+                                                      amount.substring(
+                                                              amount.length -
+                                                                  2) ==
+                                                          ".0")
+                                              ? amount.substring(
+                                                  0, amount.length - 1)
+                                              : amount) ??
+                                          0,
+                                      showCurrency: false) +
                                   (amount.substring(amount.length - 1) == "."
                                       ? "."
                                       : "") +

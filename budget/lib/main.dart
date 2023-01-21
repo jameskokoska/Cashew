@@ -335,7 +335,11 @@ class App extends StatelessWidget {
         useMaterial3: true,
         applyElevationOverlayColor: false,
         typography: Typography.material2014(),
-        canvasColor: Colors.white,
+        canvasColor: appStateSettings["materialYou"]
+            ? lightenPastel(
+                getSettingConstants(appStateSettings)["accentColor"],
+                amount: 0.91)
+            : Colors.white,
         appBarTheme:
             AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
       ),
@@ -351,7 +355,10 @@ class App extends StatelessWidget {
         ),
         useMaterial3: true,
         typography: Typography.material2014(),
-        canvasColor: Colors.black,
+        canvasColor: appStateSettings["materialYou"]
+            ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
+                amount: 0.92)
+            : Colors.black,
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
       ),
       scrollBehavior: ScrollBehavior(),

@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Fixed background color for material you
+    Fixed default wallet selection in add transactions radio popup
+    Fixed most of currency icons
+    Default budget selected when adding transactions in budget page
     Fixed Date Created for import from csv transactions
     If transactions are added out of time range to custom ranged budget for added transactions only, they appear and are added to the total
     Fixed tapping Added transactions icon changed shared status of budget when adding budget

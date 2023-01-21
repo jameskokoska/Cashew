@@ -327,9 +327,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       categoryFk: selectedCategory?.categoryPk ?? 0,
       dateCreated: selectedDate,
       income: selectedIncome,
-      walletFk: widget.transaction != null
-          ? widget.transaction!.walletFk
-          : selectedWalletPk,
+      walletFk: selectedWalletPk,
       paid: widget.transaction != null
           ? widget.transaction!.paid
           : selectedType == null,
@@ -407,6 +405,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
+      selectedWalletPk = widget.transaction!.walletFk;
       selectedAmount = widget.transaction!.amount.abs();
       selectedType = widget.transaction!.type;
       selectedTypeDisplay =
@@ -747,7 +746,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                       textBuilder: (number) {
                                         return TextFont(
                                           textAlign: TextAlign.right,
-                                          text: convertToMoney(number),
+                                          text: convertToMoney(number,
+                                              showCurrency: false),
                                           walletPkForCurrency: selectedWalletPk,
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold,
@@ -1066,10 +1066,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                         }
                                       return "";
                                     },
-                                    initial: selectedWalletPk == null
-                                        ? appStateSettings["selectedWallet"]
-                                            .toString()
-                                        : selectedWalletPk.toString(),
+                                    initial: selectedWalletPk.toString(),
                                     onChanged: (value) {
                                       for (TransactionWallet wallet
                                           in allWallets)

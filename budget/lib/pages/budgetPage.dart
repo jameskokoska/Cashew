@@ -117,8 +117,10 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                   tooltip: "Add Transaction",
                   openPage: AddTransactionPage(
                     title: "Add Transaction",
-                    selectedBudget:
-                        widget.budget.sharedKey != null ? widget.budget : null,
+                    selectedBudget: widget.budget.sharedKey != null ||
+                            widget.budget.addedTransactionsOnly == true
+                        ? widget.budget
+                        : null,
                   ),
                   color: budgetColorScheme.secondary,
                   colorPlus: budgetColorScheme.onSecondary,
@@ -271,15 +273,14 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                   children: [
                                                     Container(
                                                       child: CountUp(
+                                                        prefix:
+                                                            getCurrencyString(),
                                                         count: appStateSettings[
                                                                 "showTotalSpentForBudget"]
                                                             ? totalSpent
                                                             : widget.budget
                                                                     .amount -
                                                                 totalSpent,
-                                                        walletPkForCurrency:
-                                                            appStateSettings[
-                                                                "selectedWallet"],
                                                         duration: Duration(
                                                             milliseconds: 700),
                                                         fontSize: 25,
@@ -325,6 +326,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                               children: [
                                                 Container(
                                                   child: CountUp(
+                                                    prefix: getCurrencyString(),
                                                     count: appStateSettings[
                                                             "showTotalSpentForBudget"]
                                                         ? totalSpent
@@ -332,9 +334,6 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                             (widget.budget
                                                                     .amount -
                                                                 totalSpent),
-                                                    walletPkForCurrency:
-                                                        appStateSettings[
-                                                            "selectedWallet"],
                                                     duration: Duration(
                                                         milliseconds: 700),
                                                     fontSize: 25,

@@ -108,7 +108,8 @@ class _WalletEntryState extends State<WalletEntry>
                                       walletPkForCurrency:
                                           widget.wallet.walletPk,
                                       textAlign: TextAlign.left,
-                                      text: convertToMoney(number),
+                                      text: convertToMoney(number,
+                                          showCurrency: false),
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                     );
@@ -148,9 +149,13 @@ class _WalletEntryState extends State<WalletEntry>
                 ),
               ),
             ),
-            onTap: () {
+            onTap: () async {
               updateSettings("selectedWallet", widget.wallet.walletPk,
                   pagesNeedingRefresh: [0, 1, 2]);
+              TransactionWallet defaultWallet =
+                  await database.getWalletInstance(widget.wallet.walletPk);
+              updateSettings("selectedWalletCurrency", defaultWallet.currency,
+                  updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
             },
             onLongPress: () {
               openContainer();

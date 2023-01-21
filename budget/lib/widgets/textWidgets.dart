@@ -21,6 +21,7 @@ class TextFont extends StatelessWidget {
   final TextOverflow? overflow;
   final bool? softWrap;
   final int? walletPkForCurrency;
+  final bool onlyShowCurrencyIcon;
 
   const TextFont({
     Key? key,
@@ -38,6 +39,7 @@ class TextFont extends StatelessWidget {
     this.overflow,
     this.softWrap,
     this.walletPkForCurrency,
+    this.onlyShowCurrencyIcon = false,
   }) : super(key: key);
 
   @override
@@ -96,12 +98,15 @@ class TextFont extends StatelessWidget {
       return FutureBuilder(
         future: database.getWalletInstance(walletPkForCurrency!),
         builder: (context, AsyncSnapshot<TransactionWallet> snapshot) {
-          if (snapshot.hasData && snapshot.data!.currency != null) {
+          if (snapshot.hasData &&
+              snapshot.data!.currency != null &&
+              currenciesJSON[snapshot.data!.currency!] != null &&
+              currenciesJSON[snapshot.data!.currency!]["Symbol"] != null) {
             return textWidget(currenciesJSON[snapshot.data!.currency!]
                     ["Symbol"] +
                 text +
                 " " +
-                snapshot.data!.currency!.allCaps);
+                (onlyShowCurrencyIcon ? '' : snapshot.data!.currency!.allCaps));
           }
           return textWidget(text);
         },

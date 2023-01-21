@@ -171,7 +171,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                 fontFamily: 'Avenir');
           },
           getTitles: (value) {
-            return getWordedNumber(value, "");
+            return getWordedNumber(value);
           },
           reservedSize: widget.minPair.y <= -10000
               ? 55

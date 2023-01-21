@@ -8,6 +8,7 @@ Map<String, dynamic> defaultPreferences() {
     "backupLimit": 10,
     "theme": "system",
     "selectedWallet": 0,
+    "selectedWalletCurrency": "usd",
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "accentSystemColor": true,

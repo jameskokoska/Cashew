@@ -223,13 +223,16 @@ void deleteWalletPopup(context, TransactionWallet wallet,
       Navigator.pop(context);
     },
     onCancelLabel: "Cancel",
-    onSubmit: () {
+    onSubmit: () async {
       database.deleteWallet(wallet.walletPk, wallet.order);
       database.deleteWalletsTransactions(wallet.walletPk);
 
       // If we delete the selected wallet, set it back to the default
       if (appStateSettings["selectedWallet"] == wallet.walletPk) {
         updateSettings("selectedWallet", 0,
+            updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+        TransactionWallet defaultWallet = await database.getWalletInstance(0);
+        updateSettings("selectedWalletCurrency", defaultWallet.currency,
             updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
       }
       Navigator.pop(context);

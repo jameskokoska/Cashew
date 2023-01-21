@@ -1167,24 +1167,29 @@ class FinanceDatabase extends _$FinanceDatabase {
               transaction.copyWith(sharedStatus: Value(SharedStatus.waiting));
         }
       } else {
-        print("REMOVING SHARED");
-        try {
-          await deleteTransaction(transaction.transactionPk);
-        } catch (e) {
-          print(e.toString());
+        if (transaction.sharedStatus == null &&
+            originalTransaction != null &&
+            originalTransaction.sharedStatus == null) {
+        } else {
+          try {
+            print("REMOVING SHARED");
+            await deleteTransaction(transaction.transactionPk);
+          } catch (e) {
+            print(e.toString());
+          }
+          await createOrUpdateTransaction(
+              transaction.copyWith(
+                transactionPk: DateTime.now().millisecondsSinceEpoch,
+                sharedKey: Value(null),
+                transactionOwnerEmail: Value(null),
+                transactionOriginalOwnerEmail: Value(null),
+                sharedDateUpdated: Value(null),
+                sharedStatus: Value(null),
+                sharedReferenceBudgetPk: Value(null),
+              ),
+              updateSharedEntry: false);
+          return 1;
         }
-        await createOrUpdateTransaction(
-            transaction.copyWith(
-              transactionPk: DateTime.now().millisecondsSinceEpoch,
-              sharedKey: Value(null),
-              transactionOwnerEmail: Value(null),
-              transactionOriginalOwnerEmail: Value(null),
-              sharedDateUpdated: Value(null),
-              sharedStatus: Value(null),
-              sharedReferenceBudgetPk: Value(null),
-            ),
-            updateSharedEntry: false);
-        return 1;
       }
     }
     return into(transactions)
@@ -2072,8 +2077,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
     return (select(transactions)
           ..where((tbl) {
-            return  onlyShowBasedOnTimeRange(
-                          transactions, startDate, endDate, budget) &
+            return onlyShowBasedOnTimeRange(
+                    transactions, startDate, endDate, budget) &
                 tbl.categoryFk.isIn(categoryFks) &
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(

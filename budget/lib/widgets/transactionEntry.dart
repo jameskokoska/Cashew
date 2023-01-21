@@ -703,12 +703,15 @@ class TransactionEntry extends StatelessWidget {
                           initialCount: (transaction.amount.abs()),
                           textBuilder: (number) {
                             return TextFont(
-                              textAlign: TextAlign.left,
-                              text: convertToMoney(number),
-                              fontSize: 19,
-                              fontWeight: FontWeight.bold,
-                              textColor: textColor,
-                            );
+                                textAlign: TextAlign.left,
+                                text:
+                                    convertToMoney(number, showCurrency: false),
+                                fontSize: 19,
+                                fontWeight: FontWeight.bold,
+                                textColor: textColor,
+                                walletPkForCurrency: transaction.walletFk,
+                                onlyShowCurrencyIcon: transaction.walletFk ==
+                                    appStateSettings["selectedWallet"]);
                           },
                         ),
                       ],
