@@ -5,10 +5,12 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
+import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class SelectCategory extends StatefulWidget {
   SelectCategory({
@@ -42,6 +44,7 @@ class SelectCategory extends StatefulWidget {
 class _SelectCategoryState extends State<SelectCategory> {
   List<int> selectedCategories = [];
   bool updatedInitial = false;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
@@ -60,6 +63,7 @@ class _SelectCategoryState extends State<SelectCategory> {
       }
     });
     setInitialCategories();
+    _scrollController = ScrollController();
   }
 
   setInitialCategories() {
@@ -240,88 +244,194 @@ class _SelectCategoryState extends State<SelectCategory> {
               );
             }
             double size = MediaQuery.of(context).size.width <= 400
-                ? (MediaQuery.of(context).size.width - 200) / 4
+                ? (MediaQuery.of(context).size.width - 20) / 4 - 50
                 : 45;
+            // print(size);
+            print(snapshot.data);
+            print(size);
             return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
               child: Column(
                 children: [
-                  Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        ...snapshot.data!
-                            .asMap()
-                            .map(
-                              (index, category) => MapEntry(
-                                index,
-                                CategoryIcon(
-                                  categoryPk: category.categoryPk,
-                                  size: size,
-                                  label: true,
-                                  onTap: () {
-                                    if (widget.setSelectedCategory != null) {
-                                      widget.setSelectedCategory!(category);
+                  ReorderableGridView.count(
+                    dragWidgetBuilder: (index, child) {
+                      return Opacity(opacity: 0.5, child: child);
+                    },
+                    padding: EdgeInsets.only(top: 5),
+                    controller: _scrollController,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 5,
+                    crossAxisCount: MediaQuery.of(context).size.width <= 400
+                        ? 4
+                        : ((MediaQuery.of(context).size.width) ~/ size ~/ 2.1)
+                            .toInt(),
+                    shrinkWrap: true,
+                    children: [
+                      ...snapshot.data!
+                          .asMap()
+                          .map(
+                            (index, category) => MapEntry(
+                              index,
+                              CategoryIcon(
+                                canEditByLongPress: false,
+                                key: ValueKey(category.categoryPk),
+                                categoryPk: category.categoryPk,
+                                size: size,
+                                sizePadding: 24,
+                                margin: EdgeInsets.zero,
+                                label: true,
+                                onTap: () {
+                                  if (widget.setSelectedCategory != null) {
+                                    widget.setSelectedCategory!(category);
+                                    setState(() {
+                                      selectedCategories = [];
+                                      selectedCategories
+                                          .add(category.categoryPk);
+                                    });
+                                    Future.delayed(Duration(milliseconds: 70),
+                                        () {
+                                      if (widget.popRoute)
+                                        Navigator.pop(context);
+                                      if (widget.next != null) {
+                                        widget.next!();
+                                      }
+                                    });
+                                  } else if (widget.setSelectedCategories !=
+                                      null) {
+                                    if (selectedCategories
+                                        .contains(category.categoryPk)) {
                                       setState(() {
-                                        selectedCategories = [];
+                                        selectedCategories
+                                            .remove(category.categoryPk);
+                                      });
+                                      widget.setSelectedCategories!(
+                                          selectedCategories);
+                                    } else {
+                                      setState(() {
                                         selectedCategories
                                             .add(category.categoryPk);
                                       });
-                                      Future.delayed(Duration(milliseconds: 70),
-                                          () {
-                                        if (widget.popRoute)
-                                          Navigator.pop(context);
-                                        if (widget.next != null) {
-                                          widget.next!();
-                                        }
-                                      });
-                                    } else if (widget.setSelectedCategories !=
-                                        null) {
-                                      if (selectedCategories
-                                          .contains(category.categoryPk)) {
-                                        setState(() {
-                                          selectedCategories
-                                              .remove(category.categoryPk);
-                                        });
-                                        widget.setSelectedCategories!(
-                                            selectedCategories);
-                                      } else {
-                                        setState(() {
-                                          selectedCategories
-                                              .add(category.categoryPk);
-                                        });
-                                        widget.setSelectedCategories!(
-                                            selectedCategories);
-                                      }
+                                      widget.setSelectedCategories!(
+                                          selectedCategories);
                                     }
-                                  },
-                                  outline: selectedCategories
-                                      .contains(category.categoryPk),
+                                  }
+                                },
+                                outline: selectedCategories
+                                    .contains(category.categoryPk),
+                              ),
+                            ),
+                          )
+                          .values
+                          .toList(),
+                    ],
+                    footer: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7.5, right: 7.5),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: AddButton(
+                                onTap: () {},
+                                openPage: AddCategoryPage(
+                                  title: "Add Category",
                                 ),
                               ),
-                            )
-                            .values
-                            .toList(),
-                        Padding(
-                          key: ValueKey(2),
-                          padding: const EdgeInsets.only(
-                            top: 8,
-                            right: 8,
-                            left: 8,
-                          ),
-                          child: AddButton(
-                            onTap: () {},
-                            padding: EdgeInsets.zero,
-                            openPage: AddCategoryPage(
-                              title: "Add Category",
                             ),
-                            width: size + 20,
-                            height: size + 20,
-                          ),
+                            SizedBox(height: 15),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                    onReorder: (_intPrevious, _intNew) async {
+                      TransactionCategory oldCategory =
+                          snapshot.data![_intPrevious];
+
+                      if (_intNew > _intPrevious) {
+                        await database.moveCategory(
+                            oldCategory.categoryPk, _intNew, oldCategory.order);
+                      } else {
+                        await database.moveCategory(
+                            oldCategory.categoryPk, _intNew, oldCategory.order);
+                      }
+                    },
                   ),
+                  // Center(
+                  //   child: Wrap(
+                  //     alignment: WrapAlignment.center,
+                  //     children: [
+                  //       ...snapshot.data!
+                  //           .asMap()
+                  //           .map(
+                  //             (index, category) => MapEntry(
+                  //               index,
+                  //               CategoryIcon(
+                  //                 categoryPk: category.categoryPk,
+                  //                 size: size,
+                  //                 label: true,
+                  //                 onTap: () {
+                  //                   if (widget.setSelectedCategory != null) {
+                  //                     widget.setSelectedCategory!(category);
+                  //                     setState(() {
+                  //                       selectedCategories = [];
+                  //                       selectedCategories
+                  //                           .add(category.categoryPk);
+                  //                     });
+                  //                     Future.delayed(Duration(milliseconds: 70),
+                  //                         () {
+                  //                       if (widget.popRoute)
+                  //                         Navigator.pop(context);
+                  //                       if (widget.next != null) {
+                  //                         widget.next!();
+                  //                       }
+                  //                     });
+                  //                   } else if (widget.setSelectedCategories !=
+                  //                       null) {
+                  //                     if (selectedCategories
+                  //                         .contains(category.categoryPk)) {
+                  //                       setState(() {
+                  //                         selectedCategories
+                  //                             .remove(category.categoryPk);
+                  //                       });
+                  //                       widget.setSelectedCategories!(
+                  //                           selectedCategories);
+                  //                     } else {
+                  //                       setState(() {
+                  //                         selectedCategories
+                  //                             .add(category.categoryPk);
+                  //                       });
+                  //                       widget.setSelectedCategories!(
+                  //                           selectedCategories);
+                  //                     }
+                  //                   }
+                  //                 },
+                  //                 outline: selectedCategories
+                  //                     .contains(category.categoryPk),
+                  //               ),
+                  //             ),
+                  //           )
+                  //           .values
+                  //           .toList(),
+                  //       Padding(
+                  //         key: ValueKey(2),
+                  //         padding: const EdgeInsets.only(
+                  //           top: 8,
+                  //           right: 8,
+                  //           left: 8,
+                  //         ),
+                  //         child: AddButton(
+                  //           onTap: () {},
+                  //           padding: EdgeInsets.zero,
+                  //           openPage: AddCategoryPage(
+                  //             title: "Add Category",
+                  //           ),
+                  //           width: size + 20,
+                  //           height: size + 20,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   widget.nextLabel != null
                       ? Column(
                           children: [

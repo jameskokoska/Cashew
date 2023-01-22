@@ -231,7 +231,7 @@ class TransactionEntry extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 3),
                               child: transaction.name != ""
                                   ? TextFont(
-                                      text: transaction.name,
+                                      text: transaction.name.capitalizeFirst,
                                       fontSize: 16,
                                     )
                                   : category == null

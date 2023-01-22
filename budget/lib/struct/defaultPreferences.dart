@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// default settings, defaultSettings
 Map<String, dynamic> defaultPreferences() {
   return {
     "databaseJustImported": false,
@@ -41,5 +42,6 @@ Map<String, dynamic> defaultPreferences() {
     "sendTransactionsToServerQueue": {},
     "currentUserEmail": "",
     "usersNicknames": {},
+    "requireAuth": false,
   };
 }

@@ -585,9 +585,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                         }
                       },
                       children: <Widget>[
-                        appStateSettings["batterySaver"]
-                            ? SizedBox.shrink()
-                            : LoadingShimmer(),
+                        GhostTransactions(),
                         SwipeToSelectTransactions(
                           listID: "Transactions",
                           child: CustomScrollView(
@@ -613,9 +611,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                             ],
                           ),
                         ),
-                        appStateSettings["batterySaver"]
-                            ? SizedBox.shrink()
-                            : LoadingShimmer(),
+                        GhostTransactions(),
                       ],
                     ),
                   );
@@ -733,66 +729,60 @@ class FakeTextInput extends StatelessWidget {
   }
 }
 
-class LoadingShimmer extends StatelessWidget {
-  const LoadingShimmer({
+class GhostTransactions extends StatelessWidget {
+  const GhostTransactions({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      period: Duration(milliseconds: 1100),
-      baseColor: Theme.of(context).colorScheme.lightDarkAccent,
-      highlightColor: appStateSettings["materialYou"]
-          ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(1)
-          : Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 2),
-        child: ListView.builder(
-          itemBuilder: (_, i) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Colors.white,
-                      ),
-                      height: 20,
-                      width: 55 + randomDouble[i % 10] * 40,
+    Color color = appStateSettings["materialYou"]
+        ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.2)
+        : Theme.of(context).colorScheme.lightDarkAccentHeavy.withOpacity(0.2);
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: ListView.builder(
+        itemBuilder: (_, i) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: color,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Colors.white,
-                      ),
-                      height: 20,
-                      width: 55 + randomDouble[i % 10] * 40,
+                    height: 20,
+                    width: 55 + randomDouble[i % 10] * 40,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: color,
                     ),
-                  ],
-                ),
-                SizedBox(height: 7),
-                ...[
-                  for (int index = 0;
-                      index < 1 + randomInt[i % 10] % 3;
-                      index++)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Colors.white,
-                        ),
-                        height: 51,
-                      ),
-                    )
+                    height: 20,
+                    width: 55 + randomDouble[i % 10] * 40,
+                  ),
                 ],
+              ),
+              SizedBox(height: 7),
+              ...[
+                for (int index = 0; index < 1 + randomInt[i % 10] % 3; index++)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: color,
+                      ),
+                      height: 51,
+                    ),
+                  )
               ],
-            ),
+            ],
           ),
         ),
       ),

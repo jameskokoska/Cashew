@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'package:local_auth/local_auth.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -21,7 +21,6 @@ import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -77,6 +76,8 @@ void main() async {
 }
 
 late Map<String, dynamic> currenciesJSON;
+final LocalAuthentication auth = LocalAuthentication();
+bool biometricsAvailable = false;
 Random random = new Random();
 List<int> randomInt = [
   random.nextInt(100),
@@ -246,6 +247,83 @@ class InitializeDatabase extends StatelessWidget {
   }
 }
 
+Future<bool> checkBiometrics() async {
+  final bool requireAuth = appStateSettings["requireAuth"];
+  biometricsAvailable =
+      await auth.canCheckBiometrics || await auth.isDeviceSupported();
+  bool didAuthenticate = false;
+  if (requireAuth == true && biometricsAvailable == true) {
+    didAuthenticate = await auth.authenticate(
+        localizedReason: 'Please authenticate to continue.',
+        options: const AuthenticationOptions(biometricOnly: true));
+  } else {
+    didAuthenticate = true;
+  }
+  return didAuthenticate;
+}
+
+class InitializeBiometrics extends StatefulWidget {
+  final Widget child;
+  const InitializeBiometrics({required this.child, super.key});
+
+  @override
+  State<InitializeBiometrics> createState() => _InitializeBiometricsState();
+}
+
+class _InitializeBiometricsState extends State<InitializeBiometrics> {
+  bool authenticated = false;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      final bool result = await checkBiometrics();
+      setState(() {
+        authenticated = result;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget child = Scaffold(
+      body: Column(
+        key: ValueKey(0),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: GestureDetector(
+              onTap: () async {
+                final bool result = await checkBiometrics();
+                setState(() {
+                  authenticated = result;
+                });
+              },
+              child: Icon(
+                Icons.lock,
+                size: 50,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+    if (authenticated) {
+      child = SizedBox(key: ValueKey(1), child: widget.child);
+    }
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 1000),
+      switchInCurve: Curves.easeInOut,
+      switchOutCurve: Curves.easeInOut,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeScaleTransition(animation: animation, child: child);
+      },
+      child: child,
+    );
+  }
+}
+
 GlobalKey<_InitializeAppState> appStateKey = GlobalKey();
 GlobalKey<PageNavigationFrameworkState> pageNavigationFrameworkKey =
     GlobalKey();
@@ -271,6 +349,7 @@ class _InitializeAppState extends State<InitializeApp> {
       builder: (context, snapshot) {
         debugPrint("Initializing Settings");
         Widget child = SizedBox(
+          key: ValueKey(1),
           height: 50,
           width: 50,
           child: CircularProgressIndicator(
@@ -280,7 +359,7 @@ class _InitializeAppState extends State<InitializeApp> {
         );
         if (snapshot.hasData || entireAppLoaded == true) {
           debugPrint("Initialized Settings");
-          child = App();
+          child = App(key: ValueKey(2));
         }
         return AnimatedSwitcher(
           duration: Duration(milliseconds: 500),
@@ -370,14 +449,16 @@ class App extends StatelessWidget {
             : PageNavigationFramework(key: pageNavigationFrameworkKey),
       ),
       builder: (context, child) {
-        return Stack(
-          children: [
-            child!,
-            // The persistent global Widget stack (stays on navigation change)
-            GlobalSnackbar(key: snackbarKey),
-            GlobalLoadingProgress(key: loadingProgressKey),
-            GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
-          ],
+        return InitializeBiometrics(
+          child: Stack(
+            children: [
+              child!,
+              // The persistent global Widget stack (stays on navigation change)
+              GlobalSnackbar(key: snackbarKey),
+              GlobalLoadingProgress(key: loadingProgressKey),
+              GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
+            ],
+          ),
         );
       },
     );

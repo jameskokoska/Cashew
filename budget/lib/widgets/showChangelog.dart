@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
   String changelog = """
+    Added biometrics to unlock application option
+    Added drag to reorder categories on grid
+    Capitalized titles on transaction entry
+    Text capitalization
+    Removed shimmer from offscreen transactions on all transactions page
     Fixed background color for material you
     Fixed default wallet selection in add transactions radio popup
     Fixed most of currency icons

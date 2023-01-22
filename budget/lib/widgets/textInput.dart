@@ -84,7 +84,8 @@ class TextInput extends StatelessWidget {
         ),
         child: Center(
           child: TextFormField(
-            textCapitalization: textCapitalization ?? TextCapitalization.none,
+            textCapitalization:
+                textCapitalization ?? TextCapitalization.sentences,
             textAlignVertical: kIsWeb ? TextAlignVertical.bottom : null,
             //incognito keyboard
             enableIMEPersonalizedLearning: false,

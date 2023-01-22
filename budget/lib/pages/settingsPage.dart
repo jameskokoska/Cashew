@@ -130,6 +130,17 @@ class SettingsPageState extends State<SettingsPage>
           description: "Add and edit associated category titles",
           icon: Icons.text_fields_rounded,
         ),
+        biometricsAvailable
+            ? SettingsContainerSwitch(
+                title: "Require Biometrics",
+                onSwitched: (value) {
+                  updateSettings("requireAuth", value,
+                      updateGlobalState: false);
+                },
+                initialValue: appStateSettings["requireAuth"],
+                icon: Icons.lock_rounded,
+              )
+            : SizedBox.shrink(),
         SettingsHeader(title: "Account and Backups"),
         AccountAndBackup(),
         SettingsHeader(title: "Theme"),
