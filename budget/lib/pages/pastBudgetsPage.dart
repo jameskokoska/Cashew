@@ -38,11 +38,8 @@ class PastBudgetsPage extends StatelessWidget {
         stream: database.getBudget(budgetPk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return WatchAllWallets(
-              childFunction: (wallets) => _PastBudgetsPageContent(
-                budget: snapshot.data!,
-                wallets: wallets,
-              ),
+            return _PastBudgetsPageContent(
+              budget: snapshot.data!,
             );
           }
           return SizedBox.shrink();
@@ -51,12 +48,9 @@ class PastBudgetsPage extends StatelessWidget {
 }
 
 class _PastBudgetsPageContent extends StatefulWidget {
-  const _PastBudgetsPageContent(
-      {Key? key, required Budget this.budget, required this.wallets})
+  const _PastBudgetsPageContent({Key? key, required Budget this.budget})
       : super(key: key);
-
   final Budget budget;
-  final List<TransactionWallet> wallets;
 
   @override
   State<_PastBudgetsPageContent> createState() =>
@@ -66,53 +60,59 @@ class _PastBudgetsPageContent extends StatefulWidget {
 GlobalKey<PageFrameworkState> budgetHistoryKey = GlobalKey();
 
 class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
-  late Stream<List<double?>> mergedStreams;
+  Stream<List<double?>>? mergedStreams;
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 3;
 
   initState() {
-    List<Stream<double?>> watchedBudgetTotals = [];
-    for (int index = 0; index <= 7; index++) {
-      DateTime datePast = DateTime(
-        DateTime.now().year -
-            (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                ? index * widget.budget.periodLength
-                : 0),
-        DateTime.now().month -
-            (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                ? index * widget.budget.periodLength
-                : 0),
-        DateTime.now().day -
-            (widget.budget.reoccurrence == BudgetReoccurence.daily
-                ? index * widget.budget.periodLength
-                : 0) -
-            (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                ? index * 7 * widget.budget.periodLength
-                : 0),
-      );
-      DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
-      dateTimeRanges.add(budgetRange);
-      watchedBudgetTotals.add(database.watchTotalSpentInTimeRangeFromCategories(
-        budgetRange.start,
-        budgetRange.end,
-        widget.budget.categoryFks,
-        widget.budget.allCategoryFks,
-        widget.wallets,
-        onlyShowTransactionsBelongingToBudget:
-            widget.budget.sharedKey != null ||
-                    widget.budget.addedTransactionsOnly == true
-                ? widget.budget.budgetPk
-                : null,
-        budget: widget.budget,
-      ));
-    }
-    mergedStreams = StreamZip(watchedBudgetTotals);
-    // mergedStreams.listen(
-    //   (event) {
-    //     print("EVENT");
-    //     print(event.length);
-    //   },
-    // );
+    Future.delayed(Duration.zero, () async {
+      List<TransactionWallet> wallets = await database.getAllWallets();
+      List<Stream<double?>> watchedBudgetTotals = [];
+      for (int index = 0; index <= 7; index++) {
+        DateTime datePast = DateTime(
+          DateTime.now().year -
+              (widget.budget.reoccurrence == BudgetReoccurence.yearly
+                  ? index * widget.budget.periodLength
+                  : 0),
+          DateTime.now().month -
+              (widget.budget.reoccurrence == BudgetReoccurence.monthly
+                  ? index * widget.budget.periodLength
+                  : 0),
+          DateTime.now().day -
+              (widget.budget.reoccurrence == BudgetReoccurence.daily
+                  ? index * widget.budget.periodLength
+                  : 0) -
+              (widget.budget.reoccurrence == BudgetReoccurence.weekly
+                  ? index * 7 * widget.budget.periodLength
+                  : 0),
+        );
+        DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
+        dateTimeRanges.add(budgetRange);
+        watchedBudgetTotals
+            .add(database.watchTotalSpentInTimeRangeFromCategories(
+          budgetRange.start,
+          budgetRange.end,
+          widget.budget.categoryFks,
+          widget.budget.allCategoryFks,
+          wallets,
+          onlyShowTransactionsBelongingToBudget:
+              widget.budget.sharedKey != null ||
+                      widget.budget.addedTransactionsOnly == true
+                  ? widget.budget.budgetPk
+                  : null,
+          budget: widget.budget,
+        ));
+      }
+      setState(() {
+        mergedStreams = StreamZip(watchedBudgetTotals);
+      });
+      // mergedStreams.listen(
+      //   (event) {
+      //     print("EVENT");
+      //     print(event.length);
+      //   },
+      // );
+    });
     super.initState();
   }
 

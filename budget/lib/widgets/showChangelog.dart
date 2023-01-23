@@ -5,7 +5,7 @@ import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showChangelog(context, {forceShow: false}) async {
+Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """ 
     Support for multiple currencies with correct conversion!
     Fixed lock screen animation for biometrics
