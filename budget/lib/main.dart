@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:drift/drift.dart' hide Column;
 import 'package:local_auth/local_auth.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
@@ -198,6 +199,19 @@ Future<bool> initializeSettings() async {
     await SystemTheme.accentColor.load();
     Color accentColor = SystemTheme.accentColor.accent;
     appStateSettings["accentColor"] = toHexString(accentColor);
+  }
+
+  if (appStateSettings["cachedWalletCurrencies"] == null ||
+      appStateSettings["cachedWalletCurrencies"].keys.length <= 0) {
+    print("wallet cache is empty, need to add in values");
+    List<TransactionWallet> wallets = await database.getAllWallets();
+    for (TransactionWallet wallet in wallets) {
+      if (wallet.currency == null)
+        await database
+            .createOrUpdateWallet(wallet.copyWith(currency: Value("usd")));
+      else
+        await database.createOrUpdateWallet(wallet);
+    }
   }
 
   return true;
