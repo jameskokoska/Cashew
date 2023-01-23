@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -11,7 +13,7 @@ import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:universal_html/html.dart' hide Navigator;
-
+import 'package:http/http.dart' as http;
 import './colors.dart';
 import './widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -475,6 +477,10 @@ getTotalSubscriptions(
   DateTime today = DateTime.now();
   if (subscriptions != null) {
     for (Transaction subscription in subscriptions) {
+      subscription = subscription.copyWith(
+          amount: subscription.amount *
+              (amountRatioToPrimaryCurrencyGivenPk(subscription.walletFk) ??
+                  0));
       if (subscription.periodLength == 0) {
         continue;
       }
@@ -640,4 +646,51 @@ String getMemberNickname(member) {
   } else {
     return member;
   }
+}
+
+Future<bool> getExchangeRates() async {
+  print("Getting exchange rates for current wallets");
+  List<String?> uniqueCurrencies =
+      await database.getUniqueCurrenciesFromWallets();
+  Map<String, dynamic> cachedCurrencyExchange =
+      appStateSettings["cachedCurrencyExchange"];
+  for (String? currency in uniqueCurrencies) {
+    double exchangeRate = cachedCurrencyExchange[currency] ?? 1;
+    if (currency == null) continue;
+    try {
+      Uri url = Uri.parse(
+          "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/" +
+              currency +
+              "/usd.json");
+      dynamic response = await http.get(url);
+      if (response.statusCode == 200) {
+        exchangeRate = json.decode(response.body)?["usd"];
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    cachedCurrencyExchange[currency] = exchangeRate;
+  }
+  print(cachedCurrencyExchange);
+  updateSettings("cachedCurrencyExchange", cachedCurrencyExchange,
+      updateGlobalState: true);
+  return true;
+}
+
+double? amountRatioToPrimaryCurrencyGivenPk(int walletPk) {
+  return amountRatioToPrimaryCurrency(
+      appStateSettings["cachedWalletCurrencies"][walletPk.toString()]);
+}
+
+double? amountRatioToPrimaryCurrency(String? walletCurrency) {
+  if (walletCurrency == null) {
+    return 0;
+  }
+  if (appStateSettings["cachedCurrencyExchange"][walletCurrency] == null) {
+    return 0;
+  }
+  return appStateSettings["cachedCurrencyExchange"][walletCurrency] /
+      appStateSettings["cachedCurrencyExchange"][
+          appStateSettings["cachedWalletCurrencies"]
+              [appStateSettings["selectedWallet"].toString()]];
 }

@@ -5,6 +5,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -92,17 +93,21 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 globalSelectedID.notifyListeners();
                               },
                             ),
-                            StreamBuilder<double?>(
-                              stream: database.watchTotalSpentGivenList(
-                                  listOfIDs = listOfIDs),
-                              builder: (context, snapshot) {
-                                return CountUp(
-                                  prefix: getCurrencyString(),
-                                  count: snapshot.hasData ? snapshot.data! : 0,
-                                  duration: Duration(milliseconds: 250),
-                                  fontSize: 17,
-                                );
-                              },
+                            WatchAllWallets(
+                              childFunction: (wallets) =>
+                                  StreamBuilder<double?>(
+                                stream: database.watchTotalSpentGivenList(
+                                    listOfIDs, wallets),
+                                builder: (context, snapshot) {
+                                  return CountUp(
+                                    prefix: getCurrencyString(),
+                                    count:
+                                        snapshot.hasData ? snapshot.data! : 0,
+                                    duration: Duration(milliseconds: 250),
+                                    fontSize: 17,
+                                  );
+                                },
+                              ),
                             ),
                             TextFont(
                                 fontSize: 17,

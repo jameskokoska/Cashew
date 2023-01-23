@@ -16,6 +16,7 @@ class SelectAmount extends StatefulWidget {
     this.nextLabel,
     this.currencyKey,
     this.walletPkForCurrency,
+    this.onlyShowCurrencyIcon = false,
   }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
@@ -23,6 +24,7 @@ class SelectAmount extends StatefulWidget {
   final String? nextLabel;
   final String? currencyKey;
   final int? walletPkForCurrency;
+  final bool onlyShowCurrencyIcon;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -350,6 +352,7 @@ class _SelectAmountState extends State<SelectAmount> {
                       minFontSize: 16,
                       walletPkForCurrency: widget.walletPkForCurrency ??
                           appStateSettings["selectedWallet"],
+                      onlyShowCurrencyIcon: widget.onlyShowCurrencyIcon,
                       text: amount == ""
                           ? "0"
                           : includesOperations(amount, false)

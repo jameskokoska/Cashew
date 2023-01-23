@@ -174,7 +174,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   }
 
   determineBottomButton() {
-    if (selectedTitle != null) {
+    if (selectedTitle != null && selectedCurrency != "") {
       if (canAddWallet != true)
         this.setState(() {
           canAddWallet = true;

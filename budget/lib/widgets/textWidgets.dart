@@ -95,22 +95,31 @@ class TextFont extends StatelessWidget {
     }
 
     if (walletPkForCurrency != null) {
-      return FutureBuilder(
-        future: database.getWalletInstance(walletPkForCurrency!),
-        builder: (context, AsyncSnapshot<TransactionWallet> snapshot) {
-          if (snapshot.hasData &&
-              snapshot.data!.currency != null &&
-              currenciesJSON[snapshot.data!.currency!] != null &&
-              currenciesJSON[snapshot.data!.currency!]["Symbol"] != null) {
-            return textWidget(currenciesJSON[snapshot.data!.currency!]
-                    ["Symbol"] +
-                text +
-                " " +
-                (onlyShowCurrencyIcon ? '' : snapshot.data!.currency!.allCaps));
-          }
-          return textWidget(text);
-        },
-      );
+      final Map<dynamic, dynamic> cachedWalletCurrencies =
+          appStateSettings["cachedWalletCurrencies"] ?? {};
+      final currency = cachedWalletCurrencies[walletPkForCurrency.toString()];
+      if (currency == null) {
+        return FutureBuilder(
+          future: database.getWalletInstance(walletPkForCurrency!),
+          builder: (context, AsyncSnapshot<TransactionWallet> snapshot) {
+            if (snapshot.hasData &&
+                snapshot.data!.currency != null &&
+                currenciesJSON[snapshot.data!.currency!] != null &&
+                currenciesJSON[snapshot.data!.currency!]["Symbol"] != null) {
+              return textWidget(currenciesJSON[snapshot.data!.currency!]
+                      ["Symbol"] +
+                  text +
+                  (onlyShowCurrencyIcon
+                      ? ''
+                      : ' ' + snapshot.data!.currency!.allCaps));
+            }
+            return textWidget(text);
+          },
+        );
+      }
+      return textWidget(currenciesJSON[currency]["Symbol"] +
+          text +
+          (onlyShowCurrencyIcon ? '' : ' ' + currency.toString().allCaps));
     }
     return textWidget(text);
   }

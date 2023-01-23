@@ -1,5 +1,6 @@
 import 'dart:developer';
-
+import 'package:async/async.dart' show StreamZip;
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
@@ -502,9 +503,16 @@ class FinanceDatabase extends _$FinanceDatabase {
               transactions, onlyShowTransactionsBelongingToBudget))
       ..addColumns([transactions.dateCreated])
       ..where(transactions.dateCreated.isNotNull());
-    ;
 
     return query.map((row) => row.read(transactions.dateCreated)).watch();
+  }
+
+  Future<List<String?>> getUniqueCurrenciesFromWallets() {
+    final query = selectOnly(wallets, distinct: true)
+      ..addColumns([wallets.currency])
+      ..where(wallets.currency.isNotNull());
+
+    return query.map((row) => row.read(wallets.currency)).get();
   }
 
   Stream<List<TransactionWithCategory>> getTransactionCategoryWithMonth(
@@ -958,6 +966,13 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //create or update a new wallet
   Future<int> createOrUpdateWallet(TransactionWallet wallet) {
+    //when the first wallet is created this will most likely be null, as we initialize the database before settings
+    final Map<dynamic, dynamic> cachedWalletCurrencies =
+        appStateSettings["cachedWalletCurrencies"] ?? {};
+    cachedWalletCurrencies[wallet.walletPk.toString()] = wallet.currency ?? "";
+    print(cachedWalletCurrencies);
+    updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
+        pagesNeedingRefresh: [], updateGlobalState: false);
     if (wallet.colour == null) {
       return into(wallets).insert(wallet, mode: InsertMode.insertOrReplace);
     }
@@ -1573,6 +1588,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (walletPk == 0) {
       throw "Can't delete default wallet";
     }
+    final Map<dynamic, dynamic> cachedWalletCurrencies =
+        appStateSettings["cachedWalletCurrencies"] ?? {};
+    cachedWalletCurrencies.remove(walletPk.toString());
+    print(cachedWalletCurrencies);
+    updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
+        pagesNeedingRefresh: [], updateGlobalState: false);
     await database.shiftWallets(-1, order);
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
   }
@@ -1597,66 +1618,110 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
-  // TODO: add budget pk filter
-  // get total amount spent in each category
-  Stream<List<TypedResult>> watchTotalSpentInEachCategory() {
-    final totalAmt = transactions.amount.sum();
-    return (selectOnly(transactions).join([])
-          ..addColumns([transactions.categoryFk, totalAmt])
-          ..groupBy([transactions.categoryFk]))
-        .watch();
+  Stream<double?> totalDoubleStream(List<Stream<double?>> mergedStreams) {
+    return StreamZip(mergedStreams)
+        .map((list) => list.where((x) => x != null))
+        .map((list) => list.reduce((acc, val) => (acc ?? 0) + (val ?? 0)));
   }
 
-  Stream<double?> watchTotalSpentGivenList(List<int> transactionPks) {
-    final totalAmt = transactions.amount.sum();
-    JoinedSelectStatement<$TransactionsTable, Transaction> query;
+  Stream<List<CategoryWithTotal>> totalCategoryTotalStream(
+      List<Stream<List<CategoryWithTotal>>> mergedStreams) {
+    return StreamZip(mergedStreams).map((lists) {
+      final Map<TransactionCategory, double> categoryTotals = {};
+      for (final list in lists) {
+        for (final item in list) {
+          categoryTotals[item.category] =
+              (categoryTotals[item.category] ?? 0) + item.total;
+        }
+      }
+      return lists
+          .expand((list) => list)
+          .map((item) => CategoryWithTotal(
+                category: item.category,
+                total: categoryTotals[item.category] ?? 0,
+                transactionCount: item.transactionCount,
+              ))
+          .toList();
+    });
+  }
 
-    query = (selectOnly(transactions)
-      ..addColumns([totalAmt])
-      ..where(transactions.transactionPk.isIn(transactionPks)));
-    return query.map(((row) => row.read(totalAmt))).watchSingle();
+  Stream<double?> watchTotalSpentGivenList(
+      List<int> transactionPks, List<TransactionWallet> wallets) {
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in wallets) {
+      final totalAmt = transactions.amount.sum();
+      JoinedSelectStatement<$TransactionsTable, Transaction> query;
+
+      query = (selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(
+          transactions.transactionPk.isIn(transactionPks) &
+              transactions.walletFk.equals(wallet.walletPk),
+        ));
+      mergedStreams.add(query
+          .map(((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+          .watchSingle());
+    }
+
+    return totalDoubleStream(mergedStreams);
   }
 
   // get total amount spent in each day
   Stream<double?> watchTotalSpentInTimeRangeFromCategories(
-      DateTime start, DateTime end, List<int>? categoryFks, bool allCategories,
+      DateTime start,
+      DateTime end,
+      List<int>? categoryFks,
+      bool allCategories,
+      List<TransactionWallet> wallets,
       {bool allCashFlow = false,
       int? onlyShowTransactionsBelongingToBudget,
       Budget? budget}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
-    final totalAmt = transactions.amount.sum();
-    final date = transactions.dateCreated.date;
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in wallets) {
+      final totalAmt = transactions.amount.sum();
+      final date = transactions.dateCreated.date;
 
-    JoinedSelectStatement<$TransactionsTable, Transaction> query;
-    if (allCategories) {
-      query = (selectOnly(transactions)
-        ..addColumns([totalAmt])
-        ..where(
-          onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
-              transactions.paid.equals(true) &
-              (allCashFlow
-                  ? transactions.income.isIn([true, false])
-                  : transactions.income.equals(false)) &
-              onlyShowIfCertainBudget(
-                  transactions, onlyShowTransactionsBelongingToBudget),
-        ));
-    } else {
-      query = (selectOnly(transactions)
-        ..addColumns([totalAmt])
-        ..where(
-          onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
-              transactions.categoryFk.isIn(categoryFks ?? []) &
-              transactions.paid.equals(true) &
-              (allCashFlow
-                  ? transactions.income.isIn([true, false])
-                  : transactions.income.equals(false)) &
-              onlyShowIfCertainBudget(
-                  transactions, onlyShowTransactionsBelongingToBudget),
-        ));
+      JoinedSelectStatement<$TransactionsTable, Transaction> query;
+      if (allCategories) {
+        query = (selectOnly(transactions)
+          ..addColumns([totalAmt])
+          ..where(
+            onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
+                transactions.paid.equals(true) &
+                (allCashFlow
+                    ? transactions.income.isIn([true, false])
+                    : transactions.income.equals(false)) &
+                onlyShowIfCertainBudget(
+                    transactions, onlyShowTransactionsBelongingToBudget) &
+                transactions.walletFk.equals(wallet.walletPk),
+          ));
+      } else {
+        query = (selectOnly(transactions)
+          ..addColumns([totalAmt])
+          ..where(
+            onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
+                transactions.categoryFk.isIn(categoryFks ?? []) &
+                transactions.paid.equals(true) &
+                (allCashFlow
+                    ? transactions.income.isIn([true, false])
+                    : transactions.income.equals(false)) &
+                onlyShowIfCertainBudget(
+                    transactions, onlyShowTransactionsBelongingToBudget) &
+                transactions.walletFk.equals(wallet.walletPk),
+          ));
+      }
+
+      mergedStreams.add(query
+          .map(((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+          .watchSingle());
     }
-
-    return query.map(((row) => row.read(totalAmt))).watchSingle();
+    return totalDoubleStream(mergedStreams);
   }
 
   Expression<bool> onlyShowIfOwner(
@@ -1696,43 +1761,66 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime start,
     DateTime end,
     int budgetPk,
+    List<TransactionWallet> wallets,
   ) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
-    final totalAmt = transactions.amount.sum();
-    JoinedSelectStatement<$TransactionsTable, Transaction> query;
 
-    query = (selectOnly(transactions)
-      ..addColumns([totalAmt])
-      ..where(transactions.paid.equals(true) &
-          transactions.income.equals(false) &
-          onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner) &
-          transactions.sharedReferenceBudgetPk.equals(budgetPk)));
-    return query.map(((row) => row.read(totalAmt))).watchSingleOrNull();
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in wallets) {
+      final totalAmt = transactions.amount.sum();
+      JoinedSelectStatement<$TransactionsTable, Transaction> query =
+          (selectOnly(transactions)
+            ..addColumns([totalAmt])
+            ..where(transactions.paid.equals(true) &
+                transactions.income.equals(false) &
+                transactions.walletFk.equals(wallet.walletPk) &
+                onlyShowIfOwner(
+                    transactions, SharedTransactionsShow.onlyIfOwner) &
+                transactions.sharedReferenceBudgetPk.equals(budgetPk)));
+      mergedStreams.add(query
+          .map(((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+          .watchSingleOrNull());
+    }
+
+    return totalDoubleStream(mergedStreams);
   }
 
   Stream<double?> watchTotalSpentByUser(
-      DateTime start,
-      DateTime end,
-      List<int> categoryFks,
-      bool allCategories,
-      String userEmail,
-      int onlyShowTransactionsBelongingToBudget) {
+    DateTime start,
+    DateTime end,
+    List<int> categoryFks,
+    bool allCategories,
+    String userEmail,
+    int onlyShowTransactionsBelongingToBudget,
+    List<TransactionWallet> wallets,
+  ) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
-    final totalAmt = transactions.amount.sum();
-    JoinedSelectStatement<$TransactionsTable, Transaction> query;
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in wallets) {
+      final totalAmt = transactions.amount.sum();
+      JoinedSelectStatement<$TransactionsTable, Transaction> query;
 
-    query = (selectOnly(transactions)
-      ..addColumns([totalAmt])
-      ..where(transactions.dateCreated.isBetweenValues(startDate, endDate) &
-          transactions.paid.equals(true) &
-          transactions.income.equals(false) &
-          isInCategory(transactions, allCategories, categoryFks) &
-          transactions.transactionOwnerEmail.equals(userEmail) &
-          transactions.sharedReferenceBudgetPk
-              .equals(onlyShowTransactionsBelongingToBudget)));
-    return query.map(((row) => row.read(totalAmt))).watchSingleOrNull();
+      query = (selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(transactions.dateCreated.isBetweenValues(startDate, endDate) &
+            transactions.paid.equals(true) &
+            transactions.income.equals(false) &
+            transactions.walletFk.equals(wallet.walletPk) &
+            isInCategory(transactions, allCategories, categoryFks) &
+            transactions.transactionOwnerEmail.equals(userEmail) &
+            transactions.sharedReferenceBudgetPk
+                .equals(onlyShowTransactionsBelongingToBudget)));
+      mergedStreams.add(query
+          .map(((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+          .watchSingleOrNull());
+    }
+    return totalDoubleStream(mergedStreams);
   }
 
   Stream<List<Transaction>> watchAllTransactionsByUser(
@@ -1812,110 +1900,90 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime end,
     List<int> categoryFks,
     bool allCategories,
-    SharedTransactionsShow sharedTransactionsShow, {
+    SharedTransactionsShow sharedTransactionsShow,
+    List<TransactionWallet> wallets, {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
-    final totalAmt = transactions.amount.sum();
-    final totalCount = transactions.transactionPk.count();
+    List<Stream<List<CategoryWithTotal>>> mergedStreams = [];
+    for (TransactionWallet wallet in wallets) {
+      final totalAmt = transactions.amount.sum();
+      final totalCount = transactions.transactionPk.count();
 
-    final query = (select(transactions)
-      ..where((tbl) {
-        final dateCreated = tbl.dateCreated;
-        return onlyShowBasedOnTimeRange(
-                transactions, startDate, endDate, budget) &
-            isInCategory(tbl, allCategories, categoryFks) &
-            tbl.paid.equals(true) &
-            tbl.income.equals(false) &
-            onlyShowIfOwner(tbl, sharedTransactionsShow) &
-            onlyShowIfMember(tbl, member) &
-            onlyShowIfCertainBudget(tbl, onlyShowTransactionsBelongingToBudget);
-      })
-      ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
-    return (query.join([
-      leftOuterJoin(
-          categories, categories.categoryPk.equalsExp(transactions.categoryFk))
-    ])
-          ..addColumns([totalAmt, totalCount])
-          ..groupBy([categories.categoryPk])
-          ..orderBy([OrderingTerm.asc(totalAmt)]))
-        .map((row) {
-      final TransactionCategory category = row.readTable(categories);
-      final double? total = row.read(totalAmt);
-      final int? transactionCount = row.read(totalCount);
-      return CategoryWithTotal(
-          category: category,
-          total: total ?? 0,
-          transactionCount: transactionCount ?? -1);
-    }).watch();
+      final query = (select(transactions)
+        ..where((tbl) {
+          return onlyShowBasedOnTimeRange(
+                  transactions, startDate, endDate, budget) &
+              isInCategory(tbl, allCategories, categoryFks) &
+              tbl.paid.equals(true) &
+              tbl.income.equals(false) &
+              transactions.walletFk.equals(wallet.walletPk) &
+              onlyShowIfOwner(tbl, sharedTransactionsShow) &
+              onlyShowIfMember(tbl, member) &
+              onlyShowIfCertainBudget(
+                  tbl, onlyShowTransactionsBelongingToBudget);
+        })
+        ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
+      mergedStreams.add((query.join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ])
+            ..addColumns([totalAmt, totalCount])
+            ..groupBy([categories.categoryPk])
+            ..orderBy([OrderingTerm.asc(totalAmt)]))
+          .map((row) {
+        final TransactionCategory category = row.readTable(categories);
+        final double? total = (row.read(totalAmt) ?? 0) *
+            (amountRatioToPrimaryCurrency(wallet.currency) ?? 0);
+        final int? transactionCount = row.read(totalCount);
+        return CategoryWithTotal(
+            category: category,
+            total: total ?? 0,
+            transactionCount: transactionCount ?? -1);
+      }).watch());
+    }
+    return totalCategoryTotalStream(mergedStreams);
   }
 
-  // get total amount spent in each day
-  Stream<List<Transaction>> watchTotalSpentEachDayInPeriod(
-      DateTime startDate, DateTime endDate) {
-    final totalAmt = transactions.amount.sum();
-    final date = transactions.dateCreated.date;
-    return (select(transactions)
-          ..where((tbl) =>
-              tbl.dateCreated.isBiggerOrEqualValue(startDate) &
-              tbl.dateCreated.isSmallerOrEqualValue(endDate) &
-              tbl.paid.equals(true))
-          ..addColumns([totalAmt, date]).join([]).groupBy([date]))
-        .watch();
-  }
-
-  Stream<List<double?>> watchTotalOfWallet(int walletPk) {
+  Stream<double?> watchTotalOfWallet(int walletPk) {
     final totalAmt = transactions.amount.sum();
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
       ..where(transactions.walletFk.equals(walletPk) &
           transactions.paid.equals(true));
-    return query.map((row) => row.read(totalAmt)).watch();
+    return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
 
-  Stream<List<double?>> watchTotalOfSubscriptions() {
-    final totalAmt = transactions.amount.sum();
-    final query = selectOnly(transactions)
-      ..addColumns([totalAmt])
-      ..where(transactions.skipPaid.equals(false) &
-          transactions.paid.equals(false) &
-          transactions.type.equals(TransactionSpecialType.subscription.index));
-    return query.map((row) => row.read(totalAmt)).watch();
-  }
-
-  Stream<List<double?>> watchTotalOfUpcoming() {
-    final totalAmt = transactions.amount.sum();
-
-    final query = selectOnly(transactions)
-      ..addColumns([totalAmt])
-      ..where(transactions.income.equals(false) &
-          transactions.skipPaid.equals(false) &
-          transactions.paid.equals(false) &
-          transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
-          (transactions.type.equals(TransactionSpecialType.subscription.index) |
-              transactions.type
-                  .equals(TransactionSpecialType.repetitive.index) |
-              transactions.type.equals(TransactionSpecialType.upcoming.index)));
-    return query.map((row) => row.read(totalAmt)).watch();
-  }
-
-  Stream<List<double?>> watchTotalOfOverdue() {
-    final totalAmt = transactions.amount.sum();
-
-    final query = selectOnly(transactions)
-      ..addColumns([totalAmt])
-      ..where(transactions.income.equals(false) &
-          transactions.skipPaid.equals(false) &
-          transactions.paid.equals(false) &
-          transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
-          (transactions.type.equals(TransactionSpecialType.subscription.index) |
-              transactions.type
-                  .equals(TransactionSpecialType.repetitive.index) |
-              transactions.type.equals(TransactionSpecialType.upcoming.index)));
-    return query.map((row) => row.read(totalAmt)).watch();
+  Stream<double?> watchTotalOfUpcomingOverdue(
+      bool isOverdue, List<TransactionWallet> wallets) {
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in wallets) {
+      final totalAmt = transactions.amount.sum();
+      final query = selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(transactions.income.equals(false) &
+            transactions.skipPaid.equals(false) &
+            transactions.paid.equals(false) &
+            transactions.walletFk.equals(wallet.walletPk) &
+            (isOverdue
+                ? transactions.dateCreated.isSmallerThanValue(DateTime.now())
+                : transactions.dateCreated.isBiggerThanValue(DateTime.now())) &
+            (transactions.type
+                    .equals(TransactionSpecialType.subscription.index) |
+                transactions.type
+                    .equals(TransactionSpecialType.repetitive.index) |
+                transactions.type
+                    .equals(TransactionSpecialType.upcoming.index)));
+      mergedStreams.add(query
+          .map((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0))
+          .watchSingle());
+    }
+    return totalDoubleStream(mergedStreams);
   }
 
   Stream<List<int?>> watchCountOfUpcoming() {
@@ -1976,18 +2044,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     final totalCount = wallets.walletPk.count();
     final query = selectOnly(wallets)..addColumns([totalCount]);
     return query.map((row) => row.read(totalCount)).get();
-  }
-
-  Stream<List<Transaction>> watchTotalSpentEachDay(int? budgetPk) {
-    final totalAmt = transactions.amount.sum();
-    final date = transactions.dateCreated.date;
-    return (select(transactions)
-          ..where((tbl) {
-            return tbl.paid.equals(true);
-          })
-          ..addColumns([totalAmt, date]).join([]).groupBy([date])
-          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
-        .watch();
   }
 
   Future<List<int?>> getTotalCountOfTransactionsInBudget(int budgetPk) async {

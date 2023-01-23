@@ -703,7 +703,6 @@ class TransactionEntry extends StatelessWidget {
                           initialCount: (transaction.amount.abs()),
                           textBuilder: (number) {
                             return TextFont(
-                                textAlign: TextAlign.left,
                                 text:
                                     convertToMoney(number, showCurrency: false),
                                 fontSize: 19,

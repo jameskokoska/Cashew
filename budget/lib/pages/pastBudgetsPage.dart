@@ -38,19 +38,25 @@ class PastBudgetsPage extends StatelessWidget {
         stream: database.getBudget(budgetPk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _PastBudgetsPageContent(budget: snapshot.data!);
+            return WatchAllWallets(
+              childFunction: (wallets) => _PastBudgetsPageContent(
+                budget: snapshot.data!,
+                wallets: wallets,
+              ),
+            );
           }
           return SizedBox.shrink();
         });
-    ;
   }
 }
 
 class _PastBudgetsPageContent extends StatefulWidget {
-  const _PastBudgetsPageContent({Key? key, required Budget this.budget})
+  const _PastBudgetsPageContent(
+      {Key? key, required Budget this.budget, required this.wallets})
       : super(key: key);
 
   final Budget budget;
+  final List<TransactionWallet> wallets;
 
   @override
   State<_PastBudgetsPageContent> createState() =>
@@ -91,6 +97,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         budgetRange.end,
         widget.budget.categoryFks,
         widget.budget.allCategoryFks,
+        widget.wallets,
         onlyShowTransactionsBelongingToBudget:
             widget.budget.sharedKey != null ||
                     widget.budget.addedTransactionsOnly == true
@@ -287,11 +294,13 @@ class PastBudgetContainer extends StatelessWidget {
     DateTime dateForRangeLocal =
         dateForRange == null ? DateTime.now() : dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(budget, dateForRangeLocal);
-    var widget = StreamBuilder<double?>(
+    var widget = WatchAllWallets(
+      childFunction: (wallets) => StreamBuilder<double?>(
         stream: database.watchTotalSpentByCurrentUserOnly(
           budgetRange.start,
           budgetRange.end,
           budget.budgetPk,
+          wallets,
         ),
         builder: (context, snapshotTotalSpentByCurrentUserOnly) {
           double smallContainerHeight = 100;
@@ -303,6 +312,7 @@ class PastBudgetContainer extends StatelessWidget {
               budget.categoryFks ?? [],
               budget.allCategoryFks,
               budget.sharedTransactionsShow,
+              wallets,
               onlyShowTransactionsBelongingToBudget: budget.sharedKey != null ||
                       budget.addedTransactionsOnly == true
                   ? budget.budgetPk
@@ -494,7 +504,9 @@ class PastBudgetContainer extends StatelessWidget {
               }
             },
           );
-        });
+        },
+      ),
+    );
     return Container(
       decoration: BoxDecoration(
         boxShadow: boxShadowCheck(boxShadowGeneral(context)),

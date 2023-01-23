@@ -6,7 +6,12 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow: false}) async {
-  String changelog = """
+  String changelog = """ 
+    Support for multiple currencies with correct conversion!
+    Fixed lock screen animation for biometrics
+    Currencies are caches and load in O(1)
+    Refresh button on budgets page now sync queue (same as pull to refresh)
+    Wallet selector removed from transaction if only one wallet
     Added biometrics to unlock application option
     Added drag to reorder categories on grid
     Capitalized titles on transaction entry

@@ -497,6 +497,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                   title: "Enter Amount",
                   child: SelectAmount(
                     walletPkForCurrency: selectedWalletPk,
+                    onlyShowCurrencyIcon:
+                        appStateSettings["selectedWallet"] == selectedWalletPk,
                     amountPassed: selectedAmountCalculation ?? "",
                     setSelectedAmount: setSelectedAmount,
                     next: () async {
@@ -692,6 +694,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   title: "Enter Amount",
                                   child: SelectAmount(
                                     walletPkForCurrency: selectedWalletPk,
+                                    onlyShowCurrencyIcon:
+                                        appStateSettings["selectedWallet"] ==
+                                            selectedWalletPk,
                                     amountPassed: selectedAmountCalculation ??
                                         (selectedAmount ?? "0").toString(),
                                     setSelectedAmount: setSelectedAmount,
@@ -744,14 +749,18 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                       dynamicDecimals: true,
                                       initialCount: selectedAmount ?? 0,
                                       textBuilder: (number) {
-                                        return TextFont(
-                                          textAlign: TextAlign.right,
-                                          text: convertToMoney(number,
-                                              showCurrency: false),
-                                          walletPkForCurrency: selectedWalletPk,
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold,
-                                          maxLines: 1,
+                                        return Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextFont(
+                                            textAlign: TextAlign.right,
+                                            text: convertToMoney(number,
+                                                showCurrency: false),
+                                            walletPkForCurrency:
+                                                selectedWalletPk,
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                            maxLines: 1,
+                                          ),
                                         );
                                       },
                                     ),
@@ -1036,53 +1045,58 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 : Container(),
                           ),
                         ),
-                        AnimatedSwitcher(
-                          duration: Duration(milliseconds: 400),
-                          child: SelectedWalletButton(
-                            selectedWalletName: selectedWallet != null
-                                ? selectedWallet!.name
-                                : "",
-                            key: ValueKey(selectedWalletPk),
-                            onTap: () async {
-                              openBottomSheet(
-                                context,
-                                PopupFramework(
-                                  title: "Select Wallet",
-                                  child: RadioItems(
-                                    items: [
-                                      for (TransactionWallet wallet
-                                          in allWallets)
-                                        wallet.walletPk.toString()
-                                    ],
-                                    displayFilter: (walletPk) {
-                                      for (TransactionWallet wallet
-                                          in allWallets)
-                                        if (wallet.walletPk.toString() ==
-                                            walletPk.toString()) {
-                                          return wallet.name +
-                                              " " +
-                                              (wallet.currency ?? "")
-                                                  .toUpperCase();
-                                        }
-                                      return "";
-                                    },
-                                    initial: selectedWalletPk.toString(),
-                                    onChanged: (value) {
-                                      for (TransactionWallet wallet
-                                          in allWallets)
-                                        if (wallet.walletPk.toString() ==
-                                            value.toString()) {
-                                          setSelectedWalletPk(wallet);
-                                          break;
-                                        }
-                                      Navigator.pop(context);
-                                    },
-                                  ),
+                        appStateSettings["cachedWalletCurrencies"]
+                                    .keys
+                                    .length <=
+                                1
+                            ? SizedBox.shrink()
+                            : AnimatedSwitcher(
+                                duration: Duration(milliseconds: 400),
+                                child: SelectedWalletButton(
+                                  selectedWalletName: selectedWallet != null
+                                      ? selectedWallet!.name
+                                      : "",
+                                  key: ValueKey(selectedWalletPk),
+                                  onTap: () async {
+                                    openBottomSheet(
+                                      context,
+                                      PopupFramework(
+                                        title: "Select Wallet",
+                                        child: RadioItems(
+                                          items: [
+                                            for (TransactionWallet wallet
+                                                in allWallets)
+                                              wallet.walletPk.toString()
+                                          ],
+                                          displayFilter: (walletPk) {
+                                            for (TransactionWallet wallet
+                                                in allWallets)
+                                              if (wallet.walletPk.toString() ==
+                                                  walletPk.toString()) {
+                                                return wallet.name +
+                                                    " " +
+                                                    (wallet.currency ?? "")
+                                                        .toUpperCase();
+                                              }
+                                            return "";
+                                          },
+                                          initial: selectedWalletPk.toString(),
+                                          onChanged: (value) {
+                                            for (TransactionWallet wallet
+                                                in allWallets)
+                                              if (wallet.walletPk.toString() ==
+                                                  value.toString()) {
+                                                setSelectedWalletPk(wallet);
+                                                break;
+                                              }
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
-                        ),
+                              ),
 
                         Container(height: 20),
                         Padding(
@@ -1256,6 +1270,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                       title: "Enter Amount",
                                       child: SelectAmount(
                                         walletPkForCurrency: selectedWalletPk,
+                                        onlyShowCurrencyIcon: appStateSettings[
+                                                "selectedWallet"] ==
+                                            selectedWalletPk,
                                         amountPassed:
                                             selectedAmountCalculation ?? "",
                                         setSelectedAmount: setSelectedAmount,
@@ -1287,6 +1304,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   title: "Enter Amount",
                                   child: SelectAmount(
                                     walletPkForCurrency: selectedWalletPk,
+                                    onlyShowCurrencyIcon:
+                                        appStateSettings["selectedWallet"] ==
+                                            selectedWalletPk,
                                     amountPassed:
                                         selectedAmountCalculation ?? "",
                                     setSelectedAmount: setSelectedAmount,

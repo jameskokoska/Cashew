@@ -99,6 +99,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);
+      await getExchangeRates();
       loadingIndeterminateKey.currentState!.setVisibility(true);
       await createBackupInBackground(context);
       if (appStateSettings["currentUserEmail"] != "") {

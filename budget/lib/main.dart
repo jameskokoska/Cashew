@@ -271,7 +271,7 @@ class InitializeBiometrics extends StatefulWidget {
 }
 
 class _InitializeBiometricsState extends State<InitializeBiometrics> {
-  bool authenticated = false;
+  bool? authenticated;
   @override
   void initState() {
     super.initState();
@@ -285,6 +285,9 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
 
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["requireAuth"] == false) {
+      return widget.child;
+    }
     Widget child = Scaffold(
       body: Column(
         key: ValueKey(0),
@@ -294,26 +297,40 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
           Center(
             child: GestureDetector(
               onTap: () async {
+                setState(() {
+                  authenticated = null;
+                });
                 final bool result = await checkBiometrics();
                 setState(() {
                   authenticated = result;
                 });
               },
-              child: Icon(
-                Icons.lock,
-                size: 50,
-                color: Theme.of(context).colorScheme.secondary,
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeScaleTransition(
+                      animation: animation, child: child);
+                },
+                child: authenticated == false
+                    ? Icon(
+                        Icons.lock,
+                        size: 50,
+                        color: Theme.of(context).colorScheme.secondary,
+                      )
+                    : SizedBox.shrink(),
               ),
             ),
           )
         ],
       ),
     );
-    if (authenticated) {
+    if (authenticated == true) {
       child = SizedBox(key: ValueKey(1), child: widget.child);
     }
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 500),
       switchInCurve: Curves.easeInOut,
       switchOutCurve: Curves.easeInOut,
       transitionBuilder: (Widget child, Animation<double> animation) {

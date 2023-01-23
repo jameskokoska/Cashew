@@ -93,31 +93,26 @@ class _WalletEntryState extends State<WalletEntry>
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          StreamBuilder<List<double?>>(
+                          StreamBuilder<double?>(
                             stream: database
                                 .watchTotalOfWallet(widget.wallet.walletPk),
                             builder: (context, snapshot) {
-                              if (snapshot.hasData && snapshot.data != null) {
-                                return CountNumber(
-                                  count: (snapshot.data![0] ?? 0 * -1),
-                                  duration: Duration(milliseconds: 4000),
-                                  dynamicDecimals: true,
-                                  initialCount: (snapshot.data![0] ?? 0 * -1),
-                                  textBuilder: (number) {
-                                    return TextFont(
-                                      walletPkForCurrency:
-                                          widget.wallet.walletPk,
-                                      textAlign: TextAlign.left,
-                                      text: convertToMoney(number,
-                                          showCurrency: false),
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    );
-                                  },
-                                );
-                              } else {
-                                return SizedBox();
-                              }
+                              return CountNumber(
+                                count: (snapshot.data ?? 0 * -1),
+                                duration: Duration(milliseconds: 4000),
+                                dynamicDecimals: true,
+                                initialCount: (snapshot.data ?? 0 * -1),
+                                textBuilder: (number) {
+                                  return TextFont(
+                                    walletPkForCurrency: widget.wallet.walletPk,
+                                    textAlign: TextAlign.left,
+                                    text: convertToMoney(number,
+                                        showCurrency: false),
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                  );
+                                },
+                              );
                             },
                           ),
                           StreamBuilder<List<int?>>(

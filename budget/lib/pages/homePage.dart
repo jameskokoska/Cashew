@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
@@ -345,9 +346,15 @@ class HomePageState extends State<HomePage>
                                       transaction.dateCreated.month &&
                                   indexDay.day == transaction.dateCreated.day) {
                                 if (transaction.income) {
-                                  totalForDay += transaction.amount.abs();
+                                  totalForDay += transaction.amount.abs() *
+                                      (amountRatioToPrimaryCurrencyGivenPk(
+                                              transaction.walletFk) ??
+                                          0);
                                 } else {
-                                  totalForDay -= transaction.amount.abs();
+                                  totalForDay -= transaction.amount.abs() *
+                                      (amountRatioToPrimaryCurrencyGivenPk(
+                                              transaction.walletFk) ??
+                                          0);
                                 }
                               }
                             }
@@ -671,31 +678,34 @@ class UpcomingTransactions extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     SizedBox(height: 6),
-                    StreamBuilder<List<double?>>(
-                      stream: overdueTransactions
-                          ? database.watchTotalOfOverdue()
-                          : database.watchTotalOfUpcoming(),
-                      builder: (context, snapshot) {
-                        return CountNumber(
-                          count: snapshot.hasData == false ||
-                                  snapshot.data![0] == null
-                              ? 0
-                              : (snapshot.data![0] ?? 0).abs(),
-                          duration: Duration(milliseconds: 2500),
-                          dynamicDecimals: true,
-                          initialCount: (0),
-                          textBuilder: (number) {
-                            return TextFont(
-                              text: convertToMoney(number),
-                              fontSize: 24,
-                              textColor: overdueTransactions
-                                  ? Theme.of(context).colorScheme.unPaidRed
-                                  : Theme.of(context).colorScheme.unPaidYellow,
-                              fontWeight: FontWeight.bold,
-                            );
-                          },
-                        );
-                      },
+                    WatchAllWallets(
+                      childFunction: (wallets) => StreamBuilder<double?>(
+                        stream: database.watchTotalOfUpcomingOverdue(
+                            overdueTransactions, wallets),
+                        builder: (context, snapshot) {
+                          return CountNumber(
+                            count: snapshot.hasData == false ||
+                                    snapshot.data == null
+                                ? 0
+                                : (snapshot.data ?? 0).abs(),
+                            duration: Duration(milliseconds: 2500),
+                            dynamicDecimals: true,
+                            initialCount: (0),
+                            textBuilder: (number) {
+                              return TextFont(
+                                text: convertToMoney(number),
+                                fontSize: 24,
+                                textColor: overdueTransactions
+                                    ? Theme.of(context).colorScheme.unPaidRed
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .unPaidYellow,
+                                fontWeight: FontWeight.bold,
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                     SizedBox(height: 5),
                     StreamBuilder<List<int?>>(

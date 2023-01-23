@@ -123,24 +123,15 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                           fontSize: 21,
                         ),
                         Container(height: 2),
-                        StreamBuilder<List<double?>>(
+                        StreamBuilder<double?>(
                           stream: database.watchTotalOfWallet(wallet.walletPk),
                           builder: (context, snapshot) {
-                            if (snapshot.hasData && snapshot.data != null) {
-                              return TextFont(
-                                textAlign: TextAlign.left,
-                                text:
-                                    convertToMoney(snapshot.data![0] ?? 0 * -1)
-                                        .toString(),
-                                fontSize: 15,
-                              );
-                            } else {
-                              return TextFont(
-                                textAlign: TextAlign.left,
-                                text: "/",
-                                fontSize: 15,
-                              );
-                            }
+                            return TextFont(
+                              textAlign: TextAlign.left,
+                              text: convertToMoney(snapshot.data ?? 0 * -1)
+                                  .toString(),
+                              fontSize: 15,
+                            );
                           },
                         ),
                         StreamBuilder<List<int?>>(

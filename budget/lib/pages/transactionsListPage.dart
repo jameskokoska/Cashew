@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -110,7 +111,10 @@ List<Widget> getTransactionsSlivers(
                     double totalSpentForDay = 0;
                     transactionList.forEach((transaction) {
                       if (transaction.transaction.paid)
-                        totalSpentForDay += transaction.transaction.amount;
+                        totalSpentForDay += transaction.transaction.amount *
+                            (amountRatioToPrimaryCurrencyGivenPk(
+                                    transaction.transaction.walletFk) ??
+                                0);
                     });
                     if (slivers == false) {
                       List<Widget> children = [];
@@ -636,38 +640,40 @@ class CashFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<double?>(
-      stream: database.watchTotalSpentInTimeRangeFromCategories(
-          startDate, endDate, [], true,
-          allCashFlow: true),
-      builder: (context, snapshot) {
-        if (snapshot.data != null && snapshot.hasData) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
-            child: TextFont(
-              text: "Total cash flow: " + convertToMoney(snapshot.data!),
-              fontSize: 13,
-              textAlign: TextAlign.center,
-              textColor: Theme.of(context).colorScheme.textLight,
+    return WatchAllWallets(
+      childFunction: (wallets) => StreamBuilder<double?>(
+        stream: database.watchTotalSpentInTimeRangeFromCategories(
+            startDate, endDate, [], true, wallets,
+            allCashFlow: true),
+        builder: (context, snapshot) {
+          if (snapshot.data != null && snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+              child: TextFont(
+                text: "Total cash flow: " + convertToMoney(snapshot.data!),
+                fontSize: 13,
+                textAlign: TextAlign.center,
+                textColor: Theme.of(context).colorScheme.textLight,
+              ),
+            );
+          }
+          // return NoResults(
+          //   message: "There are no transactions in this time range.",
+          // );
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 85, right: 35, left: 35),
+              child: TextFont(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                text: "No transactions within time range.",
+                maxLines: 3,
+                textAlign: TextAlign.center,
+              ),
             ),
           );
-        }
-        // return NoResults(
-        //   message: "There are no transactions in this time range.",
-        // );
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 85, right: 35, left: 35),
-            child: TextFont(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              text: "No transactions within time range.",
-              maxLines: 3,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }

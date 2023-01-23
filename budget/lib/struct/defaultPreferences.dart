@@ -43,5 +43,10 @@ Map<String, dynamic> defaultPreferences() {
     "currentUserEmail": "",
     "usersNicknames": {},
     "requireAuth": false,
+    // cachedWalletCurrencies:
+    // Note: walletPk is a string
+    // {"walletPk": "currency", "231435":"usd",...}
+    "cachedWalletCurrencies": {},
+    "cachedCurrencyExchange": {},
   };
 }

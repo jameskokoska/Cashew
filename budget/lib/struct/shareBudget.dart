@@ -699,7 +699,7 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
 
   _onPointerUp(PointerUpEvent event) {
     if (totalDragY > 125 && swipeDownToRefresh) {
-      _refreshCategories();
+      _refreshBudgets();
     }
     totalDragY = 0;
   }
@@ -712,11 +712,12 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
     }
   }
 
-  _refreshCategories() async {
+  _refreshBudgets() async {
     if (appStateSettings["currentUserEmail"] != "") {
       loadingIndeterminateKey.currentState!.setVisibility(true);
       await syncPendingQueueOnServer();
       await getCloudBudgets();
+      await getExchangeRates();
       loadingIndeterminateKey.currentState!.setVisibility(false);
     }
   }
@@ -734,7 +735,7 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
 
 Future<bool> updateTransactionOnServerAfterChangingCategoryInformation(
     TransactionCategory category) async {
-  loadingIndeterminateKey.currentState!.setVisibility(true);
+  loadingIndeterminateKey.currentState?.setVisibility(true);
   List<Transaction> sharedTransactionsInCategory =
       await database.getAllTransactionsSharedInCategory(category.categoryPk);
 
@@ -748,6 +749,6 @@ Future<bool> updateTransactionOnServerAfterChangingCategoryInformation(
     }
   }
   await Future.wait(asyncCalls);
-  loadingIndeterminateKey.currentState!.setVisibility(false);
+  loadingIndeterminateKey.currentState?.setVisibility(false);
   return true;
 }
