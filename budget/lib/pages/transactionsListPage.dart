@@ -642,8 +642,8 @@ class CashFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     return WatchAllWallets(
       childFunction: (wallets) => StreamBuilder<double?>(
-        stream: database.watchTotalSpentInTimeRangeFromCategories(
-            startDate, endDate, [], true, wallets,
+        stream: database.watchTotalSpentInTimeRangeFromCategories(startDate,
+            endDate, [], true, wallets, SharedTransactionsShow.fromEveryone,
             allCashFlow: true),
         builder: (context, snapshot) {
           if (snapshot.data != null && snapshot.hasData) {

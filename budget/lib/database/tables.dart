@@ -1675,6 +1675,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       List<int>? categoryFks,
       bool allCategories,
       List<TransactionWallet> wallets,
+      SharedTransactionsShow sharedTransactionsShow,
       {bool allCashFlow = false,
       int? onlyShowTransactionsBelongingToBudget,
       Budget? budget}) {
@@ -1697,7 +1698,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                     : transactions.income.equals(false)) &
                 onlyShowIfCertainBudget(
                     transactions, onlyShowTransactionsBelongingToBudget) &
-                transactions.walletFk.equals(wallet.walletPk),
+                transactions.walletFk.equals(wallet.walletPk) &
+                onlyShowIfOwner(transactions, sharedTransactionsShow),
           ));
       } else {
         query = (selectOnly(transactions)
@@ -1711,7 +1713,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                     : transactions.income.equals(false)) &
                 onlyShowIfCertainBudget(
                     transactions, onlyShowTransactionsBelongingToBudget) &
-                transactions.walletFk.equals(wallet.walletPk),
+                transactions.walletFk.equals(wallet.walletPk) &
+                onlyShowIfOwner(transactions, sharedTransactionsShow),
           ));
       }
 

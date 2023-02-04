@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """ 
+    Fixed Budget History to respect budget transactions to include setting
     Support for multiple currencies with correct conversion!
     Fixed lock screen animation for biometrics
     Currencies are caches and load in O(1)

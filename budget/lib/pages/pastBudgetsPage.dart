@@ -95,6 +95,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           widget.budget.categoryFks,
           widget.budget.allCategoryFks,
           wallets,
+          widget.budget.sharedTransactionsShow,
           onlyShowTransactionsBelongingToBudget:
               widget.budget.sharedKey != null ||
                       widget.budget.addedTransactionsOnly == true
