@@ -1,6 +1,11 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -164,6 +169,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   addToAmount(String input) {
+    // bottomSheetControllerGlobal.snapToExtent(0);
     String amountClone = amount;
     if (input == "." &&
         !decimalCheck(operationsWithSpaces(amountClone + "."))) {
@@ -288,109 +294,99 @@ class _SelectAmountState extends State<SelectAmount> {
   @override
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
+    String amountConverted = amount == ""
+        ? "0"
+        : includesOperations(amount, false)
+            ? convertToMoney(calculateResult(amount), showCurrency: false)
+            : convertToMoney(
+                    double.tryParse(amount.substring(amount.length - 1) ==
+                                    "." ||
+                                (amount.length > 2 &&
+                                    amount.substring(amount.length - 2) == ".0")
+                            ? amount.substring(0, amount.length - 1)
+                            : amount) ??
+                        0,
+                    showCurrency: false) +
+                (amount.substring(amount.length - 1) == "." ? "." : "") +
+                (amount.length > 2 &&
+                        amount.substring(amount.length - 2) == ".0"
+                    ? ".0"
+                    : "");
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Wrap(
-              alignment: WrapAlignment.spaceBetween,
-              crossAxisAlignment: WrapCrossAlignment.end,
-              children: [
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 400),
-                  child: FractionallySizedBox(
-                    key: ValueKey(amount),
-                    widthFactor: 0.5,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.end,
+            children: [
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 400),
+                child: FractionallySizedBox(
+                  key: ValueKey(amount),
+                  widthFactor: 0.5,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 3.0, left: 8, top: 5),
+                    child: TextFont(
+                      text: (includesOperations(amount, false)
+                          ? operationsWithSpaces(amount)
+                          : ""),
+                      textAlign: TextAlign.left,
+                      fontSize: 18,
+                      maxLines: 5,
+                    ),
+                  ),
+                ),
+              ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 200),
+                child: FractionallySizedBox(
+                  key: ValueKey(amountConverted),
+                  widthFactor: 0.5,
+                  child: Tappable(
+                    onLongPress: () async {
+                      HapticFeedback.mediumImpact();
+                      await Clipboard.setData(
+                          ClipboardData(text: amountConverted));
+                      openSnackbar(
+                        SnackbarMessage(
+                          title: "Copied to clipboard",
+                          icon: Icons.copy_rounded,
+                          timeout: Duration(milliseconds: 2500),
+                        ),
+                      );
+                    },
+                    color: Colors.transparent,
+                    borderRadius: 10,
+                    onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 3.0),
+                      padding: const EdgeInsets.only(
+                        right: 8.0,
+                        bottom: 5,
+                        left: 5,
+                        top: 5,
+                      ),
                       child: TextFont(
-                        text: (includesOperations(amount, false)
-                            ? operationsWithSpaces(amount)
-                            : ""),
-                        textAlign: TextAlign.left,
-                        fontSize: 18,
-                        maxLines: 5,
+                        autoSizeText: true,
+                        maxLines: 1,
+                        minFontSize: 16,
+                        walletPkForCurrency: widget.walletPkForCurrency ??
+                            appStateSettings["selectedWallet"],
+                        onlyShowCurrencyIcon: widget.onlyShowCurrencyIcon,
+                        text: amountConverted,
+                        // text: amount,
+                        textAlign: TextAlign.right,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200),
-                  child: FractionallySizedBox(
-                    key: ValueKey(
-                      amount == ""
-                          ? getCurrencyString(currencyKey: widget.currencyKey) +
-                              "0"
-                          : includesOperations(amount, false)
-                              ? convertToMoney(calculateResult(amount))
-                              : convertToMoney(double.tryParse(amount.substring(
-                                                      amount.length - 1) ==
-                                                  "." ||
-                                              (amount.length > 2 &&
-                                                  amount.substring(
-                                                          amount.length - 2) ==
-                                                      ".0")
-                                          ? amount.substring(
-                                              0, amount.length - 1)
-                                          : amount) ??
-                                      0) +
-                                  (amount.substring(amount.length - 1) == "."
-                                      ? "."
-                                      : "") +
-                                  (amount.length > 2 &&
-                                          amount.substring(amount.length - 2) ==
-                                              ".0"
-                                      ? ".0"
-                                      : ""),
-                    ),
-                    widthFactor: 0.5,
-                    child: TextFont(
-                      autoSizeText: true,
-                      maxLines: 1,
-                      minFontSize: 16,
-                      walletPkForCurrency: widget.walletPkForCurrency ??
-                          appStateSettings["selectedWallet"],
-                      onlyShowCurrencyIcon: widget.onlyShowCurrencyIcon,
-                      text: amount == ""
-                          ? "0"
-                          : includesOperations(amount, false)
-                              ? convertToMoney(calculateResult(amount),
-                                  showCurrency: false)
-                              : convertToMoney(
-                                      double.tryParse(amount.substring(
-                                                          amount.length - 1) ==
-                                                      "." ||
-                                                  (amount.length > 2 &&
-                                                      amount.substring(
-                                                              amount.length -
-                                                                  2) ==
-                                                          ".0")
-                                              ? amount.substring(
-                                                  0, amount.length - 1)
-                                              : amount) ??
-                                          0,
-                                      showCurrency: false) +
-                                  (amount.substring(amount.length - 1) == "."
-                                      ? "."
-                                      : "") +
-                                  (amount.length > 2 &&
-                                          amount.substring(amount.length - 2) ==
-                                              ".0"
-                                      ? ".0"
-                                      : ""),
-                      // text: amount,
-                      textAlign: TextAlign.right,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(height: 10),
+          Container(height: 5),
           Row(
             children: [
               CalculatorButton(

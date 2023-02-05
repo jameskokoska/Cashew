@@ -152,8 +152,7 @@ class BudgetContainer extends StatelessWidget {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Container(
-                                                  child: CountUp(
-                                                    prefix: getCurrencyString(),
+                                                  child: CountNumber(
                                                     count: appStateSettings[
                                                             "showTotalSpentForBudget"]
                                                         ? totalSpent
@@ -161,11 +160,19 @@ class BudgetContainer extends StatelessWidget {
                                                             totalSpent,
                                                     duration: Duration(
                                                         milliseconds: 700),
-                                                    fontSize: 18,
-                                                    textAlign: TextAlign.left,
-                                                    fontWeight: FontWeight.bold,
-                                                    decimals: moneyDecimals(
-                                                        budget.amount),
+                                                    dynamicDecimals: true,
+                                                    initialCount: (0),
+                                                    textBuilder: (number) {
+                                                      return TextFont(
+                                                        text: convertToMoney(
+                                                            number),
+                                                        fontSize: 18,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      );
+                                                    },
                                                   ),
                                                 ),
                                                 Padding(
@@ -190,8 +197,7 @@ class BudgetContainer extends StatelessWidget {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Container(
-                                                  child: CountUp(
-                                                    prefix: getCurrencyString(),
+                                                  child: CountNumber(
                                                     count: appStateSettings[
                                                             "showTotalSpentForBudget"]
                                                         ? totalSpent
@@ -200,11 +206,19 @@ class BudgetContainer extends StatelessWidget {
                                                                 totalSpent),
                                                     duration: Duration(
                                                         milliseconds: 700),
-                                                    fontSize: 18,
-                                                    textAlign: TextAlign.left,
-                                                    fontWeight: FontWeight.bold,
-                                                    decimals: moneyDecimals(
-                                                        budget.amount),
+                                                    dynamicDecimals: true,
+                                                    initialCount: (0),
+                                                    textBuilder: (number) {
+                                                      return TextFont(
+                                                        text: convertToMoney(
+                                                            number),
+                                                        fontSize: 18,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      );
+                                                    },
                                                   ),
                                                 ),
                                                 Container(
@@ -300,8 +314,7 @@ class BudgetContainer extends StatelessWidget {
                                                 CrossAxisAlignment.end,
                                             children: [
                                               Container(
-                                                child: CountUp(
-                                                  prefix: getCurrencyString(),
+                                                child: CountNumber(
                                                   count: appStateSettings[
                                                           "showTotalSpentForBudget"]
                                                       ? totalSpent
@@ -309,11 +322,18 @@ class BudgetContainer extends StatelessWidget {
                                                           totalSpent,
                                                   duration: Duration(
                                                       milliseconds: 700),
-                                                  fontSize: 18,
-                                                  textAlign: TextAlign.left,
-                                                  fontWeight: FontWeight.bold,
-                                                  decimals: moneyDecimals(
-                                                      budget.amount),
+                                                  dynamicDecimals: true,
+                                                  initialCount: (0),
+                                                  textBuilder: (number) {
+                                                    return TextFont(
+                                                      text: convertToMoney(
+                                                          number),
+                                                      fontSize: 18,
+                                                      textAlign: TextAlign.left,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                               Padding(
@@ -341,8 +361,7 @@ class BudgetContainer extends StatelessWidget {
                                                 CrossAxisAlignment.end,
                                             children: [
                                               Container(
-                                                child: CountUp(
-                                                  prefix: getCurrencyString(),
+                                                child: CountNumber(
                                                   count: appStateSettings[
                                                           "showTotalSpentForBudget"]
                                                       ? totalSpent
@@ -351,11 +370,18 @@ class BudgetContainer extends StatelessWidget {
                                                               totalSpent),
                                                   duration: Duration(
                                                       milliseconds: 700),
-                                                  fontSize: 18,
-                                                  textAlign: TextAlign.left,
-                                                  fontWeight: FontWeight.bold,
-                                                  decimals: moneyDecimals(
-                                                      budget.amount),
+                                                  dynamicDecimals: true,
+                                                  initialCount: (0),
+                                                  textBuilder: (number) {
+                                                    return TextFont(
+                                                      text: convertToMoney(
+                                                          number),
+                                                      fontSize: 18,
+                                                      textAlign: TextAlign.left,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                               Container(

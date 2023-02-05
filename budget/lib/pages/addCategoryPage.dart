@@ -794,19 +794,20 @@ class IncomeTypeButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
-            Expanded(
-              child: TextFont(
-                text: selectedIncome == false ? "Expense" : "Income",
-                fontWeight: FontWeight.bold,
-                fontSize: 26,
-              ),
-            ),
             ButtonIcon(
               onTap: onTap,
               icon: selectedIncome
                   ? Icons.exit_to_app_rounded
                   : Icons.logout_rounded,
               size: 41,
+            ),
+            SizedBox(width: 15),
+            Expanded(
+              child: TextFont(
+                text: selectedIncome == false ? "Expense" : "Income",
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
+              ),
             ),
           ],
         ),

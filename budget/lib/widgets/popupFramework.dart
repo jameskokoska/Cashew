@@ -10,11 +10,13 @@ class PopupFramework extends StatelessWidget {
     this.title,
     this.subtitle,
     this.padding = true,
+    this.underTitleSpace = true,
   }) : super(key: key);
   final Widget child;
   final String? title;
   final String? subtitle;
   final bool padding;
+  final bool underTitleSpace;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -53,7 +55,9 @@ class PopupFramework extends StatelessWidget {
                         maxLines: 5,
                       ),
                     ),
-              title == null ? Container() : Container(height: 13),
+              title == null || underTitleSpace == false
+                  ? Container()
+                  : Container(height: 13),
               Padding(
                 padding: padding
                     ? EdgeInsets.only(left: 18, right: 18, bottom: 10)

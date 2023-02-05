@@ -51,7 +51,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
               children: [
                 Container(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top + 2, bottom: 2),
+                      top: MediaQuery.of(context).padding.top + 5, bottom: 6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10),
@@ -99,12 +99,19 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 stream: database.watchTotalSpentGivenList(
                                     listOfIDs, wallets),
                                 builder: (context, snapshot) {
-                                  return CountUp(
-                                    prefix: getCurrencyString(),
+                                  return CountNumber(
                                     count:
                                         snapshot.hasData ? snapshot.data! : 0,
                                     duration: Duration(milliseconds: 250),
-                                    fontSize: 17,
+                                    dynamicDecimals: true,
+                                    initialCount: (0),
+                                    textBuilder: (number) {
+                                      return TextFont(
+                                        text: convertToMoney(number),
+                                        fontSize: 17.5,
+                                        textAlign: TextAlign.left,
+                                      );
+                                    },
                                   );
                                 },
                               ),
@@ -234,6 +241,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
       context,
       PopupFramework(
         title: "Enter Amount",
+        underTitleSpace: false,
         child: SelectAmount(
           amountPassed: selectedAmountCalculation ?? "",
           setSelectedAmount: setSelectedAmount,

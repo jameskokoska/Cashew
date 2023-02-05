@@ -495,6 +495,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                 context,
                 PopupFramework(
                   title: "Enter Amount",
+                  underTitleSpace: false,
                   child: SelectAmount(
                     walletPkForCurrency: selectedWalletPk,
                     onlyShowCurrencyIcon:
@@ -692,6 +693,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 context,
                                 PopupFramework(
                                   title: "Enter Amount",
+                                  underTitleSpace: false,
                                   child: SelectAmount(
                                     walletPkForCurrency: selectedWalletPk,
                                     onlyShowCurrencyIcon:
@@ -1054,7 +1056,11 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 duration: Duration(milliseconds: 400),
                                 child: SelectedWalletButton(
                                   selectedWalletName: selectedWallet != null
-                                      ? selectedWallet!.name
+                                      ? selectedWallet!.name +
+                                          " (" +
+                                          (selectedWallet?.currency ?? "")
+                                              .toUpperCase() +
+                                          ")"
                                       : "",
                                   key: ValueKey(selectedWalletPk),
                                   onTap: () async {
@@ -1268,6 +1274,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                     context,
                                     PopupFramework(
                                       title: "Enter Amount",
+                                      underTitleSpace: false,
                                       child: SelectAmount(
                                         walletPkForCurrency: selectedWalletPk,
                                         onlyShowCurrencyIcon: appStateSettings[
@@ -1302,6 +1309,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 context,
                                 PopupFramework(
                                   title: "Enter Amount",
+                                  underTitleSpace: false,
                                   child: SelectAmount(
                                     walletPkForCurrency: selectedWalletPk,
                                     onlyShowCurrencyIcon:
@@ -1360,17 +1368,18 @@ class SelectedWalletButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
+            ButtonIcon(
+              onTap: onTap,
+              icon: Icons.account_balance_wallet_rounded,
+              size: 41,
+            ),
+            SizedBox(width: 15),
             Expanded(
               child: TextFont(
                 text: selectedWalletName,
                 fontWeight: FontWeight.bold,
                 fontSize: 26,
               ),
-            ),
-            ButtonIcon(
-              onTap: onTap,
-              icon: Icons.account_balance_wallet_rounded,
-              size: 41,
             ),
           ],
         ),
@@ -1396,6 +1405,12 @@ class SelectedBudgetButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
+            ButtonIcon(
+              onTap: onTap,
+              icon: MoreIcons.chart_pie,
+              size: 41,
+            ),
+            SizedBox(width: 15),
             Expanded(
               child: TextFont(
                 text: selectedBudgetName == "None"
@@ -1407,11 +1422,6 @@ class SelectedBudgetButton extends StatelessWidget {
                     ? Theme.of(context).colorScheme.textLight
                     : null,
               ),
-            ),
-            ButtonIcon(
-              onTap: onTap,
-              icon: MoreIcons.chart_pie,
-              size: 41,
             ),
           ],
         ),
@@ -1437,6 +1447,12 @@ class TransactionOwnerButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
+            ButtonIcon(
+              onTap: onTap,
+              icon: Icons.person_rounded,
+              size: 41,
+            ),
+            SizedBox(width: 15),
             Expanded(
               child: TextFont(
                 text: getMemberNickname(selectedOwner),
@@ -1444,11 +1460,6 @@ class TransactionOwnerButton extends StatelessWidget {
                 fontSize: 26,
                 textColor: Theme.of(context).colorScheme.black,
               ),
-            ),
-            ButtonIcon(
-              onTap: onTap,
-              icon: Icons.person_rounded,
-              size: 41,
             ),
           ],
         ),
@@ -1477,6 +1488,12 @@ class TypeButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
+            ButtonIcon(
+              onTap: onTap,
+              icon: iconData,
+              size: 41,
+            ),
+            SizedBox(width: 15),
             Expanded(
               child: TextFont(
                 text: selectedType == null
@@ -1488,11 +1505,6 @@ class TypeButton extends StatelessWidget {
                     ? Theme.of(context).colorScheme.textLight
                     : null,
               ),
-            ),
-            ButtonIcon(
-              onTap: onTap,
-              icon: iconData,
-              size: 41,
             ),
           ],
         ),
@@ -1522,6 +1534,12 @@ class DateButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
           children: [
+            ButtonIcon(
+              onTap: onTap,
+              icon: Icons.calendar_month_rounded,
+              size: 41,
+            ),
+            SizedBox(width: 15),
             Expanded(
               child: TextFont(
                 text: wordedDate,
@@ -1551,11 +1569,6 @@ class DateButton extends StatelessWidget {
                     ),
                   )
                 : SizedBox(),
-            ButtonIcon(
-              onTap: onTap,
-              icon: Icons.calendar_month_rounded,
-              size: 41,
-            ),
           ],
         ),
       ),

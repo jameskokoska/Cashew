@@ -280,9 +280,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                         CrossAxisAlignment.end,
                                                     children: [
                                                       Container(
-                                                        child: CountUp(
-                                                          prefix:
-                                                              getCurrencyString(),
+                                                        child: CountNumber(
                                                           count: appStateSettings[
                                                                   "showTotalSpentForBudget"]
                                                               ? totalSpent
@@ -292,18 +290,26 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                           duration: Duration(
                                                               milliseconds:
                                                                   700),
-                                                          fontSize: 25,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          decimals:
-                                                              moneyDecimals(
-                                                                  widget.budget
-                                                                      .amount),
-                                                          textColor:
-                                                              budgetColorScheme
-                                                                  .onSecondaryContainer,
+                                                          dynamicDecimals: true,
+                                                          initialCount: (0),
+                                                          textBuilder:
+                                                              (number) {
+                                                            return TextFont(
+                                                              text:
+                                                                  convertToMoney(
+                                                                      number),
+                                                              fontSize: 25,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              textColor:
+                                                                  budgetColorScheme
+                                                                      .onSecondaryContainer,
+                                                            );
+                                                          },
                                                         ),
                                                       ),
                                                       Container(
@@ -338,9 +344,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                     CrossAxisAlignment.end,
                                                 children: [
                                                   Container(
-                                                    child: CountUp(
-                                                      prefix:
-                                                          getCurrencyString(),
+                                                    child: CountNumber(
                                                       count: appStateSettings[
                                                               "showTotalSpentForBudget"]
                                                           ? totalSpent
@@ -350,14 +354,22 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                                                                   totalSpent),
                                                       duration: Duration(
                                                           milliseconds: 700),
-                                                      fontSize: 25,
-                                                      textAlign: TextAlign.left,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      decimals: moneyDecimals(
-                                                          widget.budget.amount),
-                                                      textColor: budgetColorScheme
-                                                          .onSecondaryContainer,
+                                                      dynamicDecimals: true,
+                                                      initialCount: (0),
+                                                      textBuilder: (number) {
+                                                        return TextFont(
+                                                          text: convertToMoney(
+                                                              number),
+                                                          fontSize: 25,
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          textColor:
+                                                              budgetColorScheme
+                                                                  .onSecondaryContainer,
+                                                        );
+                                                      },
                                                     ),
                                                   ),
                                                   Container(

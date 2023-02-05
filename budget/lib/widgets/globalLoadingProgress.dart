@@ -74,11 +74,17 @@ class GlobalLoadingIndeterminateState
             topRight: Radius.circular(5),
           ),
         ),
-        child: LinearProgressIndicator(
-          color: dynamicPastel(context, Theme.of(context).colorScheme.primary,
-              amount: 0.5),
-          backgroundColor: Theme.of(context).colorScheme.white,
-          minHeight: 3,
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(5),
+            topRight: Radius.circular(5),
+          ),
+          child: LinearProgressIndicator(
+            color: dynamicPastel(context, Theme.of(context).colorScheme.primary,
+                amount: 0.5),
+            backgroundColor: Theme.of(context).colorScheme.white,
+            minHeight: 3,
+          ),
         ),
       ),
     );

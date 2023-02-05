@@ -6,7 +6,13 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
-  String changelog = """ 
+  String changelog = """
+    Icon Buttons shifted to the left instead of the right
+    Shows currency in add transaction selected wallet
+    Can copy amount to clipboard by long pressing
+    Fixed commas for amounts in budget and app bar
+    Fixed lag in large budget history bar graph
+    Fixed auto backups
     Fixed Budget History to respect budget transactions to include setting
     Support for multiple currencies with correct conversion!
     Fixed lock screen animation for biometrics

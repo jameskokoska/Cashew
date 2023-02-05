@@ -67,7 +67,16 @@ class BarGraphState extends State<BarGraph> {
             gridData: FlGridData(
               show: true,
               horizontalInterval: 1,
-              checkToShowHorizontalLine: (value) => true,
+              checkToShowHorizontalLine: (value) {
+                if (value == widget.horizontalLineAt) {
+                  return true;
+                } else if (value == 0) {
+                  return true;
+                } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {
+                  return true;
+                }
+                return false;
+              },
               getDrawingHorizontalLine: (value) {
                 if (value == widget.horizontalLineAt) {
                   return FlLine(
@@ -76,15 +85,13 @@ class BarGraphState extends State<BarGraph> {
                     color: dynamicPastel(context, widget.color, amount: 0.3)
                         .withOpacity(0.7),
                   );
-                }
-                if (value == 0) {
+                } else if (value == 0) {
                   return FlLine(
                     color: dynamicPastel(context, widget.color, amount: 0.3)
                         .withOpacity(0.2),
                     strokeWidth: 2,
                   );
-                }
-                if (value % ((widget.maxY / 3.8).ceil()) == 1) {
+                } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {
                   return FlLine(
                     color: dynamicPastel(context, widget.color, amount: 0.3)
                         .withOpacity(0.2),

@@ -130,6 +130,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       context,
       PopupFramework(
         title: "Enter Amount",
+        underTitleSpace: false,
         child: SelectAmount(
           amountPassed: selectedAmountCalculation ?? "",
           setSelectedAmount: setSelectedAmount,
@@ -936,15 +937,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                           horizontal: 20, vertical: 6),
                                       child: Row(
                                         children: [
-                                          Expanded(
-                                            child: TextFont(
-                                              text: selectedShared == false
-                                                  ? "Personal"
-                                                  : "Shared",
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 26,
-                                            ),
-                                          ),
                                           ButtonIcon(
                                             onTap: () {
                                               setSelectedShared(
@@ -954,6 +946,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                                 ? Icons.share_rounded
                                                 : Icons.share_rounded,
                                             size: 41,
+                                          ),
+                                          SizedBox(width: 15),
+                                          Expanded(
+                                            child: TextFont(
+                                              text: selectedShared == false
+                                                  ? "Personal"
+                                                  : "Shared",
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 26,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -1009,6 +1011,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                           horizontal: 20, vertical: 6),
                                       child: Row(
                                         children: [
+                                          ButtonIcon(
+                                            onTap: () {
+                                              setAddedTransactionsOnly(
+                                                  !selectedAddedTransactionsOnly);
+                                            },
+                                            icon: Icons.select_all,
+                                            size: 41,
+                                          ),
+                                          SizedBox(width: 15),
                                           Expanded(
                                             child: TextFont(
                                               text:
@@ -1019,14 +1030,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 26,
                                             ),
-                                          ),
-                                          ButtonIcon(
-                                            onTap: () {
-                                              setAddedTransactionsOnly(
-                                                  !selectedAddedTransactionsOnly);
-                                            },
-                                            icon: Icons.select_all,
-                                            size: 41,
                                           ),
                                         ],
                                       ),
@@ -1122,14 +1125,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             horizontal: 20, vertical: 6),
                         child: Row(
                           children: [
-                            Expanded(
-                              child: TextFont(
-                                text:
-                                    selectedPin == true ? "Pinned" : "Unpinned",
-                                fontWeight: FontWeight.bold,
-                                fontSize: 26,
-                              ),
-                            ),
                             ButtonIcon(
                               onTap: () {
                                 setSelectedPin();
@@ -1138,6 +1133,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                   ? Icons.push_pin_rounded
                                   : Icons.push_pin_outlined,
                               size: 41,
+                            ),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: TextFont(
+                                text:
+                                    selectedPin == true ? "Pinned" : "Unpinned",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 26,
+                              ),
                             ),
                           ],
                         ),
@@ -1192,6 +1196,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                           horizontal: 20, vertical: 6),
                                       child: Row(
                                         children: [
+                                          ButtonIcon(
+                                            onTap: () {
+                                              setSelectedSharedTransactionsShow();
+                                            },
+                                            icon: Icons.import_export_rounded,
+                                            size: 41,
+                                          ),
+                                          SizedBox(width: 15),
                                           Expanded(
                                             child: Padding(
                                               padding: const EdgeInsets.only(
@@ -1234,13 +1246,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                                 fontSize: 26,
                                               ),
                                             ),
-                                          ),
-                                          ButtonIcon(
-                                            onTap: () {
-                                              setSelectedSharedTransactionsShow();
-                                            },
-                                            icon: Icons.import_export_rounded,
-                                            size: 41,
                                           ),
                                         ],
                                       ),

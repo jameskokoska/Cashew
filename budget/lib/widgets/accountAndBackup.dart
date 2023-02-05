@@ -186,7 +186,9 @@ Future<bool> signOutGoogle() async {
 }
 
 Future<void> createBackupInBackground(context) async {
-  print(entireAppLoaded);
+  // print(entireAppLoaded);
+  print("last backup:");
+  print(appStateSettings["lastBackup"]);
   //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
   if (entireAppLoaded == false) {
     if (appStateSettings["autoBackups"] == true) {
@@ -194,7 +196,7 @@ Future<void> createBackupInBackground(context) async {
       DateTime nextPlannedBackup = lastUpdate
           .add(Duration(days: appStateSettings["autoBackupsFrequency"]));
       print("next backup planned on " + nextPlannedBackup.toString());
-      if (lastUpdate.millisecondsSinceEpoch >=
+      if (lastUpdate.millisecondsSinceEpoch <=
           nextPlannedBackup.millisecondsSinceEpoch) {
         print("auto backing up");
 
