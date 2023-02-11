@@ -32,18 +32,6 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
 
-class IconForCategory {
-  IconForCategory(
-      {required this.icon, required this.tags, this.mostLikelyCategoryName});
-
-  String icon;
-  List<String> tags;
-  String? mostLikelyCategoryName;
-}
-
-IconForCategory iconForCategory = IconForCategory(
-    icon: "icon.png", tags: ["tag"], mostLikelyCategoryName: "Icon");
-
 class AddCategoryPage extends StatefulWidget {
   AddCategoryPage({
     Key? key,
