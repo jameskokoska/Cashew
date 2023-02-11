@@ -64,6 +64,8 @@ void main() async {
         ),
       );
     } catch (e) {
+      print("Error initializing Firebase");
+      print(e.toString());
       Firebase.app();
     }
   } else {
@@ -430,7 +432,7 @@ class App extends StatelessWidget {
         ),
       },
       key: ValueKey(1),
-      title: 'Budget App',
+      title: 'Cashew',
       navigatorKey: navigatorKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

@@ -29,7 +29,7 @@
     </intent>
   </queries>
     <application
-        android:label="Budget App"
+        android:label="Cashew"
         android:icon="@mipmap/ic_launcher">
         <!-- Use the new rendering engine Impeller (experimental) -->
         <!-- <meta-data

@@ -168,7 +168,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text: "Track your spending habits with Budget App!",
+              text: "Track your spending habits with Cashew!",
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
               fontSize: 25,

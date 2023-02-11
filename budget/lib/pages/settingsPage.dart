@@ -91,7 +91,7 @@ class SettingsPageState extends State<SettingsPage>
       listWidgets: [
         SettingsContainerOpenPage(
           openPage: AboutPage(),
-          title: "About Budget App",
+          title: "About Cashew",
           icon: Icons.info_outline_rounded,
         ),
         // SettingsContainerOpenPage(

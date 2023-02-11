@@ -43,7 +43,7 @@ class AboutPage extends StatelessWidget {
                   );
                 },
                 child: TextFont(
-                  text: "Budget App",
+                  text: "Cashew",
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
                   textAlign: TextAlign.center,
