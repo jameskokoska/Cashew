@@ -1948,7 +1948,7 @@ class _SelectTextState extends State<SelectText> {
     input = widget.selectedText;
     _focusNode = new FocusNode();
     if (widget.requestLateAutoFocus)
-      Future.delayed(Duration(milliseconds: 200), () {
+      Future.delayed(Duration(milliseconds: 270), () {
         _focusNode.requestFocus();
       });
   }

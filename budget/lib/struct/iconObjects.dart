@@ -13,7 +13,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "air-hockey.png",
     tags: [
-      "air-hockey",
+      "air hockey",
       "fun",
       "game",
       "table",
@@ -106,7 +106,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "beach-umbrella.png",
     tags: [
-      "beach-umbrella",
+      "beach umbrella",
       "beach",
       "summer",
       "vacation",
@@ -127,13 +127,15 @@ List<IconForCategory> iconObjects = [
       "exercise",
       "outdoor",
       "transportation",
+      "transit",
       "green",
       "travel",
-      "eco-friendly",
-      "two-wheeler",
-      "commute"
+      "eco friendly",
+      "two wheeler",
+      "commute",
+      "biking",
     ],
-    mostLikelyCategoryName: "Transportation",
+    mostLikelyCategoryName: "transportation",
   ),
   IconForCategory(
     icon: "bills.png",
@@ -250,7 +252,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "bubble-tea.png",
     tags: [
-      "bubble-tea",
+      "bubble tea",
       "tea",
       "drink",
       "bubbles",
@@ -394,6 +396,7 @@ List<IconForCategory> iconObjects = [
     tags: [
       "car",
       "transportation",
+      "transit",
       "vehicle",
       "drive",
       "gas",
@@ -403,13 +406,14 @@ List<IconForCategory> iconObjects = [
       "commute",
       "mobile"
     ],
-    mostLikelyCategoryName: "Transportation",
+    mostLikelyCategoryName: "transportation",
   ),
   IconForCategory(
     icon: "car(2).png",
     tags: [
       "car",
       "transportation",
+      "transit",
       "vehicle",
       "drive",
       "gas",
@@ -419,29 +423,32 @@ List<IconForCategory> iconObjects = [
       "commute",
       "mobile"
     ],
-    mostLikelyCategoryName: "Transportation",
+    mostLikelyCategoryName: "transportation",
   ),
   IconForCategory(
     icon: "car-key.png",
     tags: [
-      "car-key",
+      "car key",
       "vehicle",
       "access",
       "transportation",
+      "transit",
       "ignition",
       "start",
       "drive",
       "gas",
       "auto",
-      "mobile"
+      "mobile",
+      "keys",
     ],
-    mostLikelyCategoryName: "Transportation",
+    mostLikelyCategoryName: "transportation",
   ),
   IconForCategory(
     icon: "car.png",
     tags: [
       "car",
       "transportation",
+      "transit",
       "vehicle",
       "drive",
       "gas",
@@ -451,7 +458,7 @@ List<IconForCategory> iconObjects = [
       "commute",
       "mobile"
     ],
-    mostLikelyCategoryName: "Transportation",
+    mostLikelyCategoryName: "transportation",
   ),
   IconForCategory(
     icon: "cards.png",
@@ -488,7 +495,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "chef-hat.png",
     tags: [
-      "chef-hat",
+      "chef hat",
       "food",
       "cook",
       "kitchen",
@@ -568,7 +575,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "clothes-hanger.png",
     tags: [
-      "clothes-hanger",
+      "clothes hanger",
       "wardrobe",
       "fashion",
       "outfit",
@@ -584,7 +591,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "coconut-tree.png",
     tags: [
-      "coconut-tree",
+      "coconut tree",
       "tropical",
       "island",
       "beach",
@@ -616,7 +623,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "coffee-cup.png",
     tags: [
-      "coffee-cup",
+      "coffee cup",
       "coffee",
       "caffeine",
       "morning",
@@ -625,7 +632,7 @@ List<IconForCategory> iconObjects = [
       "drink",
       "energy",
       "aroma",
-      "coffee-shop"
+      "coffee shop"
     ],
     mostLikelyCategoryName: "Drinks",
   ),
@@ -638,7 +645,7 @@ List<IconForCategory> iconObjects = [
       "break",
       "energy",
       "aroma",
-      "coffee-shop",
+      "coffee shop",
       "grind",
       "bean",
       "roast"
@@ -648,7 +655,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "color-palette.png",
     tags: [
-      "color-palette",
+      "color palette",
       "art",
       "design",
       "color",
@@ -696,10 +703,10 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "construction-helmet.png",
     tags: [
-      "construction-helmet",
+      "construction helmet",
       "worker",
       "hardhat",
-      "job-site",
+      "job site",
       "safety",
       "construction",
       "tools",
@@ -712,7 +719,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "cowboy-hat.png",
     tags: [
-      "cowboy-hat",
+      "cowboy hat",
       "western",
       "ranch",
       "horseback",
@@ -728,8 +735,8 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "credit-card.png",
     tags: [
-      "credit-card",
-      "debit-card",
+      "credit card",
+      "debit card",
       "payment",
       "finance",
       "money",
@@ -744,7 +751,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "cricket-bat.png",
     tags: [
-      "cricket-bat",
+      "cricket bat",
       "cricket",
       "sport",
       "game",
@@ -792,7 +799,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "dental-care.png",
     tags: [
-      "dental-care",
+      "dental care",
       "teeth",
       "dentist",
       "oral",
@@ -803,12 +810,12 @@ List<IconForCategory> iconObjects = [
       "pain",
       "cavity"
     ],
-    mostLikelyCategoryName: "Health",
+    mostLikelyCategoryName: "Dental",
   ),
   IconForCategory(
     icon: "desktop-computer.png",
     tags: [
-      "desktop-computer",
+      "desktop computer",
       "computer",
       "desktop",
       "pc",
@@ -888,7 +895,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "double-bed.png",
     tags: [
-      "double-bed",
+      "double bed",
       "bed",
       "sleep",
       "mattress",
@@ -952,7 +959,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "emergency-exit.png",
     tags: [
-      "emergency-exit",
+      "emergency exit",
       "exit",
       "emergency",
       "escape",
@@ -1003,7 +1010,7 @@ List<IconForCategory> iconObjects = [
       "extinguisher",
       "fire",
       "emergency",
-      "put-out",
+      "put out",
       "stop",
       "hose",
       "spray",
@@ -1016,7 +1023,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "face-mask.png",
     tags: [
-      "face-mask",
+      "face mask",
       "mask",
       "health",
       "medicine",
@@ -1032,13 +1039,13 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "fast-food.png",
     tags: [
-      "fast-food",
+      "fast food",
       "food",
       "meal",
       "snack",
       "hamburger",
-      "french-fries",
-      "drive-thru",
+      "french fries",
+      "drive thru",
       "takeout",
       "convenient",
       "junk"
@@ -1064,7 +1071,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "feeding-bottle.png",
     tags: [
-      "feeding-bottle",
+      "feeding bottle",
       "baby",
       "nursing",
       "infant",
@@ -1105,14 +1112,14 @@ List<IconForCategory> iconObjects = [
       "swimming",
       "fishing",
       "catch",
-      "fish-meal"
+      "fish meal"
     ],
     mostLikelyCategoryName: "Fish",
   ),
   IconForCategory(
     icon: "fishing-rod.png",
     tags: [
-      "fishing-rod",
+      "fishing rod",
       "fishing",
       "catch",
       "angler",
@@ -1121,7 +1128,7 @@ List<IconForCategory> iconObjects = [
       "reel",
       "hook",
       "line",
-      "fish-finder"
+      "fish finder"
     ],
     mostLikelyCategoryName: "Fishing",
   ),
@@ -1135,7 +1142,7 @@ List<IconForCategory> iconObjects = [
       "beam",
       "illuminate",
       "emergency",
-      "power-outage",
+      "power outage",
       "portable",
       "battery"
     ],
@@ -1144,7 +1151,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "flat-tire.png",
     tags: [
-      "flat-tire",
+      "flat tire",
       "tire",
       "car",
       "vehicle",
@@ -1192,12 +1199,12 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "food-tray.png",
     tags: [
-      "food-tray",
+      "food tray",
       "meal",
       "dining",
       "plate",
       "restaurant",
-      "fast-food",
+      "fast food",
       "cafeteria",
       "serving",
       "dish",
@@ -1208,15 +1215,15 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "fried-potatoes.png",
     tags: [
-      "fried-potatoes",
+      "fried potatoes",
       "potatoes",
       "fry",
-      "french-fries",
+      "french fries",
       "crispy",
-      "fried-food",
+      "fried food",
       "snack",
-      "side-dish",
-      "fast-food",
+      "side dish",
+      "fast food",
       "potato"
     ],
     mostLikelyCategoryName: "Food",
@@ -1256,7 +1263,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "garden-hose.png",
     tags: [
-      "garden-hose",
+      "garden hose",
       "garden",
       "watering",
       "hose",
@@ -1272,15 +1279,16 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "gas-station.png",
     tags: [
-      "gas-station",
+      "gas station",
       "fuel",
       "petrol",
       "gasoline",
-      "fill-up",
+      "fill up",
       "refuel",
       "automobile",
       "transportation",
-      "road-trip",
+      "transit",
+      "road trip",
       "gas"
     ],
     mostLikelyCategoryName: "Gas",
@@ -1312,7 +1320,7 @@ List<IconForCategory> iconObjects = [
       "surprise",
       "give",
       "receive",
-      "wrapping-paper",
+      "wrapping paper",
       "bow"
     ],
     mostLikelyCategoryName: "Gifts",
@@ -1320,7 +1328,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "golf-ball.png",
     tags: [
-      "golf-ball",
+      "golf ball",
       "golf",
       "sports",
       "game",
@@ -1357,7 +1365,7 @@ List<IconForCategory> iconObjects = [
       "education",
       "school",
       "diploma",
-      "cap-and-gown",
+      "cap and gown",
       "commencement",
       "congrats",
       "success",
@@ -1372,7 +1380,7 @@ List<IconForCategory> iconObjects = [
       "shopping",
       "food",
       "supermarket",
-      "grocery-store",
+      "grocery store",
       "cart",
       "aisle",
       "checkout",
@@ -1411,7 +1419,7 @@ List<IconForCategory> iconObjects = [
       "beard",
       "hairdresser"
     ],
-    mostLikelyCategoryName: "Beauty",
+    mostLikelyCategoryName: "Barber",
   ),
   IconForCategory(
     icon: "hamster.png",
@@ -1432,7 +1440,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "hand-fan.png",
     tags: [
-      "hand-fan",
+      "hand fan",
       "cooling",
       "summer",
       "fan",
@@ -1480,14 +1488,14 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "hearing-aid.png",
     tags: [
-      "hearing-aid",
+      "hearing aid",
       "hearing",
       "listening",
       "ear",
       "audiology",
       "disability",
       "support",
-      "hearing-loss",
+      "hearing loss",
       "sounds",
       "device"
     ],
@@ -1516,6 +1524,7 @@ List<IconForCategory> iconObjects = [
       "flight",
       "air",
       "transportation",
+      "transit",
       "military",
       "rescue",
       "emergency",
@@ -1528,7 +1537,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "high-heels.png",
     tags: [
-      "high-heels",
+      "high heels",
       "fashion",
       "footwear",
       "shoes",
@@ -1543,7 +1552,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "hiking-backpack.png",
     tags: [
-      "hiking-backpack",
+      "hiking backpack",
       "hiking",
       "outdoor",
       "adventure",
@@ -1559,7 +1568,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "hockey-stick.png",
     tags: [
-      "hockey-stick",
+      "hockey stick",
       "hockey",
       "sport",
       "ice",
@@ -1579,7 +1588,7 @@ List<IconForCategory> iconObjects = [
       "home",
       "house",
       "living",
-      "real-estate",
+      "real estate",
       "residence",
       "family",
       "property",
@@ -1751,7 +1760,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "lightning-bolt.png",
     tags: [
-      "lightning-bolt",
+      "lightning bolt",
       "electrical",
       "power",
       "storm",
@@ -1770,6 +1779,7 @@ List<IconForCategory> iconObjects = [
       "locomotive",
       "train",
       "transportation",
+      "transit",
       "steam",
       "engine",
       "rails",
@@ -1778,12 +1788,12 @@ List<IconForCategory> iconObjects = [
       "vehicle",
       "wheels"
     ],
-    mostLikelyCategoryName: "Transportation",
+    mostLikelyCategoryName: "transportation",
   ),
   IconForCategory(
     icon: "magnifying-glass.png",
     tags: [
-      "magnifying-glass",
+      "magnifying glass",
       "search",
       "detective",
       "investigation",
@@ -1799,7 +1809,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "make-up.png",
     tags: [
-      "make-up",
+      "make up",
       "beauty",
       "cosmetics",
       "glamour",
@@ -1879,7 +1889,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "money-bag.png",
     tags: [
-      "money-bag",
+      "money bag",
       "cash",
       "finance",
       "economy",
@@ -1895,14 +1905,14 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "money-bag2.png",
     tags: [
-      "money-bag2",
+      "money bag",
       "finance",
       "savings",
       "wealth",
       "cash",
       "budget",
       "investment",
-      "piggy-bank",
+      "piggy bank",
       "banking",
       "finances"
     ],
@@ -1935,7 +1945,7 @@ List<IconForCategory> iconObjects = [
       "notes",
       "instruments",
       "concert",
-      "music-industry",
+      "music industry",
       "sound"
     ],
     mostLikelyCategoryName: "Music",
@@ -1991,13 +2001,13 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "oldschool-telephone.png",
     tags: [
-      "oldschool-telephone",
+      "oldschool telephone",
       "communication",
       "call",
       "talk",
       "telephone",
       "dial",
-      "old-school",
+      "old school",
       "vintage",
       "telecommunication",
       "antique",
@@ -2008,7 +2018,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "open-book.png",
     tags: [
-      "open-book",
+      "open book",
       "education",
       "library",
       "knowledge",
@@ -2024,7 +2034,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "open-email.png",
     tags: [
-      "open-email",
+      "open email",
       "communication",
       "email",
       "message",
@@ -2136,7 +2146,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "piggy-bank.png",
     tags: [
-      "piggy-bank",
+      "piggy bank",
       "savings",
       "penny",
       "pig",
@@ -2232,16 +2242,16 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "price-tag.png",
     tags: [
-      "price-tag",
+      "price tag",
       "cost",
       "price",
       "value",
-      "price_tag",
-      "price_sticker",
-      "price_label",
-      "price_mark",
-      "price_marker",
-      "price_stick"
+      "price tag",
+      "price sticker",
+      "price label",
+      "price mark",
+      "price marker",
+      "price stick"
     ],
     mostLikelyCategoryName: "Shopping",
   ),
@@ -2312,15 +2322,15 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "safety-helmet.png",
     tags: [
-      "safety-helmet",
+      "safety helmet",
       "construction",
       "workplace",
       "protection",
       "hardhat",
       "helmet",
       "construction_worker",
-      "hard_hat",
-      "job_site",
+      "hard hat",
+      "job site",
       "building"
     ],
     mostLikelyCategoryName: "Construction",
@@ -2360,7 +2370,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "school-backpack.png",
     tags: [
-      "school-backpack",
+      "school backpack",
       "education",
       "books",
       "study",
@@ -2569,8 +2579,8 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "teddy-bear.png",
     tags: [
-      "teddy-bear",
-      "stuffed-animal",
+      "teddy bear",
+      "stuffed animal",
       "plush",
       "toy",
       "cute",
@@ -2621,6 +2631,7 @@ List<IconForCategory> iconObjects = [
       "public transportation",
       "commute",
       "transport",
+      "transit",
       "train",
       "bus",
       "metro",
@@ -2628,7 +2639,7 @@ List<IconForCategory> iconObjects = [
       "light rail",
       "subway"
     ],
-    mostLikelyCategoryName: "Transportation",
+    mostLikelyCategoryName: "transportation",
   ),
   IconForCategory(
     icon: "trash.png",
@@ -2761,7 +2772,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "washing-machine.png",
     tags: [
-      "washing-machine",
+      "washingmachine",
       "laundry",
       "appliances",
       "clothes",
@@ -2793,7 +2804,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "watering-can.png",
     tags: [
-      "watering-can",
+      "watering can",
       "garden",
       "plants",
       "sprinkler",
@@ -2825,7 +2836,7 @@ List<IconForCategory> iconObjects = [
   IconForCategory(
     icon: "yarn-ball.png",
     tags: [
-      "yarn-ball",
+      "yarn ball",
       "knitting",
       "crochet",
       "wool",

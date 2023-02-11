@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    App rename to Cashew
+    Icon search
+    Most likely category name when selecting icon
+    Added more icons
+    Fixed popup closing from keyboard when editing nickname
     Icon Buttons shifted to the left instead of the right
     Shows currency in add transaction selected wallet
     Can copy amount to clipboard by long pressing

@@ -268,6 +268,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                 setSelectedImage: setSelectedImage,
                                 selectedImage: "assets/categories/" +
                                     selectedImage.toString(),
+                                setSelectedTitle:
+                                    (String? titleRecommendation) {
+                                  if (titleRecommendation != null)
+                                    setSelectedTitle(titleRecommendation);
+                                },
                               ),
                             ),
                           );
