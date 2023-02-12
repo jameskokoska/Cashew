@@ -904,9 +904,13 @@ List<IconForCategory> iconObjects = [
       "night",
       "restful",
       "comfortable",
-      "nighttime"
+      "nighttime",
+      "hotel",
+      "stay",
+      "hotel",
+      "lodge",
     ],
-    mostLikelyCategoryName: "Sleep",
+    mostLikelyCategoryName: "Lodging",
   ),
   IconForCategory(
     icon: "dress.png",
@@ -2848,5 +2852,118 @@ List<IconForCategory> iconObjects = [
       "craft"
     ],
     mostLikelyCategoryName: "Crafting",
+  ),
+  IconForCategory(
+    icon: "cottage.png",
+    tags: [
+      "cottage",
+      "home",
+      "real estate",
+      "property",
+      "residence",
+      "dwelling",
+      "abode",
+      "house",
+      "domicile",
+      "shelter"
+    ],
+    mostLikelyCategoryName: "Lodging",
+  ),
+  IconForCategory(
+    icon: "furniture.png",
+    tags: [
+      "furniture",
+      "chair",
+      "table",
+      "sofa",
+      "bed",
+      "couch",
+      "decor",
+      "home",
+      "interior",
+      "furnishing",
+      "room"
+    ],
+    mostLikelyCategoryName: "Furniture",
+  ),
+  IconForCategory(
+    icon: "shopping-cart.png",
+    tags: [
+      "shopping cart",
+      "purchase",
+      "buy",
+      "cart",
+      "store",
+      "market",
+      "shop",
+      "retail",
+      "consumer",
+      "goods"
+    ],
+    mostLikelyCategoryName: "Shopping",
+  ),
+  IconForCategory(
+    icon: "crypto.png",
+    tags: [
+      "crypto",
+      "digital currency",
+      "bitcoin",
+      "ethereum",
+      "blockchain",
+      "mining",
+      "altcoin",
+      "wallet",
+      "trading",
+      "finance"
+    ],
+    mostLikelyCategoryName: "Cryptocurrency",
+  ),
+  IconForCategory(
+    icon: "media-content.png",
+    tags: [
+      "media",
+      "content",
+      "entertainment",
+      "movies",
+      "music",
+      "streaming",
+      "television",
+      "shows",
+      "games",
+      "books"
+    ],
+    mostLikelyCategoryName: "Media",
+  ),
+  IconForCategory(
+    icon: "television.png",
+    tags: [
+      "television",
+      "screen",
+      "entertainment",
+      "electronics",
+      "media",
+      "television set",
+      "tv",
+      "display",
+      "device",
+      "watching"
+    ],
+    mostLikelyCategoryName: "Television",
+  ),
+  IconForCategory(
+    icon: "radio.png",
+    tags: [
+      "radio",
+      "music",
+      "communication",
+      "electronics",
+      "device",
+      "antenna",
+      "station",
+      "broadcast",
+      "receiver",
+      "tuner"
+    ],
+    mostLikelyCategoryName: "Radio",
   ),
 ];

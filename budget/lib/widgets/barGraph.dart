@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/admob/v1.dart';
@@ -112,50 +113,65 @@ class BarGraphState extends State<BarGraph> {
             ),
             titlesData: FlTitlesData(
               show: true,
-              bottomTitles: SideTitles(
-                showTitles: true,
-                getTextStyles: (_, __) {
-                  return TextStyle(
-                    color: dynamicPastel(context, widget.color,
-                            amount: 0.8, inverse: true)
-                        .withOpacity(0.5),
-                    fontFamily: 'Avenir',
-                    fontSize: 12.5,
-                  );
-                },
-                margin: 7,
-                getTitles: (value) {
-                  return widget.budget.reoccurrence == BudgetReoccurence.monthly
-                      ? DateFormat('MMM')
-                          .format(widget.dateRanges[value.toInt()].start)
-                      : widget.budget.reoccurrence == BudgetReoccurence.yearly
-                          ? DateFormat('yyyy')
-                              .format(widget.dateRanges[value.toInt()].start)
-                          : DateFormat('MMM\nd')
-                              .format(widget.dateRanges[value.toInt()].start);
-                },
+              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, _) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: TextFont(
+                          textAlign: TextAlign.center,
+                          fontSize: 13,
+                          text: widget.budget.reoccurrence ==
+                                  BudgetReoccurence.monthly
+                              ? DateFormat('MMM').format(
+                                  widget.dateRanges[value.toInt()].start)
+                              : widget.budget.reoccurrence ==
+                                      BudgetReoccurence.yearly
+                                  ? DateFormat('yyyy').format(
+                                      widget.dateRanges[value.toInt()].start)
+                                  : DateFormat('MMM\nd').format(
+                                      widget.dateRanges[value.toInt()].start),
+                          textColor: dynamicPastel(context, widget.color,
+                                  amount: 0.8, inverse: true)
+                              .withOpacity(0.5),
+                        ),
+                      );
+                    }),
               ),
-              rightTitles: SideTitles(showTitles: false),
-              topTitles: SideTitles(showTitles: false),
-              leftTitles: SideTitles(
-                textAlign: TextAlign.right,
-                showTitles: true,
-                getTextStyles: (_, __) {
-                  return TextStyle(
-                    fontSize: 13,
-                    height: 1.5,
-                    color: dynamicPastel(context, widget.color,
-                            amount: 0.5, inverse: true)
-                        .withOpacity(0.3),
-                    fontFamily: 'Avenir',
-                  );
-                },
-                getTitles: (value) {
-                  return getWordedNumber(value);
-                },
-                interval: (widget.maxY / 3.8),
-                margin: 6,
-                reservedSize: 40,
+              rightTitles:
+                  AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (
+                    value,
+                    titleMeta,
+                  ) {
+                    bool show = false;
+                    if (value == 0) {
+                      show = true;
+                    } else if (value < widget.maxY && value > 1) {
+                      show = true;
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: TextFont(
+                        textAlign: TextAlign.right,
+                        text: getWordedNumber(value),
+                        textColor: dynamicPastel(context, widget.color,
+                                amount: 0.5, inverse: true)
+                            .withOpacity(0.3),
+                        fontSize: 13,
+                      ),
+                    );
+                  },
+                  reservedSize: 48,
+                  interval: (widget.maxY / 3.8),
+                ),
               ),
             ),
             borderData: FlBorderData(
@@ -175,8 +191,13 @@ BarChartGroupData makeGroupData(int x, double y1, double y2, color) {
     x: x,
     barRods: [
       BarChartRodData(
-        y: y1,
-        colors: [color.withAlpha(120), color],
+        fromY: 0,
+        toY: y1,
+        gradient: LinearGradient(
+          colors: [color.withAlpha(120), color],
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+        ),
         width: 13,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(5),

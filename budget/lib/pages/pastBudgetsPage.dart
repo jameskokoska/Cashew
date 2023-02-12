@@ -179,14 +179,17 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
               }
 
               return SliverToBoxAdapter(
-                child: BarGraph(
-                  color: budgetColorScheme.secondary,
-                  dateRanges: dateTimeRanges,
-                  maxY: maxY,
-                  bars: bars,
-                  horizontalLineAt: widget.budget.amount,
-                  initialBars: initialBars,
-                  budget: widget.budget,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: BarGraph(
+                    color: budgetColorScheme.secondary,
+                    dateRanges: dateTimeRanges,
+                    maxY: maxY,
+                    bars: bars,
+                    horizontalLineAt: widget.budget.amount,
+                    initialBars: initialBars,
+                    budget: widget.budget,
+                  ),
                 ),
               );
             } else {

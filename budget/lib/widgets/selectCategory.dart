@@ -10,6 +10,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class SelectCategory extends StatefulWidget {
@@ -354,6 +355,9 @@ class _SelectCategoryState extends State<SelectCategory> {
                         await database.moveCategory(
                             oldCategory.categoryPk, _intNew, oldCategory.order);
                       }
+                    },
+                    onDragStart: (_) {
+                      HapticFeedback.heavyImpact();
                     },
                   ),
                   // Center(

@@ -196,7 +196,7 @@ Future<void> createBackupInBackground(context) async {
       DateTime nextPlannedBackup = lastUpdate
           .add(Duration(days: appStateSettings["autoBackupsFrequency"]));
       print("next backup planned on " + nextPlannedBackup.toString());
-      if (lastUpdate.millisecondsSinceEpoch <=
+      if (DateTime.now().millisecondsSinceEpoch >=
           nextPlannedBackup.millisecondsSinceEpoch) {
         print("auto backing up");
 

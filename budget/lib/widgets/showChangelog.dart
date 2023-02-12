@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Updated FL Charts package
+    Added vibration when reordering categories
+    Fixed auto backups timing
     App rename to Cashew
     Icon search
     Most likely category name when selecting icon

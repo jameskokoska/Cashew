@@ -28,7 +28,7 @@ dependencies:
   intl: ^0.17.0
   animations: ^2.0.1
   flutter_sticky_header: ^0.6.0
-  fl_chart: ^0.41.0
+  fl_chart: ^0.60.0
   # database dependencies
   drift: ^2.3.0
   sqlite3_flutter_libs: ^0.5.0

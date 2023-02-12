@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -82,9 +81,12 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
-        minY: !loaded ? 0 : widget.minPair.y,
-        maxY: !loaded ? widget.minPair.y * -1 : widget.maxPair.y,
-        maxX: !loaded ? 0 : widget.maxPair.x + 1,
+        minY: (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
+                (widget.maxPair.y < 0 && widget.minPair.y < 0)
+            ? 0
+            : widget.minPair.y,
+        maxY: widget.maxPair.y,
+        maxX: widget.maxPair.x + 1,
         // axisTitleData: axisTitleData,
         titlesData: titlesData,
         extraLinesData: extraLinesData,
@@ -93,17 +95,17 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   ExtraLinesData get extraLinesData => ExtraLinesData(
         horizontalLines: [
-          ...(widget.horizontalLineAt != null
-              ? [
+          ...(((widget.minPair.y > 0 && widget.maxPair.y > 0) ||
+                  (widget.minPair.y < 0 && widget.maxPair.y < 0))
+              ? []
+              : [
                   HorizontalLine(
-                    y: widget.horizontalLineAt!,
-                    dashArray: [2, 2],
                     strokeWidth: 2,
+                    y: 0,
                     color: dynamicPastel(context, widget.color, amount: 0.3)
-                        .withOpacity(0.7),
-                  )
-                ]
-              : []),
+                        .withOpacity(0.4),
+                  ),
+                ]),
           HorizontalLine(
             y: 0,
             color: dynamicPastel(context, widget.color, amount: 0.3)
@@ -134,81 +136,93 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   FlTitlesData get titlesData => FlTitlesData(
         show: true,
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (_, __) {
-            return TextStyle(
-                color: dynamicPastel(context, widget.color,
-                        amount: 0.8, inverse: true)
-                    .withOpacity(0.5),
-                fontFamily: 'Avenir');
-          },
-          getTitles: (value) {
-            DateTime currentDate =
-                widget.endDate == null ? DateTime.now() : widget.endDate!;
-            return getWordedDateShort(
-              DateTime(
-                currentDate.year,
-                currentDate.month,
-                currentDate.day - widget.maxPair.x.toInt() + value.toInt(),
-              ),
-              showTodayTomorrow: false,
-            );
-          },
-          interval: widget.maxPair.x / 4,
-          margin: 13,
+        bottomTitles: AxisTitles(
+          axisNameSize: 25,
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, titleMeta) {
+              if (value == widget.maxPair.x + 1) {
+                return SizedBox.shrink();
+              }
+              DateTime currentDate =
+                  widget.endDate == null ? DateTime.now() : widget.endDate!;
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: TextFont(
+                  textAlign: TextAlign.center,
+                  fontSize: 13,
+                  text: getWordedDateShort(
+                    DateTime(
+                      currentDate.year,
+                      currentDate.month,
+                      currentDate.day -
+                          widget.maxPair.x.toInt() +
+                          value.toInt(),
+                    ),
+                    showTodayTomorrow: false,
+                  ),
+                  textColor: dynamicPastel(context, widget.color,
+                          amount: 0.8, inverse: true)
+                      .withOpacity(0.5),
+                ),
+              );
+            },
+            reservedSize: 28,
+            interval: widget.maxPair.x / 4,
+          ),
         ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          textAlign: TextAlign.right,
-          getTextStyles: (_, __) {
-            return TextStyle(
-                fontSize: 13,
-                height: 1.5,
-                color: dynamicPastel(context, widget.color,
-                        amount: 0.5, inverse: true)
-                    .withOpacity(0.3),
-                fontFamily: 'Avenir');
-          },
-          getTitles: (value) {
-            return getWordedNumber(value);
-          },
-          reservedSize: widget.minPair.y <= -10000
-              ? 55
-              : widget.minPair.y <= -1000
-                  ? 45
-                  : widget.minPair.y <= -100
-                      ? 40
-                      : (widget.maxPair.y >= 100
-                              ? (widget.maxPair.y >= 1000 ? 37 : 33)
-                              : 25) +
-                          extraHorizontalPadding,
-          interval:
-              ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
-                          5)
-                      .ceil() *
-                  5,
-          margin: 10,
-          checkToShowTitle:
-              (minValue, maxValue, sideTitles, appliedInterval, value) {
-            if (value == 0) {
-              return true;
-            } else if (value % appliedInterval != 0) {
-              return false;
-            } else if (value < widget.maxPair.y && value > 1) {
-              return true;
-            } else if (value > widget.minPair.y && value < 1) {
-              return true;
-            } else {
-              return false;
-            }
-          },
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (
+              value,
+              titleMeta,
+            ) {
+              bool show = false;
+              if (value == 0) {
+                show = true;
+              } else if (value < widget.maxPair.y && value > 1) {
+                show = true;
+              } else if (value > widget.minPair.y && value < 1) {
+                show = true;
+              } else {
+                return SizedBox.shrink();
+              }
+              return Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: TextFont(
+                  textAlign: TextAlign.right,
+                  text: getWordedNumber(value),
+                  textColor: dynamicPastel(context, widget.color,
+                          amount: 0.5, inverse: true)
+                      .withOpacity(0.3),
+                  fontSize: 13,
+                ),
+              );
+            },
+            reservedSize: (widget.minPair.y <= -10000
+                    ? 55
+                    : widget.minPair.y <= -1000
+                        ? 45
+                        : widget.minPair.y <= -100
+                            ? 40
+                            : (widget.maxPair.y >= 100
+                                    ? (widget.maxPair.y >= 1000 ? 37 : 33)
+                                    : 25) +
+                                extraHorizontalPadding) +
+                10,
+            interval:
+                ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
+                            5)
+                        .ceil() *
+                    5,
+          ),
         ),
-        topTitles: SideTitles(
-          showTitles: false,
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
         ),
-        rightTitles: SideTitles(
-          showTitles: false,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
         ),
       );
 
@@ -247,6 +261,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           );
         },
         getDrawingVerticalLine: (value) {
+          // print((widget.maxPair.y) /
+          //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
+          // print(((widget.minPair.y)) /
+          //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
           return FlLine(
             color: dynamicPastel(context, widget.color, amount: 0.3)
                 .withOpacity(0.2),
@@ -268,7 +286,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       );
 
   LineChartBarData get lineChartBarData => LineChartBarData(
-        colors: [lightenPastel(widget.color, amount: 0.3)],
+        color: lightenPastel(widget.color, amount: 0.3),
         barWidth: 3,
         isStrokeCapRound: true,
         dotData: FlDotData(
@@ -282,50 +300,51 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           },
         ),
         isCurved: widget.isCurved,
-        curveSmoothness: 0.2,
+        curveSmoothness:
+            appStateSettings["removeZeroTransactionEntries"] ? 0.1 : 0.3,
         preventCurveOverShooting: true,
-        preventCurveOvershootingThreshold: 10,
+        preventCurveOvershootingThreshold: 8,
         aboveBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,
           show: true,
-          colors: [
-            widget.color.withAlpha(0),
-            widget.color.withAlpha(100),
-          ],
-          gradientColorStops: [0, 1],
-          gradientFrom: Offset(
-              0,
-              ((widget.maxPair.y).abs()) /
-                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
-          gradientTo: const Offset(0, 1),
+          gradient: LinearGradient(
+            colors: [
+              widget.color.withAlpha(100),
+              widget.color.withAlpha(0),
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment(
+                0,
+                (widget.minPair.y) /
+                    ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+          ),
+          // gradientFrom: Offset(
+          //     0,
+          //     ((widget.maxPair.y).abs()) /
+          //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
         belowBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,
           show: true,
-          colors: [
-            widget.color.withAlpha(100),
-            widget.color.withAlpha(0),
-          ],
-          gradientColorStops: [0, 1],
-          gradientFrom: const Offset(0, 0),
-          gradientTo: Offset(
-              0,
-              ((widget.maxPair.y).abs()) /
-                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+          gradient: LinearGradient(
+            colors: [
+              widget.color.withAlpha(100),
+              widget.color.withAlpha(0),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment(
+                0,
+                (widget.maxPair.y) /
+                    ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+          ),
+          // gradientTo: Offset(
+          //     0,
+          //     ((widget.maxPair.y).abs()) /
+          //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
-        spots: loaded
-            ? widget.spots
-            : [
-                for (int i = 0; i <= widget.spots.length - 1; i++)
-                  FlSpot(
-                      widget.minPair.x +
-                          (widget.maxPair.x - widget.minPair.x) *
-                              i /
-                              widget.spots.length,
-                      0),
-              ],
+        spots: loaded ? widget.spots : [],
       );
 }
 
@@ -412,7 +431,7 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return ClipRect(
       child: Container(
         height: 175,
         child: _LineChart(
