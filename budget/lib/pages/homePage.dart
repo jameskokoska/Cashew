@@ -383,7 +383,7 @@ class HomePageState extends State<HomePage>
                                         boxShadowGeneral(context)),
                                   ),
                                   child: LineChartWrapper(
-                                      points: points, isCurved: true)),
+                                      points: [points], isCurved: true)),
                             );
                           }
                           return SizedBox.shrink();

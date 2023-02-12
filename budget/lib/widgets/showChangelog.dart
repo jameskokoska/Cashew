@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added budget history spending momentum graph to compare with past periods
+    On touch information for line graphs
+    Line graph support multiple lines
     Scrollbar
     Fixed colors for budget history page (light mode)
     Converted bar graph to line graph for budget history

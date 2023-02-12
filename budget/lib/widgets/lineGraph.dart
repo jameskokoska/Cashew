@@ -19,17 +19,21 @@ class _LineChart extends StatefulWidget {
     this.endDate,
     this.verticalLineAt,
     this.horizontalLineAt,
+    required this.enableTouch,
+    this.colors = const [],
     Key? key,
   }) : super(key: key);
 
-  final List<FlSpot> spots;
+  final List<List<FlSpot>> spots;
   final Pair maxPair;
   final Pair minPair;
   final Color color;
+  final List<Color> colors;
   final bool isCurved;
   final DateTime? endDate;
   final double? verticalLineAt;
   final double? horizontalLineAt;
+  final bool enableTouch;
 
   @override
   State<_LineChart> createState() => _LineChartState();
@@ -60,17 +64,17 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
     // print(widget.spots);
   }
 
-  getMaxPoint(spots) {}
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
           right: 10 + extraHorizontalPadding, top: 8, bottom: 0),
-      child: LineChart(
-        data,
-        swapAnimationDuration: const Duration(milliseconds: 2500),
-        swapAnimationCurve: Curves.easeInOutCubic,
+      child: GestureDetector(
+        child: LineChart(
+          data,
+          swapAnimationDuration: const Duration(milliseconds: 2000),
+          swapAnimationCurve: Curves.easeInOutCubicEmphasized,
+        ),
       ),
     );
   }
@@ -81,12 +85,18 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
-        minY: (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
-                (widget.maxPair.y < 0 && widget.minPair.y < 0)
-            ? 0
-            : widget.minPair.y,
-        maxY: widget.maxPair.y,
-        maxX: widget.maxPair.x + 1,
+        minY: loaded
+            ? (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
+                    (widget.maxPair.y < 0 && widget.minPair.y < 0)
+                ? 0
+                : widget.minPair.y
+            : widget.minPair.y - widget.minPair.y * 0.7,
+        maxY: loaded
+            ? widget.maxPair.y
+            : widget.maxPair.y + widget.maxPair.y * 0.7,
+        maxX: loaded
+            ? widget.maxPair.x + 1
+            : widget.maxPair.x - widget.maxPair.x * 0.7,
         // axisTitleData: axisTitleData,
         titlesData: titlesData,
         extraLinesData: extraLinesData,
@@ -239,11 +249,84 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   //     );
 
   LineTouchData get lineTouchData => LineTouchData(
-        handleBuiltInTouches: false,
+        enabled: true,
+        touchSpotThreshold: 1000,
+        getTouchedSpotIndicator:
+            (LineChartBarData barData, List<int> spotIndexes) {
+          // only show touch data for primary colored lines
+          bool transparent = false;
+          if (barData.color != lightenPastel(widget.color, amount: 0.3)) {
+            transparent = true;
+          }
+          return spotIndexes.map((index) {
+            return TouchedSpotIndicatorData(
+              FlLine(
+                color: transparent
+                    ? Colors.transparent
+                    : widget.color.withOpacity(0.9),
+                strokeWidth: 2,
+                dashArray: [2, 2],
+              ),
+              FlDotData(
+                show: true,
+                getDotPainter: (spot, percent, barData, index) =>
+                    FlDotCirclePainter(
+                  radius: 3,
+                  color: transparent
+                      ? Colors.transparent
+                      : widget.color.withOpacity(0.9),
+                  strokeWidth: 2,
+                  strokeColor: transparent
+                      ? Colors.transparent
+                      : widget.color.withOpacity(0.9),
+                ),
+              ),
+            );
+          }).toList();
+        },
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: widget.color.withOpacity(0.7),
+          tooltipRoundedRadius: 8,
+          fitInsideVertically: true,
+          fitInsideHorizontally: true,
+          tooltipPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
+            return lineBarsSpot.map((LineBarSpot lineBarSpot) {
+              // only show touch data for primary colored lines
+              if (lineBarSpot.bar.color !=
+                  lightenPastel(widget.color, amount: 0.3)) {
+                return null;
+              }
+              DateTime currentDate =
+                  widget.endDate == null ? DateTime.now() : widget.endDate!;
+              return LineTooltipItem(
+                getWordedDateShort(
+                      DateTime(
+                        currentDate.year,
+                        currentDate.month,
+                        currentDate.day -
+                            widget.maxPair.x.toInt() +
+                            lineBarSpot.x.toInt(),
+                      ),
+                    ) +
+                    "\n" +
+                    convertToMoney(lineBarSpot.y),
+                const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              );
+            }).toList();
+          },
+        ),
       );
 
   List<LineChartBarData> get lineBarsData => [
-        lineChartBarData,
+        for (int spotsListIndex = 0;
+            spotsListIndex < widget.spots.length;
+            spotsListIndex++)
+          lineChartBarData(widget.spots[spotsListIndex], spotsListIndex),
       ];
 
   FlGridData get gridData => FlGridData(
@@ -285,20 +368,14 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         ),
       );
 
-  LineChartBarData get lineChartBarData => LineChartBarData(
-        color: lightenPastel(widget.color, amount: 0.3),
+  LineChartBarData lineChartBarData(List<FlSpot> spots, int index) =>
+      LineChartBarData(
+        color: widget.colors.length > 0
+            ? lightenPastel(widget.colors[index], amount: 0.3)
+            : lightenPastel(widget.color, amount: 0.3),
         barWidth: 3,
         isStrokeCapRound: true,
-        dotData: FlDotData(
-          show: false,
-          getDotPainter: (spot, percent, barData, index) {
-            return FlDotCirclePainter(
-              radius: 2,
-              color: Colors.blue,
-              strokeWidth: 0,
-            );
-          },
-        ),
+        dotData: FlDotData(show: false),
         isCurved: widget.isCurved,
         curveSmoothness:
             appStateSettings["removeZeroTransactionEntries"] ? 0.1 : 0.3,
@@ -307,7 +384,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         aboveBarData: BarAreaData(
           applyCutOffY: true,
           cutOffY: 0,
-          show: true,
+          show: index != 0 ? false : true,
           gradient: LinearGradient(
             colors: [
               widget.color.withAlpha(100),
@@ -344,7 +421,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           //     ((widget.maxPair.y).abs()) /
           //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
-        spots: loaded ? widget.spots : [],
+        spots: spots,
       );
 }
 
@@ -363,19 +440,32 @@ class LineChartWrapper extends StatelessWidget {
     this.endDate,
     this.verticalLineAt,
     this.horizontalLineAt,
+    this.enableTouch = true,
+    this.colors = const [],
     Key? key,
   }) : super(key: key);
 
-  final List<Pair> points;
+  final List<List<Pair>> points;
   final bool isCurved;
   final Color? color;
   final DateTime? endDate;
   final double? verticalLineAt;
   final double? horizontalLineAt;
+  final bool enableTouch;
+  final List<Color> colors;
 
-  List<Pair> filterPoints(points) {
+  List<List<Pair>> filterPointsList(List<List<Pair>> pointsList) {
+    List<List<Pair>> pointsOut = [];
+    for (List<Pair> points in pointsList) {
+      pointsOut.add(filterPoints(points));
+    }
+    return pointsOut;
+  }
+
+  List<Pair> filterPoints(List<Pair> points) {
     List<Pair> pointsOut = [];
-    if (appStateSettings["removeZeroTransactionEntries"]) {
+    if (appStateSettings["removeZeroTransactionEntries"] &&
+        !appStateSettings["showCumulativeSpending"]) {
       for (Pair point in points) {
         if (point.y != 0) {
           pointsOut.add(Pair(point.x, point.y));
@@ -389,41 +479,67 @@ class LineChartWrapper extends StatelessWidget {
           : 0;
       return pointsOut;
     }
+    if (appStateSettings["removeZeroTransactionEntries"] &&
+        appStateSettings["showCumulativeSpending"]) {
+      pointsOut.add(Pair(points.first.x, points.first.y));
+      double previousTotal = 0;
+      for (Pair point in points) {
+        if (previousTotal != point.y) {
+          pointsOut.add(Pair(point.x, point.y));
+        }
+        previousTotal = point.y;
+      }
+      if (pointsOut.length <= 0) {
+        return [Pair(0, 0)];
+      }
+      pointsOut.last.x != points.last.x
+          ? pointsOut.add(Pair(points.last.x, points.last.y))
+          : 0;
+      return pointsOut;
+    }
     return points;
   }
 
-  List<FlSpot> convertPoints(points) {
-    List<FlSpot> pointsOut = [];
-    for (Pair pair in points) {
-      pointsOut.add(FlSpot(pair.x, pair.y));
+  List<List<FlSpot>> convertPoints(List<List<Pair>> pointsList) {
+    List<List<FlSpot>> pointsOut = [];
+    for (List<Pair> points in pointsList) {
+      List<FlSpot> pointsOutCurrent = [];
+      for (Pair pair in points) {
+        pointsOutCurrent.add(FlSpot(pair.x, pair.y));
+      }
+      pointsOut.add(pointsOutCurrent);
     }
     return pointsOut;
   }
 
-  Pair getMaxPoint(points) {
+  Pair getMaxPoint(List<List<Pair>> pointsList) {
     Pair max = Pair(1, 1);
-    for (Pair pair in points) {
-      if (pair.x > max.x) {
-        max.x = pair.x;
-      }
-      if (pair.y > max.y) {
-        max.y = pair.y;
+    for (List<Pair> points in pointsList) {
+      for (Pair pair in points) {
+        if (pair.x > max.x) {
+          max.x = pair.x;
+        }
+        if (pair.y > max.y) {
+          max.y = pair.y;
+        }
       }
     }
     return max;
   }
 
-  Pair getMinPoint(points) {
-    if (points.length <= 0) {
-      return Pair(1, 1);
-    }
-    Pair min = Pair(points[0].x, points[0].y);
-    for (Pair pair in points) {
-      if (pair.x < min.x) {
-        min.x = pair.x;
+  Pair getMinPoint(List<List<Pair>> pointsList) {
+    Pair min = Pair(0, 0);
+    for (List<Pair> points in pointsList) {
+      if (points.length <= 0 && min.x == 0 && min.y == 0) {
+        min = Pair(1, 1);
       }
-      if (pair.y < min.y) {
-        min.y = pair.y;
+      for (Pair pair in points) {
+        if (pair.x < min.x) {
+          min.x = pair.x;
+        }
+        if (pair.y < min.y) {
+          min.y = pair.y;
+        }
       }
     }
     return min;
@@ -435,7 +551,7 @@ class LineChartWrapper extends StatelessWidget {
       child: Container(
         height: 175,
         child: _LineChart(
-          spots: convertPoints(filterPoints(points)),
+          spots: convertPoints(filterPointsList(points)),
           maxPair: getMaxPoint(points),
           minPair: getMinPoint(points),
           color: color == null ? Theme.of(context).colorScheme.primary : color!,
@@ -443,6 +559,8 @@ class LineChartWrapper extends StatelessWidget {
           endDate: endDate,
           verticalLineAt: verticalLineAt,
           horizontalLineAt: horizontalLineAt,
+          enableTouch: enableTouch,
+          colors: colors,
         ),
       ),
     );

@@ -581,7 +581,7 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                           padding: EdgeInsets.only(left: 10, right: 5),
                           child: LineChartWrapper(
                             endDate: budgetRange.end,
-                            points: points,
+                            points: [points],
                             isCurved: true,
                             color: selectedCategoryPk != -1 &&
                                     selectedCategory != null

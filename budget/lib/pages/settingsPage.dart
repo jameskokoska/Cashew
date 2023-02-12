@@ -230,34 +230,24 @@ class SettingsPageState extends State<SettingsPage>
           onSwitched: (value) {
             updateSettings("showCumulativeSpending", value,
                 pagesNeedingRefresh: [0, 3], updateGlobalState: false);
-            if (value == true) {
-              updateSettings("removeZeroTransactionEntries", false,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
-            }
+            // if (value == true) {
+            //   updateSettings("removeZeroTransactionEntries", false,
+            //       pagesNeedingRefresh: [0], updateGlobalState: false);
+            // }
           },
           initialValue: appStateSettings["showCumulativeSpending"],
           icon: Icons.show_chart_rounded,
         ),
-        AnimatedSize(
-          duration: Duration(milliseconds: 800),
-          curve: Curves.easeInOutCubicEmphasized,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: !appStateSettings["showCumulativeSpending"]
-                ? SettingsContainerSwitch(
-                    key: ValueKey(1),
-                    title: "Hide Zero Transactions",
-                    description: "On the home page spending graph",
-                    onSwitched: (value) {
-                      updateSettings("removeZeroTransactionEntries", value,
-                          pagesNeedingRefresh: [0], updateGlobalState: false);
-                    },
-                    initialValue:
-                        appStateSettings["removeZeroTransactionEntries"],
-                    icon: Icons.money_off_rounded,
-                  )
-                : Container(),
-          ),
+        SettingsContainerSwitch(
+          key: ValueKey(1),
+          title: "Hide Zero Transactions",
+          description: "On spending line graphs",
+          onSwitched: (value) {
+            updateSettings("removeZeroTransactionEntries", value,
+                pagesNeedingRefresh: [0], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["removeZeroTransactionEntries"],
+          icon: Icons.money_off_rounded,
         ),
         SettingsContainerSwitch(
           title: "Ask for Transaction Title",

@@ -72,12 +72,12 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
           getDotPainter: (spot, percent, barData, index) {
             return FlDotCirclePainter(
               radius: 4,
-              color: widget.color.withOpacity(0.8),
+              color: lightenPastel(widget.color, amount: 0.3).withOpacity(0.8),
               strokeWidth: 0,
             );
           },
         ),
-        color: widget.color,
+        color: lightenPastel(widget.color, amount: 0.3),
       ),
     ];
 
@@ -86,8 +86,8 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
     return Container(
       height: 190,
       padding: const EdgeInsets.only(
-        left: 10,
-        right: 25,
+        left: 20,
+        right: 35,
         top: 25,
       ),
       child: LineChart(
@@ -238,8 +238,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                 );
               } else if (value == 0) {
                 return FlLine(
-                  color: dynamicPastel(context, widget.color, amount: 0.3)
-                      .withOpacity(0.2),
+                  color: widget.color,
                   strokeWidth: 2,
                 );
               } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {
