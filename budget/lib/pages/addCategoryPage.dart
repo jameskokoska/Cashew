@@ -275,6 +275,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                 },
                               ),
                             ),
+                            showScrollbar: true,
                           );
                         },
                         color: Colors.transparent,

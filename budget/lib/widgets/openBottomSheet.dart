@@ -5,12 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:flutter/foundation.dart';
+import 'package:budget/widgets/scrollbarWrap.dart';
 import 'dart:io' show Platform;
 
 late SheetController bottomSheetControllerGlobal;
 // Set snap to false if there is a keyboard
-openBottomSheet(context, child,
-    {bool maxHeight: true, bool snap: true, bool resizeForKeyboard: true}) {
+openBottomSheet(
+  context,
+  child, {
+  bool maxHeight = true,
+  bool snap = true,
+  bool resizeForKeyboard = true,
+  bool showScrollbar = false,
+}) {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
   bottomSheetControllerGlobal = new SheetController();
@@ -23,6 +30,9 @@ openBottomSheet(context, child,
               amount: 0.3)
           : Theme.of(context).colorScheme.lightDarkAccent, builder: (context) {
     return SlidingSheetDialog(
+      scrollSpec: ScrollSpec(
+          showScrollbar: showScrollbar,
+          scrollbar: ((child) => ScrollbarWrap(child: child))),
       controller: bottomSheetControllerGlobal,
       elevation: 0,
       isBackdropInteractable: true,

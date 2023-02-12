@@ -145,12 +145,15 @@ class ScrollSpec {
   /// Whether to wrap the scrollable content inside a `Scrollbar` widget.
   final bool showScrollbar;
 
+  final Widget Function(Widget child)? scrollbar;
+
   /// Creates an object that defines the scroll effects, physics and more.
   const ScrollSpec({
     this.overscroll = true,
     this.overscrollColor,
     this.physics,
     this.showScrollbar = false,
+    this.scrollbar,
   });
 
   /// Creates an overscroll effect with the given [color].

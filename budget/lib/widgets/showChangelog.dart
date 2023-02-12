@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Scrollbar
+    Fixed colors for budget history page (light mode)
+    Converted bar graph to line graph for budget history
     Updated FL Charts package
     Added vibration when reordering categories
     Fixed auto backups timing

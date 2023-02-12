@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
@@ -592,27 +592,29 @@ class TransactionsListPageState extends State<TransactionsListPage>
                         GhostTransactions(),
                         SwipeToSelectTransactions(
                           listID: "Transactions",
-                          child: CustomScrollView(
-                            slivers: [
-                              ...transactionWidgets,
-                              SliverToBoxAdapter(
-                                child: CashFlow(
-                                  selectedDateStart,
-                                  new DateTime(
-                                      selectedDateStart.year,
-                                      selectedDateStart.month + 1,
-                                      selectedDateStart.day - 1),
+                          child: ScrollbarWrap(
+                            child: CustomScrollView(
+                              slivers: [
+                                ...transactionWidgets,
+                                SliverToBoxAdapter(
+                                  child: CashFlow(
+                                    selectedDateStart,
+                                    new DateTime(
+                                        selectedDateStart.year,
+                                        selectedDateStart.month + 1,
+                                        selectedDateStart.day - 1),
+                                  ),
                                 ),
-                              ),
-                              // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                              SliverToBoxAdapter(
-                                child: Container(
-                                    height: 200,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background),
-                              ),
-                            ],
+                                // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
+                                SliverToBoxAdapter(
+                                  child: Container(
+                                      height: 200,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         GhostTransactions(),

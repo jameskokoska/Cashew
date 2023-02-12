@@ -1035,9 +1035,9 @@ class _SlidingSheetState extends State<SlidingSheet>
       }(),
     );
 
-    if (scrollSpec.showScrollbar) {
-      scrollView = Scrollbar(
-        child: scrollView,
+    if (scrollSpec.showScrollbar && scrollSpec.scrollbar != null) {
+      scrollView = scrollSpec.scrollbar!(
+        scrollView,
       );
     }
 

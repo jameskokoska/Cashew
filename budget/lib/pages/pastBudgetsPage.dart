@@ -2,7 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/widgets/budgetHistoryLineGraph.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -62,7 +62,7 @@ GlobalKey<PageFrameworkState> budgetHistoryKey = GlobalKey();
 class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   Stream<List<double?>>? mergedStreams;
   List<DateTimeRange> dateTimeRanges = [];
-  int amountLoaded = 3;
+  int amountLoaded = 8;
 
   initState() {
     Future.delayed(Duration.zero, () async {
@@ -152,44 +152,35 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               double maxY = 100;
-              List<BarChartGroupData> bars = [];
-              List<BarChartGroupData> initialBars = [];
+              List<FlSpot> spots = [];
+              List<FlSpot> initialSpots = [];
 
               for (int i = snapshot.data!.length - 1; i >= 0; i--) {
                 if ((snapshot.data![i] ?? 0).abs() > maxY)
                   maxY = (snapshot.data![i] ?? 0).abs();
-                bars.add(
-                  makeGroupData(
-                    i,
-                    (snapshot.data![i] ?? 0).abs() == 0
-                        ? 0.001
-                        : (snapshot.data![i] ?? 0).abs(),
-                    50, //In the future put income here
-                    budgetColorScheme.primary,
-                  ),
-                );
-                initialBars.add(
-                  makeGroupData(
-                    i,
-                    0.001,
-                    0,
-                    budgetColorScheme.secondary,
+                spots.add(FlSpot(
+                  snapshot.data!.length - 1 - i.toDouble(),
+                  (snapshot.data![i] ?? 0).abs() == 0
+                      ? 0.001
+                      : (snapshot.data![i] ?? 0).abs(),
+                ));
+                initialSpots.add(
+                  FlSpot(
+                    snapshot.data!.length - 1 - i.toDouble(),
+                    0.000000000001,
                   ),
                 );
               }
-
               return SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: BarGraph(
-                    color: budgetColorScheme.secondary,
-                    dateRanges: dateTimeRanges,
-                    maxY: maxY,
-                    bars: bars,
-                    horizontalLineAt: widget.budget.amount,
-                    initialBars: initialBars,
-                    budget: widget.budget,
-                  ),
+                child: BudgetHistoryLineGraph(
+                  color: dynamicPastel(context, budgetColorScheme.primary,
+                      amountLight: 0.4, amountDark: 0.2),
+                  dateRanges: dateTimeRanges,
+                  maxY: maxY,
+                  spots: spots,
+                  initialSpots: initialSpots,
+                  horizontalLineAt: widget.budget.amount,
+                  budget: widget.budget,
                 ),
               );
             } else {
@@ -498,7 +489,9 @@ class PastBudgetContainer extends StatelessWidget {
                               percent: (totalSpent / budget.amount).abs(),
                               backgroundColor:
                                   budgetColorScheme.secondaryContainer,
-                              foregroundColor: budgetColorScheme.primary,
+                              foregroundColor: dynamicPastel(
+                                  context, budgetColorScheme.primary,
+                                  amountLight: 0.4, amountDark: 0.2),
                               overageColor: budgetColorScheme.tertiary,
                               overageShadowColor:
                                   Theme.of(context).colorScheme.white,

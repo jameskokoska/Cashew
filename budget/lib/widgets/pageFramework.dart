@@ -1,8 +1,9 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/rendering.dart';
@@ -208,46 +209,48 @@ class PageFrameworkState extends State<PageFramework>
   @override
   Widget build(BuildContext context) {
     Widget scaffold = Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          PageFrameworkSliverAppBar(
-            title: widget.title,
-            titleWidget: widget.titleWidget,
-            appBarBackgroundColor: widget.appBarBackgroundColor,
-            appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
-            backButton: widget.backButton,
-            subtitle: widget.subtitle,
-            subtitleSize: widget.subtitleSize,
-            subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
-            onBottomReached: widget.onBottomReached,
-            pinned: widget.pinned,
-            subtitleAlignment: widget.subtitleAlignment,
-            customTitleBuilder: widget.customTitleBuilder,
-            animationControllerOpacity: _animationControllerOpacity,
-            animationControllerShift: _animationControllerShift,
-            animationController0at50: _animationController0at50,
-            textColor: widget.textColor,
-            onBackButton: widget.onBackButton,
-            actions: widget.actions,
-            expandedHeight: widget.expandedHeight,
-          ),
-          ...widget.slivers,
-          widget.listWidgets != null
-              ? SliverList(
-                  delegate: SliverChildListDelegate([
-                    ...widget.listWidgets!,
-                    widget.navbar
+      body: ScrollbarWrap(
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            PageFrameworkSliverAppBar(
+              title: widget.title,
+              titleWidget: widget.titleWidget,
+              appBarBackgroundColor: widget.appBarBackgroundColor,
+              appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
+              backButton: widget.backButton,
+              subtitle: widget.subtitle,
+              subtitleSize: widget.subtitleSize,
+              subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
+              onBottomReached: widget.onBottomReached,
+              pinned: widget.pinned,
+              subtitleAlignment: widget.subtitleAlignment,
+              customTitleBuilder: widget.customTitleBuilder,
+              animationControllerOpacity: _animationControllerOpacity,
+              animationControllerShift: _animationControllerShift,
+              animationController0at50: _animationController0at50,
+              textColor: widget.textColor,
+              onBackButton: widget.onBackButton,
+              actions: widget.actions,
+              expandedHeight: widget.expandedHeight,
+            ),
+            ...widget.slivers,
+            widget.listWidgets != null
+                ? SliverList(
+                    delegate: SliverChildListDelegate([
+                      ...widget.listWidgets!,
+                      widget.navbar
+                          ? SizedBox(height: 87 + bottomPaddingSafeArea)
+                          : SizedBox(height: bottomPaddingSafeArea),
+                    ]),
+                  )
+                : SliverToBoxAdapter(
+                    child: widget.navbar
                         ? SizedBox(height: 87 + bottomPaddingSafeArea)
-                        : SizedBox(height: bottomPaddingSafeArea),
-                  ]),
-                )
-              : SliverToBoxAdapter(
-                  child: widget.navbar
-                      ? SizedBox(height: 87 + bottomPaddingSafeArea)
-                      : SizedBox.shrink(),
-                ),
-        ],
+                        : SizedBox.shrink(),
+                  ),
+          ],
+        ),
       ),
     );
     Widget? dragDownToDissmissScaffold = null;

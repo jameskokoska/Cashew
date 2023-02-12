@@ -1912,6 +1912,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     List<Stream<List<CategoryWithTotal>>> mergedStreams = [];
+
     for (TransactionWallet wallet in wallets) {
       final totalAmt = transactions.amount.sum();
       final totalCount = transactions.transactionPk.count();
@@ -1948,6 +1949,28 @@ class FinanceDatabase extends _$FinanceDatabase {
             transactionCount: transactionCount ?? -1);
       }).watch());
     }
+
+    // Stream<List<TransactionCategory>> allCategoriesWatched =
+    //     watchAllCategories();
+
+    // return StreamZip(mergedStreams).map((values) {
+    //   List<CategoryWithTotal> allCategoriesWithTotals = [];
+    //   for (List<CategoryWithTotal> categoriesWithTotal in values) {
+    //     allCategoriesWithTotals.addAll(categoriesWithTotal);
+    //   }
+    //   // Add categories with total amount of 0
+    //   allCategoriesWatched
+    //       .expand((categories) => categories)
+    //       .forEach((TransactionCategory category) {
+    //     if (!allCategoriesWithTotals
+    //         .any((c) => c.category.categoryPk == category.categoryPk)) {
+    //       allCategoriesWithTotals.add(CategoryWithTotal(
+    //           category: category, total: 0, transactionCount: 0));
+    //     }
+    //   });
+    //   return allCategoriesWithTotals;
+    // });
+
     return totalCategoryTotalStream(mergedStreams);
   }
 

@@ -12,6 +12,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:system_theme/system_theme.dart';
+import 'package:budget/widgets/scrollbarWrap.dart';
 
 class SelectColor extends StatefulWidget {
   SelectColor({
