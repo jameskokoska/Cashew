@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Changelog popup has scrollbar
+    Filled area above budget goal in past budget history line graph spending tracking with extra color
+    Fixed editing member nickname timeout for text auto focus
     Added budget history spending momentum graph to compare with past periods
     On touch information for line graphs
     Line graph support multiple lines
@@ -290,6 +293,7 @@ end""";
           children: changelogPoints,
         ),
       ),
+      showScrollbar: true,
     );
 
     updateSettings("lastLoginVersion", version + buildNumber);

@@ -79,6 +79,29 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
         ),
         color: lightenPastel(widget.color, amount: 0.3),
       ),
+      LineChartBarData(
+        isStrokeCapRound: false,
+        spots: loaded ? widget.spots : widget.initialSpots,
+        isCurved: true,
+        preventCurveOverShooting: true,
+        barWidth: 0,
+        belowBarData: BarAreaData(
+          show: true,
+          applyCutOffY: true,
+          cutOffY: widget.horizontalLineAt,
+          gradient: LinearGradient(
+            colors: [
+              widget.color.withOpacity(0.15),
+              widget.color.withOpacity(0.15),
+              widget.color.withOpacity(0.15),
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
+        dotData: FlDotData(show: false),
+        color: Colors.transparent,
+      ),
     ];
 
     final tooltipsOnBar = lineBarsData[0];
@@ -86,8 +109,8 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
     return Container(
       height: 190,
       padding: const EdgeInsets.only(
-        left: 20,
-        right: 35,
+        left: 10,
+        right: 25,
         top: 25,
       ),
       child: LineChart(
@@ -130,6 +153,11 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
               tooltipPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
                 return lineBarsSpot.map((lineBarSpot) {
+                  // only show touch data for primary colored lines
+                  if (lineBarSpot.bar.color !=
+                      lightenPastel(widget.color, amount: 0.3)) {
+                    return null;
+                  }
                   return LineTooltipItem(
                     convertToMoney(lineBarSpot.y),
                     const TextStyle(
@@ -238,7 +266,8 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                 );
               } else if (value == 0) {
                 return FlLine(
-                  color: widget.color,
+                  color: dynamicPastel(context, widget.color, amount: 0.3)
+                      .withOpacity(0.2),
                   strokeWidth: 2,
                 );
               } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {

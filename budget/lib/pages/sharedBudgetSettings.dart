@@ -505,6 +505,7 @@ class CategoryMemberContainer extends StatelessWidget {
                           appStateSettings["usersNicknames"][member] ?? "",
                       placeholder: "Nickname",
                       textCapitalization: TextCapitalization.words,
+                      requestLateAutoFocus: true,
                     ),
                   ],
                 ),
