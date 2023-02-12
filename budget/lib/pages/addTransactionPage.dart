@@ -205,7 +205,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           selectedBudgetPassed == null ? null : selectedBudgetPassed.budgetPk;
       selectedBudget = selectedBudgetPassed;
       selectedBudgetIsShared = isSharedBudget;
-      if (selectedBudgetPk != null)
+      if (selectedBudgetPk != null && selectedPayer == null)
         selectedPayer = appStateSettings["currentUserEmail"];
     });
     return;

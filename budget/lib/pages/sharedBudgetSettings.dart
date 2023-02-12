@@ -369,24 +369,40 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
-                  icon: Icons.block,
+                  icon: Icons.block_rounded,
                   iconColor: Theme.of(context).colorScheme.errorContainer,
                   label: "Stop Sharing",
                   onTap: () async {
-                    openLoadingPopup(context);
-                    bool status = await removedSharedFromBudget(widget.budget);
-                    if (status == false) {
-                      openSnackbar(
-                        SnackbarMessage(
-                          icon: Icons.warning_rounded,
-                          description:
-                              "There was a problem removing the shared budget from the server. Please try again later.",
-                        ),
-                      );
-                      return;
-                    }
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    openPopup(
+                      context,
+                      title: "Stop Sharing?",
+                      description:
+                          "Are you sure you want to stop sharing this budget? This will delete all entries from the server.",
+                      icon: Icons.block_rounded,
+                      onCancel: () {
+                        Navigator.pop(context);
+                      },
+                      onCancelLabel: "Cancel",
+                      onSubmit: () async {
+                        Navigator.pop(context);
+                        openLoadingPopup(context);
+                        bool status =
+                            await removedSharedFromBudget(widget.budget);
+                        if (status == false) {
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: Icons.warning_rounded,
+                              description:
+                                  "There was a problem removing the shared budget from the server. Please try again later.",
+                            ),
+                          );
+                          return;
+                        }
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      onSubmitLabel: "Delete",
+                    );
                   },
                   color: Theme.of(context).colorScheme.onErrorContainer,
                   textColor: Theme.of(context).colorScheme.errorContainer,
@@ -505,6 +521,7 @@ class CategoryMemberContainer extends StatelessWidget {
                           appStateSettings["usersNicknames"][member] ?? "",
                       placeholder: "Nickname",
                       textCapitalization: TextCapitalization.words,
+                      autoFocus: true,
                       requestLateAutoFocus: true,
                     ),
                   ],

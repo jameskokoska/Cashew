@@ -119,11 +119,8 @@ Future<bool> removedSharedFromBudget(Budget sharedBudget,
   for (Transaction transactionFromBudget in transactionsFromBudget) {
     allTransactionsToUpdate.add(transactionFromBudget.copyWith(
       sharedKey: Value(null),
-      transactionOwnerEmail: Value(null),
-      transactionOriginalOwnerEmail: Value(null),
       sharedDateUpdated: Value(null),
       sharedStatus: Value(null),
-      sharedReferenceBudgetPk: Value(null),
     ));
   }
   await database.createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);

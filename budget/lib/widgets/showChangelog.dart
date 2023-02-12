@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    When stop sharing budget, transactions are no longer removed from that budget
+    When stop sharing, transactions still remember spender 
+    Warning before stop sharing
     Changelog popup has scrollbar
     Filled area above budget goal in past budget history line graph spending tracking with extra color
     Fixed editing member nickname timeout for text auto focus
