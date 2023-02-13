@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/scheduler.dart';
 import 'dart:developer';
+import 'package:async/async.dart' show StreamZip;
 
 class BudgetPage extends StatelessWidget {
   const BudgetPage({
@@ -82,6 +83,61 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
+  Stream<List<List<Transaction>>>? mergedStreamsPastSpendingTotals;
+  List<DateTimeRange> dateTimeRanges = [];
+  initState() {
+    Future.delayed(
+      Duration.zero,
+      () async {
+        List<Stream<List<Transaction>>> watchedPastSpendingTotals = [];
+        for (int index = 0; index <= 2; index++) {
+          DateTime datePast = DateTime(
+            (widget.dateForRange ?? DateTime.now()).year -
+                (widget.budget.reoccurrence == BudgetReoccurence.yearly
+                    ? index * widget.budget.periodLength
+                    : 0),
+            (widget.dateForRange ?? DateTime.now()).month -
+                (widget.budget.reoccurrence == BudgetReoccurence.monthly
+                    ? index * widget.budget.periodLength
+                    : 0),
+            (widget.dateForRange ?? DateTime.now()).day -
+                (widget.budget.reoccurrence == BudgetReoccurence.daily
+                    ? index * widget.budget.periodLength
+                    : 0) -
+                (widget.budget.reoccurrence == BudgetReoccurence.weekly
+                    ? index * 7 * widget.budget.periodLength
+                    : 0),
+          );
+          DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
+          dateTimeRanges.add(budgetRange);
+          watchedPastSpendingTotals
+              .add(database.getTransactionsInTimeRangeFromCategories(
+            budgetRange.start,
+            budgetRange.end,
+            widget.budget.categoryFks ?? [],
+            widget.budget.categoryFks == null ||
+                    (widget.budget.categoryFks ?? []).length <= 0
+                ? true
+                : false,
+            true,
+            false,
+            widget.budget.sharedTransactionsShow,
+            onlyShowTransactionsBelongingToBudget:
+                widget.budget.sharedKey != null ||
+                        widget.budget.addedTransactionsOnly == true
+                    ? widget.budget.budgetPk
+                    : null,
+            budget: widget.budget,
+          ));
+        }
+
+        setState(() {
+          mergedStreamsPastSpendingTotals =
+              StreamZip(watchedPastSpendingTotals);
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -512,26 +568,8 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                   ),
                 ),
               ),
-              StreamBuilder<List<Transaction>>(
-                stream: database.getTransactionsInTimeRangeFromCategories(
-                  budgetRange.start,
-                  budgetRange.end,
-                  widget.budget.categoryFks ?? [],
-                  widget.budget.categoryFks == null ||
-                          (widget.budget.categoryFks ?? []).length <= 0
-                      ? true
-                      : false,
-                  true,
-                  false,
-                  widget.budget.sharedTransactionsShow,
-                  member: selectedMember,
-                  onlyShowTransactionsBelongingToBudget:
-                      widget.budget.sharedKey != null ||
-                              widget.budget.addedTransactionsOnly == true
-                          ? widget.budget.budgetPk
-                          : null,
-                  budget: widget.budget,
-                ),
+              StreamBuilder<List<List<Transaction>>>(
+                stream: mergedStreamsPastSpendingTotals,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0)
@@ -540,39 +578,38 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                       );
                     bool cumulative =
                         appStateSettings["showCumulativeSpending"];
-                    double cumulativeTotal = 0;
-                    List<Pair> points = [];
-                    for (DateTime indexDay = budgetRange.start;
-                        indexDay.compareTo(budgetRange.end) <= 0;
-                        indexDay = DateTime(
-                            indexDay.year, indexDay.month, indexDay.day + 1)) {
-                      //can be optimized...
-                      double totalForDay = 0;
-                      for (Transaction transaction in snapshot.data!) {
-                        // if (selectedSlidingSelector == 3 &&
-                        //     transaction.income == false) {
-                        //   continue;
-                        // }
-                        // if (selectedSlidingSelector == 2 &&
-                        //     transaction.income == true) {
-                        //   continue;
-                        // }
-                        if (selectedCategoryPk == -1 ||
-                            transaction.categoryFk ==
-                                selectedCategoryPk) if (indexDay
-                                    .year ==
-                                transaction.dateCreated.year &&
-                            indexDay.month == transaction.dateCreated.month &&
-                            indexDay.day == transaction.dateCreated.day) {
-                          totalForDay += transaction.amount *
-                              (amountRatioToPrimaryCurrencyGivenPk(
-                                      transaction.walletFk) ??
-                                  0);
+                    List<List<Pair>> pointsList = [];
+                    for (int snapshotIndex = 0;
+                        snapshotIndex < snapshot.data!.length;
+                        snapshotIndex++) {
+                      double cumulativeTotal = 0;
+                      print(snapshot.data![snapshotIndex]);
+                      List<Pair> points = [];
+                      for (DateTime indexDay =
+                              dateTimeRanges[snapshotIndex].start;
+                          indexDay.compareTo(
+                                  dateTimeRanges[snapshotIndex].end) <=
+                              0;
+                          indexDay = DateTime(indexDay.year, indexDay.month,
+                              indexDay.day + 1)) {
+                        //can be optimized...
+                        double totalForDay = 0;
+                        for (Transaction transaction
+                            in snapshot.data![snapshotIndex]) {
+                          if (indexDay.year == transaction.dateCreated.year &&
+                              indexDay.month == transaction.dateCreated.month &&
+                              indexDay.day == transaction.dateCreated.day) {
+                            totalForDay += transaction.amount *
+                                (amountRatioToPrimaryCurrencyGivenPk(
+                                        transaction.walletFk) ??
+                                    0);
+                          }
                         }
+                        cumulativeTotal += totalForDay;
+                        points.add(Pair(points.length.toDouble(),
+                            cumulative ? cumulativeTotal : totalForDay));
                       }
-                      cumulativeTotal += totalForDay;
-                      points.add(Pair(points.length.toDouble(),
-                          cumulative ? cumulativeTotal : totalForDay));
+                      pointsList.add(points);
                     }
                     return SliverToBoxAdapter(
                       child: Padding(
@@ -581,18 +618,18 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                           padding: EdgeInsets.only(left: 10, right: 5),
                           child: LineChartWrapper(
                             endDate: budgetRange.end,
-                            points: [points],
+                            points: pointsList,
                             isCurved: true,
-                            color: selectedCategoryPk != -1 &&
-                                    selectedCategory != null
-                                ? HexColor(selectedCategory!.colour)
-                                : budgetColorScheme.primary,
-                            verticalLineAt: widget.isPastBudget == true
-                                ? null
-                                : (budgetRange.end
-                                        .difference(dateForRange)
-                                        .inDays)
-                                    .toDouble(),
+                            color: budgetColorScheme.primary,
+                            colors: [
+                              for (int index = 0;
+                                  index < snapshot.data!.length;
+                                  index++)
+                                index == 0
+                                    ? budgetColorScheme.primary
+                                    : budgetColorScheme.tertiary.withOpacity(
+                                        (index) / snapshot.data!.length)
+                            ],
                             horizontalLineAt: -widget.budget.amount *
                                 ((DateTime.now().millisecondsSinceEpoch -
                                         budgetRange

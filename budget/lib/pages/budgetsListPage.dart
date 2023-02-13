@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/services.dart';
 
 class BudgetsListPage extends StatefulWidget {
   const BudgetsListPage({Key? key}) : super(key: key);
@@ -64,20 +65,55 @@ class BudgetsListPageState extends State<BudgetsListPage>
             if (snapshot.hasData) {
               return SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return Padding(
+                sliver: SliverReorderableList(
+                  onReorder: (_intPrevious, _intNew) async {
+                    Budget oldBudget = snapshot.data![_intPrevious];
+
+                    // print(oldBudget.name);
+                    // print(oldBudget.order);
+
+                    if (_intNew > _intPrevious) {
+                      await database.moveBudget(
+                          oldBudget.budgetPk, _intNew - 1, oldBudget.order);
+                    } else {
+                      await database.moveBudget(
+                          oldBudget.budgetPk, _intNew, oldBudget.order);
+                    }
+                  },
+                  onReorderStart: (index) {
+                    HapticFeedback.heavyImpact();
+                  },
+                  itemBuilder: (context, index) {
+                    return ReorderableDelayedDragStartListener(
+                      index: index,
+                      key: ValueKey(snapshot.data![index].budgetPk),
+                      child: Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: BudgetContainer(
                           budget: snapshot.data![index],
+                          longPressToEdit: false,
                         ),
-                      );
-                    },
-                    childCount: snapshot.data?.length, //snapshot.data?.length
-                  ),
+                      ),
+                    );
+                  },
+                  itemCount: snapshot.data!.length,
                 ),
               );
+
+              //   SliverList(
+              //     delegate: SliverChildBuilderDelegate(
+              //       (BuildContext context, int index) {
+              //         return Padding(
+              //           padding: const EdgeInsets.only(bottom: 16.0),
+              //           child: BudgetContainer(
+              //             budget: snapshot.data![index],
+              //           ),
+              //         );
+              //       },
+              //       childCount: snapshot.data?.length, //snapshot.data?.length
+              //     ),
+              //   ),
+              // );
             } else {
               return SliverToBoxAdapter();
             }

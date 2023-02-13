@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed term lengths of budgets
+    Fixed currency conversions
+    All currencies downloaded at launch, uses 1 request instead of multiple
+    Show currency conversion on transaction entry
+    Can drag to reorder budgets on budget page
     When stop sharing budget, transactions are no longer removed from that budget
     When stop sharing, transactions still remember spender 
     Warning before stop sharing

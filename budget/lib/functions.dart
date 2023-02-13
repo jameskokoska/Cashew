@@ -304,13 +304,16 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
         currentDateLoopEnd.millisecondsSinceEpoch) {
       for (int i = 0; i < 10000; i++) {
         // print(currentDateLoopStart.toString() + currentDateLoopEnd.toString());
-        if (currentDate.millisecondsSinceEpoch >=
+        // dont set this one >= only >, the other if statement will catch it
+        if (currentDate.millisecondsSinceEpoch >
                 currentDateLoopStart.millisecondsSinceEpoch &&
             currentDate.millisecondsSinceEpoch <=
                 currentDateLoopEnd.millisecondsSinceEpoch) {
           return DateTimeRange(
-              start: currentDateLoopStart,
-              end: currentDateLoopEnd.subtract(Duration(days: 1)));
+            start: currentDateLoopStart,
+            end: DateTime(currentDateLoopEnd.year, currentDateLoopEnd.month,
+                currentDateLoopEnd.day - 1),
+          );
         }
         if (budget.reoccurrence == BudgetReoccurence.daily) {
           currentDateLoopStart = currentDateLoopStart
@@ -338,7 +341,7 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
         }
       }
     } else if (currentDate.millisecondsSinceEpoch >=
-        currentDateLoopEnd.millisecondsSinceEpoch)
+        currentDateLoopEnd.millisecondsSinceEpoch) {
       for (int i = 0; i < 10000; i++) {
         // print(currentDateLoopStart.toString() + currentDateLoopEnd.toString());
         if (currentDate.millisecondsSinceEpoch >=
@@ -346,8 +349,10 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
             currentDate.millisecondsSinceEpoch <=
                 currentDateLoopEnd.millisecondsSinceEpoch) {
           return DateTimeRange(
-              start: currentDateLoopStart,
-              end: currentDateLoopEnd.subtract(Duration(days: 1)));
+            start: currentDateLoopStart,
+            end: DateTime(currentDateLoopEnd.year, currentDateLoopEnd.month,
+                currentDateLoopEnd.day - 1),
+          );
         }
         if (budget.reoccurrence == BudgetReoccurence.daily) {
           currentDateLoopStart =
@@ -374,6 +379,7 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
               currentDateLoopEnd.day);
         }
       }
+    }
   } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
     DateTime currentDateLoop = currentDate;
     for (int daysToGoBack = 0;
@@ -654,22 +660,15 @@ Future<bool> getExchangeRates() async {
       await database.getUniqueCurrenciesFromWallets();
   Map<String, dynamic> cachedCurrencyExchange =
       appStateSettings["cachedCurrencyExchange"];
-  for (String? currency in uniqueCurrencies) {
-    double exchangeRate = cachedCurrencyExchange[currency] ?? 1;
-    if (currency == null) continue;
-    try {
-      Uri url = Uri.parse(
-          "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/" +
-              currency +
-              "/usd.json");
-      dynamic response = await http.get(url);
-      if (response.statusCode == 200) {
-        exchangeRate = json.decode(response.body)?["usd"];
-      }
-    } catch (e) {
-      print(e.toString());
+  try {
+    Uri url = Uri.parse(
+        "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.min.json");
+    dynamic response = await http.get(url);
+    if (response.statusCode == 200) {
+      cachedCurrencyExchange = json.decode(response.body)?["usd"];
     }
-    cachedCurrencyExchange[currency] = exchangeRate;
+  } catch (e) {
+    print(e.toString());
   }
   print(cachedCurrencyExchange);
   updateSettings("cachedCurrencyExchange", cachedCurrencyExchange,
@@ -689,8 +688,17 @@ double? amountRatioToPrimaryCurrency(String? walletCurrency) {
   if (appStateSettings["cachedCurrencyExchange"][walletCurrency] == null) {
     return 0;
   }
-  return appStateSettings["cachedCurrencyExchange"][walletCurrency] /
+  if (appStateSettings["cachedWalletCurrencies"]
+          [appStateSettings["selectedWallet"].toString()] ==
+      walletCurrency) {
+    return 1;
+  }
+  double exchangeRateFromUSDToTarget =
       appStateSettings["cachedCurrencyExchange"][
-          appStateSettings["cachedWalletCurrencies"]
-              [appStateSettings["selectedWallet"].toString()]];
+              appStateSettings["cachedWalletCurrencies"]
+                  [appStateSettings["selectedWallet"].toString()]]
+          .toDouble();
+  double exchangeRateFromCurrentToUSD =
+      1 / appStateSettings["cachedCurrencyExchange"][walletCurrency].toDouble();
+  return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
 }

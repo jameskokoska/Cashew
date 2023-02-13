@@ -696,22 +696,53 @@ class TransactionEntry extends StatelessWidget {
                                 ),
                               )
                             : SizedBox.shrink(),
-                        CountNumber(
-                          count: (transaction.amount.abs()),
-                          duration: Duration(milliseconds: 2000),
-                          dynamicDecimals: true,
-                          initialCount: (transaction.amount.abs()),
-                          textBuilder: (number) {
-                            return TextFont(
-                                text:
-                                    convertToMoney(number, showCurrency: false),
-                                fontSize: 19,
-                                fontWeight: FontWeight.bold,
-                                textColor: textColor,
-                                walletPkForCurrency: transaction.walletFk,
-                                onlyShowCurrencyIcon: transaction.walletFk ==
-                                    appStateSettings["selectedWallet"]);
-                          },
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CountNumber(
+                              count: (transaction.amount.abs()),
+                              duration: Duration(milliseconds: 2000),
+                              dynamicDecimals: true,
+                              initialCount: (transaction.amount.abs()),
+                              textBuilder: (number) {
+                                return TextFont(
+                                  text: convertToMoney(
+                                      number *
+                                          (amountRatioToPrimaryCurrencyGivenPk(
+                                                  transaction.walletFk) ??
+                                              1),
+                                      showCurrency: false),
+                                  fontSize: 19 -
+                                      (transaction.walletFk !=
+                                              appStateSettings["selectedWallet"]
+                                          ? 1
+                                          : 0),
+                                  fontWeight: FontWeight.bold,
+                                  textColor: textColor,
+                                  walletPkForCurrency: transaction.walletFk,
+                                  onlyShowCurrencyIcon: true,
+                                );
+                              },
+                            ),
+                            transaction.walletFk !=
+                                    appStateSettings["selectedWallet"]
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 1),
+                                    child: TextFont(
+                                      text: convertToMoney(
+                                          transaction.amount.abs(),
+                                          showCurrency: false),
+                                      fontSize: 12,
+                                      textColor: textColor.withOpacity(0.6),
+                                      walletPkForCurrency: transaction.walletFk,
+                                      onlyShowCurrencyIcon: transaction
+                                              .walletFk ==
+                                          appStateSettings["selectedWallet"],
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                          ],
                         ),
                       ],
                     ),

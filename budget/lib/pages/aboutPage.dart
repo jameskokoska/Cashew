@@ -223,6 +223,10 @@ class AboutPage extends StatelessWidget {
           title: "FL Charts",
           link: "https://github.com/imaNNeoFighT/fl_chart",
         ),
+        AboutInfoBox(
+          title: "Currency Rates API",
+          link: "https://github.com/fawazahmed0/currency-api",
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
           child: Button(
