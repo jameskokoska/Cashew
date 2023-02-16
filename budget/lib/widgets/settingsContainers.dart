@@ -220,81 +220,79 @@ class SettingsContainerOutlined extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultIconSize = 25;
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
-        child: Tappable(
-          color: Colors.transparent,
-          onTap: onTap,
-          borderRadius: 10,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(10),
+    return Padding(
+      padding: EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
+      child: Tappable(
+        color: Colors.transparent,
+        onTap: onTap,
+        borderRadius: 10,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+              width: 2,
             ),
-            padding: EdgeInsets.only(
-              left: 13,
-              right: 4,
-              top: verticalPadding ?? 14,
-              bottom: verticalPadding ?? 14,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                icon == null
-                    ? SizedBox.shrink()
-                    : Padding(
-                        padding: EdgeInsets.only(
-                            right: 8 +
-                                defaultIconSize -
-                                (iconSize ?? defaultIconSize)),
-                        child: Icon(
-                          icon,
-                          size: iconSize ?? defaultIconSize,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: EdgeInsets.only(
+            left: 13,
+            right: 4,
+            top: verticalPadding ?? 14,
+            bottom: verticalPadding ?? 14,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              icon == null
+                  ? SizedBox.shrink()
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: 8 +
+                              defaultIconSize -
+                              (iconSize ?? defaultIconSize)),
+                      child: Icon(
+                        icon,
+                        size: iconSize ?? defaultIconSize,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
-                Expanded(
-                  child: description == null
-                      ? TextFont(
-                          fixParagraphMargin: true,
-                          text: title,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextFont(
-                              fixParagraphMargin: true,
-                              text: title,
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              maxLines: 1,
-                            ),
-                            Container(height: 3),
-                            TextFont(
-                              text: description!,
-                              fontSize: 12,
-                              maxLines: 5,
-                              textColor: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
-                            ),
-                          ],
-                        ),
-                ),
-                Opacity(opacity: 0.5, child: afterWidget ?? SizedBox())
-              ],
-            ),
+                    ),
+              Expanded(
+                child: description == null
+                    ? TextFont(
+                        fixParagraphMargin: true,
+                        text: title,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFont(
+                            fixParagraphMargin: true,
+                            text: title,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            maxLines: 1,
+                          ),
+                          Container(height: 3),
+                          TextFont(
+                            text: description!,
+                            fontSize: 12,
+                            maxLines: 5,
+                            textColor: Theme.of(context)
+                                .colorScheme
+                                .secondary
+                                .withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+              ),
+              Opacity(opacity: 0.5, child: afterWidget ?? SizedBox())
+            ],
           ),
         ),
       ),

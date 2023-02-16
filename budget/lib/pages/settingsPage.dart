@@ -103,6 +103,7 @@ class SettingsPageState extends State<SettingsPage>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
@@ -129,6 +130,7 @@ class SettingsPageState extends State<SettingsPage>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
@@ -153,6 +155,7 @@ class SettingsPageState extends State<SettingsPage>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
