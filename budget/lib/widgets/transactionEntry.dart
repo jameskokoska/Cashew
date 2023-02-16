@@ -13,6 +13,8 @@ import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:drift/drift.dart' hide Column;
@@ -23,6 +25,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import '../colors.dart';
 import 'package:intl/intl.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 
 ValueNotifier<Map<String, List<int>>> globalSelectedID =
     ValueNotifier<Map<String, List<int>>>({});
@@ -627,8 +630,26 @@ class TransactionEntry extends StatelessWidget {
                                                 ? "Desposit"
                                                 : "Pay",
                                             onSubmit: () async {
+                                              double amount =
+                                                  transaction.amount;
+                                              if (transaction.amount == 0) {
+                                                amount = await openBottomSheet(
+                                                  context,
+                                                  PopupFramework(
+                                                    title: "Enter Amount",
+                                                    underTitleSpace: false,
+                                                    child: SelectAmount(
+                                                      setSelectedAmount:
+                                                          (_, __) {},
+                                                      nextLabel: "Set Amount",
+                                                      popWithAmount: true,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
                                               Transaction transactionNew =
                                                   transaction.copyWith(
+                                                      amount: amount,
                                                       paid: !transaction.paid,
                                                       dateCreated: DateTime(
                                                           DateTime.now().year,

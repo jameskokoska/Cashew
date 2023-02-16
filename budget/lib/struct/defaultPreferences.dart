@@ -48,5 +48,7 @@ Map<String, dynamic> defaultPreferences() {
     // {"walletPk": "currency", "231435":"usd",...}
     "cachedWalletCurrencies": {},
     "cachedCurrencyExchange": {},
+    "lineGraphReferenceBudgetPk": null,
+    "showPastSpendingTrajectory": false,
   };
 }

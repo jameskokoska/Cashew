@@ -1025,6 +1025,8 @@ class BudgetSpenderSummary extends StatefulWidget {
     required this.budgetColorScheme,
     required this.setSelectedMember,
     required this.wallets,
+    this.allTime = false,
+    this.disableMemberSelection = false,
     super.key,
   });
 
@@ -1033,6 +1035,8 @@ class BudgetSpenderSummary extends StatefulWidget {
   final ColorScheme budgetColorScheme;
   final Function(String?) setSelectedMember;
   final List<TransactionWallet> wallets;
+  final bool allTime;
+  final bool disableMemberSelection;
 
   @override
   State<BudgetSpenderSummary> createState() => _BudgetSpenderSummaryState();
@@ -1042,29 +1046,37 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
   Stream<List<double?>>? mergedStreams;
   Set<String> members = {};
   String? selectedMember = null;
+  void didUpdateWidget(oldWidget) {
+    if (oldWidget.wallets != widget.wallets) {
+      _initialize();
+    }
+  }
 
   initState() {
-    List<Stream<double?>> watchedSpenderTotals = [];
     Future.delayed(Duration.zero, () async {
-      members = (widget.budget.sharedAllMembersEver ?? []).toSet();
-      print(widget.budget.sharedAllMembersEver);
-      for (String member in members) {
-        watchedSpenderTotals.add(database.watchTotalSpentByUser(
-          widget.budgetRange.start,
-          widget.budgetRange.end,
-          widget.budget.categoryFks ?? [],
-          widget.budget.allCategoryFks,
-          member,
-          widget.budget.budgetPk,
-          widget.wallets,
-        ));
-        print(member);
-      }
-      mergedStreams = StreamZip(watchedSpenderTotals);
-      setState(() {});
+      _initialize();
     });
-
     super.initState();
+  }
+
+  void _initialize() {
+    List<Stream<double?>> watchedSpenderTotals = [];
+    members = (widget.budget.sharedAllMembersEver ?? []).toSet();
+    print(widget.budget.sharedAllMembersEver);
+    for (String member in members) {
+      watchedSpenderTotals.add(database.watchTotalSpentByUser(
+        widget.budgetRange.start,
+        widget.budgetRange.end,
+        widget.budget.categoryFks ?? [],
+        widget.budget.allCategoryFks,
+        member,
+        widget.budget.budgetPk,
+        widget.wallets,
+        allTime: widget.allTime,
+      ));
+    }
+    mergedStreams = StreamZip(watchedSpenderTotals);
+    setState(() {});
   }
 
   @override
@@ -1098,16 +1110,19 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
             memberWidgets.add(
               Tappable(
                 onTap: () {
-                  if (selectedMember == spender.member || spender.amount == 0) {
-                    widget.setSelectedMember(null);
-                    setState(() {
-                      selectedMember = null;
-                    });
-                  } else {
-                    widget.setSelectedMember(spender.member);
-                    setState(() {
-                      selectedMember = spender.member;
-                    });
+                  if (widget.disableMemberSelection == false) {
+                    if (selectedMember == spender.member ||
+                        spender.amount == 0) {
+                      widget.setSelectedMember(null);
+                      setState(() {
+                        selectedMember = null;
+                      });
+                    } else {
+                      widget.setSelectedMember(spender.member);
+                      setState(() {
+                        selectedMember = spender.member;
+                      });
+                    }
                   }
                 },
                 onLongPress: () {

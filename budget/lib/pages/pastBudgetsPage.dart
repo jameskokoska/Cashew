@@ -206,8 +206,29 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             }
           },
         ),
+        SliverToBoxAdapter(
+          child: WatchAllWallets(
+              noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
+              childFunction: (wallets) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    top: 13,
+                    bottom: 8,
+                  ),
+                  child: BudgetSpenderSummary(
+                    budget: widget.budget,
+                    budgetRange: budgetRange,
+                    budgetColorScheme: budgetColorScheme,
+                    setSelectedMember: (member) {},
+                    disableMemberSelection: true,
+                    wallets: wallets,
+                    allTime: true,
+                  ),
+                );
+              }),
+        ),
         SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
+          padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
           sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {

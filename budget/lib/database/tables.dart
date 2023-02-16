@@ -467,7 +467,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ]))
         ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
-            transactions.name.like("%" + search + "%"));
+            transactions.name.lower().like("%" + search.toLowerCase() + "%") |
+            transactions.note.lower().like("%" + search.toLowerCase() + "%"));
     }
 
     return query.watch().map((rows) => rows.map((row) {
@@ -785,7 +786,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  // watch category given key
   Stream<Budget> getBudget(int budgetPk) {
     return (select(budgets)..where((b) => b.budgetPk.equals(budgetPk)))
         .watchSingle();
@@ -1792,14 +1792,14 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalSpentByUser(
-    DateTime start,
-    DateTime end,
-    List<int> categoryFks,
-    bool allCategories,
-    String userEmail,
-    int onlyShowTransactionsBelongingToBudget,
-    List<TransactionWallet> wallets,
-  ) {
+      DateTime start,
+      DateTime end,
+      List<int> categoryFks,
+      bool allCategories,
+      String userEmail,
+      int onlyShowTransactionsBelongingToBudget,
+      List<TransactionWallet> wallets,
+      {bool allTime = false}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     List<Stream<double?>> mergedStreams = [];
@@ -1809,7 +1809,10 @@ class FinanceDatabase extends _$FinanceDatabase {
 
       query = (selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where(transactions.dateCreated.isBetweenValues(startDate, endDate) &
+        ..where((allTime
+                ? transactions.dateCreated.isNotNull()
+                : transactions.dateCreated
+                    .isBetweenValues(startDate, endDate)) &
             transactions.paid.equals(true) &
             transactions.income.equals(false) &
             transactions.walletFk.equals(wallet.walletPk) &

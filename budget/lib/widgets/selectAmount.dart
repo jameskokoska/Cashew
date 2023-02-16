@@ -18,6 +18,7 @@ class SelectAmount extends StatefulWidget {
     required this.setSelectedAmount,
     this.amountPassed = "", //the string of calculations
     this.next,
+    this.popWithAmount = false,
     this.nextLabel,
     this.currencyKey,
     this.walletPkForCurrency,
@@ -26,6 +27,7 @@ class SelectAmount extends StatefulWidget {
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
   final VoidCallback? next;
+  final bool popWithAmount;
   final String? nextLabel;
   final String? currencyKey;
   final int? walletPkForCurrency;
@@ -155,6 +157,15 @@ class _SelectAmountState extends State<SelectAmount> {
         fired = true;
         if (widget.next != null) {
           widget.next!();
+        }
+        if (widget.popWithAmount) {
+          Navigator.pop(
+              context,
+              (amount == ""
+                  ? 0
+                  : includesOperations(amount, false)
+                      ? calculateResult(amount)
+                      : double.tryParse(amount) ?? 0));
         }
       }
       return KeyEventResult.handled;
@@ -503,6 +514,15 @@ class _SelectAmountState extends State<SelectAmount> {
                     onTap: () {
                       if (widget.next != null) {
                         widget.next!();
+                      }
+                      if (widget.popWithAmount) {
+                        Navigator.pop(
+                            context,
+                            (amount == ""
+                                ? 0
+                                : includesOperations(amount, false)
+                                    ? calculateResult(amount)
+                                    : double.tryParse(amount) ?? 0));
                       }
                     },
                   )

@@ -10,18 +10,18 @@ import 'dart:io' show Platform;
 
 late SheetController bottomSheetControllerGlobal;
 // Set snap to false if there is a keyboard
-openBottomSheet(
+Future openBottomSheet(
   context,
   child, {
   bool maxHeight = true,
   bool snap = true,
   bool resizeForKeyboard = true,
   bool showScrollbar = false,
-}) {
+}) async {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
   bottomSheetControllerGlobal = new SheetController();
-  showSlidingBottomSheet(context,
+  return await showSlidingBottomSheet(context,
       resizeToAvoidBottomInset:
           getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
       bottomPaddingColor: appStateSettings["materialYou"]

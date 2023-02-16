@@ -73,71 +73,16 @@ class _BudgetPageContent extends StatefulWidget {
   final bool? isPastBudgetButCurrentPeriod;
 
   @override
-  State<_BudgetPageContent> createState() => __BudgetPageContentState();
+  State<_BudgetPageContent> createState() => _BudgetPageContentState();
 }
 
-class __BudgetPageContentState extends State<_BudgetPageContent> {
+class _BudgetPageContentState extends State<_BudgetPageContent> {
   double budgetHeaderHeight = 0;
   int selectedCategoryPk = -1;
   String? selectedMember = null;
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
-  Stream<List<List<Transaction>>>? mergedStreamsPastSpendingTotals;
-  List<DateTimeRange> dateTimeRanges = [];
-  initState() {
-    Future.delayed(
-      Duration.zero,
-      () async {
-        List<Stream<List<Transaction>>> watchedPastSpendingTotals = [];
-        for (int index = 0; index <= 2; index++) {
-          DateTime datePast = DateTime(
-            (widget.dateForRange ?? DateTime.now()).year -
-                (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                    ? index * widget.budget.periodLength
-                    : 0),
-            (widget.dateForRange ?? DateTime.now()).month -
-                (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                    ? index * widget.budget.periodLength
-                    : 0),
-            (widget.dateForRange ?? DateTime.now()).day -
-                (widget.budget.reoccurrence == BudgetReoccurence.daily
-                    ? index * widget.budget.periodLength
-                    : 0) -
-                (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                    ? index * 7 * widget.budget.periodLength
-                    : 0),
-          );
-          DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
-          dateTimeRanges.add(budgetRange);
-          watchedPastSpendingTotals
-              .add(database.getTransactionsInTimeRangeFromCategories(
-            budgetRange.start,
-            budgetRange.end,
-            widget.budget.categoryFks ?? [],
-            widget.budget.categoryFks == null ||
-                    (widget.budget.categoryFks ?? []).length <= 0
-                ? true
-                : false,
-            true,
-            false,
-            widget.budget.sharedTransactionsShow,
-            onlyShowTransactionsBelongingToBudget:
-                widget.budget.sharedKey != null ||
-                        widget.budget.addedTransactionsOnly == true
-                    ? widget.budget.budgetPk
-                    : null,
-            budget: widget.budget,
-          ));
-        }
-
-        setState(() {
-          mergedStreamsPastSpendingTotals =
-              StreamZip(watchedPastSpendingTotals);
-        });
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -568,82 +513,22 @@ class __BudgetPageContentState extends State<_BudgetPageContent> {
                   ),
                 ),
               ),
-              StreamBuilder<List<List<Transaction>>>(
-                stream: mergedStreamsPastSpendingTotals,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.length <= 0)
-                      return SliverToBoxAdapter(
-                        child: SizedBox.shrink(),
-                      );
-                    bool cumulative =
-                        appStateSettings["showCumulativeSpending"];
-                    List<List<Pair>> pointsList = [];
-                    for (int snapshotIndex = 0;
-                        snapshotIndex < snapshot.data!.length;
-                        snapshotIndex++) {
-                      double cumulativeTotal = 0;
-                      print(snapshot.data![snapshotIndex]);
-                      List<Pair> points = [];
-                      for (DateTime indexDay =
-                              dateTimeRanges[snapshotIndex].start;
-                          indexDay.compareTo(
-                                  dateTimeRanges[snapshotIndex].end) <=
-                              0;
-                          indexDay = DateTime(indexDay.year, indexDay.month,
-                              indexDay.day + 1)) {
-                        //can be optimized...
-                        double totalForDay = 0;
-                        for (Transaction transaction
-                            in snapshot.data![snapshotIndex]) {
-                          if (indexDay.year == transaction.dateCreated.year &&
-                              indexDay.month == transaction.dateCreated.month &&
-                              indexDay.day == transaction.dateCreated.day) {
-                            totalForDay += transaction.amount *
-                                (amountRatioToPrimaryCurrencyGivenPk(
-                                        transaction.walletFk) ??
-                                    0);
-                          }
-                        }
-                        cumulativeTotal += totalForDay;
-                        points.add(Pair(points.length.toDouble(),
-                            cumulative ? cumulativeTotal : totalForDay));
-                      }
-                      pointsList.add(points);
-                    }
-                    return SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 13),
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10, right: 5),
-                          child: LineChartWrapper(
-                            endDate: budgetRange.end,
-                            points: pointsList,
-                            isCurved: true,
-                            color: budgetColorScheme.primary,
-                            colors: [
-                              for (int index = 0;
-                                  index < snapshot.data!.length;
-                                  index++)
-                                index == 0
-                                    ? budgetColorScheme.primary
-                                    : budgetColorScheme.tertiary.withOpacity(
-                                        (index) / snapshot.data!.length)
-                            ],
-                            horizontalLineAt: -widget.budget.amount *
-                                ((DateTime.now().millisecondsSinceEpoch -
-                                        budgetRange
-                                            .start.millisecondsSinceEpoch) /
-                                    (budgetRange.end.millisecondsSinceEpoch -
-                                        budgetRange
-                                            .start.millisecondsSinceEpoch)),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  return SliverToBoxAdapter();
-                },
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 13),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10, right: 5),
+                    child: BudgetLineGraph(
+                      budget: widget.budget,
+                      dateForRange: dateForRange,
+                      selectedCategoryPk: selectedCategoryPk,
+                      isPastBudget: widget.isPastBudget,
+                      selectedCategory: selectedCategory,
+                      budgetRange: budgetRange,
+                      budgetColorScheme: budgetColorScheme,
+                    ),
+                  ),
+                ),
               ),
               ...getTransactionsSlivers(
                 budgetRange.start,
@@ -758,6 +643,204 @@ class WatchAllWallets extends StatelessWidget {
         else
           return childFunction([]);
         // return noDataWidget;
+      },
+    );
+  }
+}
+
+class BudgetLineGraph extends StatefulWidget {
+  const BudgetLineGraph({
+    required this.budget,
+    required this.dateForRange,
+    required this.selectedCategoryPk,
+    required this.isPastBudget,
+    required this.selectedCategory,
+    required this.budgetRange,
+    required this.budgetColorScheme,
+    this.showPastSpending = true,
+    super.key,
+  });
+
+  final Budget budget;
+  final DateTime? dateForRange;
+  final int selectedCategoryPk;
+  final bool? isPastBudget;
+  final TransactionCategory? selectedCategory;
+  final DateTimeRange budgetRange;
+  final ColorScheme budgetColorScheme;
+  final bool showPastSpending;
+
+  @override
+  State<BudgetLineGraph> createState() => _BudgetLineGraphState();
+}
+
+class _BudgetLineGraphState extends State<BudgetLineGraph> {
+  Stream<List<List<Transaction>>>? mergedStreamsPastSpendingTotals;
+  List<DateTimeRange> dateTimeRanges = [];
+  int longestDateRange = 0;
+
+  void didUpdateWidget(oldWidget) {
+    if (oldWidget != widget) {
+      _init();
+    }
+  }
+
+  initState() {
+    _init();
+  }
+
+  _init() {
+    Future.delayed(
+      Duration.zero,
+      () async {
+        List<Stream<List<Transaction>>> watchedPastSpendingTotals = [];
+        for (int index = 0;
+            index <=
+                (widget.showPastSpending == false
+                    ? 0
+                    : (appStateSettings["showPastSpendingTrajectory"] == true
+                        ? 2
+                        : 0));
+            index++) {
+          DateTime datePast = DateTime(
+            (widget.dateForRange ?? DateTime.now()).year -
+                (widget.budget.reoccurrence == BudgetReoccurence.yearly
+                    ? index * widget.budget.periodLength
+                    : 0),
+            (widget.dateForRange ?? DateTime.now()).month -
+                (widget.budget.reoccurrence == BudgetReoccurence.monthly
+                    ? index * widget.budget.periodLength
+                    : 0),
+            (widget.dateForRange ?? DateTime.now()).day -
+                (widget.budget.reoccurrence == BudgetReoccurence.daily
+                    ? index * widget.budget.periodLength
+                    : 0) -
+                (widget.budget.reoccurrence == BudgetReoccurence.weekly
+                    ? index * 7 * widget.budget.periodLength
+                    : 0),
+          );
+          DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
+          dateTimeRanges.add(budgetRange);
+          watchedPastSpendingTotals
+              .add(database.getTransactionsInTimeRangeFromCategories(
+            budgetRange.start,
+            budgetRange.end,
+            widget.budget.categoryFks ?? [],
+            widget.budget.categoryFks == null ||
+                    (widget.budget.categoryFks ?? []).length <= 0
+                ? true
+                : false,
+            true,
+            false,
+            widget.budget.sharedTransactionsShow,
+            onlyShowTransactionsBelongingToBudget:
+                widget.budget.sharedKey != null ||
+                        widget.budget.addedTransactionsOnly == true
+                    ? widget.budget.budgetPk
+                    : null,
+            budget: widget.budget,
+          ));
+          if (budgetRange.duration.inDays > longestDateRange) {
+            longestDateRange = budgetRange.duration.inDays;
+          }
+        }
+
+        setState(() {
+          mergedStreamsPastSpendingTotals =
+              StreamZip(watchedPastSpendingTotals);
+        });
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<List<Transaction>>>(
+      stream: mergedStreamsPastSpendingTotals,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          print("TEST");
+          if (snapshot.data!.length <= 0) return SizedBox.shrink();
+          bool cumulative = appStateSettings["showCumulativeSpending"];
+          List<List<Pair>> pointsList = [];
+          for (int snapshotIndex = 0;
+              snapshotIndex < snapshot.data!.length;
+              snapshotIndex++) {
+            double cumulativeTotal = 0;
+            List<Pair> points = [];
+            // day limit used to keep max days shown to that of the current length of the current budget (for example, some monthly periods will be 28 days because of February)
+            // this should be eventually fixed better
+            // as some days are no longer accounted for in the previous budgets term
+
+            // get longest month, add those days as an offset difference of the current duration
+            int dayCount = (dateTimeRanges[snapshotIndex].duration.inDays -
+                    longestDateRange)
+                .abs();
+            for (int dayCounter = 0; dayCounter < dayCount; dayCounter++) {
+              points.add(Pair(points.length.toDouble(), 0));
+            }
+            for (DateTime indexDay = dateTimeRanges[snapshotIndex].start;
+                indexDay.compareTo(dateTimeRanges[snapshotIndex].end) <= 0;
+                indexDay =
+                    DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
+              dayCount++;
+
+              //can be optimized...
+              double totalForDay = 0;
+              for (Transaction transaction in snapshot.data![snapshotIndex]) {
+                if (widget.selectedCategoryPk == -1 ||
+                    -transaction.categoryFk ==
+                        -widget.selectedCategoryPk) if (indexDay
+                            .year ==
+                        transaction.dateCreated.year &&
+                    indexDay.month == transaction.dateCreated.month &&
+                    indexDay.day == transaction.dateCreated.day) {
+                  totalForDay += (transaction.amount *
+                          (amountRatioToPrimaryCurrencyGivenPk(
+                                  transaction.walletFk) ??
+                              0))
+                      .abs();
+                }
+              }
+              cumulativeTotal += totalForDay;
+              points.add(Pair(points.length.toDouble(),
+                  cumulative ? cumulativeTotal : totalForDay));
+            }
+            pointsList.add(points);
+          }
+          Color lineColor =
+              widget.selectedCategoryPk != -1 && widget.selectedCategory != null
+                  ? HexColor(widget.selectedCategory!.colour)
+                  : widget.budgetColorScheme.primary;
+          return LineChartWrapper(
+            color: lineColor,
+            verticalLineAt: widget.isPastBudget == true
+                ? null
+                : (widget.budgetRange.end
+                        .difference((widget.dateForRange ?? DateTime.now()))
+                        .inDays)
+                    .toDouble(),
+            endDate: widget.budgetRange.end,
+            points: pointsList,
+            isCurved: true,
+            colors: [
+              for (int index = 0; index < snapshot.data!.length; index++)
+                index == 0
+                    ? lineColor
+                    : (widget.selectedCategoryPk != -1 &&
+                                widget.selectedCategory != null
+                            ? lineColor
+                            : widget.budgetColorScheme.tertiary)
+                        .withOpacity((index) / snapshot.data!.length)
+            ],
+            horizontalLineAt: widget.budget.amount *
+                ((DateTime.now().millisecondsSinceEpoch -
+                        widget.budgetRange.start.millisecondsSinceEpoch) /
+                    (widget.budgetRange.end.millisecondsSinceEpoch -
+                        widget.budgetRange.start.millisecondsSinceEpoch)),
+          );
+        }
+        return SizedBox.shrink();
       },
     );
   }

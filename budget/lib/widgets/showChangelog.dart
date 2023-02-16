@@ -7,6 +7,17 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed date offset by adding days with 0 spending
+    Can set to keep past spending habits or not in line graph for budget page
+    Can select which budget to reference as the home page line graph
+    Search searches transaction notes
+    Search ignores capitalization
+    If transaction amount for upcoming transaction is zero, it asks how much it is
+    Date period defaults to 1 for repeating transactions
+    Spending graph positive for budget page, since income isn't used for budgets
+    Fixed past spending graphs showing wrong corresponding days for current period
+    Fixed tapping category on budgets page to select only those transactions
+    Can see spenders amount in Budget History is shared budget
     Fixed term lengths of budgets
     Fixed currency conversions
     All currencies downloaded at launch, uses 1 request instead of multiple

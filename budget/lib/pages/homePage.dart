@@ -305,89 +305,141 @@ class HomePageState extends State<HomePage>
                             ),
                           ),
                     KeepAlive(
-                      child: StreamBuilder<List<Transaction>>(
-                        stream:
-                            database.getTransactionsInTimeRangeFromCategories(
-                                DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month - 1,
-                                  DateTime.now().day,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 13),
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              left: 10, right: 10, bottom: 10, top: 20),
+                          margin: EdgeInsets.symmetric(horizontal: 13),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavyLight,
+                            boxShadow:
+                                boxShadowCheck(boxShadowGeneral(context)),
+                          ),
+                          child: appStateSettings[
+                                      "lineGraphReferenceBudgetPk"] ==
+                                  null
+                              ? StreamBuilder<List<Transaction>>(
+                                  stream: database
+                                      .getTransactionsInTimeRangeFromCategories(
+                                          DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month - 1,
+                                            DateTime.now().day,
+                                          ),
+                                          DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day,
+                                          ),
+                                          [],
+                                          true,
+                                          true,
+                                          selectedSlidingSelector == 2
+                                              ? false
+                                              : selectedSlidingSelector == 3
+                                                  ? true
+                                                  : null,
+                                          SharedTransactionsShow.fromEveryone),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      bool cumulative = appStateSettings[
+                                          "showCumulativeSpending"];
+                                      double cumulativeTotal = 0;
+                                      List<Pair> points = [];
+                                      for (DateTime indexDay = DateTime(
+                                        DateTime.now().year,
+                                        DateTime.now().month - 1,
+                                        DateTime.now().day,
+                                      );
+                                          indexDay.compareTo(DateTime.now()) <
+                                              0;
+                                          indexDay = DateTime(
+                                              indexDay.year,
+                                              indexDay.month,
+                                              indexDay.day + 1)) {
+                                        //can be optimized...
+                                        double totalForDay = 0;
+                                        for (Transaction transaction
+                                            in snapshot.data!) {
+                                          if (indexDay.year ==
+                                                  transaction
+                                                      .dateCreated.year &&
+                                              indexDay.month ==
+                                                  transaction
+                                                      .dateCreated.month &&
+                                              indexDay.day ==
+                                                  transaction.dateCreated.day) {
+                                            if (transaction.income) {
+                                              totalForDay += transaction.amount
+                                                      .abs() *
+                                                  (amountRatioToPrimaryCurrencyGivenPk(
+                                                          transaction
+                                                              .walletFk) ??
+                                                      0);
+                                            } else {
+                                              totalForDay -= transaction.amount
+                                                      .abs() *
+                                                  (amountRatioToPrimaryCurrencyGivenPk(
+                                                          transaction
+                                                              .walletFk) ??
+                                                      0);
+                                            }
+                                          }
+                                        }
+                                        cumulativeTotal += totalForDay;
+                                        points.add(Pair(
+                                            points.length.toDouble(),
+                                            cumulative
+                                                ? cumulativeTotal
+                                                : totalForDay));
+                                      }
+                                      return LineChartWrapper(
+                                          points: [points], isCurved: true);
+                                    }
+                                    return SizedBox.shrink();
+                                  },
+                                )
+                              : StreamBuilder<Budget>(
+                                  stream: database.getBudget(appStateSettings[
+                                      "lineGraphReferenceBudgetPk"]),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      Budget budget = snapshot.data!;
+                                      ColorScheme budgetColorScheme =
+                                          ColorScheme.fromSeed(
+                                        seedColor: HexColor(budget.colour,
+                                            defaultColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                        brightness:
+                                            determineBrightnessTheme(context),
+                                      );
+                                      return Column(
+                                        children: [
+                                          BudgetLineGraph(
+                                            key: ValueKey(budget.budgetPk),
+                                            budget: budget,
+                                            budgetColorScheme:
+                                                budgetColorScheme,
+                                            dateForRange: DateTime.now(),
+                                            budgetRange: getBudgetDate(
+                                                budget, DateTime.now()),
+                                            isPastBudget: false,
+                                            selectedCategory: null,
+                                            selectedCategoryPk: -1,
+                                            showPastSpending: false,
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    return SizedBox.shrink();
+                                  },
                                 ),
-                                DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                ),
-                                [],
-                                true,
-                                true,
-                                selectedSlidingSelector == 2
-                                    ? false
-                                    : selectedSlidingSelector == 3
-                                        ? true
-                                        : null,
-                                SharedTransactionsShow.fromEveryone),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            bool cumulative =
-                                appStateSettings["showCumulativeSpending"];
-                            double cumulativeTotal = 0;
-                            List<Pair> points = [];
-                            for (DateTime indexDay = DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month - 1,
-                              DateTime.now().day,
-                            );
-                                indexDay.compareTo(DateTime.now()) < 0;
-                                indexDay = DateTime(indexDay.year,
-                                    indexDay.month, indexDay.day + 1)) {
-                              //can be optimized...
-                              double totalForDay = 0;
-                              for (Transaction transaction in snapshot.data!) {
-                                if (indexDay.year ==
-                                        transaction.dateCreated.year &&
-                                    indexDay.month ==
-                                        transaction.dateCreated.month &&
-                                    indexDay.day ==
-                                        transaction.dateCreated.day) {
-                                  if (transaction.income) {
-                                    totalForDay += transaction.amount.abs() *
-                                        (amountRatioToPrimaryCurrencyGivenPk(
-                                                transaction.walletFk) ??
-                                            0);
-                                  } else {
-                                    totalForDay -= transaction.amount.abs() *
-                                        (amountRatioToPrimaryCurrencyGivenPk(
-                                                transaction.walletFk) ??
-                                            0);
-                                  }
-                                }
-                              }
-                              cumulativeTotal += totalForDay;
-                              points.add(Pair(points.length.toDouble(),
-                                  cumulative ? cumulativeTotal : totalForDay));
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 13),
-                              child: Container(
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, bottom: 10, top: 20),
-                                  margin: EdgeInsets.symmetric(horizontal: 13),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .lightDarkAccentHeavyLight,
-                                    boxShadow: boxShadowCheck(
-                                        boxShadowGeneral(context)),
-                                  ),
-                                  child: LineChartWrapper(
-                                      points: [points], isCurved: true)),
-                            );
-                          }
-                          return SizedBox.shrink();
-                        },
+                        ),
                       ),
                     ),
                     KeepAlive(

@@ -23,6 +23,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -214,6 +215,72 @@ class SettingsPageState extends State<SettingsPage>
             );
           },
         ),
+        SettingsContainer(
+          onTap: () async {
+            String defaultLabel = "Default (30 days)";
+            List<Budget> allBudgets = await database.getAllBudgets();
+            openBottomSheet(
+              context,
+              PopupFramework(
+                title: "Select Budget",
+                child: RadioItems(
+                  items: [
+                    defaultLabel,
+                    ...[
+                      for (Budget budget in allBudgets)
+                        budget.budgetPk.toString()
+                    ],
+                  ],
+                  displayFilter: (budgetPk) {
+                    for (Budget budget in allBudgets)
+                      if (budget.budgetPk.toString() == budgetPk.toString()) {
+                        return budget.name;
+                      }
+                    return defaultLabel;
+                  },
+                  initial:
+                      appStateSettings["lineGraphReferenceBudgetPk"] == null
+                          ? defaultLabel
+                          : appStateSettings["lineGraphReferenceBudgetPk"]
+                              .toString(),
+                  onChanged: (value) {
+                    if (value == defaultLabel) {
+                      updateSettings(
+                        "lineGraphReferenceBudgetPk",
+                        null,
+                        pagesNeedingRefresh: [0],
+                        updateGlobalState: false,
+                      );
+                      Navigator.pop(context);
+                      return;
+                    } else {
+                      Budget? budgetFound = null;
+                      updateSettings(
+                        "lineGraphReferenceBudgetPk",
+                        int.parse(value),
+                        pagesNeedingRefresh: [0],
+                        updateGlobalState: false,
+                      );
+                    }
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            );
+          },
+          title: "Home Page Spending Graph",
+          description: "Select reference budget",
+          icon: Icons.line_axis,
+        ),
+        SettingsContainerSwitch(
+          title: "Show past spending trajectory",
+          onSwitched: (value) {
+            updateSettings("showPastSpendingTrajectory", value,
+                pagesNeedingRefresh: [0], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["showPastSpendingTrajectory"],
+          icon: Icons.blur_circular_rounded,
+        ),
         SettingsContainerSwitch(
           title: "Overdue and Upcoming",
           description: "Sections on home page",
@@ -305,9 +372,9 @@ class EnterName extends StatelessWidget {
   }
 }
 
-Function enterNameBottomSheet(context) {
+Future enterNameBottomSheet(context) async {
   String name = "";
-  return openBottomSheet(
+  return await openBottomSheet(
     context,
     PopupFramework(
       title: "Enter Name",

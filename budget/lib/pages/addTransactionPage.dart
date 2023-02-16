@@ -79,7 +79,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   List<String> selectedTags = [];
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  int selectedPeriodLength = 0;
+  int selectedPeriodLength = 1;
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "months";
   BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;

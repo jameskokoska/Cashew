@@ -117,14 +117,24 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                   ),
                 ]),
           HorizontalLine(
-            y: 0,
+            y: 0.0001,
             color: dynamicPastel(context, widget.color, amount: 0.3)
                 .withOpacity(0.4),
           ),
+          ...(widget.horizontalLineAt == null
+              ? []
+              : [
+                  HorizontalLine(
+                    y: widget.horizontalLineAt!,
+                    color: dynamicPastel(context, widget.color, amount: 0.3)
+                        .withOpacity(0.7),
+                    dashArray: [2, 2],
+                  ),
+                ])
         ],
         verticalLines: [
           VerticalLine(
-            x: 0,
+            x: 0.0001,
             dashArray: [2, 5],
             strokeWidth: 2,
             color: dynamicPastel(context, widget.color, amount: 0.3)
