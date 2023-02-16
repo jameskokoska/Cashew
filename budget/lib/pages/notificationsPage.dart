@@ -23,8 +23,6 @@ class NotificationsPage extends StatelessWidget {
   const NotificationsPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    String version = packageInfoGlobal.version;
-    String buildNumber = packageInfoGlobal.buildNumber;
     return PageFramework(
       dragDownToDismiss: true,
       title: "Notifications",

@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Wallet summary page, tap the selected wallet to see spending information for entire wallet
+    New settings buttons
+    Uses Material You switch
+    Fixed notifications IDs repeating
+    When new subscription/repeating transaction added id is correct 
     Fixed date offset by adding days with 0 spending
     Can set to keep past spending habits or not in line graph for budget page
     Can select which budget to reference as the home page line graph

@@ -95,7 +95,7 @@ class TransactionEntry extends StatelessWidget {
         );
         Transaction newTransaction = transaction.copyWith(
           paid: false,
-          transactionPk: DateTime.now().millisecond,
+          transactionPk: DateTime.now().millisecondsSinceEpoch,
           dateCreated: newDate,
           createdAnotherFutureTransaction: Value(false),
         );

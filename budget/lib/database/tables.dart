@@ -1879,14 +1879,17 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowBasedOnTimeRange($TransactionsTable tbl,
-      DateTime startDate, DateTime endDate, Budget? budget) {
+      DateTime startDate, DateTime endDate, Budget? budget,
+      {bool? allTime = false}) {
     return (budget != null &&
             // Only if an Added only, Custom budget -> show all transactions belonging to it, even if outside the date range
             (budget.addedTransactionsOnly == true &&
                 budget.sharedKey == null &&
                 budget.reoccurrence == BudgetReoccurence.custom)
         ? transactions.dateCreated.isNotNull()
-        : transactions.dateCreated.isBetweenValues(startDate, endDate));
+        : (allTime == true
+            ? transactions.dateCreated.isNotNull()
+            : transactions.dateCreated.isBetweenValues(startDate, endDate)));
   }
 
   Expression<bool> onlyShowIfCertainBudget(
@@ -1911,6 +1914,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
+    bool allTime = false,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -1923,7 +1927,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = (select(transactions)
         ..where((tbl) {
           return onlyShowBasedOnTimeRange(
-                  transactions, startDate, endDate, budget) &
+                  transactions, startDate, endDate, budget, allTime: allTime) &
               isInCategory(tbl, allCategories, categoryFks) &
               tbl.paid.equals(true) &
               tbl.income.equals(false) &
@@ -1977,13 +1981,32 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalCategoryTotalStream(mergedStreams);
   }
 
-  Stream<double?> watchTotalOfWallet(int walletPk) {
+  Stream<double?> watchTotalOfWallet(int walletPk, {bool? isIncome = null}) {
     final totalAmt = transactions.amount.sum();
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where(transactions.walletFk.equals(walletPk) &
+      ..where((isIncome == null
+              ? transactions.walletFk.isNotNull()
+              : isIncome == true
+                  ? transactions.income.equals(true)
+                  : transactions.income.equals(false)) &
+          transactions.walletFk.equals(walletPk) &
           transactions.paid.equals(true));
     return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+  }
+
+  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(int walletPk,
+      {bool? isIncome = null}) {
+    final totalCount = transactions.transactionPk.count();
+    final query = selectOnly(transactions)
+      ..addColumns([totalCount])
+      ..where((isIncome == null
+              ? transactions.walletFk.isNotNull()
+              : isIncome == true
+                  ? transactions.income.equals(true)
+                  : transactions.income.equals(false)) &
+          transactions.walletFk.equals(walletPk));
+    return query.map((row) => row.read(totalCount)).watch();
   }
 
   Stream<double?> watchTotalOfUpcomingOverdue(
@@ -2042,14 +2065,6 @@ class FinanceDatabase extends _$FinanceDatabase {
               transactions.type
                   .equals(TransactionSpecialType.repetitive.index) |
               transactions.type.equals(TransactionSpecialType.upcoming.index)));
-    return query.map((row) => row.read(totalCount)).watch();
-  }
-
-  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(int walletPk) {
-    final totalCount = transactions.transactionPk.count();
-    final query = selectOnly(transactions)
-      ..addColumns([totalCount])
-      ..where(transactions.walletFk.equals(walletPk));
     return query.map((row) => row.read(totalCount)).watch();
   }
 

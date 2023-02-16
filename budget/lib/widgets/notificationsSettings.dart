@@ -356,14 +356,14 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
   );
 
   // schedule a week worth of notifications
-  for (int i = 1; i <= 7; i++) {
+  for (int i = 0; i <= 7; i++) {
     String chosenMessage =
         _reminderStrings[Random().nextInt(_reminderStrings.length)];
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      1,
+      i,
       'Add Transactions',
       chosenMessage,
       dateTime,
@@ -372,22 +372,29 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
       payload: 'addTransaction',
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
     print("Notification " +
         chosenMessage +
         " scheduled for " +
-        dateTime.toString());
+        dateTime.toString() +
+        " with id " +
+        i.toString());
   }
+  print(await flutterLocalNotificationsPlugin.getActiveNotifications());
 
-  // final List<PendingNotificationRequest> pendingNotificationRequests =
-  //     await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+  final List<PendingNotificationRequest> pendingNotificationRequests =
+      await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+  print(pendingNotificationRequests.first);
 
   return true;
 }
 
 Future<bool> cancelDailyNotification() async {
-  await flutterLocalNotificationsPlugin.cancel(1);
-  print("Cancelled notification for channel 1 (daily reminder)");
+  for (int i = 1; i <= 7; i++) {
+    await flutterLocalNotificationsPlugin.cancel(i);
+  }
+  print("Cancelled notifications for daily reminder");
   return true;
 }
 
@@ -433,7 +440,7 @@ Future<bool> scheduleUpcomingTransactionsNotification(
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      2,
+      upcomingTransaction.transactionPk,
       'Upcoming Transaction Due',
       chosenMessage,
       dateTime,
@@ -446,15 +453,27 @@ Future<bool> scheduleUpcomingTransactionsNotification(
     print("Notification " +
         chosenMessage +
         " scheduled for " +
-        dateTime.toString());
+        dateTime.toString() +
+        " with id " +
+        upcomingTransaction.transactionPk.toString());
   }
 
   return true;
 }
 
 Future<bool> cancelUpcomingTransactionsNotification() async {
-  await flutterLocalNotificationsPlugin.cancel(2);
-  print("Cancelled notification for channel 2 (upcoming)");
+  List<Transaction> upcomingTransactions =
+      await database.getAllUpcomingTransactions(
+    startDate: DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
+    endDate: DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day + 30),
+  );
+  for (Transaction upcomingTransaction in upcomingTransactions) {
+    await flutterLocalNotificationsPlugin
+        .cancel(upcomingTransaction.transactionPk);
+  }
+  print("Cancelled notifications for upcoming");
   return true;
 }
 

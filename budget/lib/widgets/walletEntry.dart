@@ -11,6 +11,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/colors.dart';
 
 class WalletEntry extends StatefulWidget {
@@ -42,7 +43,7 @@ class _WalletEntryState extends State<WalletEntry>
       ),
       child: OpenContainerNavigation(
         borderRadius: 15,
-        openPage: AddWalletPage(title: "Edit Wallet", wallet: widget.wallet),
+        openPage: WalletDetailsPage(wallet: widget.wallet),
         button: (openContainer) {
           return Tappable(
             color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
@@ -145,15 +146,20 @@ class _WalletEntryState extends State<WalletEntry>
               ),
             ),
             onTap: () async {
-              updateSettings("selectedWallet", widget.wallet.walletPk,
-                  pagesNeedingRefresh: [0, 1, 2]);
-              TransactionWallet defaultWallet =
-                  await database.getWalletInstance(widget.wallet.walletPk);
-              updateSettings("selectedWalletCurrency", defaultWallet.currency,
-                  updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+              if (widget.selected) {
+                openContainer();
+              } else {
+                updateSettings("selectedWallet", widget.wallet.walletPk,
+                    pagesNeedingRefresh: [0, 1, 2]);
+                TransactionWallet defaultWallet =
+                    await database.getWalletInstance(widget.wallet.walletPk);
+                updateSettings("selectedWalletCurrency", defaultWallet.currency,
+                    updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+              }
             },
             onLongPress: () {
-              openContainer();
+              pushRoute(context,
+                  AddWalletPage(title: "Edit Wallet", wallet: widget.wallet));
             },
           );
         },

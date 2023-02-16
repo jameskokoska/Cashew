@@ -458,7 +458,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   wallets: wallets,
                                 ),
                               ),
-                              Container(height: 20),
+                              SizedBox(height: 20),
                               PieChartWrapper(
                                   pieChartDisplayStateKey:
                                       _pieChartDisplayStateKey,
@@ -471,9 +471,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     });
                                   },
                                   isPastBudget: widget.isPastBudget ?? false),
-                              Container(height: 35),
+                              SizedBox(height: 35),
                               ...categoryEntries,
-                              Container(height: 15),
+                              SizedBox(height: 15),
                             ]),
                           );
                         }
@@ -759,7 +759,6 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
       stream: mergedStreamsPastSpendingTotals,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print("TEST");
           if (snapshot.data!.length <= 0) return SizedBox.shrink();
           bool cumulative = appStateSettings["showCumulativeSpending"];
           List<List<Pair>> pointsList = [];

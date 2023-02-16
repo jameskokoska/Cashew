@@ -90,47 +90,91 @@ class SettingsPageState extends State<SettingsPage>
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       listWidgets: [
-        SettingsContainerOpenPage(
-          openPage: AboutPage(),
-          title: "About Cashew",
-          icon: Icons.info_outline_rounded,
-        ),
         // SettingsContainerOpenPage(
         //   openPage: ColorsPage(),
         //   title: "Colors",
         //   icon: Icons.color_lens,
         // ),
-        SettingsHeader(title: "Data"),
         SettingsContainerOpenPage(
-          openPage: SubscriptionsPage(),
-          title: "Subscriptions",
-          icon: Icons.event_repeat_rounded,
+          openPage: AboutPage(),
+          title: "About Cashew",
+          icon: Icons.info_outline_rounded,
         ),
-        SettingsContainerOpenPage(
-          openPage: EditWalletsPage(title: "Edit Wallets"),
-          title: "Edit Wallets",
-          description: "Edit the order and wallet details",
-          icon: Icons.account_balance_wallet_rounded,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: SubscriptionsPage(),
+                  title: "Subscriptions",
+                  icon: Icons.event_repeat_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              kIsWeb
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: SettingsContainerOpenPage(
+                        openPage: NotificationsPage(),
+                        title: "Notifications",
+                        icon: Icons.notifications_rounded,
+                        isOutlined: true,
+                      ),
+                    ),
+            ],
+          ),
         ),
-        SettingsContainerOpenPage(
-          openPage: EditBudgetPage(title: "Edit Budgets"),
-          title: "Edit Budgets",
-          description: "Edit the order and budget details",
-          icon: MoreIcons.chart_pie,
-          iconSize: 25,
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditWalletsPage(title: "Edit Wallets"),
+                  title: "Wallets",
+                  icon: Icons.account_balance_wallet_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditBudgetPage(title: "Edit Budgets"),
+                  title: "Budgets",
+                  icon: MoreIcons.chart_pie,
+                  iconSize: 20,
+                  isOutlined: true,
+                ),
+              ),
+            ],
+          ),
         ),
-        SettingsContainerOpenPage(
-          openPage: EditCategoriesPage(title: "Edit Categories"),
-          title: "Edit Categories",
-          description: "Add and edit the order of categories",
-          icon: Icons.category_rounded,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditCategoriesPage(title: "Edit Categories"),
+                  title: "Categories",
+                  icon: Icons.category_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditAssociatedTitlesPage(title: "Edit Titles"),
+                  title: "Titles",
+                  icon: Icons.text_fields_rounded,
+                  isOutlined: true,
+                ),
+              ),
+            ],
+          ),
         ),
-        SettingsContainerOpenPage(
-          openPage: EditAssociatedTitlesPage(title: "Edit Titles"),
-          title: "Edit Associated Titles",
-          description: "Add and edit associated category titles",
-          icon: Icons.text_fields_rounded,
-        ),
+        SettingsHeader(title: "Account and Backups"),
+        AccountAndBackup(),
         biometricsAvailable
             ? SettingsContainerSwitch(
                 title: "Require Biometrics",
@@ -142,8 +186,6 @@ class SettingsPageState extends State<SettingsPage>
                 icon: Icons.lock_rounded,
               )
             : SizedBox.shrink(),
-        SettingsHeader(title: "Account and Backups"),
-        AccountAndBackup(),
         SettingsHeader(title: "Theme"),
         SettingsContainer(
           onTap: () {
@@ -193,28 +235,21 @@ class SettingsPageState extends State<SettingsPage>
         ),
         EnterName(),
         SettingsHeader(title: "Preferences"),
-        kIsWeb
-            ? SizedBox.shrink()
-            : SettingsContainerOpenPage(
-                openPage: NotificationsPage(),
-                title: "Notifications",
-                icon: Icons.notifications_rounded,
-              ),
         // In the future, each wallet will have its own currency
-        SettingsContainerDropdown(
-          title: "Currency Icon",
-          icon: Icons.emoji_symbols_rounded,
-          initial: appStateSettings["currencyIcon"],
-          items: ["\$", "£", "¥", "€", "₩", "₹"],
-          onChanged: (value) {
-            updateSettings(
-              "currencyIcon",
-              value,
-              pagesNeedingRefresh: [0, 1, 2, 3],
-              updateGlobalState: true,
-            );
-          },
-        ),
+        // SettingsContainerDropdown(
+        //   title: "Currency Icon",
+        //   icon: Icons.emoji_symbols_rounded,
+        //   initial: appStateSettings["currencyIcon"],
+        //   items: ["\$", "£", "¥", "€", "₩", "₹"],
+        //   onChanged: (value) {
+        //     updateSettings(
+        //       "currencyIcon",
+        //       value,
+        //       pagesNeedingRefresh: [0, 1, 2, 3],
+        //       updateGlobalState: true,
+        //     );
+        //   },
+        // ),
         SettingsContainer(
           onTap: () async {
             String defaultLabel = "Default (30 days)";

@@ -77,12 +77,13 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
         description: widget.description,
         afterWidget: Padding(
           padding: const EdgeInsets.only(left: 5),
-          child: CupertinoSwitch(
+          child: Switch(
             activeColor: Theme.of(context).colorScheme.primary,
             value: value,
             onChanged: (_) {
               toggleSwitch();
             },
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ),
         icon: widget.icon,
@@ -100,6 +101,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
     this.description,
     this.icon,
     this.iconSize,
+    this.isOutlined,
   }) : super(key: key);
 
   final Widget openPage;
@@ -107,6 +109,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   final String? description;
   final IconData? icon;
   final double? iconSize;
+  final bool? isOutlined;
 
   @override
   Widget build(BuildContext context) {
@@ -142,9 +145,10 @@ class SettingsContainerOpenPage extends StatelessWidget {
           },
           afterWidget: Icon(
             Icons.chevron_right_rounded,
-            size: 30,
+            size: isOutlined == true ? 20 : 30,
             color: Theme.of(context).colorScheme.secondary,
           ),
+          isOutlined: isOutlined,
         );
       },
       openPage: openPage,
@@ -193,8 +197,8 @@ class SettingsContainerDropdown extends StatelessWidget {
   }
 }
 
-class SettingsContainer extends StatelessWidget {
-  const SettingsContainer({
+class SettingsContainerOutlined extends StatelessWidget {
+  const SettingsContainerOutlined({
     Key? key,
     required this.title,
     this.description,
@@ -215,69 +219,196 @@ class SettingsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 0),
-      child: Tappable(
-        color: Colors.transparent,
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: 18, vertical: verticalPadding ?? 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    icon == null
-                        ? SizedBox.shrink()
-                        : Padding(
-                            padding: const EdgeInsets.only(right: 16),
-                            child: Icon(
-                              icon,
-                              size: iconSize ?? 30,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                    Expanded(
-                      child: description == null
-                          ? TextFont(
+    double defaultIconSize = 25;
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
+        child: Tappable(
+          color: Colors.transparent,
+          onTap: onTap,
+          borderRadius: 10,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.only(
+              left: 13,
+              right: 4,
+              top: verticalPadding ?? 14,
+              bottom: verticalPadding ?? 14,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                icon == null
+                    ? SizedBox.shrink()
+                    : Padding(
+                        padding: EdgeInsets.only(
+                            right: 8 +
+                                defaultIconSize -
+                                (iconSize ?? defaultIconSize)),
+                        child: Icon(
+                          icon,
+                          size: iconSize ?? defaultIconSize,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                Expanded(
+                  child: description == null
+                      ? TextFont(
+                          fixParagraphMargin: true,
+                          text: title,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFont(
                               fixParagraphMargin: true,
                               text: title,
-                              fontSize: 18,
+                              fontSize: 17,
                               fontWeight: FontWeight.bold,
-                              maxLines: 5,
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextFont(
-                                  fixParagraphMargin: true,
-                                  text: title,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  maxLines: 5,
-                                ),
-                                Container(height: 3),
-                                TextFont(
-                                  text: description!,
-                                  fontSize: 15,
-                                  maxLines: 5,
-                                ),
-                              ],
+                              maxLines: 1,
                             ),
-                    ),
-                  ],
+                            Container(height: 3),
+                            TextFont(
+                              text: description!,
+                              fontSize: 12,
+                              maxLines: 5,
+                              textColor: Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .withOpacity(0.5),
+                            ),
+                          ],
+                        ),
                 ),
-              ),
-              afterWidget ?? SizedBox()
-            ],
+                Opacity(opacity: 0.5, child: afterWidget ?? SizedBox())
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+class SettingsContainer extends StatelessWidget {
+  const SettingsContainer({
+    Key? key,
+    required this.title,
+    this.description,
+    this.icon,
+    this.afterWidget,
+    this.onTap,
+    this.verticalPadding,
+    this.iconSize,
+    this.isOutlined,
+  }) : super(key: key);
+
+  final String title;
+  final String? description;
+  final IconData? icon;
+  final Widget? afterWidget;
+  final VoidCallback? onTap;
+  final double? verticalPadding;
+  final double? iconSize;
+  final bool? isOutlined;
+
+  @override
+  Widget build(BuildContext context) {
+    return isOutlined == true
+        ? SettingsContainerOutlined(
+            title: title,
+            afterWidget: afterWidget,
+            description: description,
+            icon: icon,
+            iconSize: iconSize,
+            onTap: onTap,
+            verticalPadding: verticalPadding,
+          )
+        : Padding(
+            padding: EdgeInsets.symmetric(vertical: 0),
+            child: Tappable(
+              color: Colors.transparent,
+              onTap: onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: verticalPadding ?? 11,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            icon == null
+                                ? SizedBox.shrink()
+                                : Padding(
+                                    padding: const EdgeInsets.only(right: 16),
+                                    child: Icon(
+                                      icon,
+                                      size: iconSize ?? 30,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  ),
+                            Expanded(
+                              child: description == null
+                                  ? TextFont(
+                                      fixParagraphMargin: true,
+                                      text: title,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      maxLines: 5,
+                                    )
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextFont(
+                                          fixParagraphMargin: true,
+                                          text: title,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          maxLines: 5,
+                                        ),
+                                        Container(height: 3),
+                                        TextFont(
+                                          text: description!,
+                                          fontSize: 15,
+                                          maxLines: 5,
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    afterWidget ?? SizedBox()
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }
 
