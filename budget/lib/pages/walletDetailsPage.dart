@@ -25,19 +25,22 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class WalletDetailsPage extends StatelessWidget {
-  final TransactionWallet wallet;
+  final TransactionWallet? wallet;
   const WalletDetailsPage({required this.wallet, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme walletColorScheme = ColorScheme.fromSeed(
-      seedColor: HexColor(wallet.colour,
-          defaultColor: Theme.of(context).colorScheme.primary),
-      brightness: determineBrightnessTheme(context),
-    );
+    ColorScheme walletColorScheme = wallet == null
+        ? Theme.of(context).colorScheme
+        : ColorScheme.fromSeed(
+            seedColor: HexColor(wallet!.colour,
+                defaultColor: Theme.of(context).colorScheme.primary),
+            brightness: determineBrightnessTheme(context),
+          );
+    int? walletPk = wallet == null ? null : wallet!.walletPk;
     return PageFramework(
       dragDownToDismiss: true,
-      title: wallet.name,
+      title: wallet == null ? "All Spending" : wallet!.name,
       navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
@@ -52,13 +55,13 @@ class WalletDetailsPage extends StatelessWidget {
               Expanded(
                   child: IncomeTransactionsSummary(
                 incomeTransactions: false,
-                walletPk: wallet.walletPk,
+                walletPk: walletPk,
               )),
               SizedBox(width: 13),
               Expanded(
                 child: IncomeTransactionsSummary(
                   incomeTransactions: true,
-                  walletPk: wallet.walletPk,
+                  walletPk: walletPk,
                 ),
               ),
             ],
@@ -77,7 +80,7 @@ class WalletCategoryPieChart extends StatefulWidget {
   const WalletCategoryPieChart(
       {required this.wallet, required this.walletColorScheme, super.key});
 
-  final TransactionWallet wallet;
+  final TransactionWallet? wallet;
   final ColorScheme walletColorScheme;
 
   @override
@@ -102,6 +105,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
           SharedTransactionsShow.fromEveryone,
           wallets,
           allTime: true,
+          walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,
           // member: selectedMember,
           // onlyShowTransactionsBelongingToBudget:
           //     widget.budget.sharedKey != null ||
@@ -184,7 +188,7 @@ class IncomeTransactionsSummary extends StatelessWidget {
   }) : super(key: key);
 
   final bool incomeTransactions;
-  final int walletPk;
+  final int? walletPk;
 
   @override
   Widget build(BuildContext context) {

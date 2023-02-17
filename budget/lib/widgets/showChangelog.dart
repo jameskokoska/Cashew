@@ -7,6 +7,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added ability to individually toggle which upcoming notifications to enable for which transactions
+    Can tap settings entry to change its switch value
+    Fixed default value of upcoming notifications setting
+    Cleaned up accounts and CSV import
+    Rearranged settings page
+    Wallet is respected in wallet statistics
+    Added all spending statistics
     Wallet summary page, tap the selected wallet to see spending information for entire wallet
     New settings buttons
     Uses Material You switch

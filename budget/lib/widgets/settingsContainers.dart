@@ -73,6 +73,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       duration: Duration(milliseconds: 300),
       opacity: waiting ? 0.5 : 1,
       child: SettingsContainer(
+        onTap: () => {toggleSwitch()},
         title: widget.title,
         description: widget.description,
         afterWidget: Padding(
@@ -113,6 +114,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     return OpenContainerNavigation(
       closedColor: Theme.of(context).colorScheme.background,
       borderRadius: 0,
@@ -146,7 +148,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
           afterWidget: Icon(
             Icons.chevron_right_rounded,
             size: isOutlined == true ? 20 : 30,
-            color: Theme.of(context).colorScheme.secondary,
+            color: colorScheme.secondary,
           ),
           isOutlined: isOutlined,
         );

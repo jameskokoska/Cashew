@@ -85,7 +85,7 @@ class _AccountsPageState extends State<AccountsPage> {
               children: [
                 SizedBox(height: 35),
                 ClipOval(
-                  child: user!.photoUrl == null
+                  child: user == null || user!.photoUrl == null
                       ? Container(
                           width: 100,
                           height: 100,
@@ -97,7 +97,7 @@ class _AccountsPageState extends State<AccountsPage> {
                           ),
                           child: Center(
                             child: TextFont(
-                                text: user!.displayName![0],
+                                text: user?.displayName![0] ?? "",
                                 fontSize: 60,
                                 textAlign: TextAlign.center,
                                 fontWeight: FontWeight.bold,
@@ -116,14 +116,14 @@ class _AccountsPageState extends State<AccountsPage> {
                 ),
                 SizedBox(height: 10),
                 TextFont(
-                  text: user!.displayName.toString(),
+                  text: (user?.displayName ?? "").toString(),
                   textAlign: TextAlign.center,
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
                 SizedBox(height: 2),
                 TextFont(
-                  text: user!.email.toString(),
+                  text: (user?.email ?? "").toString(),
                   textAlign: TextAlign.center,
                   fontSize: 15,
                 ),

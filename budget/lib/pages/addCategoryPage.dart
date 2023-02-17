@@ -734,8 +734,8 @@ class AddButton extends StatelessWidget {
 
   final VoidCallback onTap;
   final EdgeInsets padding;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final Widget? openPage;
 
   @override

@@ -1,6 +1,8 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
@@ -244,15 +246,15 @@ class HomePageState extends State<HomePage>
                             if (snapshot.data!.length == 0) {
                               return SizedBox.shrink();
                             }
-                            if (snapshot.data!.length == 1) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 13, right: 13, bottom: 13),
-                                child: BudgetContainer(
-                                  budget: snapshot.data![0],
-                                ),
-                              );
-                            }
+                            // if (snapshot.data!.length == 1) {
+                            //   return Padding(
+                            //     padding: const EdgeInsets.only(
+                            //         left: 13, right: 13, bottom: 13),
+                            //     child: BudgetContainer(
+                            //       budget: snapshot.data![0],
+                            //     ),
+                            //   );
+                            // }
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 13),
                               child: CarouselSlider(
@@ -264,16 +266,41 @@ class HomePageState extends State<HomePage>
                                       CenterPageEnlargeStrategy.height,
                                   viewportFraction: 0.95,
                                   clipBehavior: Clip.none,
+                                  // onPageChanged: (index, reason) {
+                                  //   if (index == snapshot.data!.length) {
+                                  //     pushRoute(context,
+                                  //         AddBudgetPage(title: "Add Budget"));
+                                  //   }
+                                  // },
+                                  enlargeFactor: 0.3,
                                 ),
-                                items: snapshot.data?.map((Budget budget) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 3),
-                                    child: BudgetContainer(
-                                      budget: budget,
-                                    ),
-                                  );
-                                }).toList(),
+                                items: [
+                                  ...(snapshot.data?.map((Budget budget) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 3),
+                                          child: BudgetContainer(
+                                            budget: budget,
+                                          ),
+                                        );
+                                      }).toList() ??
+                                      []),
+                                  OpenContainerNavigation(
+                                    borderRadius: 5,
+                                    button: (openContainer) {
+                                      return AddButton(
+                                        onTap: () {
+                                          openContainer();
+                                        },
+                                        height: null,
+                                        width: null,
+                                        padding: EdgeInsets.all(5),
+                                      );
+                                    },
+                                    openPage:
+                                        AddBudgetPage(title: "Add Budget"),
+                                  ),
+                                ],
                               ),
                             );
                           } else {

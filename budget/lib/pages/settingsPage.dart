@@ -5,6 +5,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
+import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
@@ -29,7 +30,7 @@ import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
-import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -176,19 +177,23 @@ class SettingsPageState extends State<SettingsPage>
             ],
           ),
         ),
-        SettingsHeader(title: "Account and Backups"),
-        AccountAndBackup(),
-        biometricsAvailable
-            ? SettingsContainerSwitch(
-                title: "Require Biometrics",
-                onSwitched: (value) {
-                  updateSettings("requireAuth", value,
-                      updateGlobalState: false);
-                },
-                initialValue: appStateSettings["requireAuth"],
-                icon: Icons.lock_rounded,
-              )
-            : SizedBox.shrink(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: WalletDetailsPage(wallet: null),
+                  title: "All Spending",
+                  icon: Icons.line_weight_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(child: GoogleAccountLoginButton()),
+            ],
+          ),
+        ),
         SettingsHeader(title: "Theme"),
         SettingsContainer(
           onTap: () {
@@ -253,6 +258,17 @@ class SettingsPageState extends State<SettingsPage>
         //     );
         //   },
         // ),
+        biometricsAvailable
+            ? SettingsContainerSwitch(
+                title: "Require Biometrics",
+                onSwitched: (value) {
+                  updateSettings("requireAuth", value,
+                      updateGlobalState: false);
+                },
+                initialValue: appStateSettings["requireAuth"],
+                icon: Icons.lock_rounded,
+              )
+            : SizedBox.shrink(),
         SettingsContainer(
           onTap: () async {
             String defaultLabel = "Default (30 days)";
@@ -383,6 +399,7 @@ class SettingsPageState extends State<SettingsPage>
         //   title: "Auto Transactions",
         //   icon: Icons.auto_fix_high_rounded,
         // ),
+        ImportCSV(),
         SettingsContainerOpenPage(
           openPage: AutoTransactionsPageEmail(),
           title: "Auto Email Transactions",

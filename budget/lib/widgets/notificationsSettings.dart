@@ -3,14 +3,16 @@ import 'dart:math';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:budget/widgets/timeDigits.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -62,7 +64,7 @@ class _DailyNotificationsSettingsState
             child: notificationsEnabled
                 ? SettingsContainer(
                     key: ValueKey(1),
-                    title: "Notification Time",
+                    title: "Alert Time",
                     icon: Icons.timer,
                     onTap: () async {
                       TimeOfDay? newTime = await showTimePicker(
@@ -91,73 +93,12 @@ class _DailyNotificationsSettingsState
                         );
                       }
                     },
-                    afterWidget: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.lightDarkAccent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                          child: TextFont(
-                            text: timeOfDay.hour == 0
-                                ? "12"
-                                : timeOfDay.hour > 12
-                                    ? (timeOfDay.hour - 12).toString()
-                                    : timeOfDay.hour.toString(),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-                          child: TextFont(
-                            text: ":",
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.lightDarkAccent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                          child: TextFont(
-                            text: timeOfDay.minute.toString().length == 1
-                                ? "0" + timeOfDay.minute.toString()
-                                : timeOfDay.minute.toString(),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.lightDarkAccent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-                          child: TextFont(
-                            text: timeOfDay.hour < 12 ? "AM" : "PM",
-                            fontSize: 18,
-                          ),
-                        )
-                      ],
-                    ),
+                    afterWidget: TimeDigits(timeOfDay: timeOfDay),
                   )
                 : Container(),
           ),
         ),
+        Divider(indent: 20, endIndent: 20),
       ],
     );
   }
@@ -173,7 +114,8 @@ class UpcomingTransactionsNotificationsSettings extends StatefulWidget {
 
 class _UpcomingTransactionsNotificationsSettingsState
     extends State<UpcomingTransactionsNotificationsSettings> {
-  bool notificationsEnabled = appStateSettings["notifications"];
+  bool notificationsEnabled =
+      appStateSettings["notificationsUpcomingTransactions"];
   TimeOfDay timeOfDay = TimeOfDay(
       hour: appStateSettings["notificationHourUpcomingTransactions"],
       minute: appStateSettings["notificationMinuteUpcomingTransactions"]);
@@ -210,7 +152,7 @@ class _UpcomingTransactionsNotificationsSettingsState
             child: notificationsEnabled
                 ? SettingsContainer(
                     key: ValueKey(1),
-                    title: "Notification Time",
+                    title: "Alert Time",
                     icon: Icons.timer,
                     onTap: () async {
                       TimeOfDay? newTime = await showTimePicker(
@@ -240,71 +182,59 @@ class _UpcomingTransactionsNotificationsSettingsState
                         );
                       }
                     },
-                    afterWidget: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.lightDarkAccent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                          child: TextFont(
-                            text: timeOfDay.hour == 0
-                                ? "12"
-                                : timeOfDay.hour > 12
-                                    ? (timeOfDay.hour - 12).toString()
-                                    : timeOfDay.hour.toString(),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-                          child: TextFont(
-                            text: ":",
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.lightDarkAccent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                          child: TextFont(
-                            text: timeOfDay.minute.toString().length == 1
-                                ? "0" + timeOfDay.minute.toString()
-                                : timeOfDay.minute.toString(),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.lightDarkAccent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-                          child: TextFont(
-                            text: timeOfDay.hour < 12 ? "AM" : "PM",
-                            fontSize: 18,
-                          ),
-                        )
-                      ],
-                    ),
+                    afterWidget: TimeDigits(timeOfDay: timeOfDay),
                   )
                 : Container(),
+          ),
+        ),
+        IgnorePointer(
+          ignoring: !notificationsEnabled,
+          child: AnimatedOpacity(
+            opacity: notificationsEnabled ? 1 : 0,
+            duration: Duration(milliseconds: 300),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Theme.of(context).colorScheme.lightDarkAccent,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: StreamBuilder<List<Transaction>>(
+                  stream: database.watchAllUpcomingTransactions(
+                      startDate: null, endDate: null),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          for (Transaction transaction in snapshot.data!)
+                            SettingsContainerSwitch(
+                              icon: getTransactionTypeIcon(transaction.type),
+                              title: transaction.name,
+                              onSwitched: (value) async {
+                                await database.createOrUpdateTransaction(
+                                    transaction.copyWith(
+                                        upcomingTransactionNotification:
+                                            Value(value)));
+                                await initializeNotificationsPlatform();
+                                await scheduleUpcomingTransactionsNotification(
+                                    context, timeOfDay);
+                                return;
+                              },
+                              syncWithInitialValue: false,
+                              initialValue:
+                                  transaction.upcomingTransactionNotification ??
+                                      true,
+                            ),
+                        ],
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
+                ),
+              ),
+            ),
           ),
         ),
       ],
@@ -416,10 +346,14 @@ Future<bool> scheduleUpcomingTransactionsNotification(
     startDate: DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
     endDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day + 30),
+        DateTime.now().year, DateTime.now().month, DateTime.now().day + 365),
   );
   // print(upcomingTransactions);
+  int idStart = 100;
   for (Transaction upcomingTransaction in upcomingTransactions) {
+    idStart++;
+    // Note: if upcomingTransactionNotification is NULL the loop will continue and schedule a notification
+    if (upcomingTransaction.upcomingTransactionNotification == false) continue;
     if (upcomingTransaction.dateCreated.year == DateTime.now().year &&
         upcomingTransaction.dateCreated.month == DateTime.now().month &&
         upcomingTransaction.dateCreated.day == DateTime.now().day &&
@@ -440,7 +374,7 @@ Future<bool> scheduleUpcomingTransactionsNotification(
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      upcomingTransaction.transactionPk,
+      idStart,
       'Upcoming Transaction Due',
       chosenMessage,
       dateTime,
@@ -469,9 +403,10 @@ Future<bool> cancelUpcomingTransactionsNotification() async {
     endDate: DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day + 30),
   );
+  int idStart = 100;
   for (Transaction upcomingTransaction in upcomingTransactions) {
-    await flutterLocalNotificationsPlugin
-        .cancel(upcomingTransaction.transactionPk);
+    idStart++;
+    await flutterLocalNotificationsPlugin.cancel(idStart);
   }
   print("Cancelled notifications for upcoming");
   return true;

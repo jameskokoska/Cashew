@@ -1092,6 +1092,21 @@ class $TransactionsTable extends Transactions
               type: DriftSqlType.int, requiredDuringInsert: false)
           .withConverter<BudgetReoccurence?>(
               $TransactionsTable.$converterreoccurrencen);
+  static const VerificationMeta _upcomingTransactionNotificationMeta =
+      const VerificationMeta('upcomingTransactionNotification');
+  @override
+  late final GeneratedColumn<bool> upcomingTransactionNotification =
+      GeneratedColumn<bool>(
+          'upcoming_transaction_notification', aliasedName, true,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite:
+                'CHECK ("upcoming_transaction_notification" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(true));
   static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<TransactionSpecialType?, int>
@@ -1206,6 +1221,7 @@ class $TransactionsTable extends Transactions
         income,
         periodLength,
         reoccurrence,
+        upcomingTransactionNotification,
         type,
         paid,
         createdAnotherFutureTransaction,
@@ -1290,6 +1306,13 @@ class $TransactionsTable extends Transactions
               data['period_length']!, _periodLengthMeta));
     }
     context.handle(_reoccurrenceMeta, const VerificationResult.success());
+    if (data.containsKey('upcoming_transaction_notification')) {
+      context.handle(
+          _upcomingTransactionNotificationMeta,
+          upcomingTransactionNotification.isAcceptableOrUnknown(
+              data['upcoming_transaction_notification']!,
+              _upcomingTransactionNotificationMeta));
+    }
     context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('paid')) {
       context.handle(
@@ -1379,6 +1402,9 @@ class $TransactionsTable extends Transactions
       reoccurrence: $TransactionsTable.$converterreoccurrencen.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}reoccurrence'])),
+      upcomingTransactionNotification: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}upcoming_transaction_notification']),
       type: $TransactionsTable.$convertertypen.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}type'])),
@@ -1456,6 +1482,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final bool income;
   final int? periodLength;
   final BudgetReoccurence? reoccurrence;
+  final bool? upcomingTransactionNotification;
   final TransactionSpecialType? type;
   final bool paid;
   final bool? createdAnotherFutureTransaction;
@@ -1481,6 +1508,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.income,
       this.periodLength,
       this.reoccurrence,
+      this.upcomingTransactionNotification,
       this.type,
       required this.paid,
       this.createdAnotherFutureTransaction,
@@ -1517,6 +1545,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     if (!nullToAbsent || reoccurrence != null) {
       final converter = $TransactionsTable.$converterreoccurrencen;
       map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence));
+    }
+    if (!nullToAbsent || upcomingTransactionNotification != null) {
+      map['upcoming_transaction_notification'] =
+          Variable<bool>(upcomingTransactionNotification);
     }
     if (!nullToAbsent || type != null) {
       final converter = $TransactionsTable.$convertertypen;
@@ -1581,6 +1613,10 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       reoccurrence: reoccurrence == null && nullToAbsent
           ? const Value.absent()
           : Value(reoccurrence),
+      upcomingTransactionNotification:
+          upcomingTransactionNotification == null && nullToAbsent
+              ? const Value.absent()
+              : Value(upcomingTransactionNotification),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       paid: Value(paid),
       createdAnotherFutureTransaction:
@@ -1633,6 +1669,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       periodLength: serializer.fromJson<int?>(json['periodLength']),
       reoccurrence: $TransactionsTable.$converterreoccurrencen
           .fromJson(serializer.fromJson<int?>(json['reoccurrence'])),
+      upcomingTransactionNotification:
+          serializer.fromJson<bool?>(json['upcomingTransactionNotification']),
       type: $TransactionsTable.$convertertypen
           .fromJson(serializer.fromJson<int?>(json['type'])),
       paid: serializer.fromJson<bool>(json['paid']),
@@ -1672,6 +1710,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'periodLength': serializer.toJson<int?>(periodLength),
       'reoccurrence': serializer.toJson<int?>(
           $TransactionsTable.$converterreoccurrencen.toJson(reoccurrence)),
+      'upcomingTransactionNotification':
+          serializer.toJson<bool?>(upcomingTransactionNotification),
       'type': serializer
           .toJson<int?>($TransactionsTable.$convertertypen.toJson(type)),
       'paid': serializer.toJson<bool>(paid),
@@ -1707,6 +1747,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           bool? income,
           Value<int?> periodLength = const Value.absent(),
           Value<BudgetReoccurence?> reoccurrence = const Value.absent(),
+          Value<bool?> upcomingTransactionNotification = const Value.absent(),
           Value<TransactionSpecialType?> type = const Value.absent(),
           bool? paid,
           Value<bool?> createdAnotherFutureTransaction = const Value.absent(),
@@ -1736,6 +1777,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
             periodLength.present ? periodLength.value : this.periodLength,
         reoccurrence:
             reoccurrence.present ? reoccurrence.value : this.reoccurrence,
+        upcomingTransactionNotification: upcomingTransactionNotification.present
+            ? upcomingTransactionNotification.value
+            : this.upcomingTransactionNotification,
         type: type.present ? type.value : this.type,
         paid: paid ?? this.paid,
         createdAnotherFutureTransaction: createdAnotherFutureTransaction.present
@@ -1776,6 +1820,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
+          ..write(
+              'upcomingTransactionNotification: $upcomingTransactionNotification, ')
           ..write('type: $type, ')
           ..write('paid: $paid, ')
           ..write(
@@ -1808,6 +1854,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         income,
         periodLength,
         reoccurrence,
+        upcomingTransactionNotification,
         type,
         paid,
         createdAnotherFutureTransaction,
@@ -1837,6 +1884,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.income == this.income &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
+          other.upcomingTransactionNotification ==
+              this.upcomingTransactionNotification &&
           other.type == this.type &&
           other.paid == this.paid &&
           other.createdAnotherFutureTransaction ==
@@ -1866,6 +1915,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<bool> income;
   final Value<int?> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
+  final Value<bool?> upcomingTransactionNotification;
   final Value<TransactionSpecialType?> type;
   final Value<bool> paid;
   final Value<bool?> createdAnotherFutureTransaction;
@@ -1891,6 +1941,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
+    this.upcomingTransactionNotification = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
     this.createdAnotherFutureTransaction = const Value.absent(),
@@ -1917,6 +1968,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
+    this.upcomingTransactionNotification = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
     this.createdAnotherFutureTransaction = const Value.absent(),
@@ -1947,6 +1999,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<bool>? income,
     Expression<int>? periodLength,
     Expression<int>? reoccurrence,
+    Expression<bool>? upcomingTransactionNotification,
     Expression<int>? type,
     Expression<bool>? paid,
     Expression<bool>? createdAnotherFutureTransaction,
@@ -1973,6 +2026,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (income != null) 'income': income,
       if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
+      if (upcomingTransactionNotification != null)
+        'upcoming_transaction_notification': upcomingTransactionNotification,
       if (type != null) 'type': type,
       if (paid != null) 'paid': paid,
       if (createdAnotherFutureTransaction != null)
@@ -2005,6 +2060,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<bool>? income,
       Value<int?>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
+      Value<bool?>? upcomingTransactionNotification,
       Value<TransactionSpecialType?>? type,
       Value<bool>? paid,
       Value<bool?>? createdAnotherFutureTransaction,
@@ -2030,6 +2086,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       income: income ?? this.income,
       periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
+      upcomingTransactionNotification: upcomingTransactionNotification ??
+          this.upcomingTransactionNotification,
       type: type ?? this.type,
       paid: paid ?? this.paid,
       createdAnotherFutureTransaction: createdAnotherFutureTransaction ??
@@ -2089,6 +2147,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (reoccurrence.present) {
       final converter = $TransactionsTable.$converterreoccurrencen;
       map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence.value));
+    }
+    if (upcomingTransactionNotification.present) {
+      map['upcoming_transaction_notification'] =
+          Variable<bool>(upcomingTransactionNotification.value);
     }
     if (type.present) {
       final converter = $TransactionsTable.$convertertypen;
@@ -2151,6 +2213,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
+          ..write(
+              'upcomingTransactionNotification: $upcomingTransactionNotification, ')
           ..write('type: $type, ')
           ..write('paid: $paid, ')
           ..write(

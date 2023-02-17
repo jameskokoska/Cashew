@@ -21,7 +21,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 26;
+int schemaVersionGlobal = 27;
 
 // Generate database code
 // flutter packages pub run build_runner build
@@ -136,6 +136,8 @@ class Transactions extends Table {
   // Subscriptions and Repetitive payments
   IntColumn get periodLength => integer().nullable()();
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
+  BoolColumn get upcomingTransactionNotification =>
+      boolean().withDefault(const Constant(true)).nullable()();
   IntColumn get type => intEnum<TransactionSpecialType>().nullable()();
   BoolColumn get paid => boolean().withDefault(const Constant(false))();
   // If user sets to paid and then un pays it will not create a new transaction
@@ -363,6 +365,10 @@ class FinanceDatabase extends _$FinanceDatabase {
           }
           if (from <= 25) {
             await migrator.addColumn(budgets, budgets.addedTransactionsOnly);
+          }
+          if (from <= 26) {
+            await migrator.addColumn(
+                transactions, transactions.upcomingTransactionNotification);
           }
         },
       );
@@ -1915,12 +1921,14 @@ class FinanceDatabase extends _$FinanceDatabase {
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
     bool allTime = false,
+    int? walletPk,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     List<Stream<List<CategoryWithTotal>>> mergedStreams = [];
 
     for (TransactionWallet wallet in wallets) {
+      if (walletPk != null && wallet.walletPk != walletPk) continue;
       final totalAmt = transactions.amount.sum();
       final totalCount = transactions.transactionPk.count();
 
@@ -1981,7 +1989,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalCategoryTotalStream(mergedStreams);
   }
 
-  Stream<double?> watchTotalOfWallet(int walletPk, {bool? isIncome = null}) {
+  Stream<double?> watchTotalOfWallet(int? walletPk, {bool? isIncome = null}) {
     final totalAmt = transactions.amount.sum();
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
@@ -1990,12 +1998,14 @@ class FinanceDatabase extends _$FinanceDatabase {
               : isIncome == true
                   ? transactions.income.equals(true)
                   : transactions.income.equals(false)) &
-          transactions.walletFk.equals(walletPk) &
+          (walletPk == null
+              ? transactions.walletFk.isNotNull()
+              : transactions.walletFk.equals(walletPk)) &
           transactions.paid.equals(true));
     return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
 
-  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(int walletPk,
+  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(int? walletPk,
       {bool? isIncome = null}) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
@@ -2005,7 +2015,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               : isIncome == true
                   ? transactions.income.equals(true)
                   : transactions.income.equals(false)) &
-          transactions.walletFk.equals(walletPk));
+          (walletPk == null
+              ? transactions.walletFk.isNotNull()
+              : transactions.walletFk.equals(walletPk)));
     return query.map((row) => row.read(totalCount)).watch();
   }
 
