@@ -13,7 +13,7 @@ class Button extends StatefulWidget {
       required this.label,
       this.width,
       this.height,
-      this.fontSize = 16,
+      this.fontSize = 15,
       required this.onTap,
       this.color,
       this.textColor,

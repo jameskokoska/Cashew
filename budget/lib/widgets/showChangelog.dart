@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Improved no transactions found placeholder image
+    Fixed when adding transaction from added only budget and it's shared can't select which member of the budget
+    Compacted UI
+    Category spending size changes
+    Back button deselects category
+    Notification no longer comes if you opened the app on that day
     Added ability to individually toggle which upcoming notifications to enable for which transactions
     Can tap settings entry to change its switch value
     Fixed default value of upcoming notifications setting

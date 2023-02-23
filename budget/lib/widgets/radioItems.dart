@@ -53,6 +53,7 @@ class _RadioItemsState extends State<RadioItems> {
               title: Transform.translate(
                 offset: Offset(-12, 0),
                 child: TextFont(
+                    fontSize: 20,
                     text: widget.displayFilter == null
                         ? item
                         : widget.displayFilter!(item)),

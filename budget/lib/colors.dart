@@ -226,3 +226,26 @@ List<Color> selectableColors(context) {
     Theme.of(context).colorScheme.selectableColorCyan,
   ];
 }
+
+const ColorFilter greyScale = ColorFilter.matrix(<double>[
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  0,
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  0,
+  0.2126,
+  0.7152,
+  0.0722,
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  0,
+]);

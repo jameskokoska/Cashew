@@ -264,7 +264,7 @@ class SettingsContainerOutlined extends StatelessWidget {
                     ? TextFont(
                         fixParagraphMargin: true,
                         text: title,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         maxLines: 1,
                         overflow: TextOverflow.clip,
@@ -276,14 +276,14 @@ class SettingsContainerOutlined extends StatelessWidget {
                           TextFont(
                             fixParagraphMargin: true,
                             text: title,
-                            fontSize: 17,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             maxLines: 1,
                           ),
                           Container(height: 3),
                           TextFont(
                             text: description!,
-                            fontSize: 12,
+                            fontSize: 11,
                             maxLines: 5,
                             textColor: Theme.of(context)
                                 .colorScheme
@@ -373,7 +373,7 @@ class SettingsContainer extends StatelessWidget {
                                   ? TextFont(
                                       fixParagraphMargin: true,
                                       text: title,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       maxLines: 5,
                                     )
@@ -386,14 +386,14 @@ class SettingsContainer extends StatelessWidget {
                                         TextFont(
                                           fixParagraphMargin: true,
                                           text: title,
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           maxLines: 5,
                                         ),
                                         Container(height: 3),
                                         TextFont(
                                           text: description!,
-                                          fontSize: 15,
+                                          fontSize: 14,
                                           maxLines: 5,
                                         ),
                                       ],

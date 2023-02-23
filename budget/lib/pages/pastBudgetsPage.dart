@@ -223,6 +223,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     disableMemberSelection: true,
                     wallets: wallets,
                     allTime: true,
+                    isLarge: true,
                   ),
                 );
               }),
@@ -337,7 +338,7 @@ class PastBudgetContainer extends StatelessWidget {
           wallets,
         ),
         builder: (context, snapshotTotalSpentByCurrentUserOnly) {
-          double smallContainerHeight = 100;
+          double smallContainerHeight = 80;
           return StreamBuilder<List<CategoryWithTotal>>(
             stream:
                 database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
@@ -381,7 +382,7 @@ class PastBudgetContainer extends StatelessWidget {
                                 TextFont(
                                   text:
                                       getWordedDateShortMore(budgetRange.start),
-                                  fontSize: 23,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 Padding(
@@ -394,7 +395,7 @@ class PastBudgetContainer extends StatelessWidget {
                                             DateTime.now().year
                                         ? budgetRange.start.year.toString()
                                         : "",
-                                    fontSize: 13,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ],
@@ -422,7 +423,7 @@ class PastBudgetContainer extends StatelessWidget {
                                               textBuilder: (number) {
                                                 return TextFont(
                                                   text: convertToMoney(number),
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   textAlign: TextAlign.left,
                                                   fontWeight: FontWeight.bold,
                                                 );
@@ -431,7 +432,7 @@ class PastBudgetContainer extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                bottom: 1.7),
+                                                bottom: 0),
                                             child: Container(
                                               child: TextFont(
                                                 text: (appStateSettings[
@@ -440,7 +441,7 @@ class PastBudgetContainer extends StatelessWidget {
                                                         : " left of ") +
                                                     convertToMoney(
                                                         budget.amount),
-                                                fontSize: 14,
+                                                fontSize: 12,
                                                 textAlign: TextAlign.left,
                                               ),
                                             ),
@@ -466,7 +467,7 @@ class PastBudgetContainer extends StatelessWidget {
                                           textBuilder: (number) {
                                             return TextFont(
                                               text: convertToMoney(number),
-                                              fontSize: 18,
+                                              fontSize: 16,
                                               textAlign: TextAlign.left,
                                               fontWeight: FontWeight.bold,
                                             );
@@ -475,14 +476,14 @@ class PastBudgetContainer extends StatelessWidget {
                                       ),
                                       Container(
                                         padding:
-                                            const EdgeInsets.only(bottom: 1.5),
+                                            const EdgeInsets.only(bottom: 0),
                                         child: TextFont(
                                           text: (appStateSettings[
                                                       "showTotalSpentForBudget"]
                                                   ? " spent of "
                                                   : " overspent of ") +
                                               convertToMoney(budget.amount),
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           textAlign: TextAlign.left,
                                         ),
                                       ),
@@ -510,7 +511,7 @@ class PastBudgetContainer extends StatelessWidget {
                                   return TextFont(
                                     autoSizeText: true,
                                     text: value.toStringAsFixed(0) + "%",
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     textAlign: TextAlign.center,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.fade,
@@ -522,8 +523,8 @@ class PastBudgetContainer extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            height: 70,
-                            width: 70,
+                            height: 60,
+                            width: 60,
                             child: AnimatedCircularProgress(
                               percent: (totalSpent / budget.amount).abs(),
                               backgroundColor:

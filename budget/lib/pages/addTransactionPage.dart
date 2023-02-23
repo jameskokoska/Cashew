@@ -478,6 +478,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       selectedBudget = widget.selectedBudget;
       selectedBudgetPk = widget.selectedBudget!.budgetPk;
       selectedPayer = appStateSettings["currentUserEmail"];
+      selectedBudgetIsShared = widget.selectedBudget!.sharedKey != null;
     }
   }
 

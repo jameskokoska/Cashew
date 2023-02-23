@@ -184,18 +184,18 @@ class TransactionEntry extends StatelessWidget {
                     duration: const Duration(seconds: 1),
                     curve: Curves.easeInOutCubicEmphasized,
                     padding: EdgeInsets.only(
-                      left: selected ? 15 - 2 : 10 - 2,
-                      right: selected ? 15 : 10,
-                      top: selected ? 8 : 4,
-                      bottom: selected ? 8 : 4,
+                      left: selected ? 12 - 2 : 10 - 2,
+                      right: selected ? 12 : 10,
+                      top: selected ? 6 : 4,
+                      bottom: selected ? 6 : 4,
                     ),
                     decoration: BoxDecoration(
                       color: selected
                           ? appStateSettings["materialYou"]
                               ? Theme.of(context)
                                   .colorScheme
-                                  .primary
-                                  .withOpacity(0.35)
+                                  .onPrimaryContainer
+                                  .withOpacity(0.13)
                               : Theme.of(context)
                                   .colorScheme
                                   .lightDarkAccentHeavy

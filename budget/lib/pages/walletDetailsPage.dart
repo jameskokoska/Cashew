@@ -91,6 +91,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
   int selectedCategoryPk = -1;
   TransactionCategory? selectedCategory = null;
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
+  bool tiledCategoryEntries = false;
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +126,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             snapshot.data!.asMap().forEach((index, category) {
               categoryEntries.add(
                 CategoryEntry(
+                  isTiled: tiledCategoryEntries,
                   budgetColorScheme: widget.walletColorScheme,
                   category: category.category,
                   totalSpent: totalSpent,
@@ -168,6 +170,29 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                   },
                 ),
                 SizedBox(height: 35),
+                // IconButton(
+                //   onPressed: () {
+                //     setState(() {
+                //       tiledCategoryEntries = !tiledCategoryEntries;
+                //     });
+                //   },
+                //   icon: Icon(
+                //     tiledCategoryEntries
+                //         ? Icons.grid_view_rounded
+                //         : Icons.list_rounded,
+                //   ),
+                // ),
+                // tiledCategoryEntries
+                //     ? Padding(
+                //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                //         child: Wrap(
+                //           children: [...categoryEntries],
+                //         ),
+                //       )
+                //     : SizedBox.shrink(),
+                // Wrap(
+                //   children: [...categoryEntries],
+                // ),
                 ...categoryEntries,
                 SizedBox(height: 15),
               ],

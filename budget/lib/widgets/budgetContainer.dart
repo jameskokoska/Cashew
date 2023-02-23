@@ -564,7 +564,7 @@ class DaySpending extends StatelessWidget {
                   " for " +
                   budgetRange.end.difference(DateTime.now()).inDays.toString() +
                   " days.",
-          fontSize: large ? 16 : 14,
+          fontSize: large ? 15 : 13,
           textAlign: TextAlign.center,
         ),
       ),
@@ -1027,6 +1027,7 @@ class BudgetSpenderSummary extends StatefulWidget {
     required this.wallets,
     this.allTime = false,
     this.disableMemberSelection = false,
+    this.isLarge = false,
     super.key,
   });
 
@@ -1037,6 +1038,7 @@ class BudgetSpenderSummary extends StatefulWidget {
   final List<TransactionWallet> wallets;
   final bool allTime;
   final bool disableMemberSelection;
+  final bool isLarge;
 
   @override
   State<BudgetSpenderSummary> createState() => _BudgetSpenderSummaryState();
@@ -1137,8 +1139,12 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                               amount: 0.3)
                           .withAlpha(80)
                       : Colors.transparent,
-                  padding:
-                      EdgeInsets.only(left: 20, right: 25, top: 11, bottom: 11),
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 25,
+                    top: widget.isLarge ? 8 : 8,
+                    bottom: widget.isLarge ? 8 : 8,
+                  ),
                   child: Row(
                     children: [
                       // CategoryIcon(
@@ -1160,6 +1166,9 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                     .colorScheme
                                     .lightDarkAccentHeavy,
                         color: widget.budgetColorScheme.primary,
+                        size: widget.isLarge ? 28 : 28,
+                        insetPadding: widget.isLarge ? 23 : 18,
+                        isLarge: widget.isLarge,
                       ),
                       Container(
                         width: 15,
@@ -1172,13 +1181,13 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                             children: [
                               TextFont(
                                 text: getMemberNickname(spender.member),
-                                fontSize: 19,
+                                fontSize: widget.isLarge ? 19 : 18,
                               ),
                               SizedBox(
-                                height: 3,
+                                height: widget.isLarge ? 3 : 1,
                               ),
                               TextFont(
-                                maxLines: 5,
+                                maxLines: 1,
                                 text: (totalSpent == 0
                                         ? "0"
                                         : (spender.amount / totalSpent * 100)
@@ -1203,7 +1212,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                           TextFont(
                             fontWeight: FontWeight.bold,
                             text: convertToMoney(spender.amount),
-                            fontSize: 22,
+                            fontSize: widget.isLarge ? 21 : 20,
                           ),
                           SizedBox(
                             height: 1,
@@ -1262,6 +1271,7 @@ class MemberSpendingPercent extends StatelessWidget {
     this.insetPadding = 23,
     required this.progressBackgroundColor,
     required this.color,
+    this.isLarge = false,
   }) : super(key: key);
 
   final String displayLetter;
@@ -1270,6 +1280,7 @@ class MemberSpendingPercent extends StatelessWidget {
   final double insetPadding;
   final Color progressBackgroundColor;
   final Color color;
+  final bool isLarge;
 
   @override
   Widget build(BuildContext context) {
@@ -1279,7 +1290,7 @@ class MemberSpendingPercent extends StatelessWidget {
         child: TextFont(
           text: displayLetter,
           fontWeight: FontWeight.bold,
-          fontSize: 25,
+          fontSize: isLarge ? 23 : 21,
           textColor: dynamicPastel(
             context,
             Theme.of(context).colorScheme.primary,

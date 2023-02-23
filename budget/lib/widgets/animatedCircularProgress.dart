@@ -82,7 +82,7 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
             overageColor: widget.overageColor ?? Colors.transparent,
             overageShadowColor: widget.overageShadowColor ?? Colors.transparent,
             strokeWidth: 3.5,
-            valueStrokeWidth: 5,
+            valueStrokeWidth: 4,
             cornerRadius: 4,
           ),
         );

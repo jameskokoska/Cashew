@@ -286,7 +286,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
   );
 
   // schedule a week worth of notifications
-  for (int i = 0; i <= 7; i++) {
+  for (int i = 1; i <= 7; i++) {
     String chosenMessage =
         _reminderStrings[Random().nextInt(_reminderStrings.length)];
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);

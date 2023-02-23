@@ -421,7 +421,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                             ? SizedBox.shrink()
                                             : Padding(
                                                 padding: const EdgeInsets.only(
-                                                    top: 15, bottom: 5),
+                                                    top: 18, bottom: 0),
                                                 child: DaySpending(
                                                   budget: widget.budget,
                                                   amount:

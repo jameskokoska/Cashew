@@ -104,7 +104,7 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
           child: Tappable(
             onTap: () {},
             color: Theme.of(context).colorScheme.lightDarkAccent,
@@ -122,7 +122,7 @@ class AboutPage extends StatelessWidget {
                   ),
                   TextFont(
                     text: "James",
-                    fontSize: 33,
+                    fontSize: 29,
                     fontWeight: FontWeight.bold,
                     textColor: Theme.of(context).colorScheme.onPrimaryContainer,
                     textAlign: TextAlign.center,
@@ -130,9 +130,10 @@ class AboutPage extends StatelessWidget {
                   ),
                   TextFont(
                     text: "dapperappdeveloper@gmail.com",
-                    fontSize: 17,
+                    fontSize: 16,
                     textAlign: TextAlign.center,
                     maxLines: 5,
+                    textColor: Theme.of(context).colorScheme.textLight,
                   ),
                 ],
               ),
@@ -140,7 +141,7 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
           child: Tappable(
             onTap: () {},
             color: Theme.of(context).colorScheme.lightDarkAccent,
@@ -158,7 +159,7 @@ class AboutPage extends StatelessWidget {
                   ),
                   TextFont(
                     text: "YuYing",
-                    fontSize: 33,
+                    fontSize: 29,
                     fontWeight: FontWeight.bold,
                     textColor: Theme.of(context).colorScheme.onPrimaryContainer,
                     textAlign: TextAlign.center,
@@ -175,7 +176,7 @@ class AboutPage extends StatelessWidget {
           child: Center(
             child: TextFont(
               text: "Graphics",
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
               maxLines: 5,
@@ -200,7 +201,7 @@ class AboutPage extends StatelessWidget {
           child: Center(
             child: TextFont(
               text: "Major Tools",
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
               maxLines: 5,
@@ -250,7 +251,7 @@ class AboutPage extends StatelessWidget {
           child: Center(
             child: TextFont(
               text: "Made in Canada 🍁",
-              fontSize: 15,
+              fontSize: 14,
               textAlign: TextAlign.center,
               maxLines: 5,
             ),
@@ -317,7 +318,7 @@ class AboutInfoBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
       child: Tappable(
         onTap: () async {
           if (await canLaunchUrl(Uri.parse(link)))
@@ -334,15 +335,17 @@ class AboutInfoBox extends StatelessWidget {
             children: [
               TextFont(
                 text: title,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 textAlign: TextAlign.center,
                 maxLines: 5,
               ),
+              SizedBox(height: 6),
               TextFont(
                 text: link,
-                fontSize: 13,
+                fontSize: 14,
                 textAlign: TextAlign.center,
+                textColor: Theme.of(context).colorScheme.textLight,
               ),
             ],
           ),

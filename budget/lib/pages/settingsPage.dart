@@ -5,6 +5,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
@@ -428,40 +429,23 @@ class EnterName extends StatelessWidget {
 }
 
 Future enterNameBottomSheet(context) async {
-  String name = "";
   return await openBottomSheet(
     context,
     PopupFramework(
       title: "Enter Name",
       child: Column(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width - 36,
-            child: TextInput(
-              icon: Icons.title_rounded,
-              initialValue: appStateSettings["username"],
-              autoFocus: true,
-              onSubmitted: (value) {
-                Navigator.pop(context);
-                updateSettings("username", value, pagesNeedingRefresh: [0]);
-              },
-              onChanged: (text) {
-                name = text;
-              },
-              labelText: "Username",
-              padding: EdgeInsets.zero,
-            ),
-          ),
-          Container(height: 20),
-          Button(
-            label: "Set Name",
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            onTap: () {
-              Navigator.pop(context);
-              updateSettings("username", name, pagesNeedingRefresh: [0]);
+          SelectText(
+            icon: Icons.title_rounded,
+            setSelectedText: (_) {},
+            nextWithInput: (text) {
+              updateSettings("username", text, pagesNeedingRefresh: [0]);
             },
-          )
+            selectedText: appStateSettings["username"],
+            placeholder: "Nickname",
+            autoFocus: false,
+            requestLateAutoFocus: true,
+          ),
         ],
       ),
     ),
