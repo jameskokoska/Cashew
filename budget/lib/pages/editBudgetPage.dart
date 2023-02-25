@@ -13,6 +13,7 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -41,6 +42,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       dragDownToDismiss: true,
       dragDownToDismissEnabled: dragDownToDismissEnabled,
       title: widget.title,

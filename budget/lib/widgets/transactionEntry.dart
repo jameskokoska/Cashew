@@ -148,199 +148,225 @@ class TransactionEntry extends StatelessWidget {
 
     Color textColorLight = Theme.of(context).colorScheme.textLight;
 
-    return TransactionEntryBox(
-      transactionKey: transaction.transactionPk,
-      child: ValueListenableBuilder(
-        valueListenable: globalSelectedID,
-        builder: (context, value, _) {
-          bool selected = globalSelectedID.value[listID ?? "0"]!
-              .contains(transaction.transactionPk);
-          return OpenContainerNavigation(
-            borderRadius: 15,
-            button: (openContainer) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                    left: 13, right: 13, top: 1, bottom: 2),
-                child: Tappable(
-                  borderRadius: 15,
-                  onLongPress: () {
-                    if (!selected) {
-                      globalSelectedID.value[listID ?? "0"]!
-                          .add(transaction.transactionPk);
-                      selectingTransactionsActive = 1;
-                    } else {
-                      globalSelectedID.value[listID ?? "0"]!
-                          .remove(transaction.transactionPk);
-                      selectingTransactionsActive = -1;
-                    }
-                    globalSelectedID.notifyListeners();
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(context)),
+      child: TransactionEntryBox(
+        transactionKey: transaction.transactionPk,
+        child: ValueListenableBuilder(
+          valueListenable: globalSelectedID,
+          builder: (context, value, _) {
+            bool selected = globalSelectedID.value[listID ?? "0"]!
+                .contains(transaction.transactionPk);
+            return OpenContainerNavigation(
+              borderRadius: 15,
+              button: (openContainer) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                      left: 13, right: 13, top: 1, bottom: 2),
+                  child: Tappable(
+                    borderRadius: 15,
+                    onLongPress: () {
+                      if (!selected) {
+                        globalSelectedID.value[listID ?? "0"]!
+                            .add(transaction.transactionPk);
+                        selectingTransactionsActive = 1;
+                      } else {
+                        globalSelectedID.value[listID ?? "0"]!
+                            .remove(transaction.transactionPk);
+                        selectingTransactionsActive = -1;
+                      }
+                      globalSelectedID.notifyListeners();
 
-                    if (onSelected != null) onSelected!(transaction, selected);
-                  },
-                  onTap: () async {
-                    openContainer();
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.easeInOutCubicEmphasized,
-                    padding: EdgeInsets.only(
-                      left: selected ? 12 - 2 : 10 - 2,
-                      right: selected ? 12 : 10,
-                      top: selected ? 6 : 4,
-                      bottom: selected ? 6 : 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: selected
-                          ? appStateSettings["materialYou"]
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer
-                                  .withOpacity(0.13)
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .lightDarkAccentHeavy
-                                  .withAlpha(200)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                    child: Row(
-                      children: [
-                        CategoryIcon(
-                          categoryPk: transaction.categoryFk,
-                          size: 27,
-                          sizePadding: 20,
-                          margin: EdgeInsets.zero,
-                          borderRadius: 100,
-                        ),
-                        Container(
-                          width: 12,
-                        ),
-                        transaction.type != null
-                            ? Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Icon(
-                                  getTransactionTypeIcon(transaction.type),
-                                  color: iconColor,
-                                  size: 20,
-                                ),
-                              )
-                            : SizedBox(),
-                        Expanded(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 3),
-                              child: transaction.name != ""
-                                  ? TextFont(
-                                      text: transaction.name.capitalizeFirst,
-                                      fontSize: 16,
-                                    )
-                                  : category == null
-                                      ? StreamBuilder<TransactionCategory>(
-                                          stream: database.getCategory(
-                                              transaction.categoryFk),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              return TextFont(
-                                                text: snapshot.data!.name,
-                                                fontSize: 16,
-                                              );
-                                            }
-                                            return Container();
-                                          },
-                                        )
-                                      : TextFont(
-                                          text: category!.name,
-                                          fontSize: 16,
-                                        ),
-                            ),
-                            transaction.sharedReferenceBudgetPk != null &&
-                                    transaction.sharedKey == null &&
-                                    transaction.sharedStatus == null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 1.0),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Row(
-                                            children: [
-                                              transaction.sharedReferenceBudgetPk ==
-                                                      null
-                                                  ? SizedBox.shrink()
-                                                  : Expanded(
-                                                      child:
-                                                          StreamBuilder<Budget>(
-                                                        stream: database
-                                                            .getBudget(transaction
-                                                                .sharedReferenceBudgetPk!),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (snapshot
-                                                              .hasData) {
-                                                            return Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 3),
-                                                              child: TextFont(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                text: "For " +
-                                                                    snapshot
-                                                                        .data!
-                                                                        .name,
-                                                                fontSize: 12.5,
-                                                                textColor: Theme.of(
-                                                                        context)
-                                                                    .colorScheme
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        0.7),
-                                                              ),
-                                                            );
-                                                          }
-                                                          return Container();
-                                                        },
-                                                      ),
-                                                    ),
-                                            ],
+                      if (onSelected != null)
+                        onSelected!(transaction, selected);
+                    },
+                    onTap: () async {
+                      openContainer();
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeInOutCubicEmphasized,
+                      padding: EdgeInsets.only(
+                        left: selected ? 12 - 2 : 10 - 2,
+                        right: selected ? 12 : 10,
+                        top: selected ? 6 : 4,
+                        bottom: selected ? 6 : 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? appStateSettings["materialYou"]
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer
+                                    .withOpacity(0.13)
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .lightDarkAccentHeavy
+                                    .withAlpha(200)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: Row(
+                        children: [
+                          CategoryIcon(
+                            categoryPk: transaction.categoryFk,
+                            size: 27,
+                            sizePadding: 20,
+                            margin: EdgeInsets.zero,
+                            borderRadius: 100,
+                          ),
+                          Container(
+                            width: 12,
+                          ),
+                          transaction.type != null
+                              ? Padding(
+                                  padding: EdgeInsets.only(right: 5),
+                                  child: Icon(
+                                    getTransactionTypeIcon(transaction.type),
+                                    color: iconColor,
+                                    size: 20,
+                                  ),
+                                )
+                              : SizedBox(),
+                          Expanded(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 3),
+                                child: transaction.name != ""
+                                    ? TextFont(
+                                        text: transaction.name.capitalizeFirst,
+                                        fontSize: 16,
+                                      )
+                                    : category == null
+                                        ? StreamBuilder<TransactionCategory>(
+                                            stream: database.getCategory(
+                                                transaction.categoryFk),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return TextFont(
+                                                  text: snapshot.data!.name,
+                                                  fontSize: 16,
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          )
+                                        : TextFont(
+                                            text: category!.name,
+                                            fontSize: 16,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox.shrink(),
-                            transaction.sharedKey != null ||
-                                    transaction.sharedStatus ==
-                                        SharedStatus.waiting
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 1.0),
-                                    child: Row(
-                                      children: [
-                                        transaction.sharedStatus ==
-                                                SharedStatus.waiting
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 2.0),
-                                                child:
-                                                    InfiniteRotationAnimation(
-                                                  duration: Duration(
-                                                      milliseconds: 5000),
+                              ),
+                              transaction.sharedReferenceBudgetPk != null &&
+                                      transaction.sharedKey == null &&
+                                      transaction.sharedStatus == null
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 1.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                transaction.sharedReferenceBudgetPk ==
+                                                        null
+                                                    ? SizedBox.shrink()
+                                                    : Expanded(
+                                                        child: StreamBuilder<
+                                                            Budget>(
+                                                          stream: database
+                                                              .getBudget(transaction
+                                                                  .sharedReferenceBudgetPk!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                .hasData) {
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            3),
+                                                                child: TextFont(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  text: "For " +
+                                                                      snapshot
+                                                                          .data!
+                                                                          .name,
+                                                                  fontSize:
+                                                                      12.5,
+                                                                  textColor: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.7),
+                                                                ),
+                                                              );
+                                                            }
+                                                            return Container();
+                                                          },
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : SizedBox.shrink(),
+                              transaction.sharedKey != null ||
+                                      transaction.sharedStatus ==
+                                          SharedStatus.waiting
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 1.0),
+                                      child: Row(
+                                        children: [
+                                          transaction.sharedStatus ==
+                                                  SharedStatus.waiting
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 2.0),
+                                                  child:
+                                                      InfiniteRotationAnimation(
+                                                    duration: Duration(
+                                                        milliseconds: 5000),
+                                                    child: Icon(
+                                                      transaction.sharedStatus ==
+                                                              SharedStatus
+                                                                  .waiting
+                                                          ? Icons.sync_rounded
+                                                          : transaction
+                                                                      .transactionOwnerEmail !=
+                                                                  appStateSettings[
+                                                                      "currentUserEmail"]
+                                                              ? Icons
+                                                                  .download_rounded
+                                                              : Icons
+                                                                  .upload_rounded,
+                                                      size: 14,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .black
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 2),
                                                   child: Icon(
-                                                    transaction.sharedStatus ==
-                                                            SharedStatus.waiting
-                                                        ? Icons.sync_rounded
-                                                        : transaction
-                                                                    .transactionOwnerEmail !=
-                                                                appStateSettings[
-                                                                    "currentUserEmail"]
-                                                            ? Icons
-                                                                .download_rounded
-                                                            : Icons
-                                                                .upload_rounded,
+                                                    transaction.transactionOwnerEmail !=
+                                                            appStateSettings[
+                                                                "currentUserEmail"]
+                                                        ? Icons.download_rounded
+                                                        : Icons.upload_rounded,
                                                     size: 14,
                                                     color: Theme.of(context)
                                                         .colorScheme
@@ -348,433 +374,417 @@ class TransactionEntry extends StatelessWidget {
                                                         .withOpacity(0.7),
                                                   ),
                                                 ),
-                                              )
-                                            : Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 2),
-                                                child: Icon(
-                                                  transaction.transactionOwnerEmail !=
-                                                          appStateSettings[
-                                                              "currentUserEmail"]
-                                                      ? Icons.download_rounded
-                                                      : Icons.upload_rounded,
-                                                  size: 14,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .black
-                                                      .withOpacity(0.7),
-                                                ),
-                                              ),
-                                        SizedBox(width: 2),
-                                        Expanded(
-                                          child: Row(
-                                            children: [
-                                              transaction.sharedReferenceBudgetPk ==
-                                                      null
-                                                  ? SizedBox.shrink()
-                                                  : Expanded(
-                                                      child:
-                                                          StreamBuilder<Budget>(
-                                                        stream: database
-                                                            .getBudget(transaction
-                                                                .sharedReferenceBudgetPk!),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (snapshot
-                                                              .hasData) {
-                                                            return TextFont(
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              text: (transaction
-                                                                              .transactionOwnerEmail
-                                                                              .toString() ==
-                                                                          appStateSettings[
-                                                                              "currentUserEmail"]
-                                                                      ? getMemberNickname(
-                                                                          appStateSettings[
-                                                                              "currentUserEmail"])
-                                                                      : transaction.sharedStatus == SharedStatus.waiting &&
-                                                                              (transaction.transactionOwnerEmail == appStateSettings["currentUserEmail"] ||
-                                                                                  transaction.transactionOwnerEmail ==
-                                                                                      null)
-                                                                          ? getMemberNickname(appStateSettings[
-                                                                              "currentUserEmail"])
-                                                                          : getMemberNickname(transaction
-                                                                              .transactionOwnerEmail
-                                                                              .toString())) +
-                                                                  " for " +
-                                                                  snapshot.data!
-                                                                      .name,
-                                                              fontSize: 12.5,
-                                                              textColor: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      0.7),
-                                                            );
-                                                          }
-                                                          return Container();
-                                                        },
+                                          SizedBox(width: 2),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                transaction.sharedReferenceBudgetPk ==
+                                                        null
+                                                    ? SizedBox.shrink()
+                                                    : Expanded(
+                                                        child: StreamBuilder<
+                                                            Budget>(
+                                                          stream: database
+                                                              .getBudget(transaction
+                                                                  .sharedReferenceBudgetPk!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                .hasData) {
+                                                              return TextFont(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                text: (transaction.transactionOwnerEmail.toString() ==
+                                                                            appStateSettings[
+                                                                                "currentUserEmail"]
+                                                                        ? getMemberNickname(appStateSettings[
+                                                                            "currentUserEmail"])
+                                                                        : transaction.sharedStatus == SharedStatus.waiting &&
+                                                                                (transaction.transactionOwnerEmail == appStateSettings["currentUserEmail"] || transaction.transactionOwnerEmail == null)
+                                                                            ? getMemberNickname(appStateSettings["currentUserEmail"])
+                                                                            : getMemberNickname(transaction.transactionOwnerEmail.toString())) +
+                                                                    " for " +
+                                                                    snapshot.data!.name,
+                                                                fontSize: 12.5,
+                                                                textColor: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.7),
+                                                              );
+                                                            }
+                                                            return Container();
+                                                          },
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : SizedBox.shrink()
+                            ],
+                          )),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          // Expanded(
+                          //   child: Container(
+                          //     child: Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: [
+                          //         transaction.name != ""
+                          //             ? TextFont(
+                          //                 text: transaction.name,
+                          //                 fontSize: 20,
+                          //               )
+                          //             : Container(
+                          //                 height: transaction.note == "" ? 0 : 7),
+                          //         transaction.name == "" &&
+                          //                 (transaction.labelFks?.length ?? 0) > 0
+                          //             ? TagIcon(
+                          //                 tag: TransactionTag(
+                          //                     title: "test",
+                          //                     id: "test",
+                          //                     categoryID: "id"),
+                          //                 size: transaction.note == "" ? 20 : 16)
+                          //             : Container(),
+                          //         transaction.name == "" &&
+                          //                 (transaction.labelFks?.length ?? 0) == 0
+                          //             ? StreamBuilder<TransactionCategory>(
+                          //                 stream: database
+                          //                     .getCategory(transaction.categoryFk),
+                          //                 builder: (context, snapshot) {
+                          //                   if (snapshot.hasData) {
+                          //                     return TextFont(
+                          //                       text: snapshot.data!.name,
+                          //                       fontSize:
+                          //                           transaction.note == "" ? 20 : 20,
+                          //                     );
+                          //                   }
+                          //                   return TextFont(
+                          //                     text: "",
+                          //                     fontSize:
+                          //                         transaction.note == "" ? 20 : 20,
+                          //                   );
+                          //                 })
+                          //             : Container(),
+                          //         transaction.name == "" && transaction.note != ""
+                          //             ? Container(height: 4)
+                          //             : Container(),
+                          //         transaction.note == ""
+                          //             ? Container()
+                          //             : TextFont(
+                          //                 text: transaction.note,
+                          //                 fontSize: 16,
+                          //                 maxLines: 2,
+                          //               ),
+                          //         transaction.note == ""
+                          //             ? Container()
+                          //             : Container(height: 4),
+                          //         //TODO loop through all tags relating to this entry
+                          //         transaction.name != "" &&
+                          //                 (transaction.labelFks?.length ?? 0) > 0
+                          //             ? TagIcon(
+                          //                 tag: TransactionTag(
+                          //                     title: "test",
+                          //                     id: "test",
+                          //                     categoryID: "id"),
+                          //                 size: 12)
+                          //             : Container()
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                          transaction.type != null
+                              ? Row(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 3.0),
+                                      child: Tappable(
+                                        color: Colors.transparent,
+                                        borderRadius: 10,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8, horizontal: 3),
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 6, horizontal: 7),
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .lightDarkAccent,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10))),
+                                            child: TextFont(
+                                              text: transaction.income
+                                                  ? (transaction.paid
+                                                      ? "Desposited"
+                                                      : transaction.skipPaid
+                                                          ? "Skipped"
+                                                          : "Desposit?")
+                                                  : (transaction.paid
+                                                      ? "Paid"
+                                                      : transaction.skipPaid
+                                                          ? "Skipped"
+                                                          : "Pay?"),
+                                              fontSize: 14,
+                                              textColor: textColorLight,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          if (transaction.paid == true) {
+                                            openPopup(context,
+                                                icon: Icons.unpublished_rounded,
+                                                title: "Remove Payment?",
+                                                description:
+                                                    "Remove the payment on this transaction?",
+                                                onCancelLabel: "Cancel",
+                                                onCancel: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onSubmitLabel: "Remove",
+                                                onSubmit: () async {
+                                                  await database
+                                                      .deleteTransaction(
+                                                          transaction
+                                                              .transactionPk);
+                                                  Transaction transactionNew =
+                                                      transaction.copyWith(
+                                                    paid: false,
+                                                    sharedKey: Value(null),
+                                                    transactionOriginalOwnerEmail:
+                                                        Value(null),
+                                                    sharedDateUpdated:
+                                                        Value(null),
+                                                    sharedStatus: Value(null),
+                                                  );
+                                                  await database
+                                                      .createOrUpdateTransaction(
+                                                          transactionNew);
+                                                  Navigator.pop(context);
+                                                  setUpcomingNotifications(
+                                                      context);
+                                                });
+                                          } else if (transaction.skipPaid ==
+                                              true) {
+                                            openPopup(context,
+                                                icon: Icons.unpublished_rounded,
+                                                title: "Remove Skip?",
+                                                description:
+                                                    "Remove the skipped payment on this transaction?",
+                                                onCancelLabel: "Cancel",
+                                                onCancel: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onSubmitLabel: "Remove",
+                                                onSubmit: () async {
+                                                  Transaction transactionNew =
+                                                      transaction.copyWith(
+                                                          skipPaid: false);
+                                                  await database
+                                                      .createOrUpdateTransaction(
+                                                          transactionNew);
+                                                  Navigator.pop(context);
+                                                  setUpcomingNotifications(
+                                                      context);
+                                                });
+                                          } else {
+                                            openPopup(
+                                              context,
+                                              icon: Icons.payments_rounded,
+                                              title: transaction.income
+                                                  ? "Desposit?"
+                                                  : "Pay?",
+                                              description: transaction.income
+                                                  ? "Desposit this amount?"
+                                                  : "Add payment on this transaction?",
+                                              onCancelLabel: "Cancel",
+                                              onCancel: () {
+                                                Navigator.pop(context);
+                                              },
+                                              onExtraLabel: "Skip",
+                                              onExtra: () async {
+                                                Transaction transactionNew =
+                                                    transaction.copyWith(
+                                                        skipPaid: true,
+                                                        dateCreated: DateTime(
+                                                            DateTime.now().year,
+                                                            DateTime.now()
+                                                                .month,
+                                                            DateTime.now().day),
+                                                        createdAnotherFutureTransaction:
+                                                            Value(true));
+                                                await database
+                                                    .createOrUpdateTransaction(
+                                                        transactionNew);
+                                                await createNewSubscriptionTransaction(
+                                                    context, transaction);
+                                                Navigator.pop(context);
+                                                setUpcomingNotifications(
+                                                    context);
+                                              },
+                                              onSubmitLabel: transaction.income
+                                                  ? "Desposit"
+                                                  : "Pay",
+                                              onSubmit: () async {
+                                                double amount =
+                                                    transaction.amount;
+                                                if (transaction.amount == 0) {
+                                                  amount =
+                                                      await openBottomSheet(
+                                                    context,
+                                                    PopupFramework(
+                                                      title: "Enter Amount",
+                                                      underTitleSpace: false,
+                                                      child: SelectAmount(
+                                                        setSelectedAmount:
+                                                            (_, __) {},
+                                                        nextLabel: "Set Amount",
+                                                        popWithAmount: true,
                                                       ),
                                                     ),
-                                            ],
-                                          ),
+                                                  );
+                                                }
+                                                Transaction transactionNew =
+                                                    transaction.copyWith(
+                                                        amount: amount,
+                                                        paid: !transaction.paid,
+                                                        dateCreated: DateTime(
+                                                            DateTime.now().year,
+                                                            DateTime.now()
+                                                                .month,
+                                                            DateTime.now().day),
+                                                        createdAnotherFutureTransaction:
+                                                            Value(true));
+                                                await database
+                                                    .createOrUpdateTransaction(
+                                                        transactionNew);
+                                                await createNewSubscriptionTransaction(
+                                                    context, transaction);
+                                                Navigator.pop(context);
+                                                setUpcomingNotifications(
+                                                    context);
+                                              },
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(),
+                          transaction.note.toString().trim() != ""
+                              ? Tooltip(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  margin: EdgeInsets.symmetric(horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .lightDarkAccent,
+                                    boxShadow: boxShadowCheck(
+                                      [
+                                        BoxShadow(
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.light
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .shadowColorLight
+                                                  .withOpacity(0.3)
+                                              : Colors.black.withOpacity(0.5),
+                                          blurRadius: 20,
+                                          offset: Offset(0, 4),
+                                          spreadRadius: 9,
                                         ),
                                       ],
                                     ),
-                                  )
-                                : SizedBox.shrink()
-                          ],
-                        )),
-                        SizedBox(
-                          width: 7,
-                        ),
-                        // Expanded(
-                        //   child: Container(
-                        //     child: Column(
-                        //       crossAxisAlignment: CrossAxisAlignment.start,
-                        //       children: [
-                        //         transaction.name != ""
-                        //             ? TextFont(
-                        //                 text: transaction.name,
-                        //                 fontSize: 20,
-                        //               )
-                        //             : Container(
-                        //                 height: transaction.note == "" ? 0 : 7),
-                        //         transaction.name == "" &&
-                        //                 (transaction.labelFks?.length ?? 0) > 0
-                        //             ? TagIcon(
-                        //                 tag: TransactionTag(
-                        //                     title: "test",
-                        //                     id: "test",
-                        //                     categoryID: "id"),
-                        //                 size: transaction.note == "" ? 20 : 16)
-                        //             : Container(),
-                        //         transaction.name == "" &&
-                        //                 (transaction.labelFks?.length ?? 0) == 0
-                        //             ? StreamBuilder<TransactionCategory>(
-                        //                 stream: database
-                        //                     .getCategory(transaction.categoryFk),
-                        //                 builder: (context, snapshot) {
-                        //                   if (snapshot.hasData) {
-                        //                     return TextFont(
-                        //                       text: snapshot.data!.name,
-                        //                       fontSize:
-                        //                           transaction.note == "" ? 20 : 20,
-                        //                     );
-                        //                   }
-                        //                   return TextFont(
-                        //                     text: "",
-                        //                     fontSize:
-                        //                         transaction.note == "" ? 20 : 20,
-                        //                   );
-                        //                 })
-                        //             : Container(),
-                        //         transaction.name == "" && transaction.note != ""
-                        //             ? Container(height: 4)
-                        //             : Container(),
-                        //         transaction.note == ""
-                        //             ? Container()
-                        //             : TextFont(
-                        //                 text: transaction.note,
-                        //                 fontSize: 16,
-                        //                 maxLines: 2,
-                        //               ),
-                        //         transaction.note == ""
-                        //             ? Container()
-                        //             : Container(height: 4),
-                        //         //TODO loop through all tags relating to this entry
-                        //         transaction.name != "" &&
-                        //                 (transaction.labelFks?.length ?? 0) > 0
-                        //             ? TagIcon(
-                        //                 tag: TransactionTag(
-                        //                     title: "test",
-                        //                     id: "test",
-                        //                     categoryID: "id"),
-                        //                 size: 12)
-                        //             : Container()
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        transaction.type != null
-                            ? Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 3.0),
-                                    child: Tappable(
-                                      color: Colors.transparent,
-                                      borderRadius: 10,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 3),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 6, horizontal: 7),
-                                          decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .lightDarkAccent,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10))),
-                                          child: TextFont(
-                                            text: transaction.income
-                                                ? (transaction.paid
-                                                    ? "Desposited"
-                                                    : transaction.skipPaid
-                                                        ? "Skipped"
-                                                        : "Desposit?")
-                                                : (transaction.paid
-                                                    ? "Paid"
-                                                    : transaction.skipPaid
-                                                        ? "Skipped"
-                                                        : "Pay?"),
-                                            fontSize: 14,
-                                            textColor: textColorLight,
-                                          ),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        if (transaction.paid == true) {
-                                          openPopup(context,
-                                              icon: Icons.unpublished_rounded,
-                                              title: "Remove Payment?",
-                                              description:
-                                                  "Remove the payment on this transaction?",
-                                              onCancelLabel: "Cancel",
-                                              onCancel: () {
-                                                Navigator.pop(context);
-                                              },
-                                              onSubmitLabel: "Remove",
-                                              onSubmit: () async {
-                                                await database
-                                                    .deleteTransaction(
-                                                        transaction
-                                                            .transactionPk);
-                                                Transaction transactionNew =
-                                                    transaction.copyWith(
-                                                  paid: false,
-                                                  sharedKey: Value(null),
-                                                  transactionOriginalOwnerEmail:
-                                                      Value(null),
-                                                  sharedDateUpdated:
-                                                      Value(null),
-                                                  sharedStatus: Value(null),
-                                                );
-                                                await database
-                                                    .createOrUpdateTransaction(
-                                                        transactionNew);
-                                                Navigator.pop(context);
-                                                setUpcomingNotifications(
-                                                    context);
-                                              });
-                                        } else if (transaction.skipPaid ==
-                                            true) {
-                                          openPopup(context,
-                                              icon: Icons.unpublished_rounded,
-                                              title: "Remove Skip?",
-                                              description:
-                                                  "Remove the skipped payment on this transaction?",
-                                              onCancelLabel: "Cancel",
-                                              onCancel: () {
-                                                Navigator.pop(context);
-                                              },
-                                              onSubmitLabel: "Remove",
-                                              onSubmit: () async {
-                                                Transaction transactionNew =
-                                                    transaction.copyWith(
-                                                        skipPaid: false);
-                                                await database
-                                                    .createOrUpdateTransaction(
-                                                        transactionNew);
-                                                Navigator.pop(context);
-                                                setUpcomingNotifications(
-                                                    context);
-                                              });
-                                        } else {
-                                          openPopup(
-                                            context,
-                                            icon: Icons.payments_rounded,
-                                            title: transaction.income
-                                                ? "Desposit?"
-                                                : "Pay?",
-                                            description: transaction.income
-                                                ? "Desposit this amount?"
-                                                : "Add payment on this transaction?",
-                                            onCancelLabel: "Cancel",
-                                            onCancel: () {
-                                              Navigator.pop(context);
-                                            },
-                                            onExtraLabel: "Skip",
-                                            onExtra: () async {
-                                              Transaction transactionNew =
-                                                  transaction.copyWith(
-                                                      skipPaid: true,
-                                                      dateCreated: DateTime(
-                                                          DateTime.now().year,
-                                                          DateTime.now().month,
-                                                          DateTime.now().day),
-                                                      createdAnotherFutureTransaction:
-                                                          Value(true));
-                                              await database
-                                                  .createOrUpdateTransaction(
-                                                      transactionNew);
-                                              await createNewSubscriptionTransaction(
-                                                  context, transaction);
-                                              Navigator.pop(context);
-                                              setUpcomingNotifications(context);
-                                            },
-                                            onSubmitLabel: transaction.income
-                                                ? "Desposit"
-                                                : "Pay",
-                                            onSubmit: () async {
-                                              double amount =
-                                                  transaction.amount;
-                                              if (transaction.amount == 0) {
-                                                amount = await openBottomSheet(
-                                                  context,
-                                                  PopupFramework(
-                                                    title: "Enter Amount",
-                                                    underTitleSpace: false,
-                                                    child: SelectAmount(
-                                                      setSelectedAmount:
-                                                          (_, __) {},
-                                                      nextLabel: "Set Amount",
-                                                      popWithAmount: true,
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                              Transaction transactionNew =
-                                                  transaction.copyWith(
-                                                      amount: amount,
-                                                      paid: !transaction.paid,
-                                                      dateCreated: DateTime(
-                                                          DateTime.now().year,
-                                                          DateTime.now().month,
-                                                          DateTime.now().day),
-                                                      createdAnotherFutureTransaction:
-                                                          Value(true));
-                                              await database
-                                                  .createOrUpdateTransaction(
-                                                      transactionNew);
-                                              await createNewSubscriptionTransaction(
-                                                  context, transaction);
-                                              Navigator.pop(context);
-                                              setUpcomingNotifications(context);
-                                            },
-                                          );
-                                        }
-                                      },
+                                  ),
+                                  textStyle: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.black,
+                                      fontFamily: 'Avenir'),
+                                  triggerMode: TooltipTriggerMode.tap,
+                                  showDuration: Duration(milliseconds: 10000),
+                                  message: transaction.note,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 7, vertical: 10),
+                                    child: Icon(
+                                      Icons.sticky_note_2_rounded,
+                                      size: 22,
+                                      color: iconColor,
                                     ),
                                   ),
-                                ],
-                              )
-                            : SizedBox(),
-                        transaction.note.toString().trim() != ""
-                            ? Tooltip(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                margin: EdgeInsets.symmetric(horizontal: 15),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .lightDarkAccent,
-                                  boxShadow: boxShadowCheck(
-                                    [
-                                      BoxShadow(
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.light
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .shadowColorLight
-                                                .withOpacity(0.3)
-                                            : Colors.black.withOpacity(0.5),
-                                        blurRadius: 20,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 9,
+                                )
+                              : SizedBox.shrink(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CountNumber(
+                                count: (transaction.amount.abs()),
+                                duration: Duration(milliseconds: 2000),
+                                dynamicDecimals: true,
+                                initialCount: (transaction.amount.abs()),
+                                textBuilder: (number) {
+                                  return TextFont(
+                                    text: convertToMoney(
+                                        number *
+                                            (amountRatioToPrimaryCurrencyGivenPk(
+                                                    transaction.walletFk) ??
+                                                1),
+                                        showCurrency: false),
+                                    fontSize: 19 -
+                                        (transaction.walletFk !=
+                                                appStateSettings[
+                                                    "selectedWallet"]
+                                            ? 1
+                                            : 0),
+                                    fontWeight: FontWeight.bold,
+                                    textColor: textColor,
+                                    walletPkForCurrency: transaction.walletFk,
+                                    onlyShowCurrencyIcon: true,
+                                  );
+                                },
+                              ),
+                              transaction.walletFk !=
+                                      appStateSettings["selectedWallet"]
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 1),
+                                      child: TextFont(
+                                        text: convertToMoney(
+                                            transaction.amount.abs(),
+                                            showCurrency: false),
+                                        fontSize: 12,
+                                        textColor: textColor.withOpacity(0.6),
+                                        walletPkForCurrency:
+                                            transaction.walletFk,
+                                        onlyShowCurrencyIcon: transaction
+                                                .walletFk ==
+                                            appStateSettings["selectedWallet"],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                textStyle: TextStyle(
-                                    color: Theme.of(context).colorScheme.black,
-                                    fontFamily: 'Avenir'),
-                                triggerMode: TooltipTriggerMode.tap,
-                                showDuration: Duration(milliseconds: 10000),
-                                message: transaction.note,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 7, vertical: 10),
-                                  child: Icon(
-                                    Icons.sticky_note_2_rounded,
-                                    size: 22,
-                                    color: iconColor,
-                                  ),
-                                ),
-                              )
-                            : SizedBox.shrink(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CountNumber(
-                              count: (transaction.amount.abs()),
-                              duration: Duration(milliseconds: 2000),
-                              dynamicDecimals: true,
-                              initialCount: (transaction.amount.abs()),
-                              textBuilder: (number) {
-                                return TextFont(
-                                  text: convertToMoney(
-                                      number *
-                                          (amountRatioToPrimaryCurrencyGivenPk(
-                                                  transaction.walletFk) ??
-                                              1),
-                                      showCurrency: false),
-                                  fontSize: 19 -
-                                      (transaction.walletFk !=
-                                              appStateSettings["selectedWallet"]
-                                          ? 1
-                                          : 0),
-                                  fontWeight: FontWeight.bold,
-                                  textColor: textColor,
-                                  walletPkForCurrency: transaction.walletFk,
-                                  onlyShowCurrencyIcon: true,
-                                );
-                              },
-                            ),
-                            transaction.walletFk !=
-                                    appStateSettings["selectedWallet"]
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 1),
-                                    child: TextFont(
-                                      text: convertToMoney(
-                                          transaction.amount.abs(),
-                                          showCurrency: false),
-                                      fontSize: 12,
-                                      textColor: textColor.withOpacity(0.6),
-                                      walletPkForCurrency: transaction.walletFk,
-                                      onlyShowCurrencyIcon: transaction
-                                              .walletFk ==
-                                          appStateSettings["selectedWallet"],
-                                    ),
-                                  )
-                                : SizedBox.shrink(),
-                          ],
-                        ),
-                      ],
+                                    )
+                                  : SizedBox.shrink(),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-            openPage: openPage,
-            closedColor: Theme.of(context).colorScheme.background,
-          );
-        },
+                );
+              },
+              openPage: openPage,
+              closedColor: Theme.of(context).colorScheme.background,
+            );
+          },
+        ),
       ),
     );
   }
@@ -1030,27 +1040,31 @@ class DateDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextFont(
-            text: getWordedDate(date,
-                includeMonthDate: true, includeYearIfNotCurrentYear: true),
-            fontSize: 14,
-            textColor: Theme.of(context).colorScheme.textLight,
-          ),
-          info != null
-              ? TextFont(
-                  text: info!,
-                  fontSize: 14,
-                  textColor: Theme.of(context).colorScheme.textLight,
-                )
-              : SizedBox()
-        ],
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(context)),
+      child: Container(
+        color: Theme.of(context).colorScheme.background,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextFont(
+              text: getWordedDate(date,
+                  includeMonthDate: true, includeYearIfNotCurrentYear: true),
+              fontSize: 14,
+              textColor: Theme.of(context).colorScheme.textLight,
+            ),
+            info != null
+                ? TextFont(
+                    text: info!,
+                    fontSize: 14,
+                    textColor: Theme.of(context).colorScheme.textLight,
+                  )
+                : SizedBox()
+          ],
+        ),
       ),
     );
   }

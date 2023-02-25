@@ -21,10 +21,10 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 27;
+int schemaVersionGlobal = 28;
 
 // Generate database code
-// flutter packages pub run build_runner build
+// flutter packages pub run build_runner build --delete-conflicting-outputs
 
 // Character Limits
 const int NAME_LIMIT = 250;
@@ -179,6 +179,14 @@ class Categories extends Table {
       text().map(const StringListInColumnConverter()).nullable()();
 }
 
+@DataClassName('CategoryBudgetLimit')
+class CategoryBudgetLimits extends Table {
+  IntColumn get categoryLimitPk => integer().autoIncrement()();
+  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
+  IntColumn get budgetFk => integer().references(Budgets, #budgetPk)();
+  RealColumn get amount => real()();
+}
+
 //If a title is in a smart label, automatically choose this category
 // For e.g. for Food category
 // smartLabels = ["apple", "pear"]
@@ -289,6 +297,7 @@ class CategoryWithTotal {
   Wallets,
   Transactions,
   Categories,
+  CategoryBudgetLimits,
   Labels,
   AssociatedTitles,
   Budgets,
@@ -369,6 +378,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 26) {
             await migrator.addColumn(
                 transactions, transactions.upcomingTransactionNotification);
+          }
+          if (from <= 27) {
+            await migrator.createTable($CategoryBudgetLimitsTable(database));
           }
         },
       );

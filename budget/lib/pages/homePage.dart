@@ -17,6 +17,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
@@ -617,66 +618,70 @@ class _SlidingSelectorState extends State<SlidingSelector> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.alternateTheme
-          ? const EdgeInsets.symmetric(horizontal: 20)
-          : const EdgeInsets.symmetric(horizontal: 13),
-      child: CustomSlidingSegmentedControl<int>(
-        innerPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-        initialValue: 1,
-        isStretch: true,
-        height: widget.alternateTheme ? 38 : 45,
-        // splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
-        // splashColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
-        children: {
-          1: SlidingSelectorChip(
-            icon: Icons.all_inbox_rounded,
-            name: "All",
-            selected: selectedTab == 1,
+      padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(context)),
+      child: Padding(
+        padding: widget.alternateTheme
+            ? const EdgeInsets.symmetric(horizontal: 20)
+            : const EdgeInsets.symmetric(horizontal: 13),
+        child: CustomSlidingSegmentedControl<int>(
+          innerPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          initialValue: 1,
+          isStretch: true,
+          height: widget.alternateTheme ? 38 : 45,
+          // splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
+          // splashColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+          children: {
+            1: SlidingSelectorChip(
+              icon: Icons.all_inbox_rounded,
+              name: "All",
+              selected: selectedTab == 1,
+            ),
+            2: SlidingSelectorChip(
+              icon: Icons.exit_to_app_rounded,
+              name: "Expense",
+              selected: selectedTab == 2,
+            ),
+            3: SlidingSelectorChip(
+              icon: Icons.move_to_inbox_rounded,
+              name: "Income",
+              selected: selectedTab == 3,
+            ),
+          },
+          decoration: BoxDecoration(
+            color: widget.alternateTheme
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : Theme.of(context).colorScheme.lightDarkAccent,
+            borderRadius: BorderRadius.circular(15),
           ),
-          2: SlidingSelectorChip(
-            icon: Icons.exit_to_app_rounded,
-            name: "Expense",
-            selected: selectedTab == 2,
-          ),
-          3: SlidingSelectorChip(
-            icon: Icons.move_to_inbox_rounded,
-            name: "Income",
-            selected: selectedTab == 3,
-          ),
-        },
-        decoration: BoxDecoration(
-          color: widget.alternateTheme
-              ? Theme.of(context).colorScheme.secondaryContainer
-              : Theme.of(context).colorScheme.lightDarkAccent,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        thumbDecoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
-          borderRadius: widget.alternateTheme
-              ? BorderRadius.circular(10)
-              : BorderRadius.circular(15),
-          boxShadow: boxShadowCheck(
-            [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 5,
-                spreadRadius: 2,
-                offset: Offset(
-                  0.0,
-                  2.0,
+          thumbDecoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.background,
+            borderRadius: widget.alternateTheme
+                ? BorderRadius.circular(10)
+                : BorderRadius.circular(15),
+            boxShadow: boxShadowCheck(
+              [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 5,
+                  spreadRadius: 2,
+                  offset: Offset(
+                    0.0,
+                    2.0,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          duration: Duration(milliseconds: 800),
+          curve: Curves.easeInOutCubicEmphasized,
+          onValueChanged: (index) {
+            widget.onSelected(index);
+            setState(() {
+              selectedTab = index;
+            });
+          },
         ),
-        duration: Duration(milliseconds: 800),
-        curve: Curves.easeInOutCubicEmphasized,
-        onValueChanged: (index) {
-          widget.onSelected(index);
-          setState(() {
-            selectedTab = index;
-          });
-        },
       ),
     );
   }

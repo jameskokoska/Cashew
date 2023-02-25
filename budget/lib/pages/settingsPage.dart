@@ -91,6 +91,7 @@ class SettingsPageState extends State<SettingsPage>
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         // SettingsContainerOpenPage(
         //   openPage: ColorsPage(),

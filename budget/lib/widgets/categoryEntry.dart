@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -64,74 +65,79 @@ class CategoryEntry extends StatelessWidget {
         ),
       );
     } else {
-      component = Row(
-        children: [
-          // CategoryIcon(
-          //   category: category,
-          //   size: 30,
-          //   margin: EdgeInsets.zero,
-          // ),
-          CategoryIconPercent(
-            category: category,
-            percent: categorySpent / totalSpent * 100,
-            progressBackgroundColor: selected
-                ? Theme.of(context).colorScheme.white
-                : Theme.of(context).colorScheme.lightDarkAccentHeavy,
-            size: 28,
-            insetPadding: 18,
-          ),
-          Container(
-            width: 15,
-          ),
-          Expanded(
-            child: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextFont(
-                    text: category.name,
-                    fontSize: 18,
-                  ),
-                  SizedBox(
-                    height: 1,
-                  ),
-                  TextFont(
-                    text:
-                        (categorySpent / totalSpent * 100).toStringAsFixed(0) +
-                            "% of budget",
-                    fontSize: 14,
-                    textColor: selected
-                        ? Theme.of(context).colorScheme.black.withOpacity(0.4)
-                        : Theme.of(context).colorScheme.textLight,
-                  )
-                ],
+      component = Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(context),
+        ),
+        child: Row(
+          children: [
+            // CategoryIcon(
+            //   category: category,
+            //   size: 30,
+            //   margin: EdgeInsets.zero,
+            // ),
+            CategoryIconPercent(
+              category: category,
+              percent: categorySpent / totalSpent * 100,
+              progressBackgroundColor: selected
+                  ? Theme.of(context).colorScheme.white
+                  : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+              size: 28,
+              insetPadding: 18,
+            ),
+            Container(
+              width: 15,
+            ),
+            Expanded(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextFont(
+                      text: category.name,
+                      fontSize: 18,
+                    ),
+                    SizedBox(
+                      height: 1,
+                    ),
+                    TextFont(
+                      text: (categorySpent / totalSpent * 100)
+                              .toStringAsFixed(0) +
+                          "% of budget",
+                      fontSize: 14,
+                      textColor: selected
+                          ? Theme.of(context).colorScheme.black.withOpacity(0.4)
+                          : Theme.of(context).colorScheme.textLight,
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextFont(
-                fontWeight: FontWeight.bold,
-                text: convertToMoney(categorySpent),
-                fontSize: 20,
-              ),
-              SizedBox(
-                height: 0,
-              ),
-              TextFont(
-                text: transactionCount.toString() +
-                    pluralString(transactionCount == 1, " transaction"),
-                fontSize: 14,
-                textColor: selected
-                    ? Theme.of(context).colorScheme.black.withOpacity(0.4)
-                    : Theme.of(context).colorScheme.textLight,
-              )
-            ],
-          ),
-        ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextFont(
+                  fontWeight: FontWeight.bold,
+                  text: convertToMoney(categorySpent),
+                  fontSize: 20,
+                ),
+                SizedBox(
+                  height: 0,
+                ),
+                TextFont(
+                  text: transactionCount.toString() +
+                      pluralString(transactionCount == 1, " transaction"),
+                  fontSize: 14,
+                  textColor: selected
+                      ? Theme.of(context).colorScheme.black.withOpacity(0.4)
+                      : Theme.of(context).colorScheme.textLight,
+                )
+              ],
+            ),
+          ],
+        ),
       );
     }
     return WillPopScope(

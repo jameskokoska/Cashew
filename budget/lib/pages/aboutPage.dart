@@ -6,6 +6,7 @@ import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -30,6 +31,7 @@ class AboutPage extends StatelessWidget {
       navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),

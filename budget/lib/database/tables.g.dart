@@ -2234,649 +2234,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   }
 }
 
-class $LabelsTable extends Labels
-    with TableInfo<$LabelsTable, TransactionLabel> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $LabelsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _label_pkMeta =
-      const VerificationMeta('label_pk');
-  @override
-  late final GeneratedColumn<int> label_pk = GeneratedColumn<int>(
-      'label_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _categoryFkMeta =
-      const VerificationMeta('categoryFk');
-  @override
-  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
-      'category_fk', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES categories (category_pk)'));
-  static const VerificationMeta _dateCreatedMeta =
-      const VerificationMeta('dateCreated');
-  @override
-  late final GeneratedColumn<DateTime> dateCreated = GeneratedColumn<DateTime>(
-      'date_created', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      clientDefault: () => new DateTime.now());
-  static const VerificationMeta _orderMeta = const VerificationMeta('order');
-  @override
-  late final GeneratedColumn<int> order = GeneratedColumn<int>(
-      'order', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [label_pk, name, categoryFk, dateCreated, order];
-  @override
-  String get aliasedName => _alias ?? 'labels';
-  @override
-  String get actualTableName => 'labels';
-  @override
-  VerificationContext validateIntegrity(Insertable<TransactionLabel> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('label_pk')) {
-      context.handle(_label_pkMeta,
-          label_pk.isAcceptableOrUnknown(data['label_pk']!, _label_pkMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('category_fk')) {
-      context.handle(
-          _categoryFkMeta,
-          categoryFk.isAcceptableOrUnknown(
-              data['category_fk']!, _categoryFkMeta));
-    } else if (isInserting) {
-      context.missing(_categoryFkMeta);
-    }
-    if (data.containsKey('date_created')) {
-      context.handle(
-          _dateCreatedMeta,
-          dateCreated.isAcceptableOrUnknown(
-              data['date_created']!, _dateCreatedMeta));
-    }
-    if (data.containsKey('order')) {
-      context.handle(
-          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
-    } else if (isInserting) {
-      context.missing(_orderMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {label_pk};
-  @override
-  TransactionLabel map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TransactionLabel(
-      label_pk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}label_pk'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      categoryFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
-      dateCreated: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
-      order: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
-    );
-  }
-
-  @override
-  $LabelsTable createAlias(String alias) {
-    return $LabelsTable(attachedDatabase, alias);
-  }
-}
-
-class TransactionLabel extends DataClass
-    implements Insertable<TransactionLabel> {
-  final int label_pk;
-  final String name;
-  final int categoryFk;
-  final DateTime dateCreated;
-  final int order;
-  const TransactionLabel(
-      {required this.label_pk,
-      required this.name,
-      required this.categoryFk,
-      required this.dateCreated,
-      required this.order});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['label_pk'] = Variable<int>(label_pk);
-    map['name'] = Variable<String>(name);
-    map['category_fk'] = Variable<int>(categoryFk);
-    map['date_created'] = Variable<DateTime>(dateCreated);
-    map['order'] = Variable<int>(order);
-    return map;
-  }
-
-  LabelsCompanion toCompanion(bool nullToAbsent) {
-    return LabelsCompanion(
-      label_pk: Value(label_pk),
-      name: Value(name),
-      categoryFk: Value(categoryFk),
-      dateCreated: Value(dateCreated),
-      order: Value(order),
-    );
-  }
-
-  factory TransactionLabel.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TransactionLabel(
-      label_pk: serializer.fromJson<int>(json['label_pk']),
-      name: serializer.fromJson<String>(json['name']),
-      categoryFk: serializer.fromJson<int>(json['categoryFk']),
-      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
-      order: serializer.fromJson<int>(json['order']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'label_pk': serializer.toJson<int>(label_pk),
-      'name': serializer.toJson<String>(name),
-      'categoryFk': serializer.toJson<int>(categoryFk),
-      'dateCreated': serializer.toJson<DateTime>(dateCreated),
-      'order': serializer.toJson<int>(order),
-    };
-  }
-
-  TransactionLabel copyWith(
-          {int? label_pk,
-          String? name,
-          int? categoryFk,
-          DateTime? dateCreated,
-          int? order}) =>
-      TransactionLabel(
-        label_pk: label_pk ?? this.label_pk,
-        name: name ?? this.name,
-        categoryFk: categoryFk ?? this.categoryFk,
-        dateCreated: dateCreated ?? this.dateCreated,
-        order: order ?? this.order,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('TransactionLabel(')
-          ..write('label_pk: $label_pk, ')
-          ..write('name: $name, ')
-          ..write('categoryFk: $categoryFk, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(label_pk, name, categoryFk, dateCreated, order);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is TransactionLabel &&
-          other.label_pk == this.label_pk &&
-          other.name == this.name &&
-          other.categoryFk == this.categoryFk &&
-          other.dateCreated == this.dateCreated &&
-          other.order == this.order);
-}
-
-class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
-  final Value<int> label_pk;
-  final Value<String> name;
-  final Value<int> categoryFk;
-  final Value<DateTime> dateCreated;
-  final Value<int> order;
-  const LabelsCompanion({
-    this.label_pk = const Value.absent(),
-    this.name = const Value.absent(),
-    this.categoryFk = const Value.absent(),
-    this.dateCreated = const Value.absent(),
-    this.order = const Value.absent(),
-  });
-  LabelsCompanion.insert({
-    this.label_pk = const Value.absent(),
-    required String name,
-    required int categoryFk,
-    this.dateCreated = const Value.absent(),
-    required int order,
-  })  : name = Value(name),
-        categoryFk = Value(categoryFk),
-        order = Value(order);
-  static Insertable<TransactionLabel> custom({
-    Expression<int>? label_pk,
-    Expression<String>? name,
-    Expression<int>? categoryFk,
-    Expression<DateTime>? dateCreated,
-    Expression<int>? order,
-  }) {
-    return RawValuesInsertable({
-      if (label_pk != null) 'label_pk': label_pk,
-      if (name != null) 'name': name,
-      if (categoryFk != null) 'category_fk': categoryFk,
-      if (dateCreated != null) 'date_created': dateCreated,
-      if (order != null) 'order': order,
-    });
-  }
-
-  LabelsCompanion copyWith(
-      {Value<int>? label_pk,
-      Value<String>? name,
-      Value<int>? categoryFk,
-      Value<DateTime>? dateCreated,
-      Value<int>? order}) {
-    return LabelsCompanion(
-      label_pk: label_pk ?? this.label_pk,
-      name: name ?? this.name,
-      categoryFk: categoryFk ?? this.categoryFk,
-      dateCreated: dateCreated ?? this.dateCreated,
-      order: order ?? this.order,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (label_pk.present) {
-      map['label_pk'] = Variable<int>(label_pk.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (categoryFk.present) {
-      map['category_fk'] = Variable<int>(categoryFk.value);
-    }
-    if (dateCreated.present) {
-      map['date_created'] = Variable<DateTime>(dateCreated.value);
-    }
-    if (order.present) {
-      map['order'] = Variable<int>(order.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('LabelsCompanion(')
-          ..write('label_pk: $label_pk, ')
-          ..write('name: $name, ')
-          ..write('categoryFk: $categoryFk, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $AssociatedTitlesTable extends AssociatedTitles
-    with TableInfo<$AssociatedTitlesTable, TransactionAssociatedTitle> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $AssociatedTitlesTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _associatedTitlePkMeta =
-      const VerificationMeta('associatedTitlePk');
-  @override
-  late final GeneratedColumn<int> associatedTitlePk = GeneratedColumn<int>(
-      'associated_title_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-      'title', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _categoryFkMeta =
-      const VerificationMeta('categoryFk');
-  @override
-  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
-      'category_fk', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES categories (category_pk)'));
-  static const VerificationMeta _dateCreatedMeta =
-      const VerificationMeta('dateCreated');
-  @override
-  late final GeneratedColumn<DateTime> dateCreated = GeneratedColumn<DateTime>(
-      'date_created', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      clientDefault: () => new DateTime.now());
-  static const VerificationMeta _orderMeta = const VerificationMeta('order');
-  @override
-  late final GeneratedColumn<int> order = GeneratedColumn<int>(
-      'order', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _isExactMatchMeta =
-      const VerificationMeta('isExactMatch');
-  @override
-  late final GeneratedColumn<bool> isExactMatch =
-      GeneratedColumn<bool>('is_exact_match', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_exact_match" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [associatedTitlePk, title, categoryFk, dateCreated, order, isExactMatch];
-  @override
-  String get aliasedName => _alias ?? 'associated_titles';
-  @override
-  String get actualTableName => 'associated_titles';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<TransactionAssociatedTitle> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('associated_title_pk')) {
-      context.handle(
-          _associatedTitlePkMeta,
-          associatedTitlePk.isAcceptableOrUnknown(
-              data['associated_title_pk']!, _associatedTitlePkMeta));
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('category_fk')) {
-      context.handle(
-          _categoryFkMeta,
-          categoryFk.isAcceptableOrUnknown(
-              data['category_fk']!, _categoryFkMeta));
-    } else if (isInserting) {
-      context.missing(_categoryFkMeta);
-    }
-    if (data.containsKey('date_created')) {
-      context.handle(
-          _dateCreatedMeta,
-          dateCreated.isAcceptableOrUnknown(
-              data['date_created']!, _dateCreatedMeta));
-    }
-    if (data.containsKey('order')) {
-      context.handle(
-          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
-    } else if (isInserting) {
-      context.missing(_orderMeta);
-    }
-    if (data.containsKey('is_exact_match')) {
-      context.handle(
-          _isExactMatchMeta,
-          isExactMatch.isAcceptableOrUnknown(
-              data['is_exact_match']!, _isExactMatchMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {associatedTitlePk};
-  @override
-  TransactionAssociatedTitle map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TransactionAssociatedTitle(
-      associatedTitlePk: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}associated_title_pk'])!,
-      title: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      categoryFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
-      dateCreated: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
-      order: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
-      isExactMatch: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_exact_match'])!,
-    );
-  }
-
-  @override
-  $AssociatedTitlesTable createAlias(String alias) {
-    return $AssociatedTitlesTable(attachedDatabase, alias);
-  }
-}
-
-class TransactionAssociatedTitle extends DataClass
-    implements Insertable<TransactionAssociatedTitle> {
-  final int associatedTitlePk;
-  final String title;
-  final int categoryFk;
-  final DateTime dateCreated;
-  final int order;
-  final bool isExactMatch;
-  const TransactionAssociatedTitle(
-      {required this.associatedTitlePk,
-      required this.title,
-      required this.categoryFk,
-      required this.dateCreated,
-      required this.order,
-      required this.isExactMatch});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['associated_title_pk'] = Variable<int>(associatedTitlePk);
-    map['title'] = Variable<String>(title);
-    map['category_fk'] = Variable<int>(categoryFk);
-    map['date_created'] = Variable<DateTime>(dateCreated);
-    map['order'] = Variable<int>(order);
-    map['is_exact_match'] = Variable<bool>(isExactMatch);
-    return map;
-  }
-
-  AssociatedTitlesCompanion toCompanion(bool nullToAbsent) {
-    return AssociatedTitlesCompanion(
-      associatedTitlePk: Value(associatedTitlePk),
-      title: Value(title),
-      categoryFk: Value(categoryFk),
-      dateCreated: Value(dateCreated),
-      order: Value(order),
-      isExactMatch: Value(isExactMatch),
-    );
-  }
-
-  factory TransactionAssociatedTitle.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TransactionAssociatedTitle(
-      associatedTitlePk: serializer.fromJson<int>(json['associatedTitlePk']),
-      title: serializer.fromJson<String>(json['title']),
-      categoryFk: serializer.fromJson<int>(json['categoryFk']),
-      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
-      order: serializer.fromJson<int>(json['order']),
-      isExactMatch: serializer.fromJson<bool>(json['isExactMatch']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'associatedTitlePk': serializer.toJson<int>(associatedTitlePk),
-      'title': serializer.toJson<String>(title),
-      'categoryFk': serializer.toJson<int>(categoryFk),
-      'dateCreated': serializer.toJson<DateTime>(dateCreated),
-      'order': serializer.toJson<int>(order),
-      'isExactMatch': serializer.toJson<bool>(isExactMatch),
-    };
-  }
-
-  TransactionAssociatedTitle copyWith(
-          {int? associatedTitlePk,
-          String? title,
-          int? categoryFk,
-          DateTime? dateCreated,
-          int? order,
-          bool? isExactMatch}) =>
-      TransactionAssociatedTitle(
-        associatedTitlePk: associatedTitlePk ?? this.associatedTitlePk,
-        title: title ?? this.title,
-        categoryFk: categoryFk ?? this.categoryFk,
-        dateCreated: dateCreated ?? this.dateCreated,
-        order: order ?? this.order,
-        isExactMatch: isExactMatch ?? this.isExactMatch,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('TransactionAssociatedTitle(')
-          ..write('associatedTitlePk: $associatedTitlePk, ')
-          ..write('title: $title, ')
-          ..write('categoryFk: $categoryFk, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order, ')
-          ..write('isExactMatch: $isExactMatch')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      associatedTitlePk, title, categoryFk, dateCreated, order, isExactMatch);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is TransactionAssociatedTitle &&
-          other.associatedTitlePk == this.associatedTitlePk &&
-          other.title == this.title &&
-          other.categoryFk == this.categoryFk &&
-          other.dateCreated == this.dateCreated &&
-          other.order == this.order &&
-          other.isExactMatch == this.isExactMatch);
-}
-
-class AssociatedTitlesCompanion
-    extends UpdateCompanion<TransactionAssociatedTitle> {
-  final Value<int> associatedTitlePk;
-  final Value<String> title;
-  final Value<int> categoryFk;
-  final Value<DateTime> dateCreated;
-  final Value<int> order;
-  final Value<bool> isExactMatch;
-  const AssociatedTitlesCompanion({
-    this.associatedTitlePk = const Value.absent(),
-    this.title = const Value.absent(),
-    this.categoryFk = const Value.absent(),
-    this.dateCreated = const Value.absent(),
-    this.order = const Value.absent(),
-    this.isExactMatch = const Value.absent(),
-  });
-  AssociatedTitlesCompanion.insert({
-    this.associatedTitlePk = const Value.absent(),
-    required String title,
-    required int categoryFk,
-    this.dateCreated = const Value.absent(),
-    required int order,
-    this.isExactMatch = const Value.absent(),
-  })  : title = Value(title),
-        categoryFk = Value(categoryFk),
-        order = Value(order);
-  static Insertable<TransactionAssociatedTitle> custom({
-    Expression<int>? associatedTitlePk,
-    Expression<String>? title,
-    Expression<int>? categoryFk,
-    Expression<DateTime>? dateCreated,
-    Expression<int>? order,
-    Expression<bool>? isExactMatch,
-  }) {
-    return RawValuesInsertable({
-      if (associatedTitlePk != null) 'associated_title_pk': associatedTitlePk,
-      if (title != null) 'title': title,
-      if (categoryFk != null) 'category_fk': categoryFk,
-      if (dateCreated != null) 'date_created': dateCreated,
-      if (order != null) 'order': order,
-      if (isExactMatch != null) 'is_exact_match': isExactMatch,
-    });
-  }
-
-  AssociatedTitlesCompanion copyWith(
-      {Value<int>? associatedTitlePk,
-      Value<String>? title,
-      Value<int>? categoryFk,
-      Value<DateTime>? dateCreated,
-      Value<int>? order,
-      Value<bool>? isExactMatch}) {
-    return AssociatedTitlesCompanion(
-      associatedTitlePk: associatedTitlePk ?? this.associatedTitlePk,
-      title: title ?? this.title,
-      categoryFk: categoryFk ?? this.categoryFk,
-      dateCreated: dateCreated ?? this.dateCreated,
-      order: order ?? this.order,
-      isExactMatch: isExactMatch ?? this.isExactMatch,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (associatedTitlePk.present) {
-      map['associated_title_pk'] = Variable<int>(associatedTitlePk.value);
-    }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
-    }
-    if (categoryFk.present) {
-      map['category_fk'] = Variable<int>(categoryFk.value);
-    }
-    if (dateCreated.present) {
-      map['date_created'] = Variable<DateTime>(dateCreated.value);
-    }
-    if (order.present) {
-      map['order'] = Variable<int>(order.value);
-    }
-    if (isExactMatch.present) {
-      map['is_exact_match'] = Variable<bool>(isExactMatch.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('AssociatedTitlesCompanion(')
-          ..write('associatedTitlePk: $associatedTitlePk, ')
-          ..write('title: $title, ')
-          ..write('categoryFk: $categoryFk, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('order: $order, ')
-          ..write('isExactMatch: $isExactMatch')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -3899,6 +3256,916 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   }
 }
 
+class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
+    with TableInfo<$CategoryBudgetLimitsTable, CategoryBudgetLimit> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CategoryBudgetLimitsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _categoryLimitPkMeta =
+      const VerificationMeta('categoryLimitPk');
+  @override
+  late final GeneratedColumn<int> categoryLimitPk = GeneratedColumn<int>(
+      'category_limit_pk', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _categoryFkMeta =
+      const VerificationMeta('categoryFk');
+  @override
+  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
+      'category_fk', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES categories (category_pk)'));
+  static const VerificationMeta _budgetFkMeta =
+      const VerificationMeta('budgetFk');
+  @override
+  late final GeneratedColumn<int> budgetFk = GeneratedColumn<int>(
+      'budget_fk', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES budgets (budget_pk)'));
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+      'amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [categoryLimitPk, categoryFk, budgetFk, amount];
+  @override
+  String get aliasedName => _alias ?? 'category_budget_limits';
+  @override
+  String get actualTableName => 'category_budget_limits';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<CategoryBudgetLimit> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('category_limit_pk')) {
+      context.handle(
+          _categoryLimitPkMeta,
+          categoryLimitPk.isAcceptableOrUnknown(
+              data['category_limit_pk']!, _categoryLimitPkMeta));
+    }
+    if (data.containsKey('category_fk')) {
+      context.handle(
+          _categoryFkMeta,
+          categoryFk.isAcceptableOrUnknown(
+              data['category_fk']!, _categoryFkMeta));
+    } else if (isInserting) {
+      context.missing(_categoryFkMeta);
+    }
+    if (data.containsKey('budget_fk')) {
+      context.handle(_budgetFkMeta,
+          budgetFk.isAcceptableOrUnknown(data['budget_fk']!, _budgetFkMeta));
+    } else if (isInserting) {
+      context.missing(_budgetFkMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {categoryLimitPk};
+  @override
+  CategoryBudgetLimit map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CategoryBudgetLimit(
+      categoryLimitPk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category_limit_pk'])!,
+      categoryFk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
+      budgetFk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}budget_fk'])!,
+      amount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
+    );
+  }
+
+  @override
+  $CategoryBudgetLimitsTable createAlias(String alias) {
+    return $CategoryBudgetLimitsTable(attachedDatabase, alias);
+  }
+}
+
+class CategoryBudgetLimit extends DataClass
+    implements Insertable<CategoryBudgetLimit> {
+  final int categoryLimitPk;
+  final int categoryFk;
+  final int budgetFk;
+  final double amount;
+  const CategoryBudgetLimit(
+      {required this.categoryLimitPk,
+      required this.categoryFk,
+      required this.budgetFk,
+      required this.amount});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['category_limit_pk'] = Variable<int>(categoryLimitPk);
+    map['category_fk'] = Variable<int>(categoryFk);
+    map['budget_fk'] = Variable<int>(budgetFk);
+    map['amount'] = Variable<double>(amount);
+    return map;
+  }
+
+  CategoryBudgetLimitsCompanion toCompanion(bool nullToAbsent) {
+    return CategoryBudgetLimitsCompanion(
+      categoryLimitPk: Value(categoryLimitPk),
+      categoryFk: Value(categoryFk),
+      budgetFk: Value(budgetFk),
+      amount: Value(amount),
+    );
+  }
+
+  factory CategoryBudgetLimit.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CategoryBudgetLimit(
+      categoryLimitPk: serializer.fromJson<int>(json['categoryLimitPk']),
+      categoryFk: serializer.fromJson<int>(json['categoryFk']),
+      budgetFk: serializer.fromJson<int>(json['budgetFk']),
+      amount: serializer.fromJson<double>(json['amount']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'categoryLimitPk': serializer.toJson<int>(categoryLimitPk),
+      'categoryFk': serializer.toJson<int>(categoryFk),
+      'budgetFk': serializer.toJson<int>(budgetFk),
+      'amount': serializer.toJson<double>(amount),
+    };
+  }
+
+  CategoryBudgetLimit copyWith(
+          {int? categoryLimitPk,
+          int? categoryFk,
+          int? budgetFk,
+          double? amount}) =>
+      CategoryBudgetLimit(
+        categoryLimitPk: categoryLimitPk ?? this.categoryLimitPk,
+        categoryFk: categoryFk ?? this.categoryFk,
+        budgetFk: budgetFk ?? this.budgetFk,
+        amount: amount ?? this.amount,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('CategoryBudgetLimit(')
+          ..write('categoryLimitPk: $categoryLimitPk, ')
+          ..write('categoryFk: $categoryFk, ')
+          ..write('budgetFk: $budgetFk, ')
+          ..write('amount: $amount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(categoryLimitPk, categoryFk, budgetFk, amount);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CategoryBudgetLimit &&
+          other.categoryLimitPk == this.categoryLimitPk &&
+          other.categoryFk == this.categoryFk &&
+          other.budgetFk == this.budgetFk &&
+          other.amount == this.amount);
+}
+
+class CategoryBudgetLimitsCompanion
+    extends UpdateCompanion<CategoryBudgetLimit> {
+  final Value<int> categoryLimitPk;
+  final Value<int> categoryFk;
+  final Value<int> budgetFk;
+  final Value<double> amount;
+  const CategoryBudgetLimitsCompanion({
+    this.categoryLimitPk = const Value.absent(),
+    this.categoryFk = const Value.absent(),
+    this.budgetFk = const Value.absent(),
+    this.amount = const Value.absent(),
+  });
+  CategoryBudgetLimitsCompanion.insert({
+    this.categoryLimitPk = const Value.absent(),
+    required int categoryFk,
+    required int budgetFk,
+    required double amount,
+  })  : categoryFk = Value(categoryFk),
+        budgetFk = Value(budgetFk),
+        amount = Value(amount);
+  static Insertable<CategoryBudgetLimit> custom({
+    Expression<int>? categoryLimitPk,
+    Expression<int>? categoryFk,
+    Expression<int>? budgetFk,
+    Expression<double>? amount,
+  }) {
+    return RawValuesInsertable({
+      if (categoryLimitPk != null) 'category_limit_pk': categoryLimitPk,
+      if (categoryFk != null) 'category_fk': categoryFk,
+      if (budgetFk != null) 'budget_fk': budgetFk,
+      if (amount != null) 'amount': amount,
+    });
+  }
+
+  CategoryBudgetLimitsCompanion copyWith(
+      {Value<int>? categoryLimitPk,
+      Value<int>? categoryFk,
+      Value<int>? budgetFk,
+      Value<double>? amount}) {
+    return CategoryBudgetLimitsCompanion(
+      categoryLimitPk: categoryLimitPk ?? this.categoryLimitPk,
+      categoryFk: categoryFk ?? this.categoryFk,
+      budgetFk: budgetFk ?? this.budgetFk,
+      amount: amount ?? this.amount,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (categoryLimitPk.present) {
+      map['category_limit_pk'] = Variable<int>(categoryLimitPk.value);
+    }
+    if (categoryFk.present) {
+      map['category_fk'] = Variable<int>(categoryFk.value);
+    }
+    if (budgetFk.present) {
+      map['budget_fk'] = Variable<int>(budgetFk.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryBudgetLimitsCompanion(')
+          ..write('categoryLimitPk: $categoryLimitPk, ')
+          ..write('categoryFk: $categoryFk, ')
+          ..write('budgetFk: $budgetFk, ')
+          ..write('amount: $amount')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LabelsTable extends Labels
+    with TableInfo<$LabelsTable, TransactionLabel> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LabelsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _label_pkMeta =
+      const VerificationMeta('label_pk');
+  @override
+  late final GeneratedColumn<int> label_pk = GeneratedColumn<int>(
+      'label_pk', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _categoryFkMeta =
+      const VerificationMeta('categoryFk');
+  @override
+  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
+      'category_fk', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES categories (category_pk)'));
+  static const VerificationMeta _dateCreatedMeta =
+      const VerificationMeta('dateCreated');
+  @override
+  late final GeneratedColumn<DateTime> dateCreated = GeneratedColumn<DateTime>(
+      'date_created', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      clientDefault: () => new DateTime.now());
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+      'order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [label_pk, name, categoryFk, dateCreated, order];
+  @override
+  String get aliasedName => _alias ?? 'labels';
+  @override
+  String get actualTableName => 'labels';
+  @override
+  VerificationContext validateIntegrity(Insertable<TransactionLabel> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('label_pk')) {
+      context.handle(_label_pkMeta,
+          label_pk.isAcceptableOrUnknown(data['label_pk']!, _label_pkMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('category_fk')) {
+      context.handle(
+          _categoryFkMeta,
+          categoryFk.isAcceptableOrUnknown(
+              data['category_fk']!, _categoryFkMeta));
+    } else if (isInserting) {
+      context.missing(_categoryFkMeta);
+    }
+    if (data.containsKey('date_created')) {
+      context.handle(
+          _dateCreatedMeta,
+          dateCreated.isAcceptableOrUnknown(
+              data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {label_pk};
+  @override
+  TransactionLabel map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TransactionLabel(
+      label_pk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}label_pk'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      categoryFk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
+      dateCreated: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+    );
+  }
+
+  @override
+  $LabelsTable createAlias(String alias) {
+    return $LabelsTable(attachedDatabase, alias);
+  }
+}
+
+class TransactionLabel extends DataClass
+    implements Insertable<TransactionLabel> {
+  final int label_pk;
+  final String name;
+  final int categoryFk;
+  final DateTime dateCreated;
+  final int order;
+  const TransactionLabel(
+      {required this.label_pk,
+      required this.name,
+      required this.categoryFk,
+      required this.dateCreated,
+      required this.order});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['label_pk'] = Variable<int>(label_pk);
+    map['name'] = Variable<String>(name);
+    map['category_fk'] = Variable<int>(categoryFk);
+    map['date_created'] = Variable<DateTime>(dateCreated);
+    map['order'] = Variable<int>(order);
+    return map;
+  }
+
+  LabelsCompanion toCompanion(bool nullToAbsent) {
+    return LabelsCompanion(
+      label_pk: Value(label_pk),
+      name: Value(name),
+      categoryFk: Value(categoryFk),
+      dateCreated: Value(dateCreated),
+      order: Value(order),
+    );
+  }
+
+  factory TransactionLabel.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TransactionLabel(
+      label_pk: serializer.fromJson<int>(json['label_pk']),
+      name: serializer.fromJson<String>(json['name']),
+      categoryFk: serializer.fromJson<int>(json['categoryFk']),
+      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      order: serializer.fromJson<int>(json['order']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'label_pk': serializer.toJson<int>(label_pk),
+      'name': serializer.toJson<String>(name),
+      'categoryFk': serializer.toJson<int>(categoryFk),
+      'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'order': serializer.toJson<int>(order),
+    };
+  }
+
+  TransactionLabel copyWith(
+          {int? label_pk,
+          String? name,
+          int? categoryFk,
+          DateTime? dateCreated,
+          int? order}) =>
+      TransactionLabel(
+        label_pk: label_pk ?? this.label_pk,
+        name: name ?? this.name,
+        categoryFk: categoryFk ?? this.categoryFk,
+        dateCreated: dateCreated ?? this.dateCreated,
+        order: order ?? this.order,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TransactionLabel(')
+          ..write('label_pk: $label_pk, ')
+          ..write('name: $name, ')
+          ..write('categoryFk: $categoryFk, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(label_pk, name, categoryFk, dateCreated, order);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TransactionLabel &&
+          other.label_pk == this.label_pk &&
+          other.name == this.name &&
+          other.categoryFk == this.categoryFk &&
+          other.dateCreated == this.dateCreated &&
+          other.order == this.order);
+}
+
+class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
+  final Value<int> label_pk;
+  final Value<String> name;
+  final Value<int> categoryFk;
+  final Value<DateTime> dateCreated;
+  final Value<int> order;
+  const LabelsCompanion({
+    this.label_pk = const Value.absent(),
+    this.name = const Value.absent(),
+    this.categoryFk = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    this.order = const Value.absent(),
+  });
+  LabelsCompanion.insert({
+    this.label_pk = const Value.absent(),
+    required String name,
+    required int categoryFk,
+    this.dateCreated = const Value.absent(),
+    required int order,
+  })  : name = Value(name),
+        categoryFk = Value(categoryFk),
+        order = Value(order);
+  static Insertable<TransactionLabel> custom({
+    Expression<int>? label_pk,
+    Expression<String>? name,
+    Expression<int>? categoryFk,
+    Expression<DateTime>? dateCreated,
+    Expression<int>? order,
+  }) {
+    return RawValuesInsertable({
+      if (label_pk != null) 'label_pk': label_pk,
+      if (name != null) 'name': name,
+      if (categoryFk != null) 'category_fk': categoryFk,
+      if (dateCreated != null) 'date_created': dateCreated,
+      if (order != null) 'order': order,
+    });
+  }
+
+  LabelsCompanion copyWith(
+      {Value<int>? label_pk,
+      Value<String>? name,
+      Value<int>? categoryFk,
+      Value<DateTime>? dateCreated,
+      Value<int>? order}) {
+    return LabelsCompanion(
+      label_pk: label_pk ?? this.label_pk,
+      name: name ?? this.name,
+      categoryFk: categoryFk ?? this.categoryFk,
+      dateCreated: dateCreated ?? this.dateCreated,
+      order: order ?? this.order,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (label_pk.present) {
+      map['label_pk'] = Variable<int>(label_pk.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (categoryFk.present) {
+      map['category_fk'] = Variable<int>(categoryFk.value);
+    }
+    if (dateCreated.present) {
+      map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LabelsCompanion(')
+          ..write('label_pk: $label_pk, ')
+          ..write('name: $name, ')
+          ..write('categoryFk: $categoryFk, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AssociatedTitlesTable extends AssociatedTitles
+    with TableInfo<$AssociatedTitlesTable, TransactionAssociatedTitle> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AssociatedTitlesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _associatedTitlePkMeta =
+      const VerificationMeta('associatedTitlePk');
+  @override
+  late final GeneratedColumn<int> associatedTitlePk = GeneratedColumn<int>(
+      'associated_title_pk', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _categoryFkMeta =
+      const VerificationMeta('categoryFk');
+  @override
+  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
+      'category_fk', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES categories (category_pk)'));
+  static const VerificationMeta _dateCreatedMeta =
+      const VerificationMeta('dateCreated');
+  @override
+  late final GeneratedColumn<DateTime> dateCreated = GeneratedColumn<DateTime>(
+      'date_created', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      clientDefault: () => new DateTime.now());
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+      'order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _isExactMatchMeta =
+      const VerificationMeta('isExactMatch');
+  @override
+  late final GeneratedColumn<bool> isExactMatch =
+      GeneratedColumn<bool>('is_exact_match', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("is_exact_match" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [associatedTitlePk, title, categoryFk, dateCreated, order, isExactMatch];
+  @override
+  String get aliasedName => _alias ?? 'associated_titles';
+  @override
+  String get actualTableName => 'associated_titles';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TransactionAssociatedTitle> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('associated_title_pk')) {
+      context.handle(
+          _associatedTitlePkMeta,
+          associatedTitlePk.isAcceptableOrUnknown(
+              data['associated_title_pk']!, _associatedTitlePkMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('category_fk')) {
+      context.handle(
+          _categoryFkMeta,
+          categoryFk.isAcceptableOrUnknown(
+              data['category_fk']!, _categoryFkMeta));
+    } else if (isInserting) {
+      context.missing(_categoryFkMeta);
+    }
+    if (data.containsKey('date_created')) {
+      context.handle(
+          _dateCreatedMeta,
+          dateCreated.isAcceptableOrUnknown(
+              data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    if (data.containsKey('is_exact_match')) {
+      context.handle(
+          _isExactMatchMeta,
+          isExactMatch.isAcceptableOrUnknown(
+              data['is_exact_match']!, _isExactMatchMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {associatedTitlePk};
+  @override
+  TransactionAssociatedTitle map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TransactionAssociatedTitle(
+      associatedTitlePk: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}associated_title_pk'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      categoryFk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
+      dateCreated: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+      isExactMatch: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_exact_match'])!,
+    );
+  }
+
+  @override
+  $AssociatedTitlesTable createAlias(String alias) {
+    return $AssociatedTitlesTable(attachedDatabase, alias);
+  }
+}
+
+class TransactionAssociatedTitle extends DataClass
+    implements Insertable<TransactionAssociatedTitle> {
+  final int associatedTitlePk;
+  final String title;
+  final int categoryFk;
+  final DateTime dateCreated;
+  final int order;
+  final bool isExactMatch;
+  const TransactionAssociatedTitle(
+      {required this.associatedTitlePk,
+      required this.title,
+      required this.categoryFk,
+      required this.dateCreated,
+      required this.order,
+      required this.isExactMatch});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['associated_title_pk'] = Variable<int>(associatedTitlePk);
+    map['title'] = Variable<String>(title);
+    map['category_fk'] = Variable<int>(categoryFk);
+    map['date_created'] = Variable<DateTime>(dateCreated);
+    map['order'] = Variable<int>(order);
+    map['is_exact_match'] = Variable<bool>(isExactMatch);
+    return map;
+  }
+
+  AssociatedTitlesCompanion toCompanion(bool nullToAbsent) {
+    return AssociatedTitlesCompanion(
+      associatedTitlePk: Value(associatedTitlePk),
+      title: Value(title),
+      categoryFk: Value(categoryFk),
+      dateCreated: Value(dateCreated),
+      order: Value(order),
+      isExactMatch: Value(isExactMatch),
+    );
+  }
+
+  factory TransactionAssociatedTitle.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TransactionAssociatedTitle(
+      associatedTitlePk: serializer.fromJson<int>(json['associatedTitlePk']),
+      title: serializer.fromJson<String>(json['title']),
+      categoryFk: serializer.fromJson<int>(json['categoryFk']),
+      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      order: serializer.fromJson<int>(json['order']),
+      isExactMatch: serializer.fromJson<bool>(json['isExactMatch']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'associatedTitlePk': serializer.toJson<int>(associatedTitlePk),
+      'title': serializer.toJson<String>(title),
+      'categoryFk': serializer.toJson<int>(categoryFk),
+      'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'order': serializer.toJson<int>(order),
+      'isExactMatch': serializer.toJson<bool>(isExactMatch),
+    };
+  }
+
+  TransactionAssociatedTitle copyWith(
+          {int? associatedTitlePk,
+          String? title,
+          int? categoryFk,
+          DateTime? dateCreated,
+          int? order,
+          bool? isExactMatch}) =>
+      TransactionAssociatedTitle(
+        associatedTitlePk: associatedTitlePk ?? this.associatedTitlePk,
+        title: title ?? this.title,
+        categoryFk: categoryFk ?? this.categoryFk,
+        dateCreated: dateCreated ?? this.dateCreated,
+        order: order ?? this.order,
+        isExactMatch: isExactMatch ?? this.isExactMatch,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TransactionAssociatedTitle(')
+          ..write('associatedTitlePk: $associatedTitlePk, ')
+          ..write('title: $title, ')
+          ..write('categoryFk: $categoryFk, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order, ')
+          ..write('isExactMatch: $isExactMatch')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      associatedTitlePk, title, categoryFk, dateCreated, order, isExactMatch);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TransactionAssociatedTitle &&
+          other.associatedTitlePk == this.associatedTitlePk &&
+          other.title == this.title &&
+          other.categoryFk == this.categoryFk &&
+          other.dateCreated == this.dateCreated &&
+          other.order == this.order &&
+          other.isExactMatch == this.isExactMatch);
+}
+
+class AssociatedTitlesCompanion
+    extends UpdateCompanion<TransactionAssociatedTitle> {
+  final Value<int> associatedTitlePk;
+  final Value<String> title;
+  final Value<int> categoryFk;
+  final Value<DateTime> dateCreated;
+  final Value<int> order;
+  final Value<bool> isExactMatch;
+  const AssociatedTitlesCompanion({
+    this.associatedTitlePk = const Value.absent(),
+    this.title = const Value.absent(),
+    this.categoryFk = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    this.order = const Value.absent(),
+    this.isExactMatch = const Value.absent(),
+  });
+  AssociatedTitlesCompanion.insert({
+    this.associatedTitlePk = const Value.absent(),
+    required String title,
+    required int categoryFk,
+    this.dateCreated = const Value.absent(),
+    required int order,
+    this.isExactMatch = const Value.absent(),
+  })  : title = Value(title),
+        categoryFk = Value(categoryFk),
+        order = Value(order);
+  static Insertable<TransactionAssociatedTitle> custom({
+    Expression<int>? associatedTitlePk,
+    Expression<String>? title,
+    Expression<int>? categoryFk,
+    Expression<DateTime>? dateCreated,
+    Expression<int>? order,
+    Expression<bool>? isExactMatch,
+  }) {
+    return RawValuesInsertable({
+      if (associatedTitlePk != null) 'associated_title_pk': associatedTitlePk,
+      if (title != null) 'title': title,
+      if (categoryFk != null) 'category_fk': categoryFk,
+      if (dateCreated != null) 'date_created': dateCreated,
+      if (order != null) 'order': order,
+      if (isExactMatch != null) 'is_exact_match': isExactMatch,
+    });
+  }
+
+  AssociatedTitlesCompanion copyWith(
+      {Value<int>? associatedTitlePk,
+      Value<String>? title,
+      Value<int>? categoryFk,
+      Value<DateTime>? dateCreated,
+      Value<int>? order,
+      Value<bool>? isExactMatch}) {
+    return AssociatedTitlesCompanion(
+      associatedTitlePk: associatedTitlePk ?? this.associatedTitlePk,
+      title: title ?? this.title,
+      categoryFk: categoryFk ?? this.categoryFk,
+      dateCreated: dateCreated ?? this.dateCreated,
+      order: order ?? this.order,
+      isExactMatch: isExactMatch ?? this.isExactMatch,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (associatedTitlePk.present) {
+      map['associated_title_pk'] = Variable<int>(associatedTitlePk.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (categoryFk.present) {
+      map['category_fk'] = Variable<int>(categoryFk.value);
+    }
+    if (dateCreated.present) {
+      map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (isExactMatch.present) {
+      map['is_exact_match'] = Variable<bool>(isExactMatch.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AssociatedTitlesCompanion(')
+          ..write('associatedTitlePk: $associatedTitlePk, ')
+          ..write('title: $title, ')
+          ..write('categoryFk: $categoryFk, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('order: $order, ')
+          ..write('isExactMatch: $isExactMatch')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $AppSettingsTable extends AppSettings
     with TableInfo<$AppSettingsTable, AppSetting> {
   @override
@@ -4717,10 +4984,12 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
   late final $WalletsTable wallets = $WalletsTable(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $TransactionsTable transactions = $TransactionsTable(this);
+  late final $BudgetsTable budgets = $BudgetsTable(this);
+  late final $CategoryBudgetLimitsTable categoryBudgetLimits =
+      $CategoryBudgetLimitsTable(this);
   late final $LabelsTable labels = $LabelsTable(this);
   late final $AssociatedTitlesTable associatedTitles =
       $AssociatedTitlesTable(this);
-  late final $BudgetsTable budgets = $BudgetsTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final $ScannerTemplatesTable scannerTemplates =
       $ScannerTemplatesTable(this);
@@ -4732,9 +5001,10 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
         wallets,
         categories,
         transactions,
+        budgets,
+        categoryBudgetLimits,
         labels,
         associatedTitles,
-        budgets,
         appSettings,
         scannerTemplates
       ];

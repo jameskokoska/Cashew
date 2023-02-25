@@ -40,6 +40,7 @@ class PageFramework extends StatefulWidget {
     this.syncKeyboardHeight = false,
     this.listID,
     this.sharedBudgetRefresh = false,
+    this.horizontalPadding = 0,
   }) : super(key: key);
 
   final String title;
@@ -70,6 +71,7 @@ class PageFramework extends StatefulWidget {
   final bool syncKeyboardHeight;
   final String? listID;
   final bool? sharedBudgetRefresh;
+  final double horizontalPadding;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -234,15 +236,25 @@ class PageFrameworkState extends State<PageFramework>
               actions: widget.actions,
               expandedHeight: widget.expandedHeight,
             ),
-            ...widget.slivers,
+            for (Widget sliver in widget.slivers)
+              widget.horizontalPadding == 0
+                  ? sliver
+                  : SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: widget.horizontalPadding),
+                      sliver: sliver),
             widget.listWidgets != null
-                ? SliverList(
-                    delegate: SliverChildListDelegate([
-                      ...widget.listWidgets!,
-                      widget.navbar
-                          ? SizedBox(height: 87 + bottomPaddingSafeArea)
-                          : SizedBox(height: bottomPaddingSafeArea),
-                    ]),
+                ? SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: widget.horizontalPadding),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        ...widget.listWidgets!,
+                        widget.navbar
+                            ? SizedBox(height: 87 + bottomPaddingSafeArea)
+                            : SizedBox(height: bottomPaddingSafeArea),
+                      ]),
+                    ),
                   )
                 : SliverToBoxAdapter(
                     child: widget.navbar

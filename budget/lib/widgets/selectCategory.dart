@@ -244,8 +244,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                 ],
               );
             }
-            double size = MediaQuery.of(context).size.width <= 400
-                ? (MediaQuery.of(context).size.width - 20) / 4 - 50
+            double size = getWidthBottomSheet(context) <= 400
+                ? (getWidthBottomSheet(context) - 20) / 4 - 50
                 : 45;
             // print(size);
             print(snapshot.data);
@@ -262,9 +262,9 @@ class _SelectCategoryState extends State<SelectCategory> {
                     controller: _scrollController,
                     crossAxisSpacing: 0,
                     mainAxisSpacing: 5,
-                    crossAxisCount: MediaQuery.of(context).size.width <= 400
+                    crossAxisCount: getWidthBottomSheet(context) <= 400
                         ? 4
-                        : ((MediaQuery.of(context).size.width) ~/ size ~/ 2.1)
+                        : ((getWidthBottomSheet(context)) ~/ size ~/ 2.1)
                             .toInt(),
                     shrinkWrap: true,
                     children: [

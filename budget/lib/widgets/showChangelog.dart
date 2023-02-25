@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed category name initial value on web
+    Started adding new table and backend - budget category limits 
+    Optimized layout of some pages for full screen web
     Improved no transactions found placeholder image
     Fixed when adding transaction from added only budget and it's shared can't select which member of the budget
     Compacted UI

@@ -56,6 +56,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   bool? canAddCategory;
   TransactionCategory? widgetCategory;
   List<String>? selectedMembers;
+  late TextEditingController _titleController;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -168,6 +169,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   @override
   void initState() {
     super.initState();
+    _titleController = TextEditingController();
     widgetCategory = widget.category;
     selectedColor = widget.category != null
         ? (widget.category!.colour == null
@@ -183,6 +185,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           selectedImage = widget.category!.iconName;
           selectedIncome = widget.category!.income;
         });
+        _titleController.text = selectedTitle ?? "";
       }
     });
     //Set to false because we can't save until we made some changes
@@ -339,7 +342,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                       ? TextInput(
                                           labelText: "Name",
                                           bubbly: false,
-                                          initialValue: selectedTitle,
+                                          controller: _titleController,
                                           onChanged: (text) {
                                             setSelectedTitle(text);
                                           },

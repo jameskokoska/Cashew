@@ -1303,7 +1303,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     : selectedAmount == null
                         ? Button(
                             label: "Enter Amount",
-                            width: MediaQuery.of(context).size.width,
+                            width: getWidthBottomSheet(context),
                             height: 50,
                             onTap: () {
                               openBottomSheet(
@@ -1620,7 +1620,7 @@ class _SelectNotesState extends State<SelectNotes> {
                 ),
                 Container(height: 14),
                 Container(
-                  width: MediaQuery.of(context).size.width - 36,
+                  width: getWidthBottomSheet(context) - 36,
                   child: TextInput(
                     // icon: Icons.title_rounded,
                     initialValue: widget.selectedNote,
@@ -1708,7 +1708,7 @@ class _SelectTitleState extends State<SelectTitle> {
                 ),
                 Container(height: 14),
                 Container(
-                  width: MediaQuery.of(context).size.width - 36,
+                  width: getWidthBottomSheet(context) - 36,
                   child: TextInput(
                     icon: Icons.title_rounded,
                     initialValue: widget.selectedTitle,
@@ -1773,11 +1773,11 @@ class _SelectTitleState extends State<SelectTitle> {
                     child: selectedCategory == null
                         ? Container(
                             key: ValueKey(0),
-                            width: MediaQuery.of(context).size.width - 36,
+                            width: getWidthBottomSheet(context) - 36,
                           )
                         : Container(
                             key: ValueKey(selectedCategory!.categoryPk),
-                            width: MediaQuery.of(context).size.width - 36,
+                            width: getWidthBottomSheet(context) - 36,
                             padding: EdgeInsets.only(top: 13),
                             child: Tappable(
                               borderRadius: 15,
@@ -1855,7 +1855,7 @@ class _SelectTitleState extends State<SelectTitle> {
         widget.next != null
             ? Button(
                 label: "Select Category",
-                width: MediaQuery.of(context).size.width,
+                width: getWidthBottomSheet(context),
                 height: 50,
                 onTap: () {
                   Navigator.pop(context);
@@ -1960,7 +1960,7 @@ class _SelectTextState extends State<SelectText> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width - 36,
+          width: getWidthBottomSheet(context) - 36,
           child: TextInput(
             focusNode: _focusNode,
             textCapitalization: widget.textCapitalization,

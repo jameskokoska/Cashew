@@ -8,6 +8,17 @@ import 'package:flutter/foundation.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'dart:io' show Platform;
 
+double getWidthBottomSheet(context) {
+  double maxWidth = 700;
+  return MediaQuery.of(context).size.width > maxWidth
+      ? maxWidth
+      : MediaQuery.of(context).size.width;
+}
+
+double getHorizontalPaddingConstrained(context) {
+  return (MediaQuery.of(context).size.width - getWidthBottomSheet(context)) / 2;
+}
+
 late SheetController bottomSheetControllerGlobal;
 // Set snap to false if there is a keyboard
 Future openBottomSheet(
@@ -30,6 +41,7 @@ Future openBottomSheet(
               amount: 0.3)
           : Theme.of(context).colorScheme.lightDarkAccent, builder: (context) {
     return SlidingSheetDialog(
+      maxWidth: getWidthBottomSheet(context),
       scrollSpec: ScrollSpec(
           showScrollbar: showScrollbar,
           scrollbar: ((child) => ScrollbarWrap(child: child))),

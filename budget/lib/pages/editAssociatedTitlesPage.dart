@@ -44,6 +44,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       dragDownToDismiss: true,
       dragDownToDismissEnabled: dragDownToDismissEnabled,
       title: widget.title,

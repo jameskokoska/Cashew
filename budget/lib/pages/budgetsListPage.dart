@@ -44,6 +44,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
       key: pageState,
       title: "Budgets",
       backButton: false,
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       slivers: [
         StreamBuilder<List<Budget>>(
           stream: database.watchAllBudgets(),

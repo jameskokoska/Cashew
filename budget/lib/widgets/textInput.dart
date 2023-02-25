@@ -117,12 +117,12 @@ class TextInput extends StatelessWidget {
               prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
               suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
               contentPadding: EdgeInsets.only(
-                left: bubbly == false ? 8 : 18,
-                right: paddingRight,
+                left: bubbly == false ? (kIsWeb ? 8 + 5 : 8) : 18,
+                right: (kIsWeb ? paddingRight + 5 : paddingRight),
                 top: topContentPadding != null
                     ? topContentPadding ?? 0
                     : (bubbly == false ? 15 : 18),
-                bottom: bubbly == false ? 0 : (kIsWeb ? 15 : 0),
+                bottom: bubbly == false ? (kIsWeb ? 8 : 0) : (kIsWeb ? 15 : 0),
               ),
               hintText: labelText,
               filled: bubbly == false ? true : false,
