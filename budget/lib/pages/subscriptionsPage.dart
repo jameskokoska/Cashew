@@ -303,62 +303,67 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
             .difference(transaction.dateCreated)
             .inDays;
     return Padding(
-      padding: EdgeInsets.only(
-          left: (small ? 16 : 19), bottom: 3, right: (small ? 16 : 19)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              TextFont(
-                text: getWordedDateShortMore(transaction.dateCreated),
-                fontWeight: small ? FontWeight.normal : FontWeight.bold,
-                fontSize: small ? 14 : 18,
-                textColor:
-                    small ? Theme.of(context).colorScheme.textLight : null,
-              ),
-              daysDifference != 0
-                  ? TextFont(
-                      fontSize: small ? 14 : 16,
-                      textColor: Theme.of(context).colorScheme.textLight,
-                      text: " • " +
-                          daysDifference.abs().toString() +
-                          " " +
-                          (daysDifference.abs() == 1 ? "day" : "days") +
-                          (daysDifference > 0 ? " overdue" : ""),
-                      fontWeight: small ? FontWeight.normal : FontWeight.bold,
-                    )
-                  : SizedBox(),
-            ],
-          ),
-          transaction.type == TransactionSpecialType.repetitive ||
-                  transaction.type == TransactionSpecialType.subscription
-              ? Row(
-                  children: [
-                    Icon(
-                      Icons.loop_rounded,
-                      color: dynamicPastel(
-                          context, Theme.of(context).colorScheme.primary,
-                          amount: 0.4),
-                      size: small ? 12 : 16,
-                    ),
-                    SizedBox(width: 3),
-                    TextFont(
-                      text: transaction.periodLength.toString() +
-                          " " +
-                          (transaction.periodLength == 1
-                              ? nameRecurrence[transaction.reoccurrence]
-                              : namesRecurrence[transaction.reoccurrence]),
-                      fontWeight: FontWeight.bold,
-                      fontSize: small ? 14 : 18,
-                      textColor: dynamicPastel(
-                          context, Theme.of(context).colorScheme.primary,
-                          amount: 0.4),
-                    ),
-                  ],
-                )
-              : SizedBox(),
-        ],
+      padding: EdgeInsets.symmetric(
+        horizontal: getHorizontalPaddingConstrained(context),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: (small ? 16 : 19), bottom: 3, right: (small ? 16 : 19)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                TextFont(
+                  text: getWordedDateShortMore(transaction.dateCreated),
+                  fontWeight: small ? FontWeight.normal : FontWeight.bold,
+                  fontSize: small ? 14 : 18,
+                  textColor:
+                      small ? Theme.of(context).colorScheme.textLight : null,
+                ),
+                daysDifference != 0
+                    ? TextFont(
+                        fontSize: small ? 14 : 16,
+                        textColor: Theme.of(context).colorScheme.textLight,
+                        text: " • " +
+                            daysDifference.abs().toString() +
+                            " " +
+                            (daysDifference.abs() == 1 ? "day" : "days") +
+                            (daysDifference > 0 ? " overdue" : ""),
+                        fontWeight: small ? FontWeight.normal : FontWeight.bold,
+                      )
+                    : SizedBox(),
+              ],
+            ),
+            transaction.type == TransactionSpecialType.repetitive ||
+                    transaction.type == TransactionSpecialType.subscription
+                ? Row(
+                    children: [
+                      Icon(
+                        Icons.loop_rounded,
+                        color: dynamicPastel(
+                            context, Theme.of(context).colorScheme.primary,
+                            amount: 0.4),
+                        size: small ? 12 : 16,
+                      ),
+                      SizedBox(width: 3),
+                      TextFont(
+                        text: transaction.periodLength.toString() +
+                            " " +
+                            (transaction.periodLength == 1
+                                ? nameRecurrence[transaction.reoccurrence]
+                                : namesRecurrence[transaction.reoccurrence]),
+                        fontWeight: FontWeight.bold,
+                        fontSize: small ? 14 : 18,
+                        textColor: dynamicPastel(
+                            context, Theme.of(context).colorScheme.primary,
+                            amount: 0.4),
+                      ),
+                    ],
+                  )
+                : SizedBox(),
+          ],
+        ),
       ),
     );
   }

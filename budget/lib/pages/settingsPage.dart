@@ -373,18 +373,6 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.money_off_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Ask for Transaction Title",
-          description: "When adding a transaction",
-          onSwitched: (value) {
-            updateSettings(
-              "askForTransactionTitle",
-              value,
-            );
-          },
-          initialValue: appStateSettings["askForTransactionTitle"],
-          icon: Icons.text_fields_rounded,
-        ),
-        SettingsContainerSwitch(
           title: "Battery Saver",
           description: "Optimize the UI and increase performance",
           onSwitched: (value) {

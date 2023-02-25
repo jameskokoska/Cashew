@@ -93,6 +93,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     setState(() {
       selectedTitle = title;
     });
+    _titleController.text = title;
     determineBottomButton();
     return;
   }
@@ -273,7 +274,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                     selectedImage.toString(),
                                 setSelectedTitle:
                                     (String? titleRecommendation) {
-                                  if (titleRecommendation != null)
+                                  if (titleRecommendation != null &&
+                                      selectedTitle == "")
                                     setSelectedTitle(titleRecommendation);
                                 },
                               ),

@@ -82,6 +82,20 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             icon: Icons.add_box_rounded,
           ),
         ),
+        SliverToBoxAdapter(
+          child: SettingsContainerSwitch(
+            title: "Ask for Transaction Title",
+            description: "When adding a transaction",
+            onSwitched: (value) {
+              updateSettings(
+                "askForTransactionTitle",
+                value,
+              );
+            },
+            initialValue: appStateSettings["askForTransactionTitle"],
+            icon: Icons.text_fields_rounded,
+          ),
+        ),
         StreamBuilder<List<TransactionAssociatedTitle>>(
           stream: database.watchAllAssociatedTitles(),
           builder: (context, snapshot) {
@@ -154,7 +168,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                                 " - " +
                                 associatedTitle.order.toString(),
                             fontWeight: FontWeight.bold,
-                            fontSize: 21,
+                            fontSize: 19,
                             maxLines: 10,
                           ),
                         ),

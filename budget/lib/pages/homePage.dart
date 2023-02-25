@@ -32,6 +32,7 @@ import 'package:budget/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
+import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({

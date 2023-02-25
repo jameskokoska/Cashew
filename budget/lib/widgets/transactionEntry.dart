@@ -215,6 +215,9 @@ class TransactionEntry extends StatelessWidget {
                             sizePadding: 20,
                             margin: EdgeInsets.zero,
                             borderRadius: 100,
+                            onTap: () {
+                              openContainer();
+                            },
                           ),
                           Container(
                             width: 12,

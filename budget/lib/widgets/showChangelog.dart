@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added ability to scroll through month selector with mouse wheel
+    Selecting category icon replaces name properly
+    Tapping category icon in transaction opens transaction
     Fixed category name initial value on web
     Started adding new table and backend - budget category limits 
     Optimized layout of some pages for full screen web

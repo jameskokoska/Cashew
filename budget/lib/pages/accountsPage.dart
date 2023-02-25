@@ -67,6 +67,7 @@ class _AccountsPageState extends State<AccountsPage> {
   @override
   Widget build(BuildContext context) {
     return PageFramework(
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       expandedHeight: 65,
       dragDownToDismiss: true,
       navbar: false,
