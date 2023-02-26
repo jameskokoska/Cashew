@@ -1387,14 +1387,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  web_smooth_scroll:
-    dependency: "direct main"
-    description:
-      name: web_smooth_scroll
-      sha256: "2a4adc22e42e4045f02ecc1598885bf46adbe7ed9b05aab0a0f5df9ed071e9b6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   web_socket_channel:
     dependency: transitive
     description:

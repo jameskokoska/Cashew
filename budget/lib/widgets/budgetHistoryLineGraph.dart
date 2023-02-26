@@ -173,6 +173,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
+                  interval: 1,
                   showTitles: true,
                   getTitlesWidget: (value, _) {
                     return Padding(

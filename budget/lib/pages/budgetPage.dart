@@ -549,11 +549,71 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 budget: widget.budget,
               ),
               SliverToBoxAdapter(
+                child: WatchAllWallets(
+                  noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
+                  childFunction: (wallets) => StreamBuilder<double?>(
+                    stream: database.watchTotalSpentByCurrentUserOnly(
+                      budgetRange.start,
+                      budgetRange.end,
+                      widget.budget.budgetPk,
+                      wallets,
+                    ),
+                    builder: (context, snapshotTotalSpentByCurrentUserOnly) {
+                      return StreamBuilder<List<CategoryWithTotal>>(
+                        stream: database
+                            .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                          budgetRange.start,
+                          budgetRange.end,
+                          widget.budget.categoryFks ?? [],
+                          widget.budget.allCategoryFks,
+                          widget.budget.sharedTransactionsShow,
+                          wallets,
+                          member: selectedMember,
+                          onlyShowTransactionsBelongingToBudget:
+                              widget.budget.sharedKey != null ||
+                                      widget.budget.addedTransactionsOnly ==
+                                          true
+                                  ? widget.budget.budgetPk
+                                  : null,
+                          budget: widget.budget,
+                        ),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            double totalSpent = 0;
+                            snapshot.data!.forEach((category) {
+                              totalSpent = totalSpent + category.total.abs();
+                              totalSpent = totalSpent.abs();
+                            });
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                left: 10,
+                                right: 10,
+                                top: 10,
+                                bottom: 8,
+                              ),
+                              child: TextFont(
+                                text: "Total cash flow: " +
+                                    convertToMoney(totalSpent),
+                                fontSize: 13,
+                                textAlign: TextAlign.center,
+                                textColor:
+                                    Theme.of(context).colorScheme.textLight,
+                              ),
+                            );
+                          }
+                          return SizedBox.shrink();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
                 child: widget.budget.sharedDateUpdated == null
                     ? SizedBox.shrink()
                     : Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 28),
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, bottom: 0),
                         child: TextFont(
                           text: "Synced " +
                               getTimeAgo(
@@ -574,7 +634,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 child: Container(
                     height: 1, color: Theme.of(context).colorScheme.background),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 80))
+              SliverToBoxAdapter(child: SizedBox(height: 45))
             ],
           ),
           SelectedTransactionsActionBar(

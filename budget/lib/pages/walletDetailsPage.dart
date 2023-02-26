@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/debugPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
@@ -39,6 +40,23 @@ class WalletDetailsPage extends StatelessWidget {
           );
     int? walletPk = wallet == null ? null : wallet!.walletPk;
     return PageFramework(
+      actions: [
+        Container(
+          padding: EdgeInsets.only(top: 12.5, right: 5),
+          child: IconButton(
+            onPressed: () {
+              pushRoute(
+                context,
+                AddWalletPage(
+                  title: "Edit Budget",
+                  wallet: wallet,
+                ),
+              );
+            },
+            icon: Icon(Icons.edit_rounded),
+          ),
+        ),
+      ],
       dragDownToDismiss: true,
       title: wallet == null ? "All Spending" : wallet!.name,
       navbar: false,

@@ -108,7 +108,11 @@ class TextInput extends StatelessWidget {
             style: TextStyle(
                 fontSize:
                     fontSize != null ? fontSize : (bubbly == false ? 18 : 15),
-                height: kIsWeb ? null : 1.7,
+                height: kIsWeb
+                    ? null
+                    : bubbly == true
+                        ? 1.7
+                        : 1.3,
                 fontWeight: fontWeight,
                 fontFamily: "Avenir"),
             cursorColor: Theme.of(context).colorScheme.accentColorHeavy,

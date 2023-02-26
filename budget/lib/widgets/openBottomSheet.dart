@@ -8,6 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'dart:io' show Platform;
 
+bool getIsFullScreen(context) {
+  double maxWidth = 700;
+  return MediaQuery.of(context).size.width > maxWidth;
+}
+
 double getWidthBottomSheet(context) {
   double maxWidth = 700;
   return MediaQuery.of(context).size.width > maxWidth
@@ -43,23 +48,34 @@ Future openBottomSheet(
     return SlidingSheetDialog(
       maxWidth: getWidthBottomSheet(context),
       scrollSpec: ScrollSpec(
-          showScrollbar: showScrollbar,
-          scrollbar: ((child) => ScrollbarWrap(child: child))),
+        overscroll: false,
+        overscrollColor: Colors.transparent,
+        showScrollbar: showScrollbar,
+        scrollbar: ((child) => ScrollbarWrap(child: child)),
+      ),
       controller: bottomSheetControllerGlobal,
       elevation: 0,
       isBackdropInteractable: true,
       dismissOnBackdropTap: true,
       snapSpec: SnapSpec(
         snap: snap,
-        snappings: [
-          0.6,
-          1 -
-              MediaQuery.of(context).padding.top /
-                  MediaQuery.of(context).size.height
-        ],
+        snappings: getIsFullScreen(context)
+            ? [
+                0.95,
+              ]
+            : [
+                0.6,
+                1 -
+                    MediaQuery.of(context).padding.top /
+                        MediaQuery.of(context).size.height
+              ],
         positioning: SnapPositioning.relativeToAvailableSpace,
       ),
-      color: Theme.of(context).colorScheme.lightDarkAccent,
+      color: appStateSettings["materialYou"]
+          ? dynamicPastel(
+              context, Theme.of(context).colorScheme.secondaryContainer,
+              amount: 0.3)
+          : Theme.of(context).colorScheme.lightDarkAccent,
       // headerBuilder: (context, _) {
       //   if (handle) {
       //     return Padding(

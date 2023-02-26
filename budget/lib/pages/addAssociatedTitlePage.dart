@@ -49,6 +49,8 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
 
   String? textAddTitle = "Add Title";
 
+  late FocusNode _focusNode;
+
   Future<void> selectTitle() async {
     openBottomSheet(
       context,
@@ -101,6 +103,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
   @override
   void initState() {
     super.initState();
+    _focusNode = new FocusNode();
     if (widget.associatedTitle != null) {
       //We are editing a Title
       textAddTitle = "Edit Title";
@@ -161,6 +164,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                       child: SelectCategory(
                         selectedCategory: selectedCategory,
                         setSelectedCategory: setSelectedCategory,
+                        next: () => _focusNode.requestFocus(),
                       ),
                     ),
                   );
@@ -178,6 +182,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                         child: SelectCategory(
                           selectedCategory: selectedCategory,
                           setSelectedCategory: setSelectedCategory,
+                          next: () => _focusNode.requestFocus(),
                         ),
                       ),
                     );
@@ -185,29 +190,20 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                 ),
               ),
               Expanded(
-                child: kIsWeb
-                    ? TextInput(
-                        labelText: "Title",
-                        bubbly: false,
-                        initialValue: selectedTitle,
-                        onChanged: (text) {
-                          setSelectedTitle(text);
-                        },
-                        padding: EdgeInsets.only(left: 7, right: 7),
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        topContentPadding: 20,
-                      )
-                    : TappableTextEntry(
-                        title: selectedTitle,
-                        placeholder: "Title",
-                        onTap: () {
-                          selectTitle();
-                        },
-                        autoSizeText: true,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      ),
+                child: TextInput(
+                  labelText: "Title",
+                  bubbly: false,
+                  initialValue: selectedTitle,
+                  onChanged: (text) {
+                    setSelectedTitle(text);
+                  },
+                  autoFocus: true,
+                  padding: EdgeInsets.only(left: 7, right: 7),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  topContentPadding: 0,
+                  focusNode: _focusNode,
+                ),
               ),
             ],
           ),

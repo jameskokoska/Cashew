@@ -36,7 +36,6 @@ import 'package:flutter/widgets.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 List<Widget> getTransactionsSlivers(
   DateTime startDay,

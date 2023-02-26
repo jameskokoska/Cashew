@@ -57,6 +57,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   TransactionCategory? widgetCategory;
   List<String>? selectedMembers;
   late TextEditingController _titleController;
+  bool userAttemptedToChangeTitle = false;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -64,9 +65,11 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       PopupFramework(
         title: "Enter Name",
         child: SelectText(
-          setSelectedText: setSelectedTitle,
+          setSelectedText: (name) {
+            setSelectedTitle(name, userAttemptedToChangeTitlePassed: true);
+          },
           labelText: "Name",
-          selectedText: selectedTitle,
+          selectedText: userAttemptedToChangeTitle ? selectedTitle : "",
         ),
       ),
       snap: false,
@@ -89,9 +92,12 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     return;
   }
 
-  void setSelectedTitle(String title) {
+  void setSelectedTitle(String title,
+      {bool userAttemptedToChangeTitlePassed = false}) {
     setState(() {
       selectedTitle = title;
+      userAttemptedToChangeTitle =
+          title == "" ? false : userAttemptedToChangeTitlePassed;
     });
     _titleController.text = title;
     determineBottomButton();
@@ -275,7 +281,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                 setSelectedTitle:
                                     (String? titleRecommendation) {
                                   if (titleRecommendation != null &&
-                                      selectedTitle == "")
+                                      (userAttemptedToChangeTitle == false ||
+                                          selectedTitle == "" ||
+                                          selectedTitle == null))
                                     setSelectedTitle(titleRecommendation);
                                 },
                               ),

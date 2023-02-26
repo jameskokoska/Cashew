@@ -194,7 +194,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                   color: dynamicPastel(context, budgetColorScheme.primary,
                       amountLight: 0.4, amountDark: 0.2),
                   dateRanges: dateTimeRanges,
-                  maxY: maxY,
+                  maxY: widget.budget.amount + 0.0000000000001 > maxY
+                      ? widget.budget.amount + 0.0000000000001
+                      : maxY,
                   spots: spots,
                   initialSpots: initialSpots,
                   horizontalLineAt: widget.budget.amount,

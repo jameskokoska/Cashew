@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
@@ -188,7 +189,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               );
             },
             reservedSize: 28,
-            interval: widget.maxPair.x / 4,
+            interval: widget.maxPair.x / (getIsFullScreen(context) ? 8 : 4),
           ),
         ),
         leftTitles: AxisTitles(
@@ -231,11 +232,12 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                                     : 25) +
                                 extraHorizontalPadding) +
                 10,
-            interval:
-                ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.6) /
-                            5)
-                        .ceil() *
-                    5,
+            // This interval needs more work
+            // interval: ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) /
+            //                 (getIsFullScreen(context) ? 7 : 3.6)) /
+            //             5)
+            //         .ceil() *
+            //     5,
           ),
         ),
         topTitles: AxisTitles(
@@ -342,9 +344,12 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   FlGridData get gridData => FlGridData(
         show: true,
         verticalInterval:
-            ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) / 4,
-        horizontalInterval:
-            ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) / 3.5,
+            ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
+                (getIsFullScreen(context) ? 8 : 4),
+        // This interval needs more work, maybe follow the one from budgetHistoryLineGraph.dart
+        // horizontalInterval:
+        //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) /
+        //         (getIsFullScreen(context) ? 6 : 3.5),
         getDrawingHorizontalLine: (value) {
           return FlLine(
             color: dynamicPastel(context, widget.color, amount: 0.3)
@@ -378,61 +383,66 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         ),
       );
 
-  LineChartBarData lineChartBarData(List<FlSpot> spots, int index) =>
-      LineChartBarData(
-        color: widget.colors.length > 0
-            ? lightenPastel(widget.colors[index], amount: 0.3)
-            : lightenPastel(widget.color, amount: 0.3),
-        barWidth: 3,
-        isStrokeCapRound: true,
-        dotData: FlDotData(show: false),
-        isCurved: widget.isCurved,
-        curveSmoothness:
-            appStateSettings["removeZeroTransactionEntries"] ? 0.1 : 0.3,
-        preventCurveOverShooting: true,
-        preventCurveOvershootingThreshold: 8,
-        aboveBarData: BarAreaData(
-          applyCutOffY: true,
-          cutOffY: 0,
-          show: index != 0 ? false : true,
-          gradient: LinearGradient(
-            colors: [
-              widget.color.withAlpha(100),
-              widget.color.withAlpha(0),
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment(
-                0,
-                (widget.minPair.y) /
-                    ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
-          ),
-          // gradientFrom: Offset(
-          //     0,
-          //     ((widget.maxPair.y).abs()) /
-          //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+  LineChartBarData lineChartBarData(List<FlSpot> spots, int index) {
+    return LineChartBarData(
+      color: widget.colors.length > 0
+          ? lightenPastel(widget.colors[index], amount: 0.3)
+          : lightenPastel(widget.color, amount: 0.3),
+      barWidth: 3,
+      isStrokeCapRound: true,
+      dotData: FlDotData(show: false),
+      isCurved: widget.isCurved,
+      curveSmoothness:
+          appStateSettings["removeZeroTransactionEntries"] ? 0.1 : 0.3,
+      preventCurveOverShooting: true,
+      preventCurveOvershootingThreshold: 8,
+      aboveBarData: BarAreaData(
+        applyCutOffY: true,
+        cutOffY: 0,
+        show: index != 0 ? false : true,
+        gradient: LinearGradient(
+          colors: [
+            index == 0
+                ? widget.color.withAlpha(100)
+                : widget.color.withAlpha(0),
+            widget.color.withAlpha(0),
+          ],
+          begin: Alignment.bottomCenter,
+          end: Alignment(
+              0,
+              (widget.minPair.y) /
+                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
-        belowBarData: BarAreaData(
-          applyCutOffY: true,
-          cutOffY: 0,
-          show: true,
-          gradient: LinearGradient(
-            colors: [
-              widget.color.withAlpha(100),
-              widget.color.withAlpha(0),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment(
-                0,
-                (widget.maxPair.y) /
-                    ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
-          ),
-          // gradientTo: Offset(
-          //     0,
-          //     ((widget.maxPair.y).abs()) /
-          //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+        // gradientFrom: Offset(
+        //     0,
+        //     ((widget.maxPair.y).abs()) /
+        //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+      ),
+      belowBarData: BarAreaData(
+        applyCutOffY: true,
+        cutOffY: 0,
+        show: true,
+        gradient: LinearGradient(
+          colors: [
+            index == 0
+                ? widget.color.withAlpha(100)
+                : widget.color.withAlpha(0),
+            widget.color.withAlpha(0),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment(
+              0,
+              (widget.maxPair.y) /
+                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
-        spots: spots,
-      );
+        // gradientTo: Offset(
+        //     0,
+        //     ((widget.maxPair.y).abs()) /
+        //         ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+      ),
+      spots: spots,
+    );
+  }
 }
 
 class Pair {

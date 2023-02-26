@@ -54,3 +54,4 @@ key.properties
 keystore.jks
 
 /.firebase
+.firebase/

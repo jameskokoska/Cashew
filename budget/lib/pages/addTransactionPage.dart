@@ -375,6 +375,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
           ? widget.transaction!.sharedDateUpdated
           : null,
       sharedReferenceBudgetPk: selectedBudgetPk,
+      upcomingTransactionNotification: widget.transaction != null
+          ? widget.transaction!.upcomingTransactionNotification
+          : null,
     );
 
     if (widget.transaction != null &&
@@ -651,6 +654,17 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     child: Row(
                       children: [
                         Tappable(
+                          onLongPress: () {
+                            pushRoute(
+                              context,
+                              AddCategoryPage(
+                                title: selectedCategory == null
+                                    ? "Add Category"
+                                    : "Edit Category",
+                                category: selectedCategory,
+                              ),
+                            );
+                          },
                           onTap: () {
                             openBottomSheet(
                               context,

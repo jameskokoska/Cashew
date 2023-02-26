@@ -412,6 +412,22 @@ class EscapeIntent extends Intent {
   const EscapeIntent();
 }
 
+class Digit1Intent extends Intent {
+  const Digit1Intent();
+}
+
+class Digit2Intent extends Intent {
+  const Digit2Intent();
+}
+
+class Digit3Intent extends Intent {
+  const Digit3Intent();
+}
+
+class Digit4Intent extends Intent {
+  const Digit4Intent();
+}
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class App extends StatelessWidget {
@@ -422,12 +438,51 @@ class App extends StatelessWidget {
     return MaterialApp(
       shortcuts: <ShortcutActivator, Intent>{
         LogicalKeySet(LogicalKeyboardKey.escape): const EscapeIntent(),
+        LogicalKeySet(LogicalKeyboardKey.digit1): const Digit1Intent(),
+        LogicalKeySet(LogicalKeyboardKey.digit2): const Digit2Intent(),
+        LogicalKeySet(LogicalKeyboardKey.digit3): const Digit3Intent(),
+        LogicalKeySet(LogicalKeyboardKey.digit4): const Digit4Intent(),
       },
       actions: <Type, Action<Intent>>{
         EscapeIntent: CallbackAction<EscapeIntent>(
           onInvoke: (EscapeIntent intent) => {
             if (navigatorKey.currentState!.canPop())
               navigatorKey.currentState!.pop()
+            else
+              pageNavigationFrameworkKey.currentState!
+                  .changePage(0, switchNavbar: true)
+          },
+        ),
+        Digit1Intent: CallbackAction<Digit1Intent>(
+          onInvoke: (Digit1Intent intent) => {
+            // we are on the root of navigation pages
+            if (!navigatorKey.currentState!.canPop())
+              pageNavigationFrameworkKey.currentState!
+                  .changePage(0, switchNavbar: true)
+          },
+        ),
+        Digit2Intent: CallbackAction<Digit2Intent>(
+          onInvoke: (Digit2Intent intent) => {
+            // we are on the root of navigation pages
+            if (!navigatorKey.currentState!.canPop())
+              pageNavigationFrameworkKey.currentState!
+                  .changePage(1, switchNavbar: true)
+          },
+        ),
+        Digit3Intent: CallbackAction<Digit3Intent>(
+          onInvoke: (Digit3Intent intent) => {
+            // we are on the root of navigation pages
+            if (!navigatorKey.currentState!.canPop())
+              pageNavigationFrameworkKey.currentState!
+                  .changePage(2, switchNavbar: true)
+          },
+        ),
+        Digit4Intent: CallbackAction<Digit4Intent>(
+          onInvoke: (Digit4Intent intent) => {
+            // we are on the root of navigation pages
+            if (!navigatorKey.currentState!.canPop())
+              pageNavigationFrameworkKey.currentState!
+                  .changePage(3, switchNavbar: true)
           },
         ),
       },

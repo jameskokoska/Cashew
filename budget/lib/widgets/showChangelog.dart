@@ -7,6 +7,25 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added total cash flow to bottom of budget page
+    Consistent name changes for category when selecting icon with recommended category name
+    Editing associated title doesn't popup for editing text within the popup
+    Can edit category by long pressing in add transaction page
+    Can use arrow keys to go through onboarding
+    Can use number keys to change pages quickly when on home page
+    Fixed delayed keyboard input entry
+    Long press back button on select amount to clear numbers
+    Can edit wallet from wallet history page
+    Budget history line graph shows goal line no matter what
+    Fixed interval for line graph
+    Fixed monthly label for past budget history spending graph
+    Fixed bottom sheet colors with material you
+    Removed over-scroll glow in bottom sheet
+    Width constrained for number pad
+    Close button on popup modals if full screen
+    Started budget category limits
+    Removed gradient on past spending lines
+    Fixed discard changes warning for transaction if no changes made
     Added ability to scroll through month selector with mouse wheel
     Selecting category icon replaces name properly
     Tapping category icon in transaction opens transaction

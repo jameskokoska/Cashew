@@ -63,25 +63,12 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                 AddAssociatedTitlePage(
                   title: "Add Title",
                 ),
-                resizeForKeyboard: false,
               );
             },
           ),
         ),
       ),
       slivers: [
-        SliverToBoxAdapter(
-          child: SettingsContainerSwitch(
-            title: "Automatically Add Titles",
-            description: "When a transaction is created",
-            onSwitched: (value) {
-              updateSettings("autoAddAssociatedTitles", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
-            },
-            initialValue: appStateSettings["autoAddAssociatedTitles"],
-            icon: Icons.add_box_rounded,
-          ),
-        ),
         SliverToBoxAdapter(
           child: SettingsContainerSwitch(
             title: "Ask for Transaction Title",
@@ -94,6 +81,18 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             },
             initialValue: appStateSettings["askForTransactionTitle"],
             icon: Icons.text_fields_rounded,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SettingsContainerSwitch(
+            title: "Automatically Add Titles",
+            description: "When a transaction is created",
+            onSwitched: (value) {
+              updateSettings("autoAddAssociatedTitles", value,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+            },
+            initialValue: appStateSettings["autoAddAssociatedTitles"],
+            icon: Icons.add_box_rounded,
           ),
         ),
         StreamBuilder<List<TransactionAssociatedTitle>>(
@@ -141,7 +140,6 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                           title: "Add Title",
                           associatedTitle: associatedTitle,
                         ),
-                        resizeForKeyboard: false,
                       );
                     },
                     padding: EdgeInsets.symmetric(vertical: 7, horizontal: 7),

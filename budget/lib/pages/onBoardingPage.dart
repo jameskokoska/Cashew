@@ -25,6 +25,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -62,6 +63,10 @@ class OnBoardingPageBody extends StatefulWidget {
 class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
   int currentIndex = 0;
 
+  final PageController controller = PageController();
+  FocusNode _focusNode = FocusNode();
+  late FocusAttachment _focusAttachment;
+
   nextNavigation() {
     if (widget.popNavigationWhenDone) {
       Navigator.pop(context);
@@ -73,13 +78,49 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
 
   @override
   void initState() {
+    _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
+      if (event.logicalKey.keyLabel == "Go Back" ||
+          event.logicalKey == LogicalKeyboardKey.escape) {
+        nextNavigation();
+      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+          event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        nextOnBoardPage(4);
+      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+          event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        previousOnBoardPage();
+      }
+      return KeyEventResult.handled;
+    });
+    _focusNode.requestFocus();
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final PageController controller = PageController();
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
+  void nextOnBoardPage(int numPages) {
+    controller.nextPage(
+      duration: Duration(milliseconds: 1100),
+      curve: ElasticOutCurve(1.3),
+    );
+    if (currentIndex + 1 == numPages) {
+      nextNavigation();
+    }
+  }
+
+  void previousOnBoardPage() {
+    controller.previousPage(
+      duration: Duration(milliseconds: 1100),
+      curve: ElasticOutCurve(1.3),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _focusAttachment.reparent();
     final List<Widget> children = [
       OnBoardPage(
         widgets: [
@@ -264,10 +305,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                       duration: Duration(milliseconds: 200),
                       child: ButtonIcon(
                         onTap: () {
-                          controller.previousPage(
-                            duration: Duration(milliseconds: 1100),
-                            curve: ElasticOutCurve(1.3),
-                          );
+                          previousOnBoardPage();
                         },
                         icon: Icons.arrow_back_rounded,
                         size: 45,
@@ -319,13 +357,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                       duration: Duration(milliseconds: 200),
                       child: ButtonIcon(
                         onTap: () {
-                          controller.nextPage(
-                            duration: Duration(milliseconds: 1100),
-                            curve: ElasticOutCurve(1.3),
-                          );
-                          if (currentIndex + 1 == children.length) {
-                            nextNavigation();
-                          }
+                          nextOnBoardPage(children.length);
                         },
                         icon: Icons.arrow_forward_rounded,
                         size: 45,
