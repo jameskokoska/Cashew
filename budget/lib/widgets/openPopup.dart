@@ -335,7 +335,8 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
   );
 }
 
-void discardChangesPopup(context, {previousObject, currentObject}) async {
+void discardChangesPopup(context,
+    {previousObject, currentObject, Function? onDiscard}) async {
   print(previousObject);
   print(currentObject);
   if (previousObject == currentObject &&
@@ -357,7 +358,8 @@ void discardChangesPopup(context, {previousObject, currentObject}) async {
       description: "Are you sure you want to discard your changes.",
       icon: Icons.warning_rounded,
       onSubmitLabel: "Discard",
-      onSubmit: () {
+      onSubmit: () async {
+        if (onDiscard != null) await onDiscard();
         Navigator.pop(context);
         Navigator.pop(context);
       },

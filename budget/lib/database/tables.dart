@@ -1003,6 +1003,10 @@ class FinanceDatabase extends _$FinanceDatabase {
     return into(scannerTemplates).insertOnConflictUpdate(scannerTemplate);
   }
 
+  Future<int> createOrUpdateCategoryLimit(CategoryBudgetLimit categoryLimit) {
+    return into(categoryBudgetLimits).insertOnConflictUpdate(categoryLimit);
+  }
+
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(
       {int? limit, int? offset}) {
     return (select(associatedTitles)
@@ -1062,6 +1066,26 @@ class FinanceDatabase extends _$FinanceDatabase {
         // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
         )
         .watch();
+  }
+
+  Stream<List<CategoryBudgetLimit>> watchAllCategoryLimitsInBudget(int budgetPk,
+      {int? limit, int? offset}) {
+    return (select(categoryBudgetLimits)
+          ..where((t) => t.budgetFk.equals(budgetPk)))
+        .watch();
+  }
+
+  Stream<CategoryBudgetLimit> watchCategoryLimit(int budgetPk, int categoryPk,
+      {int? limit, int? offset}) {
+    return (select(categoryBudgetLimits)
+          ..where((t) =>
+              t.budgetFk.equals(budgetPk) & t.categoryFk.equals(categoryPk)))
+        .watchSingle();
+  }
+
+  Future<List<CategoryBudgetLimit>> getCategoryLimits(
+      {int? limit, int? offset}) {
+    return (select(categoryBudgetLimits)).get();
   }
 
   //create or update a new associatedTitle
@@ -1520,6 +1544,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     await shiftBudgets(-1, budget.order);
+    await deleteCategoryBudgetLimitsInBudget(budget.budgetPk);
     return (delete(budgets)..where((b) => b.budgetPk.equals(budget.budgetPk)))
         .go();
   }
@@ -1561,6 +1586,12 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     return (delete(transactions)
           ..where((t) => t.transactionPk.isIn(transactionPks)))
+        .go();
+  }
+
+  Future deleteCategoryBudgetLimitsInBudget(int budgetPk) {
+    return (delete(categoryBudgetLimits)
+          ..where((t) => t.budgetFk.equals(budgetPk)))
         .go();
   }
 

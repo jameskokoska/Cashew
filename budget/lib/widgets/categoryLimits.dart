@@ -17,12 +17,12 @@ import 'package:budget/colors.dart';
 
 class CategoryLimits extends StatefulWidget {
   const CategoryLimits({
-    required this.budget,
+    required this.budgetPk,
     required this.budgetLimit,
     required this.selectedCategories,
     super.key,
   });
-  final Budget? budget;
+  final int budgetPk;
   final List<int> selectedCategories;
   final double budgetLimit;
 
@@ -46,14 +46,21 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                   curve: Curves.easeInOutCubicEmphasized,
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: widget.selectedCategories == null ||
-                            widget.selectedCategories!.isEmpty ||
-                            widget.selectedCategories!
+                    child: widget.selectedCategories.isEmpty ||
+                            widget.selectedCategories
                                 .contains(category.categoryPk)
-                        ? CategoryLimitEntry(
-                            category: category,
-                            key: ValueKey(1),
-                            budgetLimit: widget.budgetLimit,
+                        ? StreamBuilder<CategoryBudgetLimit>(
+                            stream: database.watchCategoryLimit(
+                                widget.budgetPk, category.categoryPk),
+                            builder: (context, snapshot) {
+                              return CategoryLimitEntry(
+                                category: category,
+                                key: ValueKey(1),
+                                budgetLimit: widget.budgetLimit,
+                                categoryLimit: snapshot.data,
+                                budgetPk: widget.budgetPk,
+                              );
+                            },
                           )
                         : Container(
                             key: ValueKey(2),
@@ -71,10 +78,16 @@ class _CategoryLimitsState extends State<CategoryLimits> {
 
 class CategoryLimitEntry extends StatefulWidget {
   const CategoryLimitEntry(
-      {required this.category, required this.budgetLimit, super.key});
+      {required this.category,
+      required this.budgetLimit,
+      required this.categoryLimit,
+      required this.budgetPk,
+      super.key});
 
   final TransactionCategory category;
   final double budgetLimit;
+  final CategoryBudgetLimit? categoryLimit;
+  final int budgetPk;
 
   @override
   State<CategoryLimitEntry> createState() => _CategoryLimitEntryState();
@@ -82,6 +95,19 @@ class CategoryLimitEntry extends StatefulWidget {
 
 class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
   double selectedAmount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void didUpdateWidget(oldWidget) {
+    if (oldWidget.categoryLimit == null && widget.categoryLimit != null) {
+      setState(() {
+        selectedAmount = widget.categoryLimit!.amount;
+      });
+    }
+  }
 
   void selectAmount(context) {
     openBottomSheet(
@@ -98,10 +124,31 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
         underTitleSpace: false,
         child: SelectAmount(
           allowZero: true,
-          setSelectedAmount: (selectedAmountPassed, _) {
+          setSelectedAmount: (selectedAmountPassed, _) async {
             setState(() {
               selectedAmount = selectedAmountPassed;
             });
+            print(await database.getCategoryLimits());
+            if (widget.categoryLimit == null) {
+              print("IS NULL");
+              database.createOrUpdateCategoryLimit(
+                CategoryBudgetLimit(
+                  categoryLimitPk: DateTime.now().millisecondsSinceEpoch,
+                  categoryFk: widget.category.categoryPk,
+                  budgetFk: widget.budgetPk,
+                  amount: selectedAmountPassed,
+                ),
+              );
+            } else {
+              database.createOrUpdateCategoryLimit(
+                CategoryBudgetLimit(
+                  categoryLimitPk: widget.categoryLimit!.categoryLimitPk,
+                  categoryFk: widget.categoryLimit!.categoryFk,
+                  budgetFk: widget.categoryLimit!.budgetFk,
+                  amount: selectedAmountPassed,
+                ),
+              );
+            }
           },
           next: () async {
             Navigator.pop(context);
