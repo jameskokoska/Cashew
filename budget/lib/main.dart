@@ -74,8 +74,10 @@ void main() async {
   database = await constructDb();
   notificationPayload = await initializeNotifications();
   entireAppLoaded = false;
+  await initializeDatabase();
+  await initializeSettings();
 
-  runApp(RestartApp(child: InitializeDatabase()));
+  runApp(RestartApp(child: InitializeApp(key: appStateKey)));
 }
 
 late Map<String, dynamic> currenciesJSON;
@@ -241,32 +243,10 @@ Future<bool> initializeDatabase() async {
   return true;
 }
 
-class InitializeDatabase extends StatelessWidget {
-  const InitializeDatabase({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: initializeDatabase(),
-      builder: (context, snapshot) {
-        debugPrint("Initialized Database");
-        Widget child = SizedBox.shrink();
-
-        if (snapshot.hasData || entireAppLoaded == true) {
-          child = InitializeApp(
-            key: appStateKey,
-          );
-        }
-        return child;
-      },
-    );
-  }
-}
-
 Future<bool> checkBiometrics() async {
   final bool requireAuth = appStateSettings["requireAuth"];
-  biometricsAvailable =
-      await auth.canCheckBiometrics || await auth.isDeviceSupported();
+  biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
+      await auth.isDeviceSupported();
   bool didAuthenticate = false;
   if (requireAuth == true && biometricsAvailable == true) {
     didAuthenticate = await auth.authenticate(
@@ -377,34 +357,7 @@ class _InitializeAppState extends State<InitializeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: initializeSettings(),
-      builder: (context, snapshot) {
-        debugPrint("Initializing Settings");
-        Widget child = SizedBox(
-          key: ValueKey(1),
-          height: 50,
-          width: 50,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-                Theme.of(context).colorScheme.secondary),
-          ),
-        );
-        if (snapshot.hasData || entireAppLoaded == true) {
-          debugPrint("Initialized Settings");
-          child = App(key: ValueKey(2));
-        }
-        return AnimatedSwitcher(
-          duration: Duration(milliseconds: 500),
-          switchInCurve: Curves.easeInOut,
-          switchOutCurve: Curves.easeInOut,
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return FadeScaleTransition(animation: animation, child: child);
-          },
-          child: child,
-        );
-      },
-    );
+    return App(key: ValueKey("Main App"));
   }
 }
 
@@ -532,9 +485,34 @@ class App extends StatelessWidget {
       themeMode: getSettingConstants(appStateSettings)["theme"],
       home: SafeArea(
         top: false,
-        child: appStateSettings["hasOnboarded"] != true
-            ? OnBoardingPage()
-            : PageNavigationFramework(key: pageNavigationFrameworkKey),
+        child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 1200),
+            switchInCurve: Curves.easeInOutCubic,
+            switchOutCurve: Curves.easeInOutCubic,
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              final inAnimation =
+                  Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0))
+                      .animate(animation);
+              final outAnimation =
+                  Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                      .animate(animation);
+
+              if (child.key == ValueKey("Onboarding")) {
+                return ClipRect(
+                  child: SlideTransition(
+                    position: inAnimation,
+                    child: child,
+                  ),
+                );
+              } else {
+                return ClipRect(
+                  child: SlideTransition(position: outAnimation, child: child),
+                );
+              }
+            },
+            child: appStateSettings["hasOnboarded"] != true
+                ? OnBoardingPage(key: ValueKey("Onboarding"))
+                : PageNavigationFramework(key: pageNavigationFrameworkKey)),
       ),
       builder: (context, child) {
         return InitializeBiometrics(

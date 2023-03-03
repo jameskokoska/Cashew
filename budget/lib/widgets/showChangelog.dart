@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Improved loading animation, uses native loading with async main
     Added total cash flow to bottom of budget page
     Consistent name changes for category when selecting icon with recommended category name
     Editing associated title doesn't popup for editing text within the popup
