@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Per category budget limits implemented
+    New horizontal scroll view for budgets on web home
+    Animated percent animates backwards when value changes
+    Category budget limits deleted when category deleted
+    Reordered colors based on hue
+    Fixed color picker on smaller bottom sheet popup
     Improved loading animation, uses native loading with async main
     Added total cash flow to bottom of budget page
     Consistent name changes for category when selecting icon with recommended category name

@@ -61,7 +61,8 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
   void didUpdateWidget(AnimatedCircularProgress oldWidget) {
     if (oldWidget.percent != widget.percent) {
       _animationController.forward(from: 0);
-      _animation = Tween<double>(begin: 0, end: capPercentage(widget.percent))
+      _animation = Tween<double>(
+              begin: oldWidget.percent, end: capPercentage(widget.percent))
           .animate(new CurvedAnimation(
               parent: _animationController,
               curve: Curves.easeInOutCubicEmphasized));

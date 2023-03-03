@@ -240,7 +240,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       }
       if (addedOnly) {
         selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
+        selectedCategories = [];
+        selectedAllCategories = true;
       }
+      setSelectedCategories([]);
     });
   }
 
@@ -1226,27 +1229,29 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
-                                  child: TextFont(
-                                    text: "Select Categories",
-                                    textColor:
-                                        Theme.of(context).colorScheme.textLight,
-                                    fontSize: 16,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      TextFont(
+                                        text: "Select Categories",
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .textLight,
+                                        fontSize: 16,
+                                      ),
+                                      TextFont(
+                                        text:
+                                            selectedCategoriesText + " Budget",
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .textLight,
+                                        fontSize: 16,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Container(height: 2),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: TextFont(
-                                    text: selectedCategoriesText + " Budget",
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Container(height: 10),
+                                SizedBox(height: 10),
                                 Container(
                                   height: 100,
                                   child: SelectCategory(
@@ -1264,20 +1269,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           ),
                         )
                       : SizedBox.shrink(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextFont(
-                          text: "Category Spending Goals",
-                          textColor: Theme.of(context).colorScheme.textLight,
-                          fontSize: 16,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 5),
                   CategoryLimits(
                     selectedCategories: selectedCategories ?? [],
                     budgetPk: widget.budget == null

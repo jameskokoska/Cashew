@@ -203,6 +203,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 40),
                                 child: NoResults(
+                                  tintColor: budgetColorScheme.primary,
                                   message:
                                       "There are no transactions for this budget within the current dates.",
                                 ),
@@ -216,34 +217,42 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           });
                           snapshot.data!.asMap().forEach((index, category) {
                             categoryEntries.add(
-                              CategoryEntry(
-                                budgetColorScheme: budgetColorScheme,
-                                category: category.category,
-                                totalSpent: totalSpent,
-                                transactionCount: category.transactionCount,
-                                categorySpent: category.total.abs(),
-                                onTap: () {
-                                  if (selectedCategoryPk ==
-                                      category.category.categoryPk) {
-                                    setState(() {
-                                      selectedCategoryPk = -1;
-                                      selectedCategory = null;
-                                    });
-                                    _pieChartDisplayStateKey.currentState!
-                                        .setTouchedIndex(-1);
-                                  } else {
-                                    setState(() {
-                                      selectedCategoryPk =
-                                          category.category.categoryPk;
-                                      selectedCategory = category.category;
-                                    });
-                                    _pieChartDisplayStateKey.currentState!
-                                        .setTouchedIndex(index);
-                                  }
+                              StreamBuilder<CategoryBudgetLimit>(
+                                stream: database.watchCategoryLimit(
+                                    widget.budget.budgetPk,
+                                    category.category.categoryPk),
+                                builder: (context, snapshot) {
+                                  return CategoryEntry(
+                                    categoryBudgetLimit: snapshot.data,
+                                    budgetColorScheme: budgetColorScheme,
+                                    category: category.category,
+                                    totalSpent: totalSpent,
+                                    transactionCount: category.transactionCount,
+                                    categorySpent: category.total.abs(),
+                                    onTap: () {
+                                      if (selectedCategoryPk ==
+                                          category.category.categoryPk) {
+                                        setState(() {
+                                          selectedCategoryPk = -1;
+                                          selectedCategory = null;
+                                        });
+                                        _pieChartDisplayStateKey.currentState!
+                                            .setTouchedIndex(-1);
+                                      } else {
+                                        setState(() {
+                                          selectedCategoryPk =
+                                              category.category.categoryPk;
+                                          selectedCategory = category.category;
+                                        });
+                                        _pieChartDisplayStateKey.currentState!
+                                            .setTouchedIndex(index);
+                                      }
+                                    },
+                                    selected: selectedCategoryPk ==
+                                        category.category.categoryPk,
+                                    allSelected: selectedCategoryPk == -1,
+                                  );
                                 },
-                                selected: selectedCategoryPk ==
-                                    category.category.categoryPk,
-                                allSelected: selectedCategoryPk == -1,
                               ),
                             );
                           });
@@ -531,7 +540,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   ),
                 ),
               ),
-              ...getTransactionsSlivers(
+              getTransactionsSlivers(
                 budgetRange.start,
                 budgetRange.end,
                 categoryFks: selectedCategoryPk != -1
@@ -833,17 +842,18 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
             // as some days are no longer accounted for in the previous budgets term
 
             // get longest month, add those days as an offset difference of the current duration
-            int dayCount = (dateTimeRanges[snapshotIndex].duration.inDays -
-                    longestDateRange)
-                .abs();
-            for (int dayCounter = 0; dayCounter < dayCount; dayCounter++) {
-              points.add(Pair(points.length.toDouble(), 0));
-            }
+            // TODO day count broken for some days...
+            // int dayCount = (dateTimeRanges[snapshotIndex].duration.inDays -
+            //         longestDateRange)
+            //     .abs();
+            // for (int dayCounter = 0; dayCounter < dayCount; dayCounter++) {
+            //   points.add(Pair(points.length.toDouble(), 0));
+            // }
             for (DateTime indexDay = dateTimeRanges[snapshotIndex].start;
                 indexDay.compareTo(dateTimeRanges[snapshotIndex].end) <= 0;
                 indexDay =
                     DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
-              dayCount++;
+              // dayCount++;
 
               //can be optimized...
               double totalForDay = 0;

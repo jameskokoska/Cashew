@@ -393,7 +393,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
               shadeSliderPosition: shadeSliderPosition,
               ringColor: Theme.of(context).colorScheme.black,
               ringSize: 10,
-              width: MediaQuery.of(context).size.width - 100,
+              width: getWidthBottomSheet(context) - 100,
               onChange: (color, colorSliderPositionPassed,
                   shadeSliderPositionPassed) {
                 setState(() {

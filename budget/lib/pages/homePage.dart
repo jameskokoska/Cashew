@@ -200,32 +200,21 @@ class HomePageState extends State<HomePage>
                                   stream: database.watchAllWallets(),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
-                                      List<Widget> children = [];
-                                      int index = 0;
-                                      for (TransactionWallet wallet
-                                          in snapshot.data!) {
-                                        children.add(
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              left: (index == 0 ? 7 : 0.0),
-                                            ),
-                                            child: WalletEntry(
+                                      return ListView(
+                                        addAutomaticKeepAlives: true,
+                                        clipBehavior: Clip.none,
+                                        scrollDirection: Axis.horizontal,
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 7),
+                                        children: [
+                                          for (TransactionWallet wallet
+                                              in snapshot.data!)
+                                            WalletEntry(
                                               selected: appStateSettings[
                                                       "selectedWallet"] ==
                                                   wallet.walletPk,
                                               wallet: wallet,
                                             ),
-                                          ),
-                                        );
-                                        index++;
-                                      }
-
-                                      return ListView(
-                                        addAutomaticKeepAlives: true,
-                                        clipBehavior: Clip.none,
-                                        scrollDirection: Axis.horizontal,
-                                        children: [
-                                          ...children,
                                           WalletEntryAdd(
                                             key: ValueKey(1),
                                           ),
@@ -256,53 +245,76 @@ class HomePageState extends State<HomePage>
                             //     ),
                             //   );
                             // }
+                            List<Widget> budgetItems = [
+                              ...(snapshot.data?.map((Budget budget) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 3),
+                                      child: BudgetContainer(
+                                        budget: budget,
+                                      ),
+                                    );
+                                  }).toList() ??
+                                  []),
+                              OpenContainerNavigation(
+                                borderRadius: 5,
+                                button: (openContainer) {
+                                  return AddButton(
+                                    onTap: () {
+                                      openContainer();
+                                    },
+                                    height: null,
+                                    width: null,
+                                    padding: EdgeInsets.all(5),
+                                  );
+                                },
+                                openPage: AddBudgetPage(title: "Add Budget"),
+                              )
+                            ];
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 13),
-                              child: CarouselSlider(
-                                options: CarouselOptions(
-                                  height: 183,
-                                  enableInfiniteScroll: false,
-                                  enlargeCenterPage: true,
-                                  enlargeStrategy:
-                                      CenterPageEnlargeStrategy.height,
-                                  viewportFraction: 0.95,
-                                  clipBehavior: Clip.none,
-                                  // onPageChanged: (index, reason) {
-                                  //   if (index == snapshot.data!.length) {
-                                  //     pushRoute(context,
-                                  //         AddBudgetPage(title: "Add Budget"));
-                                  //   }
-                                  // },
-                                  enlargeFactor: 0.3,
-                                ),
-                                items: [
-                                  ...(snapshot.data?.map((Budget budget) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 3),
-                                          child: BudgetContainer(
-                                            budget: budget,
-                                          ),
-                                        );
-                                      }).toList() ??
-                                      []),
-                                  OpenContainerNavigation(
-                                    borderRadius: 5,
-                                    button: (openContainer) {
-                                      return AddButton(
-                                        onTap: () {
-                                          openContainer();
-                                        },
-                                        height: null,
-                                        width: null,
-                                        padding: EdgeInsets.all(5),
-                                      );
-                                    },
-                                    openPage:
-                                        AddBudgetPage(title: "Add Budget"),
-                                  ),
-                                ],
-                              ),
+                              child: getIsFullScreen(context)
+                                  ? SizedBox(
+                                      height: 183,
+                                      child: ListView(
+                                        addAutomaticKeepAlives: true,
+                                        clipBehavior: Clip.none,
+                                        scrollDirection: Axis.horizontal,
+                                        children: [
+                                          for (Widget widget in budgetItems)
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 7),
+                                              child: SizedBox(
+                                                width: 500,
+                                                child: widget,
+                                              ),
+                                            )
+                                        ],
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                      ),
+                                    )
+                                  : CarouselSlider(
+                                      options: CarouselOptions(
+                                        height: 183,
+                                        enableInfiniteScroll: false,
+                                        enlargeCenterPage: true,
+                                        enlargeStrategy:
+                                            CenterPageEnlargeStrategy.height,
+                                        viewportFraction: 0.95,
+                                        clipBehavior: Clip.none,
+                                        // onPageChanged: (index, reason) {
+                                        //   if (index == snapshot.data!.length) {
+                                        //     pushRoute(context,
+                                        //         AddBudgetPage(title: "Add Budget"));
+                                        //   }
+                                        // },
+                                        enlargeFactor: 0.3,
+                                      ),
+                                      items: budgetItems,
+                                    ),
                             );
                           } else {
                             return SizedBox.shrink();
@@ -533,29 +545,27 @@ class HomePageState extends State<HomePage>
                       curve: Curves.easeInOutCubicEmphasized,
                       child: AnimatedSwitcher(
                         duration: Duration(milliseconds: 300),
-                        child: Column(
+                        child: SizedBox(
                           key: ValueKey(selectedSlidingSelector),
-                          children: [
-                            ...getTransactionsSlivers(
-                              DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day - 7,
-                              ),
-                              DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                              ),
-                              income: selectedSlidingSelector == 1
-                                  ? null
-                                  : selectedSlidingSelector == 2
-                                      ? false
-                                      : true,
-                              sticky: false,
-                              slivers: false,
+                          child: getTransactionsSlivers(
+                            DateTime(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day - 7,
                             ),
-                          ],
+                            DateTime(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day,
+                            ),
+                            income: selectedSlidingSelector == 1
+                                ? null
+                                : selectedSlidingSelector == 2
+                                    ? false
+                                    : true,
+                            sticky: false,
+                            slivers: false,
+                          ),
                         ),
                       ),
                     ),

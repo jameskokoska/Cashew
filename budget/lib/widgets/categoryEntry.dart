@@ -21,6 +21,7 @@ class CategoryEntry extends StatelessWidget {
     required this.selected,
     required this.allSelected,
     required this.budgetColorScheme,
+    this.categoryBudgetLimit,
     this.isTiled = false,
   }) : super(key: key);
 
@@ -33,6 +34,7 @@ class CategoryEntry extends StatelessWidget {
   final bool allSelected;
   final ColorScheme budgetColorScheme;
   final bool isTiled;
+  final CategoryBudgetLimit? categoryBudgetLimit;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +80,9 @@ class CategoryEntry extends StatelessWidget {
             // ),
             CategoryIconPercent(
               category: category,
-              percent: categorySpent / totalSpent * 100,
+              percent: categoryBudgetLimit != null
+                  ? categorySpent / categoryBudgetLimit!.amount * 100
+                  : categorySpent / totalSpent * 100,
               progressBackgroundColor: selected
                   ? Theme.of(context).colorScheme.white
                   : Theme.of(context).colorScheme.lightDarkAccentHeavy,
@@ -101,15 +105,57 @@ class CategoryEntry extends StatelessWidget {
                     SizedBox(
                       height: 1,
                     ),
-                    TextFont(
-                      text: (categorySpent / totalSpent * 100)
-                              .toStringAsFixed(0) +
-                          "% of budget",
-                      fontSize: 14,
-                      textColor: selected
-                          ? Theme.of(context).colorScheme.black.withOpacity(0.4)
-                          : Theme.of(context).colorScheme.textLight,
-                    )
+                    categoryBudgetLimit != null
+                        ? Row(
+                            children: [
+                              TextFont(
+                                text: (categorySpent /
+                                            categoryBudgetLimit!.amount *
+                                            100)
+                                        .toStringAsFixed(0) +
+                                    "%",
+                                fontSize: 14,
+                                textColor: (categorySpent /
+                                            categoryBudgetLimit!.amount *
+                                            100) >
+                                        100
+                                    ? Theme.of(context).colorScheme.unPaidRed
+                                    : (selected
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .black
+                                            .withOpacity(0.4)
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .textLight),
+                              ),
+                              TextFont(
+                                text: " of " +
+                                    convertToMoney(
+                                        categoryBudgetLimit!.amount) +
+                                    " limit",
+                                fontSize: 14,
+                                textColor: selected
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .black
+                                        .withOpacity(0.4)
+                                    : Theme.of(context).colorScheme.textLight,
+                              ),
+                            ],
+                          )
+                        : TextFont(
+                            text: (categorySpent / totalSpent * 100)
+                                    .toStringAsFixed(0) +
+                                "% of budget",
+                            fontSize: 14,
+                            textColor: selected
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .black
+                                    .withOpacity(0.4)
+                                : Theme.of(context).colorScheme.textLight,
+                          )
                   ],
                 ),
               ),
@@ -118,10 +164,25 @@ class CategoryEntry extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextFont(
-                  fontWeight: FontWeight.bold,
-                  text: convertToMoney(categorySpent),
-                  fontSize: 20,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextFont(
+                      fontWeight: FontWeight.bold,
+                      text: convertToMoney(categorySpent),
+                      fontSize: 20,
+                    ),
+                    // categoryBudgetLimit == null
+                    //     ? SizedBox.shrink()
+                    //     : Padding(
+                    //         padding: const EdgeInsets.only(bottom: 1),
+                    //         child: TextFont(
+                    //           text: " / " +
+                    //               convertToMoney(categoryBudgetLimit!.amount),
+                    //           fontSize: 14,
+                    //         ),
+                    //       ),
+                  ],
                 ),
                 SizedBox(
                   height: 0,

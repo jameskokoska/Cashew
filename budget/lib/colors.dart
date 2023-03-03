@@ -210,20 +210,20 @@ String? toHexString(Color? color) {
 
 List<Color> selectableColors(context) {
   return [
-    Theme.of(context).colorScheme.selectableColorRed,
     Theme.of(context).colorScheme.selectableColorGreen,
-    Theme.of(context).colorScheme.selectableColorBlue,
-    Theme.of(context).colorScheme.selectableColorPurple,
-    Theme.of(context).colorScheme.selectableColorOrange,
-    Theme.of(context).colorScheme.selectableColorBlueGrey,
-    Theme.of(context).colorScheme.selectableColorYellow,
     Theme.of(context).colorScheme.selectableColorAqua,
-    Theme.of(context).colorScheme.selectableColorInidigo,
-    Theme.of(context).colorScheme.selectableColorGrey,
-    Theme.of(context).colorScheme.selectableColorBrown,
-    Theme.of(context).colorScheme.selectableColorDeepPurple,
-    Theme.of(context).colorScheme.selectableColorDeepOrange,
     Theme.of(context).colorScheme.selectableColorCyan,
+    Theme.of(context).colorScheme.selectableColorBlue,
+    Theme.of(context).colorScheme.selectableColorInidigo,
+    Theme.of(context).colorScheme.selectableColorDeepPurple,
+    Theme.of(context).colorScheme.selectableColorPurple,
+    Theme.of(context).colorScheme.selectableColorRed,
+    Theme.of(context).colorScheme.selectableColorOrange,
+    Theme.of(context).colorScheme.selectableColorYellow,
+    Theme.of(context).colorScheme.selectableColorDeepOrange,
+    Theme.of(context).colorScheme.selectableColorBrown,
+    Theme.of(context).colorScheme.selectableColorGrey,
+    Theme.of(context).colorScheme.selectableColorBlueGrey,
   ];
 }
 

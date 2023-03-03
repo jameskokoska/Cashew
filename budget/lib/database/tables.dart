@@ -1595,6 +1595,18 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
+  Future deleteCategoryBudgetLimitsInCategory(int categoryPk) {
+    return (delete(categoryBudgetLimits)
+          ..where((t) => t.categoryFk.equals(categoryPk)))
+        .go();
+  }
+
+  Future deleteCategoryBudgetLimit(int categoryLimitPk) {
+    return (delete(categoryBudgetLimits)
+          ..where((t) => t.categoryLimitPk.equals(categoryLimitPk)))
+        .go();
+  }
+
   //delete category given key
   Future deleteCategory(int categoryPk, int order) async {
     List<TransactionAssociatedTitle> allAssociatedTitles =
@@ -1613,6 +1625,9 @@ class FinanceDatabase extends _$FinanceDatabase {
         deleteTransaction(transaction.transactionPk)
     ]);
     await shiftCategories(-1, order);
+    print("DELETING");
+    print(categoryPk);
+    print(await deleteCategoryBudgetLimitsInCategory(categoryPk));
     return (delete(categories)..where((c) => c.categoryPk.equals(categoryPk)))
         .go();
   }
@@ -1692,6 +1707,20 @@ class FinanceDatabase extends _$FinanceDatabase {
               ))
           .toList();
     });
+  }
+
+  Stream<double?> watchTotalOfCategoryLimitsInBudgetWithCategories(
+      int budgetPk, List<int> categoryPks) {
+    final totalAmt = categoryBudgetLimits.amount.sum();
+    JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+        query;
+
+    query = selectOnly(categoryBudgetLimits)
+      ..addColumns([totalAmt])
+      ..where(categoryBudgetLimits.budgetFk.equals(budgetPk) &
+          categoryBudgetLimits.categoryFk.isIn(categoryPks));
+
+    return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
 
   Stream<double?> watchTotalSpentGivenList(

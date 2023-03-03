@@ -46,7 +46,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       DateTime.now().year, DateTime.now().month - 6, DateTime.now().day);
   DateTime selectedEndDate = DateTime.now();
 
-  late List<Widget> transactionWidgets = [];
+  late Widget transactionWidgets;
   late AnimationController _animationControllerSearch;
   late List<int> selectedTransactionIDs = [];
   bool? selectedIncome;
@@ -221,7 +221,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 SliverToBoxAdapter(
                   child: SizedBox(height: 11),
                 ),
-                ...transactionWidgets,
+                transactionWidgets,
                 SliverToBoxAdapter(
                   child: GestureDetector(
                     onTap: () {

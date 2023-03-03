@@ -56,12 +56,17 @@ class BottomNavBarState extends State<BottomNavBar> {
               boxShadow: boxShadowCheck(
                 [
                   BoxShadow(
-                    color: Theme.of(context).brightness == Brightness.light
+                    color: MediaQuery.of(context).size.width >= 600
                         ? Theme.of(context)
                             .colorScheme
                             .shadowColorLight
-                            .withOpacity(0.35)
-                        : Colors.black.withOpacity(0.8),
+                            .withOpacity(0.3)
+                        : Theme.of(context).brightness == Brightness.light
+                            ? Theme.of(context)
+                                .colorScheme
+                                .shadowColorLight
+                                .withOpacity(0.35)
+                            : Colors.black.withOpacity(0.8),
                     blurRadius: 20,
                     offset: Offset(0, 4),
                     spreadRadius: 9,

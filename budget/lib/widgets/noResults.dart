@@ -1,11 +1,13 @@
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter/rendering.dart';
 
 class NoResults extends StatelessWidget {
-  const NoResults({Key? key, required this.message}) : super(key: key);
+  const NoResults({Key? key, required this.message, this.tintColor})
+      : super(key: key);
   final String message;
+  final Color? tintColor;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,9 @@ class NoResults extends StatelessWidget {
                       : 270),
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.primary.withOpacity(0.6),
+                  tintColor == null
+                      ? Theme.of(context).colorScheme.primary.withOpacity(0.6)
+                      : tintColor!.withOpacity(0.6),
                   BlendMode.srcATop,
                 ),
                 child: ColorFiltered(

@@ -391,10 +391,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       shortcuts: <ShortcutActivator, Intent>{
         LogicalKeySet(LogicalKeyboardKey.escape): const EscapeIntent(),
-        LogicalKeySet(LogicalKeyboardKey.digit1): const Digit1Intent(),
-        LogicalKeySet(LogicalKeyboardKey.digit2): const Digit2Intent(),
-        LogicalKeySet(LogicalKeyboardKey.digit3): const Digit3Intent(),
-        LogicalKeySet(LogicalKeyboardKey.digit4): const Digit4Intent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit1):
+            const Digit1Intent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit2):
+            const Digit2Intent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit3):
+            const Digit3Intent(),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit4):
+            const Digit4Intent(),
       },
       actions: <Type, Action<Intent>>{
         EscapeIntent: CallbackAction<EscapeIntent>(

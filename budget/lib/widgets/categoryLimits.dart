@@ -7,6 +7,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
@@ -33,45 +34,92 @@ class CategoryLimits extends StatefulWidget {
 class _CategoryLimitsState extends State<CategoryLimits> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<TransactionCategory>>(
-      stream: database.watchAllCategories(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Column(
-            children: [
-              TextFont(text: "Total: \$550 / \$600"),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(context)),
+      child: StreamBuilder<List<TransactionCategory>>(
+        stream: database.watchAllCategories(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<int> allCategoryFks = [
               for (TransactionCategory category in snapshot.data!)
-                AnimatedSize(
-                  duration: Duration(milliseconds: 800),
-                  curve: Curves.easeInOutCubicEmphasized,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: widget.selectedCategories.isEmpty ||
-                            widget.selectedCategories
-                                .contains(category.categoryPk)
-                        ? StreamBuilder<CategoryBudgetLimit>(
-                            stream: database.watchCategoryLimit(
-                                widget.budgetPk, category.categoryPk),
-                            builder: (context, snapshot) {
-                              return CategoryLimitEntry(
-                                category: category,
-                                key: ValueKey(1),
-                                budgetLimit: widget.budgetLimit,
-                                categoryLimit: snapshot.data,
-                                budgetPk: widget.budgetPk,
+                category.categoryPk
+            ];
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextFont(
+                        text: "Category Spending Goals",
+                        textColor: Theme.of(context).colorScheme.textLight,
+                        fontSize: 16,
+                      ),
+                      StreamBuilder<double?>(
+                        stream: database
+                            .watchTotalOfCategoryLimitsInBudgetWithCategories(
+                                widget.budgetPk,
+                                widget.selectedCategories.length <= 0
+                                    ? allCategoryFks
+                                    : widget.selectedCategories),
+                        builder: (context, snapshot) {
+                          return CountNumber(
+                            count: snapshot.data ?? 0,
+                            duration: Duration(milliseconds: 700),
+                            dynamicDecimals: true,
+                            initialCount: (0),
+                            textBuilder: (number) {
+                              return TextFont(
+                                fontSize: 16,
+                                textColor:
+                                    Theme.of(context).colorScheme.textLight,
+                                text: convertToMoney(number) +
+                                    " / " +
+                                    convertToMoney(widget.budgetLimit),
                               );
                             },
-                          )
-                        : Container(
-                            key: ValueKey(2),
-                          ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                )
-            ],
-          );
-        }
-        return SizedBox.shrink();
-      },
+                ),
+                SizedBox(height: 5),
+                for (TransactionCategory category in snapshot.data!)
+                  AnimatedSize(
+                    duration: Duration(milliseconds: 800),
+                    curve: Curves.easeInOutCubicEmphasized,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: widget.selectedCategories.isEmpty ||
+                              widget.selectedCategories
+                                  .contains(category.categoryPk)
+                          ? StreamBuilder<CategoryBudgetLimit>(
+                              stream: database.watchCategoryLimit(
+                                  widget.budgetPk, category.categoryPk),
+                              builder: (context, snapshot) {
+                                return CategoryLimitEntry(
+                                  category: category,
+                                  key: ValueKey(1),
+                                  budgetLimit: widget.budgetLimit,
+                                  categoryLimit: snapshot.data,
+                                  budgetPk: widget.budgetPk,
+                                );
+                              },
+                            )
+                          : Container(
+                              key: ValueKey(2),
+                            ),
+                    ),
+                  )
+              ],
+            );
+          }
+          return SizedBox.shrink();
+        },
+      ),
     );
   }
 }
@@ -102,9 +150,13 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
   }
 
   void didUpdateWidget(oldWidget) {
-    if (oldWidget.categoryLimit == null && widget.categoryLimit != null) {
+    if (widget.categoryLimit != null) {
       setState(() {
         selectedAmount = widget.categoryLimit!.amount;
+      });
+    } else if (oldWidget != widget) {
+      setState(() {
+        selectedAmount = 0;
       });
     }
   }
@@ -125,12 +177,19 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
         child: SelectAmount(
           allowZero: true,
           setSelectedAmount: (selectedAmountPassed, _) async {
+            selectedAmountPassed = selectedAmountPassed.abs();
             setState(() {
               selectedAmount = selectedAmountPassed;
             });
-            print(await database.getCategoryLimits());
-            if (widget.categoryLimit == null) {
-              print("IS NULL");
+            if (selectedAmountPassed == 0) {
+              try {
+                await database.deleteCategoryBudgetLimit(
+                  widget.categoryLimit!.categoryLimitPk,
+                );
+              } catch (e) {
+                print(e.toString());
+              }
+            } else if (widget.categoryLimit == null) {
               database.createOrUpdateCategoryLimit(
                 CategoryBudgetLimit(
                   categoryLimitPk: DateTime.now().millisecondsSinceEpoch,
