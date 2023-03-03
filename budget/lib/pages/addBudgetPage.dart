@@ -92,7 +92,7 @@ dynamic enumRecurrence = {
 
 class _AddBudgetPageState extends State<AddBudgetPage> {
   bool? canAddBudget;
-
+  int setBudgetPk = DateTime.now().millisecondsSinceEpoch;
   List<int>? selectedCategories;
   double? selectedAmount;
   String? selectedAmountCalculation;
@@ -501,9 +501,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           await database.getBudgetInstance(widget.budget!.budgetPk);
     }
     return await Budget(
-      budgetPk: widget.budget != null
-          ? widget.budget!.budgetPk
-          : DateTime.now().millisecondsSinceEpoch,
+      budgetPk: widget.budget != null ? widget.budget!.budgetPk : setBudgetPk,
       name: selectedTitle ?? "",
       amount: selectedAmount ?? 0,
       colour: toHexString(selectedColor),
@@ -637,7 +635,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         if (widget.budget != null) {
           discardChangesPopupIfBudgetPassed();
         } else {
-          discardChangesPopup(context);
+          // remove budget category limits created for a budget that has not been made yet
+          discardChangesPopup(context, onDiscard: () {
+            database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
+          });
         }
         return false;
       },
@@ -662,14 +663,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   if (widget.budget != null) {
                     discardChangesPopupIfBudgetPassed();
                   } else {
-                    discardChangesPopup(context);
+                    discardChangesPopup(context, onDiscard: () {
+                      database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
+                    });
                   }
                 },
                 onDragDownToDissmiss: () async {
                   if (widget.budget != null) {
                     discardChangesPopupIfBudgetPassed();
                   } else {
-                    discardChangesPopup(context);
+                    discardChangesPopup(context, onDiscard: () {
+                      database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
+                    });
                   }
                 },
                 actions: [
@@ -1275,7 +1280,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   SizedBox(height: 5),
                   CategoryLimits(
                     selectedCategories: selectedCategories ?? [],
-                    budget: widget.budget,
+                    budgetPk: widget.budget == null
+                        ? setBudgetPk
+                        : widget.budget!.budgetPk,
                     budgetLimit: selectedAmount ?? 1,
                   ),
                   Container(height: 70),

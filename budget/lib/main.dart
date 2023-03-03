@@ -153,7 +153,6 @@ Future<Map<String, dynamic>> getUserSettings() async {
 
   final prefs = await SharedPreferences.getInstance();
   String? userSettings = prefs.getString('userSettings');
-
   try {
     if (userSettings == null) {
       throw ("no settings on file");
@@ -195,7 +194,8 @@ Future<bool> initializeSettings() async {
   appStateSettings = userSettings;
 
   packageInfoGlobal = await PackageInfo.fromPlatform();
-  currenciesJSON = json.decode(
+  print(await rootBundle.loadString('assets/static/generated/currencies.json'));
+  currenciesJSON = await json.decode(
       await rootBundle.loadString('assets/static/generated/currencies.json'));
 
   // Do some actions based on loaded settings
