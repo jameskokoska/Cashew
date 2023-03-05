@@ -7,6 +7,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Budget history line graph gets extended when more budgets loaded
+    Selecting amount for transaction limits amount of numbers that actually change the amount
+    New save bottom button
+    Fixed count-up animation decimal glitching
+    New animation for pie chart
+    If there are no transactions for budget, still shows 0 spent
+    Can add category limit by long pressing category entry in budget page
     Per category budget limits implemented
     New horizontal scroll view for budgets on web home
     Animated percent animates backwards when value changes

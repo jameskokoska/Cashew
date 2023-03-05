@@ -21,6 +21,7 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/categoryLimits.dart';
+import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
@@ -1281,28 +1282,13 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: canAddBudget ?? false
-                    ? Button(
-                        label: widget.budget == null
-                            ? "Add Budget"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {
-                          addBudget();
-                        },
-                        hasBottomExtraSafeArea: true,
-                      )
-                    : Button(
-                        label: widget.budget == null
-                            ? "Add Budget"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {},
-                        color: Colors.grey,
-                        hasBottomExtraSafeArea: true,
-                      ),
+                child: SaveBottomButton(
+                  label: widget.budget == null ? "Add Budget" : "Save Changes",
+                  onTap: () {
+                    addBudget();
+                  },
+                  disabled: !(canAddBudget ?? false),
+                ),
               ),
             ],
           ),

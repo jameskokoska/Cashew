@@ -268,7 +268,13 @@ class IncomeTransactionsSummary extends StatelessWidget {
                       initialCount: (0),
                       textBuilder: (number) {
                         return TextFont(
-                          text: convertToMoney(number),
+                          text: convertToMoney(
+                            number,
+                            finalNumber: snapshot.hasData == false ||
+                                    snapshot.data == null
+                                ? 0
+                                : (snapshot.data ?? 0).abs(),
+                          ),
                           fontSize: 21,
                           textColor: incomeTransactions
                               ? Theme.of(context).colorScheme.incomeGreen

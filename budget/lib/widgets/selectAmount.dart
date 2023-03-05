@@ -294,7 +294,7 @@ class _SelectAmountState extends State<SelectAmount> {
         .replaceAll("+", " + ");
   }
 
-  double calculateResult(input) {
+  double calculateResult(String input) {
     if (input == "") {
       return 0;
     }
@@ -312,6 +312,15 @@ class _SelectAmountState extends State<SelectAmount> {
       result = exp.evaluate(EvaluationType.REAL, cm);
     } catch (e) {}
     return result;
+  }
+
+  bool canChange() {
+    if (includesOperations(amount, false)) {
+      return true;
+    } else if (amount.contains(".") && amount.split(".")[1].length >= 2) {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -421,6 +430,7 @@ class _SelectAmountState extends State<SelectAmount> {
                       Row(
                         children: [
                           CalculatorButton(
+                            disabled: !canChange(),
                             label: "1",
                             editAmount: () {
                               addToAmount("1");
@@ -428,11 +438,13 @@ class _SelectAmountState extends State<SelectAmount> {
                             topLeft: true,
                           ),
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "2",
                               editAmount: () {
                                 addToAmount("2");
                               }),
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "3",
                               editAmount: () {
                                 addToAmount("3");
@@ -449,16 +461,19 @@ class _SelectAmountState extends State<SelectAmount> {
                       Row(
                         children: [
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "4",
                               editAmount: () {
                                 addToAmount("4");
                               }),
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "5",
                               editAmount: () {
                                 addToAmount("5");
                               }),
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "6",
                               editAmount: () {
                                 addToAmount("6");
@@ -473,16 +488,19 @@ class _SelectAmountState extends State<SelectAmount> {
                       Row(
                         children: [
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "7",
                               editAmount: () {
                                 addToAmount("7");
                               }),
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "8",
                               editAmount: () {
                                 addToAmount("8");
                               }),
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "9",
                               editAmount: () {
                                 addToAmount("9");
@@ -497,6 +515,7 @@ class _SelectAmountState extends State<SelectAmount> {
                       Row(
                         children: [
                           CalculatorButton(
+                            disabled: !canChange(),
                             label: ".",
                             editAmount: () {
                               addToAmount(".");
@@ -504,6 +523,7 @@ class _SelectAmountState extends State<SelectAmount> {
                             bottomLeft: true,
                           ),
                           CalculatorButton(
+                              disabled: !canChange(),
                               label: "0",
                               editAmount: () {
                                 addToAmount("0");
@@ -582,6 +602,7 @@ class CalculatorButton extends StatelessWidget {
     this.bottomLeft = false,
     this.bottomRight = false,
     this.onLongPress = null,
+    this.disabled = false,
   }) : super(key: key);
   final String label;
   final VoidCallback editAmount;
@@ -590,37 +611,52 @@ class CalculatorButton extends StatelessWidget {
   final bool bottomLeft;
   final bool bottomRight;
   final VoidCallback? onLongPress;
+  final bool disabled;
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Material(
-        color: appStateSettings["materialYou"]
-            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.9)
-            : Theme.of(context).colorScheme.lightDarkAccentHeavy,
-        borderRadius: BorderRadius.only(
-          topRight: topRight ? Radius.circular(15) : Radius.circular(0),
-          topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
-          bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
-          bottomRight: bottomRight ? Radius.circular(15) : Radius.circular(0),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.only(
-            topRight: topRight ? Radius.circular(15) : Radius.circular(0),
-            topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
-            bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
-            bottomRight: bottomRight ? Radius.circular(15) : Radius.circular(0),
-          ),
-          onLongPress: onLongPress,
-          onTap: editAmount,
-          child: Container(
-            height: 60,
-            child: Center(
-                child: label != "<"
-                    ? TextFont(
-                        fontSize: 24,
-                        text: label,
-                      )
-                    : Icon(Icons.backspace_rounded)),
+      child: AnimatedOpacity(
+        duration: Duration(milliseconds: 200),
+        opacity: disabled ? 0.5 : 1,
+        child: IgnorePointer(
+          ignoring: disabled,
+          child: Material(
+            color: appStateSettings["materialYou"]
+                ? Theme.of(context)
+                    .colorScheme
+                    .secondaryContainer
+                    .withOpacity(0.9)
+                : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+            borderRadius: BorderRadius.only(
+              topRight: topRight ? Radius.circular(15) : Radius.circular(0),
+              topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
+              bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
+              bottomRight:
+                  bottomRight ? Radius.circular(15) : Radius.circular(0),
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.only(
+                topRight: topRight ? Radius.circular(15) : Radius.circular(0),
+                topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
+                bottomLeft:
+                    bottomLeft ? Radius.circular(15) : Radius.circular(0),
+                bottomRight:
+                    bottomRight ? Radius.circular(15) : Radius.circular(0),
+              ),
+              onLongPress: onLongPress,
+              onTap: editAmount,
+              child: Container(
+                height: 60,
+                child: Center(
+                  child: label != "<"
+                      ? TextFont(
+                          fontSize: 24,
+                          text: label,
+                        )
+                      : Icon(Icons.backspace_rounded),
+                ),
+              ),
+            ),
           ),
         ),
       ),

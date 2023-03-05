@@ -116,7 +116,10 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                             textBuilder: (number) {
                               return TextFont(
                                 textAlign: TextAlign.center,
-                                text: convertToMoney(number),
+                                text: convertToMoney(
+                                  number,
+                                  finalNumber: total.abs(),
+                                ),
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               );

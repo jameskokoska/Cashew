@@ -5,6 +5,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
@@ -121,6 +122,7 @@ class PieChartDisplay extends StatefulWidget {
 class PieChartDisplayState extends State<PieChartDisplay> {
   int touchedIndex = -1;
   bool scaleIn = false;
+  int showLabels = 0;
   @override
   void initState() {
     super.initState();
@@ -131,6 +133,14 @@ class PieChartDisplayState extends State<PieChartDisplay> {
         });
       });
     }
+    Future.delayed(Duration(milliseconds: 500), () async {
+      for (int i = 1; i <= widget.data.length; i++) {
+        await Future.delayed(const Duration(milliseconds: 70));
+        setState(() {
+          showLabels = showLabels + 1;
+        });
+      }
+    });
   }
 
   void setTouchedIndex(index) {
@@ -141,10 +151,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedScale(
-      scale: appStateSettings["batterySaver"] ? 1 : (scaleIn ? 1 : 0),
-      duration: Duration(milliseconds: 2500),
-      curve: ElasticOutCurve(0.8),
+    return PinWheelReveal(
+      delay: Duration(milliseconds: 0),
+      duration: Duration(milliseconds: 850),
       child: PieChart(
         PieChartData(
           startDegreeOffset: -45,
@@ -207,6 +216,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
         title: "",
         radius: radius,
         badgeWidget: _Badge(
+          showLabels: i < showLabels,
           scale: widgetScale,
           color: dynamicPastel(
               context,
@@ -233,6 +243,7 @@ class _Badge extends StatelessWidget {
   final AssetImage assetImage;
   final double percent;
   final bool isTouched;
+  final bool showLabels;
 
   const _Badge({
     Key? key,
@@ -241,6 +252,7 @@ class _Badge extends StatelessWidget {
     required this.assetImage,
     required this.percent,
     required this.isTouched,
+    required this.showLabels,
   }) : super(key: key);
 
   @override
@@ -251,7 +263,9 @@ class _Badge extends StatelessWidget {
       duration: percent < 5
           ? Duration(milliseconds: 700)
           : Duration(milliseconds: 1300),
-      scale: percent < 5 && isTouched == false ? 0 : (percent < 5 ? 1 : scale),
+      scale: percent < 5 && isTouched == false
+          ? 0
+          : (showLabels ? (percent < 5 ? 1 : scale) : 0),
       child: Container(
         width: 45,
         height: 45,

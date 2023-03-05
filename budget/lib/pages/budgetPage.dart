@@ -9,7 +9,9 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/categoryEntry.dart';
+import 'package:budget/widgets/categoryLimits.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
@@ -198,17 +200,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       ),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          if (snapshot.data!.length <= 0)
-                            return SliverToBoxAdapter(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 40),
-                                child: NoResults(
-                                  tintColor: budgetColorScheme.primary,
-                                  message:
-                                      "There are no transactions for this budget within the current dates.",
-                                ),
-                              ),
-                            );
                           double totalSpent = 0;
                           List<Widget> categoryEntries = [];
                           snapshot.data!.forEach((category) {
@@ -223,6 +214,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     category.category.categoryPk),
                                 builder: (context, snapshot) {
                                   return CategoryEntry(
+                                    onLongPress: () {
+                                      enterCategoryLimitPopup(
+                                        context,
+                                        category.category,
+                                        snapshot.data,
+                                        widget.budget.budgetPk,
+                                        (p0) => null,
+                                      );
+                                    },
                                     categoryBudgetLimit: snapshot.data,
                                     budgetColorScheme: budgetColorScheme,
                                     category: category.category,
@@ -306,9 +306,14 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                           textBuilder:
                                                               (number) {
                                                             return TextFont(
-                                                              text:
-                                                                  convertToMoney(
-                                                                      number),
+                                                              text: convertToMoney(
+                                                                  number,
+                                                                  finalNumber: appStateSettings[
+                                                                          "showTotalSpentForBudget"]
+                                                                      ? totalSpent
+                                                                      : widget.budget
+                                                                              .amount -
+                                                                          totalSpent),
                                                               fontSize: 25,
                                                               textAlign:
                                                                   TextAlign
@@ -370,7 +375,14 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                       textBuilder: (number) {
                                                         return TextFont(
                                                           text: convertToMoney(
-                                                              number),
+                                                              number,
+                                                              finalNumber: appStateSettings[
+                                                                      "showTotalSpentForBudget"]
+                                                                  ? totalSpent
+                                                                  : -1 *
+                                                                      (widget.budget
+                                                                              .amount -
+                                                                          totalSpent)),
                                                           fontSize: 25,
                                                           textAlign:
                                                               TextAlign.left,
@@ -450,6 +462,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   ),
                                 ),
                               ),
+                              if (snapshot.data!.length <= 0)
+                                NoResults(
+                                  tintColor: budgetColorScheme.primary,
+                                  message:
+                                      "There are no transactions for this budget within the current dates.",
+                                ),
                               Transform.translate(
                                 offset: Offset(0, -10),
                                 child: BudgetSpenderSummary(
@@ -468,7 +486,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   wallets: wallets,
                                 ),
                               ),
-                              SizedBox(height: 20),
+                              if (snapshot.data!.length > 0)
+                                SizedBox(height: 20),
                               PieChartWrapper(
                                   pieChartDisplayStateKey:
                                       _pieChartDisplayStateKey,
@@ -481,9 +500,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     });
                                   },
                                   isPastBudget: widget.isPastBudget ?? false),
-                              SizedBox(height: 35),
+                              if (snapshot.data!.length > 0)
+                                SizedBox(height: 35),
                               ...categoryEntries,
-                              SizedBox(height: 15),
+                              if (snapshot.data!.length > 0)
+                                SizedBox(height: 15),
                             ]),
                           );
                         }

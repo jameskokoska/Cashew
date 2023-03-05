@@ -16,6 +16,7 @@ class BudgetHistoryLineGraph extends StatefulWidget {
     required this.initialSpots,
     required this.horizontalLineAt,
     required this.maxY,
+    this.onTouchedIndex,
   });
 
   final Color color;
@@ -25,6 +26,7 @@ class BudgetHistoryLineGraph extends StatefulWidget {
   final Budget budget;
   final double? horizontalLineAt;
   final double maxY;
+  final Function(int?)? onTouchedIndex;
 
   @override
   State<BudgetHistoryLineGraph> createState() => _BudgetHistoryLineGraphState();
@@ -121,6 +123,16 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
           minY: -0.00000000000001,
           maxY: widget.maxY,
           lineTouchData: LineTouchData(
+            touchCallback:
+                (FlTouchEvent event, LineTouchResponse? touchResponse) {
+              if (!event.isInterestedForInteractions || touchResponse == null) {
+                if (widget.onTouchedIndex != null) widget.onTouchedIndex!(null);
+                return;
+              }
+              double value = touchResponse.lineBarSpots![0].x;
+              if (widget.onTouchedIndex != null)
+                widget.onTouchedIndex!(value.toInt());
+            },
             enabled: true,
             touchSpotThreshold: 1000,
             getTouchedSpotIndicator:
@@ -173,9 +185,9 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
-                  interval: 1,
                   showTitles: true,
                   getTitlesWidget: (value, _) {
+                    print(value.toInt());
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: TextFont(

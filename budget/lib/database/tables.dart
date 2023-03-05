@@ -1083,6 +1083,13 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watchSingle();
   }
 
+  Future<List<CategoryBudgetLimit>> getCategoryLimit(int budgetPk,
+      {int? limit, int? offset}) {
+    return (select(categoryBudgetLimits)
+          ..where((t) => t.budgetFk.equals(budgetPk)))
+        .get();
+  }
+
   Future<List<CategoryBudgetLimit>> getCategoryLimits(
       {int? limit, int? offset}) {
     return (select(categoryBudgetLimits)).get();

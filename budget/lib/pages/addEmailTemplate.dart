@@ -10,6 +10,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
@@ -674,28 +675,15 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: canAddTemplate ?? false
-                    ? Button(
-                        label: widget.scannerTemplate == null
-                            ? "Add Template"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {
-                          addTemplate();
-                        },
-                        hasBottomExtraSafeArea: true,
-                      )
-                    : Button(
-                        label: widget.scannerTemplate == null
-                            ? "Add Template"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {},
-                        color: Colors.grey,
-                        hasBottomExtraSafeArea: true,
-                      ),
+                child: SaveBottomButton(
+                  label: widget.scannerTemplate == null
+                      ? "Add Template"
+                      : "Save Changes",
+                  onTap: () {
+                    addTemplate();
+                  },
+                  disabled: !(canAddTemplate ?? false),
+                ),
               ),
             ],
           ),

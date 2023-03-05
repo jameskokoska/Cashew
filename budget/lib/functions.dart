@@ -34,7 +34,7 @@ extension CapExtension on String {
 }
 
 String convertToMoney(double amount,
-    {String? currencyKey, bool showCurrency = true}) {
+    {String? currencyKey, bool showCurrency = true, double? finalNumber}) {
   {
     if (amount == -0.0) {
       amount = amount.abs();
@@ -44,7 +44,19 @@ String convertToMoney(double amount,
     }
     final currency = new NumberFormat("#,##0.00", "en_US");
     String formatOutput = currency.format(amount);
-    if (formatOutput.substring(formatOutput.length - 2) == "00") {
+    if (finalNumber != null &&
+        !finalNumber.abs().toStringAsFixed(5).split(".")[1].startsWith("00")) {
+      return (showCurrency ? getCurrencyString(currencyKey: currencyKey) : '') +
+          currency.format(amount);
+    }
+    if ((finalNumber != null &&
+            finalNumber
+                .abs()
+                .toStringAsFixed(5)
+                .split(".")[1]
+                .startsWith("00")) ||
+        formatOutput.substring(formatOutput.length - 2) == "00") {
+      // Do not show the zeroes
       return (showCurrency ? getCurrencyString(currencyKey: currencyKey) : '') +
           formatOutput.replaceRange(
               formatOutput.length - 3, formatOutput.length, '');

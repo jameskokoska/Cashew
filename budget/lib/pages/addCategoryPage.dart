@@ -17,6 +17,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
@@ -600,28 +601,14 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: canAddCategory ?? false
-                    ? Button(
-                        label: widget.category == null
-                            ? "Add Category"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {
-                          addCategory();
-                        },
-                        hasBottomExtraSafeArea: true,
-                      )
-                    : Button(
-                        label: widget.category == null
-                            ? "Add Category"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {},
-                        color: Colors.grey,
-                        hasBottomExtraSafeArea: true,
-                      ),
+                child: SaveBottomButton(
+                  label:
+                      widget.category == null ? "Add Category" : "Save Changes",
+                  onTap: () {
+                    addCategory();
+                  },
+                  disabled: !(canAddCategory ?? false),
+                ),
               ),
             ],
           ),

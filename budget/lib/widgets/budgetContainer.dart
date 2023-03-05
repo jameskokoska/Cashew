@@ -165,7 +165,12 @@ class BudgetContainer extends StatelessWidget {
                                                     textBuilder: (number) {
                                                       return TextFont(
                                                         text: convertToMoney(
-                                                            number),
+                                                            number,
+                                                            finalNumber: appStateSettings[
+                                                                    "showTotalSpentForBudget"]
+                                                                ? totalSpent
+                                                                : budget.amount -
+                                                                    totalSpent),
                                                         fontSize: 18,
                                                         textAlign:
                                                             TextAlign.left,
@@ -211,7 +216,13 @@ class BudgetContainer extends StatelessWidget {
                                                     textBuilder: (number) {
                                                       return TextFont(
                                                         text: convertToMoney(
-                                                            number),
+                                                            number,
+                                                            finalNumber: appStateSettings[
+                                                                    "showTotalSpentForBudget"]
+                                                                ? totalSpent
+                                                                : -1 *
+                                                                    (budget.amount -
+                                                                        totalSpent)),
                                                         fontSize: 18,
                                                         textAlign:
                                                             TextAlign.left,
@@ -327,7 +338,14 @@ class BudgetContainer extends StatelessWidget {
                                                   textBuilder: (number) {
                                                     return TextFont(
                                                       text: convertToMoney(
-                                                          number),
+                                                        number,
+                                                        finalNumber:
+                                                            appStateSettings[
+                                                                    "showTotalSpentForBudget"]
+                                                                ? totalSpent
+                                                                : budget.amount -
+                                                                    totalSpent,
+                                                      ),
                                                       fontSize: 18,
                                                       textAlign: TextAlign.left,
                                                       fontWeight:
@@ -375,7 +393,13 @@ class BudgetContainer extends StatelessWidget {
                                                   textBuilder: (number) {
                                                     return TextFont(
                                                       text: convertToMoney(
-                                                          number),
+                                                          number,
+                                                          finalNumber: appStateSettings[
+                                                                  "showTotalSpentForBudget"]
+                                                              ? totalSpent
+                                                              : -1 *
+                                                                  (budget.amount -
+                                                                      totalSpent)),
                                                       fontSize: 18,
                                                       textAlign: TextAlign.left,
                                                       fontWeight:

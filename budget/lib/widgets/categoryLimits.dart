@@ -75,7 +75,8 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                                 fontSize: 16,
                                 textColor:
                                     Theme.of(context).colorScheme.textLight,
-                                text: convertToMoney(number) +
+                                text: convertToMoney(number,
+                                        finalNumber: snapshot.data ?? 0) +
                                     " / " +
                                     convertToMoney(widget.budgetLimit),
                               );
@@ -150,79 +151,31 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
   }
 
   void didUpdateWidget(oldWidget) {
+    // when the snapshot loads the data, add it
     if (widget.categoryLimit != null) {
       setState(() {
         selectedAmount = widget.categoryLimit!.amount;
       });
-    } else if (oldWidget != widget) {
-      setState(() {
-        selectedAmount = 0;
-      });
     }
   }
 
-  void selectAmount(context) {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Limit",
-        subtitle: widget.category.name,
-        icon: CategoryIcon(
-          categoryPk: widget.category.categoryPk,
-          size: 35,
-          borderRadius: 500,
-          margin: EdgeInsets.zero,
-        ),
-        underTitleSpace: false,
-        child: SelectAmount(
-          allowZero: true,
-          setSelectedAmount: (selectedAmountPassed, _) async {
-            selectedAmountPassed = selectedAmountPassed.abs();
-            setState(() {
-              selectedAmount = selectedAmountPassed;
-            });
-            if (selectedAmountPassed == 0) {
-              try {
-                await database.deleteCategoryBudgetLimit(
-                  widget.categoryLimit!.categoryLimitPk,
-                );
-              } catch (e) {
-                print(e.toString());
-              }
-            } else if (widget.categoryLimit == null) {
-              database.createOrUpdateCategoryLimit(
-                CategoryBudgetLimit(
-                  categoryLimitPk: DateTime.now().millisecondsSinceEpoch,
-                  categoryFk: widget.category.categoryPk,
-                  budgetFk: widget.budgetPk,
-                  amount: selectedAmountPassed,
-                ),
-              );
-            } else {
-              database.createOrUpdateCategoryLimit(
-                CategoryBudgetLimit(
-                  categoryLimitPk: widget.categoryLimit!.categoryLimitPk,
-                  categoryFk: widget.categoryLimit!.categoryFk,
-                  budgetFk: widget.categoryLimit!.budgetFk,
-                  amount: selectedAmountPassed,
-                ),
-              );
-            }
-          },
-          next: () async {
-            Navigator.pop(context);
-          },
-          nextLabel: "Set Limit",
-        ),
-      ),
-    );
+  void setAmount(double selectedAmountPassed) async {
+    setState(() {
+      selectedAmount = selectedAmountPassed;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Tappable(
-      onTap: () {
-        selectAmount(context);
+      onTap: () async {
+        enterCategoryLimitPopup(
+          context,
+          widget.category,
+          widget.categoryLimit,
+          widget.budgetPk,
+          setAmount,
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
@@ -269,7 +222,13 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
               placeholder: convertToMoney(0),
               showPlaceHolderWhenTextEquals: convertToMoney(0),
               onTap: () {
-                selectAmount(context);
+                enterCategoryLimitPopup(
+                  context,
+                  widget.category,
+                  widget.categoryLimit,
+                  widget.budgetPk,
+                  setAmount,
+                );
               },
               fontSize: 23,
               fontWeight: FontWeight.bold,
@@ -278,6 +237,70 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+void enterCategoryLimitPopup(
+  context,
+  TransactionCategory category,
+  CategoryBudgetLimit? categoryLimit,
+  int budgetPk,
+  Function(double) setSelectedAmount,
+) async {
+  double amount = categoryLimit != null ? categoryLimit.amount : 0;
+  await openBottomSheet(
+    context,
+    PopupFramework(
+      title: "Enter Limit",
+      subtitle: category.name,
+      icon: CategoryIcon(
+        categoryPk: category.categoryPk,
+        size: 35,
+        borderRadius: 500,
+        margin: EdgeInsets.zero,
+      ),
+      underTitleSpace: false,
+      child: SelectAmount(
+        amountPassed: amount.toString(),
+        allowZero: true,
+        setSelectedAmount: (selectedAmountPassed, _) async {
+          selectedAmountPassed = selectedAmountPassed.abs();
+          amount = selectedAmountPassed;
+        },
+        next: () async {
+          Navigator.pop(context);
+        },
+        nextLabel: "Set Limit",
+      ),
+    ),
+  );
+  setSelectedAmount(amount);
+  if (amount == 0) {
+    try {
+      database.deleteCategoryBudgetLimit(
+        categoryLimit!.categoryLimitPk,
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  } else if (categoryLimit == null) {
+    database.createOrUpdateCategoryLimit(
+      CategoryBudgetLimit(
+        categoryLimitPk: DateTime.now().millisecondsSinceEpoch,
+        categoryFk: category.categoryPk,
+        budgetFk: budgetPk,
+        amount: amount,
+      ),
+    );
+  } else {
+    database.createOrUpdateCategoryLimit(
+      CategoryBudgetLimit(
+        categoryLimitPk: categoryLimit.categoryLimitPk,
+        categoryFk: categoryLimit.categoryFk,
+        budgetFk: categoryLimit.budgetFk,
+        amount: amount,
       ),
     );
   }

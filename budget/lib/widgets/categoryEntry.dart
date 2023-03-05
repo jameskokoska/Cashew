@@ -23,6 +23,7 @@ class CategoryEntry extends StatelessWidget {
     required this.budgetColorScheme,
     this.categoryBudgetLimit,
     this.isTiled = false,
+    this.onLongPress,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -35,6 +36,7 @@ class CategoryEntry extends StatelessWidget {
   final ColorScheme budgetColorScheme;
   final bool isTiled;
   final CategoryBudgetLimit? categoryBudgetLimit;
+  final Function? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -222,13 +224,15 @@ class CategoryEntry extends StatelessWidget {
                   borderRadius: isTiled ? 15 : 0,
                   key: ValueKey(isTiled),
                   onTap: onTap,
-                  onLongPress: () => pushRoute(
-                    context,
-                    AddCategoryPage(
-                      title: "Edit Category",
-                      category: category,
-                    ),
-                  ),
+                  onLongPress: onLongPress != null
+                      ? () => onLongPress!()
+                      : () => pushRoute(
+                            context,
+                            AddCategoryPage(
+                              title: "Edit Category",
+                              category: category,
+                            ),
+                          ),
                   color: Colors.transparent,
                   child: AnimatedOpacity(
                     duration: Duration(milliseconds: 300),

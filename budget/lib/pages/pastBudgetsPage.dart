@@ -63,59 +63,64 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   Stream<List<double?>>? mergedStreamsBudgetTotal;
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 8;
+  int? touchedBudgetIndex = null;
 
   initState() {
     Future.delayed(Duration.zero, () async {
-      List<TransactionWallet> wallets = await database.getAllWallets();
-      List<Stream<double?>> watchedBudgetTotals = [];
-      for (int index = 0; index <= 7; index++) {
-        DateTime datePast = DateTime(
-          DateTime.now().year -
-              (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                  ? index * widget.budget.periodLength
-                  : 0),
-          DateTime.now().month -
-              (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                  ? index * widget.budget.periodLength
-                  : 0),
-          DateTime.now().day -
-              (widget.budget.reoccurrence == BudgetReoccurence.daily
-                  ? index * widget.budget.periodLength
-                  : 0) -
-              (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                  ? index * 7 * widget.budget.periodLength
-                  : 0),
-        );
-        DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
-        dateTimeRanges.add(budgetRange);
-        watchedBudgetTotals
-            .add(database.watchTotalSpentInTimeRangeFromCategories(
-          budgetRange.start,
-          budgetRange.end,
-          widget.budget.categoryFks,
-          widget.budget.allCategoryFks,
-          wallets,
-          widget.budget.sharedTransactionsShow,
-          onlyShowTransactionsBelongingToBudget:
-              widget.budget.sharedKey != null ||
-                      widget.budget.addedTransactionsOnly == true
-                  ? widget.budget.budgetPk
-                  : null,
-          budget: widget.budget,
-        ));
-      }
-
-      setState(() {
-        mergedStreamsBudgetTotal = StreamZip(watchedBudgetTotals);
-      });
-      // mergedStreams.listen(
-      //   (event) {
-      //     print("EVENT");
-      //     print(event.length);
-      //   },
-      // );
+      loadLines(amountLoaded);
     });
     super.initState();
+  }
+
+  void loadLines(amountLoaded) async {
+    dateTimeRanges = [];
+    List<TransactionWallet> wallets = await database.getAllWallets();
+    List<Stream<double?>> watchedBudgetTotals = [];
+    for (int index = 0; index < amountLoaded; index++) {
+      DateTime datePast = DateTime(
+        DateTime.now().year -
+            (widget.budget.reoccurrence == BudgetReoccurence.yearly
+                ? index * widget.budget.periodLength
+                : 0),
+        DateTime.now().month -
+            (widget.budget.reoccurrence == BudgetReoccurence.monthly
+                ? index * widget.budget.periodLength
+                : 0),
+        DateTime.now().day -
+            (widget.budget.reoccurrence == BudgetReoccurence.daily
+                ? index * widget.budget.periodLength
+                : 0) -
+            (widget.budget.reoccurrence == BudgetReoccurence.weekly
+                ? index * 7 * widget.budget.periodLength
+                : 0),
+      );
+      DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
+      dateTimeRanges.add(budgetRange);
+      watchedBudgetTotals.add(database.watchTotalSpentInTimeRangeFromCategories(
+        budgetRange.start,
+        budgetRange.end,
+        widget.budget.categoryFks,
+        widget.budget.allCategoryFks,
+        wallets,
+        widget.budget.sharedTransactionsShow,
+        onlyShowTransactionsBelongingToBudget:
+            widget.budget.sharedKey != null ||
+                    widget.budget.addedTransactionsOnly == true
+                ? widget.budget.budgetPk
+                : null,
+        budget: widget.budget,
+      ));
+    }
+
+    setState(() {
+      mergedStreamsBudgetTotal = StreamZip(watchedBudgetTotals);
+    });
+    // mergedStreams.listen(
+    //   (event) {
+    //     print("EVENT");
+    //     print(event.length);
+    //   },
+    // );
   }
 
   @override
@@ -191,6 +196,11 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
               }
               return SliverToBoxAdapter(
                 child: BudgetHistoryLineGraph(
+                  onTouchedIndex: (index) {
+                    setState(() {
+                      touchedBudgetIndex = index;
+                    });
+                  },
                   color: dynamicPastel(context, budgetColorScheme.primary,
                       amountLight: 0.4, amountDark: 0.2),
                   dateRanges: dateTimeRanges,
@@ -252,17 +262,30 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                           ? index * 7 * widget.budget.periodLength
                           : 0),
                 );
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: index == amountLoaded - 1 ? 0 : 13.0),
-                  child: PastBudgetContainer(
-                    budget: widget.budget,
-                    smallBudgetContainer: true,
-                    showTodayForSmallBudget: (index == 0 ? true : false),
-                    dateForRange: datePast,
-                    isPastBudget: index == 0 ? false : true,
-                    isPastBudgetButCurrentPeriod: index == 0,
-                    budgetColorScheme: budgetColorScheme,
+                return AnimatedSize(
+                  duration: Duration(milliseconds: 1000),
+                  curve: Curves.easeInOutCubicEmphasized,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200),
+                    child: touchedBudgetIndex == null ||
+                            amountLoaded - touchedBudgetIndex! - 1 == index
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                bottom: index == amountLoaded - 1 ? 0 : 13.0),
+                            child: PastBudgetContainer(
+                              budget: widget.budget,
+                              smallBudgetContainer: true,
+                              showTodayForSmallBudget:
+                                  (index == 0 ? true : false),
+                              dateForRange: datePast,
+                              isPastBudget: index == 0 ? false : true,
+                              isPastBudgetButCurrentPeriod: index == 0,
+                              budgetColorScheme: budgetColorScheme,
+                            ),
+                          )
+                        : Container(
+                            key: ValueKey(2),
+                          ),
                   ),
                 );
               },
@@ -287,6 +310,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                   ),
                 ),
                 onTap: () {
+                  loadLines(amountLoaded + 3);
                   setState(() {
                     amountLoaded += 3;
                   });
@@ -424,7 +448,12 @@ class PastBudgetContainer extends StatelessWidget {
                                               initialCount: (0),
                                               textBuilder: (number) {
                                                 return TextFont(
-                                                  text: convertToMoney(number),
+                                                  text: convertToMoney(number,
+                                                      finalNumber: appStateSettings[
+                                                              "showTotalSpentForBudget"]
+                                                          ? totalSpent
+                                                          : budget.amount -
+                                                              totalSpent),
                                                   fontSize: 16,
                                                   textAlign: TextAlign.left,
                                                   fontWeight: FontWeight.bold,
@@ -468,7 +497,13 @@ class PastBudgetContainer extends StatelessWidget {
                                           initialCount: (0),
                                           textBuilder: (number) {
                                             return TextFont(
-                                              text: convertToMoney(number),
+                                              text: convertToMoney(number,
+                                                  finalNumber: appStateSettings[
+                                                          "showTotalSpentForBudget"]
+                                                      ? totalSpent
+                                                      : -1 *
+                                                          (budget.amount -
+                                                              totalSpent)),
                                               fontSize: 16,
                                               textAlign: TextAlign.left,
                                               fontWeight: FontWeight.bold,

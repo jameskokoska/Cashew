@@ -61,7 +61,11 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                               initialCount: (0),
                               textBuilder: (number) {
                                 return TextFont(
-                                  text: convertToMoney(number),
+                                  text: convertToMoney(number,
+                                      finalNumber: snapshot.hasData == false ||
+                                              snapshot.data == null
+                                          ? 0
+                                          : (snapshot.data ?? 0).abs()),
                                   fontSize: 25,
                                   textColor: overdueTransactions
                                       ? Theme.of(context).colorScheme.unPaidRed
@@ -77,7 +81,7 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 4.0),
+                        padding: const EdgeInsets.only(bottom: 3.0),
                         child: StreamBuilder<List<int?>>(
                           stream: overdueTransactions
                               ? database.watchCountOfOverdue()

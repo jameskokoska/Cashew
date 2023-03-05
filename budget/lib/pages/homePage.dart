@@ -648,12 +648,12 @@ class _SlidingSelectorState extends State<SlidingSelector> {
               selected: selectedTab == 1,
             ),
             2: SlidingSelectorChip(
-              icon: Icons.exit_to_app_rounded,
+              icon: Icons.logout_rounded,
               name: "Expense",
               selected: selectedTab == 2,
             ),
             3: SlidingSelectorChip(
-              icon: Icons.move_to_inbox_rounded,
+              icon: Icons.exit_to_app_rounded,
               name: "Income",
               selected: selectedTab == 3,
             ),
@@ -796,7 +796,11 @@ class UpcomingTransactions extends StatelessWidget {
                             initialCount: (0),
                             textBuilder: (number) {
                               return TextFont(
-                                text: convertToMoney(number),
+                                text: convertToMoney(number,
+                                    finalNumber: snapshot.hasData == false ||
+                                            snapshot.data == null
+                                        ? 0
+                                        : (snapshot.data ?? 0).abs()),
                                 fontSize: 24,
                                 textColor: overdueTransactions
                                     ? Theme.of(context).colorScheme.unPaidRed

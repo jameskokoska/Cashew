@@ -13,6 +13,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
@@ -417,28 +418,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: canAddWallet ?? false
-                    ? Button(
-                        label: widget.wallet == null
-                            ? "Add Wallet"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {
-                          addWallet();
-                        },
-                        hasBottomExtraSafeArea: true,
-                      )
-                    : Button(
-                        label: widget.wallet == null
-                            ? "Add Wallet"
-                            : "Save Changes",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {},
-                        color: Colors.grey,
-                        hasBottomExtraSafeArea: true,
-                      ),
+                child: SaveBottomButton(
+                  label: widget.wallet == null ? "Add Wallet" : "Save Changes",
+                  onTap: () {
+                    addWallet();
+                  },
+                  disabled: !(canAddWallet ?? false),
+                ),
               ),
             ],
           ),

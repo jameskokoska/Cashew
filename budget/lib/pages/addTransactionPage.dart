@@ -28,6 +28,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -771,7 +772,9 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                           child: TextFont(
                                             textAlign: TextAlign.right,
                                             text: convertToMoney(number,
-                                                showCurrency: false),
+                                                showCurrency: false,
+                                                finalNumber:
+                                                    selectedAmount ?? 0),
                                             walletPkForCurrency:
                                                 selectedWalletPk,
                                             fontSize: 32,
@@ -1123,8 +1126,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
                           child: Tappable(
-                            color:
-                                Theme.of(context).colorScheme.canvasContainer,
+                            color: (appStateSettings["materialYou"]
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .canvasContainer),
                             onTap: () {
                               openBottomSheet(
                                 context,
@@ -1151,6 +1159,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   )
                                 : IgnorePointer(
                                     child: TextInput(
+                                      backgroundColor: Colors.transparent,
                                       padding: EdgeInsets.zero,
                                       readOnly: true,
                                       labelText: "Title",
@@ -1164,8 +1173,13 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
                           child: Tappable(
-                            color:
-                                Theme.of(context).colorScheme.canvasContainer,
+                            color: (appStateSettings["materialYou"]
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .canvasContainer),
                             onTap: () {
                               openBottomSheet(
                                 context,
@@ -1194,6 +1208,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                   )
                                 : IgnorePointer(
                                     child: TextInput(
+                                      backgroundColor: Colors.transparent,
                                       padding: EdgeInsets.zero,
                                       readOnly: true,
                                       labelText: "Notes",
@@ -1271,10 +1286,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: selectedCategory == null
-                    ? Button(
+                    ? SaveBottomButton(
                         label: "Select Category",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
                         onTap: () {
                           openBottomSheet(
                             context,
@@ -1285,40 +1298,39 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 setSelectedCategory: setSelectedCategory,
                                 skipIfSet: true,
                                 next: () {
-                                  openBottomSheet(
-                                    context,
-                                    PopupFramework(
-                                      title: "Enter Amount",
-                                      underTitleSpace: false,
-                                      child: SelectAmount(
-                                        walletPkForCurrency: selectedWalletPk,
-                                        onlyShowCurrencyIcon: appStateSettings[
-                                                "selectedWallet"] ==
-                                            selectedWalletPk,
-                                        amountPassed:
-                                            selectedAmountCalculation ?? "",
-                                        setSelectedAmount: setSelectedAmount,
-                                        next: () async {
-                                          await addTransaction();
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        },
-                                        nextLabel: textAddTransaction,
+                                  if (selectedAmount == null)
+                                    openBottomSheet(
+                                      context,
+                                      PopupFramework(
+                                        title: "Enter Amount",
+                                        underTitleSpace: false,
+                                        child: SelectAmount(
+                                          walletPkForCurrency: selectedWalletPk,
+                                          onlyShowCurrencyIcon:
+                                              appStateSettings[
+                                                      "selectedWallet"] ==
+                                                  selectedWalletPk,
+                                          amountPassed:
+                                              selectedAmountCalculation ?? "",
+                                          setSelectedAmount: setSelectedAmount,
+                                          next: () async {
+                                            await addTransaction();
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                          nextLabel: textAddTransaction,
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
                                 },
                               ),
                             ),
                           );
                         },
-                        hasBottomExtraSafeArea: true,
                       )
                     : selectedAmount == null
-                        ? Button(
+                        ? SaveBottomButton(
                             label: "Enter Amount",
-                            width: getWidthBottomSheet(context),
-                            height: 50,
                             onTap: () {
                               openBottomSheet(
                                 context,
@@ -1343,19 +1355,15 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                                 ),
                               );
                             },
-                            hasBottomExtraSafeArea: true,
                           )
-                        : Button(
+                        : SaveBottomButton(
                             label: widget.transaction != null
                                 ? "Save Changes"
                                 : textAddTransaction ?? "",
-                            width: MediaQuery.of(context).size.width,
-                            height: 50,
                             onTap: () async {
                               bool result = await addTransaction();
                               if (result) Navigator.of(context).pop();
                             },
-                            hasBottomExtraSafeArea: true,
                           ),
               ),
             ],

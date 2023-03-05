@@ -226,11 +226,11 @@ class SettingsPageState extends State<SettingsPage>
             updateSettings("materialYou", value, updateGlobalState: true);
           },
           initialValue: appStateSettings["materialYou"],
-          icon: Icons.format_paint_rounded,
+          icon: Icons.brush_rounded,
         ),
         SettingsContainerDropdown(
           title: "Theme Mode",
-          icon: Icons.dark_mode_rounded,
+          icon: Icons.lightbulb_rounded,
           initial: appStateSettings["theme"].toString().capitalizeFirst,
           items: ["Light", "Dark", "System"],
           onChanged: (value) {

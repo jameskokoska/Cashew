@@ -107,7 +107,10 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                     initialCount: (0),
                                     textBuilder: (number) {
                                       return TextFont(
-                                        text: convertToMoney(number),
+                                        text: convertToMoney(number,
+                                            finalNumber: snapshot.hasData
+                                                ? snapshot.data!
+                                                : 0),
                                         fontSize: 17.5,
                                         textAlign: TextAlign.left,
                                       );

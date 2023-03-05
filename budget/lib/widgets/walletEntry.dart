@@ -107,8 +107,11 @@ class _WalletEntryState extends State<WalletEntry>
                                   return TextFont(
                                     walletPkForCurrency: widget.wallet.walletPk,
                                     textAlign: TextAlign.left,
-                                    text: convertToMoney(number,
-                                        showCurrency: false),
+                                    text: convertToMoney(
+                                      number,
+                                      showCurrency: false,
+                                      finalNumber: snapshot.data ?? 0 * -1,
+                                    ),
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
                                   );
