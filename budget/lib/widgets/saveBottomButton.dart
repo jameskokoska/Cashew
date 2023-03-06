@@ -29,7 +29,7 @@ class SaveBottomButton extends StatelessWidget {
             foregroundDecoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.transparent,
+                  Colors.white.withOpacity(0.0),
                   Theme.of(context).canvasColor,
                 ],
                 begin: Alignment.topCenter,

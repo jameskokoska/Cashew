@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added debounce to past budget line graph selection to avoid spam
+    Fixed linear gradient light mode
+    Fixed open close container colors light mode
+    Fixed add button light mode
     Budget history line graph gets extended when more budgets loaded
     Selecting amount for transaction limits amount of numbers that actually change the amount
     New save bottom button

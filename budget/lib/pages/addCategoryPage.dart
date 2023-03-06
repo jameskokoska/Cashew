@@ -748,7 +748,9 @@ class AddButton extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               width: 1.5,
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+              color: appStateSettings["materialYou"]
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.lightDarkAccentHeavy,
             ),
             borderRadius: BorderRadius.circular(15),
           ),
@@ -758,7 +760,9 @@ class AddButton extends StatelessWidget {
             child: TextFont(
               text: "+",
               fontWeight: FontWeight.bold,
-              textColor: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+              textColor: appStateSettings["materialYou"]
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.lightDarkAccentHeavy,
             ),
           ),
         ),
@@ -774,7 +778,7 @@ class AddButton extends StatelessWidget {
         button: (openPage) {
           return getButton(openPage);
         },
-        borderRadius: 5,
+        borderRadius: 15,
       );
     }
     Widget button = getButton(onTap);

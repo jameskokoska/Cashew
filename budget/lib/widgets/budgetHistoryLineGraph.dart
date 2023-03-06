@@ -34,6 +34,7 @@ class BudgetHistoryLineGraph extends StatefulWidget {
 
 class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
   bool loaded = false;
+  int? touchedValue = null;
 
   @override
   void initState() {
@@ -126,12 +127,15 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
             touchCallback:
                 (FlTouchEvent event, LineTouchResponse? touchResponse) {
               if (!event.isInterestedForInteractions || touchResponse == null) {
-                if (widget.onTouchedIndex != null) widget.onTouchedIndex!(null);
+                if (touchedValue != null) if (widget.onTouchedIndex != null)
+                  widget.onTouchedIndex!(null);
+                touchedValue = null;
                 return;
               }
               double value = touchResponse.lineBarSpots![0].x;
-              if (widget.onTouchedIndex != null)
-                widget.onTouchedIndex!(value.toInt());
+              if (touchedValue != value.toInt()) if (widget.onTouchedIndex !=
+                  null) widget.onTouchedIndex!(value.toInt());
+              touchedValue = value.toInt();
             },
             enabled: true,
             touchSpotThreshold: 1000,
@@ -187,7 +191,6 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
               sideTitles: SideTitles(
                   showTitles: true,
                   getTitlesWidget: (value, _) {
-                    print(value.toInt());
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: TextFont(

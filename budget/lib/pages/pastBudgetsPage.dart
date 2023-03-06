@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -123,6 +125,21 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     // );
   }
 
+  final _debouncer = Debouncer(milliseconds: 50);
+
+  onTouchedBudgetIndex(int? touchedBudgetIndexPassed) {
+    _debouncer.run(() {
+      setState(() {
+        touchedBudgetIndex = touchedBudgetIndexPassed;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTimeRange budgetRange = getBudgetDate(widget.budget, DateTime.now());
@@ -197,9 +214,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
               return SliverToBoxAdapter(
                 child: BudgetHistoryLineGraph(
                   onTouchedIndex: (index) {
-                    setState(() {
-                      touchedBudgetIndex = index;
-                    });
+                    // debounce to avoid duplicate key on AnimatedSwitcher
+                    onTouchedBudgetIndex(index);
                   },
                   color: dynamicPastel(context, budgetColorScheme.primary,
                       amountLight: 0.4, amountDark: 0.2),
@@ -262,30 +278,39 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                           ? index * 7 * widget.budget.periodLength
                           : 0),
                 );
-                return AnimatedSize(
-                  duration: Duration(milliseconds: 1000),
-                  curve: Curves.easeInOutCubicEmphasized,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200),
-                    child: touchedBudgetIndex == null ||
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                    boxShadow: touchedBudgetIndex == null ||
                             amountLoaded - touchedBudgetIndex! - 1 == index
-                        ? Padding(
-                            padding: EdgeInsets.only(
-                                bottom: index == amountLoaded - 1 ? 0 : 13.0),
-                            child: PastBudgetContainer(
-                              budget: widget.budget,
-                              smallBudgetContainer: true,
-                              showTodayForSmallBudget:
-                                  (index == 0 ? true : false),
-                              dateForRange: datePast,
-                              isPastBudget: index == 0 ? false : true,
-                              isPastBudgetButCurrentPeriod: index == 0,
-                              budgetColorScheme: budgetColorScheme,
+                        ? boxShadowCheck(boxShadowGeneral(context))
+                        : [BoxShadow(color: Colors.transparent)],
+                  ),
+                  child: AnimatedSize(
+                    duration: Duration(milliseconds: 1000),
+                    curve: Curves.easeInOutCubicEmphasized,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200),
+                      child: touchedBudgetIndex == null ||
+                              amountLoaded - touchedBudgetIndex! - 1 == index
+                          ? Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: index == amountLoaded - 1 ? 0 : 13.0),
+                              child: PastBudgetContainer(
+                                budget: widget.budget,
+                                smallBudgetContainer: true,
+                                showTodayForSmallBudget:
+                                    (index == 0 ? true : false),
+                                dateForRange: datePast,
+                                isPastBudget: index == 0 ? false : true,
+                                isPastBudgetButCurrentPeriod: index == 0,
+                                budgetColorScheme: budgetColorScheme,
+                              ),
+                            )
+                          : Container(
+                              key: ValueKey(datePast.millisecondsSinceEpoch),
                             ),
-                          )
-                        : Container(
-                            key: ValueKey(2),
-                          ),
+                    ),
                   ),
                 );
               },
@@ -589,9 +614,6 @@ class PastBudgetContainer extends StatelessWidget {
       ),
     );
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-      ),
       child: OpenContainerNavigation(
         borderRadius: 20,
         closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
@@ -622,5 +644,17 @@ class PastBudgetContainer extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class Debouncer {
+  final int milliseconds;
+  Timer? _timer;
+
+  Debouncer({required this.milliseconds});
+
+  run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
 }

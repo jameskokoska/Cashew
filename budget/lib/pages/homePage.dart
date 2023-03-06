@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -215,8 +216,17 @@ class HomePageState extends State<HomePage>
                                                   wallet.walletPk,
                                               wallet: wallet,
                                             ),
-                                          WalletEntryAdd(
-                                            key: ValueKey(1),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 6, right: 6 + 8),
+                                            child: AddButton(
+                                              onTap: () {},
+                                              height: null,
+                                              width: 110,
+                                              openPage: AddWalletPage(
+                                                title: "Add Wallet",
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       );
@@ -256,20 +266,17 @@ class HomePageState extends State<HomePage>
                                     );
                                   }).toList() ??
                                   []),
-                              OpenContainerNavigation(
-                                borderRadius: 5,
-                                button: (openContainer) {
-                                  return AddButton(
-                                    onTap: () {
-                                      openContainer();
-                                    },
-                                    height: null,
-                                    width: null,
-                                    padding: EdgeInsets.all(5),
-                                  );
-                                },
-                                openPage: AddBudgetPage(title: "Add Budget"),
-                              )
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 3, right: 3),
+                                child: AddButton(
+                                  onTap: () {},
+                                  height: null,
+                                  width: null,
+                                  padding: EdgeInsets.all(5),
+                                  openPage: AddBudgetPage(title: "Add Budget"),
+                                ),
+                              ),
                             ];
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 13),
