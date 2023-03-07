@@ -134,6 +134,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         title: "Enter Amount",
         underTitleSpace: false,
         child: SelectAmount(
+          onlyShowCurrencyIcon: true,
           amountPassed: selectedAmountCalculation ?? "",
           setSelectedAmount: setSelectedAmount,
           next: () async {

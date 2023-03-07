@@ -246,6 +246,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
         title: "Enter Amount",
         underTitleSpace: false,
         child: SelectAmount(
+          onlyShowCurrencyIcon: true,
           amountPassed: selectedAmountCalculation ?? "",
           setSelectedAmount: setSelectedAmount,
           next: () async {

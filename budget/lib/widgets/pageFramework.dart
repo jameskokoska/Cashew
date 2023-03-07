@@ -112,16 +112,17 @@ class PageFrameworkState extends State<PageFramework>
     WidgetsBinding.instance.addObserver(this);
   }
 
-  double measurement = 0;
-  @override
-  void didChangeMetrics() {
-    if (widget.syncKeyboardHeight &&
-        MediaQuery.of(context).viewInsets.bottom < measurement) {
-      // keyboard closed
-      _scrollListener();
-    }
-    measurement = MediaQuery.of(context).viewInsets.bottom;
-  }
+  // double measurement = 0;
+  // @override
+  // void didChangeMetrics() {
+  //   // should be changed to the new method:
+  //   // print(EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,WidgetsBinding.instance.window.devicePixelRatio));
+  //   if (MediaQuery.of(context).viewInsets.bottom < measurement) {
+  //     // keyboard closed
+  //     _scrollListener();
+  //   }
+  //   measurement = MediaQuery.of(context).viewInsets.bottom;
+  // }
 
   _scrollListener() {
     if (widget.onScroll != null) {
@@ -358,7 +359,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.actions,
     this.textColor,
     this.onBackButton,
-    this.expandedHeight,
+    this.expandedHeight = 200,
   }) : super(key: key);
 
   final String title;
@@ -379,8 +380,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final List<Widget>? actions;
   final Color? textColor;
   final VoidCallback? onBackButton;
-  final double? expandedHeight;
-
+  final double expandedHeight;
+  final double collapsedHeight = 65;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -416,91 +417,91 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           : appBarBackgroundColor,
       floating: false,
       pinned: pinned,
-      expandedHeight: expandedHeight ?? 200,
-      collapsedHeight: 65,
+      expandedHeight: expandedHeight,
+      collapsedHeight: collapsedHeight,
       actions: actions,
-      flexibleSpace: ClipRRect(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(15),
-        ),
-        child: FlexibleSpaceBar(
-          centerTitle: false,
-          titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-          title: animationControllerShift == null
-              ? titleWidget ??
-                  TextFont(
-                    text: title,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    textColor:
-                        Theme.of(context).colorScheme.onSecondaryContainer,
-                    textAlign: TextAlign.left,
-                  )
-              : customTitleBuilder == null
-                  ? AnimatedBuilder(
-                      animation: animationControllerShift!,
-                      builder: (_, child) {
-                        return Transform.translate(
-                          offset: Offset(
-                            backButton
-                                ? 40 * animationControllerShift!.value
-                                : 0,
-                            -(subtitleSize ?? 0) *
-                                (1 - animationControllerShift!.value),
-                          ),
-                          child: child,
-                        );
-                      },
-                      child: titleWidget ??
-                          TextFont(
-                            text: title,
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            textColor: textColor == null
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
-                                : textColor,
-                            textAlign: TextAlign.left,
-                          ),
-                    )
-                  : customTitleBuilder!(animationControllerShift!),
-          background: Stack(
-            children: [
-              Container(
-                color: appBarBackgroundColorStart == null
-                    ? Theme.of(context).colorScheme.background
-                    : appBarBackgroundColorStart,
-              ),
-              subtitle != null &&
-                      animationControllerShift != null &&
-                      animationController0at50 != null
-                  ? AnimatedBuilder(
-                      animation: animationControllerShift!,
-                      builder: (_, child) {
-                        return Transform.translate(
-                          offset: Offset(
-                            0,
-                            -(subtitleSize ?? 0) *
-                                (animationControllerShift!.value) *
-                                subtitleAnimationSpeed,
-                          ),
-                          child: child,
-                        );
-                      },
-                      child: Align(
-                        alignment: subtitleAlignment,
-                        child: FadeTransition(
-                          opacity: animationController0at50!,
-                          child: subtitle,
-                        ),
-                      ),
-                    )
-                  : SizedBox(),
-            ],
+      flexibleSpace: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        // print('constraints=' + constraints.toString());
+        double percent = 1 -
+            (constraints.biggest.height -
+                    collapsedHeight -
+                    MediaQuery.of(context).padding.top) /
+                (expandedHeight - collapsedHeight);
+        return ClipRRect(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
           ),
-        ),
-      ),
+          child: FlexibleSpaceBar(
+            centerTitle: false,
+            titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+            title: animationControllerShift == null
+                ? titleWidget ??
+                    TextFont(
+                      text: title,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      textColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      textAlign: TextAlign.left,
+                    )
+                : customTitleBuilder == null
+                    ? Transform.translate(
+                        offset: Offset(
+                          backButton ? 40 * percent : 0,
+                          -(subtitleSize ?? 0) * (1 - percent),
+                        ),
+                        child: titleWidget ??
+                            TextFont(
+                              text: title,
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              textColor: textColor == null
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer
+                                  : textColor,
+                              textAlign: TextAlign.left,
+                            ),
+                      )
+                    : customTitleBuilder!(animationControllerShift!),
+            background: Stack(
+              children: [
+                Container(
+                  color: appBarBackgroundColorStart == null
+                      ? Theme.of(context).colorScheme.background
+                      : appBarBackgroundColorStart,
+                ),
+                subtitle != null &&
+                        animationControllerShift != null &&
+                        animationController0at50 != null
+                    ? AnimatedBuilder(
+                        animation: animationControllerShift!,
+                        builder: (_, child) {
+                          return Transform.translate(
+                            offset: Offset(
+                              0,
+                              -(subtitleSize ?? 0) *
+                                  (animationControllerShift!.value) *
+                                  subtitleAnimationSpeed,
+                            ),
+                            child: child,
+                          );
+                        },
+                        child: Align(
+                          alignment: subtitleAlignment,
+                          child: FadeTransition(
+                            opacity: animationController0at50!,
+                            child: subtitle,
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
+              ],
+            ),
+          ),
+        );
+      }),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(15),

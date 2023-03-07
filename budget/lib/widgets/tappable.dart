@@ -1,6 +1,8 @@
 import 'package:budget/widgets/button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
+import 'package:context_menus/context_menus.dart';
 
 class Tappable extends StatelessWidget {
   Tappable({
@@ -24,7 +26,7 @@ class Tappable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    Widget tappable = Material(
       color: color ?? Theme.of(context).colorScheme.background,
       type: type,
       borderRadius: BorderRadius.circular(borderRadius),
@@ -36,6 +38,24 @@ class Tappable extends StatelessWidget {
         child: child,
         onLongPress: onLongPress,
       ),
+    );
+    if (!kIsWeb) {
+      return tappable;
+    }
+    return ContextMenuRegion(
+      contextMenu: ContextMenuButton(
+        ContextMenuButtonConfig(
+          "test",
+          icon: Icon(Icons.edit),
+          onPressed: () {
+            return;
+          },
+        ),
+        style: ContextMenuButtonStyle(
+          bgColor: Theme.of(context).colorScheme.secondaryContainer,
+        ),
+      ),
+      child: tappable,
     );
   }
 }

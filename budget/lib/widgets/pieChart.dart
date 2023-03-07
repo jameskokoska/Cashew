@@ -294,7 +294,7 @@ class _Badge extends StatelessWidget {
                           color: color,
                           width: 1.5,
                         ),
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).canvasColor,
                       ),
                       child: Center(
                         child: TextFont(
@@ -311,8 +311,9 @@ class _Badge extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.lightDarkAccent),
+                shape: BoxShape.circle,
+                color: Theme.of(context).canvasColor,
+              ),
               child: Center(
                 child: Image(
                   image: assetImage,

@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Currency icon removed from some amount popups
+    Keyboard open animation for bottom button
+    Fixed long lasting bug with alignment on sliver app bar (especially with keyboard)
+    Fixed back button double popping route for select amount
     Added debounce to past budget line graph selection to avoid spam
     Fixed linear gradient light mode
     Fixed open close container colors light mode

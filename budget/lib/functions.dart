@@ -588,9 +588,12 @@ String? getOSInsideWeb() {
 restartApp(context) async {
   // For now, enforce this until better solution found
   if (kIsWeb || true) {
-    openPopup(context,
-        title: "Please Restart the Application",
-        icon: Icons.restart_alt_rounded);
+    openPopup(
+      context,
+      title: "Please Restart the Application",
+      icon: Icons.restart_alt_rounded,
+      barrierDismissible: false,
+    );
   } else {
     // Pop all routes, select home tab
     RestartApp.restartApp(context);
@@ -713,4 +716,16 @@ double? amountRatioToPrimaryCurrency(String? walletCurrency) {
   double exchangeRateFromCurrentToUSD =
       1 / appStateSettings["cachedCurrencyExchange"][walletCurrency].toDouble();
   return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
+}
+
+bool getIsKeyboardOpen(context) {
+  return EdgeInsets.zero !=
+      EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,
+          WidgetsBinding.instance.window.devicePixelRatio);
+}
+
+double getKeyboardHeight(context) {
+  return EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,
+          WidgetsBinding.instance.window.devicePixelRatio)
+      .bottom;
 }

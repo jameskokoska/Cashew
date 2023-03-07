@@ -749,7 +749,7 @@ class AddButton extends StatelessWidget {
             border: Border.all(
               width: 1.5,
               color: appStateSettings["materialYou"]
-                  ? Theme.of(context).colorScheme.primaryContainer
+                  ? Theme.of(context).colorScheme.secondaryContainer
                   : Theme.of(context).colorScheme.lightDarkAccentHeavy,
             ),
             borderRadius: BorderRadius.circular(15),
@@ -761,7 +761,7 @@ class AddButton extends StatelessWidget {
               text: "+",
               fontWeight: FontWeight.bold,
               textColor: appStateSettings["materialYou"]
-                  ? Theme.of(context).colorScheme.primaryContainer
+                  ? Theme.of(context).colorScheme.secondaryContainer
                   : Theme.of(context).colorScheme.lightDarkAccentHeavy,
             ),
           ),

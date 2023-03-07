@@ -53,7 +53,8 @@ class _SelectAmountState extends State<SelectAmount> {
       amount = widget.amountPassed.replaceAll(".0", "");
     }
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
-      if (event.logicalKey.keyLabel == "Go Back" ||
+      if (event.runtimeType.toString() == "KeyDownEvent" &&
+              event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.pop(context);
       } else if (event.runtimeType.toString() == "KeyDownEvent" &&
@@ -692,7 +693,8 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
     super.initState();
     amount = widget.amountPassed;
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
-      if (event.logicalKey.keyLabel == "Go Back" ||
+      if (event.runtimeType.toString() == "KeyDownEvent" &&
+              event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.pop(context);
       } else if (event.runtimeType.toString() == "KeyDownEvent" &&

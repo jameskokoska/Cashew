@@ -1,8 +1,10 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -189,6 +191,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
+                  interval: getIsFullScreen(context) ? 1 : null,
                   showTitles: true,
                   getTitlesWidget: (value, _) {
                     return Padding(

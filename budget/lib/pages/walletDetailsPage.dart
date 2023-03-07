@@ -48,7 +48,7 @@ class WalletDetailsPage extends StatelessWidget {
               pushRoute(
                 context,
                 AddWalletPage(
-                  title: "Edit Budget",
+                  title: "Edit Wallet",
                   wallet: wallet,
                 ),
               );

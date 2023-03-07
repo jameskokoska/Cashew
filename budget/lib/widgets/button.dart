@@ -8,20 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
 class Button extends StatefulWidget {
-  Button(
-      {Key? key,
-      required this.label,
-      this.width,
-      this.height,
-      this.fontSize = 15,
-      required this.onTap,
-      this.color,
-      this.textColor,
-      this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      this.hasBottomExtraSafeArea = false,
-      this.icon,
-      this.iconColor})
-      : super(key: key);
+  Button({
+    Key? key,
+    required this.label,
+    this.width,
+    this.height,
+    this.fontSize = 15,
+    required this.onTap,
+    this.color,
+    this.textColor,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+    this.hasBottomExtraSafeArea = false,
+    this.icon,
+    this.iconColor,
+    this.borderRadius = 20,
+    this.changeScale = true,
+  }) : super(key: key);
   final String label;
   final double? width;
   final double? height;
@@ -33,6 +35,8 @@ class Button extends StatefulWidget {
   final bool hasBottomExtraSafeArea;
   final IconData? icon;
   final Color? iconColor;
+  final double borderRadius;
+  final bool changeScale;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -68,7 +72,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       child: AnimatedScale(
         duration: Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
-        scale: isTapped ? 0.95 : 1,
+        scale: widget.changeScale ? (isTapped ? 0.95 : 1) : 1,
         child: Tappable(
           color: widget.color != null
               ? widget.color!.withOpacity(0.8)
@@ -86,7 +90,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             _shrink();
             widget.onTap();
           },
-          borderRadius: 20,
+          borderRadius: widget.borderRadius,
           child: Container(
             width: widget.width,
             height: widget.height,
