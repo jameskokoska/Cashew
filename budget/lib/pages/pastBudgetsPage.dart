@@ -294,8 +294,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       child: touchedBudgetIndex == null ||
                               amountLoaded - touchedBudgetIndex! - 1 == index
                           ? Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: index == amountLoaded - 1 ? 0 : 13.0),
+                              padding: EdgeInsets.only(bottom: 13.0),
                               child: PastBudgetContainer(
                                 budget: widget.budget,
                                 smallBudgetContainer: true,

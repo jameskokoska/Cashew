@@ -488,18 +488,20 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               ),
                               if (snapshot.data!.length > 0)
                                 SizedBox(height: 20),
-                              PieChartWrapper(
-                                  pieChartDisplayStateKey:
-                                      _pieChartDisplayStateKey,
-                                  data: snapshot.data ?? [],
-                                  totalSpent: totalSpent,
-                                  setSelectedCategory: (categoryPk, category) {
-                                    setState(() {
-                                      selectedCategoryPk = categoryPk;
-                                      selectedCategory = category;
-                                    });
-                                  },
-                                  isPastBudget: widget.isPastBudget ?? false),
+                              if (snapshot.data!.length > 0)
+                                PieChartWrapper(
+                                    pieChartDisplayStateKey:
+                                        _pieChartDisplayStateKey,
+                                    data: snapshot.data ?? [],
+                                    totalSpent: totalSpent,
+                                    setSelectedCategory:
+                                        (categoryPk, category) {
+                                      setState(() {
+                                        selectedCategoryPk = categoryPk;
+                                        selectedCategory = category;
+                                      });
+                                    },
+                                    isPastBudget: widget.isPastBudget ?? false),
                               if (snapshot.data!.length > 0)
                                 SizedBox(height: 35),
                               ...categoryEntries,
@@ -557,6 +559,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       selectedCategory: selectedCategory,
                       budgetRange: budgetRange,
                       budgetColorScheme: budgetColorScheme,
+                      showIfNone: false,
                     ),
                   ),
                 ),
@@ -749,6 +752,7 @@ class BudgetLineGraph extends StatefulWidget {
     required this.budgetRange,
     required this.budgetColorScheme,
     this.showPastSpending = true,
+    this.showIfNone = true,
     super.key,
   });
 
@@ -760,6 +764,7 @@ class BudgetLineGraph extends StatefulWidget {
   final DateTimeRange budgetRange;
   final ColorScheme budgetColorScheme;
   final bool showPastSpending;
+  final bool showIfNone;
 
   @override
   State<BudgetLineGraph> createState() => _BudgetLineGraphState();
@@ -852,6 +857,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0) return SizedBox.shrink();
           bool cumulative = appStateSettings["showCumulativeSpending"];
+          int totalZeroes = 0;
           List<List<Pair>> pointsList = [];
           for (int snapshotIndex = 0;
               snapshotIndex < snapshot.data!.length;
@@ -896,6 +902,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               cumulativeTotal += totalForDay;
               points.add(Pair(points.length.toDouble(),
                   cumulative ? cumulativeTotal : totalForDay));
+              if (totalForDay == 0) totalZeroes++;
             }
             pointsList.add(points);
           }
@@ -903,6 +910,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               widget.selectedCategoryPk != -1 && widget.selectedCategory != null
                   ? HexColor(widget.selectedCategory!.colour)
                   : widget.budgetColorScheme.primary;
+          if (totalZeroes == pointsList[0].length) return SizedBox.shrink();
           return LineChartWrapper(
             color: lineColor,
             verticalLineAt: widget.isPastBudget == true

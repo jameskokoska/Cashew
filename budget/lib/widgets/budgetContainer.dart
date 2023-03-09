@@ -793,9 +793,21 @@ class BudgetProgress extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: large
-                          ? Theme.of(context).colorScheme.lightDarkAccent
-                          : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                      color: appStateSettings["materialYou"]
+                          ? large
+                              ? dynamicPastel(context, color,
+                                  amountLight: 0.9, amountDark: 0.8)
+                              : dynamicPastel(
+                                  context,
+                                  dynamicPastel(context, color,
+                                      amount: 0.7, inverse: true),
+                                  amountLight: 0.87,
+                                  amountDark: 0.75)
+                          : large
+                              ? Theme.of(context).colorScheme.lightDarkAccent
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .lightDarkAccentHeavy,
                     ),
                     height: large ? 24.2 : 19.2,
                   ),

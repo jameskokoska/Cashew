@@ -1,8 +1,13 @@
+import 'dart:ui';
+
 import 'package:budget/widgets/button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 import 'package:context_menus/context_menus.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:universal_html/html.dart' hide VoidCallback;
 
 class Tappable extends StatelessWidget {
   Tappable({
@@ -42,20 +47,32 @@ class Tappable extends StatelessWidget {
     if (!kIsWeb) {
       return tappable;
     }
-    return ContextMenuRegion(
-      contextMenu: ContextMenuButton(
-        ContextMenuButtonConfig(
-          "test",
-          icon: Icon(Icons.edit),
-          onPressed: () {
-            return;
-          },
-        ),
-        style: ContextMenuButtonStyle(
-          bgColor: Theme.of(context).colorScheme.secondaryContainer,
-        ),
-      ),
+    // return ContextMenuRegion(
+    //   contextMenu: ContextMenuButton(
+    //     ContextMenuButtonConfig(
+    //       "test",
+    //       icon: Icon(Icons.edit),
+    //       onPressed: () {
+    //         return;
+    //       },
+    //     ),
+    //     style: ContextMenuButtonStyle(
+    //       bgColor: Theme.of(context).colorScheme.secondaryContainer,
+    //     ),
+    //   ),
+    //   child: tappable,
+    // );
+    Future<void> _onPointerDown(PointerDownEvent event) async {
+      // Check if right mouse button clicked
+      if (event.kind == PointerDeviceKind.mouse &&
+          event.buttons == kSecondaryMouseButton) {
+        if (onLongPress != null) onLongPress!();
+      }
+    }
+
+    return Listener(
       child: tappable,
+      onPointerDown: _onPointerDown,
     );
   }
 }

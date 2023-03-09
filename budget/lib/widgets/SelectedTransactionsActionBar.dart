@@ -23,6 +23,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SelectedTransactionsActionBar extends StatelessWidget {
@@ -50,12 +51,15 @@ class SelectedTransactionsActionBar extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top + 5, bottom: 6),
+                  padding: kIsWeb
+                      ? EdgeInsets.symmetric(vertical: 10)
+                      : EdgeInsets.only(
+                          top: MediaQuery.of(context).padding.top + 5,
+                          bottom: 6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(kIsWeb ? 15 : 10),
+                      bottomRight: Radius.circular(kIsWeb ? 15 : 10),
                     ),
                     boxShadow: boxShadowCheck(
                       [

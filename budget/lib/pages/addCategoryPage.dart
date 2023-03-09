@@ -94,13 +94,14 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   }
 
   void setSelectedTitle(String title,
-      {bool userAttemptedToChangeTitlePassed = false}) {
+      {bool userAttemptedToChangeTitlePassed = false,
+      bool modifyControllerValue = false}) {
     setState(() {
       selectedTitle = title;
       userAttemptedToChangeTitle =
           title == "" ? false : userAttemptedToChangeTitlePassed;
     });
-    _titleController.text = title;
+    if (modifyControllerValue) _titleController.text = title;
     determineBottomButton();
     return;
   }
@@ -285,7 +286,10 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                       (userAttemptedToChangeTitle == false ||
                                           selectedTitle == "" ||
                                           selectedTitle == null))
-                                    setSelectedTitle(titleRecommendation);
+                                    setSelectedTitle(
+                                        titleRecommendation
+                                            .capitalizeFirstofEach,
+                                        modifyControllerValue: true);
                                 },
                               ),
                             ),
@@ -355,7 +359,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                           bubbly: false,
                                           controller: _titleController,
                                           onChanged: (text) {
-                                            setSelectedTitle(text);
+                                            setSelectedTitle(text,
+                                                userAttemptedToChangeTitlePassed:
+                                                    true);
                                           },
                                           padding: EdgeInsets.zero,
                                           fontSize: 30,

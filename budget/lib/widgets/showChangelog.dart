@@ -7,6 +7,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Removed scrollbar for web
+    View more budgets padding glitch
+    Improved contrast for material you budget progress bar
+    Removed line graph and pie chart if no transactions in budget
+    Right click action performs long press on web
+    Top app bar larger for web
+    Web respects system dark mode when loading
+    Added loading animation on web
     Currency icon removed from some amount popups
     Keyboard open animation for bottom button
     Fixed long lasting bug with alignment on sliver app bar (especially with keyboard)
