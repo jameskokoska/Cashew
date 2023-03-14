@@ -293,6 +293,7 @@ class _RefreshButtonState extends State<RefreshButton>
             opacity: _isEnabled ? 1 : 0.3,
             duration: Duration(milliseconds: 500),
             child: IconButton(
+              tooltip: "Refresh shared budgets",
               icon: Icon(Icons.refresh_rounded),
               color: Theme.of(context).colorScheme.secondary,
               onPressed: () => _onTap(),

@@ -46,19 +46,21 @@ Future<List<CategoryTotalDetailed>> getCategoryDetails(
 }
 
 class PieChartWrapper extends StatelessWidget {
-  const PieChartWrapper(
-      {Key? key,
-      required this.data,
-      required this.totalSpent,
-      required this.setSelectedCategory,
-      required this.isPastBudget,
-      required this.pieChartDisplayStateKey})
-      : super(key: key);
+  const PieChartWrapper({
+    Key? key,
+    required this.data,
+    required this.totalSpent,
+    required this.setSelectedCategory,
+    required this.isPastBudget,
+    required this.pieChartDisplayStateKey,
+    this.middleColor,
+  }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
   final Function(int, TransactionCategory?) setSelectedCategory;
   final bool isPastBudget;
   final pieChartDisplayStateKey;
+  final Color? middleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,8 @@ class PieChartWrapper extends StatelessWidget {
                 width: 105,
                 height: 105,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.white.withOpacity(0.2),
+                  color: middleColor?.withOpacity(0.2) ??
+                      Theme.of(context).colorScheme.white.withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -91,7 +94,8 @@ class PieChartWrapper extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
+                    color:
+                        middleColor ?? Theme.of(context).colorScheme.background,
                     shape: BoxShape.circle),
               ),
             ),
@@ -265,7 +269,7 @@ class _Badge extends StatelessWidget {
           : Duration(milliseconds: 1300),
       scale: percent < 5 && isTouched == false
           ? 0
-          : (showLabels ? (percent < 5 ? 1 : scale) : 0),
+          : (showLabels || isTouched ? (percent < 5 ? 1 : scale) : 0),
       child: Container(
         width: 45,
         height: 45,

@@ -517,6 +517,11 @@ class BudgetContainer extends StatelessWidget {
         },
       ),
     );
+    ColorScheme budgetColorScheme = ColorScheme.fromSeed(
+      seedColor: HexColor(budget.colour,
+          defaultColor: Theme.of(context).colorScheme.primary),
+      brightness: determineBrightnessTheme(context),
+    );
     return Container(
       decoration: BoxDecoration(
         boxShadow: boxShadowCheck(boxShadowGeneral(context)),
@@ -1146,8 +1151,8 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
 
           for (BudgetSpender spender in budgetSpenderList) {
             memberWidgets.add(
-              Tappable(
-                onTap: () {
+              WillPopScope(
+                onWillPop: () async {
                   if (widget.disableMemberSelection == false) {
                     if (selectedMember == spender.member ||
                         spender.amount == 0) {
@@ -1155,133 +1160,152 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                       setState(() {
                         selectedMember = null;
                       });
-                    } else {
-                      widget.setSelectedMember(spender.member);
-                      setState(() {
-                        selectedMember = spender.member;
-                      });
+                      return false;
                     }
                   }
+                  return true;
                 },
-                onLongPress: () {
-                  memberPopup(context, spender.member);
-                },
-                color: Colors.transparent,
-                child: AnimatedContainer(
-                  curve: Curves.easeInOut,
-                  duration: Duration(milliseconds: 500),
-                  color: selectedMember == spender.member
-                      ? dynamicPastel(context, widget.budgetColorScheme.primary,
-                              amount: 0.3)
-                          .withAlpha(80)
-                      : Colors.transparent,
-                  padding: EdgeInsets.only(
-                    left: 20,
-                    right: 25,
-                    top: widget.isLarge ? 8 : 8,
-                    bottom: widget.isLarge ? 8 : 8,
-                  ),
-                  child: Row(
-                    children: [
-                      // CategoryIcon(
-                      //   category: category,
-                      //   size: 30,
-                      //   margin: EdgeInsets.zero,
-                      // ),
-                      MemberSpendingPercent(
-                        displayLetter: getMemberNickname(spender.member)
-                            .capitalizeFirst
-                            .substring(0, 1),
-                        percent: totalSpent == 0
-                            ? 0
-                            : spender.amount / totalSpent * 100,
-                        progressBackgroundColor:
-                            selectedMember == spender.member
-                                ? Theme.of(context).colorScheme.white
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .lightDarkAccentHeavy,
-                        color: widget.budgetColorScheme.primary,
-                        size: widget.isLarge ? 28 : 28,
-                        insetPadding: widget.isLarge ? 23 : 18,
-                        isLarge: widget.isLarge,
-                      ),
-                      Container(
-                        width: 15,
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextFont(
-                                text: getMemberNickname(spender.member),
-                                fontSize: widget.isLarge ? 19 : 18,
-                              ),
-                              SizedBox(
-                                height: widget.isLarge ? 3 : 1,
-                              ),
-                              TextFont(
-                                maxLines: 1,
-                                text: (totalSpent == 0
-                                        ? "0"
-                                        : (spender.amount / totalSpent * 100)
-                                            .toStringAsFixed(0)) +
-                                    "% of budget",
-                                fontSize: 14,
-                                textColor: selectedMember == spender.member
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .black
-                                        .withOpacity(0.4)
-                                    : Theme.of(context).colorScheme.textLight,
-                              )
-                            ],
+                child: Tappable(
+                  onTap: () {
+                    if (widget.disableMemberSelection == false) {
+                      if (selectedMember == spender.member ||
+                          spender.amount == 0) {
+                        widget.setSelectedMember(null);
+                        setState(() {
+                          selectedMember = null;
+                        });
+                      } else {
+                        widget.setSelectedMember(spender.member);
+                        setState(() {
+                          selectedMember = spender.member;
+                        });
+                      }
+                    }
+                  },
+                  onLongPress: () {
+                    memberPopup(context, spender.member);
+                  },
+                  color: Colors.transparent,
+                  child: AnimatedContainer(
+                    curve: Curves.easeInOut,
+                    duration: Duration(milliseconds: 500),
+                    color: selectedMember == spender.member
+                        ? dynamicPastel(
+                                context, widget.budgetColorScheme.primary,
+                                amount: 0.3)
+                            .withAlpha(80)
+                        : Colors.transparent,
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 25,
+                      top: widget.isLarge ? 8 : 8,
+                      bottom: widget.isLarge ? 8 : 8,
+                    ),
+                    child: Row(
+                      children: [
+                        // CategoryIcon(
+                        //   category: category,
+                        //   size: 30,
+                        //   margin: EdgeInsets.zero,
+                        // ),
+                        MemberSpendingPercent(
+                          displayLetter: getMemberNickname(spender.member)
+                              .capitalizeFirst
+                              .substring(0, 1),
+                          percent: totalSpent == 0
+                              ? 0
+                              : spender.amount / totalSpent * 100,
+                          progressBackgroundColor:
+                              selectedMember == spender.member
+                                  ? Theme.of(context).colorScheme.white
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .lightDarkAccentHeavy,
+                          color: widget.budgetColorScheme.primary,
+                          size: widget.isLarge ? 28 : 28,
+                          insetPadding: widget.isLarge ? 23 : 18,
+                          isLarge: widget.isLarge,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextFont(
+                                  text: getMemberNickname(spender.member),
+                                  fontSize: widget.isLarge ? 19 : 18,
+                                ),
+                                SizedBox(
+                                  height: widget.isLarge ? 3 : 1,
+                                ),
+                                TextFont(
+                                  maxLines: 1,
+                                  text: (totalSpent == 0
+                                          ? "0"
+                                          : (spender.amount / totalSpent * 100)
+                                              .toStringAsFixed(0)) +
+                                      "% of budget",
+                                  fontSize: 14,
+                                  textColor: selectedMember == spender.member
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .black
+                                          .withOpacity(0.4)
+                                      : Theme.of(context).colorScheme.textLight,
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextFont(
-                            fontWeight: FontWeight.bold,
-                            text: convertToMoney(spender.amount),
-                            fontSize: widget.isLarge ? 21 : 20,
-                          ),
-                          SizedBox(
-                            height: 1,
-                          ),
-                          StreamBuilder<List<Transaction>>(
-                              stream: database.watchAllTransactionsByUser(
-                                  start: widget.budgetRange.start,
-                                  end: widget.budgetRange.end,
-                                  categoryFks: widget.budget.categoryFks ?? [],
-                                  allCategories: widget.budget.allCategoryFks,
-                                  userEmail: spender.member),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return TextFont(
-                                    text: snapshot.data!.length.toString() +
-                                        pluralString(snapshot.data!.length == 1,
-                                            " transaction"),
-                                    fontSize: 14,
-                                    textColor: selectedMember == spender.member
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .black
-                                            .withOpacity(0.4)
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .textLight,
-                                  );
-                                }
-                                return SizedBox.shrink();
-                              }),
-                        ],
-                      ),
-                    ],
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextFont(
+                              fontWeight: FontWeight.bold,
+                              text: convertToMoney(spender.amount),
+                              fontSize: widget.isLarge ? 21 : 20,
+                            ),
+                            SizedBox(
+                              height: 1,
+                            ),
+                            StreamBuilder<List<Transaction>>(
+                                stream: database.watchAllTransactionsByUser(
+                                    start: widget.budgetRange.start,
+                                    end: widget.budgetRange.end,
+                                    categoryFks:
+                                        widget.budget.categoryFks ?? [],
+                                    allCategories: widget.budget.allCategoryFks,
+                                    userEmail: spender.member),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return TextFont(
+                                      text: snapshot.data!.length.toString() +
+                                          pluralString(
+                                              snapshot.data!.length == 1,
+                                              " transaction"),
+                                      fontSize: 14,
+                                      textColor:
+                                          selectedMember == spender.member
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .black
+                                                  .withOpacity(0.4)
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .textLight,
+                                    );
+                                  }
+                                  return SizedBox.shrink();
+                                }),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

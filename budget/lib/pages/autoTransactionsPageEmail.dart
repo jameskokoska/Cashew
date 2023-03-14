@@ -311,7 +311,7 @@ Future<void> parseEmailsInBackground(context,
           walletFk: appStateSettings["selectedWallet"],
           dateCreated:
               DateTime(messageDate.year, messageDate.month, messageDate.day),
-          income: false,
+          income: selectedCategory.income,
           paid: true,
           skipPaid: false,
           methodAdded: MethodAdded.email,
@@ -558,6 +558,12 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 children: [
                   Expanded(
                     child: AddButton(
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                        bottom: 9,
+                        top: 4,
+                      ),
                       onTap: openContainer,
                     ),
                   ),

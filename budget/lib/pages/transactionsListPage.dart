@@ -436,6 +436,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
   @override
   Widget build(BuildContext context) {
     Widget searchButton = IconButton(
+      tooltip: "Search transactions",
       onPressed: () {
         pushRoute(context, TransactionsSearchPage());
       },
@@ -617,7 +618,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                                     SliverToBoxAdapter(
                                       child: Container(
-                                          height: 200,
+                                          height: 90,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .background),

@@ -7,6 +7,24 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Started improving add new budget page
+    Scanned email transactions income supported based on the category
+    Fixed header for page frameworks that don't require expanding
+    Category immediately appears if touched in pie chart
+    Budget background follows theme of budget
+    Fixed split budget progress for your spending compared to others (watchTotalSpentByCurrentUserOnly)
+    Improved stop sharing button colors
+    Better connection error if loading members list
+    Back button deselects user if selected on shared budgets
+    Removed extra spacing at bottom of transaction list page
+    Pin budget moved to corner
+    New tab slider
+    Added tooltips to buttons
+    Wallet is watched for updates on wallet details page
+    Animated subscription total buttons
+    Skipped payment subscriptions don't show up on subscription page
+    New and improved page for adding transaction
+    Fixed bar graph glitch and date past for budgets
     Removed scrollbar for web
     View more budgets padding glitch
     Improved contrast for material you budget progress bar

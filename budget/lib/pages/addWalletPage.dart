@@ -272,6 +272,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     ? Container(
                         padding: EdgeInsets.only(top: 12.5, right: 5),
                         child: IconButton(
+                          tooltip: "Delete wallet",
                           onPressed: () {
                             deleteWalletPopup(context, widget.wallet!,
                                 afterDelete: () {

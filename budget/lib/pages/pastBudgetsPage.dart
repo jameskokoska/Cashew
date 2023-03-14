@@ -95,6 +95,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             (widget.budget.reoccurrence == BudgetReoccurence.weekly
                 ? index * 7 * widget.budget.periodLength
                 : 0),
+        0,
+        0,
+        1,
       );
       DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
       dateTimeRanges.add(budgetRange);
@@ -165,6 +168,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         Container(
           padding: EdgeInsets.only(top: 12.5, right: 5),
           child: IconButton(
+            tooltip: "Edit budget",
             onPressed: () {
               pushRoute(
                 context,
@@ -277,6 +281,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       (widget.budget.reoccurrence == BudgetReoccurence.weekly
                           ? index * 7 * widget.budget.periodLength
                           : 0),
+                  0,
+                  0,
+                  1,
                 );
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 200),

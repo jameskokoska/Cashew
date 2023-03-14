@@ -113,6 +113,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
       child: Stack(
         children: [
           PageFramework(
+            backgroundColor: appStateSettings["materialYou"]
+                ? dynamicPastel(context, budgetColorScheme.primary,
+                    amount: 0.92)
+                : null,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
               fab: Padding(
@@ -139,6 +143,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   : Container(
                       padding: EdgeInsets.only(top: 12.5, right: 5),
                       child: IconButton(
+                        tooltip: "Past budgets",
                         onPressed: () {
                           pushRoute(context,
                               PastBudgetsPage(budgetPk: widget.budget.budgetPk),
@@ -150,6 +155,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               Container(
                 padding: EdgeInsets.only(top: 12.5, right: 5),
                 child: IconButton(
+                  tooltip: "Edit budget",
                   onPressed: () {
                     pushRoute(
                       context,
@@ -489,7 +495,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               if (snapshot.data!.length > 0)
                                 SizedBox(height: 20),
                               if (snapshot.data!.length > 0)
-                                PieChartWrapper(
+                                Container(
+                                  decoration: BoxDecoration(
+                                      boxShadow: boxShadowCheck(
+                                        boxShadowGeneral(context),
+                                      ),
+                                      borderRadius: BorderRadius.circular(200)),
+                                  child: PieChartWrapper(
                                     pieChartDisplayStateKey:
                                         _pieChartDisplayStateKey,
                                     data: snapshot.data ?? [],
@@ -501,7 +513,14 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         selectedCategory = category;
                                       });
                                     },
-                                    isPastBudget: widget.isPastBudget ?? false),
+                                    isPastBudget: widget.isPastBudget ?? false,
+                                    middleColor: appStateSettings["materialYou"]
+                                        ? dynamicPastel(
+                                            context, budgetColorScheme.primary,
+                                            amount: 0.92)
+                                        : null,
+                                  ),
+                                ),
                               if (snapshot.data!.length > 0)
                                 SizedBox(height: 35),
                               ...categoryEntries,
@@ -789,6 +808,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
     Future.delayed(
       Duration.zero,
       () async {
+        dateTimeRanges = [];
         List<Stream<List<Transaction>>> watchedPastSpendingTotals = [];
         for (int index = 0;
             index <=
@@ -814,7 +834,11 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                 (widget.budget.reoccurrence == BudgetReoccurence.weekly
                     ? index * 7 * widget.budget.periodLength
                     : 0),
+            0,
+            0,
+            1,
           );
+
           DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
           dateTimeRanges.add(budgetRange);
           watchedPastSpendingTotals

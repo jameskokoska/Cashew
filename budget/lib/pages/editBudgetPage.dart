@@ -353,9 +353,9 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
   if (budget.sharedOwnerMember == SharedOwnerMember.owner) {
     return openPopup(
       context,
-      title: "Delete Shared Category?",
+      title: "Delete Shared Budget?",
       description:
-          "You own this category. Deleting it will remove it from the server. All transactions belonging to this budget will no longer be connected to a budget.",
+          "You own this budget. Deleting it will remove it from the server. All transactions belonging to this budget will no longer be connected to a budget.",
       icon: Icons.delete_rounded,
       onCancel: () {
         Navigator.pop(context, false);
@@ -369,9 +369,9 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
   } else {
     return openPopup(
       context,
-      title: "Leave Shared Category?",
+      title: "Leave Shared Budget?",
       description:
-          "You are a member of this category. Deleting it will remove you from the shared group. All transactions belonging to this budget will no longer be connected to a budget, until you are added back.",
+          "You are a member of this budget. Deleting it will remove you from the shared group. All transactions belonging to this budget will no longer be connected to a budget, until you are added back.",
       icon: Icons.delete_rounded,
       onCancel: () {
         Navigator.pop(context, false);

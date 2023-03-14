@@ -165,6 +165,7 @@ class TransactionEntry extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       left: 13, right: 13, top: 1, bottom: 2),
                   child: Tappable(
+                    color: Colors.transparent,
                     borderRadius: 15,
                     onLongPress: () {
                       if (!selected) {
@@ -791,7 +792,6 @@ class TransactionEntry extends StatelessWidget {
                 );
               },
               openPage: openPage,
-              closedColor: Theme.of(context).colorScheme.background,
             );
           },
         ),
@@ -1054,7 +1054,6 @@ class DateDivider extends StatelessWidget {
       padding: EdgeInsets.symmetric(
           horizontal: getHorizontalPaddingConstrained(context)),
       child: Container(
-        color: Theme.of(context).colorScheme.background,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
         alignment: Alignment.centerLeft,
         child: Row(

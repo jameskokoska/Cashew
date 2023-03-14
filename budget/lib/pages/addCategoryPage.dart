@@ -255,6 +255,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       ? Container(
                           padding: EdgeInsets.only(top: 12.5, right: 5),
                           child: IconButton(
+                            tooltip: "Delete category",
                             onPressed: () {
                               deleteCategoryPopup(context, widgetCategory!,
                                   afterDelete: () {
@@ -520,37 +521,44 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  AddButton(onTap: () {
-                    openBottomSheet(
-                      context,
-                      PopupFramework(
-                        title: "Set Title",
-                        child: SelectText(
-                          setSelectedText: (_) {},
-                          labelText: "Set Title",
-                          placeholder: "Title",
-                          nextWithInput: (text) async {
-                            int length =
-                                await database.getAmountOfAssociatedTitles();
-
-                            await database.createOrUpdateAssociatedTitle(
-                              TransactionAssociatedTitle(
-                                associatedTitlePk:
-                                    DateTime.now().millisecondsSinceEpoch,
-                                categoryFk: widget.category == null
-                                    ? setCategoryPk
-                                    : widget.category!.categoryPk,
-                                isExactMatch: false,
-                                title: text.trim(),
-                                dateCreated: DateTime.now(),
-                                order: length,
-                              ),
-                            );
-                          },
-                        ),
+                  AddButton(
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                        bottom: 9,
+                        top: 4,
                       ),
-                    );
-                  }),
+                      onTap: () {
+                        openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "Set Title",
+                            child: SelectText(
+                              setSelectedText: (_) {},
+                              labelText: "Set Title",
+                              placeholder: "Title",
+                              nextWithInput: (text) async {
+                                int length = await database
+                                    .getAmountOfAssociatedTitles();
+
+                                await database.createOrUpdateAssociatedTitle(
+                                  TransactionAssociatedTitle(
+                                    associatedTitlePk:
+                                        DateTime.now().millisecondsSinceEpoch,
+                                    categoryFk: widget.category == null
+                                        ? setCategoryPk
+                                        : widget.category!.categoryPk,
+                                    isExactMatch: false,
+                                    title: text.trim(),
+                                    dateCreated: DateTime.now(),
+                                    order: length,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }),
                   StreamBuilder<List<TransactionAssociatedTitle>>(
                       stream: database.watchAllAssociatedTitlesInCategory(
                         widget.category == null
@@ -727,21 +735,18 @@ class AddButton extends StatelessWidget {
   const AddButton({
     Key? key,
     required this.onTap,
-    this.padding = const EdgeInsets.only(
-      left: 15,
-      right: 15,
-      bottom: 9,
-      top: 4,
-    ),
+    this.padding = EdgeInsets.zero,
     this.width = 110,
     this.height = 52,
     this.openPage,
+    this.borderRadius = 15,
   }) : super(key: key);
 
   final VoidCallback onTap;
   final EdgeInsets padding;
   final double? width;
   final double? height;
+  final double borderRadius;
   final Widget? openPage;
 
   @override
@@ -749,7 +754,7 @@ class AddButton extends StatelessWidget {
     Widget getButton(onTap) {
       return Tappable(
         color: Theme.of(context).colorScheme.background,
-        borderRadius: 15,
+        borderRadius: borderRadius,
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
@@ -758,7 +763,7 @@ class AddButton extends StatelessWidget {
                   ? Theme.of(context).colorScheme.secondaryContainer
                   : Theme.of(context).colorScheme.lightDarkAccentHeavy,
             ),
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
           width: width,
           height: height,
@@ -779,12 +784,15 @@ class AddButton extends StatelessWidget {
     }
 
     if (openPage != null) {
-      return OpenContainerNavigation(
-        openPage: openPage!,
-        button: (openPage) {
-          return getButton(openPage);
-        },
-        borderRadius: 15,
+      return Padding(
+        padding: padding,
+        child: OpenContainerNavigation(
+          openPage: openPage!,
+          button: (openPage) {
+            return getButton(openPage);
+          },
+          borderRadius: borderRadius,
+        ),
       );
     }
     Widget button = getButton(onTap);

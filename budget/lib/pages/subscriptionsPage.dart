@@ -144,77 +144,94 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Button(
-                              color: selectedType !=
-                                      SelectedSubscriptionsType.monthly
-                                  ? dynamicPastel(
-                                      context,
-                                      Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer,
-                                      amount: appStateSettings["materialYou"]
-                                          ? 0.2
-                                          : 0.7)
-                                  : null,
-                              label: "Monthly",
-                              onTap: () => setState(() {
-                                selectedType =
-                                    SelectedSubscriptionsType.monthly;
-                                updateSettings("selectedSubscriptionType", 0,
-                                    pagesNeedingRefresh: [],
-                                    updateGlobalState: false);
-                              }),
-                              fontSize: 12,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 13),
+                            AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: Button(
+                                key: ValueKey(selectedType !=
+                                    SelectedSubscriptionsType.monthly),
+                                color: selectedType !=
+                                        SelectedSubscriptionsType.monthly
+                                    ? dynamicPastel(
+                                        context,
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                        amount: appStateSettings["materialYou"]
+                                            ? 0.2
+                                            : 0.7)
+                                    : null,
+                                label: "Monthly",
+                                onTap: () => setState(() {
+                                  selectedType =
+                                      SelectedSubscriptionsType.monthly;
+                                  updateSettings("selectedSubscriptionType", 0,
+                                      pagesNeedingRefresh: [],
+                                      updateGlobalState: false);
+                                }),
+                                fontSize: 12,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 13),
+                              ),
                             ),
                             SizedBox(width: 7),
-                            Button(
-                              color: selectedType !=
-                                      SelectedSubscriptionsType.yearly
-                                  ? dynamicPastel(
-                                      context,
-                                      Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer,
-                                      amount: appStateSettings["materialYou"]
-                                          ? 0.2
-                                          : 0.7)
-                                  : null,
-                              label: "Yearly",
-                              onTap: () => setState(() {
-                                selectedType = SelectedSubscriptionsType.yearly;
-                                updateSettings("selectedSubscriptionType", 1,
-                                    pagesNeedingRefresh: [],
-                                    updateGlobalState: false);
-                              }),
-                              fontSize: 12,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 13),
+                            AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: Button(
+                                key: ValueKey(selectedType !=
+                                    SelectedSubscriptionsType.yearly),
+                                color: selectedType !=
+                                        SelectedSubscriptionsType.yearly
+                                    ? dynamicPastel(
+                                        context,
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                        amount: appStateSettings["materialYou"]
+                                            ? 0.2
+                                            : 0.7)
+                                    : null,
+                                label: "Yearly",
+                                onTap: () => setState(() {
+                                  selectedType =
+                                      SelectedSubscriptionsType.yearly;
+                                  updateSettings("selectedSubscriptionType", 1,
+                                      pagesNeedingRefresh: [],
+                                      updateGlobalState: false);
+                                }),
+                                fontSize: 12,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 13),
+                              ),
                             ),
                             SizedBox(width: 7),
-                            Button(
-                              color: selectedType !=
-                                      SelectedSubscriptionsType.total
-                                  ? dynamicPastel(
-                                      context,
-                                      Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer,
-                                      amount: appStateSettings["materialYou"]
-                                          ? 0.2
-                                          : 0.7)
-                                  : null,
-                              label: "Total",
-                              onTap: () => setState(() {
-                                selectedType = SelectedSubscriptionsType.total;
-                                updateSettings("selectedSubscriptionType", 2,
-                                    pagesNeedingRefresh: [],
-                                    updateGlobalState: false);
-                              }),
-                              fontSize: 12,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 13),
+                            AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: Button(
+                                key: ValueKey(selectedType !=
+                                    SelectedSubscriptionsType.total),
+                                color: selectedType !=
+                                        SelectedSubscriptionsType.total
+                                    ? dynamicPastel(
+                                        context,
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                        amount: appStateSettings["materialYou"]
+                                            ? 0.2
+                                            : 0.7)
+                                    : null,
+                                label: "Total",
+                                onTap: () => setState(() {
+                                  selectedType =
+                                      SelectedSubscriptionsType.total;
+                                  updateSettings("selectedSubscriptionType", 2,
+                                      pagesNeedingRefresh: [],
+                                      updateGlobalState: false);
+                                }),
+                                fontSize: 12,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 13),
+                              ),
                             ),
                           ],
                         ),

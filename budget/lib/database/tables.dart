@@ -697,9 +697,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<Transaction>> watchAllSubscriptions(
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
-      ..where((transaction) =>
-          transactions.paid.equals(false) &
-          transactions.type.equals(TransactionSpecialType.subscription.index));
+      ..where(
+        (transaction) =>
+            transactions.paid.equals(false) &
+            transactions.type
+                .equals(TransactionSpecialType.subscription.index) &
+            transactions.skipPaid.equals(false),
+      );
     return query.watch();
   }
 
@@ -806,6 +810,11 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Stream<Budget> getBudget(int budgetPk) {
     return (select(budgets)..where((b) => b.budgetPk.equals(budgetPk)))
+        .watchSingle();
+  }
+
+  Stream<TransactionWallet> getWallet(int walletPk) {
+    return (select(wallets)..where((w) => w.walletPk.equals(walletPk)))
         .watchSingle();
   }
 
@@ -1857,15 +1866,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in wallets) {
       final totalAmt = transactions.amount.sum();
-      JoinedSelectStatement<$TransactionsTable, Transaction> query =
-          (selectOnly(transactions)
-            ..addColumns([totalAmt])
-            ..where(transactions.paid.equals(true) &
-                transactions.income.equals(false) &
-                transactions.walletFk.equals(wallet.walletPk) &
-                onlyShowIfOwner(
-                    transactions, SharedTransactionsShow.onlyIfOwner) &
-                transactions.sharedReferenceBudgetPk.equals(budgetPk)));
+      JoinedSelectStatement<$TransactionsTable,
+          Transaction> query = (selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(transactions.paid.equals(true) &
+            transactions.income.equals(false) &
+            transactions.walletFk.equals(wallet.walletPk) &
+            onlyShowBasedOnTimeRange(transactions, startDate, endDate, null) &
+            onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner) &
+            transactions.sharedReferenceBudgetPk.equals(budgetPk)));
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *

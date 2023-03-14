@@ -43,7 +43,7 @@ class _WalletEntryState extends State<WalletEntry>
       ),
       child: OpenContainerNavigation(
         borderRadius: 15,
-        openPage: WalletDetailsPage(wallet: widget.wallet),
+        openPage: WatchedWalletDetailsPage(walletPk: widget.wallet.walletPk),
         button: (openContainer) {
           return Tappable(
             color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,

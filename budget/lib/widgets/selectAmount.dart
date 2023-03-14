@@ -1,5 +1,8 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -24,6 +27,10 @@ class SelectAmount extends StatefulWidget {
     this.walletPkForCurrency,
     this.onlyShowCurrencyIcon = false,
     this.allowZero = false,
+    this.padding = EdgeInsets.zero,
+    this.allWallets,
+    this.setSelectedWallet,
+    this.selectedWallet,
   }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
@@ -34,6 +41,10 @@ class SelectAmount extends StatefulWidget {
   final int? walletPkForCurrency;
   final bool onlyShowCurrencyIcon;
   final bool allowZero;
+  final EdgeInsets padding;
+  final List<TransactionWallet>? allWallets;
+  final Function(TransactionWallet)? setSelectedWallet;
+  final TransactionWallet? selectedWallet;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -44,10 +55,15 @@ class _SelectAmountState extends State<SelectAmount> {
 
   FocusNode _focusNode = FocusNode();
   late FocusAttachment _focusAttachment;
+  late TransactionWallet? selectedWallet;
+  late int? walletPkForCurrency;
 
   @override
   void initState() {
+    print(widget.allWallets);
     super.initState();
+    selectedWallet = widget.selectedWallet;
+    walletPkForCurrency = widget.walletPkForCurrency;
     amount = widget.amountPassed;
     if (amount.endsWith(".0")) {
       amount = widget.amountPassed.replaceAll(".0", "");
@@ -351,239 +367,330 @@ class _SelectAmountState extends State<SelectAmount> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                crossAxisAlignment: WrapCrossAlignment.end,
-                children: [
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 400),
-                    child: FractionallySizedBox(
-                      key: ValueKey(amount),
-                      widthFactor: 0.5,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: 3.0, left: 8, top: 5),
-                        child: TextFont(
-                          text: (includesOperations(amount, false)
-                              ? operationsWithSpaces(amount)
-                              : ""),
-                          textAlign: TextAlign.left,
-                          fontSize: 18,
-                          maxLines: 5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200),
-                    child: FractionallySizedBox(
-                      key: ValueKey(amountConverted),
-                      widthFactor: 0.5,
-                      child: Tappable(
-                        onLongPress: () async {
-                          HapticFeedback.mediumImpact();
-                          await Clipboard.setData(
-                              ClipboardData(text: amountConverted));
-                          openSnackbar(
-                            SnackbarMessage(
-                              title: "Copied to clipboard",
-                              icon: Icons.copy_rounded,
-                              timeout: Duration(milliseconds: 2500),
-                            ),
-                          );
-                        },
-                        color: Colors.transparent,
-                        borderRadius: 10,
-                        onTap: () {},
+              Padding(
+                padding: widget.padding,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.end,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 400),
+                      child: FractionallySizedBox(
+                        key: ValueKey(amount),
+                        widthFactor: 0.5,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                            right: 8.0,
-                            bottom: 5,
-                            left: 5,
-                            top: 5,
-                          ),
+                              bottom: 3.0, left: 8, top: 5),
                           child: TextFont(
-                            autoSizeText: true,
-                            maxLines: 1,
-                            minFontSize: 16,
-                            walletPkForCurrency: widget.walletPkForCurrency ??
-                                appStateSettings["selectedWallet"],
-                            onlyShowCurrencyIcon: widget.onlyShowCurrencyIcon,
-                            text: amountConverted,
-                            // text: amount,
-                            textAlign: TextAlign.right,
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
+                            text: (includesOperations(amount, false)
+                                ? operationsWithSpaces(amount)
+                                : ""),
+                            textAlign: TextAlign.left,
+                            fontSize: 18,
+                            maxLines: 5,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200),
+                      child: FractionallySizedBox(
+                        key: ValueKey(amountConverted),
+                        widthFactor: 0.5,
+                        child: Tappable(
+                          onLongPress: () async {
+                            HapticFeedback.mediumImpact();
+                            await Clipboard.setData(
+                                ClipboardData(text: amountConverted));
+                            openSnackbar(
+                              SnackbarMessage(
+                                title: "Copied to clipboard",
+                                icon: Icons.copy_rounded,
+                                timeout: Duration(milliseconds: 2500),
+                              ),
+                            );
+                          },
+                          color: Colors.transparent,
+                          borderRadius: 10,
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              right: 8.0,
+                              bottom: 5,
+                              left: 5,
+                              top: 5,
+                            ),
+                            child: TextFont(
+                              autoSizeText: true,
+                              maxLines: 1,
+                              minFontSize: 16,
+                              walletPkForCurrency: walletPkForCurrency ??
+                                  appStateSettings["selectedWallet"],
+                              onlyShowCurrencyIcon: widget.onlyShowCurrencyIcon,
+                              text: amountConverted,
+                              // text: amount,
+                              textAlign: TextAlign.right,
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              widget.allWallets == null ||
+                      appStateSettings["cachedWalletCurrencies"].keys.length <=
+                          1
+                  ? SizedBox.shrink()
+                  : SizedBox(
+                      height: 40,
+                      child: appStateSettings["cachedWalletCurrencies"]
+                                  .keys
+                                  .length <=
+                              1
+                          ? null
+                          : ListView(
+                              reverse: true,
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                AddButton(
+                                  onTap: () {},
+                                  width: 40,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 1),
+                                  openPage: AddWalletPage(title: "Add Wallet"),
+                                  borderRadius: 8,
+                                ),
+                                ...List<Widget>.generate(
+                                  widget.allWallets!.length,
+                                  (int index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: ChoiceChip(
+                                        side: BorderSide(
+                                          color: dynamicPastel(
+                                            context,
+                                            lightenPastel(
+                                              HexColor(widget
+                                                  .allWallets![index].colour),
+                                              amount: 0.3,
+                                            ),
+                                            amount: 0.4,
+                                          ),
+                                        ),
+                                        label: TextFont(
+                                          text: widget.allWallets![index]
+                                                      .name ==
+                                                  widget.allWallets![index]
+                                                      .currency
+                                                      .toString()
+                                                      .toUpperCase()
+                                              ? widget
+                                                  .allWallets![index].currency
+                                                  .toString()
+                                                  .toUpperCase()
+                                              : widget.allWallets![index].name +
+                                                  " (" +
+                                                  widget.allWallets![index]
+                                                      .currency
+                                                      .toString()
+                                                      .toUpperCase() +
+                                                  ")",
+                                          fontSize: 15,
+                                        ),
+                                        selected: selectedWallet ==
+                                            widget.allWallets![index],
+                                        onSelected: (bool selected) {
+                                          if (widget.setSelectedWallet != null)
+                                            widget.setSelectedWallet!(
+                                                widget.allWallets![index]);
+                                          setState(() {
+                                            selectedWallet =
+                                                widget.allWallets![index];
+                                            walletPkForCurrency = widget
+                                                .allWallets![index].walletPk;
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ).toList()
+                              ],
+                            ),
+                    ),
               SizedBox(height: 5),
-              Center(
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 400),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          CalculatorButton(
-                            disabled: !canChange(),
-                            label: "1",
-                            editAmount: () {
-                              addToAmount("1");
-                            },
-                            topLeft: true,
-                          ),
-                          CalculatorButton(
+              Padding(
+                padding: widget.padding,
+                child: Center(
+                  child: Container(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            CalculatorButton(
                               disabled: !canChange(),
-                              label: "2",
+                              label: "1",
                               editAmount: () {
-                                addToAmount("2");
-                              }),
-                          CalculatorButton(
+                                addToAmount("1");
+                              },
+                              topLeft: true,
+                            ),
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "2",
+                                editAmount: () {
+                                  addToAmount("2");
+                                }),
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "3",
+                                editAmount: () {
+                                  addToAmount("3");
+                                }),
+                            CalculatorButton(
+                              label: "÷",
+                              editAmount: () {
+                                addToAmount("÷");
+                              },
+                              topRight: true,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "4",
+                                editAmount: () {
+                                  addToAmount("4");
+                                }),
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "5",
+                                editAmount: () {
+                                  addToAmount("5");
+                                }),
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "6",
+                                editAmount: () {
+                                  addToAmount("6");
+                                }),
+                            CalculatorButton(
+                                label: "×",
+                                editAmount: () {
+                                  addToAmount("×");
+                                }),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "7",
+                                editAmount: () {
+                                  addToAmount("7");
+                                }),
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "8",
+                                editAmount: () {
+                                  addToAmount("8");
+                                }),
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "9",
+                                editAmount: () {
+                                  addToAmount("9");
+                                }),
+                            CalculatorButton(
+                                label: "-",
+                                editAmount: () {
+                                  addToAmount("-");
+                                }),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CalculatorButton(
                               disabled: !canChange(),
-                              label: "3",
+                              label: ".",
                               editAmount: () {
-                                addToAmount("3");
-                              }),
-                          CalculatorButton(
-                            label: "÷",
-                            editAmount: () {
-                              addToAmount("÷");
-                            },
-                            topRight: true,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CalculatorButton(
-                              disabled: !canChange(),
-                              label: "4",
+                                addToAmount(".");
+                              },
+                              bottomLeft: true,
+                            ),
+                            CalculatorButton(
+                                disabled: !canChange(),
+                                label: "0",
+                                editAmount: () {
+                                  addToAmount("0");
+                                }),
+                            CalculatorButton(
+                              label: "<",
                               editAmount: () {
-                                addToAmount("4");
-                              }),
-                          CalculatorButton(
-                              disabled: !canChange(),
-                              label: "5",
+                                removeToAmount();
+                              },
+                              onLongPress: removeAll,
+                            ),
+                            CalculatorButton(
+                              label: "+",
                               editAmount: () {
-                                addToAmount("5");
-                              }),
-                          CalculatorButton(
-                              disabled: !canChange(),
-                              label: "6",
-                              editAmount: () {
-                                addToAmount("6");
-                              }),
-                          CalculatorButton(
-                              label: "×",
-                              editAmount: () {
-                                addToAmount("×");
-                              }),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CalculatorButton(
-                              disabled: !canChange(),
-                              label: "7",
-                              editAmount: () {
-                                addToAmount("7");
-                              }),
-                          CalculatorButton(
-                              disabled: !canChange(),
-                              label: "8",
-                              editAmount: () {
-                                addToAmount("8");
-                              }),
-                          CalculatorButton(
-                              disabled: !canChange(),
-                              label: "9",
-                              editAmount: () {
-                                addToAmount("9");
-                              }),
-                          CalculatorButton(
-                              label: "-",
-                              editAmount: () {
-                                addToAmount("-");
-                              }),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CalculatorButton(
-                            disabled: !canChange(),
-                            label: ".",
-                            editAmount: () {
-                              addToAmount(".");
-                            },
-                            bottomLeft: true,
-                          ),
-                          CalculatorButton(
-                              disabled: !canChange(),
-                              label: "0",
-                              editAmount: () {
-                                addToAmount("0");
-                              }),
-                          CalculatorButton(
-                            label: "<",
-                            editAmount: () {
-                              removeToAmount();
-                            },
-                            onLongPress: removeAll,
-                          ),
-                          CalculatorButton(
-                            label: "+",
-                            editAmount: () {
-                              addToAmount("+");
-                            },
-                            bottomRight: true,
-                          ),
-                        ],
-                      ),
-                    ],
+                                addToAmount("+");
+                              },
+                              bottomRight: true,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
               SizedBox(height: 15),
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 500),
-                child: widget.allowZero || amount != ""
-                    ? Button(
-                        key: Key("addSuccess"),
-                        label: widget.nextLabel ?? "",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {
-                          if (widget.allowZero && amount == "") {
-                            widget.setSelectedAmount(0, "");
-                          }
-                          if (widget.next != null) {
-                            widget.next!();
-                          }
-                          if (widget.popWithAmount) {
-                            Navigator.pop(
-                                context,
-                                (amount == ""
-                                    ? 0
-                                    : includesOperations(amount, false)
-                                        ? calculateResult(amount)
-                                        : double.tryParse(amount) ?? 0));
-                          }
-                        },
-                      )
-                    : Button(
-                        key: Key("addNoSuccess"),
-                        label: widget.nextLabel ?? "",
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        onTap: () {},
-                        color: Colors.grey,
-                      ),
+              Padding(
+                padding: widget.padding,
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 500),
+                  child: widget.allowZero || amount != ""
+                      ? Button(
+                          key: Key("addSuccess"),
+                          label: widget.nextLabel ?? "",
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          onTap: () {
+                            if (widget.allowZero && amount == "") {
+                              widget.setSelectedAmount(0, "");
+                            }
+                            if (widget.next != null) {
+                              widget.next!();
+                            }
+                            if (widget.popWithAmount) {
+                              Navigator.pop(
+                                  context,
+                                  (amount == ""
+                                      ? 0
+                                      : includesOperations(amount, false)
+                                          ? calculateResult(amount)
+                                          : double.tryParse(amount) ?? 0));
+                            }
+                          },
+                        )
+                      : Button(
+                          key: Key("addNoSuccess"),
+                          label: widget.nextLabel ?? "",
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          onTap: () {},
+                          color: Colors.grey,
+                        ),
+                ),
               )
             ],
           ),

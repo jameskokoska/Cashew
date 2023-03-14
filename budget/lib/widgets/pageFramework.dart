@@ -41,6 +41,7 @@ class PageFramework extends StatefulWidget {
     this.listID,
     this.sharedBudgetRefresh = false,
     this.horizontalPadding = 0,
+    this.backgroundColor,
   }) : super(key: key);
 
   final String title;
@@ -72,6 +73,7 @@ class PageFramework extends StatefulWidget {
   final String? listID;
   final bool? sharedBudgetRefresh;
   final double horizontalPadding;
+  final Color? backgroundColor;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -212,6 +214,7 @@ class PageFrameworkState extends State<PageFramework>
   @override
   Widget build(BuildContext context) {
     Widget scaffold = Scaffold(
+      backgroundColor: widget.backgroundColor,
       body: ScrollbarWrap(
         child: CustomScrollView(
           controller: _scrollController,
@@ -428,6 +431,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     collapsedHeight -
                     MediaQuery.of(context).padding.top) /
                 (expandedHeight - collapsedHeight);
+        if (collapsedHeight == expandedHeight) percent = 1;
         return ClipRRect(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),

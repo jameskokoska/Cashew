@@ -152,11 +152,20 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
           ),
           SizedBox(height: 10),
           Center(
+            child: Icon(
+              Icons.warning_rounded,
+              color: Theme.of(context).colorScheme.secondary,
+              size: 40,
+            ),
+          ),
+          Center(
             child: TextFont(
               text: "Connection Error",
+              fontSize: 15,
               textAlign: TextAlign.center,
             ),
           ),
+          SizedBox(height: 10),
         ],
       );
     }
@@ -191,22 +200,29 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                 ? Row(
                     children: [
                       Expanded(
-                        child: AddButton(onTap: () {
-                          openBottomSheet(
-                            context,
-                            PopupFramework(
-                              title: "Add Member",
-                              subtitle: "Enter the email of the member",
-                              child: SelectText(
-                                setSelectedText: (_) {},
-                                placeholder: "example@example.com",
-                                nextWithInput: (text) async {
-                                  addMember(text);
-                                },
-                              ),
+                        child: AddButton(
+                            padding: EdgeInsets.only(
+                              left: 15,
+                              right: 15,
+                              bottom: 9,
+                              top: 4,
                             ),
-                          );
-                        }),
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Add Member",
+                                  subtitle: "Enter the email of the member",
+                                  child: SelectText(
+                                    setSelectedText: (_) {},
+                                    placeholder: "example@example.com",
+                                    nextWithInput: (text) async {
+                                      addMember(text);
+                                    },
+                                  ),
+                                ),
+                              );
+                            }),
                       ),
                     ],
                   )
@@ -370,7 +386,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
                   icon: Icons.block_rounded,
-                  iconColor: Theme.of(context).colorScheme.errorContainer,
+                  iconColor: Theme.of(context).colorScheme.onError,
                   label: "Stop Sharing",
                   onTap: () async {
                     openPopup(
@@ -404,8 +420,8 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                       onSubmitLabel: "Delete",
                     );
                   },
-                  color: Theme.of(context).colorScheme.onErrorContainer,
-                  textColor: Theme.of(context).colorScheme.errorContainer,
+                  color: Theme.of(context).colorScheme.error,
+                  textColor: Theme.of(context).colorScheme.onError,
                 ),
               )
             : Padding(

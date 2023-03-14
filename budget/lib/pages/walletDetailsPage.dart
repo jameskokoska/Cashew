@@ -25,6 +25,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+class WatchedWalletDetailsPage extends StatelessWidget {
+  const WatchedWalletDetailsPage({required this.walletPk, super.key});
+  final int walletPk;
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<TransactionWallet>(
+      stream: database.getWallet(walletPk),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return WalletDetailsPage(wallet: snapshot.data);
+        }
+        return SizedBox.shrink();
+      },
+    );
+  }
+}
+
 class WalletDetailsPage extends StatelessWidget {
   final TransactionWallet? wallet;
   const WalletDetailsPage({required this.wallet, Key? key}) : super(key: key);
@@ -44,6 +61,7 @@ class WalletDetailsPage extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(top: 12.5, right: 5),
           child: IconButton(
+            tooltip: "Edit wallet",
             onPressed: () {
               pushRoute(
                 context,
