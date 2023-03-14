@@ -53,6 +53,8 @@ Widget getTransactionsSlivers(
   int? onlyShowTransactionsBelongingToBudget,
   bool simpleListRender = false,
   Budget? budget,
+  Color? dateDividerColor,
+  Color? transactionBackgroundColor,
 }) {
   return StreamBuilder<List<DateTime?>>(
     stream: database.getUniqueDates(
@@ -124,6 +126,7 @@ Widget getTransactionsSlivers(
                       int realIndex = index - 1;
                       if (realIndex == -1) {
                         children.add(DateDivider(
+                            color: dateDividerColor,
                             date: date,
                             info: transactionList.length > 1
                                 ? convertToMoney(totalSpentForDay)
@@ -133,6 +136,7 @@ Widget getTransactionsSlivers(
                           AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
                             child: TransactionEntry(
+                              containerColor: transactionBackgroundColor,
                               key: ValueKey(transactionList[realIndex]
                                   .transaction
                                   .transactionPk),
@@ -172,12 +176,14 @@ Widget getTransactionsSlivers(
                               return SizedBox.shrink();
                             else
                               return DateDivider(
+                                  color: dateDividerColor,
                                   date: date,
                                   info: transactionList.length > 1
                                       ? convertToMoney(totalSpentForDay)
                                       : "");
                           }
                           return TransactionEntry(
+                            containerColor: transactionBackgroundColor,
                             key: ValueKey(transactionList[realIndex]
                                 .transaction
                                 .transactionPk),
@@ -217,6 +223,7 @@ Widget getTransactionsSlivers(
                           curve: Curves.easeInOut,
                           animation: animation,
                           child: TransactionEntry(
+                            containerColor: transactionBackgroundColor,
                             key: ValueKey(item.transaction.transactionPk),
                             category: item.category,
                             openPage: AddTransactionPage(
@@ -274,6 +281,7 @@ Widget getTransactionsSlivers(
                               simpleListRender == true
                           ? transactionList.length > 0
                               ? DateDivider(
+                                  color: dateDividerColor,
                                   key: ValueKey(date),
                                   date: date,
                                   info: transactionList.length > 1
@@ -287,6 +295,7 @@ Widget getTransactionsSlivers(
                                   ? AnimatedSwitcher(
                                       duration: Duration(milliseconds: 300),
                                       child: DateDivider(
+                                          color: dateDividerColor,
                                           key: ValueKey(date),
                                           date: date,
                                           info: transactionList.length > 1

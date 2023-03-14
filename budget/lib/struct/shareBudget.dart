@@ -362,6 +362,8 @@ Future<int> downloadTransactionsFromBudgets(
           budgetDecoded["ownerEmail"],
           ...List<String>.from(budgetDecoded["members"]),
         ],
+        budgetTransactionFilters: [],
+        memberTransactionFilters: [],
       ),
     );
 

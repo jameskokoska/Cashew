@@ -21,7 +21,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 28;
+int schemaVersionGlobal = 29;
 
 // Generate database code
 // flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -86,6 +86,20 @@ class IntListInColumnConverter extends TypeConverter<List<int>, String> {
 
   @override
   String toSql(List<int> ints) {
+    return json.encode(ints);
+  }
+}
+
+class BudgetTransactionFiltersListInColumnConverter
+    extends TypeConverter<List<BudgetTransactionFilters>, String> {
+  const BudgetTransactionFiltersListInColumnConverter();
+  @override
+  List<BudgetTransactionFilters> fromSql(String string_from_db) {
+    return new List<BudgetTransactionFilters>.from(json.decode(string_from_db));
+  }
+
+  @override
+  String toSql(List<BudgetTransactionFilters> ints) {
     return json.encode(ints);
   }
 }
@@ -246,6 +260,12 @@ class Budgets extends Table {
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
   IntColumn get sharedTransactionsShow =>
       intEnum<SharedTransactionsShow>().withDefault(const Constant(0))();
+  TextColumn get budgetTransactionFilters => text()
+      .withDefault(const Constant("[]"))
+      .map(const BudgetTransactionFiltersListInColumnConverter())();
+  TextColumn get memberTransactionFilters => text()
+      .withDefault(const Constant("[]"))
+      .map(const StringListInColumnConverter())();
   // Attributes to configure sharing of transactions:
   // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
   TextColumn get sharedKey => text().nullable()();
@@ -391,6 +411,10 @@ class FinanceDatabase extends _$FinanceDatabase {
           }
           if (from <= 27) {
             await migrator.createTable($CategoryBudgetLimitsTable(database));
+          }
+          if (from <= 28) {
+            await migrator.addColumn(budgets, budgets.budgetTransactionFilters);
+            await migrator.addColumn(budgets, budgets.memberTransactionFilters);
           }
         },
       );

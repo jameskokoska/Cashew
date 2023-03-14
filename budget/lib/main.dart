@@ -467,6 +467,13 @@ class App extends StatelessWidget {
             : Colors.white,
         appBarTheme:
             AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+        splashColor: appStateSettings["materialYou"]
+            ? darkenPastel(
+                lightenPastel(
+                    getSettingConstants(appStateSettings)["accentColor"],
+                    amount: 0.86),
+                amount: 0.1)
+            : null,
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

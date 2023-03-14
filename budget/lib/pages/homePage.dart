@@ -571,6 +571,7 @@ class HomePageState extends State<HomePage>
                                     : true,
                             sticky: false,
                             slivers: false,
+                            dateDividerColor: Colors.transparent,
                           ),
                         ),
                       ),

@@ -62,6 +62,7 @@ class TransactionEntry extends StatelessWidget {
     this.listID, //needs to be unique based on the page to avoid conflicting globalSelectedIDs
     this.category,
     this.onSelected,
+    this.containerColor,
   }) : super(key: key);
 
   final Widget openPage;
@@ -69,6 +70,7 @@ class TransactionEntry extends StatelessWidget {
   final String? listID;
   final TransactionCategory? category;
   final Function(Transaction transaction, bool selected)? onSelected;
+  final Color? containerColor;
 
   final double fabSize = 50;
 
@@ -160,6 +162,9 @@ class TransactionEntry extends StatelessWidget {
                 .contains(transaction.transactionPk);
             return OpenContainerNavigation(
               borderRadius: 15,
+              closedColor: containerColor == null
+                  ? Theme.of(context).canvasColor
+                  : containerColor,
               button: (openContainer) {
                 return Padding(
                   padding: const EdgeInsets.only(
@@ -1043,10 +1048,12 @@ class DateDivider extends StatelessWidget {
     Key? key,
     required this.date,
     this.info,
+    this.color,
   }) : super(key: key);
 
   final DateTime date;
   final String? info;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -1054,6 +1061,7 @@ class DateDivider extends StatelessWidget {
       padding: EdgeInsets.symmetric(
           horizontal: getHorizontalPaddingConstrained(context)),
       child: Container(
+        color: color == null ? Theme.of(context).canvasColor : color,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
         alignment: Alignment.centerLeft,
         child: Row(

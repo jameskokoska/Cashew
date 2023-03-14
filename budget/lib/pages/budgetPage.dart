@@ -100,6 +100,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
     String pageId = budgetRange.start.millisecondsSinceEpoch.toString() +
         widget.budget.name +
         budgetRange.end.millisecondsSinceEpoch.toString();
+    Color? pageBackgroundColor = appStateSettings["materialYou"]
+        ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
+        : null;
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -113,10 +116,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
       child: Stack(
         children: [
           PageFramework(
-            backgroundColor: appStateSettings["materialYou"]
-                ? dynamicPastel(context, budgetColorScheme.primary,
-                    amount: 0.92)
-                : null,
+            backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
               fab: Padding(
@@ -599,6 +599,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         ? widget.budget.budgetPk
                         : null,
                 budget: widget.budget,
+                dateDividerColor: pageBackgroundColor,
+                transactionBackgroundColor: pageBackgroundColor,
               ),
               SliverToBoxAdapter(
                 child: WatchAllWallets(

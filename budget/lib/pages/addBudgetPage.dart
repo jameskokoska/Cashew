@@ -112,11 +112,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   bool selectedAddedTransactionsOnly = false;
   SharedTransactionsShow selectedSharedTransactionsShow =
       SharedTransactionsShow.fromEveryone;
-  List<BudgetTransactionFilters> budgetTransactionFilters = [
+  List<BudgetTransactionFilters> selectedBudgetTransactionFilters = [
     ...allBudgetTransactionFilters
   ];
   List<String> allMembersOfAllBudgets = [];
-  List<String> memberTransactionFilters = [];
+  List<String> selectedMemberTransactionFilters = [];
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -502,6 +502,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           widget.budget != null ? currentInstance!.sharedMembers : null,
       sharedAllMembersEver:
           widget.budget != null ? currentInstance!.sharedAllMembersEver : null,
+      budgetTransactionFilters: selectedBudgetTransactionFilters,
+      memberTransactionFilters: selectedMemberTransactionFilters,
     );
   }
 
@@ -510,7 +512,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       allMembersOfAllBudgets = await database.getAllMembersOfBudgets();
-      memberTransactionFilters = [...allMembersOfAllBudgets];
+      if (widget.budget == null)
+        selectedMemberTransactionFilters = [...allMembersOfAllBudgets];
       setState(() {});
     });
     if (widget.budget != null) {
@@ -534,6 +537,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       selectedColor = widget.budget!.colour == null
           ? null
           : HexColor(widget.budget!.colour);
+
+      selectedBudgetTransactionFilters =
+          widget.budget!.budgetTransactionFilters;
+      selectedMemberTransactionFilters =
+          widget.budget!.memberTransactionFilters;
 
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {
@@ -1104,16 +1112,17 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                                   : "";
                                         },
                                         onSelected: (item) {
-                                          if (budgetTransactionFilters
+                                          if (selectedBudgetTransactionFilters
                                               .contains(item))
-                                            budgetTransactionFilters
+                                            selectedBudgetTransactionFilters
                                                 .remove(item);
                                           else
-                                            budgetTransactionFilters.add(item);
+                                            selectedBudgetTransactionFilters
+                                                .add(item);
                                           setState(() {});
                                         },
                                         getSelected: (item) {
-                                          return budgetTransactionFilters
+                                          return selectedBudgetTransactionFilters
                                               .contains(item);
                                         },
                                       ),
@@ -1123,16 +1132,17 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                           return getMemberNickname(item);
                                         },
                                         onSelected: (item) {
-                                          if (memberTransactionFilters
+                                          if (selectedMemberTransactionFilters
                                               .contains(item))
-                                            memberTransactionFilters
+                                            selectedMemberTransactionFilters
                                                 .remove(item);
                                           else
-                                            memberTransactionFilters.add(item);
+                                            selectedMemberTransactionFilters
+                                                .add(item);
                                           setState(() {});
                                         },
                                         getSelected: (item) {
-                                          return memberTransactionFilters
+                                          return selectedMemberTransactionFilters
                                               .contains(item);
                                         },
                                       ),

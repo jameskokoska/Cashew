@@ -223,7 +223,10 @@ class PageFrameworkState extends State<PageFramework>
               title: widget.title,
               titleWidget: widget.titleWidget,
               appBarBackgroundColor: widget.appBarBackgroundColor,
-              appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
+              appBarBackgroundColorStart: widget.backgroundColor == null ||
+                      widget.appBarBackgroundColorStart != null
+                  ? widget.appBarBackgroundColorStart
+                  : widget.backgroundColor,
               backButton: widget.backButton,
               subtitle: widget.subtitle,
               subtitleSize: widget.subtitleSize,

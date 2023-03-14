@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Initial population of new filter columns in budgets
+    Splash color follows color theme
+    Fixed background color of transaction entries (for open navigation container)
+    Fixed initial background color of loading page on web
+    Fixed header background color on past budget page
     Started new budget filters
     Notification permission request
     Color fixes
