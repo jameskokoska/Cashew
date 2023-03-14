@@ -698,7 +698,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 ),
                                 labelColor: Theme.of(context).colorScheme.black,
                                 unselectedLabelColor:
-                                    Theme.of(context).colorScheme.textLight,
+                                    Colors.white.withOpacity(0.3),
                                 tabs: [
                                   Tab(
                                     child: Padding(
@@ -2094,6 +2094,9 @@ class _SelectChipsState extends State<SelectChips> {
                 if (widget.onLongPress != null) widget.onLongPress!(item);
               },
               child: ChoiceChip(
+                selectedColor: appStateSettings["materialYou"]
+                    ? null
+                    : Theme.of(context).colorScheme.lightDarkAccentHeavy,
                 side: widget.getCustomBorderColor == null
                     ? null
                     : BorderSide(

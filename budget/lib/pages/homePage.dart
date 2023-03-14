@@ -658,9 +658,15 @@ class SlidingSelector extends StatelessWidget {
                     indicatorColor: Colors.transparent,
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicator: BoxDecoration(
-                      color: dynamicPastel(
-                          context, Theme.of(context).colorScheme.primary,
-                          amount: 0.65),
+                      color: appStateSettings["materialYou"]
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3)
+                          : Theme.of(context)
+                              .colorScheme
+                              .black
+                              .withOpacity(0.15),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     labelColor: Theme.of(context).colorScheme.black,

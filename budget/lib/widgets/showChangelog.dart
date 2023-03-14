@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Started new budget filters
+    Notification permission request
+    Color fixes
+    Added material you colorscheme to budget history page
     Started improving add new budget page
     Scanned email transactions income supported based on the category
     Fixed header for page frameworks that don't require expanding

@@ -49,7 +49,7 @@ runNotificationPayLoadsNoContext(payloadData) {
   notificationPayload = "";
 }
 
-runNotificationPayLoads(context) {
+void runNotificationPayLoads(context) {
   if (kIsWeb) return;
   if (notificationPayload == "addTransaction") {
     Navigator.push(
@@ -62,7 +62,7 @@ runNotificationPayLoads(context) {
   notificationPayload = "";
 }
 
-setDailyNotificationOnLaunch(context) async {
+Future<void> setDailyNotificationOnLaunch(context) async {
   if (kIsWeb) return;
   bool notificationsEnabled = appStateSettings["notifications"];
   TimeOfDay timeOfDay = TimeOfDay(
@@ -74,7 +74,7 @@ setDailyNotificationOnLaunch(context) async {
   }
 }
 
-setUpcomingNotifications(context) async {
+Future<void> setUpcomingNotifications(context) async {
   if (kIsWeb) return;
   bool upcomingTransactionsNotificationsEnabled =
       appStateSettings["notificationsUpcomingTransactions"];
@@ -86,4 +86,11 @@ setUpcomingNotifications(context) async {
     await scheduleUpcomingTransactionsNotification(
         context, upcomingTransactionsTimeOfDay);
   }
+}
+
+Future<void> askForNotificationPermission() async {
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
 }

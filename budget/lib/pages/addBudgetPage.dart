@@ -112,6 +112,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   bool selectedAddedTransactionsOnly = false;
   SharedTransactionsShow selectedSharedTransactionsShow =
       SharedTransactionsShow.fromEveryone;
+  List<BudgetTransactionFilters> budgetTransactionFilters = [
+    ...allBudgetTransactionFilters
+  ];
+  List<String> allMembersOfAllBudgets = [];
+  List<String> memberTransactionFilters = [];
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -503,6 +508,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () async {
+      allMembersOfAllBudgets = await database.getAllMembersOfBudgets();
+      memberTransactionFilters = [...allMembersOfAllBudgets];
+      setState(() {});
+    });
     if (widget.budget != null) {
       //We are editing a budget
       //Fill in the information from the passed in budget
@@ -1075,6 +1085,57 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                         ),
                                       ),
                                       SizedBox(height: 5),
+                                      SelectChips(
+                                        items: [
+                                          BudgetTransactionFilters
+                                              .addedToOtherBudget,
+                                          BudgetTransactionFilters
+                                              .sharedToOtherBudget,
+                                        ],
+                                        getLabel: (item) {
+                                          return item ==
+                                                  BudgetTransactionFilters
+                                                      .addedToOtherBudget
+                                              ? "Added to Other Budgets"
+                                              : item ==
+                                                      BudgetTransactionFilters
+                                                          .sharedToOtherBudget
+                                                  ? "Shared to Other Budgets"
+                                                  : "";
+                                        },
+                                        onSelected: (item) {
+                                          if (budgetTransactionFilters
+                                              .contains(item))
+                                            budgetTransactionFilters
+                                                .remove(item);
+                                          else
+                                            budgetTransactionFilters.add(item);
+                                          setState(() {});
+                                        },
+                                        getSelected: (item) {
+                                          return budgetTransactionFilters
+                                              .contains(item);
+                                        },
+                                      ),
+                                      SelectChips(
+                                        items: allMembersOfAllBudgets,
+                                        getLabel: (item) {
+                                          return getMemberNickname(item);
+                                        },
+                                        onSelected: (item) {
+                                          if (memberTransactionFilters
+                                              .contains(item))
+                                            memberTransactionFilters
+                                                .remove(item);
+                                          else
+                                            memberTransactionFilters.add(item);
+                                          setState(() {});
+                                        },
+                                        getSelected: (item) {
+                                          return memberTransactionFilters
+                                              .contains(item);
+                                        },
+                                      ),
                                       SelectChips(
                                         wrapped: true,
                                         items: [

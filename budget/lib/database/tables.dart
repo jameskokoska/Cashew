@@ -61,6 +61,16 @@ enum SharedTransactionsShow {
   excludeOtherIfNotShared,
 }
 
+enum BudgetTransactionFilters {
+  addedToOtherBudget,
+  sharedToOtherBudget,
+}
+
+const allBudgetTransactionFilters = [
+  BudgetTransactionFilters.addedToOtherBudget,
+  BudgetTransactionFilters.sharedToOtherBudget
+];
+
 enum ThemeSetting { dark, light }
 
 enum MethodAdded { email, shared, csv }
@@ -1452,6 +1462,16 @@ class FinanceDatabase extends _$FinanceDatabase {
                   : b.sharedKey.isNull())))
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
+  }
+
+  Future<List<String>> getAllMembersOfBudgets() async {
+    List<Budget> sharedBudgets = await getAllBudgets(sharedBudgetsOnly: true);
+    Set<String> members = {};
+    for (Budget budget in sharedBudgets) {
+      for (String member in budget.sharedAllMembersEver ?? [])
+        members.add(member);
+    }
+    return members.toList();
   }
 
   Future<List<Budget>> getAllBudgetsAddedTransactionsOnly() {

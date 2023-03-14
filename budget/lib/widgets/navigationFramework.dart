@@ -95,7 +95,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     // Functions to run after entire UI loaded
     Future.delayed(Duration.zero, () async {
       await showChangelog(context);
-      await runNotificationPayLoads(context);
+      runNotificationPayLoads(context);
+      await askForNotificationPermission();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);

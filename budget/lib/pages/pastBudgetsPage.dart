@@ -153,6 +153,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     );
 
     return PageFramework(
+      backgroundColor: appStateSettings["materialYou"]
+          ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
+          : null,
       key: budgetHistoryKey,
       title: "Budget History",
       subtitle: Padding(
@@ -622,7 +625,13 @@ class PastBudgetContainer extends StatelessWidget {
     return Container(
       child: OpenContainerNavigation(
         borderRadius: 20,
-        closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+        closedColor: appStateSettings["materialYou"]
+            ? dynamicPastel(
+                context,
+                budgetColorScheme.secondaryContainer,
+                amount: 0.5,
+              )
+            : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
         button: (openContainer) {
           return Tappable(
             onTap: () {
@@ -639,7 +648,13 @@ class PastBudgetContainer extends StatelessWidget {
             },
             borderRadius: 20,
             child: widget,
-            color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+            color: appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context,
+                    budgetColorScheme.secondaryContainer,
+                    amount: 0.5,
+                  )
+                : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
           );
         },
         openPage: BudgetPage(
