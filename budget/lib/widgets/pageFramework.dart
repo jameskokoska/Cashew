@@ -214,6 +214,7 @@ class PageFrameworkState extends State<PageFramework>
   @override
   Widget build(BuildContext context) {
     Widget scaffold = Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: widget.backgroundColor,
       body: ScrollbarWrap(
         child: CustomScrollView(
@@ -275,12 +276,14 @@ class PageFrameworkState extends State<PageFramework>
     Widget? dragDownToDissmissScaffold = null;
     if (widget.dragDownToDismiss) {
       dragDownToDissmissScaffold = Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Listener(
           onPointerMove: (ptr) => {_onPointerMove(ptr)},
           onPointerUp: (ptr) => {_onPointerUp(ptr)},
           onPointerDown: (ptr) => {_onPointerDown(ptr)},
           behavior: HitTestBehavior.opaque,
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: widget.dragDownToDissmissBackground,
             body: AnimatedBuilder(
               // animation: _animationControllerDragX,
@@ -425,7 +428,10 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       pinned: pinned,
       expandedHeight: expandedHeight,
       collapsedHeight: collapsedHeight,
-      actions: actions,
+      actions: [
+        for (Widget action in actions ?? [])
+          Padding(padding: EdgeInsets.only(top: 12.5, right: 5), child: action)
+      ],
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         // print('constraints=' + constraints.toString());

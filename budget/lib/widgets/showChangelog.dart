@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Improved action spacing for sliverappbar
+    Changed input text to accept input directly instead of popup sheet
+    Fixed colors of icons not following colorscheme of page
+    Fixed associated title popup delay
     Initial population of new filter columns in budgets
     Splash color follows color theme
     Fixed background color of transaction entries (for open navigation container)

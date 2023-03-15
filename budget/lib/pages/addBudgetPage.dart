@@ -663,31 +663,25 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   }
                 },
                 actions: [
-                  Container(
-                    padding: EdgeInsets.only(top: 12.5, right: 5),
-                    child: IconButton(
-                      tooltip: "Pin to homepage",
-                      onPressed: () {
-                        setSelectedPin();
-                      },
-                      icon: Icon(selectedPin
-                          ? Icons.push_pin_rounded
-                          : Icons.push_pin_outlined),
-                    ),
+                  IconButton(
+                    tooltip: "Pin to homepage",
+                    onPressed: () {
+                      setSelectedPin();
+                    },
+                    icon: Icon(selectedPin
+                        ? Icons.push_pin_rounded
+                        : Icons.push_pin_outlined),
                   ),
                   widget.budget != null
-                      ? Container(
-                          padding: EdgeInsets.only(top: 12.5, right: 5),
-                          child: IconButton(
-                            tooltip: "Delete budget",
-                            onPressed: () {
-                              deleteBudgetPopup(context, widget.budget!,
-                                  afterDelete: () {
-                                Navigator.pop(context);
-                              });
-                            },
-                            icon: Icon(Icons.delete_rounded),
-                          ),
+                      ? IconButton(
+                          tooltip: "Delete budget",
+                          onPressed: () {
+                            deleteBudgetPopup(context, widget.budget!,
+                                afterDelete: () {
+                              Navigator.pop(context);
+                            });
+                          },
+                          icon: Icon(Icons.delete_rounded),
                         )
                       : SizedBox.shrink(),
                 ],
@@ -695,29 +689,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   Container(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: kIsWeb
-                        ? TextInput(
-                            labelText: "Name",
-                            bubbly: false,
-                            initialValue: selectedTitle,
-                            onChanged: (text) {
-                              setSelectedTitle(text);
-                            },
-                            padding: EdgeInsets.only(left: 7, right: 7),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            topContentPadding: 20,
-                          )
-                        : TappableTextEntry(
-                            title: selectedTitle,
-                            placeholder: "Name",
-                            onTap: () {
-                              selectTitle();
-                            },
-                            autoSizeText: true,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                          ),
+                    child: TextInput(
+                      labelText: "Name",
+                      bubbly: false,
+                      initialValue: selectedTitle,
+                      onChanged: (text) {
+                        setSelectedTitle(text);
+                      },
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      topContentPadding: 20,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),

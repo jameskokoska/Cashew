@@ -249,14 +249,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
-  context_menus:
-    dependency: "direct main"
-    description:
-      name: context_menus
-      sha256: "25313f2a17dc936f541f8012761648cb58d936c5d6f6bf7282f137a4b9dedddb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
   convert:
     dependency: transitive
     description:

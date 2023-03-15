@@ -60,15 +60,12 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       actions: [
-        Container(
-          padding: EdgeInsets.only(top: 12.5, right: 5),
-          child: RefreshButton(onTap: () async {
-            loadingIndeterminateKey.currentState!.setVisibility(true);
-            await parseEmailsInBackground(context,
-                sayUpdates: true, forceParse: true);
-            loadingIndeterminateKey.currentState!.setVisibility(false);
-          }),
-        ),
+        RefreshButton(onTap: () async {
+          loadingIndeterminateKey.currentState!.setVisibility(true);
+          await parseEmailsInBackground(context,
+              sayUpdates: true, forceParse: true);
+          loadingIndeterminateKey.currentState!.setVisibility(false);
+        }),
       ],
       listWidgets: [
         Padding(

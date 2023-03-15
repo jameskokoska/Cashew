@@ -476,31 +476,29 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       PageFrameworkSliverAppBar(
                         title: "Transactions",
                         actions: [
-                          Padding(
-                              padding: EdgeInsets.only(top: 10, right: 7),
-                              child: MediaQuery.of(context).padding.top >= 25
-                                  ? AnimatedSwitcher(
-                                      duration: Duration(milliseconds: 1100),
-                                      switchInCurve:
-                                          Curves.easeInOutCubicEmphasized,
-                                      switchOutCurve: Curves.ease,
-                                      transitionBuilder: (Widget child,
-                                          Animation<double> animation) {
-                                        return FadeScaleTransitionButton(
-                                          alignment: Alignment.center,
-                                          animation: animation,
-                                          child: child,
-                                        );
-                                      },
-                                      child: scaleInSearchIcon
-                                          ? searchButton
-                                          : Container(
-                                              key: ValueKey(1),
-                                              width: 50,
-                                              height: 50,
-                                            ),
-                                    )
-                                  : searchButton),
+                          MediaQuery.of(context).padding.top >= 25
+                              ? AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 1100),
+                                  switchInCurve:
+                                      Curves.easeInOutCubicEmphasized,
+                                  switchOutCurve: Curves.ease,
+                                  transitionBuilder: (Widget child,
+                                      Animation<double> animation) {
+                                    return FadeScaleTransitionButton(
+                                      alignment: Alignment.center,
+                                      animation: animation,
+                                      child: child,
+                                    );
+                                  },
+                                  child: scaleInSearchIcon
+                                      ? searchButton
+                                      : Container(
+                                          key: ValueKey(1),
+                                          width: 50,
+                                          height: 50,
+                                        ),
+                                )
+                              : searchButton,
                         ],
                       ),
                     ];

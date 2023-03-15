@@ -65,6 +65,11 @@ Future<T?> openPopup<T extends Object?>(
   VoidCallback? onExtra,
   bool barrierDismissible = true,
 }) {
+  //Minimize keyboard when tap non interactive widget
+  FocusScopeNode currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus) {
+    currentFocus.unfocus();
+  }
   return showGeneralDialog(
     context: context,
     barrierDismissible: barrierDismissible,

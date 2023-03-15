@@ -66,10 +66,6 @@ class TextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _keyboardIsVisible() {
-      return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
-    }
-
     return Padding(
       padding: padding,
       child: Container(
@@ -117,6 +113,8 @@ class TextInput extends StatelessWidget {
                 fontFamily: "Avenir"),
             cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
             decoration: new InputDecoration(
+              hintStyle:
+                  TextStyle(color: Theme.of(context).colorScheme.textLight),
               alignLabelWithHint: true,
               prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
               suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
@@ -126,7 +124,7 @@ class TextInput extends StatelessWidget {
                 top: topContentPadding != null
                     ? topContentPadding ?? 0
                     : (bubbly == false ? 15 : 18),
-                bottom: bubbly == false ? (kIsWeb ? 8 : 0) : (kIsWeb ? 15 : 0),
+                bottom: bubbly == false ? (kIsWeb ? 8 : 5) : (kIsWeb ? 15 : 0),
               ),
               hintText: labelText,
               filled: bubbly == false ? true : false,
@@ -163,10 +161,14 @@ class TextInput extends StatelessWidget {
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(8.0)),
                       borderSide: BorderSide(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .secondary
-                            .withAlpha(100),
+                        color: appStateSettings["materialYou"]
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.2)
+                            : Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavy,
                         width: 2,
                       ),
                     )

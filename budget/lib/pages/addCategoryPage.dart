@@ -252,18 +252,15 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                 },
                 actions: [
                   widget.category != null
-                      ? Container(
-                          padding: EdgeInsets.only(top: 12.5, right: 5),
-                          child: IconButton(
-                            tooltip: "Delete category",
-                            onPressed: () {
-                              deleteCategoryPopup(context, widgetCategory!,
-                                  afterDelete: () {
-                                Navigator.pop(context);
-                              });
-                            },
-                            icon: Icon(Icons.delete_rounded),
-                          ),
+                      ? IconButton(
+                          tooltip: "Delete category",
+                          onPressed: () {
+                            deleteCategoryPopup(context, widgetCategory!,
+                                afterDelete: () {
+                              Navigator.pop(context);
+                            });
+                          },
+                          icon: Icon(Icons.delete_rounded),
                         )
                       : SizedBox.shrink()
                 ],
@@ -329,68 +326,22 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         ),
                       ),
                       Expanded(
-                        child: Tappable(
-                          onTap: !kIsWeb
-                              ? () {
-                                  selectTitle();
-                                }
-                              : null,
-                          color: Colors.transparent,
-                          child: Container(
-                            height: 136,
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              height: 55,
-                              width: MediaQuery.of(context).size.width - 150,
-                              padding: EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 1.5,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .lightDarkAccentHeavy)),
-                              ),
-                              child: IntrinsicWidth(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: kIsWeb
-                                      ? TextInput(
-                                          labelText: "Name",
-                                          bubbly: false,
-                                          controller: _titleController,
-                                          onChanged: (text) {
-                                            setSelectedTitle(text,
-                                                userAttemptedToChangeTitlePassed:
-                                                    true);
-                                          },
-                                          padding: EdgeInsets.zero,
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                          topContentPadding: 40,
-                                        )
-                                      : TextFont(
-                                          autoSizeText: true,
-                                          maxLines: 1,
-                                          minFontSize: 16,
-                                          textAlign: TextAlign.left,
-                                          fontSize: 35,
-                                          fontWeight: FontWeight.bold,
-                                          text: selectedTitle == null ||
-                                                  selectedTitle == ""
-                                              ? "Name"
-                                              : selectedTitle ?? "",
-                                          textColor: selectedTitle == null ||
-                                                  selectedTitle == ""
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .textLight
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .black,
-                                        ),
-                                ),
-                              ),
+                        child: IntrinsicWidth(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(right: 20, bottom: 40),
+                            child: TextInput(
+                              labelText: "Name",
+                              bubbly: false,
+                              controller: _titleController,
+                              onChanged: (text) {
+                                setSelectedTitle(text,
+                                    userAttemptedToChangeTitlePassed: true);
+                              },
+                              padding: EdgeInsets.zero,
+                              fontSize: 34,
+                              fontWeight: FontWeight.bold,
+                              topContentPadding: 40,
                             ),
                           ),
                         ),
@@ -422,82 +373,78 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   SizedBox(height: 13),
                   widgetCategory == null
                       ? SizedBox.shrink()
-                      : Container(
-                          padding: EdgeInsets.only(top: 12.5, right: 5),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Button(
-                              icon: Icons.merge_rounded,
-                              label: "Merge Category",
-                              onTap: () async {
-                                openBottomSheet(
-                                  context,
-                                  PopupFramework(
-                                    title: "Select Category",
-                                    subtitle:
-                                        "Category to transfer all transactions to",
-                                    child: SelectCategory(
-                                      popRoute: true,
-                                      setSelectedCategory: (category) async {
-                                        Future.delayed(
-                                            Duration(milliseconds: 90),
-                                            () async {
-                                          final result = await openPopup(
-                                            context,
-                                            title: "Merge into " +
-                                                category.name +
-                                                "?",
-                                            description:
-                                                "This will erase this category and all transactions",
-                                            icon: Icons.warning_amber_rounded,
-                                            onSubmit: () async {
-                                              Navigator.pop(context, true);
-                                            },
-                                            onSubmitLabel: "Merge",
-                                            onCancelLabel: "Cancel",
-                                            onCancel: () {
-                                              Navigator.pop(context);
-                                            },
-                                          );
-                                          if (result == true) {
-                                            openLoadingPopup(context);
-                                            List<Transaction>
-                                                transactionsToUpdate =
-                                                await database
-                                                    .getAllTransactionsFromCategory(
-                                                        widget.category!
-                                                            .categoryPk);
-                                            for (Transaction transaction
-                                                in transactionsToUpdate) {
-                                              await Future.delayed(
-                                                  Duration(milliseconds: 1));
-                                              Transaction transactionEdited =
-                                                  transaction.copyWith(
-                                                      categoryFk:
-                                                          category.categoryPk);
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Button(
+                            icon: Icons.merge_rounded,
+                            label: "Merge Category",
+                            onTap: () async {
+                              openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "Select Category",
+                                  subtitle:
+                                      "Category to transfer all transactions to",
+                                  child: SelectCategory(
+                                    popRoute: true,
+                                    setSelectedCategory: (category) async {
+                                      Future.delayed(Duration(milliseconds: 90),
+                                          () async {
+                                        final result = await openPopup(
+                                          context,
+                                          title: "Merge into " +
+                                              category.name +
+                                              "?",
+                                          description:
+                                              "This will erase this category and all transactions",
+                                          icon: Icons.warning_amber_rounded,
+                                          onSubmit: () async {
+                                            Navigator.pop(context, true);
+                                          },
+                                          onSubmitLabel: "Merge",
+                                          onCancelLabel: "Cancel",
+                                          onCancel: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                        if (result == true) {
+                                          openLoadingPopup(context);
+                                          List<Transaction>
+                                              transactionsToUpdate =
                                               await database
-                                                  .createOrUpdateTransaction(
-                                                      transactionEdited);
-                                            }
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                            await database.deleteCategory(
-                                                widget.category!.categoryPk,
-                                                widget.category!.order);
-                                            openSnackbar(SnackbarMessage(
-                                                title: "Merged into " +
-                                                    category.name));
+                                                  .getAllTransactionsFromCategory(
+                                                      widget.category!
+                                                          .categoryPk);
+                                          for (Transaction transaction
+                                              in transactionsToUpdate) {
+                                            await Future.delayed(
+                                                Duration(milliseconds: 1));
+                                            Transaction transactionEdited =
+                                                transaction.copyWith(
+                                                    categoryFk:
+                                                        category.categoryPk);
+                                            await database
+                                                .createOrUpdateTransaction(
+                                                    transactionEdited);
                                           }
-                                        });
-                                      },
-                                    ),
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          await database.deleteCategory(
+                                              widget.category!.categoryPk,
+                                              widget.category!.order);
+                                          openSnackbar(SnackbarMessage(
+                                              title: "Merged into " +
+                                                  category.name));
+                                        }
+                                      });
+                                    },
                                   ),
-                                );
-                              },
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
-                            ),
+                                ),
+                              );
+                            },
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
                           ),
                         ),
                   SizedBox(height: 23),

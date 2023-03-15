@@ -116,6 +116,13 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
         updateInitial();
       });
     } else {}
+    // requestLateAutoFocus
+    if (widget.associatedTitle == null)
+      _focusNode.requestFocus();
+    else
+      Future.delayed(Duration(milliseconds: 250), () {
+        _focusNode.requestFocus();
+      });
   }
 
   updateInitial() async {
@@ -197,7 +204,6 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   onChanged: (text) {
                     setSelectedTitle(text);
                   },
-                  autoFocus: true,
                   padding: EdgeInsets.only(left: 7, right: 7),
                   fontSize: 30,
                   fontWeight: FontWeight.bold,

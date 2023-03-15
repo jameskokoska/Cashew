@@ -441,31 +441,18 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   Container(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: kIsWeb
-                        ? TextInput(
-                            labelText: "Name",
-                            bubbly: false,
-                            initialValue: selectedName,
-                            onChanged: (text) {
-                              setSelectedName(text);
-                            },
-                            padding: EdgeInsets.only(left: 7, right: 7),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            topContentPadding: 20,
-                          )
-                        : TappableTextEntry(
-                            title: selectedName,
-                            placeholder: "Name",
-                            onTap: () {
-                              selectTitle();
-                            },
-                            autoSizeText: true,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                          ),
+                    child: TextInput(
+                      labelText: "Name",
+                      bubbly: false,
+                      initialValue: selectedName,
+                      onChanged: (text) {
+                        setSelectedName(text);
+                      },
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      topContentPadding: 20,
+                    ),
                   ),
                   Container(height: 10),
                   Padding(

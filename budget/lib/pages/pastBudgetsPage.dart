@@ -168,20 +168,20 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         ),
       ),
       actions: [
-        Container(
-          padding: EdgeInsets.only(top: 12.5, right: 5),
-          child: IconButton(
-            tooltip: "Edit budget",
-            onPressed: () {
-              pushRoute(
-                context,
-                AddBudgetPage(
-                  title: "Edit Budget",
-                  budget: widget.budget,
-                ),
-              );
-            },
-            icon: Icon(Icons.edit_rounded),
+        IconButton(
+          tooltip: "Edit budget",
+          onPressed: () {
+            pushRoute(
+              context,
+              AddBudgetPage(
+                title: "Edit Budget",
+                budget: widget.budget,
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.edit_rounded,
+            color: budgetColorScheme.onSecondaryContainer,
           ),
         ),
       ],

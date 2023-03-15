@@ -59,15 +59,12 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         ),
       ),
       actions: [
-        Container(
-          padding: EdgeInsets.only(top: 12.5, right: 5),
-          child: RefreshButton(onTap: () async {
-            loadingIndeterminateKey.currentState!.setVisibility(true);
-            await syncPendingQueueOnServer();
-            await getCloudBudgets();
-            loadingIndeterminateKey.currentState!.setVisibility(false);
-          }),
-        ),
+        RefreshButton(onTap: () async {
+          loadingIndeterminateKey.currentState!.setVisibility(true);
+          await syncPendingQueueOnServer();
+          await getCloudBudgets();
+          loadingIndeterminateKey.currentState!.setVisibility(false);
+        }),
       ],
       slivers: [
         SliverToBoxAdapter(

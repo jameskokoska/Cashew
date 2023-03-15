@@ -269,18 +269,15 @@ class _AddWalletPageState extends State<AddWalletPage> {
               },
               actions: [
                 widget.wallet != null && widget.wallet!.walletPk != 0
-                    ? Container(
-                        padding: EdgeInsets.only(top: 12.5, right: 5),
-                        child: IconButton(
-                          tooltip: "Delete wallet",
-                          onPressed: () {
-                            deleteWalletPopup(context, widget.wallet!,
-                                afterDelete: () {
-                              Navigator.pop(context);
-                            });
-                          },
-                          icon: Icon(Icons.delete_rounded),
-                        ),
+                    ? IconButton(
+                        tooltip: "Delete wallet",
+                        onPressed: () {
+                          deleteWalletPopup(context, widget.wallet!,
+                              afterDelete: () {
+                            Navigator.pop(context);
+                          });
+                        },
+                        icon: Icon(Icons.delete_rounded),
                       )
                     : SizedBox.shrink()
               ],
@@ -288,29 +285,18 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: kIsWeb
-                        ? TextInput(
-                            labelText: "Name",
-                            bubbly: false,
-                            initialValue: selectedTitle,
-                            onChanged: (text) {
-                              setSelectedTitle(text);
-                            },
-                            padding: EdgeInsets.only(left: 7, right: 7),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            topContentPadding: 20,
-                          )
-                        : TappableTextEntry(
-                            title: selectedTitle,
-                            placeholder: "Name",
-                            onTap: () {
-                              selectTitle();
-                            },
-                            autoSizeText: true,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                          ),
+                    child: TextInput(
+                      labelText: "Name",
+                      bubbly: false,
+                      initialValue: selectedTitle,
+                      onChanged: (text) {
+                        setSelectedTitle(text);
+                      },
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      topContentPadding: 20,
+                    ),
                   ),
                 ),
                 SliverToBoxAdapter(

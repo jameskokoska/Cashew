@@ -58,21 +58,18 @@ class WalletDetailsPage extends StatelessWidget {
     int? walletPk = wallet == null ? null : wallet!.walletPk;
     return PageFramework(
       actions: [
-        Container(
-          padding: EdgeInsets.only(top: 12.5, right: 5),
-          child: IconButton(
-            tooltip: "Edit wallet",
-            onPressed: () {
-              pushRoute(
-                context,
-                AddWalletPage(
-                  title: "Edit Wallet",
-                  wallet: wallet,
-                ),
-              );
-            },
-            icon: Icon(Icons.edit_rounded),
-          ),
+        IconButton(
+          tooltip: "Edit wallet",
+          onPressed: () {
+            pushRoute(
+              context,
+              AddWalletPage(
+                title: "Edit Wallet",
+                wallet: wallet,
+              ),
+            );
+          },
+          icon: Icon(Icons.edit_rounded),
         ),
       ],
       dragDownToDismiss: true,

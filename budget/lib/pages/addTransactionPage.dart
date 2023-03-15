@@ -590,7 +590,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         return false;
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: GestureDetector(
           onTap: () {
             //Minimize keyboard when tap non interactive widget
@@ -631,38 +631,35 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 },
                 actions: [
                   widget.transaction != null
-                      ? Container(
-                          padding: EdgeInsets.only(top: 12.5, right: 5),
-                          child: IconButton(
-                            tooltip: "Delete transaction",
-                            onPressed: () {
-                              openPopup(
-                                context,
-                                title: "Delete transaction?",
-                                description:
-                                    "Are you sure you want to delete this transaction?",
-                                icon: Icons.delete_rounded,
-                                onCancel: () {
-                                  Navigator.pop(context);
-                                },
-                                onCancelLabel: "Cancel",
-                                onSubmit: () {
-                                  database.deleteTransaction(
-                                      widget.transaction!.transactionPk);
-                                  openSnackbar(
-                                    SnackbarMessage(
-                                      title: "Deleted transaction",
-                                      icon: Icons.delete_rounded,
-                                    ),
-                                  );
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                onSubmitLabel: "Delete",
-                              );
-                            },
-                            icon: Icon(Icons.delete_rounded),
-                          ),
+                      ? IconButton(
+                          tooltip: "Delete transaction",
+                          onPressed: () {
+                            openPopup(
+                              context,
+                              title: "Delete transaction?",
+                              description:
+                                  "Are you sure you want to delete this transaction?",
+                              icon: Icons.delete_rounded,
+                              onCancel: () {
+                                Navigator.pop(context);
+                              },
+                              onCancelLabel: "Cancel",
+                              onSubmit: () {
+                                database.deleteTransaction(
+                                    widget.transaction!.transactionPk);
+                                openSnackbar(
+                                  SnackbarMessage(
+                                    title: "Deleted transaction",
+                                    icon: Icons.delete_rounded,
+                                  ),
+                                );
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              onSubmitLabel: "Delete",
+                            );
+                          },
+                          icon: Icon(Icons.delete_rounded),
                         )
                       : SizedBox.shrink()
                 ],
@@ -1107,26 +1104,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             );
                           },
                           borderRadius: 15,
-                          child: kIsWeb
-                              ? TextInput(
-                                  padding: EdgeInsets.zero,
-                                  labelText: "Title",
-                                  icon: Icons.title_rounded,
-                                  controller: _titleInputController,
-                                  onChanged: (text) async {
-                                    setSelectedTitle(text);
-                                  },
-                                )
-                              : IgnorePointer(
-                                  child: TextInput(
-                                    backgroundColor: Colors.transparent,
-                                    padding: EdgeInsets.zero,
-                                    readOnly: true,
-                                    labelText: "Title",
-                                    icon: Icons.title_rounded,
-                                    controller: _titleInputController,
-                                  ),
-                                ),
+                          child: TextInput(
+                            padding: EdgeInsets.zero,
+                            labelText: "Title",
+                            icon: Icons.title_rounded,
+                            controller: _titleInputController,
+                            onChanged: (text) async {
+                              setSelectedTitle(text);
+                            },
+                          ),
                         ),
                       ),
                       Container(height: 14),
@@ -1149,32 +1135,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             );
                           },
                           borderRadius: 15,
-                          child: kIsWeb
-                              ? TextInput(
-                                  padding: EdgeInsets.zero,
-                                  labelText: "Notes",
-                                  icon: Icons.sticky_note_2_rounded,
-                                  controller: _noteInputController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  minLines: 3,
-                                  onChanged: (text) async {
-                                    setSelectedNoteController(text);
-                                  },
-                                )
-                              : IgnorePointer(
-                                  child: TextInput(
-                                    backgroundColor: Colors.transparent,
-                                    padding: EdgeInsets.zero,
-                                    readOnly: true,
-                                    labelText: "Notes",
-                                    icon: Icons.sticky_note_2_rounded,
-                                    controller: _noteInputController,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                    minLines: 3,
-                                  ),
-                                ),
+                          child: TextInput(
+                            padding: EdgeInsets.zero,
+                            labelText: "Notes",
+                            icon: Icons.sticky_note_2_rounded,
+                            controller: _noteInputController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            minLines: 3,
+                            onChanged: (text) async {
+                              setSelectedNoteController(text);
+                            },
+                          ),
                         ),
                       ),
                       widget.transaction == null ||

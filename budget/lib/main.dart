@@ -34,7 +34,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:context_menus/context_menus.dart';
 
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
@@ -286,6 +285,7 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
       return widget.child;
     }
     Widget child = Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         key: ValueKey(0),
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -527,17 +527,15 @@ class App extends StatelessWidget {
                 : PageNavigationFramework(key: pageNavigationFrameworkKey)),
       ),
       builder: (context, child) {
-        return ContextMenuOverlay(
-          child: InitializeBiometrics(
-            child: Stack(
-              children: [
-                child!,
-                // The persistent global Widget stack (stays on navigation change)
-                GlobalSnackbar(key: snackbarKey),
-                GlobalLoadingProgress(key: loadingProgressKey),
-                GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
-              ],
-            ),
+        return InitializeBiometrics(
+          child: Stack(
+            children: [
+              child!,
+              // The persistent global Widget stack (stays on navigation change)
+              GlobalSnackbar(key: snackbarKey),
+              GlobalLoadingProgress(key: loadingProgressKey),
+              GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
+            ],
           ),
         );
       },

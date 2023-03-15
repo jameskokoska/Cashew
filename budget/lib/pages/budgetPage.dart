@@ -140,32 +140,32 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       widget.isPastBudget == true ||
                       widget.isPastBudgetButCurrentPeriod == true
                   ? SizedBox.shrink()
-                  : Container(
-                      padding: EdgeInsets.only(top: 12.5, right: 5),
-                      child: IconButton(
-                        tooltip: "Past budgets",
-                        onPressed: () {
-                          pushRoute(context,
-                              PastBudgetsPage(budgetPk: widget.budget.budgetPk),
-                              fancyRoute: true);
-                        },
-                        icon: Icon(Icons.history_rounded),
+                  : IconButton(
+                      tooltip: "Past budgets",
+                      onPressed: () {
+                        pushRoute(context,
+                            PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                            fancyRoute: true);
+                      },
+                      icon: Icon(
+                        Icons.history_rounded,
+                        color: budgetColorScheme.onSecondaryContainer,
                       ),
                     ),
-              Container(
-                padding: EdgeInsets.only(top: 12.5, right: 5),
-                child: IconButton(
-                  tooltip: "Edit budget",
-                  onPressed: () {
-                    pushRoute(
-                      context,
-                      AddBudgetPage(
-                        title: "Edit Budget",
-                        budget: widget.budget,
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.edit_rounded),
+              IconButton(
+                tooltip: "Edit budget",
+                onPressed: () {
+                  pushRoute(
+                    context,
+                    AddBudgetPage(
+                      title: "Edit Budget",
+                      budget: widget.budget,
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.edit_rounded,
+                  color: budgetColorScheme.onSecondaryContainer,
                 ),
               ),
             ],
