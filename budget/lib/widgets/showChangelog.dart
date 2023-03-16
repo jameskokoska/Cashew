@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Implemented new filters into budgets
+    Sticky header in add budget page
     Improved action spacing for sliverappbar
     Changed input text to accept input directly instead of popup sheet
     Fixed colors of icons not following colorscheme of page

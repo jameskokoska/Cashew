@@ -390,7 +390,8 @@ class HomePageState extends State<HomePage>
                                               : selectedSlidingSelector == 3
                                                   ? true
                                                   : null,
-                                          SharedTransactionsShow.fromEveryone),
+                                          null,
+                                          null),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       bool cumulative = appStateSettings[

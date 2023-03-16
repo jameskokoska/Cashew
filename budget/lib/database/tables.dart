@@ -21,7 +21,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 29;
+int schemaVersionGlobal = 30;
 
 // Generate database code
 // flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -95,11 +95,15 @@ class BudgetTransactionFiltersListInColumnConverter
   const BudgetTransactionFiltersListInColumnConverter();
   @override
   List<BudgetTransactionFilters> fromSql(String string_from_db) {
-    return new List<BudgetTransactionFilters>.from(json.decode(string_from_db));
+    List<int> ints = List<int>.from(json.decode(string_from_db));
+    List<BudgetTransactionFilters> filters =
+        ints.map((i) => BudgetTransactionFilters.values[i]).toList();
+    return filters;
   }
 
   @override
-  String toSql(List<BudgetTransactionFilters> ints) {
+  String toSql(List<BudgetTransactionFilters> filters) {
+    List<int> ints = filters.map((filter) => filter.index).toList();
     return json.encode(ints);
   }
 }
@@ -261,10 +265,12 @@ class Budgets extends Table {
   IntColumn get sharedTransactionsShow =>
       intEnum<SharedTransactionsShow>().withDefault(const Constant(0))();
   TextColumn get budgetTransactionFilters => text()
-      .withDefault(const Constant("[]"))
+      .nullable()
+      .withDefault(const Constant(null))
       .map(const BudgetTransactionFiltersListInColumnConverter())();
   TextColumn get memberTransactionFilters => text()
-      .withDefault(const Constant("[]"))
+      .nullable()
+      .withDefault(const Constant(null))
       .map(const StringListInColumnConverter())();
   // Attributes to configure sharing of transactions:
   // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
@@ -416,6 +422,9 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.addColumn(budgets, budgets.budgetTransactionFilters);
             await migrator.addColumn(budgets, budgets.memberTransactionFilters);
           }
+          if (from <= 29) {
+            await migrator.alterTable(TableMigration(budgets));
+          }
         },
       );
 
@@ -455,7 +464,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
     bool? income,
-    required SharedTransactionsShow sharedTransactionsShow,
+    required List<BudgetTransactionFilters>? budgetTransactionFilters,
+    required List<String>? memberTransactionFilters,
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
   }) {
@@ -464,7 +474,9 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+              return onlyShowIfFollowsFilters(tbl,
+                      budgetTransactionFilters: budgetTransactionFilters,
+                      memberTransactionFilters: memberTransactionFilters) &
                   dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day) &
@@ -484,7 +496,9 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+              return onlyShowIfFollowsFilters(tbl,
+                      budgetTransactionFilters: budgetTransactionFilters,
+                      memberTransactionFilters: memberTransactionFilters) &
                   dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day) &
@@ -503,7 +517,9 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = ((select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+              return onlyShowIfFollowsFilters(tbl,
+                      budgetTransactionFilters: budgetTransactionFilters,
+                      memberTransactionFilters: memberTransactionFilters) &
                   dateCreated.year.equals(date.year) &
                   dateCreated.month.equals(date.month) &
                   dateCreated.day.equals(date.day) &
@@ -537,7 +553,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
     bool? income,
-    required SharedTransactionsShow sharedTransactionsShow,
+    required List<BudgetTransactionFilters>? budgetTransactionFilters,
+    required List<String>? memberTransactionFilters,
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
@@ -547,7 +564,9 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions, distinct: true)
       ..orderBy([OrderingTerm.asc(transactions.dateCreated)])
-      ..where(onlyShowIfOwner(transactions, sharedTransactionsShow) &
+      ..where(onlyShowIfFollowsFilters(transactions,
+              budgetTransactionFilters: budgetTransactionFilters,
+              memberTransactionFilters: memberTransactionFilters) &
           onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
           onlyShowBasedOnCategoryFks(transactions, categoryFks) &
           onlyShowBasedOnIncome(transactions, income) &
@@ -1813,7 +1832,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       List<int>? categoryFks,
       bool allCategories,
       List<TransactionWallet> wallets,
-      SharedTransactionsShow sharedTransactionsShow,
+      List<BudgetTransactionFilters>? budgetTransactionFilters,
+      List<String>? memberTransactionFilters,
       {bool allCashFlow = false,
       int? onlyShowTransactionsBelongingToBudget,
       Budget? budget}) {
@@ -1837,7 +1857,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowIfCertainBudget(
                     transactions, onlyShowTransactionsBelongingToBudget) &
                 transactions.walletFk.equals(wallet.walletPk) &
-                onlyShowIfOwner(transactions, sharedTransactionsShow),
+                onlyShowIfFollowsFilters(transactions,
+                    budgetTransactionFilters: budgetTransactionFilters,
+                    memberTransactionFilters: memberTransactionFilters),
           ));
       } else {
         query = (selectOnly(transactions)
@@ -1852,7 +1874,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowIfCertainBudget(
                     transactions, onlyShowTransactionsBelongingToBudget) &
                 transactions.walletFk.equals(wallet.walletPk) &
-                onlyShowIfOwner(transactions, sharedTransactionsShow),
+                onlyShowIfFollowsFilters(transactions,
+                    budgetTransactionFilters: budgetTransactionFilters,
+                    memberTransactionFilters: memberTransactionFilters),
           ));
       }
 
@@ -1865,37 +1889,41 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
-  Expression<bool> onlyShowIfOwner(
-      $TransactionsTable tbl, SharedTransactionsShow sharedTransactionsShow) {
-    return (sharedTransactionsShow == SharedTransactionsShow.onlyIfOwner
-        ? (tbl.sharedKey.isNotNull() &
-                tbl.transactionOwnerEmail
-                    .equals(appStateSettings["currentUserEmail"])) |
-            tbl.sharedKey.isNull()
-        : (sharedTransactionsShow == SharedTransactionsShow.excludeOther)
-            ? (tbl.sharedReferenceBudgetPk.isNull())
-            : (sharedTransactionsShow ==
-                    SharedTransactionsShow.excludeOtherIfShared)
-                ? (tbl.sharedReferenceBudgetPk.isNull() |
-                    tbl.sharedKey.isNull())
-                : (sharedTransactionsShow ==
-                        SharedTransactionsShow.excludeOtherIfNotShared)
-                    ? (tbl.sharedReferenceBudgetPk.isNull() |
-                        tbl.sharedKey.isNotNull())
-                    : (sharedTransactionsShow ==
-                            SharedTransactionsShow.onlyIfShared)
-                        ? (tbl.sharedKey.isNotNull())
-                        : (sharedTransactionsShow ==
-                                SharedTransactionsShow.onlyIfNotShared)
-                            ? (tbl.sharedKey.isNull())
-                            : (sharedTransactionsShow ==
-                                    SharedTransactionsShow.onlyIfOwnerIfShared)
-                                ? (tbl.sharedReferenceBudgetPk.isNotNull() &
-                                    tbl.sharedKey.isNotNull() &
-                                    tbl.transactionOwnerEmail.equals(
-                                        appStateSettings["currentUserEmail"]))
-                                : tbl.sharedKey.isNotNull() |
-                                    tbl.sharedKey.isNull());
+  Expression<bool> onlyShowIfFollowsFilters($TransactionsTable tbl,
+      {List<BudgetTransactionFilters>? budgetTransactionFilters,
+      List<String>? memberTransactionFilters}) {
+    Expression<bool> memberIncluded = memberTransactionFilters == null
+        ? tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull()
+        : (tbl.sharedKey.isNotNull() &
+                tbl.transactionOwnerEmail.isIn(memberTransactionFilters) |
+            tbl.sharedKey.isNull());
+    Expression<bool> includeShared = budgetTransactionFilters == null
+        ? tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull()
+        : budgetTransactionFilters
+                    .contains(BudgetTransactionFilters.sharedToOtherBudget) ==
+                false
+            ? tbl.sharedKey.isNull()
+            : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull();
+    Expression<bool> includeAdded = budgetTransactionFilters == null
+        ? tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull()
+        : budgetTransactionFilters
+                    .contains(BudgetTransactionFilters.addedToOtherBudget) ==
+                false
+            ? tbl.sharedReferenceBudgetPk.isNull() | tbl.sharedKey.isNotNull()
+            : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull();
+    return memberIncluded & includeShared & includeAdded;
+    // ? (tbl.sharedReferenceBudgetPk.isNull())
+    //             : (sharedTransactionsShow ==
+    //                     SharedTransactionsShow.onlyIfNotShared)
+    //                 ? (tbl.sharedKey.isNull())
+    //                 : (sharedTransactionsShow ==
+    //                         SharedTransactionsShow.onlyIfOwnerIfShared)
+    //                     ? (tbl.sharedReferenceBudgetPk.isNotNull() &
+    //                         tbl.sharedKey.isNotNull() &
+    //                         tbl.transactionOwnerEmail.equals(
+    //                             appStateSettings["currentUserEmail"]))
+    //                     : tbl.sharedKey.isNotNull() |
+    //                         tbl.sharedKey.isNull());
   }
 
   Stream<double?> watchTotalSpentByCurrentUserOnly(
@@ -1910,15 +1938,19 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in wallets) {
       final totalAmt = transactions.amount.sum();
-      JoinedSelectStatement<$TransactionsTable,
-          Transaction> query = (selectOnly(transactions)
-        ..addColumns([totalAmt])
-        ..where(transactions.paid.equals(true) &
-            transactions.income.equals(false) &
-            transactions.walletFk.equals(wallet.walletPk) &
-            onlyShowBasedOnTimeRange(transactions, startDate, endDate, null) &
-            onlyShowIfOwner(transactions, SharedTransactionsShow.onlyIfOwner) &
-            transactions.sharedReferenceBudgetPk.equals(budgetPk)));
+      JoinedSelectStatement<$TransactionsTable, Transaction> query =
+          (selectOnly(transactions)
+            ..addColumns([totalAmt])
+            ..where(transactions.paid.equals(true) &
+                transactions.income.equals(false) &
+                transactions.walletFk.equals(wallet.walletPk) &
+                onlyShowBasedOnTimeRange(
+                    transactions, startDate, endDate, null) &
+                onlyShowIfFollowsFilters(transactions,
+                    memberTransactionFilters: [
+                      appStateSettings["currentUserEmail"]
+                    ]) &
+                transactions.sharedReferenceBudgetPk.equals(budgetPk)));
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
@@ -2047,7 +2079,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime end,
     List<int> categoryFks,
     bool allCategories,
-    SharedTransactionsShow sharedTransactionsShow,
+    List<BudgetTransactionFilters>? budgetTransactionFilters,
+    List<String>? memberTransactionFilters,
     List<TransactionWallet> wallets, {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
@@ -2072,7 +2105,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               tbl.paid.equals(true) &
               tbl.income.equals(false) &
               transactions.walletFk.equals(wallet.walletPk) &
-              onlyShowIfOwner(tbl, sharedTransactionsShow) &
+              onlyShowIfFollowsFilters(tbl,
+                  budgetTransactionFilters: budgetTransactionFilters,
+                  memberTransactionFilters: memberTransactionFilters) &
               onlyShowIfMember(tbl, member) &
               onlyShowIfCertainBudget(
                   tbl, onlyShowTransactionsBelongingToBudget);
@@ -2250,7 +2285,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     bool allCategories,
     bool isPaidOnly,
     bool? isIncome,
-    SharedTransactionsShow sharedTransactionsShow, {
+    List<BudgetTransactionFilters>? budgetTransactionFilters,
+    List<String>? memberTransactionFilters, {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
@@ -2263,7 +2299,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               final dateCreated = tbl.dateCreated;
               if (isPaidOnly) {
                 if (isIncome == true) {
-                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  return onlyShowIfFollowsFilters(tbl,
+                          budgetTransactionFilters: budgetTransactionFilters,
+                          memberTransactionFilters: memberTransactionFilters) &
                       onlyShowBasedOnTimeRange(
                           transactions, startDate, endDate, budget) &
                       tbl.paid.equals(true) &
@@ -2272,7 +2310,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                       onlyShowIfCertainBudget(
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
-                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  return onlyShowIfFollowsFilters(tbl,
+                          budgetTransactionFilters: budgetTransactionFilters,
+                          memberTransactionFilters: memberTransactionFilters) &
                       onlyShowBasedOnTimeRange(
                           transactions, startDate, endDate, budget) &
                       tbl.paid.equals(true) &
@@ -2281,7 +2321,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                       onlyShowIfCertainBudget(
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
-                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  return onlyShowIfFollowsFilters(tbl,
+                          budgetTransactionFilters: budgetTransactionFilters,
+                          memberTransactionFilters: memberTransactionFilters) &
                       onlyShowBasedOnTimeRange(
                           transactions, startDate, endDate, budget) &
                       tbl.paid.equals(true) &
@@ -2291,7 +2333,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                 }
               } else {
                 if (isIncome == true) {
-                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  return onlyShowIfFollowsFilters(tbl,
+                          budgetTransactionFilters: budgetTransactionFilters,
+                          memberTransactionFilters: memberTransactionFilters) &
                       onlyShowBasedOnTimeRange(
                           transactions, startDate, endDate, budget) &
                       tbl.income.equals(true) &
@@ -2299,7 +2343,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                       onlyShowIfCertainBudget(
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else if (isIncome == false) {
-                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  return onlyShowIfFollowsFilters(tbl,
+                          budgetTransactionFilters: budgetTransactionFilters,
+                          memberTransactionFilters: memberTransactionFilters) &
                       onlyShowBasedOnTimeRange(
                           transactions, startDate, endDate, budget) &
                       tbl.income.equals(false) &
@@ -2307,7 +2353,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                       onlyShowIfCertainBudget(
                           tbl, onlyShowTransactionsBelongingToBudget);
                 } else {
-                  return onlyShowIfOwner(tbl, sharedTransactionsShow) &
+                  return onlyShowIfFollowsFilters(tbl,
+                          budgetTransactionFilters: budgetTransactionFilters,
+                          memberTransactionFilters: memberTransactionFilters) &
                       onlyShowBasedOnTimeRange(
                           transactions, startDate, endDate, budget) &
                       onlyShowIfMember(tbl, member) &

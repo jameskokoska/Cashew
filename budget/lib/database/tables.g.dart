@@ -2374,25 +2374,25 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static const VerificationMeta _budgetTransactionFiltersMeta =
       const VerificationMeta('budgetTransactionFilters');
   @override
-  late final GeneratedColumnWithTypeConverter<List<BudgetTransactionFilters>,
+  late final GeneratedColumnWithTypeConverter<List<BudgetTransactionFilters>?,
       String> budgetTransactionFilters = GeneratedColumn<String>(
-          'budget_transaction_filters', aliasedName, false,
+          'budget_transaction_filters', aliasedName, true,
           type: DriftSqlType.string,
           requiredDuringInsert: false,
-          defaultValue: const Constant("[]"))
-      .withConverter<List<BudgetTransactionFilters>>(
-          $BudgetsTable.$converterbudgetTransactionFilters);
+          defaultValue: const Constant(null))
+      .withConverter<List<BudgetTransactionFilters>?>(
+          $BudgetsTable.$converterbudgetTransactionFiltersn);
   static const VerificationMeta _memberTransactionFiltersMeta =
       const VerificationMeta('memberTransactionFilters');
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String>
+  late final GeneratedColumnWithTypeConverter<List<String>?, String>
       memberTransactionFilters = GeneratedColumn<String>(
-              'member_transaction_filters', aliasedName, false,
+              'member_transaction_filters', aliasedName, true,
               type: DriftSqlType.string,
               requiredDuringInsert: false,
-              defaultValue: const Constant("[]"))
-          .withConverter<List<String>>(
-              $BudgetsTable.$convertermemberTransactionFilters);
+              defaultValue: const Constant(null))
+          .withConverter<List<String>?>(
+              $BudgetsTable.$convertermemberTransactionFiltersn);
   static const VerificationMeta _sharedKeyMeta =
       const VerificationMeta('sharedKey');
   @override
@@ -2609,12 +2609,14 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShow
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.int,
               data['${effectivePrefix}shared_transactions_show'])!),
-      budgetTransactionFilters: $BudgetsTable.$converterbudgetTransactionFilters
+      budgetTransactionFilters: $BudgetsTable
+          .$converterbudgetTransactionFiltersn
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
-              data['${effectivePrefix}budget_transaction_filters'])!),
-      memberTransactionFilters: $BudgetsTable.$convertermemberTransactionFilters
+              data['${effectivePrefix}budget_transaction_filters'])),
+      memberTransactionFilters: $BudgetsTable
+          .$convertermemberTransactionFiltersn
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
-              data['${effectivePrefix}member_transaction_filters'])!),
+              data['${effectivePrefix}member_transaction_filters'])),
       sharedKey: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}shared_key']),
       sharedOwnerMember: $BudgetsTable.$convertersharedOwnerMembern.fromSql(
@@ -2653,8 +2655,14 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static TypeConverter<List<BudgetTransactionFilters>, String>
       $converterbudgetTransactionFilters =
       const BudgetTransactionFiltersListInColumnConverter();
+  static TypeConverter<List<BudgetTransactionFilters>?, String?>
+      $converterbudgetTransactionFiltersn =
+      NullAwareTypeConverter.wrap($converterbudgetTransactionFilters);
   static TypeConverter<List<String>, String>
       $convertermemberTransactionFilters = const StringListInColumnConverter();
+  static TypeConverter<List<String>?, String?>
+      $convertermemberTransactionFiltersn =
+      NullAwareTypeConverter.wrap($convertermemberTransactionFilters);
   static JsonTypeConverter2<SharedOwnerMember, int, int>
       $convertersharedOwnerMember =
       const EnumIndexConverter<SharedOwnerMember>(SharedOwnerMember.values);
@@ -2688,8 +2696,8 @@ class Budget extends DataClass implements Insertable<Budget> {
   final int order;
   final int walletFk;
   final SharedTransactionsShow sharedTransactionsShow;
-  final List<BudgetTransactionFilters> budgetTransactionFilters;
-  final List<String> memberTransactionFilters;
+  final List<BudgetTransactionFilters>? budgetTransactionFilters;
+  final List<String>? memberTransactionFilters;
   final String? sharedKey;
   final SharedOwnerMember? sharedOwnerMember;
   final DateTime? sharedDateUpdated;
@@ -2712,8 +2720,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.order,
       required this.walletFk,
       required this.sharedTransactionsShow,
-      required this.budgetTransactionFilters,
-      required this.memberTransactionFilters,
+      this.budgetTransactionFilters,
+      this.memberTransactionFilters,
       this.sharedKey,
       this.sharedOwnerMember,
       this.sharedDateUpdated,
@@ -2750,13 +2758,13 @@ class Budget extends DataClass implements Insertable<Budget> {
       map['shared_transactions_show'] =
           Variable<int>(converter.toSql(sharedTransactionsShow));
     }
-    {
-      final converter = $BudgetsTable.$converterbudgetTransactionFilters;
+    if (!nullToAbsent || budgetTransactionFilters != null) {
+      final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
       map['budget_transaction_filters'] =
           Variable<String>(converter.toSql(budgetTransactionFilters));
     }
-    {
-      final converter = $BudgetsTable.$convertermemberTransactionFilters;
+    if (!nullToAbsent || memberTransactionFilters != null) {
+      final converter = $BudgetsTable.$convertermemberTransactionFiltersn;
       map['member_transaction_filters'] =
           Variable<String>(converter.toSql(memberTransactionFilters));
     }
@@ -2806,8 +2814,12 @@ class Budget extends DataClass implements Insertable<Budget> {
       order: Value(order),
       walletFk: Value(walletFk),
       sharedTransactionsShow: Value(sharedTransactionsShow),
-      budgetTransactionFilters: Value(budgetTransactionFilters),
-      memberTransactionFilters: Value(memberTransactionFilters),
+      budgetTransactionFilters: budgetTransactionFilters == null && nullToAbsent
+          ? const Value.absent()
+          : Value(budgetTransactionFilters),
+      memberTransactionFilters: memberTransactionFilters == null && nullToAbsent
+          ? const Value.absent()
+          : Value(memberTransactionFilters),
       sharedKey: sharedKey == null && nullToAbsent
           ? const Value.absent()
           : Value(sharedKey),
@@ -2850,10 +2862,10 @@ class Budget extends DataClass implements Insertable<Budget> {
       sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShow
           .fromJson(serializer.fromJson<int>(json['sharedTransactionsShow'])),
       budgetTransactionFilters:
-          serializer.fromJson<List<BudgetTransactionFilters>>(
+          serializer.fromJson<List<BudgetTransactionFilters>?>(
               json['budgetTransactionFilters']),
       memberTransactionFilters:
-          serializer.fromJson<List<String>>(json['memberTransactionFilters']),
+          serializer.fromJson<List<String>?>(json['memberTransactionFilters']),
       sharedKey: serializer.fromJson<String?>(json['sharedKey']),
       sharedOwnerMember: $BudgetsTable.$convertersharedOwnerMembern
           .fromJson(serializer.fromJson<int?>(json['sharedOwnerMember'])),
@@ -2888,9 +2900,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           .$convertersharedTransactionsShow
           .toJson(sharedTransactionsShow)),
       'budgetTransactionFilters': serializer
-          .toJson<List<BudgetTransactionFilters>>(budgetTransactionFilters),
+          .toJson<List<BudgetTransactionFilters>?>(budgetTransactionFilters),
       'memberTransactionFilters':
-          serializer.toJson<List<String>>(memberTransactionFilters),
+          serializer.toJson<List<String>?>(memberTransactionFilters),
       'sharedKey': serializer.toJson<String?>(sharedKey),
       'sharedOwnerMember': serializer.toJson<int?>(
           $BudgetsTable.$convertersharedOwnerMembern.toJson(sharedOwnerMember)),
@@ -2918,8 +2930,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           int? order,
           int? walletFk,
           SharedTransactionsShow? sharedTransactionsShow,
-          List<BudgetTransactionFilters>? budgetTransactionFilters,
-          List<String>? memberTransactionFilters,
+          Value<List<BudgetTransactionFilters>?> budgetTransactionFilters =
+              const Value.absent(),
+          Value<List<String>?> memberTransactionFilters = const Value.absent(),
           Value<String?> sharedKey = const Value.absent(),
           Value<SharedOwnerMember?> sharedOwnerMember = const Value.absent(),
           Value<DateTime?> sharedDateUpdated = const Value.absent(),
@@ -2945,10 +2958,12 @@ class Budget extends DataClass implements Insertable<Budget> {
         walletFk: walletFk ?? this.walletFk,
         sharedTransactionsShow:
             sharedTransactionsShow ?? this.sharedTransactionsShow,
-        budgetTransactionFilters:
-            budgetTransactionFilters ?? this.budgetTransactionFilters,
-        memberTransactionFilters:
-            memberTransactionFilters ?? this.memberTransactionFilters,
+        budgetTransactionFilters: budgetTransactionFilters.present
+            ? budgetTransactionFilters.value
+            : this.budgetTransactionFilters,
+        memberTransactionFilters: memberTransactionFilters.present
+            ? memberTransactionFilters.value
+            : this.memberTransactionFilters,
         sharedKey: sharedKey.present ? sharedKey.value : this.sharedKey,
         sharedOwnerMember: sharedOwnerMember.present
             ? sharedOwnerMember.value
@@ -3064,8 +3079,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<int> order;
   final Value<int> walletFk;
   final Value<SharedTransactionsShow> sharedTransactionsShow;
-  final Value<List<BudgetTransactionFilters>> budgetTransactionFilters;
-  final Value<List<String>> memberTransactionFilters;
+  final Value<List<BudgetTransactionFilters>?> budgetTransactionFilters;
+  final Value<List<String>?> memberTransactionFilters;
   final Value<String?> sharedKey;
   final Value<SharedOwnerMember?> sharedOwnerMember;
   final Value<DateTime?> sharedDateUpdated;
@@ -3202,8 +3217,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<int>? order,
       Value<int>? walletFk,
       Value<SharedTransactionsShow>? sharedTransactionsShow,
-      Value<List<BudgetTransactionFilters>>? budgetTransactionFilters,
-      Value<List<String>>? memberTransactionFilters,
+      Value<List<BudgetTransactionFilters>?>? budgetTransactionFilters,
+      Value<List<String>?>? memberTransactionFilters,
       Value<String?>? sharedKey,
       Value<SharedOwnerMember?>? sharedOwnerMember,
       Value<DateTime?>? sharedDateUpdated,
@@ -3298,12 +3313,12 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           Variable<int>(converter.toSql(sharedTransactionsShow.value));
     }
     if (budgetTransactionFilters.present) {
-      final converter = $BudgetsTable.$converterbudgetTransactionFilters;
+      final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
       map['budget_transaction_filters'] =
           Variable<String>(converter.toSql(budgetTransactionFilters.value));
     }
     if (memberTransactionFilters.present) {
-      final converter = $BudgetsTable.$convertermemberTransactionFilters;
+      final converter = $BudgetsTable.$convertermemberTransactionFiltersn;
       map['member_transaction_filters'] =
           Variable<String>(converter.toSql(memberTransactionFilters.value));
     }

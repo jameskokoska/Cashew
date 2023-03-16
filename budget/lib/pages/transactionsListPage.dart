@@ -47,8 +47,8 @@ Widget getTransactionsSlivers(
   bool? income,
   bool sticky = true,
   bool slivers = true,
-  SharedTransactionsShow sharedTransactionsShow =
-      SharedTransactionsShow.fromEveryone,
+  List<BudgetTransactionFilters>? budgetTransactionFilters,
+  List<String>? memberTransactionFilters,
   String? member,
   int? onlyShowTransactionsBelongingToBudget,
   bool simpleListRender = false,
@@ -63,7 +63,8 @@ Widget getTransactionsSlivers(
       search: search,
       categoryFks: categoryFks,
       income: income,
-      sharedTransactionsShow: sharedTransactionsShow,
+      budgetTransactionFilters: budgetTransactionFilters,
+      memberTransactionFilters: memberTransactionFilters,
       member: member,
       onlyShowTransactionsBelongingToBudget:
           onlyShowTransactionsBelongingToBudget,
@@ -98,7 +99,8 @@ Widget getTransactionsSlivers(
                 search: search,
                 categoryFks: categoryFks,
                 income: income,
-                sharedTransactionsShow: sharedTransactionsShow,
+                budgetTransactionFilters: budgetTransactionFilters,
+                memberTransactionFilters: memberTransactionFilters,
                 member: member,
                 onlyShowTransactionsBelongingToBudget:
                     onlyShowTransactionsBelongingToBudget,
@@ -663,8 +665,8 @@ class CashFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     return WatchAllWallets(
       childFunction: (wallets) => StreamBuilder<double?>(
-        stream: database.watchTotalSpentInTimeRangeFromCategories(startDate,
-            endDate, [], true, wallets, SharedTransactionsShow.fromEveryone,
+        stream: database.watchTotalSpentInTimeRangeFromCategories(
+            startDate, endDate, [], true, wallets, null, null,
             allCashFlow: true),
         builder: (context, snapshot) {
           if (snapshot.data != null && snapshot.hasData) {

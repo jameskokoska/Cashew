@@ -503,8 +503,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           widget.budget != null ? currentInstance!.sharedMembers : null,
       sharedAllMembersEver:
           widget.budget != null ? currentInstance!.sharedAllMembersEver : null,
-      budgetTransactionFilters: selectedBudgetTransactionFilters,
-      memberTransactionFilters: selectedMemberTransactionFilters,
+      budgetTransactionFilters: currentInstance?.sharedKey != null
+          ? null
+          : selectedBudgetTransactionFilters,
+      memberTransactionFilters: currentInstance?.sharedKey != null
+          ? null
+          : selectedMemberTransactionFilters,
     );
   }
 
@@ -540,9 +544,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : HexColor(widget.budget!.colour);
 
       selectedBudgetTransactionFilters =
-          widget.budget!.budgetTransactionFilters;
+          widget.budget!.budgetTransactionFilters ?? [];
       selectedMemberTransactionFilters =
-          widget.budget!.memberTransactionFilters;
+          widget.budget!.memberTransactionFilters ?? [];
 
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {
@@ -896,23 +900,26 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           info: "Budget Type",
                           sliver: ColumnSliver(
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: TextFont(
-                                  text: selectedAddedTransactionsOnly ==
-                                              false &&
-                                          selectedShared == false
-                                      ? "All transactions within the time period following the categories and filters selected will be added to this budget"
-                                      : selectedShared == true &&
-                                              selectedAddedTransactionsOnly ==
-                                                  true
-                                          ? "Only transactions added to this budget will be shared with others users you share this budget to"
-                                          : "The transactions you add to this budget will be the only ones added",
-                                  textColor:
-                                      Theme.of(context).colorScheme.textLight,
-                                  fontSize: 13,
-                                  maxLines: 3,
+                              AnimatedSize(
+                                duration: Duration(milliseconds: 500),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextFont(
+                                    text: selectedAddedTransactionsOnly ==
+                                                false &&
+                                            selectedShared == false
+                                        ? "All transactions within the time period following the categories and filters selected will be added to this budget"
+                                        : selectedShared == true &&
+                                                selectedAddedTransactionsOnly ==
+                                                    true
+                                            ? "Only transactions added to this budget will be shared with others users you share this budget to"
+                                            : "Only the transactions you explicitly add to this budget will be shown in this budget",
+                                    textColor:
+                                        Theme.of(context).colorScheme.textLight,
+                                    fontSize: 13,
+                                    maxLines: 3,
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 10),
