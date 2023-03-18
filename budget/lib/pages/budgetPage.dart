@@ -194,7 +194,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         budgetRange.end,
                         widget.budget.categoryFks ?? [],
                         widget.budget.allCategoryFks,
-                        widget.budget.sharedTransactionsShow,
+                        widget.budget.budgetTransactionFilters,
+                        widget.budget.memberTransactionFilters,
                         wallets,
                         member: selectedMember,
                         onlyShowTransactionsBelongingToBudget:
@@ -591,7 +592,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                     : widget.budget.categoryFks ?? [],
                 income: false,
                 listID: pageId,
-                sharedTransactionsShow: widget.budget.sharedTransactionsShow,
+                budgetTransactionFilters:
+                    widget.budget.budgetTransactionFilters,
+                memberTransactionFilters:
+                    widget.budget.memberTransactionFilters,
                 member: selectedMember,
                 onlyShowTransactionsBelongingToBudget:
                     widget.budget.sharedKey != null ||
@@ -620,7 +624,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           budgetRange.end,
                           widget.budget.categoryFks ?? [],
                           widget.budget.allCategoryFks,
-                          widget.budget.sharedTransactionsShow,
+                          widget.budget.budgetTransactionFilters,
+                          widget.budget.memberTransactionFilters,
                           wallets,
                           member: selectedMember,
                           onlyShowTransactionsBelongingToBudget:
@@ -854,7 +859,8 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                 : false,
             true,
             false,
-            widget.budget.sharedTransactionsShow,
+            widget.budget.budgetTransactionFilters,
+            widget.budget.memberTransactionFilters,
             onlyShowTransactionsBelongingToBudget:
                 widget.budget.sharedKey != null ||
                         widget.budget.addedTransactionsOnly == true

@@ -107,7 +107,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         widget.budget.categoryFks,
         widget.budget.allCategoryFks,
         wallets,
-        widget.budget.sharedTransactionsShow,
+        widget.budget.budgetTransactionFilters,
+        widget.budget.memberTransactionFilters,
         onlyShowTransactionsBelongingToBudget:
             widget.budget.sharedKey != null ||
                     widget.budget.addedTransactionsOnly == true
@@ -406,7 +407,8 @@ class PastBudgetContainer extends StatelessWidget {
               budgetRange.end,
               budget.categoryFks ?? [],
               budget.allCategoryFks,
-              budget.sharedTransactionsShow,
+              budget.budgetTransactionFilters,
+              budget.memberTransactionFilters,
               wallets,
               onlyShowTransactionsBelongingToBudget: budget.sharedKey != null ||
                       budget.addedTransactionsOnly == true

@@ -65,7 +65,8 @@ class BudgetContainer extends StatelessWidget {
                       budgetRange.end,
                       budget.categoryFks ?? [],
                       budget.allCategoryFks,
-                      budget.sharedTransactionsShow,
+                      budget.budgetTransactionFilters,
+                      budget.memberTransactionFilters,
                       wallets,
                       onlyShowTransactionsBelongingToBudget:
                           budget.sharedKey != null ||

@@ -73,6 +73,8 @@ Future<bool> shareBudget(Budget? budgetToShare, context) async {
       sharedMembers: Value([FirebaseAuth.instance.currentUser!.email!]),
       allCategoryFks: true,
       categoryFks: Value(null),
+      budgetTransactionFilters: Value(null),
+      memberTransactionFilters: Value(null),
     ),
     updateSharedEntry: false,
   );
@@ -130,6 +132,8 @@ Future<bool> removedSharedFromBudget(Budget sharedBudget,
       sharedKey: Value(null),
       sharedOwnerMember: Value(null),
       sharedMembers: Value(null),
+      budgetTransactionFilters: Value(null),
+      memberTransactionFilters: Value(null),
     ),
     updateSharedEntry: false,
   );
@@ -362,8 +366,8 @@ Future<int> downloadTransactionsFromBudgets(
           budgetDecoded["ownerEmail"],
           ...List<String>.from(budgetDecoded["members"]),
         ],
-        budgetTransactionFilters: [],
-        memberTransactionFilters: [],
+        budgetTransactionFilters: null,
+        memberTransactionFilters: null,
       ),
     );
 

@@ -136,7 +136,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
           DateTime.now(),
           [],
           true,
-          SharedTransactionsShow.fromEveryone,
+          null, null,
           wallets,
           allTime: true,
           walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,

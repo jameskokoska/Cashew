@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+<<<<<<< HEAD
     New side navigation for web
     Back button only works if can pop
     Back button only shows if can pop
+=======
+    Implemented new filters into budgets
+    Sticky header in add budget page
+>>>>>>> ffd9c5df21966c2353f67cb5fc7ac360627449c8
     Improved action spacing for sliverappbar
     Changed input text to accept input directly instead of popup sheet
     Fixed colors of icons not following colorscheme of page
