@@ -14,7 +14,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -530,7 +530,16 @@ class App extends StatelessWidget {
         return InitializeBiometrics(
           child: Stack(
             children: [
-              child!,
+              Row(
+                children: [
+                  NavigationSidebar(
+                    key: sidebarStateKey,
+                  ),
+                  Expanded(
+                    child: child!,
+                  ),
+                ],
+              ),
               // The persistent global Widget stack (stays on navigation change)
               GlobalSnackbar(key: snackbarKey),
               GlobalLoadingProgress(key: loadingProgressKey),

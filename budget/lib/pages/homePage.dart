@@ -18,6 +18,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -89,6 +90,8 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    bool showUsername = appStateSettings["username"] != "" &&
+        getWidthNavigationSidebar(context) <= 0;
     return SwipeToSelectTransactions(
       listID: "0",
       child: SharedBudgetRefresh(
@@ -118,7 +121,7 @@ class HomePageState extends State<HomePage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              appStateSettings["username"] == ""
+                              !showUsername
                                   ? SizedBox()
                                   : AnimatedBuilder(
                                       animation: _animationControllerHeader,
@@ -157,7 +160,7 @@ class HomePageState extends State<HomePage>
                                   );
                                 },
                                 child: TextFont(
-                                  text: appStateSettings["username"] == ""
+                                  text: !showUsername
                                       ? "Home"
                                       : appStateSettings["username"],
                                   fontWeight: FontWeight.bold,

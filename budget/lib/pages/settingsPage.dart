@@ -59,7 +59,8 @@ import 'package:timezone/timezone.dart' as tz;
 //Generate new OAuth and put JSON in budget\android\app folder
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({Key? key, this.hasMorePages = true}) : super(key: key);
+  final bool hasMorePages;
 
   @override
   State<SettingsPage> createState() => SettingsPageState();
@@ -98,104 +99,14 @@ class SettingsPageState extends State<SettingsPage>
         //   title: "Colors",
         //   icon: Icons.color_lens,
         // ),
-        SettingsContainerOpenPage(
-          openPage: AboutPage(),
-          title: "About Cashew",
-          icon: Icons.info_outline_rounded,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: SubscriptionsPage(),
-                  title: "Subscriptions",
-                  icon: Icons.event_repeat_rounded,
-                  isOutlined: true,
-                ),
-              ),
-              kIsWeb
-                  ? SizedBox.shrink()
-                  : Expanded(
-                      child: SettingsContainerOpenPage(
-                        openPage: NotificationsPage(),
-                        title: "Notifications",
-                        icon: Icons.notifications_rounded,
-                        isOutlined: true,
-                      ),
-                    ),
-            ],
-          ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: EditWalletsPage(title: "Edit Wallets"),
-                  title: "Wallets",
-                  icon: Icons.account_balance_wallet_rounded,
-                  isOutlined: true,
-                ),
-              ),
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: EditBudgetPage(title: "Edit Budgets"),
-                  title: "Budgets",
-                  icon: MoreIcons.chart_pie,
-                  iconSize: 20,
-                  isOutlined: true,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: EditCategoriesPage(title: "Edit Categories"),
-                  title: "Categories",
-                  icon: Icons.category_rounded,
-                  isOutlined: true,
-                ),
-              ),
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: EditAssociatedTitlesPage(title: "Edit Titles"),
-                  title: "Titles",
-                  icon: Icons.text_fields_rounded,
-                  isOutlined: true,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: WalletDetailsPage(wallet: null),
-                  title: "All Spending",
-                  icon: Icons.line_weight_rounded,
-                  isOutlined: true,
-                ),
-              ),
-              Expanded(child: GoogleAccountLoginButton()),
-            ],
-          ),
-        ),
+        widget.hasMorePages
+            ? SettingsContainerOpenPage(
+                openPage: AboutPage(),
+                title: "About Cashew",
+                icon: Icons.info_outline_rounded,
+              )
+            : SizedBox.shrink(),
+        widget.hasMorePages ? MorePages() : SizedBox.shrink(),
         SettingsHeader(title: "Theme"),
         SettingsContainer(
           onTap: () {
@@ -394,6 +305,110 @@ class SettingsPageState extends State<SettingsPage>
           openPage: AutoTransactionsPageEmail(),
           title: "Auto Email Transactions",
           icon: Icons.mark_email_unread_rounded,
+        ),
+      ],
+    );
+  }
+}
+
+class MorePages extends StatelessWidget {
+  const MorePages({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: SubscriptionsPage(),
+                  title: "Subscriptions",
+                  icon: Icons.event_repeat_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              kIsWeb
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: SettingsContainerOpenPage(
+                        openPage: NotificationsPage(),
+                        title: "Notifications",
+                        icon: Icons.notifications_rounded,
+                        isOutlined: true,
+                      ),
+                    ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditWalletsPage(title: "Edit Wallets"),
+                  title: "Wallets",
+                  icon: Icons.account_balance_wallet_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditBudgetPage(title: "Edit Budgets"),
+                  title: "Budgets",
+                  icon: MoreIcons.chart_pie,
+                  iconSize: 20,
+                  isOutlined: true,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditCategoriesPage(title: "Edit Categories"),
+                  title: "Categories",
+                  icon: Icons.category_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: EditAssociatedTitlesPage(title: "Edit Titles"),
+                  title: "Titles",
+                  icon: Icons.text_fields_rounded,
+                  isOutlined: true,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: WalletDetailsPage(wallet: null),
+                  title: "All Spending",
+                  icon: Icons.line_weight_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(child: GoogleAccountLoginButton()),
+            ],
+          ),
         ),
       ],
     );

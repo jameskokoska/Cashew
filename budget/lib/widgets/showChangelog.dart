@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    New side navigation for web
+    Back button only works if can pop
+    Back button only shows if can pop
     Improved action spacing for sliverappbar
     Changed input text to accept input directly instead of popup sheet
     Fixed colors of icons not following colorscheme of page

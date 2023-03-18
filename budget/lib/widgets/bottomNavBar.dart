@@ -2,6 +2,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -41,6 +42,7 @@ class BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (getWidthNavigationSidebar(context) > 0) return SizedBox.shrink();
     return Padding(
       //Bottom padding is a container wrapped with absorb pointer
       padding: const EdgeInsets.only(bottom: 0, left: 10, right: 10),

@@ -15,6 +15,7 @@ import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -349,7 +350,15 @@ Future<void> deleteBackup(drive.DriveApi driveApi, String fileId) async {
 }
 
 class GoogleAccountLoginButton extends StatefulWidget {
-  const GoogleAccountLoginButton({super.key});
+  const GoogleAccountLoginButton({
+    super.key,
+    this.navigationSidebarButton = false,
+    this.onTap,
+    this.isButtonSelected = false,
+  });
+  final bool navigationSidebarButton;
+  final Function? onTap;
+  final bool isButtonSelected;
 
   @override
   State<GoogleAccountLoginButton> createState() =>
@@ -438,33 +447,68 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
         await _chooseBackup(isManaging: true);
       },
     );
-
+    Function login = () async {
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      try {
+        await signInGoogle(
+            context: context,
+            waitForCompletion: false,
+            drivePermissions: true,
+            next: () {
+              setState(() {});
+              // pushRoute(context, accountsPage);
+              if (widget.navigationSidebarButton) {
+                navigatorKey.currentState!.push(
+                  MaterialPageRoute(
+                    builder: (context) => accountsPage,
+                  ),
+                );
+                if (widget.onTap != null) widget.onTap!();
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => accountsPage,
+                  ),
+                );
+              }
+            });
+        if (appStateSettings["username"] == "" && user != null) {
+          updateSettings("username", user!.displayName,
+              pagesNeedingRefresh: [0]);
+        }
+      } catch (e) {}
+      loadingIndeterminateKey.currentState!.setVisibility(false);
+    };
+    if (widget.navigationSidebarButton == true) {
+      return user == null
+          ? NavigationSidebarButton(
+              label: "Login",
+              icon: MoreIcons.google,
+              onTap: () async {
+                login();
+              },
+              isSelected: false,
+            )
+          : NavigationSidebarButton(
+              label: user!.displayName ?? "",
+              icon: Icons.person_rounded,
+              onTap: () async {
+                navigatorKey.currentState!.push(
+                  MaterialPageRoute(
+                    builder: (context) => accountsPage,
+                  ),
+                );
+                if (widget.onTap != null) widget.onTap!();
+              },
+              isSelected: widget.isButtonSelected,
+            );
+    }
     return user == null
         ? SettingsContainer(
             isOutlined: true,
             onTap: () async {
-              loadingIndeterminateKey.currentState!.setVisibility(true);
-              try {
-                await signInGoogle(
-                    context: context,
-                    waitForCompletion: false,
-                    drivePermissions: true,
-                    next: () {
-                      setState(() {});
-                      // pushRoute(context, accountsPage);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => accountsPage,
-                        ),
-                      );
-                    });
-                if (appStateSettings["username"] == "" && user != null) {
-                  updateSettings("username", user!.displayName,
-                      pagesNeedingRefresh: [0]);
-                }
-              } catch (e) {}
-              loadingIndeterminateKey.currentState!.setVisibility(false);
+              login();
             },
             title: "Login",
             icon: MoreIcons.google,

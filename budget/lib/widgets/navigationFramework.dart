@@ -2,20 +2,27 @@ import 'dart:math';
 
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/budgetsListPage.dart';
+import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/homePage.dart';
+import 'package:budget/pages/notificationsPage.dart';
 import 'package:budget/pages/settingsPage.dart';
+import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
@@ -55,6 +62,7 @@ GlobalKey<TransactionsListPageState> transactionsListPageStateKey = GlobalKey();
 GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
 GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
 GlobalKey<BottomNavBarState> navbarStateKey = GlobalKey();
+GlobalKey<NavigationSidebarState> sidebarStateKey = GlobalKey();
 GlobalKey<GlobalLoadingProgressState> loadingProgressKey = GlobalKey();
 GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
     GlobalKey();
@@ -62,6 +70,7 @@ GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pages;
+  late List<Widget> pagesExtended;
 
   int currentPage = 0;
   bool refresh = false;
@@ -85,6 +94,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     });
     if (switchNavbar) {
       navbarStateKey.currentState!.setSelectedIndex(page);
+      sidebarStateKey.currentState!.setSelectedIndex(page);
     }
   }
 
@@ -112,10 +122,22 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     });
 
     pages = [
-      HomePage(key: homePageStateKey),
-      TransactionsListPage(key: transactionsListPageStateKey),
-      BudgetsListPage(key: budgetsListPageStateKey),
-      SettingsPage(key: settingsPageStateKey)
+      HomePage(key: homePageStateKey), // 0
+      TransactionsListPage(key: transactionsListPageStateKey), //1
+      BudgetsListPage(key: budgetsListPageStateKey), //2
+      SettingsPage(key: settingsPageStateKey), //3
+    ];
+    pagesExtended = [
+      SettingsPage(key: settingsPageStateKey, hasMorePages: false), //4
+      SubscriptionsPage(), //5
+      NotificationsPage(), //6
+      WalletDetailsPage(wallet: null), //7
+      SizedBox(), // 8, this is accounts page, handles by GoogleAccountLoginButton
+      EditWalletsPage(title: "Edit Wallets"), //9
+      EditBudgetPage(title: "Edit Budgets"), //10
+      EditCategoriesPage(title: "Edit Categories"), //11
+      EditAssociatedTitlesPage(title: "Edit Titles"), //12
+      AboutPage(), //13
     ];
   }
 
@@ -152,7 +174,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
               body: PageView(
                 controller: pageController,
                 onPageChanged: (int index) {},
-                children: pages,
+                children: [...pages, ...pagesExtended],
                 physics: NeverScrollableScrollPhysics(),
               ),
               extendBody: true,
@@ -172,7 +194,11 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: EdgeInsets.only(
-                  bottom: 75 + bottomPaddingSafeArea, right: 15),
+                bottom: getWidthNavigationSidebar(context) <= 0
+                    ? 75
+                    : 15 + bottomPaddingSafeArea,
+                right: 15,
+              ),
               child: Stack(
                 children: [
                   AnimateFAB(

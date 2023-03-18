@@ -401,7 +401,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 : Brightness.light,
       ),
       shadowColor: Theme.of(context).shadowColor.withAlpha(130),
-      leading: backButton == true && animationControllerOpacity != null
+      leading: ModalRoute.of(context)?.isCurrent == false &&
+              backButton == true &&
+              animationControllerOpacity != null
           ? Container(
               padding: EdgeInsets.only(top: 12.5),
               child: FadeTransition(
@@ -411,7 +413,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     if (onBackButton != null)
                       onBackButton!();
                     else
-                      Navigator.of(context).pop();
+                      Navigator.of(context).maybePop();
                   },
                   icon: Icon(
                     Icons.arrow_back_rounded,
