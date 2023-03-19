@@ -92,6 +92,104 @@ class HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     bool showUsername = appStateSettings["username"] != "" &&
         getWidthNavigationSidebar(context) <= 0;
+    Widget slidingSelector = SlidingSelector(
+        useHorizontalPaddingConstrained: false,
+        onSelected: (index) {
+          setState(() {
+            selectedSlidingSelector = index;
+          });
+        });
+    Widget upcomingTransactionSliversHome = AnimatedSize(
+      duration: Duration(milliseconds: 600),
+      curve: Curves.easeInOutCubicEmphasized,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        child: StreamBuilder<List<Transaction>>(
+          stream: database.watchAllUpcomingTransactions(
+              // upcoming in 3 days
+              endDate: DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day + 4)),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.length <= 0) {
+                return SizedBox.shrink();
+              }
+              List<Widget> children = [];
+              for (Transaction transaction in snapshot.data!) {
+                children.add(Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UpcomingTransactionDateHeader(
+                        transaction: transaction, small: true),
+                    TransactionEntry(
+                      useHorizontalPaddingConstrained: false,
+                      openPage: AddTransactionPage(
+                        title: "Edit Transaction",
+                        transaction: transaction,
+                      ),
+                      transaction: transaction,
+                    ),
+                    SizedBox(height: 5),
+                  ],
+                ));
+              }
+              return Column(children: children);
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+      ),
+    );
+    Widget transactionSliversHome = AnimatedSize(
+      duration: Duration(milliseconds: 600),
+      curve: Curves.easeInOutCubicEmphasized,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        child: SizedBox(
+          key: ValueKey(selectedSlidingSelector),
+          child: getTransactionsSlivers(
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day - 7,
+            ),
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+            ),
+            income: selectedSlidingSelector == 1
+                ? null
+                : selectedSlidingSelector == 2
+                    ? false
+                    : true,
+            sticky: false,
+            slivers: false,
+            dateDividerColor: Colors.transparent,
+            useHorizontalPaddingConstrained: false,
+          ),
+        ),
+      ),
+    );
+    Widget viewAllTransactionsButton = Center(
+      child: Tappable(
+        color: Theme.of(context).colorScheme.lightDarkAccent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          child: TextFont(
+            text: "View All Transactions",
+            textAlign: TextAlign.center,
+            fontSize: 16,
+            textColor: Theme.of(context).colorScheme.textLight,
+          ),
+        ),
+        onTap: () {
+          PageNavigationFramework.changePage(context, 1, switchNavbar: true);
+        },
+        borderRadius: 10,
+      ),
+    );
     return SwipeToSelectTransactions(
       listID: "0",
       child: SharedBudgetRefresh(
@@ -333,275 +431,256 @@ class HomePageState extends State<HomePage>
                       ),
                     ),
 
-                    !appStateSettings["showOverdueUpcoming"]
-                        ? SizedBox.shrink()
-                        : KeepAlive(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: 13, left: 13, right: 13),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(child: UpcomingTransactions()),
-                                  SizedBox(width: 13),
-                                  Expanded(
-                                    child: UpcomingTransactions(
-                                      overdueTransactions: true,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              !appStateSettings["showOverdueUpcoming"]
+                                  ? SizedBox.shrink()
+                                  : KeepAlive(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 13, left: 13, right: 13),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                                child: UpcomingTransactions()),
+                                            SizedBox(width: 13),
+                                            Expanded(
+                                              child: UpcomingTransactions(
+                                                overdueTransactions: true,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
+                              KeepAlive(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 13),
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        bottom: 10,
+                                        top: 20),
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 13),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .lightDarkAccentHeavyLight,
+                                      boxShadow: boxShadowCheck(
+                                          boxShadowGeneral(context)),
+                                    ),
+                                    child: appStateSettings[
+                                                "lineGraphReferenceBudgetPk"] ==
+                                            null
+                                        ? StreamBuilder<List<Transaction>>(
+                                            stream: database
+                                                .getTransactionsInTimeRangeFromCategories(
+                                                    DateTime(
+                                                      DateTime.now().year,
+                                                      DateTime.now().month - 1,
+                                                      DateTime.now().day,
+                                                    ),
+                                                    DateTime(
+                                                      DateTime.now().year,
+                                                      DateTime.now().month,
+                                                      DateTime.now().day,
+                                                    ),
+                                                    [],
+                                                    true,
+                                                    true,
+                                                    selectedSlidingSelector == 2
+                                                        ? false
+                                                        : selectedSlidingSelector ==
+                                                                3
+                                                            ? true
+                                                            : null,
+                                                    null,
+                                                    null),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                bool cumulative =
+                                                    appStateSettings[
+                                                        "showCumulativeSpending"];
+                                                double cumulativeTotal = 0;
+                                                List<Pair> points = [];
+                                                for (DateTime indexDay =
+                                                        DateTime(
+                                                  DateTime.now().year,
+                                                  DateTime.now().month - 1,
+                                                  DateTime.now().day,
+                                                );
+                                                    indexDay.compareTo(
+                                                            DateTime.now()) <
+                                                        0;
+                                                    indexDay = DateTime(
+                                                        indexDay.year,
+                                                        indexDay.month,
+                                                        indexDay.day + 1)) {
+                                                  //can be optimized...
+                                                  double totalForDay = 0;
+                                                  for (Transaction transaction
+                                                      in snapshot.data!) {
+                                                    if (indexDay.year ==
+                                                            transaction
+                                                                .dateCreated
+                                                                .year &&
+                                                        indexDay.month ==
+                                                            transaction
+                                                                .dateCreated
+                                                                .month &&
+                                                        indexDay.day ==
+                                                            transaction
+                                                                .dateCreated
+                                                                .day) {
+                                                      if (transaction.income) {
+                                                        totalForDay += transaction
+                                                                .amount
+                                                                .abs() *
+                                                            (amountRatioToPrimaryCurrencyGivenPk(
+                                                                    transaction
+                                                                        .walletFk) ??
+                                                                0);
+                                                      } else {
+                                                        totalForDay -= transaction
+                                                                .amount
+                                                                .abs() *
+                                                            (amountRatioToPrimaryCurrencyGivenPk(
+                                                                    transaction
+                                                                        .walletFk) ??
+                                                                0);
+                                                      }
+                                                    }
+                                                  }
+                                                  cumulativeTotal +=
+                                                      totalForDay;
+                                                  points.add(Pair(
+                                                      points.length.toDouble(),
+                                                      cumulative
+                                                          ? cumulativeTotal
+                                                          : totalForDay));
+                                                }
+                                                return LineChartWrapper(
+                                                    points: [points],
+                                                    isCurved: true);
+                                              }
+                                              return SizedBox.shrink();
+                                            },
+                                          )
+                                        : StreamBuilder<Budget>(
+                                            stream: database.getBudget(
+                                                appStateSettings[
+                                                    "lineGraphReferenceBudgetPk"]),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                Budget budget = snapshot.data!;
+                                                ColorScheme budgetColorScheme =
+                                                    ColorScheme.fromSeed(
+                                                  seedColor: HexColor(
+                                                      budget.colour,
+                                                      defaultColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primary),
+                                                  brightness:
+                                                      determineBrightnessTheme(
+                                                          context),
+                                                );
+                                                return Column(
+                                                  children: [
+                                                    BudgetLineGraph(
+                                                      key: ValueKey(
+                                                          budget.budgetPk),
+                                                      budget: budget,
+                                                      budgetColorScheme:
+                                                          budgetColorScheme,
+                                                      dateForRange:
+                                                          DateTime.now(),
+                                                      budgetRange:
+                                                          getBudgetDate(budget,
+                                                              DateTime.now()),
+                                                      isPastBudget: false,
+                                                      selectedCategory: null,
+                                                      selectedCategoryPk: -1,
+                                                      showPastSpending: false,
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                              return SizedBox.shrink();
+                                            },
+                                          ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                    KeepAlive(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 13),
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              left: 10, right: 10, bottom: 10, top: 20),
-                          margin: EdgeInsets.symmetric(horizontal: 13),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavyLight,
-                            boxShadow:
-                                boxShadowCheck(boxShadowGeneral(context)),
-                          ),
-                          child: appStateSettings[
-                                      "lineGraphReferenceBudgetPk"] ==
-                                  null
-                              ? StreamBuilder<List<Transaction>>(
-                                  stream: database
-                                      .getTransactionsInTimeRangeFromCategories(
-                                          DateTime(
-                                            DateTime.now().year,
-                                            DateTime.now().month - 1,
-                                            DateTime.now().day,
-                                          ),
-                                          DateTime(
-                                            DateTime.now().year,
-                                            DateTime.now().month,
-                                            DateTime.now().day,
-                                          ),
-                                          [],
-                                          true,
-                                          true,
-                                          selectedSlidingSelector == 2
-                                              ? false
-                                              : selectedSlidingSelector == 3
-                                                  ? true
-                                                  : null,
-                                          null,
-                                          null),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      bool cumulative = appStateSettings[
-                                          "showCumulativeSpending"];
-                                      double cumulativeTotal = 0;
-                                      List<Pair> points = [];
-                                      for (DateTime indexDay = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month - 1,
-                                        DateTime.now().day,
-                                      );
-                                          indexDay.compareTo(DateTime.now()) <
-                                              0;
-                                          indexDay = DateTime(
-                                              indexDay.year,
-                                              indexDay.month,
-                                              indexDay.day + 1)) {
-                                        //can be optimized...
-                                        double totalForDay = 0;
-                                        for (Transaction transaction
-                                            in snapshot.data!) {
-                                          if (indexDay.year ==
-                                                  transaction
-                                                      .dateCreated.year &&
-                                              indexDay.month ==
-                                                  transaction
-                                                      .dateCreated.month &&
-                                              indexDay.day ==
-                                                  transaction.dateCreated.day) {
-                                            if (transaction.income) {
-                                              totalForDay += transaction.amount
-                                                      .abs() *
-                                                  (amountRatioToPrimaryCurrencyGivenPk(
-                                                          transaction
-                                                              .walletFk) ??
-                                                      0);
-                                            } else {
-                                              totalForDay -= transaction.amount
-                                                      .abs() *
-                                                  (amountRatioToPrimaryCurrencyGivenPk(
-                                                          transaction
-                                                              .walletFk) ??
-                                                      0);
-                                            }
-                                          }
-                                        }
-                                        cumulativeTotal += totalForDay;
-                                        points.add(Pair(
-                                            points.length.toDouble(),
-                                            cumulative
-                                                ? cumulativeTotal
-                                                : totalForDay));
-                                      }
-                                      return LineChartWrapper(
-                                          points: [points], isCurved: true);
-                                    }
-                                    return SizedBox.shrink();
-                                  },
-                                )
-                              : StreamBuilder<Budget>(
-                                  stream: database.getBudget(appStateSettings[
-                                      "lineGraphReferenceBudgetPk"]),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      Budget budget = snapshot.data!;
-                                      ColorScheme budgetColorScheme =
-                                          ColorScheme.fromSeed(
-                                        seedColor: HexColor(budget.colour,
-                                            defaultColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                        brightness:
-                                            determineBrightnessTheme(context),
-                                      );
-                                      return Column(
-                                        children: [
-                                          BudgetLineGraph(
-                                            key: ValueKey(budget.budgetPk),
-                                            budget: budget,
-                                            budgetColorScheme:
-                                                budgetColorScheme,
-                                            dateForRange: DateTime.now(),
-                                            budgetRange: getBudgetDate(
-                                                budget, DateTime.now()),
-                                            isPastBudget: false,
-                                            selectedCategory: null,
-                                            selectedCategoryPk: -1,
-                                            showPastSpending: false,
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                    return SizedBox.shrink();
-                                  },
                                 ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    KeepAlive(
-                      child: SlidingSelector(onSelected: (index) {
-                        setState(() {
-                          selectedSlidingSelector = index;
-                        });
-                      }),
-                    ),
-                    KeepAlive(
-                      child: Container(height: 8),
-                    ),
-                    KeepAlive(
-                      child: AnimatedSize(
-                        duration: Duration(milliseconds: 600),
-                        curve: Curves.easeInOutCubicEmphasized,
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
-                          child: StreamBuilder<List<Transaction>>(
-                            stream: database.watchAllUpcomingTransactions(
-                                // upcoming in 3 days
-                                endDate: DateTime(
-                                    DateTime.now().year,
-                                    DateTime.now().month,
-                                    DateTime.now().day + 4)),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                if (snapshot.data!.length <= 0) {
-                                  return SizedBox.shrink();
-                                }
-                                List<Widget> children = [];
-                                for (Transaction transaction
-                                    in snapshot.data!) {
-                                  children.add(Column(
+                        enableDoubleColumn(context) == false
+                            ? SizedBox.shrink()
+                            : Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 13, vertical: 5),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      UpcomingTransactionDateHeader(
-                                          transaction: transaction,
-                                          small: true),
-                                      TransactionEntry(
-                                        openPage: AddTransactionPage(
-                                          title: "Edit Transaction",
-                                          transaction: transaction,
-                                        ),
-                                        transaction: transaction,
+                                      TextFont(
+                                        text: "Recent Spending",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28,
                                       ),
-                                      SizedBox(height: 5),
+                                      SizedBox(height: 15),
+                                      slidingSelector,
+                                      SizedBox(height: 8),
+                                      upcomingTransactionSliversHome,
+                                      transactionSliversHome,
+                                      SizedBox(height: 7),
+                                      viewAllTransactionsButton,
                                     ],
-                                  ));
-                                }
-                                return Column(children: children);
-                              } else {
-                                return SizedBox.shrink();
-                              }
-                            },
-                          ),
-                        ),
-                      ),
+                                  ),
+                                ),
+                              ),
+                      ],
                     ),
-                    AnimatedSize(
-                      duration: Duration(milliseconds: 600),
-                      curve: Curves.easeInOutCubicEmphasized,
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: SizedBox(
-                          key: ValueKey(selectedSlidingSelector),
-                          child: getTransactionsSlivers(
-                            DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month,
-                              DateTime.now().day - 7,
-                            ),
-                            DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month,
-                              DateTime.now().day,
-                            ),
-                            income: selectedSlidingSelector == 1
-                                ? null
-                                : selectedSlidingSelector == 2
-                                    ? false
-                                    : true,
-                            sticky: false,
-                            slivers: false,
-                            dateDividerColor: Colors.transparent,
+                    enableDoubleColumn(context) == true
+                        ? SizedBox.shrink()
+                        : KeepAlive(
+                            child: slidingSelector,
                           ),
-                        ),
-                      ),
-                    ),
-                    Container(height: 7),
-                    Center(
-                      child: Tappable(
-                        color: Theme.of(context).colorScheme.lightDarkAccent,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 8),
-                          child: TextFont(
-                            text: "View All Transactions",
-                            textAlign: TextAlign.center,
-                            fontSize: 16,
-                            textColor: Theme.of(context).colorScheme.textLight,
+                    enableDoubleColumn(context) == true
+                        ? SizedBox.shrink()
+                        : KeepAlive(
+                            child: SizedBox(height: 8),
                           ),
-                        ),
-                        onTap: () {
-                          PageNavigationFramework.changePage(context, 1,
-                              switchNavbar: true);
-                        },
-                        borderRadius: 10,
-                      ),
-                    ),
+                    enableDoubleColumn(context) == true
+                        ? SizedBox.shrink()
+                        : KeepAlive(
+                            child: upcomingTransactionSliversHome,
+                          ),
+                    enableDoubleColumn(context) == true
+                        ? SizedBox.shrink()
+                        : transactionSliversHome,
+                    enableDoubleColumn(context) == true
+                        ? SizedBox.shrink()
+                        : Container(height: 7),
+                    enableDoubleColumn(context) == true
+                        ? SizedBox.shrink()
+                        : viewAllTransactionsButton,
                     SizedBox(height: 65),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(
@@ -626,10 +705,12 @@ class SlidingSelector extends StatelessWidget {
     Key? key,
     required this.onSelected,
     this.alternateTheme = false,
+    this.useHorizontalPaddingConstrained = true,
   }) : super(key: key);
 
   final Function(int) onSelected;
   final bool alternateTheme;
+  final bool useHorizontalPaddingConstrained;
 
   @override
   Widget build(BuildContext context) {
@@ -638,7 +719,9 @@ class SlidingSelector extends StatelessWidget {
           BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: getHorizontalPaddingConstrained(context)),
+            horizontal: useHorizontalPaddingConstrained == false
+                ? 0
+                : getHorizontalPaddingConstrained(context)),
         child: Padding(
           padding: alternateTheme
               ? const EdgeInsets.symmetric(horizontal: 20)

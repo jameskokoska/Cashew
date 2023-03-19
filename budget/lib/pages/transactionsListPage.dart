@@ -55,6 +55,7 @@ Widget getTransactionsSlivers(
   Budget? budget,
   Color? dateDividerColor,
   Color? transactionBackgroundColor,
+  bool useHorizontalPaddingConstrained = true,
 }) {
   return StreamBuilder<List<DateTime?>>(
     stream: database.getUniqueDates(
@@ -128,6 +129,8 @@ Widget getTransactionsSlivers(
                       int realIndex = index - 1;
                       if (realIndex == -1) {
                         children.add(DateDivider(
+                            useHorizontalPaddingConstrained:
+                                useHorizontalPaddingConstrained,
                             color: dateDividerColor,
                             date: date,
                             info: transactionList.length > 1
@@ -138,6 +141,8 @@ Widget getTransactionsSlivers(
                           AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
                             child: TransactionEntry(
+                              useHorizontalPaddingConstrained:
+                                  useHorizontalPaddingConstrained,
                               containerColor: transactionBackgroundColor,
                               key: ValueKey(transactionList[realIndex]
                                   .transaction
@@ -178,6 +183,8 @@ Widget getTransactionsSlivers(
                               return SizedBox.shrink();
                             else
                               return DateDivider(
+                                  useHorizontalPaddingConstrained:
+                                      useHorizontalPaddingConstrained,
                                   color: dateDividerColor,
                                   date: date,
                                   info: transactionList.length > 1
@@ -185,6 +192,8 @@ Widget getTransactionsSlivers(
                                       : "");
                           }
                           return TransactionEntry(
+                            useHorizontalPaddingConstrained:
+                                useHorizontalPaddingConstrained,
                             containerColor: transactionBackgroundColor,
                             key: ValueKey(transactionList[realIndex]
                                 .transaction
@@ -225,6 +234,8 @@ Widget getTransactionsSlivers(
                           curve: Curves.easeInOut,
                           animation: animation,
                           child: TransactionEntry(
+                            useHorizontalPaddingConstrained:
+                                useHorizontalPaddingConstrained,
                             containerColor: transactionBackgroundColor,
                             key: ValueKey(item.transaction.transactionPk),
                             category: item.category,
@@ -283,6 +294,8 @@ Widget getTransactionsSlivers(
                               simpleListRender == true
                           ? transactionList.length > 0
                               ? DateDivider(
+                                  useHorizontalPaddingConstrained:
+                                      useHorizontalPaddingConstrained,
                                   color: dateDividerColor,
                                   key: ValueKey(date),
                                   date: date,
@@ -297,6 +310,8 @@ Widget getTransactionsSlivers(
                                   ? AnimatedSwitcher(
                                       duration: Duration(milliseconds: 300),
                                       child: DateDivider(
+                                          useHorizontalPaddingConstrained:
+                                              useHorizontalPaddingConstrained,
                                           color: dateDividerColor,
                                           key: ValueKey(date),
                                           date: date,

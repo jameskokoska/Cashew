@@ -63,6 +63,7 @@ class TransactionEntry extends StatelessWidget {
     this.category,
     this.onSelected,
     this.containerColor,
+    this.useHorizontalPaddingConstrained = true,
   }) : super(key: key);
 
   final Widget openPage;
@@ -71,6 +72,7 @@ class TransactionEntry extends StatelessWidget {
   final TransactionCategory? category;
   final Function(Transaction transaction, bool selected)? onSelected;
   final Color? containerColor;
+  final bool useHorizontalPaddingConstrained;
 
   final double fabSize = 50;
 
@@ -152,7 +154,9 @@ class TransactionEntry extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: getHorizontalPaddingConstrained(context)),
+          horizontal: useHorizontalPaddingConstrained == false
+              ? 0
+              : getHorizontalPaddingConstrained(context)),
       child: TransactionEntryBox(
         transactionKey: transaction.transactionPk,
         child: ValueListenableBuilder(
@@ -1049,17 +1053,22 @@ class DateDivider extends StatelessWidget {
     required this.date,
     this.info,
     this.color,
+    this.useHorizontalPaddingConstrained = true,
   }) : super(key: key);
 
   final DateTime date;
   final String? info;
   final Color? color;
+  final bool useHorizontalPaddingConstrained;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: getHorizontalPaddingConstrained(context)),
+        horizontal: useHorizontalPaddingConstrained == false
+            ? 0
+            : getHorizontalPaddingConstrained(context),
+      ),
       child: Container(
         color: color == null ? Theme.of(context).canvasColor : color,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),

@@ -77,7 +77,11 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
   final pageController = PageController();
 
-  void changePage(int page, {bool switchNavbar = false}) {
+  void changePage(int page, {bool switchNavbar = true}) {
+    if (switchNavbar) {
+      sidebarStateKey.currentState?.setSelectedIndex(page);
+      navbarStateKey.currentState?.setSelectedIndex(page >= 3 ? 3 : page);
+    }
     setState(() {
       currentPage = page;
     });
@@ -92,10 +96,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         refresh = true;
       });
     });
-    if (switchNavbar) {
-      navbarStateKey.currentState!.setSelectedIndex(page);
-      sidebarStateKey.currentState!.setSelectedIndex(page);
-    }
   }
 
   @override
@@ -128,7 +128,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       SettingsPage(key: settingsPageStateKey), //3
     ];
     pagesExtended = [
-      SettingsPage(key: settingsPageStateKey, hasMorePages: false), //4
+      SettingsPage(hasMorePages: false), //4
       SubscriptionsPage(), //5
       NotificationsPage(), //6
       WalletDetailsPage(wallet: null), //7
@@ -171,25 +171,28 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                         : Brightness.light,
                 statusBarColor: kIsWeb ? Colors.black : Colors.transparent),
             child: Scaffold(
-              body: PageView(
-                controller: pageController,
-                onPageChanged: (int index) {},
-                children: [...pages, ...pagesExtended],
-                physics: NeverScrollableScrollPhysics(),
-              ),
+              body: kIsWeb
+                  ? FadeIndexedStack(
+                      children: [...pages, ...pagesExtended],
+                      index: currentPage,
+                      duration: Duration(milliseconds: 300),
+                    )
+                  : PageView(
+                      controller: pageController,
+                      onPageChanged: (int index) {},
+                      children: [...pages, ...pagesExtended],
+                      physics: NeverScrollableScrollPhysics(),
+                    ),
               extendBody: true,
               resizeToAvoidBottomInset: false,
               bottomNavigationBar: BottomNavBar(
-                  key: navbarStateKey,
-                  onChanged: (index) {
-                    changePage(index);
-                  }),
+                key: navbarStateKey,
+                onChanged: (index) {
+                  changePage(index);
+                },
+              ),
             ),
           ),
-          // IndexedStack(
-          //   children: pages,
-          //   index: currentPage,
-          // ),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
@@ -329,6 +332,73 @@ class FadeScaleTransitionButton extends StatelessWidget {
         );
       },
       child: child,
+    );
+  }
+}
+
+class FadeIndexedStack extends StatefulWidget {
+  final int index;
+  final List<Widget> children;
+  final Duration duration;
+  final AlignmentGeometry alignment;
+  final TextDirection? textDirection;
+  final Clip clipBehavior;
+  final StackFit sizing;
+
+  const FadeIndexedStack({
+    super.key,
+    required this.index,
+    required this.children,
+    this.duration = const Duration(
+      milliseconds: 250,
+    ),
+    this.alignment = AlignmentDirectional.topStart,
+    this.textDirection,
+    this.clipBehavior = Clip.hardEdge,
+    this.sizing = StackFit.loose,
+  });
+
+  @override
+  FadeIndexedStackState createState() => FadeIndexedStackState();
+}
+
+class FadeIndexedStackState extends State<FadeIndexedStack>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller =
+      AnimationController(vsync: this, duration: widget.duration);
+
+  @override
+  void didUpdateWidget(FadeIndexedStack oldWidget) {
+    if (widget.index != oldWidget.index) {
+      _controller.forward(from: 0.0);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    _controller.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _controller,
+      child: IndexedStack(
+        index: widget.index,
+        alignment: widget.alignment,
+        textDirection: widget.textDirection,
+        clipBehavior: widget.clipBehavior,
+        sizing: widget.sizing,
+        children: widget.children,
+      ),
     );
   }
 }

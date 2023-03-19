@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed width sizing for web with new sidebar for bottom sheet and max padding
+    Added budget history grid for web
+    Improved colors and sidebar for full screen web
+    Fixed back arrow navigation
+    Reformatted home screen layout for full screen web
     New side navigation for web
     Back button only works if can pop
     Back button only shows if can pop

@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -14,14 +15,16 @@ bool getIsFullScreen(context) {
 }
 
 double getWidthBottomSheet(context) {
-  double maxWidth = 700;
-  return MediaQuery.of(context).size.width > maxWidth
-      ? maxWidth
-      : MediaQuery.of(context).size.width;
+  double maxWidth = 900;
+  return MediaQuery.of(context).size.width -
+              getWidthNavigationSidebar(context) >
+          maxWidth
+      ? maxWidth - getWidthNavigationSidebar(context)
+      : MediaQuery.of(context).size.width - getWidthNavigationSidebar(context);
 }
 
 double getHorizontalPaddingConstrained(context) {
-  return (MediaQuery.of(context).size.width - getWidthBottomSheet(context)) / 2;
+  return (MediaQuery.of(context).size.width - getWidthBottomSheet(context)) / 3;
 }
 
 late SheetController bottomSheetControllerGlobal;

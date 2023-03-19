@@ -16,6 +16,8 @@ import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
@@ -264,70 +266,143 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 );
               }),
         ),
-        SliverPadding(
-          padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                DateTime datePast = DateTime(
-                  DateTime.now().year -
-                      (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                          ? index * widget.budget.periodLength
-                          : 0),
-                  DateTime.now().month -
-                      (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                          ? index * widget.budget.periodLength
-                          : 0),
-                  DateTime.now().day -
-                      (widget.budget.reoccurrence == BudgetReoccurence.daily
-                          ? index * widget.budget.periodLength
-                          : 0) -
-                      (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                          ? index * 7 * widget.budget.periodLength
-                          : 0),
-                  0,
-                  0,
-                  1,
-                );
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    boxShadow: touchedBudgetIndex == null ||
-                            amountLoaded - touchedBudgetIndex! - 1 == index
-                        ? boxShadowCheck(boxShadowGeneral(context))
-                        : [BoxShadow(color: Colors.transparent)],
+        getWidthNavigationSidebar(context) <= 0
+            ? SliverPadding(
+                padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      DateTime datePast = DateTime(
+                        DateTime.now().year -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.yearly
+                                ? index * widget.budget.periodLength
+                                : 0),
+                        DateTime.now().month -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.monthly
+                                ? index * widget.budget.periodLength
+                                : 0),
+                        DateTime.now().day -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.daily
+                                ? index * widget.budget.periodLength
+                                : 0) -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.weekly
+                                ? index * 7 * widget.budget.periodLength
+                                : 0),
+                        0,
+                        0,
+                        1,
+                      );
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          boxShadow: touchedBudgetIndex == null ||
+                                  amountLoaded - touchedBudgetIndex! - 1 ==
+                                      index
+                              ? boxShadowCheck(boxShadowGeneral(context))
+                              : [BoxShadow(color: Colors.transparent)],
+                        ),
+                        child: AnimatedSize(
+                          duration: Duration(milliseconds: 1000),
+                          curve: Curves.easeInOutCubicEmphasized,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 200),
+                            child: touchedBudgetIndex == null ||
+                                    amountLoaded - touchedBudgetIndex! - 1 ==
+                                        index
+                                ? Padding(
+                                    padding: EdgeInsets.only(bottom: 13.0),
+                                    child: PastBudgetContainer(
+                                      budget: widget.budget,
+                                      smallBudgetContainer: true,
+                                      showTodayForSmallBudget:
+                                          (index == 0 ? true : false),
+                                      dateForRange: datePast,
+                                      isPastBudget: index == 0 ? false : true,
+                                      isPastBudgetButCurrentPeriod: index == 0,
+                                      budgetColorScheme: budgetColorScheme,
+                                    ),
+                                  )
+                                : Container(
+                                    key: ValueKey(
+                                        datePast.millisecondsSinceEpoch),
+                                  ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: amountLoaded, //snapshot.data?.length
                   ),
-                  child: AnimatedSize(
-                    duration: Duration(milliseconds: 1000),
-                    curve: Curves.easeInOutCubicEmphasized,
-                    child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 200),
-                      child: touchedBudgetIndex == null ||
-                              amountLoaded - touchedBudgetIndex! - 1 == index
-                          ? Padding(
-                              padding: EdgeInsets.only(bottom: 13.0),
-                              child: PastBudgetContainer(
-                                budget: widget.budget,
-                                smallBudgetContainer: true,
-                                showTodayForSmallBudget:
-                                    (index == 0 ? true : false),
-                                dateForRange: datePast,
-                                isPastBudget: index == 0 ? false : true,
-                                isPastBudgetButCurrentPeriod: index == 0,
-                                budgetColorScheme: budgetColorScheme,
-                              ),
-                            )
-                          : Container(
-                              key: ValueKey(datePast.millisecondsSinceEpoch),
+                ),
+              )
+            : SliverPadding(
+                padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 600,
+                    mainAxisExtent: 95,
+                    crossAxisSpacing: 10,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      DateTime datePast = DateTime(
+                        DateTime.now().year -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.yearly
+                                ? index * widget.budget.periodLength
+                                : 0),
+                        DateTime.now().month -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.monthly
+                                ? index * widget.budget.periodLength
+                                : 0),
+                        DateTime.now().day -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.daily
+                                ? index * widget.budget.periodLength
+                                : 0) -
+                            (widget.budget.reoccurrence ==
+                                    BudgetReoccurence.weekly
+                                ? index * 7 * widget.budget.periodLength
+                                : 0),
+                        0,
+                        0,
+                        1,
+                      );
+                      return AnimatedOpacity(
+                        duration: Duration(milliseconds: 200),
+                        opacity: touchedBudgetIndex == null ||
+                                amountLoaded - touchedBudgetIndex! - 1 == index
+                            ? 1
+                            : 0.5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow:
+                                boxShadowCheck(boxShadowGeneral(context)),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 13.0),
+                            child: PastBudgetContainer(
+                              budget: widget.budget,
+                              smallBudgetContainer: true,
+                              showTodayForSmallBudget:
+                                  (index == 0 ? true : false),
+                              dateForRange: datePast,
+                              isPastBudget: index == 0 ? false : true,
+                              isPastBudgetButCurrentPeriod: index == 0,
+                              budgetColorScheme: budgetColorScheme,
                             ),
-                    ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: amountLoaded,
                   ),
-                );
-              },
-              childCount: amountLoaded, //snapshot.data?.length
-            ),
-          ),
-        ),
+                ),
+              ),
         SliverToBoxAdapter(
           child: Center(
             child: Padding(
@@ -347,7 +422,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 onTap: () {
                   loadLines(amountLoaded + 3);
                   setState(() {
-                    amountLoaded += 3;
+                    getWidthNavigationSidebar(context) <= 0
+                        ? amountLoaded += 3
+                        : amountLoaded += 5;
                   });
                   Future.delayed(Duration(milliseconds: 150), () {
                     budgetHistoryKey.currentState!

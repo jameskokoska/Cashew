@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -112,7 +113,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
     final tooltipsOnBar = lineBarsData[0];
 
     return Container(
-      height: 190,
+      height: getWidthNavigationSidebar(context) <= 0 ? 190 : 350,
       padding: const EdgeInsets.only(
         left: 10,
         right: 25,

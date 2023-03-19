@@ -192,7 +192,7 @@ class PageFrameworkState extends State<PageFramework>
         if (widget.onDragDownToDissmiss != null) {
           widget.onDragDownToDissmiss!();
         } else {
-          Navigator.of(context).pop();
+          Navigator.of(context).maybePop();
           return;
         }
       }
@@ -393,6 +393,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final double collapsedHeight = 65;
   @override
   Widget build(BuildContext context) {
+    bool backButtonEnabled =
+        ModalRoute.of(context)?.isFirst == false && backButton;
     return SliverAppBar(
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness:
@@ -401,9 +403,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 : Brightness.light,
       ),
       shadowColor: Theme.of(context).shadowColor.withAlpha(130),
-      leading: ModalRoute.of(context)?.isCurrent == false &&
-              backButton == true &&
-              animationControllerOpacity != null
+      leading: backButtonEnabled == true && animationControllerOpacity != null
           ? Container(
               padding: EdgeInsets.only(top: 12.5),
               child: FadeTransition(
@@ -463,7 +463,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 : customTitleBuilder == null
                     ? Transform.translate(
                         offset: Offset(
-                          backButton ? 40 * percent : 0,
+                          backButtonEnabled ? 40 * percent : 0,
                           -(subtitleSize ?? 0) * (1 - percent),
                         ),
                         child: titleWidget ??
