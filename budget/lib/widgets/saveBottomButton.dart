@@ -144,7 +144,7 @@ class _KeyboardHeightAreaAnimatedState extends State<KeyboardHeightAreaAnimated>
 
   @override
   Widget build(BuildContext context) {
-    print(isKeyboardOpen);
+    // print(isKeyboardOpen);
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.easeInOutCubic,

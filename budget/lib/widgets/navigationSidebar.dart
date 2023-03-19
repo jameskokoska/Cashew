@@ -51,7 +51,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
     if (widthNavigationSidebar <= 0) {
       return SizedBox.shrink();
     }
-    print(selectedIndex);
+    // print(selectedIndex);
     return Container(
       decoration: BoxDecoration(
         border: Border(

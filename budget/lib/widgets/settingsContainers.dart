@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -231,7 +232,9 @@ class SettingsContainerOutlined extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+              color: (appStateSettings["materialYou"]
+                  ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
+                  : Theme.of(context).colorScheme.lightDarkAccentHeavy),
               width: 2,
             ),
             borderRadius: BorderRadius.circular(10),

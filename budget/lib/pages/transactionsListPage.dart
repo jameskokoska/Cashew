@@ -549,9 +549,6 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                           ? MediaQuery.of(context).padding.top -
                                               21
                                           : 15,
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondaryContainer,
                                     ),
                                   ),
                                 )
@@ -738,7 +735,10 @@ class FakeTextInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tappable(
       onTap: onTap,
-      color: backgroundColor ?? Theme.of(context).colorScheme.canvasContainer,
+      color: backgroundColor ??
+          (appStateSettings["materialYou"]
+              ? Theme.of(context).colorScheme.secondaryContainer
+              : Theme.of(context).colorScheme.canvasContainer),
       borderRadius: 15,
       child: Container(
         margin: EdgeInsets.only(
@@ -763,7 +763,7 @@ class FakeTextInput extends StatelessWidget {
                   ),
             Icon(
               icon,
-              color: Theme.of(context).colorScheme.accentColorHeavy,
+              color: Theme.of(context).colorScheme.secondary,
               size: 20,
             )
           ],

@@ -42,6 +42,10 @@ class EditRowEntry extends StatelessWidget {
           borderRadius: 18,
           color: backgroundColor,
           onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
             if (onTap != null)
               onTap!();
             else

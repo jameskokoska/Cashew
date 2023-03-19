@@ -76,7 +76,7 @@ class _ColorPickerState extends State<ColorPicker> {
   @override
   initState() {
     super.initState();
-    print(widget.colorSliderPosition);
+    // print(widget.colorSliderPosition);
     _colorSliderPosition = widget.colorSliderPosition ?? widget.width * 0.5;
     _shadeSliderPosition = widget.shadeSliderPosition ?? widget.width * 0.75;
     _currentColor = _calculateSelectedColor(_colorSliderPosition);

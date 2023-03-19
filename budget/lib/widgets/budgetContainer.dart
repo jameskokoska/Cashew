@@ -1106,7 +1106,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
   void _initialize() {
     List<Stream<double?>> watchedSpenderTotals = [];
     members = (widget.budget.sharedAllMembersEver ?? []).toSet();
-    print(widget.budget.sharedAllMembersEver);
+    // print(widget.budget.sharedAllMembersEver);
     for (String member in members) {
       watchedSpenderTotals.add(database.watchTotalSpentByUser(
         widget.budgetRange.start,

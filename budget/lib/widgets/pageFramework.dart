@@ -37,11 +37,12 @@ class PageFramework extends StatefulWidget {
     this.onDragDownToDissmiss,
     this.actions,
     this.expandedHeight = 200,
-    this.syncKeyboardHeight = false,
     this.listID,
     this.sharedBudgetRefresh = false,
     this.horizontalPadding = 0,
     this.backgroundColor,
+    this.resizeToAvoidBottomInset = false,
+    this.overlay,
   }) : super(key: key);
 
   final String title;
@@ -69,11 +70,12 @@ class PageFramework extends StatefulWidget {
   final VoidCallback? onDragDownToDissmiss;
   final List<Widget>? actions;
   final double expandedHeight;
-  final bool syncKeyboardHeight;
   final String? listID;
   final bool? sharedBudgetRefresh;
   final double horizontalPadding;
   final Color? backgroundColor;
+  final bool resizeToAvoidBottomInset;
+  final Widget? overlay;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -214,96 +216,103 @@ class PageFrameworkState extends State<PageFramework>
   @override
   Widget build(BuildContext context) {
     Widget scaffold = Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       backgroundColor: widget.backgroundColor,
-      body: ScrollbarWrap(
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            PageFrameworkSliverAppBar(
-              title: widget.title,
-              titleWidget: widget.titleWidget,
-              appBarBackgroundColor: widget.appBarBackgroundColor,
-              appBarBackgroundColorStart: widget.backgroundColor == null ||
-                      widget.appBarBackgroundColorStart != null
-                  ? widget.appBarBackgroundColorStart
-                  : widget.backgroundColor,
-              backButton: widget.backButton,
-              subtitle: widget.subtitle,
-              subtitleSize: widget.subtitleSize,
-              subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
-              onBottomReached: widget.onBottomReached,
-              pinned: widget.pinned,
-              subtitleAlignment: widget.subtitleAlignment,
-              customTitleBuilder: widget.customTitleBuilder,
-              animationControllerOpacity: _animationControllerOpacity,
-              animationControllerShift: _animationControllerShift,
-              animationController0at50: _animationController0at50,
-              textColor: widget.textColor,
-              onBackButton: widget.onBackButton,
-              actions: widget.actions,
-              expandedHeight: widget.expandedHeight,
-            ),
-            for (Widget sliver in widget.slivers)
-              widget.horizontalPadding == 0
-                  ? sliver
-                  : SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: widget.horizontalPadding),
-                      sliver: sliver),
-            widget.listWidgets != null
-                ? SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: widget.horizontalPadding),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate([
-                        ...widget.listWidgets!,
-                        widget.navbar
+      body: Stack(
+        children: [
+          ScrollbarWrap(
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                PageFrameworkSliverAppBar(
+                  title: widget.title,
+                  titleWidget: widget.titleWidget,
+                  appBarBackgroundColor: widget.appBarBackgroundColor,
+                  appBarBackgroundColorStart: widget.backgroundColor == null ||
+                          widget.appBarBackgroundColorStart != null
+                      ? widget.appBarBackgroundColorStart
+                      : widget.backgroundColor,
+                  backButton: widget.backButton,
+                  subtitle: widget.subtitle,
+                  subtitleSize: widget.subtitleSize,
+                  subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
+                  onBottomReached: widget.onBottomReached,
+                  pinned: widget.pinned,
+                  subtitleAlignment: widget.subtitleAlignment,
+                  customTitleBuilder: widget.customTitleBuilder,
+                  animationControllerOpacity: _animationControllerOpacity,
+                  animationControllerShift: _animationControllerShift,
+                  animationController0at50: _animationController0at50,
+                  textColor: widget.textColor,
+                  onBackButton: widget.onBackButton,
+                  actions: widget.actions,
+                  expandedHeight: widget.expandedHeight,
+                ),
+                for (Widget sliver in widget.slivers)
+                  widget.horizontalPadding == 0
+                      ? sliver
+                      : SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: widget.horizontalPadding),
+                          sliver: sliver),
+                widget.listWidgets != null
+                    ? SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: widget.horizontalPadding),
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate([
+                            ...widget.listWidgets!,
+                            widget.navbar
+                                ? SizedBox(height: 87 + bottomPaddingSafeArea)
+                                : SizedBox(height: bottomPaddingSafeArea),
+                          ]),
+                        ),
+                      )
+                    : SliverToBoxAdapter(
+                        child: widget.navbar
                             ? SizedBox(height: 87 + bottomPaddingSafeArea)
-                            : SizedBox(height: bottomPaddingSafeArea),
-                      ]),
-                    ),
-                  )
-                : SliverToBoxAdapter(
-                    child: widget.navbar
-                        ? SizedBox(height: 87 + bottomPaddingSafeArea)
-                        : SizedBox.shrink(),
-                  ),
-          ],
-        ),
+                            : SizedBox.shrink(),
+                      ),
+              ],
+            ),
+          ),
+          widget.overlay ?? SizedBox.shrink(),
+        ],
       ),
     );
     Widget? dragDownToDissmissScaffold = null;
     if (widget.dragDownToDismiss) {
-      dragDownToDissmissScaffold = Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Listener(
-          onPointerMove: (ptr) => {_onPointerMove(ptr)},
-          onPointerUp: (ptr) => {_onPointerUp(ptr)},
-          onPointerDown: (ptr) => {_onPointerDown(ptr)},
-          behavior: HitTestBehavior.opaque,
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: widget.dragDownToDissmissBackground,
-            body: AnimatedBuilder(
-              // animation: _animationControllerDragX,
-              // builder: (_, child) {
-              //   return Transform.translate(
-              //     offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
-              //     child: Scaffold(
-              //       backgroundColor: widget.dragDownToDissmissBackground,
-              //       body: AnimatedBuilder(
-              animation: _animationControllerDragY,
-              builder: (_, child) {
-                return Transform.translate(
-                  offset: Offset(
-                      0,
-                      _animationControllerDragY.value *
-                          ((1 + 1 - _animationControllerDragY.value) * 50)),
-                  child: scaffold,
-                );
-              },
-            ),
+      dragDownToDissmissScaffold = Listener(
+        onPointerMove: (ptr) => {_onPointerMove(ptr)},
+        onPointerUp: (ptr) => {_onPointerUp(ptr)},
+        onPointerDown: (ptr) => {_onPointerDown(ptr)},
+        behavior: HitTestBehavior.opaque,
+        child: Scaffold(
+          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+          backgroundColor: widget.dragDownToDissmissBackground,
+          body: Stack(
+            children: [
+              AnimatedBuilder(
+                // animation: _animationControllerDragX,
+                // builder: (_, child) {
+                //   return Transform.translate(
+                //     offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
+                //     child: Scaffold(
+                //       backgroundColor: widget.dragDownToDissmissBackground,
+                //       body: AnimatedBuilder(
+                animation: _animationControllerDragY,
+                builder: (_, child) {
+                  return Transform.translate(
+                    offset: Offset(
+                        0,
+                        _animationControllerDragY.value *
+                            ((1 + 1 - _animationControllerDragY.value) * 50)),
+                    child: scaffold,
+                  );
+                },
+              ),
+              widget.overlay ?? SizedBox.shrink(),
+            ],
           ),
         ),
         //       );

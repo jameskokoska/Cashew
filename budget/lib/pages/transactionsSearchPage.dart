@@ -175,9 +175,6 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         SizedBox(width: 20),
                         Expanded(
                           child: TextInput(
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
                             labelText: "Search...",
                             icon: Icons.search_rounded,
                             onSubmitted: (value) {
@@ -191,10 +188,11 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         ),
                         SizedBox(width: 10),
                         ButtonIcon(
-                            onTap: () {
-                              selectDateRange(context);
-                            },
-                            icon: Icons.calendar_month_rounded),
+                          onTap: () {
+                            selectDateRange(context);
+                          },
+                          icon: Icons.calendar_month_rounded,
+                        ),
                         SizedBox(width: 20),
                       ],
                     ),

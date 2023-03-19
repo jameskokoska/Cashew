@@ -74,37 +74,6 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 23),
-                child: Button(
-                  label: "View App Intro",
-                  onTap: () {
-                    pushRoute(
-                      context,
-                      OnBoardingPage(popNavigationWhenDone: true),
-                    );
-                  },
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 23),
-                child: Button(
-                  label: "View Changelog",
-                  onTap: () {
-                    showChangelog(context, forceShow: true);
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
           child: Tappable(
@@ -172,7 +141,38 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        Container(height: 15),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 23),
+                child: Button(
+                  label: "View App Intro",
+                  onTap: () {
+                    pushRoute(
+                      context,
+                      OnBoardingPage(popNavigationWhenDone: true),
+                    );
+                  },
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 23),
+                child: Button(
+                  label: "View Changelog",
+                  onTap: () {
+                    showChangelog(context, forceShow: true);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
           child: Center(

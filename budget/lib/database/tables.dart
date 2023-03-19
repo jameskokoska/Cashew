@@ -845,8 +845,14 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // watch all budgets that have been created
-  Stream<List<Budget>> watchAllBudgets({int? limit, int? offset}) {
+  Stream<List<Budget>> watchAllBudgets(
+      {String? searchFor, int? limit, int? offset}) {
     return (select(budgets)
+          ..where((b) => (searchFor == null
+              ? Constant(true)
+              : b.name
+                  .lower()
+                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
           ..orderBy([(b) => OrderingTerm.asc(b.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -937,8 +943,14 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Stream<List<TransactionWallet>> watchAllWallets({int? limit, int? offset}) {
+  Stream<List<TransactionWallet>> watchAllWallets(
+      {String? searchFor, int? limit, int? offset}) {
     return (select(wallets)
+          ..where((w) => (searchFor == null
+              ? Constant(true)
+              : w.name
+                  .lower()
+                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
           ..orderBy([(w) => OrderingTerm.asc(w.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -1070,8 +1082,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(
-      {int? limit, int? offset}) {
+      {String? searchFor, int? limit, int? offset}) {
     return (select(associatedTitles)
+          ..where((t) => (searchFor == null
+              ? Constant(true)
+              : t.title
+                  .lower()
+                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
           ..orderBy([(t) => OrderingTerm.desc(t.order)])
         // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
         )
@@ -1478,8 +1495,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<TransactionCategory>> watchAllCategories(
-      {int? limit, int? offset}) {
+      {String? searchFor, int? limit, int? offset}) {
     return (select(categories)
+          ..where((c) => (searchFor == null
+              ? Constant(true)
+              : c.name
+                  .lower()
+                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -1499,7 +1521,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<List<Budget>> getAllBudgets({bool? sharedBudgetsOnly}) {
     return (select(budgets)
           ..where((b) => ((sharedBudgetsOnly == null
-              ? b.sharedKey.isNotNull() | b.sharedKey.isNull()
+              ? Constant(true)
               : sharedBudgetsOnly == true
                   ? b.sharedKey.isNotNull()
                   : b.sharedKey.isNull())))
@@ -1893,24 +1915,24 @@ class FinanceDatabase extends _$FinanceDatabase {
       {List<BudgetTransactionFilters>? budgetTransactionFilters,
       List<String>? memberTransactionFilters}) {
     Expression<bool> memberIncluded = memberTransactionFilters == null
-        ? tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull()
+        ? Constant(true)
         : (tbl.sharedKey.isNotNull() &
                 tbl.transactionOwnerEmail.isIn(memberTransactionFilters) |
             tbl.sharedKey.isNull());
     Expression<bool> includeShared = budgetTransactionFilters == null
-        ? tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull()
+        ? Constant(true)
         : budgetTransactionFilters
                     .contains(BudgetTransactionFilters.sharedToOtherBudget) ==
                 false
             ? tbl.sharedKey.isNull()
-            : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull();
+            : Constant(true);
     Expression<bool> includeAdded = budgetTransactionFilters == null
-        ? tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull()
+        ? Constant(true)
         : budgetTransactionFilters
                     .contains(BudgetTransactionFilters.addedToOtherBudget) ==
                 false
             ? tbl.sharedReferenceBudgetPk.isNull() | tbl.sharedKey.isNotNull()
-            : tbl.sharedKey.isNotNull() | tbl.sharedKey.isNull();
+            : Constant(true);
     return memberIncluded & includeShared & includeAdded;
     // ? (tbl.sharedReferenceBudgetPk.isNull())
     //             : (sharedTransactionsShow ==
@@ -2031,21 +2053,18 @@ class FinanceDatabase extends _$FinanceDatabase {
   Expression<bool> onlyShowIfMember($TransactionsTable tbl, String? member) {
     return (member != null
         ? tbl.transactionOwnerEmail.equals(member)
-        : tbl.transactionOwnerEmail.isNull() |
-            tbl.transactionOwnerEmail.isNotNull());
+        : Constant(true));
   }
 
   Expression<bool> onlyShowBasedOnIncome($TransactionsTable tbl, bool? income) {
-    return (income != null
-        ? tbl.income.equals(income)
-        : tbl.income.isNull() | tbl.income.isNotNull());
+    return (income != null ? tbl.income.equals(income) : Constant(true));
   }
 
   Expression<bool> onlyShowBasedOnCategoryFks(
       $TransactionsTable tbl, List<int> categoryFks) {
     return (categoryFks.length >= 1
         ? tbl.categoryFk.isIn(categoryFks)
-        : tbl.categoryFk.isNotNull());
+        : Constant(true));
   }
 
   Expression<bool> onlyShowBasedOnTimeRange($TransactionsTable tbl,
@@ -2066,8 +2085,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       $TransactionsTable tbl, int? budgetPk) {
     return (budgetPk != null
         ? tbl.sharedReferenceBudgetPk.equals(budgetPk)
-        : tbl.sharedReferenceBudgetPk.isNull() |
-            tbl.sharedReferenceBudgetPk.isNotNull());
+        : Constant(true));
   }
 
   // The total amount of that category will always be that last column

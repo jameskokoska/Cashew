@@ -503,12 +503,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           widget.budget != null ? currentInstance!.sharedMembers : null,
       sharedAllMembersEver:
           widget.budget != null ? currentInstance!.sharedAllMembersEver : null,
-      budgetTransactionFilters: currentInstance?.sharedKey != null
+      budgetTransactionFilters: widget.budget?.addedTransactionsOnly == true
           ? null
-          : selectedBudgetTransactionFilters,
-      memberTransactionFilters: currentInstance?.sharedKey != null
+          : currentInstance?.sharedKey != null
+              ? null
+              : selectedBudgetTransactionFilters,
+      memberTransactionFilters: widget.budget?.addedTransactionsOnly == true
           ? null
-          : selectedMemberTransactionFilters,
+          : currentInstance?.sharedKey != null
+              ? null
+              : selectedMemberTransactionFilters,
     );
   }
 
@@ -632,136 +636,123 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         }
         return false;
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: GestureDetector(
-          onTap: () {
-            //Minimize keyboard when tap non interactive widget
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
+      child: GestureDetector(
+        onTap: () {
+          //Minimize keyboard when tap non interactive widget
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: PageFramework(
+          resizeToAvoidBottomInset: true,
+          dragDownToDismiss: true,
+          title: widget.title,
+          navbar: false,
+          onBackButton: () async {
+            if (widget.budget != null) {
+              discardChangesPopupIfBudgetPassed();
+            } else {
+              discardChangesPopup(context, onDiscard: () {
+                database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
+              });
             }
           },
-          child: Stack(
-            children: [
-              PageFramework(
-                syncKeyboardHeight: true,
-                dragDownToDismiss: true,
-                title: widget.title,
-                navbar: false,
-                onBackButton: () async {
-                  if (widget.budget != null) {
-                    discardChangesPopupIfBudgetPassed();
-                  } else {
-                    discardChangesPopup(context, onDiscard: () {
-                      database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
-                    });
-                  }
-                },
-                onDragDownToDissmiss: () async {
-                  if (widget.budget != null) {
-                    discardChangesPopupIfBudgetPassed();
-                  } else {
-                    discardChangesPopup(context, onDiscard: () {
-                      database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
-                    });
-                  }
-                },
-                actions: [
-                  IconButton(
-                    tooltip: "Pin to homepage",
+          onDragDownToDissmiss: () async {
+            if (widget.budget != null) {
+              discardChangesPopupIfBudgetPassed();
+            } else {
+              discardChangesPopup(context, onDiscard: () {
+                database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
+              });
+            }
+          },
+          actions: [
+            IconButton(
+              tooltip: "Pin to homepage",
+              onPressed: () {
+                setSelectedPin();
+              },
+              icon: Icon(selectedPin
+                  ? Icons.push_pin_rounded
+                  : Icons.push_pin_outlined),
+            ),
+            widget.budget != null
+                ? IconButton(
+                    tooltip: "Delete budget",
                     onPressed: () {
-                      setSelectedPin();
+                      deleteBudgetPopup(context, widget.budget!,
+                          afterDelete: () {
+                        Navigator.pop(context);
+                      });
                     },
-                    icon: Icon(selectedPin
-                        ? Icons.push_pin_rounded
-                        : Icons.push_pin_outlined),
+                    icon: Icon(Icons.delete_rounded),
+                  )
+                : SizedBox.shrink(),
+          ],
+          overlay: Align(
+            alignment: Alignment.bottomCenter,
+            child: SaveBottomButton(
+              label: widget.budget == null ? "Add Budget" : "Save Changes",
+              onTap: () {
+                addBudget();
+              },
+              disabled: !(canAddBudget ?? false),
+            ),
+          ),
+          slivers: [
+            ColumnSliver(
+              centered: true,
+              children: [
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextInput(
+                    labelText: "Name",
+                    bubbly: false,
+                    initialValue: selectedTitle,
+                    onChanged: (text) {
+                      setSelectedTitle(text);
+                    },
+                    padding: EdgeInsets.only(left: 7, right: 7),
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    topContentPadding: 20,
                   ),
-                  widget.budget != null
-                      ? IconButton(
-                          tooltip: "Delete budget",
-                          onPressed: () {
-                            deleteBudgetPopup(context, widget.budget!,
-                                afterDelete: () {
-                              Navigator.pop(context);
-                            });
-                          },
-                          icon: Icon(Icons.delete_rounded),
-                        )
-                      : SizedBox.shrink(),
-                ],
-                slivers: [
-                  ColumnSliver(
-                    centered: true,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.end,
+                    alignment: WrapAlignment.center,
                     children: [
-                      SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TextInput(
-                          labelText: "Name",
-                          bubbly: false,
-                          initialValue: selectedTitle,
-                          onChanged: (text) {
-                            setSelectedTitle(text);
+                      IntrinsicWidth(
+                        child: TappableTextEntry(
+                          title: convertToMoney(selectedAmount ?? 0),
+                          placeholder: convertToMoney(0),
+                          showPlaceHolderWhenTextEquals: convertToMoney(0),
+                          onTap: () {
+                            selectAmount(context);
                           },
-                          padding: EdgeInsets.only(left: 7, right: 7),
-                          fontSize: 30,
+                          fontSize: 35,
                           fontWeight: FontWeight.bold,
-                          topContentPadding: 20,
+                          internalPadding:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.end,
-                          alignment: WrapAlignment.center,
+                      IntrinsicWidth(
+                        child: Row(
                           children: [
-                            IntrinsicWidth(
-                              child: TappableTextEntry(
-                                title: convertToMoney(selectedAmount ?? 0),
-                                placeholder: convertToMoney(0),
-                                showPlaceHolderWhenTextEquals:
-                                    convertToMoney(0),
-                                onTap: () {
-                                  selectAmount(context);
-                                },
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold,
-                                internalPadding: EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 4),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 3),
-                              ),
-                            ),
-                            IntrinsicWidth(
-                              child: Row(
-                                children: [
-                                  selectedRecurrence != "Custom"
-                                      ? TappableTextEntry(
-                                          title: "/ " +
-                                              selectedPeriodLength.toString(),
-                                          placeholder: "/ 0",
-                                          showPlaceHolderWhenTextEquals: "/ 0",
-                                          onTap: () {
-                                            selectPeriodLength(context);
-                                          },
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 3),
-                                        )
-                                      : TextFont(
-                                          text: " /",
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  TappableTextEntry(
-                                    title: selectedRecurrenceDisplay,
-                                    placeholder: "",
+                            selectedRecurrence != "Custom"
+                                ? TappableTextEntry(
+                                    title:
+                                        "/ " + selectedPeriodLength.toString(),
+                                    placeholder: "/ 0",
+                                    showPlaceHolderWhenTextEquals: "/ 0",
                                     onTap: () {
-                                      selectRecurrence(context);
+                                      selectPeriodLength(context);
                                     },
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
@@ -769,358 +760,344 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                         vertical: 4, horizontal: 4),
                                     padding: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 3),
+                                  )
+                                : TextFont(
+                                    text: " /",
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ],
-                              ),
+                            TappableTextEntry(
+                              title: selectedRecurrenceDisplay,
+                              placeholder: "",
+                              onTap: () {
+                                selectRecurrence(context);
+                              },
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              internalPadding: EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 4),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 3),
                             ),
                           ],
                         ),
                       ),
-                      Transform.translate(
-                        offset: Offset(
-                            0,
-                            selectedEndDate == null &&
-                                    selectedRecurrence == "Custom"
-                                ? 0
-                                : -5),
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: selectedRecurrence != "Custom"
-                                ? Tappable(
-                                    onTap: () {
-                                      selectStartDate(context);
-                                    },
-                                    color: Colors.transparent,
-                                    borderRadius: 15,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 8),
-                                      child: Center(
-                                        child: Wrap(
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.end,
-                                          runAlignment: WrapAlignment.center,
-                                          alignment: WrapAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 5.8),
-                                              child: TextFont(
-                                                text: "beginning ",
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            IgnorePointer(
-                                              child: TappableTextEntry(
-                                                title: getWordedDateShortMore(
-                                                    selectedStartDate),
-                                                placeholder: "",
-                                                onTap: () {
-                                                  selectAmount(context);
-                                                },
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold,
-                                                internalPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 2,
-                                                        horizontal: 4),
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 0, horizontal: 5),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Tappable(
-                                    onTap: () {
-                                      selectDateRange(context);
-                                    },
-                                    color: Colors.transparent,
-                                    borderRadius: 15,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 8),
-                                      child: Center(
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            IgnorePointer(
-                                              child: TappableTextEntry(
-                                                title: selectedEndDate == null
-                                                    ? null
-                                                    : getWordedDateShort(
-                                                            selectedStartDate) +
-                                                        " - " +
-                                                        getWordedDateShort(
-                                                            selectedEndDate!),
-                                                placeholder:
-                                                    "Select Custom Period",
-                                                onTap: () {},
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold,
-                                                internalPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 2,
-                                                        horizontal: 4),
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 0, horizontal: 5),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )),
-                      ),
-                      SizedBox(height: 17),
                     ],
                   ),
-                  SliverStickyLabelDivider(
-                    info: "Select Color",
-                    sliver: ColumnSliver(children: [
-                      Container(
-                        height: 65,
-                        child: SelectColor(
-                          horizontalList: true,
-                          selectedColor: selectedColor,
-                          setSelectedColor: setSelectedColor,
-                        ),
-                      ),
-                    ]),
-                  ),
-                  widget.budget != null
-                      ? SliverToBoxAdapter(child: SizedBox.shrink())
-                      : SliverStickyLabelDivider(
-                          info: "Budget Type",
-                          sliver: ColumnSliver(
-                            children: [
-                              AnimatedSize(
-                                duration: Duration(milliseconds: 500),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: TextFont(
-                                    text: selectedAddedTransactionsOnly ==
-                                                false &&
-                                            selectedShared == false
-                                        ? "All transactions within the time period following the categories and filters selected will be added to this budget"
-                                        : selectedShared == true &&
-                                                selectedAddedTransactionsOnly ==
-                                                    true
-                                            ? "Only transactions added to this budget will be shared with others users you share this budget to"
-                                            : "Only the transactions you explicitly add to this budget will be shown in this budget",
-                                    textColor:
-                                        Theme.of(context).colorScheme.textLight,
-                                    fontSize: 13,
-                                    maxLines: 3,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              SelectChips(
-                                wrapped: true,
-                                items: [
-                                  "All Transactions",
-                                  "Added Only",
-                                  "Shared Group Budget"
-                                ],
-                                getLabel: (item) {
-                                  if (item == "Shared Group Budget")
-                                    return item + " (Beta)";
-                                  return item;
-                                },
-                                onSelected: (item) {
-                                  if (item == "All Transactions") {
-                                    setSelectedShared(false);
-                                    setAddedTransactionsOnly(false);
-                                  } else if (item == "Added Only") {
-                                    setAddedTransactionsOnly(true);
-                                    setSelectedShared(false);
-                                  } else if (item == "Shared Group Budget") {
-                                    setAddedTransactionsOnly(true);
-                                    setSelectedShared(true);
-                                  }
-                                },
-                                getSelected: (item) {
-                                  if (selectedShared == true &&
-                                      selectedAddedTransactionsOnly == true &&
-                                      item == "Shared Group Budget") {
-                                    return true;
-                                  } else if (selectedShared == false &&
-                                      selectedAddedTransactionsOnly == true &&
-                                      item == "Added Only") {
-                                    return true;
-                                  } else if (selectedShared == false &&
-                                      selectedAddedTransactionsOnly == false &&
-                                      item == "All Transactions") {
-                                    return true;
-                                  }
-                                  return false;
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                  SliverStickyLabelDivider(
-                    info: "Select Categories",
-                    extraInfo: selectedCategoriesText + " Budget",
-                    visible: !(selectedShared == true ||
-                            selectedAddedTransactionsOnly) &&
-                        ((widget.budget != null &&
-                                widget.budget!.sharedKey == null &&
-                                widget.budget!.addedTransactionsOnly ==
-                                    false) ||
-                            widget.budget == null),
-                    sliver: ColumnSliver(
-                      children: [
-                        AnimatedSize(
-                          duration: Duration(milliseconds: 400),
-                          curve: Curves.easeInOut,
-                          child: AnimatedSwitcher(
-                            duration: Duration(milliseconds: 400),
-                            child: selectedShared == true ||
-                                    selectedAddedTransactionsOnly
-                                ? Container(
-                                    key: ValueKey(1),
-                                  )
-                                : Container(
-                                    height: 100,
-                                    child: SelectCategory(
-                                      horizontalList: true,
-                                      selectedCategories: selectedCategories,
-                                      setSelectedCategories:
-                                          setSelectedCategories,
-                                      showSelectedAllCategoriesIfNoneSelected:
-                                          true,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SliverStickyLabelDivider(
-                    info: "Transaction Filters",
-                    visible: !(selectedShared == true ||
-                            selectedAddedTransactionsOnly) &&
-                        ((widget.budget != null &&
-                                widget.budget!.sharedKey == null &&
-                                widget.budget!.addedTransactionsOnly ==
-                                    false) ||
-                            widget.budget == null),
-                    sliver: ColumnSliver(
-                      children: [
-                        AnimatedSize(
-                          duration: Duration(milliseconds: 400),
-                          curve: Curves.easeInOut,
-                          child: AnimatedSwitcher(
-                            duration: Duration(milliseconds: 400),
-                            child: selectedShared == true ||
-                                    selectedAddedTransactionsOnly
-                                ? Container(
-                                    key: ValueKey(1),
-                                  )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                ),
+                Transform.translate(
+                  offset: Offset(
+                      0,
+                      selectedEndDate == null && selectedRecurrence == "Custom"
+                          ? 0
+                          : -5),
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: selectedRecurrence != "Custom"
+                          ? Tappable(
+                              onTap: () {
+                                selectStartDate(context);
+                              },
+                              color: Colors.transparent,
+                              borderRadius: 15,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 8),
+                                child: Center(
+                                  child: Wrap(
+                                    crossAxisAlignment: WrapCrossAlignment.end,
+                                    runAlignment: WrapAlignment.center,
+                                    alignment: WrapAlignment.center,
                                     children: [
-                                      SizedBox(height: 5),
-                                      SelectChips(
-                                        items: [
-                                          BudgetTransactionFilters
-                                              .addedToOtherBudget,
-                                          BudgetTransactionFilters
-                                              .sharedToOtherBudget,
-                                        ],
-                                        getLabel: (item) {
-                                          return item ==
-                                                  BudgetTransactionFilters
-                                                      .addedToOtherBudget
-                                              ? "Added to Other Budgets"
-                                              : item ==
-                                                      BudgetTransactionFilters
-                                                          .sharedToOtherBudget
-                                                  ? "Shared to Other Budgets"
-                                                  : "";
-                                        },
-                                        onSelected: (item) {
-                                          if (selectedBudgetTransactionFilters
-                                              .contains(item))
-                                            selectedBudgetTransactionFilters
-                                                .remove(item);
-                                          else
-                                            selectedBudgetTransactionFilters
-                                                .add(item);
-                                          setState(() {});
-                                        },
-                                        getSelected: (item) {
-                                          return selectedBudgetTransactionFilters
-                                              .contains(item);
-                                        },
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 5.8),
+                                        child: TextFont(
+                                          text: "beginning ",
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                      SelectChips(
-                                        items: allMembersOfAllBudgets,
-                                        getLabel: (item) {
-                                          return getMemberNickname(item);
-                                        },
-                                        onSelected: (item) {
-                                          if (selectedMemberTransactionFilters
-                                              .contains(item))
-                                            selectedMemberTransactionFilters
-                                                .remove(item);
-                                          else
-                                            selectedMemberTransactionFilters
-                                                .add(item);
-                                          setState(() {});
-                                        },
-                                        getSelected: (item) {
-                                          return selectedMemberTransactionFilters
-                                              .contains(item);
-                                        },
+                                      IgnorePointer(
+                                        child: TappableTextEntry(
+                                          title: getWordedDateShortMore(
+                                              selectedStartDate),
+                                          placeholder: "",
+                                          onTap: () {
+                                            selectAmount(context);
+                                          },
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          internalPadding: EdgeInsets.symmetric(
+                                              vertical: 2, horizontal: 4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 5),
+                                        ),
                                       ),
                                     ],
                                   ),
+                                ),
+                              ),
+                            )
+                          : Tappable(
+                              onTap: () {
+                                selectDateRange(context);
+                              },
+                              color: Colors.transparent,
+                              borderRadius: 15,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 8),
+                                child: Center(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IgnorePointer(
+                                        child: TappableTextEntry(
+                                          title: selectedEndDate == null
+                                              ? null
+                                              : getWordedDateShort(
+                                                      selectedStartDate) +
+                                                  " - " +
+                                                  getWordedDateShort(
+                                                      selectedEndDate!),
+                                          placeholder: "Select Custom Period",
+                                          onTap: () {},
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          internalPadding: EdgeInsets.symmetric(
+                                              vertical: 2, horizontal: 4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 5),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )),
+                ),
+                SizedBox(height: 17),
+              ],
+            ),
+            SliverStickyLabelDivider(
+              info: "Select Color",
+              sliver: ColumnSliver(children: [
+                Container(
+                  height: 65,
+                  child: SelectColor(
+                    horizontalList: true,
+                    selectedColor: selectedColor,
+                    setSelectedColor: setSelectedColor,
+                  ),
+                ),
+              ]),
+            ),
+            widget.budget != null
+                ? SliverToBoxAdapter(child: SizedBox.shrink())
+                : SliverStickyLabelDivider(
+                    info: "Budget Type",
+                    sliver: ColumnSliver(
+                      children: [
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 500),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: TextFont(
+                              text: selectedAddedTransactionsOnly == false &&
+                                      selectedShared == false
+                                  ? "All transactions within the time period following the categories and filters selected will be added to this budget"
+                                  : selectedShared == true &&
+                                          selectedAddedTransactionsOnly == true
+                                      ? "Only transactions added to this budget will be shared with others users you share this budget to"
+                                      : "Only the transactions you explicitly add to this budget will be shown in this budget",
+                              textColor:
+                                  Theme.of(context).colorScheme.textLight,
+                              fontSize: 13,
+                              maxLines: 3,
+                            ),
                           ),
+                        ),
+                        SizedBox(height: 10),
+                        SelectChips(
+                          wrapped: true,
+                          items: [
+                            "All Transactions",
+                            "Added Only",
+                            "Shared Group Budget"
+                          ],
+                          getLabel: (item) {
+                            if (item == "Shared Group Budget")
+                              return item + " (Beta)";
+                            return item;
+                          },
+                          onSelected: (item) {
+                            if (item == "All Transactions") {
+                              setSelectedShared(false);
+                              setAddedTransactionsOnly(false);
+                            } else if (item == "Added Only") {
+                              setAddedTransactionsOnly(true);
+                              setSelectedShared(false);
+                            } else if (item == "Shared Group Budget") {
+                              setAddedTransactionsOnly(true);
+                              setSelectedShared(true);
+                            }
+                          },
+                          getSelected: (item) {
+                            if (selectedShared == true &&
+                                selectedAddedTransactionsOnly == true &&
+                                item == "Shared Group Budget") {
+                              return true;
+                            } else if (selectedShared == false &&
+                                selectedAddedTransactionsOnly == true &&
+                                item == "Added Only") {
+                              return true;
+                            } else if (selectedShared == false &&
+                                selectedAddedTransactionsOnly == false &&
+                                item == "All Transactions") {
+                              return true;
+                            }
+                            return false;
+                          },
                         ),
                       ],
                     ),
                   ),
-                  CategoryLimits(
-                    selectedCategories: selectedCategories ?? [],
-                    budgetPk: widget.budget == null
-                        ? setBudgetPk
-                        : widget.budget!.budgetPk,
-                    budgetLimit: selectedAmount ?? 1,
+            SliverStickyLabelDivider(
+              info: "Select Categories",
+              extraInfo: selectedCategoriesText + " Budget",
+              visible:
+                  !(selectedShared == true || selectedAddedTransactionsOnly) &&
+                      ((widget.budget != null &&
+                              widget.budget!.sharedKey == null &&
+                              widget.budget!.addedTransactionsOnly == false) ||
+                          widget.budget == null),
+              sliver: ColumnSliver(
+                children: [
+                  AnimatedSize(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 400),
+                      child: selectedShared == true ||
+                              selectedAddedTransactionsOnly
+                          ? Container(
+                              key: ValueKey(1),
+                            )
+                          : Container(
+                              height: 100,
+                              child: SelectCategory(
+                                horizontalList: true,
+                                selectedCategories: selectedCategories,
+                                setSelectedCategories: setSelectedCategories,
+                                showSelectedAllCategoriesIfNoneSelected: true,
+                              ),
+                            ),
+                    ),
                   ),
                 ],
-                listWidgets: [
-                  widget.budget != null && widget.budget!.sharedKey != null
-                      ? SharedBudgetSettings(
-                          budget: widget.budget!,
-                        )
-                      : SizedBox.shrink(),
-                  SizedBox(height: 13),
-                  Container(height: 70),
+              ),
+            ),
+            SliverStickyLabelDivider(
+              info: "Transaction Filters",
+              visible:
+                  !(selectedShared == true || selectedAddedTransactionsOnly) &&
+                      ((widget.budget != null &&
+                              widget.budget!.sharedKey == null &&
+                              widget.budget!.addedTransactionsOnly == false) ||
+                          widget.budget == null),
+              sliver: ColumnSliver(
+                children: [
+                  AnimatedSize(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 400),
+                      child: selectedShared == true ||
+                              selectedAddedTransactionsOnly
+                          ? Container(
+                              key: ValueKey(1),
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5),
+                                SelectChips(
+                                  items: [
+                                    BudgetTransactionFilters.addedToOtherBudget,
+                                    BudgetTransactionFilters
+                                        .sharedToOtherBudget,
+                                  ],
+                                  getLabel: (item) {
+                                    return item ==
+                                            BudgetTransactionFilters
+                                                .addedToOtherBudget
+                                        ? "Added to Other Budgets"
+                                        : item ==
+                                                BudgetTransactionFilters
+                                                    .sharedToOtherBudget
+                                            ? "Shared to Other Budgets"
+                                            : "";
+                                  },
+                                  onSelected: (item) {
+                                    if (selectedBudgetTransactionFilters
+                                        .contains(item))
+                                      selectedBudgetTransactionFilters
+                                          .remove(item);
+                                    else
+                                      selectedBudgetTransactionFilters
+                                          .add(item);
+                                    setState(() {});
+                                  },
+                                  getSelected: (item) {
+                                    return selectedBudgetTransactionFilters
+                                        .contains(item);
+                                  },
+                                ),
+                                SelectChips(
+                                  items: allMembersOfAllBudgets,
+                                  getLabel: (item) {
+                                    return getMemberNickname(item);
+                                  },
+                                  onSelected: (item) {
+                                    if (selectedMemberTransactionFilters
+                                        .contains(item))
+                                      selectedMemberTransactionFilters
+                                          .remove(item);
+                                    else
+                                      selectedMemberTransactionFilters
+                                          .add(item);
+                                    setState(() {});
+                                  },
+                                  getSelected: (item) {
+                                    return selectedMemberTransactionFilters
+                                        .contains(item);
+                                  },
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
                 ],
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SaveBottomButton(
-                  label: widget.budget == null ? "Add Budget" : "Save Changes",
-                  onTap: () {
-                    addBudget();
-                  },
-                  disabled: !(canAddBudget ?? false),
-                ),
-              ),
-            ],
-          ),
+            ),
+            CategoryLimits(
+              selectedCategories: selectedCategories ?? [],
+              budgetPk:
+                  widget.budget == null ? setBudgetPk : widget.budget!.budgetPk,
+              budgetLimit: selectedAmount ?? 1,
+            ),
+          ],
+          listWidgets: [
+            widget.budget != null && widget.budget!.sharedKey != null
+                ? SharedBudgetSettings(
+                    budget: widget.budget!,
+                  )
+                : SizedBox.shrink(),
+            SizedBox(height: 13),
+            Container(height: 70),
+          ],
         ),
       ),
     );

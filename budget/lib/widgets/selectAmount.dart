@@ -60,7 +60,7 @@ class _SelectAmountState extends State<SelectAmount> {
 
   @override
   void initState() {
-    print(widget.allWallets);
+    // print(widget.allWallets);
     super.initState();
     selectedWallet = widget.selectedWallet;
     walletPkForCurrency = widget.walletPkForCurrency;

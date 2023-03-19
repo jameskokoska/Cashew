@@ -408,7 +408,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: Tappable(
-                color: Theme.of(context).colorScheme.lightDarkAccent,
+                color: budgetColorScheme.secondaryContainer,
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),

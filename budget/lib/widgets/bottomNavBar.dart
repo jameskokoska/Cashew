@@ -84,7 +84,10 @@ class BottomNavBarState extends State<BottomNavBar> {
                       ? dynamicPastel(
                           context, Theme.of(context).colorScheme.primary,
                           amount: 0.9)
-                      : null,
+                      : Theme.of(context).colorScheme.lightDarkAccent,
+                  surfaceTintColor: appStateSettings["materialYou"]
+                      ? null
+                      : Theme.of(context).colorScheme.lightDarkAccent,
                   indicatorColor: appStateSettings["materialYou"]
                       ? dynamicPastel(
                           context, Theme.of(context).colorScheme.primary,

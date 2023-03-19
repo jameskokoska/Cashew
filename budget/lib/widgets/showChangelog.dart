@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -7,6 +8,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Searching for categories, wallets, titles, budgets
+    Scaffold for page framework now has overlay
+    Color fixes for material you disabled
+    Added close button to bottom of changelog
+    View app intro and changelog moved below developers in About page
     Fixed width sizing for web with new sidebar for bottom sheet and max padding
     Added budget history grid for web
     Improved colors and sidebar for full screen web
@@ -410,6 +416,17 @@ end""";
         ));
       }
     }
+    changelogPoints.add(
+      Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: Button(
+          label: "Close",
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
 
     openBottomSheet(
       context,

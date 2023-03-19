@@ -239,178 +239,178 @@ class _AddWalletPageState extends State<AddWalletPage> {
             currentFocus.unfocus();
           }
         },
-        child: Stack(
-          children: [
-            PageFramework(
-              dragDownToDismiss: true,
-              title: widget.title,
-              navbar: false,
-              onBackButton: () async {
-                if (widget.wallet != null) {
-                  discardChangesPopup(
-                    context,
-                    previousObject: widget.wallet,
-                    currentObject: await createTransactionWallet(),
-                  );
-                } else {
-                  discardChangesPopup(context);
-                }
-              },
-              onDragDownToDissmiss: () async {
-                if (widget.wallet != null) {
-                  discardChangesPopup(
-                    context,
-                    previousObject: widget.wallet,
-                    currentObject: await createTransactionWallet(),
-                  );
-                } else {
-                  discardChangesPopup(context);
-                }
-              },
-              actions: [
-                widget.wallet != null && widget.wallet!.walletPk != 0
-                    ? IconButton(
-                        tooltip: "Delete wallet",
-                        onPressed: () {
-                          deleteWalletPopup(context, widget.wallet!,
-                              afterDelete: () {
-                            Navigator.pop(context);
-                          });
-                        },
-                        icon: Icon(Icons.delete_rounded),
-                      )
-                    : SizedBox.shrink()
-              ],
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextInput(
-                      labelText: "Name",
-                      bubbly: false,
-                      initialValue: selectedTitle,
-                      onChanged: (text) {
-                        setSelectedTitle(text);
-                      },
-                      padding: EdgeInsets.only(left: 7, right: 7),
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      topContentPadding: 20,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: 14),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 65,
-                    child: SelectColor(
-                      horizontalList: true,
-                      selectedColor: selectedColor,
-                      setSelectedColor: setSelectedColor,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: 15),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextFont(
-                      text: "Select Currency",
-                      textColor: Theme.of(context).colorScheme.textLight,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: 10),
-                ),
-                SliverToBoxAdapter(
-                  child: TextInput(
-                    labelText: "Search currencies...",
-                    icon: Icons.search_rounded,
-                    onChanged: (text) {
-                      searchCurrencies(text);
+        child: PageFramework(
+          resizeToAvoidBottomInset: true,
+          dragDownToDismiss: true,
+          title: widget.title,
+          navbar: false,
+          onBackButton: () async {
+            if (widget.wallet != null) {
+              discardChangesPopup(
+                context,
+                previousObject: widget.wallet,
+                currentObject: await createTransactionWallet(),
+              );
+            } else {
+              discardChangesPopup(context);
+            }
+          },
+          onDragDownToDissmiss: () async {
+            if (widget.wallet != null) {
+              discardChangesPopup(
+                context,
+                previousObject: widget.wallet,
+                currentObject: await createTransactionWallet(),
+              );
+            } else {
+              discardChangesPopup(context);
+            }
+          },
+          actions: [
+            widget.wallet != null && widget.wallet!.walletPk != 0
+                ? IconButton(
+                    tooltip: "Delete wallet",
+                    onPressed: () {
+                      deleteWalletPopup(context, widget.wallet!,
+                          afterDelete: () {
+                        Navigator.pop(context);
+                      });
                     },
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: 15),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      String key = currencies.keys.toList()[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            left: 18.0, right: 18, bottom: 5),
-                        child: Tappable(
-                          color: selectedCurrency == key
-                              ? Theme.of(context).colorScheme.secondaryContainer
-                              : Theme.of(context).colorScheme.lightDarkAccent,
-                          borderRadius: 13,
-                          onTap: () {
-                            setSelectedCurrency(key);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 17, vertical: 10),
-                            child: Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                IntrinsicWidth(
-                                  child: Row(
-                                    children: [
-                                      TextFont(
-                                          text: currencies[key]
-                                                  ?["CountryName"] ??
-                                              currencies[key]?["Currency"]),
-                                    ],
-                                  ),
-                                ),
-                                IntrinsicWidth(
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        currencies[key]["Symbol"],
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      TextFont(text: currencies[key]["Code"]),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: currencies.keys.length, //snapshot.data?.length
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 60)),
-                // SliverToBoxAdapter(
-                //   child: KeyboardHeightAreaAnimated(),
-                // ),
-              ],
+                    icon: Icon(Icons.delete_rounded),
+                  )
+                : SizedBox.shrink()
+          ],
+          overlay: Align(
+            alignment: Alignment.bottomCenter,
+            child: SaveBottomButton(
+              label: widget.wallet == null ? "Add Wallet" : "Save Changes",
+              onTap: () {
+                addWallet();
+              },
+              disabled: !(canAddWallet ?? false),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SaveBottomButton(
-                label: widget.wallet == null ? "Add Wallet" : "Save Changes",
-                onTap: () {
-                  addWallet();
-                },
-                disabled: !(canAddWallet ?? false),
+          ),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextInput(
+                  labelText: "Name",
+                  bubbly: false,
+                  initialValue: selectedTitle,
+                  onChanged: (text) {
+                    setSelectedTitle(text);
+                  },
+                  padding: EdgeInsets.only(left: 7, right: 7),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  topContentPadding: 20,
+                ),
               ),
             ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 14),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: 65,
+                child: SelectColor(
+                  horizontalList: true,
+                  selectedColor: selectedColor,
+                  setSelectedColor: setSelectedColor,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 15),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFont(
+                  text: "Select Currency",
+                  textColor: Theme.of(context).colorScheme.textLight,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 10),
+            ),
+            SliverToBoxAdapter(
+              child: TextInput(
+                labelText: "Search currencies...",
+                icon: Icons.search_rounded,
+                onChanged: (text) {
+                  searchCurrencies(text);
+                },
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 15),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  String key = currencies.keys.toList()[index];
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(left: 18.0, right: 18, bottom: 5),
+                    child: Tappable(
+                      color: selectedCurrency == key
+                          ? Theme.of(context).colorScheme.secondaryContainer
+                          : Theme.of(context).colorScheme.lightDarkAccent,
+                      borderRadius: 13,
+                      onTap: () {
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
+                        setSelectedCurrency(key);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 17, vertical: 10),
+                        child: Wrap(
+                          alignment: WrapAlignment.spaceBetween,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            IntrinsicWidth(
+                              child: Row(
+                                children: [
+                                  TextFont(
+                                      text: currencies[key]?["CountryName"] ??
+                                          currencies[key]?["Currency"]),
+                                ],
+                              ),
+                            ),
+                            IntrinsicWidth(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    currencies[key]["Symbol"],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  TextFont(text: currencies[key]["Code"]),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                childCount: currencies.keys.length, //snapshot.data?.length
+              ),
+            ),
+            SliverToBoxAdapter(child: SizedBox(height: 60)),
+            // SliverToBoxAdapter(
+            //   child: KeyboardHeightAreaAnimated(),
+            // ),
           ],
         ),
       ),

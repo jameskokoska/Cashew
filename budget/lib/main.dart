@@ -34,7 +34,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
 /*

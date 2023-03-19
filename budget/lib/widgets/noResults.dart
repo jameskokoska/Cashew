@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,9 +25,14 @@ class NoResults extends StatelessWidget {
                       : 270),
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  tintColor == null
-                      ? Theme.of(context).colorScheme.primary.withOpacity(0.6)
-                      : tintColor!.withOpacity(0.6),
+                  !appStateSettings["materialYou"]
+                      ? Theme.of(context).colorScheme.black.withOpacity(0.1)
+                      : tintColor == null
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.6)
+                          : tintColor!.withOpacity(0.6),
                   BlendMode.srcATop,
                 ),
                 child: ColorFiltered(

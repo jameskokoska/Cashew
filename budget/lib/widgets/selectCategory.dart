@@ -134,7 +134,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                           }
                         });
                       } else if (widget.setSelectedCategories != null) {
-                        print(selectedCategories);
+                        // print(selectedCategories);
                         if (selectedCategories.contains(category.categoryPk)) {
                           setState(() {
                             selectedCategories.remove(category.categoryPk);
@@ -256,8 +256,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                 ? (getWidthBottomSheet(context) - 20) / 4 - 50
                 : 45;
             // print(size);
-            print(snapshot.data);
-            print(size);
+            // print(snapshot.data);
+            // print(size);
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
               child: Column(
