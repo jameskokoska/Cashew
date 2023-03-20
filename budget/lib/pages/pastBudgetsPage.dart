@@ -396,31 +396,34 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 30),
-              child: Tappable(
-                color: budgetColorScheme.secondaryContainer,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: TextFont(
-                    text: "View More",
-                    textAlign: TextAlign.center,
-                    fontSize: 16,
-                    textColor: budgetColorScheme.onSecondaryContainer,
+              child: Opacity(
+                opacity: 0.5,
+                child: Tappable(
+                  color: budgetColorScheme.secondaryContainer,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    child: TextFont(
+                      text: "View More",
+                      textAlign: TextAlign.center,
+                      fontSize: 16,
+                      textColor: budgetColorScheme.onSecondaryContainer,
+                    ),
                   ),
+                  onTap: () {
+                    loadLines(amountLoaded + 3);
+                    setState(() {
+                      getWidthNavigationSidebar(context) <= 0
+                          ? amountLoaded += 3
+                          : amountLoaded += 5;
+                    });
+                    Future.delayed(Duration(milliseconds: 150), () {
+                      budgetHistoryKey.currentState!
+                          .scrollToBottom(duration: 4000);
+                    });
+                  },
+                  borderRadius: 10,
                 ),
-                onTap: () {
-                  loadLines(amountLoaded + 3);
-                  setState(() {
-                    getWidthNavigationSidebar(context) <= 0
-                        ? amountLoaded += 3
-                        : amountLoaded += 5;
-                  });
-                  Future.delayed(Duration(milliseconds: 150), () {
-                    budgetHistoryKey.currentState!
-                        .scrollToBottom(duration: 4000);
-                  });
-                },
-                borderRadius: 10,
               ),
             ),
           ),

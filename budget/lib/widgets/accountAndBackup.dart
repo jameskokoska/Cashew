@@ -8,6 +8,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
@@ -20,6 +21,7 @@ import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,10 +36,34 @@ import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 
+bool isSyncBackupFile(String? backupFileName) {
+  if (backupFileName == null) return false;
+  return backupFileName.contains("sync-");
+}
+
+bool isCurrentDeviceSyncBackupFile(String? backupFileName) {
+  if (backupFileName == null) return false;
+  return backupFileName == getCurrentDeviceSyncBackupFileName();
+}
+
+String getCurrentDeviceSyncBackupFileName({String? clientIDForSync}) {
+  if (clientIDForSync == null) clientIDForSync = clientID;
+  return "sync-" + clientIDForSync + ".sqlite";
+}
+
+String getDeviceFromSyncBackupFileName(String? backupFileName) {
+  if (backupFileName == null) return "";
+  return (backupFileName).replaceAll("sync-", "").split("-")[0];
+}
+
 Timer? syncTimeoutTimer;
-Future<bool> createSyncBackup() async {
+Future<bool> createSyncBackup({bool showLoading = false}) async {
+  if (appStateSettings["backupSync"] == false) return false;
+  print("Creating sync backup");
+  if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(true);
   if (syncTimeoutTimer?.isActive == true) {
     // openSnackbar(SnackbarMessage(title: "Please wait..."));
+    if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
     return false;
   } else {
     syncTimeoutTimer = Timer(Duration(milliseconds: 10000), () {
@@ -56,6 +82,7 @@ Future<bool> createSyncBackup() async {
     hasSignedIn = true;
   }
   if (hasSignedIn == false) {
+    if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
     return false;
   }
 
@@ -63,6 +90,7 @@ Future<bool> createSyncBackup() async {
   final authenticateClient = GoogleAuthClient(authHeaders);
   drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
   if (driveApi == null) {
+    if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
     throw "Failed to login to Google Drive";
   }
 
@@ -71,7 +99,7 @@ Future<bool> createSyncBackup() async {
   List<drive.File>? files = fileList.files;
 
   for (drive.File file in files ?? []) {
-    if (file.name == "sync-" + clientID + ".sqlite") {
+    if (isCurrentDeviceSyncBackupFile(file.name)) {
       try {
         await deleteBackup(driveApi, file.id ?? "");
       } catch (e) {
@@ -81,6 +109,7 @@ Future<bool> createSyncBackup() async {
   }
   await createBackup(null,
       silentBackup: true, deleteOldBackups: true, clientIDForSync: clientID);
+  if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
   return true;
 }
 
@@ -131,7 +160,7 @@ Future<bool> syncData() async {
 
   List<drive.File> filesToDownloadSyncChanges = [];
   for (drive.File file in files) {
-    if ((file.name ?? "").startsWith("sync-")) {
+    if (isSyncBackupFile(file.name)) {
       filesToDownloadSyncChanges.add(file);
     }
   }
@@ -141,7 +170,7 @@ Future<bool> syncData() async {
 
   for (drive.File file in filesToDownloadSyncChanges) {
     // we don't want to restore this clients backup
-    if ((file.name ?? "") == "sync-" + clientID + ".sqlite") continue;
+    if (isCurrentDeviceSyncBackupFile(file.name)) continue;
 
     String? fileId = file.id;
     if (fileId == null) continue;
@@ -151,7 +180,6 @@ Future<bool> syncData() async {
     dynamic response = await driveApi.files
         .get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
     await for (var data in response.stream) {
-      print(data.length);
       dataStore.insertAll(dataStore.length, data);
     }
 
@@ -182,7 +210,7 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified != newEntry.dateTimeModified)
-          database.createOrUpdateWallet(newEntry);
+          await database.createOrUpdateWallet(newEntry);
       }
 
       for (TransactionCategory newEntry
@@ -195,7 +223,7 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified != newEntry.dateTimeModified)
-          database.createOrUpdateCategory(newEntry);
+          await database.createOrUpdateCategory(newEntry);
       }
 
       for (Budget newEntry
@@ -208,7 +236,8 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified != newEntry.dateTimeModified)
-          database.createOrUpdateBudget(newEntry, updateSharedEntry: false);
+          await database.createOrUpdateBudget(newEntry,
+              updateSharedEntry: false);
       }
 
       for (CategoryBudgetLimit newEntry
@@ -222,17 +251,12 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified != newEntry.dateTimeModified)
-          database.createOrUpdateCategoryLimit(newEntry);
+          await database.createOrUpdateCategoryLimit(newEntry);
       }
 
-      List<Transaction> transactionsNew =
-          (await databaseSync.getAllNewTransactions(lastSynced));
-      inspect(transactionsNew);
-      for (Transaction newEntry in transactionsNew) {
-        print(transactionsNew.length);
-        print(lastSynced);
-        print("CREATING NEW TRANSACTION");
-        print(newEntry.name);
+      List<Transaction> transactionsToUpdate = [];
+      for (Transaction newEntry
+          in await databaseSync.getAllNewTransactions(lastSynced)) {
         Transaction? current;
         try {
           current = await database.getTransactionFromPk(newEntry.transactionPk);
@@ -241,10 +265,11 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified != newEntry.dateTimeModified)
-          database.createOrUpdateTransaction(newEntry,
-              updateSharedEntry: false);
+          transactionsToUpdate.add(newEntry);
       }
+      await database.createOrUpdateBatchTransactionsOnly(transactionsToUpdate);
 
+      List<TransactionAssociatedTitle> titlesToUpdate = [];
       for (TransactionAssociatedTitle newEntry
           in (await databaseSync.getAllNewAssociatedTitles(lastSynced))) {
         TransactionAssociatedTitle? current;
@@ -256,8 +281,9 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified != newEntry.dateTimeModified)
-          database.createOrUpdateAssociatedTitle(newEntry);
+          titlesToUpdate.add(newEntry);
       }
+      await database.createOrUpdateBatchAssociatedTitlesOnly(titlesToUpdate);
 
       for (ScannerTemplate newEntry
           in (await databaseSync.getAllNewScannerTemplates(lastSynced))) {
@@ -270,7 +296,12 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified != newEntry.dateTimeModified)
-          database.createOrUpdateScannerTemplate(newEntry);
+          await database.createOrUpdateScannerTemplate(newEntry);
+      }
+
+      // check for wallet mismatch, since settings are not synced
+      if (checkPrimaryWallet() == false) {
+        setPrimaryWallet((await database.getAllWallets())[0]);
       }
     } catch (e) {
       print("SYNC FAILED");
@@ -510,6 +541,7 @@ Future<void> createBackup(
     } else {
       final dbFolder = await getApplicationDocumentsDirectory();
       final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
+      print("FILE SIZE:" + (dbFile.lengthSync() / 1e+6).toString());
       // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
       //     text: 'Database');
       // await file.readAsBytes();
@@ -527,7 +559,8 @@ Future<void> createBackup(
         DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
     driveFile.name = "db-v$schemaVersionGlobal-$timestamp.sqlite";
     if (clientIDForSync != null)
-      driveFile.name = "sync-" + clientIDForSync + ".sqlite";
+      driveFile.name =
+          getCurrentDeviceSyncBackupFileName(clientIDForSync: clientIDForSync);
     driveFile.modifiedTime = DateTime.now().toUtc();
     driveFile.parents = ["appDataFolder"];
 
@@ -584,10 +617,9 @@ Future<void> deleteRecentBackups(context, amountToKeep,
       // subtract 1 because we just made a backup
       if (index >= amountToKeep - 1) {
         // only delete excess backups that don't belong to a client sync
-        if (!(file.name ?? "").contains("sync-"))
-          deleteBackup(driveApi, file.id ?? "");
+        if (!isSyncBackupFile(file.name)) deleteBackup(driveApi, file.id ?? "");
       }
-      index++;
+      if (!isSyncBackupFile(file.name)) index++;
     });
     if (silentDelete == false || silentDelete == null) {
       loadingIndeterminateKey.currentState!.setVisibility(false);
@@ -737,6 +769,9 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
         if (appStateSettings["username"] == "" && user != null) {
           updateSettings("username", user!.displayName,
               pagesNeedingRefresh: [0]);
+          await syncData();
+          await syncPendingQueueOnServer();
+          await getCloudBudgets();
         }
       } catch (e) {}
       loadingIndeterminateKey.currentState!.setVisibility(false);
@@ -854,6 +889,19 @@ class _BackupManagementState extends State<BackupManagement> {
                     description: "Backup data when opened",
                     icon: Icons.backup_rounded,
                   ),
+                )
+              : SizedBox.shrink(),
+          widget.isManaging
+              ? SettingsContainerSwitch(
+                  onSwitched: (value) {
+                    updateSettings("backupSync", value,
+                        pagesNeedingRefresh: [], updateGlobalState: false);
+                  },
+                  initialValue: appStateSettings["backupSync"],
+                  title: "Client Sync",
+                  description:
+                      "Create sync backups to be used between different devices",
+                  icon: Icons.cloud_sync_rounded,
                 )
               : SizedBox.shrink(),
           widget.isManaging
@@ -1024,12 +1072,10 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 TextFont(
-                                                  text: ((file.value.name ?? "")
-                                                          .contains("sync-")
-                                                      ? (file.value.name ?? "")
-                                                              .replaceAll(
-                                                                  "sync-", "")
-                                                              .split("-")[0] +
+                                                  text: (isSyncBackupFile(
+                                                          file.value.name)
+                                                      ? getDeviceFromSyncBackupFileName(
+                                                              file.value.name) +
                                                           " " +
                                                           "sync"
                                                       : file.value.name ??
@@ -1037,8 +1083,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   fontSize: 14,
                                                   maxLines: 2,
                                                 ),
-                                                (file.value.name ?? "")
-                                                        .contains("sync-")
+                                                isSyncBackupFile(
+                                                        file.value.name)
                                                     ? Padding(
                                                         padding:
                                                             const EdgeInsets

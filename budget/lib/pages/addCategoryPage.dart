@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -257,8 +258,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             alignment: Alignment.bottomCenter,
             child: SaveBottomButton(
               label: widget.category == null ? "Add Category" : "Save Changes",
-              onTap: () {
-                addCategory();
+              onTap: () async {
+                await addCategory();
+                createSyncBackup(showLoading: true);
               },
               disabled: !(canAddCategory ?? false),
             ),

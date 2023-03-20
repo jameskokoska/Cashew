@@ -6,6 +6,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -682,8 +683,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             alignment: Alignment.bottomCenter,
             child: SaveBottomButton(
               label: widget.budget == null ? "Add Budget" : "Save Changes",
-              onTap: () {
-                addBudget();
+              onTap: () async {
+                await addBudget();
+                createSyncBackup(showLoading: true);
               },
               disabled: !(canAddBudget ?? false),
             ),

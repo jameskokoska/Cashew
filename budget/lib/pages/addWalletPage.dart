@@ -3,6 +3,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -270,8 +271,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
             alignment: Alignment.bottomCenter,
             child: SaveBottomButton(
               label: widget.wallet == null ? "Add Wallet" : "Save Changes",
-              onTap: () {
-                addWallet();
+              onTap: () async {
+                await addWallet();
+                createSyncBackup(showLoading: true);
               },
               disabled: !(canAddWallet ?? false),
             ),

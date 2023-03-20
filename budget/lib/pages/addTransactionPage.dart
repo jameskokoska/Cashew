@@ -5,6 +5,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -513,6 +514,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     setSelectedAmount: setSelectedAmount,
                     next: () async {
                       await addTransaction();
+                      createSyncBackup(showLoading: true);
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
@@ -686,6 +688,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       setSelectedAmount: setSelectedAmount,
                                       next: () async {
                                         await addTransaction();
+                                        createSyncBackup(showLoading: true);
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
@@ -722,6 +725,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 setSelectedAmount: setSelectedAmount,
                                 next: () async {
                                   await addTransaction();
+                                  createSyncBackup(showLoading: true);
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 },
@@ -737,6 +741,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             : textAddTransaction ?? "",
                         onTap: () async {
                           bool result = await addTransaction();
+                          if (result) createSyncBackup(showLoading: true);
                           if (result) Navigator.of(context).pop();
                         },
                       ),
@@ -899,6 +904,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         );
                                       } else {
                                         await addTransaction();
+                                        createSyncBackup(showLoading: true);
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                       }

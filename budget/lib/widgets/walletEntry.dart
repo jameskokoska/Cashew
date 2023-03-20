@@ -1,4 +1,3 @@
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -150,12 +149,7 @@ class _WalletEntryState extends State<WalletEntry>
               if (widget.selected) {
                 openContainer();
               } else {
-                updateSettings("selectedWallet", widget.wallet.walletPk,
-                    pagesNeedingRefresh: [0, 1, 2]);
-                TransactionWallet defaultWallet =
-                    await database.getWalletInstance(widget.wallet.walletPk);
-                updateSettings("selectedWalletCurrency", defaultWallet.currency,
-                    updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+                setPrimaryWallet(widget.wallet);
               }
             },
             onLongPress: () {
@@ -167,4 +161,22 @@ class _WalletEntryState extends State<WalletEntry>
       ),
     );
   }
+}
+
+setPrimaryWallet(TransactionWallet wallet) async {
+  updateSettings("selectedWallet", wallet.walletPk,
+      pagesNeedingRefresh: [0, 1, 2]);
+  TransactionWallet defaultWallet =
+      await database.getWalletInstance(wallet.walletPk);
+  updateSettings("selectedWalletCurrency", defaultWallet.currency,
+      updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+}
+
+Future<bool> checkPrimaryWallet() async {
+  TransactionWallet primaryWallet =
+      await database.getWalletInstance(appStateSettings["selectedWallet"]);
+  if (primaryWallet.currency == appStateSettings["selectedWalletCurrency"]) {
+    return true;
+  }
+  return false;
 }

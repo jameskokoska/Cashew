@@ -1450,6 +1450,16 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  // This doesn't handle order of titles!
+  Future<bool> createOrUpdateBatchAssociatedTitlesOnly(
+      List<TransactionAssociatedTitle> associatedTitlesInserting) async {
+    await batch((batch) {
+      batch.insertAll(associatedTitles, associatedTitlesInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
   // create or update a category
   Future<int> createOrUpdateCategory(TransactionCategory category,
       {bool updateSharedEntry = true}) async {

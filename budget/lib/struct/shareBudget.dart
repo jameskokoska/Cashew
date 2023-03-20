@@ -703,6 +703,7 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
   }
 
   _refreshBudgets() async {
+    print(appStateSettings["currentUserEmail"]);
     if (appStateSettings["currentUserEmail"] != "") {
       loadingIndeterminateKey.currentState!.setVisibility(true);
       await syncData();

@@ -103,11 +103,11 @@ class _AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
                 SizedBox(height: 25),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 18.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Row(
+                    children: [
+                      Expanded(
                         child: Container(
                           decoration: BoxDecoration(
                               boxShadow:
@@ -156,11 +156,8 @@ class _AccountsPageState extends State<AccountsPage> {
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 15),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 18.0),
+                      SizedBox(width: 15),
+                      Expanded(
                         child: Container(
                           decoration: BoxDecoration(
                               boxShadow:
@@ -192,42 +189,80 @@ class _AccountsPageState extends State<AccountsPage> {
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(height: 15),
                 Padding(
-                  padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                        boxShadow: boxShadowCheck(boxShadowGeneral(context))),
-                    child: Tappable(
-                      onTap: widget.manageData,
-                      borderRadius: 15,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .lightDarkAccentHeavyLight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 30),
-                          Icon(
-                            Icons.folder_rounded,
-                            size: 35,
-                            color: Theme.of(context).colorScheme.secondary,
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              boxShadow:
+                                  boxShadowCheck(boxShadowGeneral(context))),
+                          child: Tappable(
+                            onTap: widget.manageData,
+                            borderRadius: 15,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavyLight,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 30),
+                                Icon(
+                                  Icons.cloud_sync_rounded,
+                                  size: 35,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                SizedBox(height: 10),
+                                TextFont(
+                                  text: "Sync",
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                SizedBox(height: 30),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: 10),
-                          TextFont(
-                            text: "Manage",
-                            fontSize: 21,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          SizedBox(width: 30),
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(width: 18),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              boxShadow:
+                                  boxShadowCheck(boxShadowGeneral(context))),
+                          child: Tappable(
+                            onTap: widget.manageData,
+                            borderRadius: 15,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .lightDarkAccentHeavyLight,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 30),
+                                Icon(
+                                  Icons.folder_rounded,
+                                  size: 35,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                SizedBox(height: 10),
+                                TextFont(
+                                  text: "Backups",
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                SizedBox(height: 30),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 75),

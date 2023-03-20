@@ -6,6 +6,7 @@ Map<String, dynamic> defaultPreferences() {
   return {
     "databaseJustImported": false,
     "backupLimit": 10,
+    "backupSync": true,
     "theme": "system",
     "selectedWallet": 0,
     "selectedWalletCurrency": "usd",

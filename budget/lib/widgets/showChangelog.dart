@@ -8,6 +8,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed dropdown selector not having default value, chooses first entry
+    Client sync setting
+    Client syncs when changes are made 
+    Fixed default wallet when importing client sync changes
+    Cleaned up client sync backup detection code
+    Client sync import fixes
     Decluttered unused imports
     Read changes past modified time
     Client specific backup read and write 

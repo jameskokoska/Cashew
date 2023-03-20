@@ -188,7 +188,7 @@ class SettingsContainerDropdown extends StatelessWidget {
         padding: const EdgeInsets.only(left: 10),
         child: DropdownSelect(
           compact: true,
-          initial: initial,
+          initial: items.contains(initial) == false ? items[0] : initial,
           items: items,
           onChanged: onChanged,
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
