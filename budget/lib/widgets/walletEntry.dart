@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -10,7 +9,6 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/colors.dart';
 

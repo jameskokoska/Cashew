@@ -1,18 +1,13 @@
 import 'package:budget/colors.dart';
-import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/colorPicker.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:system_theme/system_theme.dart';
-import 'package:budget/widgets/scrollbarWrap.dart';
 
 class SelectColor extends StatefulWidget {
   SelectColor({

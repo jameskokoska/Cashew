@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Decluttered unused imports
+    Read changes past modified time
+    Client specific backup read and write 
+    Each client backup to Google Drive
+    Started cross client sync feature
     Searching for categories, wallets, titles, budgets
     Scaffold for page framework now has overlay
     Color fixes for material you disabled

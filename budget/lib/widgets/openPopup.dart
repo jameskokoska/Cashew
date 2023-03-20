@@ -1,9 +1,7 @@
-import 'dart:convert';
-
-import 'package:animations/animations.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -344,6 +342,7 @@ void discardChangesPopup(context,
     {previousObject, currentObject, Function? onDiscard}) async {
   print(previousObject);
   print(currentObject);
+  previousObject = previousObject.copyWith(dateTimeModified: Value(null));
   if (previousObject == currentObject &&
       previousObject != null &&
       currentObject != null) {

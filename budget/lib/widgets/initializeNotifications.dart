@@ -1,14 +1,7 @@
-import 'package:budget/database/tables.dart';
-import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/popupFramework.dart';
-import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

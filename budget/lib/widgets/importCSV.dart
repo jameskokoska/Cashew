@@ -1,47 +1,22 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:budget/colors.dart';
-import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/moreIcons.dart';
-import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:drift/drift.dart' hide Column hide Table;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
-import 'package:share_plus/share_plus.dart';
-import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:googleapis/gmail/v1.dart' as gMail;
-import 'package:google_sign_in/google_sign_in.dart' as signIn;
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:universal_html/html.dart' as html;
-import 'dart:math' as math;
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ImportCSV extends StatefulWidget {
   const ImportCSV({Key? key}) : super(key: key);
@@ -420,6 +395,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           categoryPk: DateTime.now().millisecondsSinceEpoch,
           name: row[assignedColumns["category"]!["setHeaderIndex"]],
           dateCreated: DateTime.now(),
+          dateTimeModified: null,
           order: numberOfCategories,
           income: amount > 0,
           iconName: "image.png",
@@ -474,6 +450,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         categoryFk: categoryFk,
         walletFk: walletFk,
         dateCreated: dateCreated,
+        dateTimeModified: null,
         income: income,
         paid: true,
         skipPaid: false,

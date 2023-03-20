@@ -1,10 +1,8 @@
-import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -18,13 +16,10 @@ import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:drift/drift.dart' hide Column;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import '../colors.dart';
-import 'package:intl/intl.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 
 ValueNotifier<Map<String, List<int>>> globalSelectedID =

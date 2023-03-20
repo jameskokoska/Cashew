@@ -1,13 +1,10 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
-import 'package:flutter/foundation.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
-import 'dart:io' show Platform;
 
 bool getIsFullScreen(context) {
   double maxWidth = 700;

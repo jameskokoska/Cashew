@@ -47,6 +47,14 @@ class $WalletsTable extends Wallets
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       clientDefault: () => new DateTime.now());
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
   late final GeneratedColumn<int> order = GeneratedColumn<int>(
@@ -59,8 +67,16 @@ class $WalletsTable extends Wallets
       'currency', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns =>
-      [walletPk, name, colour, iconName, dateCreated, order, currency];
+  List<GeneratedColumn> get $columns => [
+        walletPk,
+        name,
+        colour,
+        iconName,
+        dateCreated,
+        dateTimeModified,
+        order,
+        currency
+      ];
   @override
   String get aliasedName => _alias ?? 'wallets';
   @override
@@ -94,6 +110,12 @@ class $WalletsTable extends Wallets
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
     }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
     if (data.containsKey('order')) {
       context.handle(
           _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
@@ -123,6 +145,8 @@ class $WalletsTable extends Wallets
           .read(DriftSqlType.string, data['${effectivePrefix}icon_name']),
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       order: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       currency: attachedDatabase.typeMapping
@@ -143,6 +167,7 @@ class TransactionWallet extends DataClass
   final String? colour;
   final String? iconName;
   final DateTime dateCreated;
+  final DateTime? dateTimeModified;
   final int order;
   final String? currency;
   const TransactionWallet(
@@ -151,6 +176,7 @@ class TransactionWallet extends DataClass
       this.colour,
       this.iconName,
       required this.dateCreated,
+      this.dateTimeModified,
       required this.order,
       this.currency});
   @override
@@ -165,6 +191,9 @@ class TransactionWallet extends DataClass
       map['icon_name'] = Variable<String>(iconName);
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
     map['order'] = Variable<int>(order);
     if (!nullToAbsent || currency != null) {
       map['currency'] = Variable<String>(currency);
@@ -182,6 +211,9 @@ class TransactionWallet extends DataClass
           ? const Value.absent()
           : Value(iconName),
       dateCreated: Value(dateCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
       order: Value(order),
       currency: currency == null && nullToAbsent
           ? const Value.absent()
@@ -198,6 +230,8 @@ class TransactionWallet extends DataClass
       colour: serializer.fromJson<String?>(json['colour']),
       iconName: serializer.fromJson<String?>(json['iconName']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
       order: serializer.fromJson<int>(json['order']),
       currency: serializer.fromJson<String?>(json['currency']),
     );
@@ -211,6 +245,7 @@ class TransactionWallet extends DataClass
       'colour': serializer.toJson<String?>(colour),
       'iconName': serializer.toJson<String?>(iconName),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
       'currency': serializer.toJson<String?>(currency),
     };
@@ -222,6 +257,7 @@ class TransactionWallet extends DataClass
           Value<String?> colour = const Value.absent(),
           Value<String?> iconName = const Value.absent(),
           DateTime? dateCreated,
+          Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           Value<String?> currency = const Value.absent()}) =>
       TransactionWallet(
@@ -230,6 +266,9 @@ class TransactionWallet extends DataClass
         colour: colour.present ? colour.value : this.colour,
         iconName: iconName.present ? iconName.value : this.iconName,
         dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
         order: order ?? this.order,
         currency: currency.present ? currency.value : this.currency,
       );
@@ -241,6 +280,7 @@ class TransactionWallet extends DataClass
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('currency: $currency')
           ..write(')'))
@@ -248,8 +288,8 @@ class TransactionWallet extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(
-      walletPk, name, colour, iconName, dateCreated, order, currency);
+  int get hashCode => Object.hash(walletPk, name, colour, iconName, dateCreated,
+      dateTimeModified, order, currency);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -259,6 +299,7 @@ class TransactionWallet extends DataClass
           other.colour == this.colour &&
           other.iconName == this.iconName &&
           other.dateCreated == this.dateCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
           other.currency == this.currency);
 }
@@ -269,6 +310,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
   final Value<String?> colour;
   final Value<String?> iconName;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeModified;
   final Value<int> order;
   final Value<String?> currency;
   const WalletsCompanion({
@@ -277,6 +319,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.colour = const Value.absent(),
     this.iconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
     this.currency = const Value.absent(),
   });
@@ -286,6 +329,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.colour = const Value.absent(),
     this.iconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     required int order,
     this.currency = const Value.absent(),
   })  : name = Value(name),
@@ -296,6 +340,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     Expression<String>? colour,
     Expression<String>? iconName,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
     Expression<String>? currency,
   }) {
@@ -305,6 +350,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       if (colour != null) 'colour': colour,
       if (iconName != null) 'icon_name': iconName,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
       if (currency != null) 'currency': currency,
     });
@@ -316,6 +362,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       Value<String?>? colour,
       Value<String?>? iconName,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeModified,
       Value<int>? order,
       Value<String?>? currency}) {
     return WalletsCompanion(
@@ -324,6 +371,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       colour: colour ?? this.colour,
       iconName: iconName ?? this.iconName,
       dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
       currency: currency ?? this.currency,
     );
@@ -347,6 +395,9 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
     }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
     if (order.present) {
       map['order'] = Variable<int>(order.value);
     }
@@ -364,6 +415,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('currency: $currency')
           ..write(')'))
@@ -415,6 +467,14 @@ class $CategoriesTable extends Categories
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       clientDefault: () => new DateTime.now());
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
   late final GeneratedColumn<int> order = GeneratedColumn<int>(
@@ -476,6 +536,7 @@ class $CategoriesTable extends Categories
         colour,
         iconName,
         dateCreated,
+        dateTimeModified,
         order,
         income,
         methodAdded,
@@ -520,6 +581,12 @@ class $CategoriesTable extends Categories
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
     }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
     if (data.containsKey('order')) {
       context.handle(
           _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
@@ -562,6 +629,8 @@ class $CategoriesTable extends Categories
           .read(DriftSqlType.string, data['${effectivePrefix}icon_name']),
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       order: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       income: attachedDatabase.typeMapping
@@ -610,6 +679,7 @@ class TransactionCategory extends DataClass
   final String? colour;
   final String? iconName;
   final DateTime dateCreated;
+  final DateTime? dateTimeModified;
   final int order;
   final bool income;
   final MethodAdded? methodAdded;
@@ -623,6 +693,7 @@ class TransactionCategory extends DataClass
       this.colour,
       this.iconName,
       required this.dateCreated,
+      this.dateTimeModified,
       required this.order,
       required this.income,
       this.methodAdded,
@@ -642,6 +713,9 @@ class TransactionCategory extends DataClass
       map['icon_name'] = Variable<String>(iconName);
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
     map['order'] = Variable<int>(order);
     map['income'] = Variable<bool>(income);
     if (!nullToAbsent || methodAdded != null) {
@@ -676,6 +750,9 @@ class TransactionCategory extends DataClass
           ? const Value.absent()
           : Value(iconName),
       dateCreated: Value(dateCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
       order: Value(order),
       income: Value(income),
       methodAdded: methodAdded == null && nullToAbsent
@@ -705,6 +782,8 @@ class TransactionCategory extends DataClass
       colour: serializer.fromJson<String?>(json['colour']),
       iconName: serializer.fromJson<String?>(json['iconName']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
       order: serializer.fromJson<int>(json['order']),
       income: serializer.fromJson<bool>(json['income']),
       methodAdded: $CategoriesTable.$convertermethodAddedn
@@ -726,6 +805,7 @@ class TransactionCategory extends DataClass
       'colour': serializer.toJson<String?>(colour),
       'iconName': serializer.toJson<String?>(iconName),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
       'income': serializer.toJson<bool>(income),
       'methodAdded': serializer.toJson<int?>(
@@ -745,6 +825,7 @@ class TransactionCategory extends DataClass
           Value<String?> colour = const Value.absent(),
           Value<String?> iconName = const Value.absent(),
           DateTime? dateCreated,
+          Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           bool? income,
           Value<MethodAdded?> methodAdded = const Value.absent(),
@@ -758,6 +839,9 @@ class TransactionCategory extends DataClass
         colour: colour.present ? colour.value : this.colour,
         iconName: iconName.present ? iconName.value : this.iconName,
         dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
         order: order ?? this.order,
         income: income ?? this.income,
         methodAdded: methodAdded.present ? methodAdded.value : this.methodAdded,
@@ -779,6 +863,7 @@ class TransactionCategory extends DataClass
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
           ..write('methodAdded: $methodAdded, ')
@@ -797,6 +882,7 @@ class TransactionCategory extends DataClass
       colour,
       iconName,
       dateCreated,
+      dateTimeModified,
       order,
       income,
       methodAdded,
@@ -813,6 +899,7 @@ class TransactionCategory extends DataClass
           other.colour == this.colour &&
           other.iconName == this.iconName &&
           other.dateCreated == this.dateCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
           other.income == this.income &&
           other.methodAdded == this.methodAdded &&
@@ -828,6 +915,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<String?> colour;
   final Value<String?> iconName;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeModified;
   final Value<int> order;
   final Value<bool> income;
   final Value<MethodAdded?> methodAdded;
@@ -841,6 +929,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.colour = const Value.absent(),
     this.iconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
@@ -855,6 +944,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.colour = const Value.absent(),
     this.iconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     required int order,
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
@@ -870,6 +960,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<String>? colour,
     Expression<String>? iconName,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
     Expression<bool>? income,
     Expression<int>? methodAdded,
@@ -884,6 +975,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (colour != null) 'colour': colour,
       if (iconName != null) 'icon_name': iconName,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
       if (income != null) 'income': income,
       if (methodAdded != null) 'method_added': methodAdded,
@@ -900,6 +992,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<String?>? colour,
       Value<String?>? iconName,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeModified,
       Value<int>? order,
       Value<bool>? income,
       Value<MethodAdded?>? methodAdded,
@@ -913,6 +1006,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       colour: colour ?? this.colour,
       iconName: iconName ?? this.iconName,
       dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
       income: income ?? this.income,
       methodAdded: methodAdded ?? this.methodAdded,
@@ -940,6 +1034,9 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
     }
     if (order.present) {
       map['order'] = Variable<int>(order.value);
@@ -978,6 +1075,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
           ..write('methodAdded: $methodAdded, ')
@@ -1065,7 +1163,15 @@ class $TransactionsTable extends Transactions
       GeneratedColumn<DateTime>('date_time_created', aliasedName, true,
           type: DriftSqlType.dateTime,
           requiredDuringInsert: false,
-          clientDefault: () => new DateTime.now());
+          defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _incomeMeta = const VerificationMeta('income');
   @override
   late final GeneratedColumn<bool> income =
@@ -1218,6 +1324,7 @@ class $TransactionsTable extends Transactions
         labelFks,
         dateCreated,
         dateTimeCreated,
+        dateTimeModified,
         income,
         periodLength,
         reoccurrence,
@@ -1294,6 +1401,12 @@ class $TransactionsTable extends Transactions
           _dateTimeCreatedMeta,
           dateTimeCreated.isAcceptableOrUnknown(
               data['date_time_created']!, _dateTimeCreatedMeta));
+    }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
     }
     if (data.containsKey('income')) {
       context.handle(_incomeMeta,
@@ -1395,6 +1508,8 @@ class $TransactionsTable extends Transactions
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       dateTimeCreated: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_time_created']),
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       income: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}income'])!,
       periodLength: attachedDatabase.typeMapping
@@ -1479,6 +1594,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final List<int>? labelFks;
   final DateTime dateCreated;
   final DateTime? dateTimeCreated;
+  final DateTime? dateTimeModified;
   final bool income;
   final int? periodLength;
   final BudgetReoccurence? reoccurrence;
@@ -1505,6 +1621,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.labelFks,
       required this.dateCreated,
       this.dateTimeCreated,
+      this.dateTimeModified,
       required this.income,
       this.periodLength,
       this.reoccurrence,
@@ -1537,6 +1654,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeCreated != null) {
       map['date_time_created'] = Variable<DateTime>(dateTimeCreated);
+    }
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
     }
     map['income'] = Variable<bool>(income);
     if (!nullToAbsent || periodLength != null) {
@@ -1606,6 +1726,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       dateTimeCreated: dateTimeCreated == null && nullToAbsent
           ? const Value.absent()
           : Value(dateTimeCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
       income: Value(income),
       periodLength: periodLength == null && nullToAbsent
           ? const Value.absent()
@@ -1665,6 +1788,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       labelFks: serializer.fromJson<List<int>?>(json['labelFks']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeCreated: serializer.fromJson<DateTime?>(json['dateTimeCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
       income: serializer.fromJson<bool>(json['income']),
       periodLength: serializer.fromJson<int?>(json['periodLength']),
       reoccurrence: $TransactionsTable.$converterreoccurrencen
@@ -1706,6 +1831,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'labelFks': serializer.toJson<List<int>?>(labelFks),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeCreated': serializer.toJson<DateTime?>(dateTimeCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'income': serializer.toJson<bool>(income),
       'periodLength': serializer.toJson<int?>(periodLength),
       'reoccurrence': serializer.toJson<int?>(
@@ -1744,6 +1870,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Value<List<int>?> labelFks = const Value.absent(),
           DateTime? dateCreated,
           Value<DateTime?> dateTimeCreated = const Value.absent(),
+          Value<DateTime?> dateTimeModified = const Value.absent(),
           bool? income,
           Value<int?> periodLength = const Value.absent(),
           Value<BudgetReoccurence?> reoccurrence = const Value.absent(),
@@ -1772,6 +1899,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         dateTimeCreated: dateTimeCreated.present
             ? dateTimeCreated.value
             : this.dateTimeCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
         income: income ?? this.income,
         periodLength:
             periodLength.present ? periodLength.value : this.periodLength,
@@ -1817,6 +1947,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeCreated: $dateTimeCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -1851,6 +1982,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         labelFks,
         dateCreated,
         dateTimeCreated,
+        dateTimeModified,
         income,
         periodLength,
         reoccurrence,
@@ -1881,6 +2013,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.labelFks == this.labelFks &&
           other.dateCreated == this.dateCreated &&
           other.dateTimeCreated == this.dateTimeCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
           other.income == this.income &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
@@ -1912,6 +2045,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<List<int>?> labelFks;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeCreated;
+  final Value<DateTime?> dateTimeModified;
   final Value<bool> income;
   final Value<int?> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
@@ -1938,6 +2072,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -1965,6 +2100,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -1996,6 +2132,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<String>? labelFks,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeCreated,
+    Expression<DateTime>? dateTimeModified,
     Expression<bool>? income,
     Expression<int>? periodLength,
     Expression<int>? reoccurrence,
@@ -2023,6 +2160,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (labelFks != null) 'label_fks': labelFks,
       if (dateCreated != null) 'date_created': dateCreated,
       if (dateTimeCreated != null) 'date_time_created': dateTimeCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (income != null) 'income': income,
       if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
@@ -2057,6 +2195,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<List<int>?>? labelFks,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeCreated,
+      Value<DateTime?>? dateTimeModified,
       Value<bool>? income,
       Value<int?>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
@@ -2083,6 +2222,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       labelFks: labelFks ?? this.labelFks,
       dateCreated: dateCreated ?? this.dateCreated,
       dateTimeCreated: dateTimeCreated ?? this.dateTimeCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       income: income ?? this.income,
       periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
@@ -2137,6 +2277,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (dateTimeCreated.present) {
       map['date_time_created'] = Variable<DateTime>(dateTimeCreated.value);
+    }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
     }
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
@@ -2210,6 +2353,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeCreated: $dateTimeCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -2334,6 +2478,14 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       clientDefault: () => new DateTime.now());
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _pinnedMeta = const VerificationMeta('pinned');
   @override
   late final GeneratedColumn<bool> pinned =
@@ -2445,6 +2597,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         periodLength,
         reoccurrence,
         dateCreated,
+        dateTimeModified,
         pinned,
         order,
         walletFk,
@@ -2528,6 +2681,12 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
     }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
     if (data.containsKey('pinned')) {
       context.handle(_pinnedMeta,
           pinned.isAcceptableOrUnknown(data['pinned']!, _pinnedMeta));
@@ -2600,6 +2759,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
               .read(DriftSqlType.int, data['${effectivePrefix}reoccurrence'])),
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       pinned: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}pinned'])!,
       order: attachedDatabase.typeMapping
@@ -2692,6 +2853,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final int periodLength;
   final BudgetReoccurence? reoccurrence;
   final DateTime dateCreated;
+  final DateTime? dateTimeModified;
   final bool pinned;
   final int order;
   final int walletFk;
@@ -2716,6 +2878,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.periodLength,
       this.reoccurrence,
       required this.dateCreated,
+      this.dateTimeModified,
       required this.pinned,
       required this.order,
       required this.walletFk,
@@ -2750,6 +2913,9 @@ class Budget extends DataClass implements Insertable<Budget> {
       map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence));
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
     map['pinned'] = Variable<bool>(pinned);
     map['order'] = Variable<int>(order);
     map['wallet_fk'] = Variable<int>(walletFk);
@@ -2810,6 +2976,9 @@ class Budget extends DataClass implements Insertable<Budget> {
           ? const Value.absent()
           : Value(reoccurrence),
       dateCreated: Value(dateCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
       pinned: Value(pinned),
       order: Value(order),
       walletFk: Value(walletFk),
@@ -2856,6 +3025,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       reoccurrence: $BudgetsTable.$converterreoccurrencen
           .fromJson(serializer.fromJson<int?>(json['reoccurrence'])),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
       pinned: serializer.fromJson<bool>(json['pinned']),
       order: serializer.fromJson<int>(json['order']),
       walletFk: serializer.fromJson<int>(json['walletFk']),
@@ -2893,6 +3064,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       'reoccurrence': serializer.toJson<int?>(
           $BudgetsTable.$converterreoccurrencen.toJson(reoccurrence)),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'pinned': serializer.toJson<bool>(pinned),
       'order': serializer.toJson<int>(order),
       'walletFk': serializer.toJson<int>(walletFk),
@@ -2926,6 +3098,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           int? periodLength,
           Value<BudgetReoccurence?> reoccurrence = const Value.absent(),
           DateTime? dateCreated,
+          Value<DateTime?> dateTimeModified = const Value.absent(),
           bool? pinned,
           int? order,
           int? walletFk,
@@ -2953,6 +3126,9 @@ class Budget extends DataClass implements Insertable<Budget> {
         reoccurrence:
             reoccurrence.present ? reoccurrence.value : this.reoccurrence,
         dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
         pinned: pinned ?? this.pinned,
         order: order ?? this.order,
         walletFk: walletFk ?? this.walletFk,
@@ -2992,6 +3168,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('pinned: $pinned, ')
           ..write('order: $order, ')
           ..write('walletFk: $walletFk, ')
@@ -3021,6 +3198,7 @@ class Budget extends DataClass implements Insertable<Budget> {
         periodLength,
         reoccurrence,
         dateCreated,
+        dateTimeModified,
         pinned,
         order,
         walletFk,
@@ -3049,6 +3227,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
           other.dateCreated == this.dateCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
           other.pinned == this.pinned &&
           other.order == this.order &&
           other.walletFk == this.walletFk &&
@@ -3075,6 +3254,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<int> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeModified;
   final Value<bool> pinned;
   final Value<int> order;
   final Value<int> walletFk;
@@ -3099,6 +3279,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.pinned = const Value.absent(),
     this.order = const Value.absent(),
     this.walletFk = const Value.absent(),
@@ -3124,6 +3305,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     required int periodLength,
     this.reoccurrence = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.pinned = const Value.absent(),
     required int order,
     required int walletFk,
@@ -3156,6 +3338,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<int>? periodLength,
     Expression<int>? reoccurrence,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime>? dateTimeModified,
     Expression<bool>? pinned,
     Expression<int>? order,
     Expression<int>? walletFk,
@@ -3182,6 +3365,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (pinned != null) 'pinned': pinned,
       if (order != null) 'order': order,
       if (walletFk != null) 'wallet_fk': walletFk,
@@ -3213,6 +3397,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<int>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeModified,
       Value<bool>? pinned,
       Value<int>? order,
       Value<int>? walletFk,
@@ -3238,6 +3423,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
       dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       pinned: pinned ?? this.pinned,
       order: order ?? this.order,
       walletFk: walletFk ?? this.walletFk,
@@ -3297,6 +3483,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
     }
     if (pinned.present) {
       map['pinned'] = Variable<bool>(pinned.value);
@@ -3361,6 +3550,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('pinned: $pinned, ')
           ..write('order: $order, ')
           ..write('walletFk: $walletFk, ')
@@ -3416,9 +3606,17 @@ class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
   late final GeneratedColumn<double> amount = GeneratedColumn<double>(
       'amount', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   @override
   List<GeneratedColumn> get $columns =>
-      [categoryLimitPk, categoryFk, budgetFk, amount];
+      [categoryLimitPk, categoryFk, budgetFk, amount, dateTimeModified];
   @override
   String get aliasedName => _alias ?? 'category_budget_limits';
   @override
@@ -3455,6 +3653,12 @@ class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
     } else if (isInserting) {
       context.missing(_amountMeta);
     }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
     return context;
   }
 
@@ -3472,6 +3676,8 @@ class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
           .read(DriftSqlType.int, data['${effectivePrefix}budget_fk'])!,
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
     );
   }
 
@@ -3487,11 +3693,13 @@ class CategoryBudgetLimit extends DataClass
   final int categoryFk;
   final int budgetFk;
   final double amount;
+  final DateTime? dateTimeModified;
   const CategoryBudgetLimit(
       {required this.categoryLimitPk,
       required this.categoryFk,
       required this.budgetFk,
-      required this.amount});
+      required this.amount,
+      this.dateTimeModified});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3499,6 +3707,9 @@ class CategoryBudgetLimit extends DataClass
     map['category_fk'] = Variable<int>(categoryFk);
     map['budget_fk'] = Variable<int>(budgetFk);
     map['amount'] = Variable<double>(amount);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
     return map;
   }
 
@@ -3508,6 +3719,9 @@ class CategoryBudgetLimit extends DataClass
       categoryFk: Value(categoryFk),
       budgetFk: Value(budgetFk),
       amount: Value(amount),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
     );
   }
 
@@ -3519,6 +3733,8 @@ class CategoryBudgetLimit extends DataClass
       categoryFk: serializer.fromJson<int>(json['categoryFk']),
       budgetFk: serializer.fromJson<int>(json['budgetFk']),
       amount: serializer.fromJson<double>(json['amount']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
     );
   }
   @override
@@ -3529,6 +3745,7 @@ class CategoryBudgetLimit extends DataClass
       'categoryFk': serializer.toJson<int>(categoryFk),
       'budgetFk': serializer.toJson<int>(budgetFk),
       'amount': serializer.toJson<double>(amount),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
     };
   }
 
@@ -3536,12 +3753,16 @@ class CategoryBudgetLimit extends DataClass
           {int? categoryLimitPk,
           int? categoryFk,
           int? budgetFk,
-          double? amount}) =>
+          double? amount,
+          Value<DateTime?> dateTimeModified = const Value.absent()}) =>
       CategoryBudgetLimit(
         categoryLimitPk: categoryLimitPk ?? this.categoryLimitPk,
         categoryFk: categoryFk ?? this.categoryFk,
         budgetFk: budgetFk ?? this.budgetFk,
         amount: amount ?? this.amount,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
       );
   @override
   String toString() {
@@ -3549,14 +3770,15 @@ class CategoryBudgetLimit extends DataClass
           ..write('categoryLimitPk: $categoryLimitPk, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('budgetFk: $budgetFk, ')
-          ..write('amount: $amount')
+          ..write('amount: $amount, ')
+          ..write('dateTimeModified: $dateTimeModified')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(categoryLimitPk, categoryFk, budgetFk, amount);
+  int get hashCode => Object.hash(
+      categoryLimitPk, categoryFk, budgetFk, amount, dateTimeModified);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3564,7 +3786,8 @@ class CategoryBudgetLimit extends DataClass
           other.categoryLimitPk == this.categoryLimitPk &&
           other.categoryFk == this.categoryFk &&
           other.budgetFk == this.budgetFk &&
-          other.amount == this.amount);
+          other.amount == this.amount &&
+          other.dateTimeModified == this.dateTimeModified);
 }
 
 class CategoryBudgetLimitsCompanion
@@ -3573,17 +3796,20 @@ class CategoryBudgetLimitsCompanion
   final Value<int> categoryFk;
   final Value<int> budgetFk;
   final Value<double> amount;
+  final Value<DateTime?> dateTimeModified;
   const CategoryBudgetLimitsCompanion({
     this.categoryLimitPk = const Value.absent(),
     this.categoryFk = const Value.absent(),
     this.budgetFk = const Value.absent(),
     this.amount = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
   });
   CategoryBudgetLimitsCompanion.insert({
     this.categoryLimitPk = const Value.absent(),
     required int categoryFk,
     required int budgetFk,
     required double amount,
+    this.dateTimeModified = const Value.absent(),
   })  : categoryFk = Value(categoryFk),
         budgetFk = Value(budgetFk),
         amount = Value(amount);
@@ -3592,12 +3818,14 @@ class CategoryBudgetLimitsCompanion
     Expression<int>? categoryFk,
     Expression<int>? budgetFk,
     Expression<double>? amount,
+    Expression<DateTime>? dateTimeModified,
   }) {
     return RawValuesInsertable({
       if (categoryLimitPk != null) 'category_limit_pk': categoryLimitPk,
       if (categoryFk != null) 'category_fk': categoryFk,
       if (budgetFk != null) 'budget_fk': budgetFk,
       if (amount != null) 'amount': amount,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
     });
   }
 
@@ -3605,12 +3833,14 @@ class CategoryBudgetLimitsCompanion
       {Value<int>? categoryLimitPk,
       Value<int>? categoryFk,
       Value<int>? budgetFk,
-      Value<double>? amount}) {
+      Value<double>? amount,
+      Value<DateTime?>? dateTimeModified}) {
     return CategoryBudgetLimitsCompanion(
       categoryLimitPk: categoryLimitPk ?? this.categoryLimitPk,
       categoryFk: categoryFk ?? this.categoryFk,
       budgetFk: budgetFk ?? this.budgetFk,
       amount: amount ?? this.amount,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
     );
   }
 
@@ -3629,6 +3859,9 @@ class CategoryBudgetLimitsCompanion
     if (amount.present) {
       map['amount'] = Variable<double>(amount.value);
     }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
     return map;
   }
 
@@ -3638,7 +3871,8 @@ class CategoryBudgetLimitsCompanion
           ..write('categoryLimitPk: $categoryLimitPk, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('budgetFk: $budgetFk, ')
-          ..write('amount: $amount')
+          ..write('amount: $amount, ')
+          ..write('dateTimeModified: $dateTimeModified')
           ..write(')'))
         .toString();
   }
@@ -3684,6 +3918,14 @@ class $LabelsTable extends Labels
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       clientDefault: () => new DateTime.now());
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
   late final GeneratedColumn<int> order = GeneratedColumn<int>(
@@ -3691,7 +3933,7 @@ class $LabelsTable extends Labels
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [label_pk, name, categoryFk, dateCreated, order];
+      [label_pk, name, categoryFk, dateCreated, dateTimeModified, order];
   @override
   String get aliasedName => _alias ?? 'labels';
   @override
@@ -3725,6 +3967,12 @@ class $LabelsTable extends Labels
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
     }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
     if (data.containsKey('order')) {
       context.handle(
           _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
@@ -3748,6 +3996,8 @@ class $LabelsTable extends Labels
           .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       order: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
     );
@@ -3765,12 +4015,14 @@ class TransactionLabel extends DataClass
   final String name;
   final int categoryFk;
   final DateTime dateCreated;
+  final DateTime? dateTimeModified;
   final int order;
   const TransactionLabel(
       {required this.label_pk,
       required this.name,
       required this.categoryFk,
       required this.dateCreated,
+      this.dateTimeModified,
       required this.order});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3779,6 +4031,9 @@ class TransactionLabel extends DataClass
     map['name'] = Variable<String>(name);
     map['category_fk'] = Variable<int>(categoryFk);
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
     map['order'] = Variable<int>(order);
     return map;
   }
@@ -3789,6 +4044,9 @@ class TransactionLabel extends DataClass
       name: Value(name),
       categoryFk: Value(categoryFk),
       dateCreated: Value(dateCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
       order: Value(order),
     );
   }
@@ -3801,6 +4059,8 @@ class TransactionLabel extends DataClass
       name: serializer.fromJson<String>(json['name']),
       categoryFk: serializer.fromJson<int>(json['categoryFk']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
       order: serializer.fromJson<int>(json['order']),
     );
   }
@@ -3812,6 +4072,7 @@ class TransactionLabel extends DataClass
       'name': serializer.toJson<String>(name),
       'categoryFk': serializer.toJson<int>(categoryFk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
     };
   }
@@ -3821,12 +4082,16 @@ class TransactionLabel extends DataClass
           String? name,
           int? categoryFk,
           DateTime? dateCreated,
+          Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order}) =>
       TransactionLabel(
         label_pk: label_pk ?? this.label_pk,
         name: name ?? this.name,
         categoryFk: categoryFk ?? this.categoryFk,
         dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
         order: order ?? this.order,
       );
   @override
@@ -3836,14 +4101,15 @@ class TransactionLabel extends DataClass
           ..write('name: $name, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(label_pk, name, categoryFk, dateCreated, order);
+  int get hashCode => Object.hash(
+      label_pk, name, categoryFk, dateCreated, dateTimeModified, order);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3852,6 +4118,7 @@ class TransactionLabel extends DataClass
           other.name == this.name &&
           other.categoryFk == this.categoryFk &&
           other.dateCreated == this.dateCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order);
 }
 
@@ -3860,12 +4127,14 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
   final Value<String> name;
   final Value<int> categoryFk;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeModified;
   final Value<int> order;
   const LabelsCompanion({
     this.label_pk = const Value.absent(),
     this.name = const Value.absent(),
     this.categoryFk = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
   });
   LabelsCompanion.insert({
@@ -3873,6 +4142,7 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
     required String name,
     required int categoryFk,
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     required int order,
   })  : name = Value(name),
         categoryFk = Value(categoryFk),
@@ -3882,6 +4152,7 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
     Expression<String>? name,
     Expression<int>? categoryFk,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
   }) {
     return RawValuesInsertable({
@@ -3889,6 +4160,7 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
       if (name != null) 'name': name,
       if (categoryFk != null) 'category_fk': categoryFk,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
     });
   }
@@ -3898,12 +4170,14 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
       Value<String>? name,
       Value<int>? categoryFk,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeModified,
       Value<int>? order}) {
     return LabelsCompanion(
       label_pk: label_pk ?? this.label_pk,
       name: name ?? this.name,
       categoryFk: categoryFk ?? this.categoryFk,
       dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
     );
   }
@@ -3923,6 +4197,9 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
     }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
     if (order.present) {
       map['order'] = Variable<int>(order.value);
     }
@@ -3936,6 +4213,7 @@ class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
           ..write('name: $name, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order')
           ..write(')'))
         .toString();
@@ -3982,6 +4260,14 @@ class $AssociatedTitlesTable extends AssociatedTitles
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       clientDefault: () => new DateTime.now());
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
   late final GeneratedColumn<int> order = GeneratedColumn<int>(
@@ -4001,8 +4287,15 @@ class $AssociatedTitlesTable extends AssociatedTitles
           }),
           defaultValue: const Constant(false));
   @override
-  List<GeneratedColumn> get $columns =>
-      [associatedTitlePk, title, categoryFk, dateCreated, order, isExactMatch];
+  List<GeneratedColumn> get $columns => [
+        associatedTitlePk,
+        title,
+        categoryFk,
+        dateCreated,
+        dateTimeModified,
+        order,
+        isExactMatch
+      ];
   @override
   String get aliasedName => _alias ?? 'associated_titles';
   @override
@@ -4039,6 +4332,12 @@ class $AssociatedTitlesTable extends AssociatedTitles
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
     }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
     if (data.containsKey('order')) {
       context.handle(
           _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
@@ -4069,6 +4368,8 @@ class $AssociatedTitlesTable extends AssociatedTitles
           .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       order: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       isExactMatch: attachedDatabase.typeMapping
@@ -4088,6 +4389,7 @@ class TransactionAssociatedTitle extends DataClass
   final String title;
   final int categoryFk;
   final DateTime dateCreated;
+  final DateTime? dateTimeModified;
   final int order;
   final bool isExactMatch;
   const TransactionAssociatedTitle(
@@ -4095,6 +4397,7 @@ class TransactionAssociatedTitle extends DataClass
       required this.title,
       required this.categoryFk,
       required this.dateCreated,
+      this.dateTimeModified,
       required this.order,
       required this.isExactMatch});
   @override
@@ -4104,6 +4407,9 @@ class TransactionAssociatedTitle extends DataClass
     map['title'] = Variable<String>(title);
     map['category_fk'] = Variable<int>(categoryFk);
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
     map['order'] = Variable<int>(order);
     map['is_exact_match'] = Variable<bool>(isExactMatch);
     return map;
@@ -4115,6 +4421,9 @@ class TransactionAssociatedTitle extends DataClass
       title: Value(title),
       categoryFk: Value(categoryFk),
       dateCreated: Value(dateCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
       order: Value(order),
       isExactMatch: Value(isExactMatch),
     );
@@ -4128,6 +4437,8 @@ class TransactionAssociatedTitle extends DataClass
       title: serializer.fromJson<String>(json['title']),
       categoryFk: serializer.fromJson<int>(json['categoryFk']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
       order: serializer.fromJson<int>(json['order']),
       isExactMatch: serializer.fromJson<bool>(json['isExactMatch']),
     );
@@ -4140,6 +4451,7 @@ class TransactionAssociatedTitle extends DataClass
       'title': serializer.toJson<String>(title),
       'categoryFk': serializer.toJson<int>(categoryFk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
       'isExactMatch': serializer.toJson<bool>(isExactMatch),
     };
@@ -4150,6 +4462,7 @@ class TransactionAssociatedTitle extends DataClass
           String? title,
           int? categoryFk,
           DateTime? dateCreated,
+          Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           bool? isExactMatch}) =>
       TransactionAssociatedTitle(
@@ -4157,6 +4470,9 @@ class TransactionAssociatedTitle extends DataClass
         title: title ?? this.title,
         categoryFk: categoryFk ?? this.categoryFk,
         dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
         order: order ?? this.order,
         isExactMatch: isExactMatch ?? this.isExactMatch,
       );
@@ -4167,6 +4483,7 @@ class TransactionAssociatedTitle extends DataClass
           ..write('title: $title, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('isExactMatch: $isExactMatch')
           ..write(')'))
@@ -4174,8 +4491,8 @@ class TransactionAssociatedTitle extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(
-      associatedTitlePk, title, categoryFk, dateCreated, order, isExactMatch);
+  int get hashCode => Object.hash(associatedTitlePk, title, categoryFk,
+      dateCreated, dateTimeModified, order, isExactMatch);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4184,6 +4501,7 @@ class TransactionAssociatedTitle extends DataClass
           other.title == this.title &&
           other.categoryFk == this.categoryFk &&
           other.dateCreated == this.dateCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
           other.isExactMatch == this.isExactMatch);
 }
@@ -4194,6 +4512,7 @@ class AssociatedTitlesCompanion
   final Value<String> title;
   final Value<int> categoryFk;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeModified;
   final Value<int> order;
   final Value<bool> isExactMatch;
   const AssociatedTitlesCompanion({
@@ -4201,6 +4520,7 @@ class AssociatedTitlesCompanion
     this.title = const Value.absent(),
     this.categoryFk = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
     this.isExactMatch = const Value.absent(),
   });
@@ -4209,6 +4529,7 @@ class AssociatedTitlesCompanion
     required String title,
     required int categoryFk,
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     required int order,
     this.isExactMatch = const Value.absent(),
   })  : title = Value(title),
@@ -4219,6 +4540,7 @@ class AssociatedTitlesCompanion
     Expression<String>? title,
     Expression<int>? categoryFk,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
     Expression<bool>? isExactMatch,
   }) {
@@ -4227,6 +4549,7 @@ class AssociatedTitlesCompanion
       if (title != null) 'title': title,
       if (categoryFk != null) 'category_fk': categoryFk,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
       if (isExactMatch != null) 'is_exact_match': isExactMatch,
     });
@@ -4237,6 +4560,7 @@ class AssociatedTitlesCompanion
       Value<String>? title,
       Value<int>? categoryFk,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeModified,
       Value<int>? order,
       Value<bool>? isExactMatch}) {
     return AssociatedTitlesCompanion(
@@ -4244,6 +4568,7 @@ class AssociatedTitlesCompanion
       title: title ?? this.title,
       categoryFk: categoryFk ?? this.categoryFk,
       dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
       isExactMatch: isExactMatch ?? this.isExactMatch,
     );
@@ -4264,6 +4589,9 @@ class AssociatedTitlesCompanion
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
     }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
     if (order.present) {
       map['order'] = Variable<int>(order.value);
     }
@@ -4280,6 +4608,7 @@ class AssociatedTitlesCompanion
           ..write('title: $title, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('isExactMatch: $isExactMatch')
           ..write(')'))
@@ -4531,6 +4860,14 @@ class $ScannerTemplatesTable extends ScannerTemplates
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       clientDefault: () => new DateTime.now());
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _templateNameMeta =
       const VerificationMeta('templateName');
   @override
@@ -4613,6 +4950,7 @@ class $ScannerTemplatesTable extends ScannerTemplates
   List<GeneratedColumn> get $columns => [
         scannerTemplatePk,
         dateCreated,
+        dateTimeModified,
         templateName,
         contains,
         titleTransactionBefore,
@@ -4643,6 +4981,12 @@ class $ScannerTemplatesTable extends ScannerTemplates
           _dateCreatedMeta,
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
     }
     if (data.containsKey('template_name')) {
       context.handle(
@@ -4722,6 +5066,8 @@ class $ScannerTemplatesTable extends ScannerTemplates
           DriftSqlType.int, data['${effectivePrefix}scanner_template_pk'])!,
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       templateName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}template_name'])!,
       contains: attachedDatabase.typeMapping
@@ -4756,6 +5102,7 @@ class $ScannerTemplatesTable extends ScannerTemplates
 class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   final int scannerTemplatePk;
   final DateTime dateCreated;
+  final DateTime? dateTimeModified;
   final String templateName;
   final String contains;
   final String titleTransactionBefore;
@@ -4768,6 +5115,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   const ScannerTemplate(
       {required this.scannerTemplatePk,
       required this.dateCreated,
+      this.dateTimeModified,
       required this.templateName,
       required this.contains,
       required this.titleTransactionBefore,
@@ -4782,6 +5130,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     final map = <String, Expression>{};
     map['scanner_template_pk'] = Variable<int>(scannerTemplatePk);
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
     map['template_name'] = Variable<String>(templateName);
     map['contains'] = Variable<String>(contains);
     map['title_transaction_before'] = Variable<String>(titleTransactionBefore);
@@ -4799,6 +5150,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     return ScannerTemplatesCompanion(
       scannerTemplatePk: Value(scannerTemplatePk),
       dateCreated: Value(dateCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
       templateName: Value(templateName),
       contains: Value(contains),
       titleTransactionBefore: Value(titleTransactionBefore),
@@ -4817,6 +5171,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     return ScannerTemplate(
       scannerTemplatePk: serializer.fromJson<int>(json['scannerTemplatePk']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
       templateName: serializer.fromJson<String>(json['templateName']),
       contains: serializer.fromJson<String>(json['contains']),
       titleTransactionBefore:
@@ -4838,6 +5194,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     return <String, dynamic>{
       'scannerTemplatePk': serializer.toJson<int>(scannerTemplatePk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'templateName': serializer.toJson<String>(templateName),
       'contains': serializer.toJson<String>(contains),
       'titleTransactionBefore':
@@ -4856,6 +5213,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   ScannerTemplate copyWith(
           {int? scannerTemplatePk,
           DateTime? dateCreated,
+          Value<DateTime?> dateTimeModified = const Value.absent(),
           String? templateName,
           String? contains,
           String? titleTransactionBefore,
@@ -4868,6 +5226,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       ScannerTemplate(
         scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
         dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
         templateName: templateName ?? this.templateName,
         contains: contains ?? this.contains,
         titleTransactionBefore:
@@ -4887,6 +5248,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     return (StringBuffer('ScannerTemplate(')
           ..write('scannerTemplatePk: $scannerTemplatePk, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('templateName: $templateName, ')
           ..write('contains: $contains, ')
           ..write('titleTransactionBefore: $titleTransactionBefore, ')
@@ -4904,6 +5266,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   int get hashCode => Object.hash(
       scannerTemplatePk,
       dateCreated,
+      dateTimeModified,
       templateName,
       contains,
       titleTransactionBefore,
@@ -4919,6 +5282,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       (other is ScannerTemplate &&
           other.scannerTemplatePk == this.scannerTemplatePk &&
           other.dateCreated == this.dateCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
           other.templateName == this.templateName &&
           other.contains == this.contains &&
           other.titleTransactionBefore == this.titleTransactionBefore &&
@@ -4933,6 +5297,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
 class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   final Value<int> scannerTemplatePk;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeModified;
   final Value<String> templateName;
   final Value<String> contains;
   final Value<String> titleTransactionBefore;
@@ -4945,6 +5310,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   const ScannerTemplatesCompanion({
     this.scannerTemplatePk = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     this.templateName = const Value.absent(),
     this.contains = const Value.absent(),
     this.titleTransactionBefore = const Value.absent(),
@@ -4958,6 +5324,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   ScannerTemplatesCompanion.insert({
     this.scannerTemplatePk = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
     required String templateName,
     required String contains,
     required String titleTransactionBefore,
@@ -4978,6 +5345,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   static Insertable<ScannerTemplate> custom({
     Expression<int>? scannerTemplatePk,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime>? dateTimeModified,
     Expression<String>? templateName,
     Expression<String>? contains,
     Expression<String>? titleTransactionBefore,
@@ -4991,6 +5359,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     return RawValuesInsertable({
       if (scannerTemplatePk != null) 'scanner_template_pk': scannerTemplatePk,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (templateName != null) 'template_name': templateName,
       if (contains != null) 'contains': contains,
       if (titleTransactionBefore != null)
@@ -5010,6 +5379,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   ScannerTemplatesCompanion copyWith(
       {Value<int>? scannerTemplatePk,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeModified,
       Value<String>? templateName,
       Value<String>? contains,
       Value<String>? titleTransactionBefore,
@@ -5022,6 +5392,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     return ScannerTemplatesCompanion(
       scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
       dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       templateName: templateName ?? this.templateName,
       contains: contains ?? this.contains,
       titleTransactionBefore:
@@ -5046,6 +5417,9 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
     }
     if (templateName.present) {
       map['template_name'] = Variable<String>(templateName.value);
@@ -5086,6 +5460,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     return (StringBuffer('ScannerTemplatesCompanion(')
           ..write('scannerTemplatePk: $scannerTemplatePk, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
           ..write('templateName: $templateName, ')
           ..write('contains: $contains, ')
           ..write('titleTransactionBefore: $titleTransactionBefore, ')

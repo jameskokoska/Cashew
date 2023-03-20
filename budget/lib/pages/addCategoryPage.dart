@@ -1,16 +1,12 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -18,20 +14,15 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
-import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
-import 'package:drift/drift.dart' hide Column;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
-import 'package:math_expressions/math_expressions.dart';
 
 class AddCategoryPage extends StatefulWidget {
   AddCategoryPage({
@@ -157,6 +148,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       dateCreated: widget.category != null
           ? widget.category!.dateCreated
           : DateTime.now(),
+      dateTimeModified: null,
       income: selectedIncome,
       order: widget.category != null
           ? widget.category!.order
@@ -316,6 +308,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                               categoryPk: 0,
                               name: "",
                               dateCreated: DateTime.now(),
+                              dateTimeModified: null,
                               order: 0,
                               income: false,
                               iconName: selectedImage,
@@ -493,6 +486,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                               isExactMatch: false,
                               title: text.trim(),
                               dateCreated: DateTime.now(),
+                              dateTimeModified: null,
                               order: length,
                             ),
                           );
@@ -529,6 +523,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                   isExactMatch: associatedTitle.isExactMatch,
                                   title: text.trim(),
                                   dateCreated: DateTime.now(),
+                                  dateTimeModified: null,
                                   order: associatedTitle.order,
                                 ),
                               );

@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -281,6 +278,7 @@ void enterCategoryLimitPopup(
         categoryFk: category.categoryPk,
         budgetFk: budgetPk,
         amount: amount,
+        dateTimeModified: null,
       ),
     );
   } else {
@@ -290,6 +288,7 @@ void enterCategoryLimitPopup(
         categoryFk: categoryLimit.categoryFk,
         budgetFk: categoryLimit.budgetFk,
         amount: amount,
+        dateTimeModified: null,
       ),
     );
   }

@@ -4,9 +4,7 @@ import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/database/tables.dart';
 
 class SettingsContainerSwitch extends StatefulWidget {
   const SettingsContainerSwitch({

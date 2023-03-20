@@ -6,31 +6,19 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/widgets/budgetHistoryLineGraph.dart';
 import 'package:budget/pages/budgetPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
-import 'package:budget/widgets/barGraph.dart';
 import 'package:budget/widgets/budgetContainer.dart';
-import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/categoryEntry.dart';
-import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:flutter/scheduler.dart';
-import 'dart:developer';
 import 'package:async/async.dart' show StreamZip;
-import 'package:googleapis/admob/v1.dart';
 
 class PastBudgetsPage extends StatelessWidget {
   const PastBudgetsPage({super.key, required int this.budgetPk});
@@ -314,7 +302,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                     amountLoaded - touchedBudgetIndex! - 1 ==
                                         index
                                 ? Padding(
-                                    padding: EdgeInsets.only(bottom: 13.0),
+                                    padding: EdgeInsets.only(
+                                        top: index == 0 ? 0 : 13.0),
                                     child: PastBudgetContainer(
                                       budget: widget.budget,
                                       smallBudgetContainer: true,
@@ -416,7 +405,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     text: "View More",
                     textAlign: TextAlign.center,
                     fontSize: 16,
-                    textColor: Theme.of(context).colorScheme.textLight,
+                    textColor: budgetColorScheme.onSecondaryContainer,
                   ),
                 ),
                 onTap: () {

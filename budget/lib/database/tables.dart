@@ -1,27 +1,19 @@
-import 'dart:developer';
 import 'package:async/async.dart' show StreamZip;
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
-import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/openSnackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
-import 'dart:io';
 export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 30;
+int schemaVersionGlobal = 31;
 
 // Generate database code
 // flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -142,6 +134,8 @@ class Wallets extends Table {
   TextColumn get iconName => text().nullable()(); // Money symbol
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
   IntColumn get order => integer()();
   TextColumn get currency => text().nullable()();
 }
@@ -159,7 +153,9 @@ class Transactions extends Table {
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   DateTimeColumn get dateTimeCreated =>
-      dateTime().clientDefault(() => new DateTime.now()).nullable()();
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
   // Subscriptions and Repetitive payments
   IntColumn get periodLength => integer().nullable()();
@@ -195,6 +191,8 @@ class Categories extends Table {
   TextColumn get iconName => text().nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
   IntColumn get order => integer()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
   IntColumn get methodAdded => intEnum<MethodAdded>().nullable()();
@@ -213,6 +211,8 @@ class CategoryBudgetLimits extends Table {
   IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
   IntColumn get budgetFk => integer().references(Budgets, #budgetPk)();
   RealColumn get amount => real()();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
 }
 
 //If a title is in a smart label, automatically choose this category
@@ -226,6 +226,8 @@ class AssociatedTitles extends Table {
   IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
   IntColumn get order => integer()();
   BoolColumn get isExactMatch => boolean().withDefault(const Constant(false))();
 }
@@ -237,6 +239,8 @@ class Labels extends Table {
   IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
   IntColumn get order => integer()();
 }
 
@@ -259,6 +263,8 @@ class Budgets extends Table {
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
   IntColumn get order => integer()();
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
@@ -298,6 +304,8 @@ class ScannerTemplates extends Table {
   IntColumn get scannerTemplatePk => integer().autoIncrement()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
   TextColumn get templateName => text().withLength(max: NAME_LIMIT)();
   TextColumn get contains => text().withLength(max: NAME_LIMIT)();
   TextColumn get titleTransactionBefore => text().withLength(max: NAME_LIMIT)();
@@ -424,6 +432,20 @@ class FinanceDatabase extends _$FinanceDatabase {
           }
           if (from <= 29) {
             await migrator.alterTable(TableMigration(budgets));
+          }
+          if (from <= 30) {
+            await migrator.addColumn(wallets, wallets.dateTimeModified);
+            await migrator.addColumn(
+                transactions, transactions.dateTimeModified);
+            await migrator.addColumn(categories, categories.dateTimeModified);
+            await migrator.addColumn(
+                categoryBudgetLimits, categoryBudgetLimits.dateTimeModified);
+            await migrator.addColumn(labels, labels.dateTimeModified);
+            await migrator.addColumn(
+                associatedTitles, associatedTitles.dateTimeModified);
+            await migrator.addColumn(budgets, budgets.dateTimeModified);
+            await migrator.addColumn(
+                scannerTemplates, scannerTemplates.dateTimeModified);
           }
         },
       );
@@ -827,22 +849,22 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // watch all labels in a category (if given)
-  Stream<List<TransactionLabel>> watchAllLabelsInCategory(int? categoryPk) {
-    return (categoryPk != null
-            ? (select(labels)
-              ..where((label) => label.categoryFk.equals(categoryPk)))
-            : select(labels))
-        .watch();
-  }
+  // Stream<List<TransactionLabel>> watchAllLabelsInCategory(int? categoryPk) {
+  //   return (categoryPk != null
+  //           ? (select(labels)
+  //             ..where((label) => label.categoryFk.equals(categoryPk)))
+  //           : select(labels))
+  //       .watch();
+  // }
 
-  // watch all labels grouped by all category
-  Stream<List<TypedResult>> watchAllLabelsGroupedByCategory() {
-    return (select(categories).join([
-      innerJoin(labels, labels.categoryFk.equalsExp(categories.categoryPk))
-    ])
-          ..groupBy([categories.categoryPk]))
-        .watch();
-  }
+  // // watch all labels grouped by all category
+  // Stream<List<TypedResult>> watchAllLabelsGroupedByCategory() {
+  //   return (select(categories).join([
+  //     innerJoin(labels, labels.categoryFk.equalsExp(categories.categoryPk))
+  //   ])
+  //         ..groupBy([categories.categoryPk]))
+  //       .watch();
+  // }
 
   // watch all budgets that have been created
   Stream<List<Budget>> watchAllBudgets(
@@ -979,6 +1001,64 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
+  Future<List<TransactionWallet>> getAllNewWallets(DateTime lastSynced) {
+    return (select(wallets)
+          ..where((tbl) =>
+              tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
+              tbl.dateTimeModified.isNull()))
+        .get();
+  }
+
+  Future<List<Transaction>> getAllNewTransactions(DateTime lastSynced) {
+    return (select(transactions)
+          ..where((tbl) =>
+              tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
+              tbl.dateTimeModified.isNull()))
+        .get();
+  }
+
+  Future<List<TransactionCategory>> getAllNewCategories(DateTime lastSynced) {
+    return (select(categories)
+          ..where((tbl) =>
+              tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
+              tbl.dateTimeModified.isNull()))
+        .get();
+  }
+
+  Future<List<CategoryBudgetLimit>> getAllNewCategoryBudgetLimits(
+      DateTime lastSynced) {
+    return (select(categoryBudgetLimits)
+          ..where((tbl) =>
+              tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
+              tbl.dateTimeModified.isNull()))
+        .get();
+  }
+
+  Future<List<TransactionAssociatedTitle>> getAllNewAssociatedTitles(
+      DateTime lastSynced) {
+    return (select(associatedTitles)
+          ..where((tbl) =>
+              tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
+              tbl.dateTimeModified.isNull()))
+        .get();
+  }
+
+  Future<List<Budget>> getAllNewBudgets(DateTime lastSynced) {
+    return (select(budgets)
+          ..where((tbl) =>
+              tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
+              tbl.dateTimeModified.isNull()))
+        .get();
+  }
+
+  Future<List<ScannerTemplate>> getAllNewScannerTemplates(DateTime lastSynced) {
+    return (select(scannerTemplates)
+          ..where((tbl) =>
+              tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
+              tbl.dateTimeModified.isNull()))
+        .get();
+  }
+
   Future getAmountOfWallets() async {
     return (await select(budgets).get()).length;
   }
@@ -1069,16 +1149,19 @@ class FinanceDatabase extends _$FinanceDatabase {
       return into(wallets).insert(wallet, mode: InsertMode.insertOrReplace);
     }
 
-    return into(wallets).insertOnConflictUpdate(wallet);
+    return into(wallets).insertOnConflictUpdate(
+        wallet.copyWith(dateTimeModified: Value(DateTime.now())));
   }
 
   //create or update a new wallet
   Future<int> createOrUpdateScannerTemplate(ScannerTemplate scannerTemplate) {
-    return into(scannerTemplates).insertOnConflictUpdate(scannerTemplate);
+    return into(scannerTemplates).insertOnConflictUpdate(
+        scannerTemplate.copyWith(dateTimeModified: Value(DateTime.now())));
   }
 
   Future<int> createOrUpdateCategoryLimit(CategoryBudgetLimit categoryLimit) {
-    return into(categoryBudgetLimits).insertOnConflictUpdate(categoryLimit);
+    return into(categoryBudgetLimits).insertOnConflictUpdate(
+        categoryLimit.copyWith(dateTimeModified: Value(DateTime.now())));
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(
@@ -1160,6 +1243,24 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..where((t) =>
               t.budgetFk.equals(budgetPk) & t.categoryFk.equals(categoryPk)))
         .watchSingle();
+  }
+
+  Future<CategoryBudgetLimit> getCategoryBudgetLimitInstance(
+      int categoryLimitPk,
+      {int? limit,
+      int? offset}) {
+    return (select(categoryBudgetLimits)
+          ..where((t) => t.categoryLimitPk.equals(categoryLimitPk)))
+        .getSingle();
+  }
+
+  Future<TransactionAssociatedTitle> getAssociatedTitleInstance(
+      int associatedTitlePk,
+      {int? limit,
+      int? offset}) {
+    return (select(associatedTitles)
+          ..where((t) => t.associatedTitlePk.equals(associatedTitlePk)))
+        .getSingle();
   }
 
   Future<List<CategoryBudgetLimit>> getCategoryLimit(int budgetPk,
@@ -1271,7 +1372,6 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     if (transaction.amount == double.infinity ||
         transaction.amount == double.negativeInfinity ||
-        transaction.amount == double.nan ||
         transaction.amount.isNaN) {
       return 0;
     }
@@ -1373,12 +1473,14 @@ class FinanceDatabase extends _$FinanceDatabase {
             budgetPk: sharedBudget.budgetPk,
             order: sharedBudget.order,
             pinned: sharedBudget.pinned);
-        return into(budgets).insertOnConflictUpdate(sharedBudget);
+        return into(budgets).insertOnConflictUpdate(
+            sharedBudget.copyWith(dateTimeModified: Value(DateTime.now())));
       } catch (e) {
         // new entry is needed
         int numberOfBudgets = (await database.getAmountOfBudgets());
         sharedBudget = budget.copyWith(order: numberOfBudgets);
-        return into(budgets).insertOnConflictUpdate(sharedBudget);
+        return into(budgets).insertOnConflictUpdate(
+            sharedBudget.copyWith(dateTimeModified: Value(DateTime.now())));
       }
     } else {
       return 0;
@@ -1423,10 +1525,12 @@ class FinanceDatabase extends _$FinanceDatabase {
             .getSingle();
         sharedTransaction = transaction.copyWith(
             transactionPk: sharedTransaction.transactionPk);
-        return into(transactions).insertOnConflictUpdate(sharedTransaction);
+        return into(transactions).insertOnConflictUpdate(sharedTransaction
+            .copyWith(dateTimeModified: Value(DateTime.now())));
       } catch (e) {
         // new entry is needed
-        return into(transactions).insertOnConflictUpdate(transaction);
+        return into(transactions).insertOnConflictUpdate(
+            transaction.copyWith(dateTimeModified: Value(DateTime.now())));
       }
     } else {
       return 0;
@@ -1442,9 +1546,10 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<List<Transaction>> get allTransactions => select(transactions).get();
 
   // create or update a label
-  Future<int> createOrUpdateLabel(TransactionLabel label) {
-    return into(labels).insertOnConflictUpdate(label);
-  }
+  // Future<int> createOrUpdateLabel(TransactionLabel label) {
+  //   return into(labels).insertOnConflictUpdate(
+  //       label.copyWith(dateTimeModified: Value(DateTime.now())));
+  // }
 
   // create or update a budget
   Future<int> createOrUpdateBudget(Budget budget,
@@ -1625,6 +1730,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get wallet given id
   Future<TransactionWallet> getWalletInstance(int walletPk) {
     return (select(wallets)..where((w) => w.walletPk.equals(walletPk)))
+        .getSingle();
+  }
+
+  Future<ScannerTemplate> getScannerTemplateInstance(int scannerTemplatePk) {
+    return (select(scannerTemplates)
+          ..where((s) => s.scannerTemplatePk.equals(scannerTemplatePk)))
         .getSingle();
   }
 

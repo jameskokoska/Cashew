@@ -1,10 +1,8 @@
-import 'dart:async';
 
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
-import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';

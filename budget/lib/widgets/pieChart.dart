@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'dart:math';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
@@ -8,9 +6,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 
 class CategoryTotal {
   CategoryTotal(

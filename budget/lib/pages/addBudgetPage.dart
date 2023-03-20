@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -8,15 +6,9 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/categoryEntry.dart';
-import 'package:budget/widgets/dropdownSelect.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
@@ -28,15 +20,11 @@ import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:math_expressions/math_expressions.dart';
 
 class AddBudgetPage extends StatefulWidget {
   AddBudgetPage({
@@ -488,6 +476,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       reoccurrence: mapRecurrence(selectedRecurrence),
       dateCreated:
           widget.budget != null ? widget.budget!.dateCreated : DateTime.now(),
+      dateTimeModified: null,
       order: widget.budget != null
           ? widget.budget!.order
           : await database.getAmountOfBudgets(),
@@ -585,7 +574,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     if (selectedTitle != null &&
         (selectedAmount ?? 0) >= 0 &&
         selectedAmount != null &&
-        selectedStartDate != null &&
         ((selectedRecurrence == "Custom" && selectedEndDate != null) ||
             (selectedRecurrence != "Custom" && selectedPeriodLength != 0))) {
       if (canAddBudget != true) {

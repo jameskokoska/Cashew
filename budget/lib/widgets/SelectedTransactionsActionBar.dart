@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -11,15 +8,12 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
@@ -37,9 +31,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: globalSelectedID,
       builder: (context, value, widget) {
-        List<int> listOfIDs = (value as Map)[pageID] ?? [];
-        bool animateIn =
-            (value as Map)[pageID] != null && (value as Map)[pageID].length > 0;
+        List<int> listOfIDs = (value)[pageID] ?? [];
+        bool animateIn = (value)[pageID] != null && (value)[pageID]!.length > 0;
         return AnimatedPositioned(
           left: 0,
           right: 0,
@@ -142,10 +135,10 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 openPopupCustom(
                                   context,
                                   title: "Edit " +
-                                      (value as Map)[pageID].length.toString() +
+                                      (value)[pageID]!.length.toString() +
                                       " Selected",
                                   child: EditSelectedTransactions(
-                                    transactionIDs: (value as Map)[pageID],
+                                    transactionIDs: value[pageID]!,
                                   ),
                                 );
                               },
@@ -162,12 +155,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   title: "Delete selected transactions?",
                                   description:
                                       "Are you sure you want to delete " +
-                                          (value as Map)[pageID]
-                                              .length
-                                              .toString() +
+                                          (value)[pageID]!.length.toString() +
                                           pluralString(
-                                              (value as Map)[pageID].length ==
-                                                  1,
+                                              (value)[pageID]!.length == 1,
                                               " transaction") +
                                           "?",
                                   icon: Icons.delete_rounded,
@@ -176,17 +166,14 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   },
                                   onCancelLabel: "Cancel",
                                   onSubmit: () async {
-                                    await database.deleteTransactions(
-                                        (value as Map)[pageID]);
+                                    await database
+                                        .deleteTransactions(value[pageID]!);
                                     openSnackbar(
                                       SnackbarMessage(
                                         title: "Deleted " +
-                                            (value as Map)[pageID]
-                                                .length
-                                                .toString() +
+                                            value[pageID]!.length.toString() +
                                             pluralString(
-                                                (value as Map)[pageID].length ==
-                                                    1,
+                                                value[pageID]!.length == 1,
                                                 " transaction"),
                                         icon: Icons.delete_rounded,
                                       ),

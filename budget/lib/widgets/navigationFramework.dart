@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
@@ -16,29 +14,20 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
-import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:budget/struct/notificationsGlobal.dart';
-import 'package:local_auth/local_auth.dart';
 
 class PageNavigationFramework extends StatefulWidget {
   const PageNavigationFramework({Key? key}) : super(key: key);
@@ -112,11 +101,12 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await parseEmailsInBackground(context);
       await getExchangeRates();
       loadingIndeterminateKey.currentState!.setVisibility(true);
-      await createBackupInBackground(context);
+      await syncData();
       if (appStateSettings["currentUserEmail"] != "") {
         await syncPendingQueueOnServer(); //sync before download
         await getCloudBudgets();
       }
+      await createBackupInBackground(context);
       loadingIndeterminateKey.currentState!.setVisibility(false);
       entireAppLoaded = true;
     });

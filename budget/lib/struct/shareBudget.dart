@@ -1,36 +1,20 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
-import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/fab.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/globalLoadingProgress.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/openContainerNavigation.dart';
-import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Query, Column;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:budget/widgets/editRowEntry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 
 Future<bool> shareBudget(Budget? budgetToShare, context) async {
@@ -353,6 +337,7 @@ Future<int> downloadTransactionsFromBudgets(
         periodLength: budgetDecoded["periodLength"],
         reoccurrence: mapRecurrence(budgetDecoded["reoccurrence"]),
         dateCreated: DateTime.now(),
+        dateTimeModified: null,
         pinned: true,
         order: 0,
         walletFk: 0,
@@ -405,6 +390,7 @@ Future<int> downloadTransactionsFromBudgets(
               categoryPk: DateTime.now().millisecondsSinceEpoch,
               name: transactionDecoded["categoryName"],
               dateCreated: DateTime.now(),
+              dateTimeModified: null,
               order: numberOfCategories,
               income: false,
               iconName: transactionDecoded["categoryIcon"],
@@ -429,6 +415,7 @@ Future<int> downloadTransactionsFromBudgets(
               transactionDecoded["dateTimeCreated"].toDate().month,
               transactionDecoded["dateTimeCreated"].toDate().day,
             ),
+            dateTimeModified: null,
             dateTimeCreated: transactionDecoded["dateTimeCreated"].toDate(),
             income: transactionDecoded["income"],
             paid: true,
@@ -718,6 +705,7 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
   _refreshBudgets() async {
     if (appStateSettings["currentUserEmail"] != "") {
       loadingIndeterminateKey.currentState!.setVisibility(true);
+      await syncData();
       await syncPendingQueueOnServer();
       await getCloudBudgets();
       await getExchangeRates();

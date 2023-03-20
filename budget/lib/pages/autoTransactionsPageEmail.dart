@@ -308,6 +308,7 @@ Future<void> parseEmailsInBackground(context,
           walletFk: appStateSettings["selectedWallet"],
           dateCreated:
               DateTime(messageDate.year, messageDate.month, messageDate.day),
+          dateTimeModified: null,
           income: selectedCategory.income,
           paid: true,
           skipPaid: false,
@@ -526,7 +527,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                       title: "Email Configuration Missing",
                       description: "Please add a configuration.",
                       icon: Icons.warning_rounded,
-                      color: Theme.of(context).errorColor,
+                      color: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

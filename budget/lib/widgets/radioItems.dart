@@ -1,7 +1,6 @@
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class RadioItems extends StatefulWidget {
   final String initial;

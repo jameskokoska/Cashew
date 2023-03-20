@@ -1,11 +1,9 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import '../colors.dart';

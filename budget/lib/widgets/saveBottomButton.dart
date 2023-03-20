@@ -1,10 +1,7 @@
-import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/tappable.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
 
 class SaveBottomButton extends StatefulWidget {

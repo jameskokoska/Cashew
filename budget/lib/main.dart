@@ -1,37 +1,28 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'package:budget/functions.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:local_auth/local_auth.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/autoTransactionsPageEmail.dart';
-import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
-import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/restartApp.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './pages/homePage.dart';
 import 'package:budget/colors.dart';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
@@ -70,7 +61,8 @@ void main() async {
   } else {
     await Firebase.initializeApp();
   }
-  database = await constructDb();
+  sharedPreferences = await SharedPreferences.getInstance();
+  database = await constructDb('db');
   notificationPayload = await initializeNotifications();
   entireAppLoaded = false;
   await initializeDatabase();
@@ -112,11 +104,11 @@ late PackageInfo packageInfoGlobal;
 
 // setAppStateSettings
 Future<bool> updateSettings(setting, value,
-    {List<int> pagesNeedingRefresh: const [],
+    {List<int> pagesNeedingRefresh = const [],
     bool updateGlobalState = true}) async {
-  final prefs = await SharedPreferences.getInstance();
   appStateSettings[setting] = value;
-  await prefs.setString('userSettings', json.encode(appStateSettings));
+  await sharedPreferences.setString(
+      'userSettings', json.encode(appStateSettings));
   if (updateGlobalState == true) appStateKey.currentState?.refreshAppState();
   //Refresh any pages listed
   for (int page in pagesNeedingRefresh) {
@@ -150,8 +142,7 @@ Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
 Future<Map<String, dynamic>> getUserSettings() async {
   Map<String, dynamic> userPreferencesDefault = defaultPreferences();
 
-  final prefs = await SharedPreferences.getInstance();
-  String? userSettings = prefs.getString('userSettings');
+  String? userSettings = sharedPreferences.getString('userSettings');
   try {
     if (userSettings == null) {
       throw ("no settings on file");
@@ -168,7 +159,8 @@ Future<Map<String, dynamic>> getUserSettings() async {
     return userSettingsJSON;
   } catch (e) {
     print("There was an error, settings corrupted");
-    await prefs.setString('userSettings', json.encode(userPreferencesDefault));
+    await sharedPreferences.setString(
+        'userSettings', json.encode(userPreferencesDefault));
     return userPreferencesDefault;
   }
 }
@@ -179,8 +171,7 @@ Future<bool> initializeSettings() async {
     try {
       print("Settings were loaded from backup, trying to restore");
       String storedSettings = (await database.getSettings()).settingsJSON;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userSettings', storedSettings);
+      await sharedPreferences.setString('userSettings', storedSettings);
       print(storedSettings);
       userSettings = json.decode(storedSettings);
       updateSettings("databaseJustImported", false);
@@ -217,6 +208,20 @@ Future<bool> initializeSettings() async {
     }
   }
 
+  String? retrievedClientID = await sharedPreferences.getString("clientID");
+  if (retrievedClientID == null) {
+    String systemID = await getDeviceInfo();
+    String newClientID = systemID
+            .substring(0, (systemID.length > 10 ? 10 : systemID.length))
+            .replaceAll("-", "_") +
+        "-" +
+        DateTime.now().millisecondsSinceEpoch.toString();
+    await sharedPreferences.setString('clientID', newClientID);
+    clientID = newClientID;
+  } else {
+    clientID = retrievedClientID;
+  }
+
   return true;
 }
 
@@ -236,6 +241,7 @@ Future<bool> initializeDatabase() async {
         dateCreated: DateTime.now(),
         order: 0,
         currency: "usd",
+        dateTimeModified: null,
       ),
     );
   }

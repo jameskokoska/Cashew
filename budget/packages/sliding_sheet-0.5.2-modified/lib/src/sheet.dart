@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'sheet_container.dart';
 import 'specs.dart';
@@ -790,8 +788,8 @@ class _SlidingSheetState extends State<SlidingSheet>
       // Close the keyboard
       currentFocus.unfocus();
       // Wait for the keyboard to close
-      while ((MediaQuery.of(context).viewInsets.bottom > 0)) {
-        await Future.delayed(Duration(milliseconds: 1), () {});
+      while (MediaQuery.of(context).viewInsets.bottom > 0) {
+        await Future.delayed(const Duration(milliseconds: 1), () {});
       }
     }
     snapToExtent(0.0, velocity: velocity);
@@ -1045,7 +1043,7 @@ class _SlidingSheetState extends State<SlidingSheet>
     if (scrollSpec.overscroll) {
       scrollView = GlowingOverscrollIndicator(
         axisDirection: AxisDirection.down,
-        color: scrollSpec.overscrollColor ?? Theme.of(context).accentColor,
+        color: scrollSpec.overscrollColor ?? Theme.of(context).colorScheme.secondary,
         child: scrollView,
       );
     }

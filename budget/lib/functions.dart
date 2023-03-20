@@ -1,23 +1,21 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path/path.dart';
-import 'package:universal_html/html.dart' hide Navigator;
+import 'package:universal_html/html.dart' hide Navigator, Platform;
 import 'package:http/http.dart' as http;
 import './colors.dart';
-import './widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io';
 
 // Add bottom padding for web Safari browsers
 double bottomPaddingSafeArea = getOSInsideWeb() == "iOS" ? 20 : 0;
@@ -728,4 +726,29 @@ double getKeyboardHeight(context) {
   return EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,
           WidgetsBinding.instance.window.devicePixelRatio)
       .bottom;
+}
+
+Future<String> getDeviceInfo() async {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+  if (kIsWeb) {
+    WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+    return webBrowserInfo.userAgent ?? "Web";
+  } else if (Platform.isAndroid) {
+    AndroidDeviceInfo info = await deviceInfo.androidInfo;
+    return info.model;
+  } else if (Platform.isIOS) {
+    IosDeviceInfo info = await deviceInfo.iosInfo;
+    return info.utsname.machine ?? info.model ?? "iOS";
+  } else if (Platform.isLinux) {
+    LinuxDeviceInfo info = await deviceInfo.linuxInfo;
+    return info.machineId ?? "Linux";
+  } else if (Platform.isMacOS) {
+    MacOsDeviceInfo info = await deviceInfo.macOsInfo;
+    return info.computerName;
+  } else if (Platform.isWindows) {
+    WindowsDeviceInfo info = await deviceInfo.windowsInfo;
+    return info.computerName;
+  }
+  return "";
 }

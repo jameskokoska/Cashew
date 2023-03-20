@@ -1,32 +1,16 @@
-import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
-import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/popupFramework.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
-import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/main.dart';
 import 'package:budget/colors.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'dart:math';
-import 'package:shimmer/shimmer.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class TransactionsSearchPage extends StatefulWidget {
   const TransactionsSearchPage({Key? key}) : super(key: key);

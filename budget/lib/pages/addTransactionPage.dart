@@ -1,21 +1,15 @@
-import 'dart:developer';
-import 'dart:math';
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
-import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
-import 'package:budget/widgets/moreIcons.dart';
-import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -27,13 +21,10 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
-import 'package:math_expressions/math_expressions.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -93,7 +84,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   int selectedWalletPk = appStateSettings["selectedWallet"];
   TransactionWallet? selectedWallet;
   late TabController _incomeTabController =
-      TabController(length: 3, vsync: this);
+      TabController(length: 2, vsync: this);
 
   String? textAddTransaction = "Add Transaction";
 
@@ -148,7 +139,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   void setSelectedAmount(double amount, String amountCalculation) {
     if (amount == double.infinity ||
         amount == double.negativeInfinity ||
-        amount == double.nan ||
         amount.isNaN) {
       return;
     }
@@ -334,6 +324,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       note: selectedNote ?? "",
       categoryFk: selectedCategory?.categoryPk ?? 0,
       dateCreated: selectedDate,
+      dateTimeModified: null,
       income: selectedIncome,
       walletFk: selectedWalletPk,
       paid: widget.transaction != null
@@ -1894,6 +1885,7 @@ getRelatingAssociatedTitleLimited(String text) async {
       title: category.name,
       categoryFk: category.categoryPk,
       dateCreated: category.dateCreated,
+      dateTimeModified: null,
       order: category.order,
       isExactMatch: false,
     );
@@ -1928,6 +1920,7 @@ getRelatingAssociatedTitle(String text) async {
           title: category.name,
           categoryFk: category.categoryPk,
           dateCreated: category.dateCreated,
+          dateTimeModified: null,
           order: category.order,
           isExactMatch: false,
         );
@@ -1983,6 +1976,7 @@ addAssociatedTitles(
           isExactMatch: false,
           title: selectedTitle.trim(),
           dateCreated: DateTime.now(),
+          dateTimeModified: null,
           order: length,
         ),
       );

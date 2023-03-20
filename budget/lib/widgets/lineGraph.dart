@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -6,9 +5,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:budget/colors.dart';
-import 'package:intl/intl.dart';
 
 class _LineChart extends StatefulWidget {
   _LineChart({

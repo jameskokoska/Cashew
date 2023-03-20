@@ -1,19 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
-import 'package:budget/database/tables.dart';
-import 'package:budget/functions.dart';
-import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/openContainerNavigation.dart';
-import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart';
 import '../colors.dart';
-import 'package:intl/intl.dart';
 import 'package:pausable_timer/pausable_timer.dart';
 
 class GlobalSnackbar extends StatefulWidget {

@@ -1,8 +1,5 @@
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:flutter/material.dart';
-import 'package:budget/colors.dart';
-import 'package:budget/widgets/textWidgets.dart';
 
 openSnackbar(SnackbarMessage message, {bool postIfQueue = true}) {
   snackbarKey.currentState!.post(message, postIfQueue: postIfQueue);

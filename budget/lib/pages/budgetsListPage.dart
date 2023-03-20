@@ -1,17 +1,10 @@
 import 'package:budget/database/tables.dart';
-import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/popupFramework.dart';
-import 'package:budget/widgets/selectColor.dart';
-import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/main.dart';
-import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
 
 class BudgetsListPage extends StatefulWidget {

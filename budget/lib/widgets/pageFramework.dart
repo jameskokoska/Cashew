@@ -3,10 +3,8 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class PageFramework extends StatefulWidget {
@@ -90,12 +88,12 @@ class PageFrameworkState extends State<PageFramework>
   late AnimationController _animationControllerDragY;
   // late AnimationController _animationControllerDragX;
 
-  void scrollToTop({duration: 1200}) {
+  void scrollToTop({duration = 1200}) {
     _scrollController.animateTo(0,
         duration: Duration(milliseconds: duration), curve: Curves.elasticOut);
   }
 
-  void scrollToBottom({duration: 1200}) {
+  void scrollToBottom({duration = 1200}) {
     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
         duration: Duration(milliseconds: duration), curve: Curves.elasticOut);
   }

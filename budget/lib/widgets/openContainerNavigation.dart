@@ -1,7 +1,5 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/widgets/tappable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 

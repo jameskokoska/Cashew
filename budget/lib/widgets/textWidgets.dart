@@ -1,7 +1,5 @@
-import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';

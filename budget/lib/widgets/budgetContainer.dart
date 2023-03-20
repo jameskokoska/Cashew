@@ -4,11 +4,9 @@ import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
-import 'package:animations/animations.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -912,10 +910,8 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
     return Stack(
       children: [
         widget.percent == double.infinity ||
-                widget.percent == double.nan ||
                 widget.percent == double.negativeInfinity ||
                 widget.otherPercent == double.infinity ||
-                widget.otherPercent == double.nan ||
                 widget.otherPercent == double.negativeInfinity
             ? SizedBox.shrink()
             : AnimatedFractionallySizedBox(

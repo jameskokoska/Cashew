@@ -1,8 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class ScrollbarWrap extends StatelessWidget {
   const ScrollbarWrap({required this.child, super.key});

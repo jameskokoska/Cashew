@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:budget/colors.dart';
@@ -7,11 +7,8 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -20,17 +17,14 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/popupFramework.dart';
-import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:drift/drift.dart' hide Column hide Table;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:share_plus/share_plus.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
@@ -38,11 +32,268 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
-import 'dart:math' as math;
-import 'package:file_picker/file_picker.dart';
 import 'dart:io';
-import 'package:csv/csv.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+
+Timer? syncTimeoutTimer;
+Future<bool> createSyncBackup() async {
+  if (syncTimeoutTimer?.isActive == true) {
+    // openSnackbar(SnackbarMessage(title: "Please wait..."));
+    return false;
+  } else {
+    syncTimeoutTimer = Timer(Duration(milliseconds: 10000), () {
+      syncTimeoutTimer!.cancel();
+    });
+  }
+
+  bool hasSignedIn = false;
+  if (user == null) {
+    hasSignedIn = await signInGoogle(
+      gMailPermissions: false,
+      waitForCompletion: false,
+      silentSignIn: true,
+    );
+  } else {
+    hasSignedIn = true;
+  }
+  if (hasSignedIn == false) {
+    return false;
+  }
+
+  final authHeaders = await user!.authHeaders;
+  final authenticateClient = GoogleAuthClient(authHeaders);
+  drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
+  if (driveApi == null) {
+    throw "Failed to login to Google Drive";
+  }
+
+  drive.FileList fileList = await driveApi.files.list(
+      spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime, size)');
+  List<drive.File>? files = fileList.files;
+
+  for (drive.File file in files ?? []) {
+    if (file.name == "sync-" + clientID + ".sqlite") {
+      try {
+        await deleteBackup(driveApi, file.id ?? "");
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+  await createBackup(null,
+      silentBackup: true, deleteOldBackups: true, clientIDForSync: clientID);
+  return true;
+}
+
+// load the latest backup and import any newly modified data into the db
+Future<bool> syncData() async {
+  bool hasSignedIn = false;
+  if (user == null) {
+    hasSignedIn = await signInGoogle(
+      gMailPermissions: false,
+      waitForCompletion: false,
+      silentSignIn: true,
+    );
+  } else {
+    hasSignedIn = true;
+  }
+  if (hasSignedIn == false) {
+    return false;
+  }
+
+  final authHeaders = await user!.authHeaders;
+  final authenticateClient = GoogleAuthClient(authHeaders);
+  drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
+  if (driveApi == null) {
+    throw "Failed to login to Google Drive";
+  }
+
+  await createSyncBackup();
+
+  drive.FileList fileList = await driveApi.files.list(
+      spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime, size)');
+  List<drive.File>? files = fileList.files;
+
+  if (files == null) {
+    throw "No backups found.";
+  }
+
+  DateTime lastSynced;
+  if (appStateSettings["lastSynced"] == null)
+    lastSynced = DateTime(2000);
+  else
+    lastSynced = DateTime.parse(appStateSettings["lastSynced"]);
+
+  if (files.first.modifiedTime == null ||
+      lastSynced.isAfter(files.first.modifiedTime!)) {
+    print("no need to backup, no new backup file to pull data from");
+    return false;
+  }
+
+  List<drive.File> filesToDownloadSyncChanges = [];
+  for (drive.File file in files) {
+    if ((file.name ?? "").startsWith("sync-")) {
+      filesToDownloadSyncChanges.add(file);
+    }
+  }
+
+  print("LOADING SYNC DB");
+  DateTime syncStarted = DateTime.now();
+
+  for (drive.File file in filesToDownloadSyncChanges) {
+    // we don't want to restore this clients backup
+    if ((file.name ?? "") == "sync-" + clientID + ".sqlite") continue;
+
+    String? fileId = file.id;
+    if (fileId == null) continue;
+    print("SYNCING WITH " + (file.name ?? ""));
+
+    List<int> dataStore = [];
+    dynamic response = await driveApi.files
+        .get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
+    await for (var data in response.stream) {
+      print(data.length);
+      dataStore.insertAll(dataStore.length, data);
+    }
+
+    if (kIsWeb) {
+      final html.Storage localStorage = html.window.localStorage;
+      localStorage["moor_db_str_syncdb"] =
+          bin2str.encode(Uint8List.fromList(dataStore));
+    } else {
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final dbFile = File(p.join(dbFolder.path, 'syncdb.sqlite'));
+      await dbFile.writeAsBytes(dataStore);
+    }
+
+    FinanceDatabase databaseSync = await constructDb('syncdb');
+
+    try {
+      // labels table is not synced because it is not used
+      // settings table is not synced
+      // deletions dont get synced! should log deletions somewhere?
+
+      for (TransactionWallet newEntry
+          in (await databaseSync.getAllNewWallets(lastSynced))) {
+        TransactionWallet? current;
+        try {
+          current = await database.getWalletInstance(newEntry.walletPk);
+        } catch (e) {
+          current = null;
+        }
+        if (current == null ||
+            current.dateTimeModified != newEntry.dateTimeModified)
+          database.createOrUpdateWallet(newEntry);
+      }
+
+      for (TransactionCategory newEntry
+          in (await databaseSync.getAllNewCategories(lastSynced))) {
+        TransactionCategory? current;
+        try {
+          current = await database.getCategoryInstance(newEntry.categoryPk);
+        } catch (e) {
+          current = null;
+        }
+        if (current == null ||
+            current.dateTimeModified != newEntry.dateTimeModified)
+          database.createOrUpdateCategory(newEntry);
+      }
+
+      for (Budget newEntry
+          in (await databaseSync.getAllNewBudgets(lastSynced))) {
+        Budget? current;
+        try {
+          current = await database.getBudgetInstance(newEntry.budgetPk);
+        } catch (e) {
+          current = null;
+        }
+        if (current == null ||
+            current.dateTimeModified != newEntry.dateTimeModified)
+          database.createOrUpdateBudget(newEntry, updateSharedEntry: false);
+      }
+
+      for (CategoryBudgetLimit newEntry
+          in (await databaseSync.getAllNewCategoryBudgetLimits(lastSynced))) {
+        CategoryBudgetLimit? current;
+        try {
+          current = await database
+              .getCategoryBudgetLimitInstance(newEntry.categoryLimitPk);
+        } catch (e) {
+          current = null;
+        }
+        if (current == null ||
+            current.dateTimeModified != newEntry.dateTimeModified)
+          database.createOrUpdateCategoryLimit(newEntry);
+      }
+
+      List<Transaction> transactionsNew =
+          (await databaseSync.getAllNewTransactions(lastSynced));
+      inspect(transactionsNew);
+      for (Transaction newEntry in transactionsNew) {
+        print(transactionsNew.length);
+        print(lastSynced);
+        print("CREATING NEW TRANSACTION");
+        print(newEntry.name);
+        Transaction? current;
+        try {
+          current = await database.getTransactionFromPk(newEntry.transactionPk);
+        } catch (e) {
+          current = null;
+        }
+        if (current == null ||
+            current.dateTimeModified != newEntry.dateTimeModified)
+          database.createOrUpdateTransaction(newEntry,
+              updateSharedEntry: false);
+      }
+
+      for (TransactionAssociatedTitle newEntry
+          in (await databaseSync.getAllNewAssociatedTitles(lastSynced))) {
+        TransactionAssociatedTitle? current;
+        try {
+          current = await database
+              .getAssociatedTitleInstance(newEntry.associatedTitlePk);
+        } catch (e) {
+          current = null;
+        }
+        if (current == null ||
+            current.dateTimeModified != newEntry.dateTimeModified)
+          database.createOrUpdateAssociatedTitle(newEntry);
+      }
+
+      for (ScannerTemplate newEntry
+          in (await databaseSync.getAllNewScannerTemplates(lastSynced))) {
+        ScannerTemplate? current;
+        try {
+          current = await database
+              .getScannerTemplateInstance(newEntry.scannerTemplatePk);
+        } catch (e) {
+          current = null;
+        }
+        if (current == null ||
+            current.dateTimeModified != newEntry.dateTimeModified)
+          database.createOrUpdateScannerTemplate(newEntry);
+      }
+    } catch (e) {
+      print("SYNC FAILED");
+      print(e.toString());
+      openSnackbar(
+        SnackbarMessage(
+          title: "Sync failed",
+          description: "Mismatching schema versions",
+          icon: Icons.warning_amber_rounded,
+        ),
+      );
+      databaseSync.close();
+      return false;
+    }
+
+    databaseSync.close();
+  }
+
+  updateSettings("lastSynced", syncStarted.toString(),
+      pagesNeedingRefresh: [], updateGlobalState: false);
+  print("DONE SYNCING");
+  return true;
+}
 
 Future<bool> checkConnection() async {
   late bool isConnected;
@@ -216,15 +467,18 @@ Future<void> createBackupInBackground(context) async {
   return;
 }
 
-Future<void> createBackup(context,
-    {bool? silentBackup, bool deleteOldBackups = false}) async {
+Future<void> createBackup(
+  context, {
+  bool? silentBackup,
+  bool deleteOldBackups = false,
+  String? clientIDForSync,
+}) async {
   // Backup user settings
   try {
     if (silentBackup == false || silentBackup == null) {
       loadingIndeterminateKey.currentState!.setVisibility(true);
     }
-    final prefs = await SharedPreferences.getInstance();
-    String userSettings = prefs.getString('userSettings') ?? "";
+    String userSettings = sharedPreferences.getString('userSettings') ?? "";
     if (userSettings == "") throw ("No settings stored");
     await database.createOrUpdateSettings(
       AppSetting(
@@ -236,7 +490,7 @@ Future<void> createBackup(context,
     print("successfully created settings entry");
   } catch (e) {
     if (silentBackup == false || silentBackup == null) {
-      Navigator.of(context).pop();
+      Navigator.of(context).maybePop();
     }
     openSnackbar(
       SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
@@ -272,19 +526,24 @@ Future<void> createBackup(context,
     final timestamp =
         DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
     driveFile.name = "db-v$schemaVersionGlobal-$timestamp.sqlite";
+    if (clientIDForSync != null)
+      driveFile.name = "sync-" + clientIDForSync + ".sqlite";
     driveFile.modifiedTime = DateTime.now().toUtc();
     driveFile.parents = ["appDataFolder"];
 
     await driveApi.files.create(driveFile, uploadMedia: media);
-    openSnackbar(
-      SnackbarMessage(
-        title: "Backup Created",
-        description: driveFile.name,
-        icon: Icons.backup_rounded,
-      ),
-    );
-    updateSettings("lastBackup", DateTime.now().toString(),
-        pagesNeedingRefresh: [], updateGlobalState: false);
+
+    if (clientIDForSync == null)
+      openSnackbar(
+        SnackbarMessage(
+          title: "Backup Created",
+          description: driveFile.name,
+          icon: Icons.backup_rounded,
+        ),
+      );
+    if (clientIDForSync == null)
+      updateSettings("lastBackup", DateTime.now().toString(),
+          pagesNeedingRefresh: [], updateGlobalState: false);
 
     if (silentBackup == false || silentBackup == null) {
       loadingIndeterminateKey.currentState!.setVisibility(false);
@@ -324,7 +583,9 @@ Future<void> deleteRecentBackups(context, amountToKeep,
     files.forEach((file) {
       // subtract 1 because we just made a backup
       if (index >= amountToKeep - 1) {
-        deleteBackup(driveApi, file.id ?? "");
+        // only delete excess backups that don't belong to a client sync
+        if (!(file.name ?? "").contains("sync-"))
+          deleteBackup(driveApi, file.id ?? "");
       }
       index++;
     });
@@ -366,7 +627,7 @@ class GoogleAccountLoginButton extends StatefulWidget {
 }
 
 class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
-  Future<void> _chooseBackup({isManaging: false}) async {
+  Future<void> _chooseBackup({isManaging = false}) async {
     try {
       openBottomSheet(context,
           BackupManagement(isManaging: isManaging, loadBackup: _loadBackup));
@@ -706,6 +967,22 @@ class _BackupManagementState extends State<BackupManagement> {
                                   widget.loadBackup(
                                       driveApiState!, file.value.id ?? "");
                               }
+                              // else {
+                              //   await openPopup(
+                              //     context,
+                              //     title: "Backup Details",
+                              //     description: (file.value.name ?? "") +
+                              //         "\n" +
+                              //         (file.value.size ?? "") +
+                              //         "\n" +
+                              //         (file.value.description ?? ""),
+                              //     icon: Icons.warning_amber_rounded,
+                              //     onSubmit: () async {
+                              //       Navigator.pop(context, true);
+                              //     },
+                              //     onSubmitLabel: "Close",
+                              //   );
+                              // }
                             },
                             borderRadius: 15,
                             color: appStateSettings["materialYou"]
@@ -747,11 +1024,34 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 TextFont(
-                                                  text: (file.value.name ??
-                                                      "No name"),
+                                                  text: ((file.value.name ?? "")
+                                                          .contains("sync-")
+                                                      ? (file.value.name ?? "")
+                                                              .replaceAll(
+                                                                  "sync-", "")
+                                                              .split("-")[0] +
+                                                          " " +
+                                                          "sync"
+                                                      : file.value.name ??
+                                                          "No name"),
                                                   fontSize: 14,
                                                   maxLines: 2,
                                                 ),
+                                                (file.value.name ?? "")
+                                                        .contains("sync-")
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 3),
+                                                        child: TextFont(
+                                                          text:
+                                                              file.value.name ??
+                                                                  "",
+                                                          fontSize: 11,
+                                                          maxLines: 2,
+                                                        ),
+                                                      )
+                                                    : SizedBox.shrink()
                                               ],
                                             ),
                                           ),
