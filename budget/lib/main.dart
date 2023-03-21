@@ -72,7 +72,6 @@ void main() async {
 }
 
 late Map<String, dynamic> currenciesJSON;
-final LocalAuthentication auth = LocalAuthentication();
 bool biometricsAvailable = false;
 Random random = new Random();
 List<int> randomInt = [
@@ -257,6 +256,8 @@ Future<bool> initializeDatabase() async {
 }
 
 Future<bool> checkBiometrics() async {
+  if (kIsWeb) return true;
+  final LocalAuthentication auth = LocalAuthentication();
   final bool requireAuth = appStateSettings["requireAuth"];
   biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
       await auth.isDeviceSupported();

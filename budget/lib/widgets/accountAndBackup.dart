@@ -129,8 +129,9 @@ Future<bool> createSyncBackup({bool changeMadeSync = false}) async {
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData() async {
   if (appStateSettings["backupSync"] == false) return false;
-  if (appStateSettings["currentUserEmail"] == "") return false;
-
+  // if (appStateSettings["currentUserEmail"] == "") return false;
+  print("LOGGING IN");
+  print(appStateSettings["currentUserEmail"]);
   bool hasSignedIn = false;
   if (user == null) {
     hasSignedIn = await signInGoogle(
@@ -479,10 +480,14 @@ Future<bool> signInGoogle(
         ]);
       }
       final signIn.GoogleSignInAccount? account = silentSignIn == true
-          ? await googleSignIn?.signInSilently()
+          ? await googleSignIn?.signInSilently().then((value) async {
+              if (kIsWeb) return await googleSignIn?.signIn();
+            })
           : await googleSignIn?.signIn();
+
       if (account != null) {
         user = account;
+        appStateSettings["currentUserEmail"] = user?.email ?? "";
         accountsPageStateKey.currentState?.refreshState();
       } else {
         throw ("Login failed");
@@ -738,13 +743,14 @@ Future<void> chooseBackup(context,
   }
 }
 
-Future<void> loadBackup(context, drive.DriveApi driveApi, String fileId) async {
+Future<void> loadBackup(
+    context, drive.DriveApi driveApi, drive.File file) async {
   try {
     openLoadingPopup(context);
 
     List<int> dataStore = [];
     dynamic response = await driveApi.files
-        .get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
+        .get(file.id ?? "", downloadOptions: drive.DownloadOptions.fullMedia);
     response.stream.listen(
       (data) {
         print("Data: ${data.length}");
@@ -753,8 +759,12 @@ Future<void> loadBackup(context, drive.DriveApi driveApi, String fileId) async {
       onDone: () async {
         if (kIsWeb) {
           final html.Storage localStorage = html.window.localStorage;
+          localStorage.clear();
           localStorage["moor_db_str_db"] =
               bin2str.encode(Uint8List.fromList(dataStore));
+          // extract the db number and set it to this to run migrator
+          // localStorage["moor_db_version_db"] =
+          //     (file.name ?? "-").split("-")[1].replaceAll("v", "");
         } else {
           final dbFolder = await getApplicationDocumentsDirectory();
           final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
@@ -830,13 +840,15 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
               }
             });
         if (appStateSettings["username"] == "" && user != null) {
-          updateSettings("username", user!.displayName,
+          updateSettings("username", user?.displayName ?? "",
               pagesNeedingRefresh: [0]);
           await syncData();
           await syncPendingQueueOnServer();
           await getCloudBudgets();
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e.toString());
+      }
       loadingIndeterminateKey.currentState!.setVisibility(false);
     };
     if (widget.navigationSidebarButton == true) {
@@ -1131,8 +1143,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                   },
                                 );
                                 if (result == true)
-                                  loadBackup(context, driveApiState!,
-                                      file.value.id ?? "");
+                                  loadBackup(
+                                      context, driveApiState!, file.value);
                               }
                               // else {
                               //   await openPopup(

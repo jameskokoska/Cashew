@@ -1830,9 +1830,14 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> deleteFromSharedTransaction(sharedTransactionKey) async {
-    await createDeleteLog(DeleteLogType.Transaction, sharedTransactionKey);
-    return (delete(transactions)
+    Transaction transactionToDelete = await (select(transactions)
           ..where((t) => t.sharedKey.equals(sharedTransactionKey)))
+        .getSingle();
+    await createDeleteLog(
+        DeleteLogType.Transaction, transactionToDelete.transactionPk);
+    return (delete(transactions)
+          ..where(
+              (t) => t.transactionPk.equals(transactionToDelete.transactionPk)))
         .go();
   }
 

@@ -67,107 +67,107 @@ class _SelectAmountState extends State<SelectAmount> {
       amount = widget.amountPassed.replaceAll(".0", "");
     }
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
-      if (event.runtimeType.toString() == "KeyDownEvent" &&
+      if (event.runtimeType == KeyDownEvent &&
               event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.pop(context);
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit0) {
         addToAmount("0");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit1) {
         addToAmount("1");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit2) {
         addToAmount("2");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit3) {
         addToAmount("3");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit4) {
         addToAmount("4");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit5) {
         addToAmount("5");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit6) {
         addToAmount("6");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit7) {
         addToAmount("7");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit8) {
         addToAmount("8");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit9) {
         addToAmount("9");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad0) {
         addToAmount("0");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad1) {
         addToAmount("1");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad2) {
         addToAmount("2");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad3) {
         addToAmount("3");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad4) {
         addToAmount("4");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad5) {
         addToAmount("5");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad6) {
         addToAmount("6");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad7) {
         addToAmount("7");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad8) {
         addToAmount("8");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad9) {
         addToAmount("9");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.asterisk) {
         addToAmount("×");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpadMultiply) {
         addToAmount("×");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.slash) {
         addToAmount("÷");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpadDivide) {
         addToAmount("÷");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.add) {
         addToAmount("+");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpadAdd) {
         addToAmount("+");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.minus) {
         addToAmount("-");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpadSubtract) {
         addToAmount("-");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.period) {
         addToAmount(".");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
         addToAmount(".");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.backspace) {
         removeToAmount();
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.delete) {
         removeToAmount();
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.enter) {
         if (widget.next != null) {
           widget.next!();
@@ -798,83 +798,83 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
     super.initState();
     amount = widget.amountPassed;
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
-      if (event.runtimeType.toString() == "KeyDownEvent" &&
+      if (event.runtimeType == KeyDownEvent &&
               event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.pop(context);
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit0) {
         addToAmount("0");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit1) {
         addToAmount("1");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit2) {
         addToAmount("2");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit3) {
         addToAmount("3");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit4) {
         addToAmount("4");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit5) {
         addToAmount("5");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit6) {
         addToAmount("6");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit7) {
         addToAmount("7");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit8) {
         addToAmount("8");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.digit9) {
         addToAmount("9");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad0) {
         addToAmount("0");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad1) {
         addToAmount("1");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad2) {
         addToAmount("2");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad3) {
         addToAmount("3");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad4) {
         addToAmount("4");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad5) {
         addToAmount("5");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad6) {
         addToAmount("6");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad7) {
         addToAmount("7");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad8) {
         addToAmount("8");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpad9) {
         addToAmount("9");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.period) {
         addToAmount(".");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
         addToAmount(".");
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.backspace) {
         removeToAmount();
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.delete) {
         removeToAmount();
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.enter) {
         if (widget.next != null) {
           widget.next!();

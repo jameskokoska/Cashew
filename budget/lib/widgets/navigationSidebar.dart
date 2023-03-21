@@ -86,17 +86,15 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                     showUsername
                         ? Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Expanded(
-                              child: TextFont(
-                                maxLines: 3,
-                                text: appStateSettings["username"],
-                                fontWeight: FontWeight.bold,
-                                fontSize: 39,
-                                textColor: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                                textAlign: TextAlign.center,
-                              ),
+                            child: TextFont(
+                              maxLines: 3,
+                              text: appStateSettings["username"],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 39,
+                              textColor: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              textAlign: TextAlign.center,
                             ),
                           )
                         : SizedBox.shrink(),

@@ -31,7 +31,9 @@ class Tappable extends StatelessWidget {
       type: type,
       borderRadius: BorderRadius.circular(borderRadius),
       child: InkWell(
-        splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
+        splashFactory: kIsWeb
+            ? InkRipple.splashFactory
+            : InkSparkle.constantTurbulenceSeedSplashFactory,
         borderRadius: BorderRadius.circular(borderRadius),
         onTap: onTap,
         onHighlightChanged: onHighlightChanged,

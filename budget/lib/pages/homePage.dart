@@ -254,7 +254,7 @@ class HomePageState extends State<HomePage>
                                 child: TextFont(
                                   text: !showUsername
                                       ? "Home"
-                                      : appStateSettings["username"],
+                                      : appStateSettings["username"] ?? "",
                                   fontWeight: FontWeight.bold,
                                   fontSize: 39,
                                   textColor: Theme.of(context)
@@ -626,19 +626,12 @@ class HomePageState extends State<HomePage>
                             ? SizedBox.shrink()
                             : Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13, vertical: 5),
+                                  padding: const EdgeInsets.only(right: 5),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      TextFont(
-                                        text: "Recent Spending",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 28,
-                                      ),
-                                      SizedBox(height: 15),
                                       slidingSelector,
                                       SizedBox(height: 8),
                                       upcomingTransactionSliversHome,
