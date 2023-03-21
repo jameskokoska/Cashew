@@ -1,6 +1,9 @@
 import 'package:budget/colors.dart';
+import 'package:budget/main.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -10,24 +13,18 @@ import '../functions.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class AccountsPage extends StatefulWidget {
-  const AccountsPage({
-    Key? key,
-    required this.exportData,
-    required this.importData,
-    required this.manageData,
-    required this.logout,
-  }) : super(key: key);
-  final Function() exportData;
-  final Function() importData;
-  final Function() manageData;
+  const AccountsPage({Key? key}) : super(key: key);
 
-  final Function() logout;
   @override
-  State<AccountsPage> createState() => _AccountsPageState();
+  State<AccountsPage> createState() => AccountsPageState();
 }
 
-class _AccountsPageState extends State<AccountsPage> {
+class AccountsPageState extends State<AccountsPage> {
   bool currentlyExporting = false;
+
+  void refreshState() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +94,18 @@ class _AccountsPageState extends State<AccountsPage> {
                 IntrinsicWidth(
                   child: Button(
                     label: "Logout",
-                    onTap: widget.logout,
+                    onTap: () async {
+                      final result = await signOutGoogle();
+                      if (result == true) {
+                        if (getWidthNavigationSidebar(context) <= 0) {
+                          Navigator.maybePop(context);
+                          settingsPageStateKey.currentState?.refreshState();
+                        } else {
+                          pageNavigationFrameworkKey.currentState!
+                              .changePage(0, switchNavbar: true);
+                        }
+                      }
+                    },
                     padding: EdgeInsets.symmetric(horizontal: 17, vertical: 12),
                     fontSize: 15,
                   ),
@@ -122,7 +130,8 @@ class _AccountsPageState extends State<AccountsPage> {
                                   setState(() {
                                     currentlyExporting = true;
                                   });
-                                  await widget.exportData();
+                                  await createBackup(context,
+                                      deleteOldBackups: true);
                                   if (mounted)
                                     setState(() {
                                       currentlyExporting = false;
@@ -163,7 +172,9 @@ class _AccountsPageState extends State<AccountsPage> {
                               boxShadow:
                                   boxShadowCheck(boxShadowGeneral(context))),
                           child: Tappable(
-                            onTap: widget.importData,
+                            onTap: () async {
+                              await chooseBackup(context);
+                            },
                             borderRadius: 15,
                             color: Theme.of(context)
                                 .colorScheme
@@ -203,7 +214,10 @@ class _AccountsPageState extends State<AccountsPage> {
                               boxShadow:
                                   boxShadowCheck(boxShadowGeneral(context))),
                           child: Tappable(
-                            onTap: widget.manageData,
+                            onTap: () async {
+                              chooseBackup(context,
+                                  isManaging: true, isClientSync: true);
+                            },
                             borderRadius: 15,
                             color: Theme.of(context)
                                 .colorScheme
@@ -236,7 +250,9 @@ class _AccountsPageState extends State<AccountsPage> {
                               boxShadow:
                                   boxShadowCheck(boxShadowGeneral(context))),
                           child: Tappable(
-                            onTap: widget.manageData,
+                            onTap: () async {
+                              await chooseBackup(context, isManaging: true);
+                            },
                             borderRadius: 15,
                             color: Theme.of(context)
                                 .colorScheme

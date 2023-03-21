@@ -114,7 +114,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
           },
         ),
         SliverToBoxAdapter(
-          child: SizedBox(height: 55),
+          child: SizedBox(height: 40),
         ),
       ],
     );

@@ -340,14 +340,15 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
 
 void discardChangesPopup(context,
     {previousObject, currentObject, Function? onDiscard}) async {
-  print(previousObject);
-  print(currentObject);
-  previousObject = previousObject.copyWith(dateTimeModified: Value(null));
   if (previousObject == currentObject &&
       previousObject != null &&
       currentObject != null) {
-    Navigator.pop(context);
-  } else if (previousObject != currentObject &&
+    Navigator.maybePop(context);
+  }
+  print(previousObject);
+  print(currentObject);
+  previousObject = previousObject.copyWith(dateTimeModified: Value(null));
+  if (previousObject != currentObject &&
       previousObject != null &&
       currentObject != null &&
       previousObject.toString() == currentObject.toString()) {

@@ -8,7 +8,8 @@ class ScrollbarWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
+    // disable in debug mode because of scroll controller warnings
+    if (kIsWeb || kDebugMode) {
       return child;
     }
     return RawScrollbar(

@@ -1,4 +1,3 @@
-
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
@@ -96,6 +95,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 textColor: Theme.of(context)
                                     .colorScheme
                                     .onPrimaryContainer,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           )
@@ -171,7 +171,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                     GoogleAccountLoginButton(
                       navigationSidebarButton: true,
                       onTap: () {
-                        setSelectedIndex(8);
+                        pageNavigationFrameworkKey.currentState!
+                            .changePage(8, switchNavbar: true);
+                        appStateKey.currentState?.refreshAppState();
                       },
                       isButtonSelected: selectedIndex == 8,
                     ),

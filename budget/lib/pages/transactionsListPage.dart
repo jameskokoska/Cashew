@@ -1,3 +1,4 @@
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -936,8 +937,10 @@ class _MonthSelectorState extends State<MonthSelector> {
           height: 50,
           overBoundsDetection: 50,
           initialItems: 10,
-          startingScrollPosition:
-              -MediaQuery.of(context).size.width / 2 + 100 / 2,
+          startingScrollPosition: -(MediaQuery.of(context).size.width -
+                      getWidthNavigationSidebar(context)) /
+                  2 +
+              100 / 2,
           duration: Duration(milliseconds: 1500),
           itemBuilder: (index) {
             DateTime currentDateTime =

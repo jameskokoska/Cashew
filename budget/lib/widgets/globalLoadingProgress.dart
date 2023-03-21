@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';
 
 class GlobalLoadingProgress extends StatefulWidget {
@@ -21,7 +22,9 @@ class GlobalLoadingProgressState extends State<GlobalLoadingProgress> {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.bottomLeft,
+      alignment: getWidthNavigationSidebar(context) <= 0
+          ? Alignment.bottomLeft
+          : Alignment.topCenter,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -62,7 +65,9 @@ class GlobalLoadingIndeterminateState
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.bottomLeft,
+      alignment: getWidthNavigationSidebar(context) <= 0
+          ? Alignment.bottomLeft
+          : Alignment.topCenter,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,

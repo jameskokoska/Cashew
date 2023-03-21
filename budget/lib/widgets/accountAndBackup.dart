@@ -56,14 +56,23 @@ String getDeviceFromSyncBackupFileName(String? backupFileName) {
   return (backupFileName).replaceAll("sync-", "").split("-")[0];
 }
 
+String getCurrentDeviceName() {
+  return (clientID).split("-")[0];
+}
+
+// if changeMadeSync show loading and check if syncEveryChange is turned on
 Timer? syncTimeoutTimer;
-Future<bool> createSyncBackup({bool showLoading = false}) async {
+Future<bool> createSyncBackup({bool changeMadeSync = false}) async {
   if (appStateSettings["backupSync"] == false) return false;
+  if (changeMadeSync == true && appStateSettings["syncEveryChange"] == false)
+    return false;
+
   print("Creating sync backup");
-  if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(true);
+  if (changeMadeSync) loadingIndeterminateKey.currentState!.setVisibility(true);
   if (syncTimeoutTimer?.isActive == true) {
     // openSnackbar(SnackbarMessage(title: "Please wait..."));
-    if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
+    if (changeMadeSync)
+      loadingIndeterminateKey.currentState!.setVisibility(false);
     return false;
   } else {
     syncTimeoutTimer = Timer(Duration(milliseconds: 10000), () {
@@ -82,7 +91,8 @@ Future<bool> createSyncBackup({bool showLoading = false}) async {
     hasSignedIn = true;
   }
   if (hasSignedIn == false) {
-    if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
+    if (changeMadeSync)
+      loadingIndeterminateKey.currentState!.setVisibility(false);
     return false;
   }
 
@@ -90,7 +100,8 @@ Future<bool> createSyncBackup({bool showLoading = false}) async {
   final authenticateClient = GoogleAuthClient(authHeaders);
   drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
   if (driveApi == null) {
-    if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
+    if (changeMadeSync)
+      loadingIndeterminateKey.currentState!.setVisibility(false);
     throw "Failed to login to Google Drive";
   }
 
@@ -109,12 +120,15 @@ Future<bool> createSyncBackup({bool showLoading = false}) async {
   }
   await createBackup(null,
       silentBackup: true, deleteOldBackups: true, clientIDForSync: clientID);
-  if (showLoading) loadingIndeterminateKey.currentState!.setVisibility(false);
+  if (changeMadeSync)
+    loadingIndeterminateKey.currentState!.setVisibility(false);
   return true;
 }
 
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData() async {
+  if (appStateSettings["backupSync"] == false) return false;
+
   bool hasSignedIn = false;
   if (user == null) {
     hasSignedIn = await signInGoogle(
@@ -299,6 +313,179 @@ Future<bool> syncData() async {
           await database.createOrUpdateScannerTemplate(newEntry);
       }
 
+      List<TransactionWallet> incomingTransactionWallets =
+          await databaseSync.getAllNewWallets(DateTime(0));
+      List<TransactionWallet> currentTransactionWallets =
+          await database.getAllNewWallets(DateTime(0));
+      Set<String> incomingTransactionWalletIds = Set.from(
+          incomingTransactionWallets
+              .map((TransactionWallet t) => t.walletPk.toString()));
+      Map<String, DateTime> TransactionWalletModifiedTimes = Map.fromIterable(
+          currentTransactionWallets,
+          key: (t) => t.walletPk.toString(),
+          value: (t) => t.dateTimeModified);
+      List<TransactionWallet> deletedTransactionWallets = [];
+      for (TransactionWallet t in currentTransactionWallets) {
+        if (!incomingTransactionWalletIds.contains(t.walletPk.toString()) &&
+            TransactionWalletModifiedTimes[t.walletPk.toString()] != null &&
+            TransactionWalletModifiedTimes[t.walletPk.toString()]!
+                .isBefore(lastSynced)) {
+          deletedTransactionWallets.add(t);
+        }
+      }
+      print("DELETE WALLETS");
+      print(deletedTransactionWallets);
+      database.deleteBatchWallets(deletedTransactionWallets);
+
+      List<TransactionCategory> incomingTransactionCategories =
+          await databaseSync.getAllNewCategories(DateTime(0));
+      List<TransactionCategory> currentTransactionCategories =
+          await database.getAllNewCategories(DateTime(0));
+      Set<String> incomingTransactionCategoryIds = Set.from(
+          incomingTransactionCategories
+              .map((TransactionCategory t) => t.categoryPk.toString()));
+      Map<String, DateTime> TransactionCategoryModifiedTimes = Map.fromIterable(
+          currentTransactionCategories,
+          key: (t) => t.categoryPk.toString(),
+          value: (t) => t.dateTimeModified);
+      List<TransactionCategory> deletedTransactionCategories = [];
+      for (TransactionCategory t in currentTransactionCategories) {
+        if (!incomingTransactionCategoryIds.contains(t.categoryPk.toString()) &&
+            TransactionCategoryModifiedTimes[t.categoryPk.toString()] != null &&
+            TransactionCategoryModifiedTimes[t.categoryPk.toString()]!
+                .isBefore(lastSynced)) {
+          deletedTransactionCategories.add(t);
+        }
+      }
+      print("DELETE CATEGORIES");
+      print(deletedTransactionCategories);
+      database.deleteBatchCategories(deletedTransactionCategories);
+
+      List<Budget> incomingBudgets =
+          await databaseSync.getAllNewBudgets(DateTime(0));
+      List<Budget> currentBudgets =
+          await database.getAllNewBudgets(DateTime(0));
+      Set<String> incomingBudgetIds =
+          Set.from(incomingBudgets.map((Budget t) => t.budgetPk.toString()));
+      Map<String, DateTime> BudgetModifiedTimes = Map.fromIterable(
+          currentBudgets,
+          key: (t) => t.budgetPk.toString(),
+          value: (t) => t.dateTimeModified);
+      List<Budget> deletedBudgets = [];
+      for (Budget t in currentBudgets) {
+        if (!incomingBudgetIds.contains(t.budgetPk.toString()) &&
+            BudgetModifiedTimes[t.budgetPk.toString()] != null &&
+            BudgetModifiedTimes[t.budgetPk.toString()]!.isBefore(lastSynced)) {
+          deletedBudgets.add(t);
+        }
+      }
+      print("DELETE BUDGETS");
+      print(deletedBudgets);
+      database.deleteBatchBudgets(deletedBudgets);
+
+      List<CategoryBudgetLimit> incomingCategoryBudgetLimits =
+          await databaseSync.getAllNewCategoryBudgetLimits(DateTime(0));
+      List<CategoryBudgetLimit> currentCategoryBudgetLimits =
+          await database.getAllNewCategoryBudgetLimits(DateTime(0));
+      Set<String> incomingCategoryBudgetLimitIds = Set.from(
+          incomingCategoryBudgetLimits
+              .map((CategoryBudgetLimit t) => t.categoryLimitPk.toString()));
+      Map<String, DateTime> CategoryBudgetLimitModifiedTimes = Map.fromIterable(
+          currentCategoryBudgetLimits,
+          key: (t) => t.categoryLimitPk.toString(),
+          value: (t) => t.dateTimeModified);
+      List<CategoryBudgetLimit> deletedCategoryBudgetLimits = [];
+      for (CategoryBudgetLimit t in currentCategoryBudgetLimits) {
+        if (!incomingCategoryBudgetLimitIds
+                .contains(t.categoryLimitPk.toString()) &&
+            CategoryBudgetLimitModifiedTimes[t.categoryLimitPk.toString()] !=
+                null &&
+            CategoryBudgetLimitModifiedTimes[t.categoryLimitPk.toString()]!
+                .isBefore(lastSynced)) {
+          deletedCategoryBudgetLimits.add(t);
+        }
+      }
+      print("DELETE CATEGORIES LIMITS");
+      print(deletedCategoryBudgetLimits);
+      database.deleteBatchCategoryBudgetLimit(deletedCategoryBudgetLimits);
+
+      List<TransactionAssociatedTitle> incomingTransactionAssociatedTitles =
+          await databaseSync.getAllNewAssociatedTitles(DateTime(0));
+      List<TransactionAssociatedTitle> currentTransactionAssociatedTitles =
+          await database.getAllNewAssociatedTitles(DateTime(0));
+      Set<String> incomingTransactionAssociatedTitleIds = Set.from(
+          incomingTransactionAssociatedTitles.map(
+              (TransactionAssociatedTitle t) =>
+                  t.associatedTitlePk.toString()));
+      Map<String, DateTime> TransactionAssociatedTitleModifiedTimes =
+          Map.fromIterable(currentTransactionAssociatedTitles,
+              key: (t) => t.associatedTitlePk.toString(),
+              value: (t) => t.dateTimeModified);
+      List<TransactionAssociatedTitle> deletedTransactionAssociatedTitles = [];
+      for (TransactionAssociatedTitle t in currentTransactionAssociatedTitles) {
+        if (!incomingTransactionAssociatedTitleIds
+                .contains(t.associatedTitlePk.toString()) &&
+            TransactionAssociatedTitleModifiedTimes[
+                    t.associatedTitlePk.toString()] !=
+                null &&
+            TransactionAssociatedTitleModifiedTimes[
+                    t.associatedTitlePk.toString()]!
+                .isBefore(lastSynced)) {
+          deletedTransactionAssociatedTitles.add(t);
+        }
+      }
+      print("DELETE ASSOCIATED TITLES");
+      print(deletedTransactionAssociatedTitles);
+      database.deleteBatchAssociatedTitles(deletedTransactionAssociatedTitles);
+
+      List<Transaction> incomingTransactions =
+          await databaseSync.getAllNewTransactions(DateTime(0));
+      List<Transaction> currentTransactions =
+          await database.getAllNewTransactions(DateTime(0));
+      Set<String> incomingTransactionIds = Set.from(incomingTransactions
+          .map((Transaction t) => t.transactionPk.toString()));
+      Map<String, DateTime> transactionModifiedTimes = Map.fromIterable(
+          currentTransactions,
+          key: (t) => t.transactionPk.toString(),
+          value: (t) => t.dateTimeModified);
+      List<Transaction> deletedTransactions = [];
+      for (Transaction t in currentTransactions) {
+        if (!incomingTransactionIds.contains(t.transactionPk.toString()) &&
+            transactionModifiedTimes[t.transactionPk.toString()] != null &&
+            transactionModifiedTimes[t.transactionPk.toString()]!
+                .isBefore(lastSynced)) {
+          deletedTransactions.add(t);
+        }
+      }
+      print("DELETE TRANSACTIONS");
+      print(deletedTransactions);
+      database.deleteBatchTransactions(deletedTransactions);
+
+      List<ScannerTemplate> incomingScannerTemplates =
+          await databaseSync.getAllNewScannerTemplates(DateTime(0));
+      List<ScannerTemplate> currentScannerTemplates =
+          await database.getAllNewScannerTemplates(DateTime(0));
+      Set<String> incomingScannerTemplateIds = Set.from(incomingScannerTemplates
+          .map((ScannerTemplate t) => t.scannerTemplatePk.toString()));
+      Map<String, DateTime> scannerTemplateModifiedTimes = Map.fromIterable(
+          currentScannerTemplates,
+          key: (t) => t.scannerTemplatePk.toString(),
+          value: (t) => t.dateTimeModified);
+      List<ScannerTemplate> deletedScannerTemplates = [];
+      for (ScannerTemplate t in currentScannerTemplates) {
+        if (!incomingScannerTemplateIds
+                .contains(t.scannerTemplatePk.toString()) &&
+            scannerTemplateModifiedTimes[t.scannerTemplatePk.toString()] !=
+                null &&
+            scannerTemplateModifiedTimes[t.scannerTemplatePk.toString()]!
+                .isBefore(lastSynced)) {
+          deletedScannerTemplates.add(t);
+        }
+      }
+      print("DELETE SCANNER TEMPLATES");
+      print(deletedScannerTemplates);
+      database.deleteBatchScannerTemplates(deletedScannerTemplates);
+
       // check for wallet mismatch, since settings are not synced
       if (checkPrimaryWallet() == false) {
         setPrimaryWallet((await database.getAllWallets())[0]);
@@ -410,11 +597,12 @@ Future<bool> signInGoogle(
           : await googleSignIn?.signIn();
       if (account != null) {
         user = account;
+        accountsPageStateKey.currentState?.refreshState();
       } else {
         throw ("Login failed");
       }
     }
-    if (waitForCompletion == true) Navigator.of(context).pop();
+    if (waitForCompletion == true) Navigator.of(context).maybePop();
     next != null ? next() : 0;
 
     if (appStateSettings["hasSignedInOnce"] == false) {
@@ -425,7 +613,7 @@ Future<bool> signInGoogle(
     return true;
   } catch (e) {
     print(e);
-    if (waitForCompletion == true) Navigator.of(context).pop();
+    if (waitForCompletion == true) Navigator.of(context).maybePop();
     openSnackbar(
       SnackbarMessage(
         title: "Sign-in Error",
@@ -557,7 +745,9 @@ Future<void> createBackup(
     var driveFile = new drive.File();
     final timestamp =
         DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
-    driveFile.name = "db-v$schemaVersionGlobal-$timestamp.sqlite";
+    // -$timestamp
+    driveFile.name =
+        "db-v$schemaVersionGlobal-${getCurrentDeviceName()}.sqlite";
     if (clientIDForSync != null)
       driveFile.name =
           getCurrentDeviceSyncBackupFileName(clientIDForSync: clientIDForSync);
@@ -642,6 +832,75 @@ Future<void> deleteBackup(drive.DriveApi driveApi, String fileId) async {
   }
 }
 
+Future<void> chooseBackup(context,
+    {bool isManaging = false, bool isClientSync = false}) async {
+  try {
+    openBottomSheet(
+      context,
+      BackupManagement(
+        isManaging: isManaging,
+        isClientSync: isClientSync,
+      ),
+    );
+  } catch (e) {
+    Navigator.of(context).pop();
+    openSnackbar(
+      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+    );
+  }
+}
+
+Future<void> loadBackup(context, drive.DriveApi driveApi, String fileId) async {
+  try {
+    openLoadingPopup(context);
+
+    List<int> dataStore = [];
+    dynamic response = await driveApi.files
+        .get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
+    response.stream.listen(
+      (data) {
+        print("Data: ${data.length}");
+        dataStore.insertAll(dataStore.length, data);
+      },
+      onDone: () async {
+        if (kIsWeb) {
+          final html.Storage localStorage = html.window.localStorage;
+          localStorage["moor_db_str_db"] =
+              bin2str.encode(Uint8List.fromList(dataStore));
+        } else {
+          final dbFolder = await getApplicationDocumentsDirectory();
+          final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
+          await dbFile.writeAsBytes(dataStore);
+          // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
+          //     text: 'Database');
+        }
+
+        Navigator.of(context).pop();
+
+        await updateSettings("databaseJustImported", true,
+            pagesNeedingRefresh: [], updateGlobalState: false);
+        print(appStateSettings);
+        openSnackbar(
+          SnackbarMessage(
+              title: "Backup Restored",
+              icon: Icons.settings_backup_restore_rounded),
+        );
+        restartApp(context);
+      },
+      onError: (error) {
+        openSnackbar(
+          SnackbarMessage(title: error.toString(), icon: Icons.error_rounded),
+        );
+      },
+    );
+  } catch (e) {
+    Navigator.of(context).pop();
+    openSnackbar(
+      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+    );
+  }
+}
+
 class GoogleAccountLoginButton extends StatefulWidget {
   const GoogleAccountLoginButton({
     super.key,
@@ -659,87 +918,8 @@ class GoogleAccountLoginButton extends StatefulWidget {
 }
 
 class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
-  Future<void> _chooseBackup({isManaging = false}) async {
-    try {
-      openBottomSheet(context,
-          BackupManagement(isManaging: isManaging, loadBackup: _loadBackup));
-    } catch (e) {
-      Navigator.of(context).pop();
-      openSnackbar(
-        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
-      );
-    }
-  }
-
-  Future<void> _loadBackup(drive.DriveApi driveApi, String fileId) async {
-    try {
-      openLoadingPopup(context);
-
-      List<int> dataStore = [];
-      dynamic response = await driveApi.files
-          .get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
-      response.stream.listen(
-        (data) {
-          print("Data: ${data.length}");
-          dataStore.insertAll(dataStore.length, data);
-        },
-        onDone: () async {
-          if (kIsWeb) {
-            final html.Storage localStorage = html.window.localStorage;
-            localStorage["moor_db_str_db"] =
-                bin2str.encode(Uint8List.fromList(dataStore));
-          } else {
-            final dbFolder = await getApplicationDocumentsDirectory();
-            final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-            await dbFile.writeAsBytes(dataStore);
-            // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
-            //     text: 'Database');
-          }
-
-          Navigator.of(context).pop();
-
-          await updateSettings("databaseJustImported", true,
-              pagesNeedingRefresh: [], updateGlobalState: false);
-          print(appStateSettings);
-          openSnackbar(
-            SnackbarMessage(
-                title: "Backup Restored",
-                icon: Icons.settings_backup_restore_rounded),
-          );
-          restartApp(context);
-        },
-        onError: (error) {
-          openSnackbar(
-            SnackbarMessage(title: error.toString(), icon: Icons.error_rounded),
-          );
-        },
-      );
-    } catch (e) {
-      Navigator.of(context).pop();
-      openSnackbar(
-        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final Widget accountsPage = AccountsPage(
-      exportData: () async {
-        await createBackup(context, deleteOldBackups: true);
-      },
-      importData: () async {
-        await _chooseBackup();
-      },
-      logout: () async {
-        final result = await signOutGoogle();
-        if (result) Navigator.pop(context);
-        setState(() {});
-      },
-      manageData: () async {
-        await _chooseBackup(isManaging: true);
-      },
-    );
     Function login = () async {
       loadingIndeterminateKey.currentState!.setVisibility(true);
       try {
@@ -751,17 +931,12 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
               setState(() {});
               // pushRoute(context, accountsPage);
               if (widget.navigationSidebarButton) {
-                navigatorKey.currentState!.push(
-                  MaterialPageRoute(
-                    builder: (context) => accountsPage,
-                  ),
-                );
                 if (widget.onTap != null) widget.onTap!();
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => accountsPage,
+                    builder: (context) => AccountsPage(),
                   ),
                 );
               }
@@ -790,11 +965,6 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
               label: user!.displayName ?? "",
               icon: Icons.person_rounded,
               onTap: () async {
-                navigatorKey.currentState!.push(
-                  MaterialPageRoute(
-                    builder: (context) => accountsPage,
-                  ),
-                );
                 if (widget.onTap != null) widget.onTap!();
               },
               isSelected: widget.isButtonSelected,
@@ -810,7 +980,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
             icon: MoreIcons.google,
           )
         : SettingsContainerOpenPage(
-            openPage: accountsPage,
+            openPage: AccountsPage(),
             title: user!.displayName ?? "",
             icon: Icons.person_rounded,
             isOutlined: true,
@@ -819,12 +989,14 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
 }
 
 class BackupManagement extends StatefulWidget {
-  const BackupManagement(
-      {Key? key, required this.isManaging, required this.loadBackup})
-      : super(key: key);
+  const BackupManagement({
+    Key? key,
+    required this.isManaging,
+    required this.isClientSync,
+  }) : super(key: key);
 
   final bool isManaging;
-  final Function(drive.DriveApi driveApi, String fileId) loadBackup;
+  final bool isClientSync;
 
   @override
   State<BackupManagement> createState() => _BackupManagementState();
@@ -837,6 +1009,7 @@ class _BackupManagementState extends State<BackupManagement> {
   UniqueKey dropDownKey = UniqueKey();
   bool isLoading = true;
   bool autoBackups = appStateSettings["autoBackups"];
+  bool backupSync = appStateSettings["backupSync"];
 
   @override
   void initState() {
@@ -866,14 +1039,35 @@ class _BackupManagementState extends State<BackupManagement> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isClientSync) {
+      if (filesState.length > 0) {
+        print(appStateSettings["devicesHaveBeenSynced"]);
+        filesState =
+            filesState.where((file) => isSyncBackupFile(file.name)).toList();
+        appStateSettings["devicesHaveBeenSynced"] = filesState.length;
+      }
+    } else {
+      if (filesState.length > 0) {
+        filesState =
+            filesState.where((file) => !isSyncBackupFile(file.name)).toList();
+      }
+    }
+    Iterable<dynamic> filesMap = filesState.asMap().entries;
+
     return PopupFramework(
-      title:
-          widget.isManaging ? "Manage Backups" : "Choose a Backup to Restore",
-      subtitle:
-          widget.isManaging ? null : "This will overwrite all previous data",
+      title: widget.isClientSync
+          ? "Manage Devices"
+          : widget.isManaging
+              ? "Manage Backups"
+              : "Choose a Backup to Restore",
+      subtitle: widget.isClientSync
+          ? "Manage the syncing of data between multiple devices. May incur extra data usage."
+          : widget.isManaging
+              ? null
+              : "This will overwrite all previous data",
       child: Column(
         children: [
-          widget.isManaging
+          widget.isManaging && widget.isClientSync == false
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 0),
                   child: SettingsContainerSwitch(
@@ -891,20 +1085,54 @@ class _BackupManagementState extends State<BackupManagement> {
                   ),
                 )
               : SizedBox.shrink(),
-          widget.isManaging
+          widget.isClientSync
               ? SettingsContainerSwitch(
                   onSwitched: (value) {
                     updateSettings("backupSync", value,
                         pagesNeedingRefresh: [], updateGlobalState: false);
+                    setState(() {
+                      backupSync = value;
+                    });
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      bottomSheetControllerGlobal.snapToExtent(0);
+                    });
                   },
                   initialValue: appStateSettings["backupSync"],
-                  title: "Client Sync",
-                  description:
-                      "Create sync backups to be used between different devices",
+                  title: "Sync Data",
+                  description: "Sync data to other devices",
                   icon: Icons.cloud_sync_rounded,
                 )
               : SizedBox.shrink(),
-          widget.isManaging
+          widget.isClientSync
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: AnimatedSize(
+                    duration: Duration(milliseconds: 800),
+                    curve: Curves.easeInOutCubicEmphasized,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: backupSync
+                          ? SettingsContainerSwitch(
+                              onSwitched: (value) {
+                                updateSettings("syncEveryChange", value,
+                                    pagesNeedingRefresh: [],
+                                    updateGlobalState: false);
+                              },
+                              initialValue: appStateSettings["syncEveryChange"],
+                              title: "Sync Every Change",
+                              descriptionWithValue: (value) {
+                                return value
+                                    ? "Syncing every change made"
+                                    : "Syncing on refresh/launch";
+                              },
+                              icon: Icons.all_inbox_rounded,
+                            )
+                          : Container(),
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
+          widget.isManaging && widget.isClientSync == false
               ? AnimatedSize(
                   duration: Duration(milliseconds: 800),
                   curve: Curves.easeInOutCubicEmphasized,
@@ -933,7 +1161,7 @@ class _BackupManagementState extends State<BackupManagement> {
                   ),
                 )
               : SizedBox.shrink(),
-          widget.isManaging
+          widget.isManaging && widget.isClientSync == false
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: SettingsContainerDropdown(
@@ -976,15 +1204,18 @@ class _BackupManagementState extends State<BackupManagement> {
           isLoading
               ? Column(
                   children: [
-                    for (int i = 0; i < appStateSettings["backupLimit"]; i++)
+                    for (int i = 0;
+                        i <
+                            (widget.isClientSync
+                                ? appStateSettings["devicesHaveBeenSynced"]
+                                : appStateSettings["backupLimit"]);
+                        i++)
                       LoadingShimmerDriveFiles(
                           isManaging: widget.isManaging, i: i),
                   ],
                 )
               : SizedBox.shrink(),
-          ...filesState
-              .asMap()
-              .entries
+          ...filesMap
               .map(
                 (file) => AnimatedSize(
                   duration: Duration(milliseconds: 500),
@@ -1012,8 +1243,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                   },
                                 );
                                 if (result == true)
-                                  widget.loadBackup(
-                                      driveApiState!, file.value.id ?? "");
+                                  loadBackup(context, driveApiState!,
+                                      file.value.id ?? "");
                               }
                               // else {
                               //   await openPopup(
@@ -1033,14 +1264,21 @@ class _BackupManagementState extends State<BackupManagement> {
                               // }
                             },
                             borderRadius: 15,
-                            color: appStateSettings["materialYou"]
+                            color: widget.isClientSync &&
+                                    isCurrentDeviceSyncBackupFile(
+                                        file.value.name)
                                 ? Theme.of(context)
                                     .colorScheme
-                                    .secondaryContainer
-                                    .withOpacity(0.5)
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .lightDarkAccentHeavyLight,
+                                    .primary
+                                    .withOpacity(0.4)
+                                : appStateSettings["materialYou"]
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer
+                                        .withOpacity(0.5)
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .lightDarkAccentHeavyLight,
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 15),
@@ -1050,13 +1288,18 @@ class _BackupManagementState extends State<BackupManagement> {
                                       child: Row(
                                         children: [
                                           Icon(
-                                            Icons.description_rounded,
+                                            widget.isClientSync
+                                                ? Icons.devices_rounded
+                                                : Icons.description_rounded,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .secondary,
                                             size: 30,
                                           ),
-                                          SizedBox(width: 13),
+                                          SizedBox(
+                                              width: widget.isClientSync
+                                                  ? 17
+                                                  : 13),
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment:
@@ -1083,21 +1326,21 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   fontSize: 14,
                                                   maxLines: 2,
                                                 ),
-                                                isSyncBackupFile(
-                                                        file.value.name)
-                                                    ? Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 3),
-                                                        child: TextFont(
-                                                          text:
-                                                              file.value.name ??
-                                                                  "",
-                                                          fontSize: 11,
-                                                          maxLines: 2,
-                                                        ),
-                                                      )
-                                                    : SizedBox.shrink()
+                                                // isSyncBackupFile(
+                                                //         file.value.name)
+                                                //     ? Padding(
+                                                //         padding:
+                                                //             const EdgeInsets
+                                                //                 .only(top: 3),
+                                                //         child: TextFont(
+                                                //           text:
+                                                //               file.value.name ??
+                                                //                   "",
+                                                //           fontSize: 11,
+                                                //           maxLines: 2,
+                                                //         ),
+                                                //       )
+                                                //     : SizedBox.shrink()
                                               ],
                                             ),
                                           ),
@@ -1170,7 +1413,7 @@ class _BackupManagementState extends State<BackupManagement> {
                         ),
                 ),
               )
-              .toList()
+              .toList(),
         ],
       ),
     );

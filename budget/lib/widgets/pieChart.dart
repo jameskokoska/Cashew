@@ -1,8 +1,8 @@
-
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -61,8 +61,8 @@ class PieChartWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 200,
+      width: getWidthNavigationSidebar(context) <= 0 ? 200 : 300,
+      height: getWidthNavigationSidebar(context) <= 0 ? 200 : 300,
       child: Stack(
         children: [
           PieChartDisplay(
@@ -74,8 +74,8 @@ class PieChartWrapper extends StatelessWidget {
           IgnorePointer(
             child: Center(
               child: Container(
-                width: 105,
-                height: 105,
+                width: getWidthNavigationSidebar(context) <= 0 ? 105 : 130,
+                height: getWidthNavigationSidebar(context) <= 0 ? 105 : 130,
                 decoration: BoxDecoration(
                   color: middleColor?.withOpacity(0.2) ??
                       Theme.of(context).colorScheme.white.withOpacity(0.2),
@@ -87,8 +87,8 @@ class PieChartWrapper extends StatelessWidget {
           IgnorePointer(
             child: Center(
               child: Container(
-                width: 80,
-                height: 80,
+                width: getWidthNavigationSidebar(context) <= 0 ? 80 : 110,
+                height: getWidthNavigationSidebar(context) <= 0 ? 80 : 110,
                 decoration: BoxDecoration(
                     color:
                         middleColor ?? Theme.of(context).colorScheme.background,
@@ -136,9 +136,10 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     Future.delayed(Duration(milliseconds: 500), () async {
       for (int i = 1; i <= widget.data.length; i++) {
         await Future.delayed(const Duration(milliseconds: 70));
-        setState(() {
-          showLabels = showLabels + 1;
-        });
+        if (mounted)
+          setState(() {
+            showLabels = showLabels + 1;
+          });
       }
     });
   }
@@ -203,7 +204,13 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     return List.generate(widget.data.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 106.0 : 100.0;
+      final radius = getWidthNavigationSidebar(context) <= 0
+          ? isTouched
+              ? 106.0
+              : 100.0
+          : isTouched
+              ? 146.0
+              : 136.0;
       final widgetScale = isTouched ? 1.3 : 1.0;
       return PieChartSectionData(
         color: dynamicPastel(

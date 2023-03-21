@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // default settings, defaultSettings
@@ -7,6 +8,8 @@ Map<String, dynamic> defaultPreferences() {
     "databaseJustImported": false,
     "backupLimit": 10,
     "backupSync": true,
+    "syncEveryChange": kIsWeb,
+    "devicesHaveBeenSynced": 1,
     "theme": "system",
     "selectedWallet": 0,
     "selectedWalletCurrency": "usd",

@@ -1,6 +1,7 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
@@ -50,6 +51,7 @@ GlobalKey<HomePageState> homePageStateKey = GlobalKey();
 GlobalKey<TransactionsListPageState> transactionsListPageStateKey = GlobalKey();
 GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
 GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
+GlobalKey<AccountsPageState> accountsPageStateKey = GlobalKey();
 GlobalKey<BottomNavBarState> navbarStateKey = GlobalKey();
 GlobalKey<NavigationSidebarState> sidebarStateKey = GlobalKey();
 GlobalKey<GlobalLoadingProgressState> loadingProgressKey = GlobalKey();
@@ -76,7 +78,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     });
     // pageController.animateToPage(page,
     //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
-    pageController.jumpToPage(page);
+    if (pageController.hasClients) pageController.jumpToPage(page);
     setState(() {
       refresh = false;
     });
@@ -101,12 +103,16 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await parseEmailsInBackground(context);
       await getExchangeRates();
       loadingIndeterminateKey.currentState!.setVisibility(true);
-      await syncData();
-      if (appStateSettings["currentUserEmail"] != "") {
-        await syncPendingQueueOnServer(); //sync before download
-        await getCloudBudgets();
+      try {
+        await syncData();
+        if (appStateSettings["currentUserEmail"] != "") {
+          await syncPendingQueueOnServer(); //sync before download
+          await getCloudBudgets();
+        }
+        await createBackupInBackground(context);
+      } catch (e) {
+        print("Error running sync functions on load: " + e.toString());
       }
-      await createBackupInBackground(context);
       loadingIndeterminateKey.currentState!.setVisibility(false);
       entireAppLoaded = true;
     });
@@ -122,7 +128,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       SubscriptionsPage(), //5
       NotificationsPage(), //6
       WalletDetailsPage(wallet: null), //7
-      SizedBox(), // 8, this is accounts page, handles by GoogleAccountLoginButton
+      AccountsPage(key: accountsPageStateKey), // 8
       EditWalletsPage(title: "Edit Wallets"), //9
       EditBudgetPage(title: "Edit Budgets"), //10
       EditCategoriesPage(title: "Edit Categories"), //11

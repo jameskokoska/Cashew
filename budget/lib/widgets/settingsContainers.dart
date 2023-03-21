@@ -10,6 +10,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   const SettingsContainerSwitch({
     required this.title,
     this.description,
+    this.descriptionWithValue,
     this.initialValue = false,
     this.icon,
     required this.onSwitched,
@@ -20,6 +21,7 @@ class SettingsContainerSwitch extends StatefulWidget {
 
   final String title;
   final String? description;
+  final String Function(bool)? descriptionWithValue;
   final bool initialValue;
   final IconData? icon;
   final Function(bool) onSwitched;
@@ -68,13 +70,17 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
 
   @override
   Widget build(BuildContext context) {
+    String? description = widget.description;
+    if (widget.descriptionWithValue != null) {
+      description = widget.descriptionWithValue!(value);
+    }
     return AnimatedOpacity(
       duration: Duration(milliseconds: 300),
       opacity: waiting ? 0.5 : 1,
       child: SettingsContainer(
         onTap: () => {toggleSwitch()},
         title: widget.title,
-        description: widget.description,
+        description: description,
         afterWidget: Padding(
           padding: const EdgeInsets.only(left: 5),
           child: Switch(

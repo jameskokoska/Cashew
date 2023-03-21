@@ -45,30 +45,33 @@ class PopupFramework extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            title == null
-                                ? SizedBox.shrink()
-                                : TextFont(
-                                    text: title ?? "",
-                                    fontSize: title!.length > 16 ? 24 : 32,
-                                    fontWeight: FontWeight.bold,
-                                    maxLines: 5,
-                                  ),
-                            subtitle == null
-                                ? SizedBox.shrink()
-                                : Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 2, bottom: 4),
-                                    child: TextFont(
-                                      text: subtitle ?? "",
-                                      fontSize: 17,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              title == null
+                                  ? SizedBox.shrink()
+                                  : TextFont(
+                                      text: title ?? "",
+                                      fontSize: title!.length > 16 ? 24 : 32,
+                                      fontWeight: FontWeight.bold,
                                       maxLines: 5,
                                     ),
-                                  ),
-                          ],
+                              subtitle == null
+                                  ? SizedBox.shrink()
+                                  : Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 2, bottom: 4),
+                                      child: TextFont(
+                                        text: subtitle ?? "",
+                                        fontSize: 17,
+                                        maxLines: 5,
+                                      ),
+                                    ),
+                            ],
+                          ),
                         ),
                         icon ?? SizedBox.shrink()
                       ],

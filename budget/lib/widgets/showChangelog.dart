@@ -8,13 +8,18 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    When reordering items, modified date is updated
+    Fixed starting position of month selector on web with side navbar
+    Option to sync all changes
+    Loading progress bar on top for web
+    Login and loading fixes on web
     Fixed dropdown selector not having default value, chooses first entry
     Client sync setting
     Client syncs when changes are made 
     Fixed default wallet when importing client sync changes
     Cleaned up client sync backup detection code
     Client sync import fixes
-    Decluttered unused imports
+    De-cluttered unused imports
     Read changes past modified time
     Client specific backup read and write 
     Each client backup to Google Drive

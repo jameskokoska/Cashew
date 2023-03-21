@@ -706,10 +706,14 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
     print(appStateSettings["currentUserEmail"]);
     if (appStateSettings["currentUserEmail"] != "") {
       loadingIndeterminateKey.currentState!.setVisibility(true);
-      await syncData();
-      await syncPendingQueueOnServer();
-      await getCloudBudgets();
-      await getExchangeRates();
+      try {
+        await syncData();
+        await syncPendingQueueOnServer();
+        await getCloudBudgets();
+        await getExchangeRates();
+      } catch (e) {
+        print("Error syncing with server: " + e.toString());
+      }
       loadingIndeterminateKey.currentState!.setVisibility(false);
     }
   }

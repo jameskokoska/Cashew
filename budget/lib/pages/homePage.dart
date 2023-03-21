@@ -675,7 +675,7 @@ class HomePageState extends State<HomePage>
                     enableDoubleColumn(context) == true
                         ? SizedBox.shrink()
                         : viewAllTransactionsButton,
-                    SizedBox(height: 65),
+                    SizedBox(height: 40),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(
                         height: 1,

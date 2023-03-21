@@ -917,7 +917,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     b.order.isSmallerOrEqualValue(newPosition),
               ))
             .write(
-          BudgetsCompanion(order: Value(budget.order - 1)),
+          BudgetsCompanion(
+            order: Value(budget.order - 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     } else {
@@ -930,7 +933,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     b.order.isSmallerOrEqualValue(oldPosition),
               ))
             .write(
-          BudgetsCompanion(order: Value(budget.order + 1)),
+          BudgetsCompanion(
+            order: Value(budget.order + 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     }
@@ -939,7 +945,10 @@ class FinanceDatabase extends _$FinanceDatabase {
             (b) => b.budgetPk.equals(budgetPk),
           ))
         .write(
-      BudgetsCompanion(order: Value(newPosition)),
+      BudgetsCompanion(
+        order: Value(newPosition),
+        dateTimeModified: Value(DateTime.now()),
+      ),
     );
   }
 
@@ -956,7 +965,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     b.budgetPk.equals(budget.budgetPk),
               ))
             .write(
-          BudgetsCompanion(order: Value(budget.order + direction)),
+          BudgetsCompanion(
+            order: Value(budget.order + direction),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     } else {
@@ -1077,7 +1089,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     w.order.isSmallerOrEqualValue(newPosition),
               ))
             .write(
-          WalletsCompanion(order: Value(wallet.order - 1)),
+          WalletsCompanion(
+            order: Value(wallet.order - 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     } else {
@@ -1090,7 +1105,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     w.order.isSmallerOrEqualValue(oldPosition),
               ))
             .write(
-          WalletsCompanion(order: Value(wallet.order + 1)),
+          WalletsCompanion(
+            order: Value(wallet.order + 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     }
@@ -1099,7 +1117,10 @@ class FinanceDatabase extends _$FinanceDatabase {
             (w) => w.walletPk.equals(walletPk),
           ))
         .write(
-      WalletsCompanion(order: Value(newPosition)),
+      WalletsCompanion(
+        order: Value(newPosition),
+        dateTimeModified: Value(DateTime.now()),
+      ),
     );
   }
 
@@ -1116,7 +1137,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     w.walletPk.equals(wallet.walletPk),
               ))
             .write(
-          WalletsCompanion(order: Value(wallet.order + direction)),
+          WalletsCompanion(
+            order: Value(wallet.order + direction),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     } else {
@@ -1130,7 +1154,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     return into(appSettings).insertOnConflictUpdate(setting);
   }
 
-  //Overwrite settings entry, it will always have id 0
   Future<AppSetting> getSettings() {
     return (select(appSettings)..where((s) => s.settingsPk.equals(0)))
         .getSingle();
@@ -1299,7 +1322,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     t.order.isSmallerOrEqualValue(newPosition),
               ))
             .write(
-          AssociatedTitlesCompanion(order: Value(associatedTitle.order - 1)),
+          AssociatedTitlesCompanion(
+            order: Value(associatedTitle.order - 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     } else {
@@ -1313,7 +1339,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     t.order.isSmallerOrEqualValue(oldPosition),
               ))
             .write(
-          AssociatedTitlesCompanion(order: Value(associatedTitle.order + 1)),
+          AssociatedTitlesCompanion(
+            order: Value(associatedTitle.order + 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     }
@@ -1322,7 +1351,10 @@ class FinanceDatabase extends _$FinanceDatabase {
             (t) => t.associatedTitlePk.equals(associatedTitlePk),
           ))
         .write(
-      AssociatedTitlesCompanion(order: Value(newPosition)),
+      AssociatedTitlesCompanion(
+        order: Value(newPosition),
+        dateTimeModified: Value(DateTime.now()),
+      ),
     );
   }
 
@@ -1435,9 +1467,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         }
       }
     }
-    return into(transactions)
-        .insert(transaction, mode: InsertMode.insertOrReplace);
+    return into(transactions).insert(
+        transaction.copyWith(dateTimeModified: Value(DateTime.now())),
+        mode: InsertMode.insertOrReplace);
   }
+
+  // ************************************************************
+  // The following functions should only be used for data sync
+  // Unless another use case makes sense
+  // ************************************************************
 
   // This doesn't handle shared transactions!
   // updateShared is always false
@@ -1459,6 +1497,76 @@ class FinanceDatabase extends _$FinanceDatabase {
     });
     return true;
   }
+
+  Future<bool> deleteBatchWallets(
+      List<TransactionWallet> walletsDeleting) async {
+    await batch((batch) {
+      for (TransactionWallet wallet in walletsDeleting)
+        batch.delete(wallets, wallet);
+    });
+    return true;
+  }
+
+  Future<bool> deleteBatchCategories(
+      List<TransactionCategory> categoriesDeleting) async {
+    await batch((batch) {
+      for (TransactionCategory category in categoriesDeleting)
+        batch.delete(categories, category);
+    });
+    return true;
+  }
+
+  // This doesn't handle shared budgets!
+  Future<bool> deleteBatchBudgets(List<Budget> budgetsDeleting) async {
+    await batch((batch) {
+      for (Budget budget in budgetsDeleting) batch.delete(budgets, budget);
+    });
+    return true;
+  }
+
+  Future<bool> deleteBatchCategoryBudgetLimit(
+      List<CategoryBudgetLimit> categoryBudgetLimitDeleting) async {
+    await batch((batch) {
+      for (CategoryBudgetLimit categoryBudgetLimit
+          in categoryBudgetLimitDeleting)
+        batch.delete(categoryBudgetLimits, categoryBudgetLimit);
+    });
+    return true;
+  }
+
+  // This doesn't handle order of titles!
+  Future<bool> deleteBatchAssociatedTitles(
+      List<TransactionAssociatedTitle> associatedTitlesDeleting) async {
+    await batch((batch) {
+      for (TransactionAssociatedTitle associatedTitle
+          in associatedTitlesDeleting)
+        batch.delete(associatedTitles, associatedTitle);
+    });
+    return true;
+  }
+
+  // This doesn't handle shared transactions!
+  // updateShared is always false
+  Future<bool> deleteBatchTransactions(
+      List<Transaction> transactionsDeleting) async {
+    await batch((batch) {
+      for (Transaction transaction in transactionsDeleting)
+        batch.delete(transactions, transaction);
+    });
+    return true;
+  }
+
+  Future<bool> deleteBatchScannerTemplates(
+      List<ScannerTemplate> scannerTemplatesDeleting) async {
+    await batch((batch) {
+      for (ScannerTemplate scannerTemplate in scannerTemplatesDeleting)
+        batch.delete(scannerTemplates, scannerTemplate);
+    });
+    return true;
+  }
+
+  // ************************************************************
+  // ************************************************************
 
   // create or update a category
   Future<int> createOrUpdateCategory(TransactionCategory category,
@@ -1684,7 +1792,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     c.order.isSmallerOrEqualValue(newPosition),
               ))
             .write(
-          CategoriesCompanion(order: Value(category.order - 1)),
+          CategoriesCompanion(
+            order: Value(category.order - 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     } else {
@@ -1697,7 +1808,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     c.order.isSmallerOrEqualValue(oldPosition),
               ))
             .write(
-          CategoriesCompanion(order: Value(category.order + 1)),
+          CategoriesCompanion(
+            order: Value(category.order + 1),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     }
@@ -1706,7 +1820,10 @@ class FinanceDatabase extends _$FinanceDatabase {
             (c) => c.categoryPk.equals(categoryPk),
           ))
         .write(
-      CategoriesCompanion(order: Value(newPosition)),
+      CategoriesCompanion(
+        order: Value(newPosition),
+        dateTimeModified: Value(DateTime.now()),
+      ),
     );
   }
 
@@ -1723,7 +1840,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                     c.categoryPk.equals(category.categoryPk),
               ))
             .write(
-          CategoriesCompanion(order: Value(category.order + direction)),
+          CategoriesCompanion(
+            order: Value(category.order + direction),
+            dateTimeModified: Value(DateTime.now()),
+          ),
         );
       }
     } else {
