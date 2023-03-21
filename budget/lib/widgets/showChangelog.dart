@@ -8,6 +8,19 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed device id name on web devices
+    Navigation sidebar disabled when onboarding
+    New account and backup buttons
+    Fixed month selector media query width position considers side navbar
+    Fixed stack order, side panel always on top
+    Fixed offset in last synced time race condition
+    (need to track the time you last synced with that specific client e.g. if change made on mobile, web syncs now, wait 5 seconds, then movile syncs, - web thinks that it got that latest version from mobile already changes not here!)
+    Links listed below notes in transaction entry
+    Added time and date to sidebar on web
+    Web no longer asks for gmail permissions
+    Fixed search icon text input colors
+    Improved selected transactions action bar size on web
+    Fixed drag down to dismiss stuck on web
     Added users email on side navigation bar
     Added sync button on side navigation bar
     Sign-in silent fix on mobile

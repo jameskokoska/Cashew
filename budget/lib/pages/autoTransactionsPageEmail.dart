@@ -748,83 +748,91 @@ class EmailsList extends StatelessWidget {
                   onTap: () {
                     if (onTap != null) onTap!(messageString);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        doesEmailContain &&
-                                (title == null || amountDouble == null)
-                            ? Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: TextFont(
-                                  text: "Email parsing failed.",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                ),
-                              )
-                            : SizedBox(),
-                        doesEmailContain
-                            ? templateFound == null
-                                ? TextFont(
-                                    fontSize: 19,
-                                    text: "Template Not found.",
-                                    maxLines: 10,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                : TextFont(
-                                    fontSize: 19,
-                                    text: templateFound,
-                                    maxLines: 10,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                            : SizedBox(),
-                        doesEmailContain
-                            ? title == null
-                                ? TextFont(
-                                    fontSize: 15,
-                                    text: "Title: Not found.",
-                                    maxLines: 10,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                : TextFont(
-                                    fontSize: 15,
-                                    text: "Title: " + title,
-                                    maxLines: 10,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                            : SizedBox(),
-                        doesEmailContain
-                            ? amountDouble == null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: TextFont(
-                                      fontSize: 15,
-                                      text:
-                                          "Amount: Not found / invalid number.",
-                                      maxLines: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: TextFont(
-                                      fontSize: 15,
-                                      text: "Amount: " +
-                                          convertToMoney(amountDouble),
-                                      maxLines: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                            : SizedBox(),
-                        TextFont(
-                          fontSize: 13,
-                          text: messageShort,
-                          maxLines: 10,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              doesEmailContain &&
+                                      (title == null || amountDouble == null)
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: TextFont(
+                                        text: "Email parsing failed.",
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              doesEmailContain
+                                  ? templateFound == null
+                                      ? TextFont(
+                                          fontSize: 19,
+                                          text: "Template Not found.",
+                                          maxLines: 10,
+                                          fontWeight: FontWeight.bold,
+                                        )
+                                      : TextFont(
+                                          fontSize: 19,
+                                          text: templateFound,
+                                          maxLines: 10,
+                                          fontWeight: FontWeight.bold,
+                                        )
+                                  : SizedBox(),
+                              doesEmailContain
+                                  ? title == null
+                                      ? TextFont(
+                                          fontSize: 15,
+                                          text: "Title: Not found.",
+                                          maxLines: 10,
+                                          fontWeight: FontWeight.bold,
+                                        )
+                                      : TextFont(
+                                          fontSize: 15,
+                                          text: "Title: " + title,
+                                          maxLines: 10,
+                                          fontWeight: FontWeight.bold,
+                                        )
+                                  : SizedBox(),
+                              doesEmailContain
+                                  ? amountDouble == null
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: TextFont(
+                                            fontSize: 15,
+                                            text:
+                                                "Amount: Not found / invalid number.",
+                                            maxLines: 10,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: TextFont(
+                                            fontSize: 15,
+                                            text: "Amount: " +
+                                                convertToMoney(amountDouble),
+                                            maxLines: 10,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                  : SizedBox(),
+                              TextFont(
+                                fontSize: 13,
+                                text: messageShort,
+                                maxLines: 10,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

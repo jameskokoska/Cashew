@@ -154,14 +154,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     return;
   }
 
-  void setSelectedTitle(String title) {
-    setTextInput(_titleInputController, title);
+  void setSelectedTitle(String title, {bool setInput = true}) {
+    if (setInput) setTextInput(_titleInputController, title);
     selectedTitle = title.trim();
     return;
   }
 
-  void setSelectedTitleController(String title) {
-    setTextInput(_titleInputController, title);
+  void setSelectedTitleController(String title, {bool setInput = true}) {
+    if (setInput) setTextInput(_titleInputController, title);
     selectedTitle = title;
     return;
   }
@@ -173,7 +173,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   void setSelectedNoteController(String note) {
-    setTextInput(_noteInputController, note);
+    // setTextInput(_noteInputController, note);
     selectedNote = note;
     return;
   }
@@ -1174,7 +1174,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       icon: Icons.title_rounded,
                       controller: _titleInputController,
                       onChanged: (text) async {
-                        setSelectedTitle(text);
+                        setSelectedTitle(text, setInput: false);
                       },
                     ),
                   ),
@@ -1182,34 +1182,89 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 Container(height: 14),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22),
-                  child: Tappable(
-                    color: (appStateSettings["materialYou"]
-                        ? Theme.of(context).colorScheme.secondaryContainer
-                        : Theme.of(context).colorScheme.canvasContainer),
-                    onTap: () {
-                      openBottomSheet(
-                        context,
-                        PopupFramework(
-                          child: SelectNotes(
-                            setSelectedNote: setSelectedNoteController,
-                            selectedNote: selectedNote,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Column(
+                      children: [
+                        Tappable(
+                          color: (appStateSettings["materialYou"]
+                              ? Theme.of(context).colorScheme.secondaryContainer
+                              : Theme.of(context).colorScheme.canvasContainer),
+                          onTap: () {
+                            openBottomSheet(
+                              context,
+                              PopupFramework(
+                                child: SelectNotes(
+                                  setSelectedNote: setSelectedNoteController,
+                                  selectedNote: selectedNote,
+                                ),
+                              ),
+                              snap: false,
+                            );
+                          },
+                          borderRadius: 15,
+                          child: TextInput(
+                            borderRadius: BorderRadius.zero,
+                            padding: EdgeInsets.zero,
+                            labelText: "Notes",
+                            icon: Icons.sticky_note_2_rounded,
+                            controller: _noteInputController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            minLines: 3,
+                            onChanged: (text) async {
+                              setSelectedNoteController(text);
+                            },
                           ),
                         ),
-                        snap: false,
-                      );
-                    },
-                    borderRadius: 15,
-                    child: TextInput(
-                      padding: EdgeInsets.zero,
-                      labelText: "Notes",
-                      icon: Icons.sticky_note_2_rounded,
-                      controller: _noteInputController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      minLines: 3,
-                      onChanged: (text) async {
-                        setSelectedNoteController(text);
-                      },
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 1000),
+                          curve: Curves.easeInOutCubicEmphasized,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: extractLinks(selectedNote ?? "").length <= 0
+                                ? Container(
+                                    key: ValueKey(1),
+                                  )
+                                : Column(
+                                    children: [
+                                      for (String link
+                                          in extractLinks(selectedNote ?? ""))
+                                        Tappable(
+                                          onTap: () {
+                                            if (link.startsWith("www."))
+                                              link = "http://" + link;
+                                            openUrl(link);
+                                          },
+                                          color: darkenPastel(
+                                              appStateSettings["materialYou"]
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .secondaryContainer
+                                                  : Theme.of(context)
+                                                      .colorScheme
+                                                      .canvasContainer,
+                                              amount: 0.2),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 10),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.link_rounded),
+                                                SizedBox(width: 10),
+                                                TextFont(
+                                                  text: link,
+                                                  fontSize: 16,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:budget/colors.dart';
@@ -58,6 +59,31 @@ String getDeviceFromSyncBackupFileName(String? backupFileName) {
 
 String getCurrentDeviceName() {
   return (clientID).split("-")[0];
+}
+
+Future<DateTime> getDateOfLastSyncedWithClient(String clientIDForSync) async {
+  String string =
+      sharedPreferences.getString("dateOfLastSyncedWithClient") ?? "{}";
+  String lastTimeSynced =
+      (jsonDecode(string)[clientIDForSync] ?? "").toString();
+  if (lastTimeSynced == "") return DateTime(0);
+  try {
+    return DateTime.parse(lastTimeSynced);
+  } catch (e) {
+    print("Error getting time of last sync " + e.toString());
+    return DateTime(0);
+  }
+}
+
+Future<bool> setDateOfLastSyncedWithClient(
+    String clientIDForSync, DateTime dateTimeSynced) async {
+  String string =
+      sharedPreferences.getString("dateOfLastSyncedWithClient") ?? "{}";
+  dynamic parsed = jsonDecode(string);
+  parsed[clientIDForSync] = dateTimeSynced.toString();
+  await sharedPreferences.setString(
+      "dateOfLastSyncedWithClient", jsonEncode(parsed));
+  return true;
 }
 
 // if changeMadeSync show loading and check if syncEveryChange is turned on
@@ -162,18 +188,6 @@ Future<bool> syncData() async {
     throw "No backups found.";
   }
 
-  DateTime lastSynced;
-  if (appStateSettings["lastSynced"] == null)
-    lastSynced = DateTime(2000);
-  else
-    lastSynced = DateTime.parse(appStateSettings["lastSynced"]);
-
-  if (files.first.modifiedTime == null ||
-      lastSynced.isAfter(files.first.modifiedTime!)) {
-    print("no need to backup, no new backup file to pull data from");
-    return false;
-  }
-
   List<drive.File> filesToDownloadSyncChanges = [];
   for (drive.File file in files) {
     if (isSyncBackupFile(file.name)) {
@@ -187,6 +201,18 @@ Future<bool> syncData() async {
   for (drive.File file in filesToDownloadSyncChanges) {
     // we don't want to restore this clients backup
     if (isCurrentDeviceSyncBackupFile(file.name)) continue;
+
+    // check if this is a new sync from this specific client
+    DateTime lastSynced = await getDateOfLastSyncedWithClient(
+        getDeviceFromSyncBackupFileName(file.name));
+
+    print("COMPARING TIMES");
+    print(file.modifiedTime);
+    print(lastSynced);
+    if (file.modifiedTime == null || lastSynced.isAfter(file.modifiedTime!)) {
+      print(
+          "no need to restore backup from this client, no new backup file to pull data from");
+    }
 
     String? fileId = file.id;
     if (fileId == null) continue;
@@ -393,6 +419,8 @@ Future<bool> syncData() async {
       if (checkPrimaryWallet() == false) {
         setPrimaryWallet((await database.getAllWallets())[0]);
       }
+      setDateOfLastSyncedWithClient(
+          getDeviceFromSyncBackupFileName(file.name), syncStarted);
     } catch (e) {
       print("SYNC FAILED");
       print(e.toString());
@@ -411,7 +439,7 @@ Future<bool> syncData() async {
   }
 
   updateSettings("lastSynced", syncStarted.toString(),
-      pagesNeedingRefresh: [], updateGlobalState: false);
+      pagesNeedingRefresh: [], updateGlobalState: true);
   print("DONE SYNCING");
   return true;
 }
@@ -480,26 +508,23 @@ Future<bool> signInGoogle(
 
     if (waitForCompletion == true) openLoadingPopup(context);
     if (user == null) {
-      // we can only have one instance of this set (on web at least)
-      if (googleSignIn == null) {
-        googleSignIn = signIn.GoogleSignIn.standard(scopes: [
-          ...(drivePermissions == true || kIsWeb
-              ? [drive.DriveApi.driveAppdataScope]
-              : []),
-          ...(gMailPermissions == true || kIsWeb
-              ? [
-                  gMail.GmailApi.gmailReadonlyScope,
-                  gMail.GmailApi
-                      .gmailModifyScope //We do this so the emails can be marked read
-                ]
-              : [])
-        ]);
-      }
+      googleSignIn = signIn.GoogleSignIn.standard(scopes: [
+        ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
+        ...(gMailPermissions == true
+            ? [
+                gMail.GmailApi.gmailReadonlyScope,
+                gMail.GmailApi
+                    .gmailModifyScope //We do this so the emails can be marked read
+              ]
+            : [])
+      ]);
+
       final signIn.GoogleSignInAccount? account = silentSignIn == true
           ? kIsWeb
-              ? await googleSignIn?.signInSilently().then((value) async {
-                  return await googleSignIn?.signIn();
-                })
+              ? await googleSignIn?.signIn()
+              // await googleSignIn?.signInSilently().then((value) async {
+              //   return await googleSignIn?.signIn();
+              // })
               : await googleSignIn?.signInSilently()
           : await googleSignIn?.signIn();
 
@@ -512,7 +537,7 @@ Future<bool> signInGoogle(
         throw ("Login failed");
       }
     }
-    if (waitForCompletion == true) Navigator.of(context).maybePop();
+    if (waitForCompletion == true) Navigator.of(context).pop();
     next != null ? next() : 0;
 
     if (appStateSettings["hasSignedInOnce"] == false) {
@@ -523,7 +548,7 @@ Future<bool> signInGoogle(
     return true;
   } catch (e) {
     print(e);
-    if (waitForCompletion == true) Navigator.of(context).maybePop();
+    if (waitForCompletion == true) Navigator.of(context).pop();
     openSnackbar(
       SnackbarMessage(
         title: "Sign-in Error",

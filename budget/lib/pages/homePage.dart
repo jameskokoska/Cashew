@@ -84,8 +84,7 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    bool showUsername = appStateSettings["username"] != "" &&
-        getWidthNavigationSidebar(context) <= 0;
+    bool showUsername = appStateSettings["username"] != "";
     Widget slidingSelector = SlidingSelector(
         useHorizontalPaddingConstrained: false,
         onSelected: (index) {

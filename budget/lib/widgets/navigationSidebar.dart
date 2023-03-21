@@ -6,9 +6,11 @@ import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:intl/intl.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 // returns 0 if no navigation sidebar should be shown
@@ -23,7 +25,7 @@ double getWidthNavigationSidebar(context) {
 }
 
 bool enableDoubleColumn(context) {
-  double minScreenWidth = 1200;
+  double minScreenWidth = 1000;
   return MediaQuery.of(context).size.width > minScreenWidth ? true : false;
 }
 
@@ -64,229 +66,251 @@ class NavigationSidebarState extends State<NavigationSidebar> {
         color: Theme.of(context).canvasColor,
       ),
       width: getWidthNavigationSidebar(context),
-      child: SingleChildScrollView(
-        child: IntrinsicHeight(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: 60),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: TextFont(
-                        text: getWelcomeMessage(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    showUsername
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: TextFont(
-                              maxLines: 3,
-                              text: appStateSettings["username"],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 39,
-                              textColor: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer,
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    AnimatedSize(
-                      duration: Duration(milliseconds: 1500),
-                      curve: Curves.easeInOutCubic,
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: showEmail == false
-                            ? Container(
-                                key: ValueKey(1),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 12, right: 12, top: 5),
-                                child: TextFont(
-                                  textColor:
-                                      Theme.of(context).colorScheme.textLight,
-                                  fontSize: 13,
-                                  text: appStateSettings["currentUserEmail"],
-                                ),
-                              ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    NavigationSidebarButton(
-                      icon: Icons.home_rounded,
-                      label: "Home",
-                      isSelected: selectedIndex == 0,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(0, switchNavbar: true);
-                      },
-                    ),
-                    NavigationSidebarButton(
-                      icon: Icons.payments_rounded,
-                      label: "Transactions",
-                      isSelected: selectedIndex == 1,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(1, switchNavbar: true);
-                      },
-                    ),
-                    NavigationSidebarButton(
-                      icon: MoreIcons.chart_pie,
-                      iconSize: 15,
-                      label: "Budgets",
-                      isSelected: selectedIndex == 2,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(2, switchNavbar: true);
-                      },
-                    ),
-                    NavigationSidebarButton(
-                      icon: Icons.event_repeat_rounded,
-                      label: "Subscriptions",
-                      isSelected: selectedIndex == 5,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(5, switchNavbar: true);
-                      },
-                    ),
-                    kIsWeb
-                        ? SizedBox.shrink()
-                        : NavigationSidebarButton(
-                            icon: Icons.notifications_rounded,
-                            label: "Notifications",
-                            isSelected: selectedIndex == 6,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(6, switchNavbar: true);
-                            },
-                          ),
-                    NavigationSidebarButton(
-                      icon: Icons.line_weight_rounded,
-                      label: "All Spending",
-                      isSelected: selectedIndex == 7,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(7, switchNavbar: true);
-                      },
-                    ),
-                  ],
+      child: IgnorePointer(
+        ignoring: appStateSettings["hasOnboarded"] == false,
+        child: AnimatedOpacity(
+          duration: Duration(milliseconds: 500),
+          opacity: appStateSettings["hasOnboarded"] == false ? 0.5 : 1,
+          child: SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
                 ),
-                Spacer(),
-                SizedBox(height: 40),
-                Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    EditDataButtons(selectedIndex: selectedIndex),
-                    GoogleAccountLoginButton(
-                      navigationSidebarButton: true,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(8, switchNavbar: true);
-                        appStateKey.currentState?.refreshAppState();
-                      },
-                      isButtonSelected: selectedIndex == 8,
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: 70),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: TimerBuilder.periodic(
+                            Duration(seconds: 5),
+                            builder: (context) {
+                              DateTime now = DateTime.now();
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextFont(
+                                    textColor:
+                                        Theme.of(context).colorScheme.black,
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.bold,
+                                    text: DateFormat('h:mm').format(now),
+                                  ),
+                                  TextFont(
+                                    textColor: Theme.of(context)
+                                        .colorScheme
+                                        .black
+                                        .withOpacity(0.5),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    text: DateFormat('EEEE').format(now),
+                                  ),
+                                  SizedBox(height: 5),
+                                  TextFont(
+                                    textColor: Theme.of(context)
+                                        .colorScheme
+                                        .black
+                                        .withOpacity(0.5),
+                                    fontSize: 18,
+                                    text: DateFormat('MMMM d, y').format(now),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 60),
+                        NavigationSidebarButton(
+                          icon: Icons.home_rounded,
+                          label: "Home",
+                          isSelected: selectedIndex == 0,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(0, switchNavbar: true);
+                          },
+                        ),
+                        NavigationSidebarButton(
+                          icon: Icons.payments_rounded,
+                          label: "Transactions",
+                          isSelected: selectedIndex == 1,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(1, switchNavbar: true);
+                          },
+                        ),
+                        NavigationSidebarButton(
+                          icon: MoreIcons.chart_pie,
+                          iconSize: 15,
+                          label: "Budgets",
+                          isSelected: selectedIndex == 2,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(2, switchNavbar: true);
+                          },
+                        ),
+                        NavigationSidebarButton(
+                          icon: Icons.event_repeat_rounded,
+                          label: "Subscriptions",
+                          isSelected: selectedIndex == 5,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(5, switchNavbar: true);
+                          },
+                        ),
+                        kIsWeb
+                            ? SizedBox.shrink()
+                            : NavigationSidebarButton(
+                                icon: Icons.notifications_rounded,
+                                label: "Notifications",
+                                isSelected: selectedIndex == 6,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(6, switchNavbar: true);
+                                },
+                              ),
+                        NavigationSidebarButton(
+                          icon: Icons.line_weight_rounded,
+                          label: "All Spending",
+                          isSelected: selectedIndex == 7,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(7, switchNavbar: true);
+                          },
+                        ),
+                      ],
                     ),
-                    NavigationSidebarButton(
-                      icon: Icons.settings_rounded,
-                      label: "Settings",
-                      isSelected: selectedIndex == 4,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(4, switchNavbar: true);
-                      },
-                    ),
-                    NavigationSidebarButton(
-                      icon: Icons.info_outline_rounded,
-                      label: "About",
-                      isSelected: selectedIndex == 13,
-                      onTap: () {
-                        pageNavigationFrameworkKey.currentState!
-                            .changePage(13, switchNavbar: true);
-                      },
-                    ),
-                    AnimatedSize(
-                      duration: Duration(milliseconds: 1500),
-                      curve: Curves.easeInOutCubic,
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: appStateSettings["currentUserEmail"] == ""
-                            ? Container(
-                                key: ValueKey(1),
-                              )
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 500),
-                                  child: Tappable(
-                                    key: ValueKey(
-                                        appStateSettings["lastSynced"]),
-                                    onTap: () {
-                                      runAllCloudFunctions(context);
-                                    },
-                                    borderRadius: 15,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 20),
-                                          child: TimerBuilder.periodic(
-                                            Duration(seconds: 5),
-                                            builder: (context) {
-                                              return TextFont(
-                                                textColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .textLight,
-                                                fontSize: 13,
-                                                text: "Synced " +
-                                                    getTimeAgo(
-                                                      DateTime.parse(
-                                                        appStateSettings[
-                                                            "lastSynced"],
-                                                      ),
-                                                    ),
-                                              );
-                                            },
+                    Spacer(),
+                    SizedBox(height: 40),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        EditDataButtons(selectedIndex: selectedIndex),
+                        GoogleAccountLoginButton(
+                          navigationSidebarButton: true,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(8, switchNavbar: true);
+                            appStateKey.currentState?.refreshAppState();
+                          },
+                          isButtonSelected: selectedIndex == 8,
+                        ),
+                        NavigationSidebarButton(
+                          icon: Icons.settings_rounded,
+                          label: "Settings",
+                          isSelected: selectedIndex == 4,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(4, switchNavbar: true);
+                          },
+                        ),
+                        NavigationSidebarButton(
+                          icon: Icons.info_outline_rounded,
+                          label: "About",
+                          isSelected: selectedIndex == 13,
+                          onTap: () {
+                            pageNavigationFrameworkKey.currentState!
+                                .changePage(13, switchNavbar: true);
+                          },
+                        ),
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 1500),
+                          curve: Curves.easeInOutCubic,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: appStateSettings["currentUserEmail"] == ""
+                                ? Container(
+                                    key: ValueKey(1),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: AnimatedSwitcher(
+                                      duration: Duration(milliseconds: 500),
+                                      child: Tappable(
+                                        key: ValueKey(
+                                            appStateSettings["lastSynced"]),
+                                        onTap: () {
+                                          runAllCloudFunctions(context);
+                                        },
+                                        borderRadius: 15,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: TimerBuilder.periodic(
+                                                    Duration(seconds: 5),
+                                                    builder: (context) {
+                                                      DateTime? timeLastSynced =
+                                                          null;
+                                                      try {
+                                                        timeLastSynced =
+                                                            DateTime.parse(
+                                                          appStateSettings[
+                                                              "lastSynced"],
+                                                        );
+                                                      } catch (e) {
+                                                        print(
+                                                            "Error parsing time last synced: " +
+                                                                e.toString());
+                                                      }
+                                                      return TextFont(
+                                                        textColor:
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .textLight,
+                                                        fontSize: 13,
+                                                        text: "Synced " +
+                                                            (timeLastSynced ==
+                                                                    null
+                                                                ? "?"
+                                                                : getTimeAgo(
+                                                                    timeLastSynced)) +
+                                                            "\n" +
+                                                            appStateSettings[
+                                                                    "currentUserEmail"]
+                                                                .split("@")[0],
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 2),
+                                              Opacity(
+                                                opacity: 0.7,
+                                                child: RefreshButton(onTap: () {
+                                                  runAllCloudFunctions(context);
+                                                }),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(width: 2),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 5),
-                                          child: Opacity(
-                                            opacity: 0.7,
-                                            child: RefreshButton(onTap: () {
-                                              runAllCloudFunctions(context);
-                                            }),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                      ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                      ],
                     ),
-                    SizedBox(height: 10),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

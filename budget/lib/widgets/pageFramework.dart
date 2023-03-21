@@ -185,15 +185,14 @@ class PageFrameworkState extends State<PageFramework>
     }
   }
 
-  _onPointerUp(PointerUpEvent event) {
+  _onPointerUp(PointerUpEvent event) async {
     //How far you need to drag to dismiss
     if (widget.dragDownToDismissEnabled) {
-      if (totalDragY >= 125) {
+      if (totalDragY >= 125 && !(ModalRoute.of(context)?.isFirst ?? true)) {
         if (widget.onDragDownToDissmiss != null) {
           widget.onDragDownToDissmiss!();
         } else {
-          Navigator.of(context).maybePop();
-          return;
+          await Navigator.of(context).maybePop();
         }
       }
       totalDragX = 0;

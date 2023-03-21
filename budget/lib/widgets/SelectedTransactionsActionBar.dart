@@ -8,6 +8,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -51,8 +52,10 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                           bottom: 6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(kIsWeb ? 15 : 10),
-                      bottomRight: Radius.circular(kIsWeb ? 15 : 10),
+                      bottomLeft: Radius.circular(
+                          getWidthNavigationSidebar(context) > 0 ? 20 : 10),
+                      bottomRight: Radius.circular(
+                          getWidthNavigationSidebar(context) > 0 ? 20 : 10),
                     ),
                     boxShadow: boxShadowCheck(
                       [
@@ -80,6 +83,12 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                         Row(
                           children: [
                             IconButton(
+                              iconSize: getWidthNavigationSidebar(context) > 0
+                                  ? 23
+                                  : null,
+                              padding: getWidthNavigationSidebar(context) > 0
+                                  ? EdgeInsets.all(12)
+                                  : null,
                               color: Theme.of(context).colorScheme.secondary,
                               icon: Icon(
                                 Icons.arrow_back_rounded,
@@ -108,7 +117,11 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                             finalNumber: snapshot.hasData
                                                 ? snapshot.data!
                                                 : 0),
-                                        fontSize: 17.5,
+                                        fontSize: getWidthNavigationSidebar(
+                                                    context) <=
+                                                0
+                                            ? 17.5
+                                            : 19,
                                         textAlign: TextAlign.left,
                                       );
                                     },
@@ -117,7 +130,10 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               ),
                             ),
                             TextFont(
-                                fontSize: 17,
+                                fontSize:
+                                    getWidthNavigationSidebar(context) <= 0
+                                        ? 17
+                                        : 19,
                                 text: " (" +
                                     listOfIDs.length.toString() +
                                     " selected)"),
@@ -126,6 +142,12 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                         Row(
                           children: [
                             IconButton(
+                              iconSize: getWidthNavigationSidebar(context) > 0
+                                  ? 23
+                                  : null,
+                              padding: getWidthNavigationSidebar(context) > 0
+                                  ? EdgeInsets.all(12)
+                                  : null,
                               color: Theme.of(context).colorScheme.secondary,
                               icon: Icon(
                                 Icons.edit,
@@ -144,6 +166,12 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               },
                             ),
                             IconButton(
+                              iconSize: getWidthNavigationSidebar(context) > 0
+                                  ? 23
+                                  : null,
+                              padding: getWidthNavigationSidebar(context) > 0
+                                  ? EdgeInsets.all(12)
+                                  : null,
                               color: Theme.of(context).colorScheme.secondary,
                               icon: Icon(
                                 Icons.delete,

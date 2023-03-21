@@ -32,6 +32,7 @@ class TextInput extends StatelessWidget {
   final FontWeight fontWeight;
   final double? topContentPadding;
   final TextCapitalization? textCapitalization;
+  final BorderRadius? borderRadius;
 
   const TextInput({
     Key? key,
@@ -62,6 +63,7 @@ class TextInput extends StatelessWidget {
     this.fontWeight = FontWeight.normal,
     this.topContentPadding,
     this.textCapitalization,
+    this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -76,7 +78,7 @@ class TextInput extends StatelessWidget {
                   (appStateSettings["materialYou"]
                       ? Theme.of(context).colorScheme.secondaryContainer
                       : Theme.of(context).colorScheme.canvasContainer),
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: borderRadius ?? BorderRadius.circular(15),
         ),
         child: Center(
           child: TextFormField(

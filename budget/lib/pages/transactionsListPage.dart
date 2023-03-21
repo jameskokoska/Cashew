@@ -449,6 +449,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
   @override
   Widget build(BuildContext context) {
     Widget searchButton = IconButton(
+      iconSize: getWidthNavigationSidebar(context) > 0 ? 30 : null,
       tooltip: "Search transactions",
       onPressed: () {
         pushRoute(context, TransactionsSearchPage());
@@ -591,9 +592,12 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                 duration: Duration(milliseconds: 500),
                                 curve: Curves.easeInOutCubicEmphasized,
                               );
-                              double middle =
-                                  -MediaQuery.of(context).size.width / 2 +
-                                      100 / 2;
+                              double middle = -(MediaQuery.of(context)
+                                              .size
+                                              .width -
+                                          getWidthNavigationSidebar(context)) /
+                                      2 +
+                                  100 / 2;
                               int difference = (DateTime.now().year -
                                           selectedDateStart.year) *
                                       12 +
@@ -901,7 +905,11 @@ class _MonthSelectorState extends State<MonthSelector> {
 
   _onScroll(double position) {
     final upperBound = 200;
-    final lowerBound = -200 - MediaQuery.of(context).size.width / 2 - 100;
+    final lowerBound = -200 -
+        (MediaQuery.of(context).size.width -
+                getWidthNavigationSidebar(context)) /
+            2 -
+        100;
     if (position > upperBound) {
       if (showScrollBottom == false)
         setState(() {

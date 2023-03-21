@@ -276,9 +276,7 @@ class AboutPage extends StatelessWidget {
                     icon: Icons.warning_rounded,
                     onSubmit: () async {
                       database.deleteEverything();
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      await preferences.clear();
+                      await sharedPreferences.clear();
                       restartApp(context);
                     },
                     onSubmitLabel: "Erase",
@@ -320,11 +318,7 @@ class AboutInfoBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
       child: Tappable(
         onTap: () async {
-          if (await canLaunchUrl(Uri.parse(link)))
-            await launchUrl(
-              Uri.parse(link),
-              mode: LaunchMode.externalApplication,
-            );
+          openUrl(link);
         },
         color: Theme.of(context).colorScheme.lightDarkAccent,
         borderRadius: 15,

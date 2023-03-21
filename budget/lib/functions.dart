@@ -11,6 +11,7 @@ import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:universal_html/html.dart' hide Navigator, Platform;
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import './colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -729,13 +730,21 @@ double getKeyboardHeight(context) {
 }
 
 Future<String> getDeviceInfo() async {
+  if (kIsWeb) {
+    String webBrowserInfo = window.navigator.userAgent.toString();
+    return webBrowserInfo
+        .toLowerCase()
+        .replaceAll("mozilla/5.0", "")
+        .replaceAll("mozilla", "")
+        .replaceAll("(", "")
+        .replaceAll(")", "")
+        .replaceAll(";", "")
+        .replaceAll(" ", "")
+        .capitalizeFirst;
+  }
   try {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
-    if (kIsWeb) {
-      WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
-      return webBrowserInfo.userAgent ?? "Web";
-    } else if (Platform.isAndroid) {
+    if (Platform.isAndroid) {
       AndroidDeviceInfo info = await deviceInfo.androidInfo;
       return info.model;
     } else if (Platform.isIOS) {
@@ -755,4 +764,22 @@ Future<String> getDeviceInfo() async {
   } catch (e) {
     return "Unknown";
   }
+}
+
+List<String> extractLinks(String text) {
+  RegExp regExp = new RegExp(r'(http(s)?://)?(www\.)?\S+\.\S+');
+  Iterable<RegExpMatch> matches = regExp.allMatches(text);
+  List<String> links = [];
+  for (RegExpMatch match in matches) {
+    links.add(match.group(0)!);
+  }
+  return links;
+}
+
+void openUrl(String link) async {
+  if (await canLaunchUrl(Uri.parse(link)))
+    await launchUrl(
+      Uri.parse(link),
+      mode: LaunchMode.externalApplication,
+    );
 }

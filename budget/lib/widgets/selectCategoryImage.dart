@@ -1,4 +1,3 @@
-
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -60,7 +59,6 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
       child: Column(
         children: [
           TextInput(
-            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
             labelText: "Search...",
             icon: Icons.search_rounded,
             onSubmitted: (value) {},

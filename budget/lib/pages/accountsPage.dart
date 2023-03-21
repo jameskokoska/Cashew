@@ -28,6 +28,25 @@ class AccountsPageState extends State<AccountsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget profileWidget = Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: dynamicPastel(context, Theme.of(context).colorScheme.primary,
+            amount: 0.2),
+      ),
+      child: Center(
+        child: TextFont(
+            text: user?.displayName![0] ?? "",
+            fontSize: 60,
+            textAlign: TextAlign.center,
+            fontWeight: FontWeight.bold,
+            textColor: dynamicPastel(
+                context, Theme.of(context).colorScheme.primary,
+                amount: 0.85, inverse: false)),
+      ),
+    );
     return PageFramework(
       horizontalPadding: getHorizontalPaddingConstrained(context),
       expandedHeight: 65,
@@ -49,32 +68,18 @@ class AccountsPageState extends State<AccountsPage> {
                 SizedBox(height: 35),
                 ClipOval(
                   child: user == null || user!.photoUrl == null
-                      ? Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: dynamicPastel(
-                                context, Theme.of(context).colorScheme.primary,
-                                amount: 0.2),
-                          ),
-                          child: Center(
-                            child: TextFont(
-                                text: user?.displayName![0] ?? "",
-                                fontSize: 60,
-                                textAlign: TextAlign.center,
-                                fontWeight: FontWeight.bold,
-                                textColor: dynamicPastel(context,
-                                    Theme.of(context).colorScheme.primary,
-                                    amount: 0.85, inverse: false)),
-                          ),
-                        )
+                      ? profileWidget
                       : FadeInImage.memoryNetwork(
+                          fadeInDuration: Duration(milliseconds: 500),
+                          fadeOutDuration: Duration(milliseconds: 500),
                           placeholder: kTransparentImage,
                           image: user!.photoUrl.toString(),
                           height: 95,
                           width: 95,
-                          fadeInDuration: Duration(milliseconds: 200),
+                          imageErrorBuilder: (BuildContext context,
+                              Object exception, StackTrace? stackTrace) {
+                            return profileWidget;
+                          },
                         ),
                 ),
                 SizedBox(height: 10),
@@ -116,90 +121,39 @@ class AccountsPageState extends State<AccountsPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              boxShadow:
-                                  boxShadowCheck(boxShadowGeneral(context))),
-                          child: IgnorePointer(
-                            ignoring: currentlyExporting,
-                            child: AnimatedOpacity(
-                              opacity: currentlyExporting ? 0.4 : 1,
-                              duration: Duration(milliseconds: 200),
-                              child: Tappable(
-                                onTap: () async {
+                        child: IgnorePointer(
+                          ignoring: currentlyExporting,
+                          child: AnimatedOpacity(
+                            opacity: currentlyExporting ? 0.4 : 1,
+                            duration: Duration(milliseconds: 200),
+                            child: OutlinedButtonStacked(
+                              text: "Export",
+                              iconData: Icons.upload_rounded,
+                              onTap: () async {
+                                setState(() {
+                                  currentlyExporting = true;
+                                });
+                                await createBackup(context,
+                                    deleteOldBackups: true);
+                                if (mounted)
                                   setState(() {
-                                    currentlyExporting = true;
+                                    currentlyExporting = false;
                                   });
-                                  await createBackup(context,
-                                      deleteOldBackups: true);
-                                  if (mounted)
-                                    setState(() {
-                                      currentlyExporting = false;
-                                    });
-                                },
-                                borderRadius: 15,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .lightDarkAccentHeavyLight,
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 30),
-                                    Icon(
-                                      Icons.upload_rounded,
-                                      size: 35,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
-                                    SizedBox(height: 10),
-                                    TextFont(
-                                      text: "Export",
-                                      fontSize: 21,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    SizedBox(height: 30),
-                                  ],
-                                ),
-                              ),
+                              },
                             ),
                           ),
                         ),
                       ),
                       SizedBox(width: 15),
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              boxShadow:
-                                  boxShadowCheck(boxShadowGeneral(context))),
-                          child: Tappable(
-                            onTap: () async {
-                              await chooseBackup(context);
-                            },
-                            borderRadius: 15,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavyLight,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 30),
-                                Icon(
-                                  Icons.download_rounded,
-                                  size: 35,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                SizedBox(height: 10),
-                                TextFont(
-                                  text: "Import",
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                SizedBox(height: 30),
-                              ],
-                            ),
-                          ),
+                        child: OutlinedButtonStacked(
+                          text: "Import",
+                          iconData: Icons.download_rounded,
+                          onTap: () async {
+                            await chooseBackup(context);
+                          },
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -209,73 +163,23 @@ class AccountsPageState extends State<AccountsPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              boxShadow:
-                                  boxShadowCheck(boxShadowGeneral(context))),
-                          child: Tappable(
-                            onTap: () async {
-                              chooseBackup(context,
-                                  isManaging: true, isClientSync: true);
-                            },
-                            borderRadius: 15,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavyLight,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 30),
-                                Icon(
-                                  Icons.cloud_sync_rounded,
-                                  size: 35,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                SizedBox(height: 10),
-                                TextFont(
-                                  text: "Sync",
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                SizedBox(height: 30),
-                              ],
-                            ),
-                          ),
+                        child: OutlinedButtonStacked(
+                          text: "Sync",
+                          iconData: Icons.cloud_sync_rounded,
+                          onTap: () async {
+                            chooseBackup(context,
+                                isManaging: true, isClientSync: true);
+                          },
                         ),
                       ),
                       SizedBox(width: 18),
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              boxShadow:
-                                  boxShadowCheck(boxShadowGeneral(context))),
-                          child: Tappable(
-                            onTap: () async {
-                              await chooseBackup(context, isManaging: true);
-                            },
-                            borderRadius: 15,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavyLight,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 30),
-                                Icon(
-                                  Icons.folder_rounded,
-                                  size: 35,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                SizedBox(height: 10),
-                                TextFont(
-                                  text: "Backups",
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                SizedBox(height: 30),
-                              ],
-                            ),
-                          ),
+                        child: OutlinedButtonStacked(
+                          text: "Backups",
+                          iconData: Icons.folder_rounded,
+                          onTap: () async {
+                            await chooseBackup(context, isManaging: true);
+                          },
                         ),
                       ),
                     ],
@@ -287,6 +191,52 @@ class AccountsPageState extends State<AccountsPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class OutlinedButtonStacked extends StatelessWidget {
+  const OutlinedButtonStacked(
+      {super.key,
+      required this.text,
+      required this.onTap,
+      required this.iconData});
+  final String text;
+  final void Function()? onTap;
+  final IconData iconData;
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      borderRadius: 15,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: (appStateSettings["materialYou"]
+                ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
+                : Theme.of(context).colorScheme.lightDarkAccentHeavy),
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 30),
+            Icon(
+              iconData,
+              size: 35,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            SizedBox(height: 10),
+            TextFont(
+              text: text,
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
+            ),
+            SizedBox(height: 30),
+          ],
+        ),
+      ),
     );
   }
 }

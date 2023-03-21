@@ -49,10 +49,10 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       if (event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
         nextNavigation();
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.arrowRight) {
         nextOnBoardPage(4);
-      } else if (event.runtimeType.toString() == "KeyDownEvent" &&
+      } else if (event.runtimeType == KeyDownEvent &&
           event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         previousOnBoardPage();
       }

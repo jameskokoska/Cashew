@@ -62,11 +62,11 @@ GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 Future<bool> runAllCloudFunctions(context) async {
   loadingIndeterminateKey.currentState!.setVisibility(true);
   try {
-    await getExchangeRates();
     await syncData();
     await syncPendingQueueOnServer(); //sync before download
     await getCloudBudgets();
     await createBackupInBackground(context);
+    await getExchangeRates();
   } catch (e) {
     print("Error running sync functions on load: " + e.toString());
     loadingIndeterminateKey.currentState!.setVisibility(false);
@@ -176,7 +176,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   ? FadeIndexedStack(
                       children: [...pages, ...pagesExtended],
                       index: currentPage,
-                      duration: Duration(milliseconds: 300),
+                      duration: appStateSettings["batterySaver"]
+                          ? Duration.zero
+                          : Duration(milliseconds: 300),
                     )
                   : PageView(
                       controller: pageController,

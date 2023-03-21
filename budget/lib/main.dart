@@ -219,7 +219,7 @@ Future<bool> initializeSettings() async {
   if (retrievedClientID == null) {
     String systemID = await getDeviceInfo();
     String newClientID = systemID
-            .substring(0, (systemID.length > 10 ? 10 : systemID.length))
+            .substring(0, (systemID.length > 17 ? 17 : systemID.length))
             .replaceAll("-", "_") +
         "-" +
         DateTime.now().millisecondsSinceEpoch.toString();
@@ -546,13 +546,14 @@ class App extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  NavigationSidebar(
-                    key: sidebarStateKey,
-                  ),
+                  SizedBox(width: getWidthNavigationSidebar(context)),
                   Expanded(
                     child: child!,
                   ),
                 ],
+              ),
+              NavigationSidebar(
+                key: sidebarStateKey,
               ),
               // The persistent global Widget stack (stays on navigation change)
               GlobalSnackbar(key: snackbarKey),
