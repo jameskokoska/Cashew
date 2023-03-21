@@ -59,6 +59,23 @@ GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
     GlobalKey();
 GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
+Future<bool> runAllCloudFunctions(context) async {
+  loadingIndeterminateKey.currentState!.setVisibility(true);
+  try {
+    await getExchangeRates();
+    await syncData();
+    await syncPendingQueueOnServer(); //sync before download
+    await getCloudBudgets();
+    await createBackupInBackground(context);
+  } catch (e) {
+    print("Error running sync functions on load: " + e.toString());
+    loadingIndeterminateKey.currentState!.setVisibility(false);
+    return false;
+  }
+  loadingIndeterminateKey.currentState!.setVisibility(false);
+  return true;
+}
+
 class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pages;
   late List<Widget> pagesExtended;
@@ -101,17 +118,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);
-      await getExchangeRates();
-      loadingIndeterminateKey.currentState!.setVisibility(true);
-      try {
-        await syncData();
-        await syncPendingQueueOnServer(); //sync before download
-        await getCloudBudgets();
-        await createBackupInBackground(context);
-      } catch (e) {
-        print("Error running sync functions on load: " + e.toString());
-      }
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      await runAllCloudFunctions(context);
       entireAppLoaded = true;
     });
 

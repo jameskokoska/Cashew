@@ -706,16 +706,7 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
   _refreshBudgets() async {
     print(appStateSettings["currentUserEmail"]);
     if (appStateSettings["currentUserEmail"] != "") {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
-      try {
-        await syncData();
-        await syncPendingQueueOnServer();
-        await getCloudBudgets();
-        await getExchangeRates();
-      } catch (e) {
-        print("Error syncing with server: " + e.toString());
-      }
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      runAllCloudFunctions(context);
     }
   }
 

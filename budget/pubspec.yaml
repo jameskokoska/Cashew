@@ -69,6 +69,7 @@ dependencies:
   sliver_tools: ^0.2.8
   reorderable_grid_view: ^2.2.6-alpha.11
   local_auth: ^2.1.3
+  timer_builder: ^2.0.0
   device_info_plus: ^8.1.0
   
 # flutter pub run flutter_launcher_icons:main

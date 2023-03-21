@@ -129,9 +129,8 @@ Future<bool> createSyncBackup({bool changeMadeSync = false}) async {
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData() async {
   if (appStateSettings["backupSync"] == false) return false;
-  // if (appStateSettings["currentUserEmail"] == "") return false;
-  print("LOGGING IN");
-  print(appStateSettings["currentUserEmail"]);
+  if (appStateSettings["currentUserEmail"] == "") return false;
+
   bool hasSignedIn = false;
   if (user == null) {
     hasSignedIn = await signInGoogle(
@@ -217,8 +216,9 @@ Future<bool> syncData() async {
       // settings table is not synced
       // deletions dont get synced! should log deletions somewhere?
 
-      for (TransactionWallet newEntry
-          in (await databaseSync.getAllNewWallets(lastSynced))) {
+      List<TransactionWallet> newWallets =
+          await databaseSync.getAllNewWallets(lastSynced);
+      for (TransactionWallet newEntry in newWallets) {
         TransactionWallet? current;
         try {
           current = await database.getWalletInstance(newEntry.walletPk);
@@ -229,9 +229,12 @@ Future<bool> syncData() async {
             current.dateTimeModified != newEntry.dateTimeModified)
           await database.createOrUpdateWallet(newEntry);
       }
+      print("NEW WALLETS");
+      print(newWallets);
 
-      for (TransactionCategory newEntry
-          in (await databaseSync.getAllNewCategories(lastSynced))) {
+      List<TransactionCategory> newCategories =
+          await databaseSync.getAllNewCategories(lastSynced);
+      for (TransactionCategory newEntry in newCategories) {
         TransactionCategory? current;
         try {
           current = await database.getCategoryInstance(newEntry.categoryPk);
@@ -242,9 +245,11 @@ Future<bool> syncData() async {
             current.dateTimeModified != newEntry.dateTimeModified)
           await database.createOrUpdateCategory(newEntry);
       }
+      print("NEW CATEGORIES");
+      print(newCategories);
 
-      for (Budget newEntry
-          in (await databaseSync.getAllNewBudgets(lastSynced))) {
+      List<Budget> newBudgets = await databaseSync.getAllNewBudgets(lastSynced);
+      for (Budget newEntry in newBudgets) {
         Budget? current;
         try {
           current = await database.getBudgetInstance(newEntry.budgetPk);
@@ -256,9 +261,12 @@ Future<bool> syncData() async {
           await database.createOrUpdateBudget(newEntry,
               updateSharedEntry: false);
       }
+      print("NEW BUDGETS");
+      print(newBudgets);
 
-      for (CategoryBudgetLimit newEntry
-          in (await databaseSync.getAllNewCategoryBudgetLimits(lastSynced))) {
+      List<CategoryBudgetLimit> newCategoryBudgetLimits =
+          await databaseSync.getAllNewCategoryBudgetLimits(lastSynced);
+      for (CategoryBudgetLimit newEntry in newCategoryBudgetLimits) {
         CategoryBudgetLimit? current;
         try {
           current = await database
@@ -270,10 +278,13 @@ Future<bool> syncData() async {
             current.dateTimeModified != newEntry.dateTimeModified)
           await database.createOrUpdateCategoryLimit(newEntry);
       }
+      print("NEW CATEGORY LIMITS");
+      print(newCategoryBudgetLimits);
 
+      List<Transaction> newTransactions =
+          await databaseSync.getAllNewTransactions(lastSynced);
       List<Transaction> transactionsToUpdate = [];
-      for (Transaction newEntry
-          in await databaseSync.getAllNewTransactions(lastSynced)) {
+      for (Transaction newEntry in newTransactions) {
         Transaction? current;
         try {
           current = await database.getTransactionFromPk(newEntry.transactionPk);
@@ -285,10 +296,13 @@ Future<bool> syncData() async {
           transactionsToUpdate.add(newEntry);
       }
       await database.createOrUpdateBatchTransactionsOnly(transactionsToUpdate);
+      print("NEW TRANSACTIONS");
+      print(newTransactions);
 
+      List<TransactionAssociatedTitle> newTitles =
+          await databaseSync.getAllNewAssociatedTitles(lastSynced);
       List<TransactionAssociatedTitle> titlesToUpdate = [];
-      for (TransactionAssociatedTitle newEntry
-          in (await databaseSync.getAllNewAssociatedTitles(lastSynced))) {
+      for (TransactionAssociatedTitle newEntry in newTitles) {
         TransactionAssociatedTitle? current;
         try {
           current = await database
@@ -301,6 +315,8 @@ Future<bool> syncData() async {
           titlesToUpdate.add(newEntry);
       }
       await database.createOrUpdateBatchAssociatedTitlesOnly(titlesToUpdate);
+      print("NEW TITLES");
+      print(newTitles);
 
       for (ScannerTemplate newEntry
           in (await databaseSync.getAllNewScannerTemplates(lastSynced))) {
@@ -480,14 +496,17 @@ Future<bool> signInGoogle(
         ]);
       }
       final signIn.GoogleSignInAccount? account = silentSignIn == true
-          ? await googleSignIn?.signInSilently().then((value) async {
-              if (kIsWeb) return await googleSignIn?.signIn();
-            })
+          ? kIsWeb
+              ? await googleSignIn?.signInSilently().then((value) async {
+                  return await googleSignIn?.signIn();
+                })
+              : await googleSignIn?.signInSilently()
           : await googleSignIn?.signIn();
 
       if (account != null) {
         user = account;
-        appStateSettings["currentUserEmail"] = user?.email ?? "";
+        updateSettings("currentUserEmail", user?.email ?? "",
+            updateGlobalState: false);
         accountsPageStateKey.currentState?.refreshState();
       } else {
         throw ("Login failed");
@@ -514,6 +533,7 @@ Future<bool> signInGoogle(
         timeout: Duration(milliseconds: 1400),
       ),
     );
+    updateSettings("currentUserEmail", "", updateGlobalState: false);
     throw ("Error signing in");
   }
 }
@@ -842,6 +862,8 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
         if (appStateSettings["username"] == "" && user != null) {
           updateSettings("username", user?.displayName ?? "",
               pagesNeedingRefresh: [0]);
+        }
+        if (user != null) {
           await syncData();
           await syncPendingQueueOnServer();
           await getCloudBudgets();

@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added users email on side navigation bar
+    Added sync button on side navigation bar
+    Sign-in silent fix on mobile
+    All entries should have a new modified date if changed
     Upgraded Google sign in API
     Fixed layout of username in production in side navbar
     Fixed keyboard in production

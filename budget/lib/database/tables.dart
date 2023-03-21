@@ -1279,7 +1279,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
         pagesNeedingRefresh: [], updateGlobalState: false);
     if (wallet.colour == null) {
-      return into(wallets).insert(wallet, mode: InsertMode.insertOrReplace);
+      return into(wallets).insert(
+          wallet.copyWith(dateTimeModified: Value(DateTime.now())),
+          mode: InsertMode.insertOrReplace);
     }
 
     return into(wallets).insertOnConflictUpdate(
@@ -1411,8 +1413,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   //create or update a new associatedTitle
   Future<int> createOrUpdateAssociatedTitle(
       TransactionAssociatedTitle associatedTitle) {
-    return into(associatedTitles)
-        .insert(associatedTitle, mode: InsertMode.insertOrReplace);
+    return into(associatedTitles).insert(
+        associatedTitle.copyWith(dateTimeModified: Value(DateTime.now())),
+        mode: InsertMode.insertOrReplace);
   }
 
   Future moveAssociatedTitle(
@@ -1746,8 +1749,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<int> createOrUpdateCategory(TransactionCategory category,
       {bool updateSharedEntry = true}) async {
     // We need to ensure the value is set back to null, so insert/replace
-    int result = await into(categories)
-        .insert(category, mode: InsertMode.insertOrReplace);
+    int result = await into(categories).insert(
+        category.copyWith(dateTimeModified: Value(DateTime.now())),
+        mode: InsertMode.insertOrReplace);
     updateTransactionOnServerAfterChangingCategoryInformation(category);
     return result;
   }
@@ -1871,7 +1875,9 @@ class FinanceDatabase extends _$FinanceDatabase {
       });
     }
 
-    return into(budgets).insert(budget, mode: InsertMode.replace);
+    return into(budgets).insert(
+        budget.copyWith(dateTimeModified: Value(DateTime.now())),
+        mode: InsertMode.replace);
   }
 
   // watch category given key

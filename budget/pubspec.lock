@@ -1251,6 +1251,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
+  timer_builder:
+    dependency: "direct main"
+    description:
+      name: timer_builder
+      sha256: "67c5653a8d9f6ce62fe9121e520736e9da74418a919fe1c0e181b5d2627dbc4a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   timezone:
     dependency: transitive
     description:

@@ -1,12 +1,15 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:timer_builder/timer_builder.dart';
 
 // returns 0 if no navigation sidebar should be shown
 double getWidthNavigationSidebar(context) {
@@ -44,6 +47,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
   @override
   Widget build(BuildContext context) {
     bool showUsername = appStateSettings["username"] != "";
+    bool showEmail = appStateSettings["currentUserEmail"] != "";
     double widthNavigationSidebar = getWidthNavigationSidebar(context);
     if (widthNavigationSidebar <= 0) {
       return SizedBox.shrink();
@@ -98,7 +102,28 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                             ),
                           )
                         : SizedBox.shrink(),
-                    SizedBox(height: 40),
+                    AnimatedSize(
+                      duration: Duration(milliseconds: 1500),
+                      curve: Curves.easeInOutCubic,
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        child: showEmail == false
+                            ? Container(
+                                key: ValueKey(1),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 12, right: 12, top: 5),
+                                child: TextFont(
+                                  textColor:
+                                      Theme.of(context).colorScheme.textLight,
+                                  fontSize: 13,
+                                  text: appStateSettings["currentUserEmail"],
+                                ),
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
                     NavigationSidebarButton(
                       icon: Icons.home_rounded,
                       label: "Home",
@@ -193,7 +218,72 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                             .changePage(13, switchNavbar: true);
                       },
                     ),
-                    SizedBox(height: 20),
+                    AnimatedSize(
+                      duration: Duration(milliseconds: 1500),
+                      curve: Curves.easeInOutCubic,
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        child: appStateSettings["currentUserEmail"] == ""
+                            ? Container(
+                                key: ValueKey(1),
+                              )
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                child: AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 500),
+                                  child: Tappable(
+                                    key: ValueKey(
+                                        appStateSettings["lastSynced"]),
+                                    onTap: () {
+                                      runAllCloudFunctions(context);
+                                    },
+                                    borderRadius: 15,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          child: TimerBuilder.periodic(
+                                            Duration(seconds: 5),
+                                            builder: (context) {
+                                              return TextFont(
+                                                textColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .textLight,
+                                                fontSize: 13,
+                                                text: "Synced " +
+                                                    getTimeAgo(
+                                                      DateTime.parse(
+                                                        appStateSettings[
+                                                            "lastSynced"],
+                                                      ),
+                                                    ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(width: 2),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 5),
+                                          child: Opacity(
+                                            opacity: 0.7,
+                                            child: RefreshButton(onTap: () {
+                                              runAllCloudFunctions(context);
+                                            }),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
                   ],
                 ),
               ],
