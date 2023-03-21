@@ -136,25 +136,11 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                       content: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Stack(
-                            children: [
-                              CategoryIcon(
-                                categoryPk: category.categoryPk,
-                                size: 40,
-                                category: category,
-                                canEditByLongPress: false,
-                              ),
-                              category.sharedKey != null
-                                  ? Positioned(
-                                      top: 4,
-                                      left: 0,
-                                      child: Icon(
-                                        Icons.people_alt_rounded,
-                                        size: 18,
-                                      ),
-                                    )
-                                  : SizedBox.shrink()
-                            ],
+                          CategoryIcon(
+                            categoryPk: category.categoryPk,
+                            size: 40,
+                            category: category,
+                            canEditByLongPress: false,
                           ),
                           Container(width: 5),
                           Expanded(

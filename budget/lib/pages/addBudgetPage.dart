@@ -100,8 +100,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   bool selectedPin = true;
   bool selectedShared = false;
   bool selectedAddedTransactionsOnly = false;
-  SharedTransactionsShow selectedSharedTransactionsShow =
-      SharedTransactionsShow.fromEveryone;
   List<BudgetTransactionFilters> selectedBudgetTransactionFilters = [
     ...allBudgetTransactionFilters
   ];
@@ -227,7 +225,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       selectedShared = shared;
       if (shared == true) selectedAddedTransactionsOnly = true;
       if (shared == false) selectedAddedTransactionsOnly = true;
-      selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
     });
   }
 
@@ -238,7 +235,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         selectedShared = false;
       }
       if (addedOnly) {
-        selectedSharedTransactionsShow = SharedTransactionsShow.fromEveryone;
         selectedCategories = [];
         selectedAllCategories = true;
       }
@@ -353,15 +349,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     setState(() {
       selectedPin = !selectedPin;
     });
-    determineBottomButton();
-    return;
-  }
-
-  void setSelectedSharedTransactionsShow(selectedSharedTransactionsShowPassed) {
-    setState(() {
-      selectedSharedTransactionsShow = selectedSharedTransactionsShowPassed;
-    });
-
     determineBottomButton();
     return;
   }
@@ -483,7 +470,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : await database.getAmountOfBudgets(),
       walletFk: 0,
       pinned: selectedPin,
-      sharedTransactionsShow: selectedSharedTransactionsShow,
       sharedKey: widget.budget != null ? currentInstance!.sharedKey : null,
       sharedOwnerMember:
           widget.budget != null ? currentInstance!.sharedOwnerMember : null,
@@ -520,7 +506,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       //Fill in the information from the passed in budget
       selectedTitle = widget.budget!.name;
       selectedPin = widget.budget!.pinned;
-      selectedSharedTransactionsShow = widget.budget!.sharedTransactionsShow;
       selectedAllCategories = widget.budget!.allCategoryFks;
       selectedAmount = widget.budget!.amount;
       selectedAddedTransactionsOnly = widget.budget!.addedTransactionsOnly;

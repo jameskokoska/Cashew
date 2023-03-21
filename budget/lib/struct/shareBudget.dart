@@ -341,7 +341,6 @@ Future<int> downloadTransactionsFromBudgets(
         pinned: true,
         order: 0,
         walletFk: 0,
-        sharedTransactionsShow: SharedTransactionsShow.fromEveryone,
         sharedKey: budget.id,
         sharedOwnerMember: FirebaseAuth.instance.currentUser!.email ==
                 budgetDecoded["ownerEmail"]

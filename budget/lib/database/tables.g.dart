@@ -499,36 +499,6 @@ class $CategoriesTable extends Categories
       GeneratedColumn<int>('method_added', aliasedName, true,
               type: DriftSqlType.int, requiredDuringInsert: false)
           .withConverter<MethodAdded?>($CategoriesTable.$convertermethodAddedn);
-  static const VerificationMeta _sharedKeyMeta =
-      const VerificationMeta('sharedKey');
-  @override
-  late final GeneratedColumn<String> sharedKey = GeneratedColumn<String>(
-      'shared_key', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _sharedOwnerMemberMeta =
-      const VerificationMeta('sharedOwnerMember');
-  @override
-  late final GeneratedColumnWithTypeConverter<SharedOwnerMember?, int>
-      sharedOwnerMember = GeneratedColumn<int>(
-              'shared_owner_member', aliasedName, true,
-              type: DriftSqlType.int, requiredDuringInsert: false)
-          .withConverter<SharedOwnerMember?>(
-              $CategoriesTable.$convertersharedOwnerMembern);
-  static const VerificationMeta _sharedDateUpdatedMeta =
-      const VerificationMeta('sharedDateUpdated');
-  @override
-  late final GeneratedColumn<DateTime> sharedDateUpdated =
-      GeneratedColumn<DateTime>('shared_date_updated', aliasedName, true,
-          type: DriftSqlType.dateTime, requiredDuringInsert: false);
-  static const VerificationMeta _sharedMembersMeta =
-      const VerificationMeta('sharedMembers');
-  @override
-  late final GeneratedColumnWithTypeConverter<List<String>?, String>
-      sharedMembers = GeneratedColumn<String>(
-              'shared_members', aliasedName, true,
-              type: DriftSqlType.string, requiredDuringInsert: false)
-          .withConverter<List<String>?>(
-              $CategoriesTable.$convertersharedMembersn);
   @override
   List<GeneratedColumn> get $columns => [
         categoryPk,
@@ -539,11 +509,7 @@ class $CategoriesTable extends Categories
         dateTimeModified,
         order,
         income,
-        methodAdded,
-        sharedKey,
-        sharedOwnerMember,
-        sharedDateUpdated,
-        sharedMembers
+        methodAdded
       ];
   @override
   String get aliasedName => _alias ?? 'categories';
@@ -598,18 +564,6 @@ class $CategoriesTable extends Categories
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
     }
     context.handle(_methodAddedMeta, const VerificationResult.success());
-    if (data.containsKey('shared_key')) {
-      context.handle(_sharedKeyMeta,
-          sharedKey.isAcceptableOrUnknown(data['shared_key']!, _sharedKeyMeta));
-    }
-    context.handle(_sharedOwnerMemberMeta, const VerificationResult.success());
-    if (data.containsKey('shared_date_updated')) {
-      context.handle(
-          _sharedDateUpdatedMeta,
-          sharedDateUpdated.isAcceptableOrUnknown(
-              data['shared_date_updated']!, _sharedDateUpdatedMeta));
-    }
-    context.handle(_sharedMembersMeta, const VerificationResult.success());
     return context;
   }
 
@@ -638,16 +592,6 @@ class $CategoriesTable extends Categories
       methodAdded: $CategoriesTable.$convertermethodAddedn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}method_added'])),
-      sharedKey: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}shared_key']),
-      sharedOwnerMember: $CategoriesTable.$convertersharedOwnerMembern.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.int, data['${effectivePrefix}shared_owner_member'])),
-      sharedDateUpdated: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}shared_date_updated']),
-      sharedMembers: $CategoriesTable.$convertersharedMembersn.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}shared_members'])),
     );
   }
 
@@ -660,16 +604,6 @@ class $CategoriesTable extends Categories
       const EnumIndexConverter<MethodAdded>(MethodAdded.values);
   static JsonTypeConverter2<MethodAdded?, int?, int?> $convertermethodAddedn =
       JsonTypeConverter2.asNullable($convertermethodAdded);
-  static JsonTypeConverter2<SharedOwnerMember, int, int>
-      $convertersharedOwnerMember =
-      const EnumIndexConverter<SharedOwnerMember>(SharedOwnerMember.values);
-  static JsonTypeConverter2<SharedOwnerMember?, int?, int?>
-      $convertersharedOwnerMembern =
-      JsonTypeConverter2.asNullable($convertersharedOwnerMember);
-  static TypeConverter<List<String>, String> $convertersharedMembers =
-      const StringListInColumnConverter();
-  static TypeConverter<List<String>?, String?> $convertersharedMembersn =
-      NullAwareTypeConverter.wrap($convertersharedMembers);
 }
 
 class TransactionCategory extends DataClass
@@ -683,10 +617,6 @@ class TransactionCategory extends DataClass
   final int order;
   final bool income;
   final MethodAdded? methodAdded;
-  final String? sharedKey;
-  final SharedOwnerMember? sharedOwnerMember;
-  final DateTime? sharedDateUpdated;
-  final List<String>? sharedMembers;
   const TransactionCategory(
       {required this.categoryPk,
       required this.name,
@@ -696,11 +626,7 @@ class TransactionCategory extends DataClass
       this.dateTimeModified,
       required this.order,
       required this.income,
-      this.methodAdded,
-      this.sharedKey,
-      this.sharedOwnerMember,
-      this.sharedDateUpdated,
-      this.sharedMembers});
+      this.methodAdded});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -721,21 +647,6 @@ class TransactionCategory extends DataClass
     if (!nullToAbsent || methodAdded != null) {
       final converter = $CategoriesTable.$convertermethodAddedn;
       map['method_added'] = Variable<int>(converter.toSql(methodAdded));
-    }
-    if (!nullToAbsent || sharedKey != null) {
-      map['shared_key'] = Variable<String>(sharedKey);
-    }
-    if (!nullToAbsent || sharedOwnerMember != null) {
-      final converter = $CategoriesTable.$convertersharedOwnerMembern;
-      map['shared_owner_member'] =
-          Variable<int>(converter.toSql(sharedOwnerMember));
-    }
-    if (!nullToAbsent || sharedDateUpdated != null) {
-      map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated);
-    }
-    if (!nullToAbsent || sharedMembers != null) {
-      final converter = $CategoriesTable.$convertersharedMembersn;
-      map['shared_members'] = Variable<String>(converter.toSql(sharedMembers));
     }
     return map;
   }
@@ -758,18 +669,6 @@ class TransactionCategory extends DataClass
       methodAdded: methodAdded == null && nullToAbsent
           ? const Value.absent()
           : Value(methodAdded),
-      sharedKey: sharedKey == null && nullToAbsent
-          ? const Value.absent()
-          : Value(sharedKey),
-      sharedOwnerMember: sharedOwnerMember == null && nullToAbsent
-          ? const Value.absent()
-          : Value(sharedOwnerMember),
-      sharedDateUpdated: sharedDateUpdated == null && nullToAbsent
-          ? const Value.absent()
-          : Value(sharedDateUpdated),
-      sharedMembers: sharedMembers == null && nullToAbsent
-          ? const Value.absent()
-          : Value(sharedMembers),
     );
   }
 
@@ -788,12 +687,6 @@ class TransactionCategory extends DataClass
       income: serializer.fromJson<bool>(json['income']),
       methodAdded: $CategoriesTable.$convertermethodAddedn
           .fromJson(serializer.fromJson<int?>(json['methodAdded'])),
-      sharedKey: serializer.fromJson<String?>(json['sharedKey']),
-      sharedOwnerMember: $CategoriesTable.$convertersharedOwnerMembern
-          .fromJson(serializer.fromJson<int?>(json['sharedOwnerMember'])),
-      sharedDateUpdated:
-          serializer.fromJson<DateTime?>(json['sharedDateUpdated']),
-      sharedMembers: serializer.fromJson<List<String>?>(json['sharedMembers']),
     );
   }
   @override
@@ -810,12 +703,6 @@ class TransactionCategory extends DataClass
       'income': serializer.toJson<bool>(income),
       'methodAdded': serializer.toJson<int?>(
           $CategoriesTable.$convertermethodAddedn.toJson(methodAdded)),
-      'sharedKey': serializer.toJson<String?>(sharedKey),
-      'sharedOwnerMember': serializer.toJson<int?>($CategoriesTable
-          .$convertersharedOwnerMembern
-          .toJson(sharedOwnerMember)),
-      'sharedDateUpdated': serializer.toJson<DateTime?>(sharedDateUpdated),
-      'sharedMembers': serializer.toJson<List<String>?>(sharedMembers),
     };
   }
 
@@ -828,11 +715,7 @@ class TransactionCategory extends DataClass
           Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           bool? income,
-          Value<MethodAdded?> methodAdded = const Value.absent(),
-          Value<String?> sharedKey = const Value.absent(),
-          Value<SharedOwnerMember?> sharedOwnerMember = const Value.absent(),
-          Value<DateTime?> sharedDateUpdated = const Value.absent(),
-          Value<List<String>?> sharedMembers = const Value.absent()}) =>
+          Value<MethodAdded?> methodAdded = const Value.absent()}) =>
       TransactionCategory(
         categoryPk: categoryPk ?? this.categoryPk,
         name: name ?? this.name,
@@ -845,15 +728,6 @@ class TransactionCategory extends DataClass
         order: order ?? this.order,
         income: income ?? this.income,
         methodAdded: methodAdded.present ? methodAdded.value : this.methodAdded,
-        sharedKey: sharedKey.present ? sharedKey.value : this.sharedKey,
-        sharedOwnerMember: sharedOwnerMember.present
-            ? sharedOwnerMember.value
-            : this.sharedOwnerMember,
-        sharedDateUpdated: sharedDateUpdated.present
-            ? sharedDateUpdated.value
-            : this.sharedDateUpdated,
-        sharedMembers:
-            sharedMembers.present ? sharedMembers.value : this.sharedMembers,
       );
   @override
   String toString() {
@@ -866,30 +740,14 @@ class TransactionCategory extends DataClass
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
-          ..write('methodAdded: $methodAdded, ')
-          ..write('sharedKey: $sharedKey, ')
-          ..write('sharedOwnerMember: $sharedOwnerMember, ')
-          ..write('sharedDateUpdated: $sharedDateUpdated, ')
-          ..write('sharedMembers: $sharedMembers')
+          ..write('methodAdded: $methodAdded')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      categoryPk,
-      name,
-      colour,
-      iconName,
-      dateCreated,
-      dateTimeModified,
-      order,
-      income,
-      methodAdded,
-      sharedKey,
-      sharedOwnerMember,
-      sharedDateUpdated,
-      sharedMembers);
+  int get hashCode => Object.hash(categoryPk, name, colour, iconName,
+      dateCreated, dateTimeModified, order, income, methodAdded);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -902,11 +760,7 @@ class TransactionCategory extends DataClass
           other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
           other.income == this.income &&
-          other.methodAdded == this.methodAdded &&
-          other.sharedKey == this.sharedKey &&
-          other.sharedOwnerMember == this.sharedOwnerMember &&
-          other.sharedDateUpdated == this.sharedDateUpdated &&
-          other.sharedMembers == this.sharedMembers);
+          other.methodAdded == this.methodAdded);
 }
 
 class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
@@ -919,10 +773,6 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<int> order;
   final Value<bool> income;
   final Value<MethodAdded?> methodAdded;
-  final Value<String?> sharedKey;
-  final Value<SharedOwnerMember?> sharedOwnerMember;
-  final Value<DateTime?> sharedDateUpdated;
-  final Value<List<String>?> sharedMembers;
   const CategoriesCompanion({
     this.categoryPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -933,10 +783,6 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.order = const Value.absent(),
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
-    this.sharedKey = const Value.absent(),
-    this.sharedOwnerMember = const Value.absent(),
-    this.sharedDateUpdated = const Value.absent(),
-    this.sharedMembers = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.categoryPk = const Value.absent(),
@@ -948,10 +794,6 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     required int order,
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
-    this.sharedKey = const Value.absent(),
-    this.sharedOwnerMember = const Value.absent(),
-    this.sharedDateUpdated = const Value.absent(),
-    this.sharedMembers = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionCategory> custom({
@@ -964,10 +806,6 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<int>? order,
     Expression<bool>? income,
     Expression<int>? methodAdded,
-    Expression<String>? sharedKey,
-    Expression<int>? sharedOwnerMember,
-    Expression<DateTime>? sharedDateUpdated,
-    Expression<String>? sharedMembers,
   }) {
     return RawValuesInsertable({
       if (categoryPk != null) 'category_pk': categoryPk,
@@ -979,10 +817,6 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (order != null) 'order': order,
       if (income != null) 'income': income,
       if (methodAdded != null) 'method_added': methodAdded,
-      if (sharedKey != null) 'shared_key': sharedKey,
-      if (sharedOwnerMember != null) 'shared_owner_member': sharedOwnerMember,
-      if (sharedDateUpdated != null) 'shared_date_updated': sharedDateUpdated,
-      if (sharedMembers != null) 'shared_members': sharedMembers,
     });
   }
 
@@ -995,11 +829,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<DateTime?>? dateTimeModified,
       Value<int>? order,
       Value<bool>? income,
-      Value<MethodAdded?>? methodAdded,
-      Value<String?>? sharedKey,
-      Value<SharedOwnerMember?>? sharedOwnerMember,
-      Value<DateTime?>? sharedDateUpdated,
-      Value<List<String>?>? sharedMembers}) {
+      Value<MethodAdded?>? methodAdded}) {
     return CategoriesCompanion(
       categoryPk: categoryPk ?? this.categoryPk,
       name: name ?? this.name,
@@ -1010,10 +840,6 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       order: order ?? this.order,
       income: income ?? this.income,
       methodAdded: methodAdded ?? this.methodAdded,
-      sharedKey: sharedKey ?? this.sharedKey,
-      sharedOwnerMember: sharedOwnerMember ?? this.sharedOwnerMember,
-      sharedDateUpdated: sharedDateUpdated ?? this.sharedDateUpdated,
-      sharedMembers: sharedMembers ?? this.sharedMembers,
     );
   }
 
@@ -1048,22 +874,6 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       final converter = $CategoriesTable.$convertermethodAddedn;
       map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
     }
-    if (sharedKey.present) {
-      map['shared_key'] = Variable<String>(sharedKey.value);
-    }
-    if (sharedOwnerMember.present) {
-      final converter = $CategoriesTable.$convertersharedOwnerMembern;
-      map['shared_owner_member'] =
-          Variable<int>(converter.toSql(sharedOwnerMember.value));
-    }
-    if (sharedDateUpdated.present) {
-      map['shared_date_updated'] = Variable<DateTime>(sharedDateUpdated.value);
-    }
-    if (sharedMembers.present) {
-      final converter = $CategoriesTable.$convertersharedMembersn;
-      map['shared_members'] =
-          Variable<String>(converter.toSql(sharedMembers.value));
-    }
     return map;
   }
 
@@ -1078,11 +888,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
-          ..write('methodAdded: $methodAdded, ')
-          ..write('sharedKey: $sharedKey, ')
-          ..write('sharedOwnerMember: $sharedOwnerMember, ')
-          ..write('sharedDateUpdated: $sharedDateUpdated, ')
-          ..write('sharedMembers: $sharedMembers')
+          ..write('methodAdded: $methodAdded')
           ..write(')'))
         .toString();
   }
@@ -1141,13 +947,6 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES wallets (wallet_pk)'));
-  static const VerificationMeta _labelFksMeta =
-      const VerificationMeta('labelFks');
-  @override
-  late final GeneratedColumnWithTypeConverter<List<int>?, String> labelFks =
-      GeneratedColumn<String>('label_fks', aliasedName, true,
-              type: DriftSqlType.string, requiredDuringInsert: false)
-          .withConverter<List<int>?>($TransactionsTable.$converterlabelFksn);
   static const VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   @override
@@ -1321,7 +1120,6 @@ class $TransactionsTable extends Transactions
         note,
         categoryFk,
         walletFk,
-        labelFks,
         dateCreated,
         dateTimeCreated,
         dateTimeModified,
@@ -1389,7 +1187,6 @@ class $TransactionsTable extends Transactions
     } else if (isInserting) {
       context.missing(_walletFkMeta);
     }
-    context.handle(_labelFksMeta, const VerificationResult.success());
     if (data.containsKey('date_created')) {
       context.handle(
           _dateCreatedMeta,
@@ -1501,9 +1298,6 @@ class $TransactionsTable extends Transactions
           .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
       walletFk: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}wallet_fk'])!,
-      labelFks: $TransactionsTable.$converterlabelFksn.fromSql(attachedDatabase
-          .typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}label_fks'])),
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       dateTimeCreated: attachedDatabase.typeMapping.read(
@@ -1559,10 +1353,6 @@ class $TransactionsTable extends Transactions
     return $TransactionsTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<List<int>, String> $converterlabelFks =
-      const IntListInColumnConverter();
-  static TypeConverter<List<int>?, String?> $converterlabelFksn =
-      NullAwareTypeConverter.wrap($converterlabelFks);
   static JsonTypeConverter2<BudgetReoccurence, int, int>
       $converterreoccurrence =
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
@@ -1591,7 +1381,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final String note;
   final int categoryFk;
   final int walletFk;
-  final List<int>? labelFks;
   final DateTime dateCreated;
   final DateTime? dateTimeCreated;
   final DateTime? dateTimeModified;
@@ -1618,7 +1407,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.note,
       required this.categoryFk,
       required this.walletFk,
-      this.labelFks,
       required this.dateCreated,
       this.dateTimeCreated,
       this.dateTimeModified,
@@ -1647,10 +1435,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     map['note'] = Variable<String>(note);
     map['category_fk'] = Variable<int>(categoryFk);
     map['wallet_fk'] = Variable<int>(walletFk);
-    if (!nullToAbsent || labelFks != null) {
-      final converter = $TransactionsTable.$converterlabelFksn;
-      map['label_fks'] = Variable<String>(converter.toSql(labelFks));
-    }
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeCreated != null) {
       map['date_time_created'] = Variable<DateTime>(dateTimeCreated);
@@ -1719,9 +1503,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       note: Value(note),
       categoryFk: Value(categoryFk),
       walletFk: Value(walletFk),
-      labelFks: labelFks == null && nullToAbsent
-          ? const Value.absent()
-          : Value(labelFks),
       dateCreated: Value(dateCreated),
       dateTimeCreated: dateTimeCreated == null && nullToAbsent
           ? const Value.absent()
@@ -1785,7 +1566,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       note: serializer.fromJson<String>(json['note']),
       categoryFk: serializer.fromJson<int>(json['categoryFk']),
       walletFk: serializer.fromJson<int>(json['walletFk']),
-      labelFks: serializer.fromJson<List<int>?>(json['labelFks']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeCreated: serializer.fromJson<DateTime?>(json['dateTimeCreated']),
       dateTimeModified:
@@ -1828,7 +1608,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'note': serializer.toJson<String>(note),
       'categoryFk': serializer.toJson<int>(categoryFk),
       'walletFk': serializer.toJson<int>(walletFk),
-      'labelFks': serializer.toJson<List<int>?>(labelFks),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeCreated': serializer.toJson<DateTime?>(dateTimeCreated),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
@@ -1867,7 +1646,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           String? note,
           int? categoryFk,
           int? walletFk,
-          Value<List<int>?> labelFks = const Value.absent(),
           DateTime? dateCreated,
           Value<DateTime?> dateTimeCreated = const Value.absent(),
           Value<DateTime?> dateTimeModified = const Value.absent(),
@@ -1894,7 +1672,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         note: note ?? this.note,
         categoryFk: categoryFk ?? this.categoryFk,
         walletFk: walletFk ?? this.walletFk,
-        labelFks: labelFks.present ? labelFks.value : this.labelFks,
         dateCreated: dateCreated ?? this.dateCreated,
         dateTimeCreated: dateTimeCreated.present
             ? dateTimeCreated.value
@@ -1944,7 +1721,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('note: $note, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('walletFk: $walletFk, ')
-          ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeCreated: $dateTimeCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
@@ -1979,7 +1755,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         note,
         categoryFk,
         walletFk,
-        labelFks,
         dateCreated,
         dateTimeCreated,
         dateTimeModified,
@@ -2010,7 +1785,6 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.note == this.note &&
           other.categoryFk == this.categoryFk &&
           other.walletFk == this.walletFk &&
-          other.labelFks == this.labelFks &&
           other.dateCreated == this.dateCreated &&
           other.dateTimeCreated == this.dateTimeCreated &&
           other.dateTimeModified == this.dateTimeModified &&
@@ -2042,7 +1816,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<String> note;
   final Value<int> categoryFk;
   final Value<int> walletFk;
-  final Value<List<int>?> labelFks;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeCreated;
   final Value<DateTime?> dateTimeModified;
@@ -2069,7 +1842,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.note = const Value.absent(),
     this.categoryFk = const Value.absent(),
     this.walletFk = const Value.absent(),
-    this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
@@ -2097,7 +1869,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required String note,
     required int categoryFk,
     required int walletFk,
-    this.labelFks = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
@@ -2129,7 +1900,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<String>? note,
     Expression<int>? categoryFk,
     Expression<int>? walletFk,
-    Expression<String>? labelFks,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeCreated,
     Expression<DateTime>? dateTimeModified,
@@ -2157,7 +1927,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (note != null) 'note': note,
       if (categoryFk != null) 'category_fk': categoryFk,
       if (walletFk != null) 'wallet_fk': walletFk,
-      if (labelFks != null) 'label_fks': labelFks,
       if (dateCreated != null) 'date_created': dateCreated,
       if (dateTimeCreated != null) 'date_time_created': dateTimeCreated,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
@@ -2192,7 +1961,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<String>? note,
       Value<int>? categoryFk,
       Value<int>? walletFk,
-      Value<List<int>?>? labelFks,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeCreated,
       Value<DateTime?>? dateTimeModified,
@@ -2219,7 +1987,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       note: note ?? this.note,
       categoryFk: categoryFk ?? this.categoryFk,
       walletFk: walletFk ?? this.walletFk,
-      labelFks: labelFks ?? this.labelFks,
       dateCreated: dateCreated ?? this.dateCreated,
       dateTimeCreated: dateTimeCreated ?? this.dateTimeCreated,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
@@ -2267,10 +2034,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (walletFk.present) {
       map['wallet_fk'] = Variable<int>(walletFk.value);
-    }
-    if (labelFks.present) {
-      final converter = $TransactionsTable.$converterlabelFksn;
-      map['label_fks'] = Variable<String>(converter.toSql(labelFks.value));
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
@@ -2350,7 +2113,6 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('note: $note, ')
           ..write('categoryFk: $categoryFk, ')
           ..write('walletFk: $walletFk, ')
-          ..write('labelFks: $labelFks, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeCreated: $dateTimeCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
@@ -2512,17 +2274,6 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES wallets (wallet_pk)'));
-  static const VerificationMeta _sharedTransactionsShowMeta =
-      const VerificationMeta('sharedTransactionsShow');
-  @override
-  late final GeneratedColumnWithTypeConverter<SharedTransactionsShow, int>
-      sharedTransactionsShow = GeneratedColumn<int>(
-              'shared_transactions_show', aliasedName, false,
-              type: DriftSqlType.int,
-              requiredDuringInsert: false,
-              defaultValue: const Constant(0))
-          .withConverter<SharedTransactionsShow>(
-              $BudgetsTable.$convertersharedTransactionsShow);
   static const VerificationMeta _budgetTransactionFiltersMeta =
       const VerificationMeta('budgetTransactionFilters');
   @override
@@ -2601,7 +2352,6 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         pinned,
         order,
         walletFk,
-        sharedTransactionsShow,
         budgetTransactionFilters,
         memberTransactionFilters,
         sharedKey,
@@ -2704,8 +2454,6 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       context.missing(_walletFkMeta);
     }
     context.handle(
-        _sharedTransactionsShowMeta, const VerificationResult.success());
-    context.handle(
         _budgetTransactionFiltersMeta, const VerificationResult.success());
     context.handle(
         _memberTransactionFiltersMeta, const VerificationResult.success());
@@ -2767,9 +2515,6 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       walletFk: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}wallet_fk'])!,
-      sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShow
-          .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.int,
-              data['${effectivePrefix}shared_transactions_show'])!),
       budgetTransactionFilters: $BudgetsTable
           .$converterbudgetTransactionFiltersn
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
@@ -2809,10 +2554,6 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static JsonTypeConverter2<BudgetReoccurence?, int?, int?>
       $converterreoccurrencen =
       JsonTypeConverter2.asNullable($converterreoccurrence);
-  static JsonTypeConverter2<SharedTransactionsShow, int, int>
-      $convertersharedTransactionsShow =
-      const EnumIndexConverter<SharedTransactionsShow>(
-          SharedTransactionsShow.values);
   static TypeConverter<List<BudgetTransactionFilters>, String>
       $converterbudgetTransactionFilters =
       const BudgetTransactionFiltersListInColumnConverter();
@@ -2857,7 +2598,6 @@ class Budget extends DataClass implements Insertable<Budget> {
   final bool pinned;
   final int order;
   final int walletFk;
-  final SharedTransactionsShow sharedTransactionsShow;
   final List<BudgetTransactionFilters>? budgetTransactionFilters;
   final List<String>? memberTransactionFilters;
   final String? sharedKey;
@@ -2882,7 +2622,6 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.pinned,
       required this.order,
       required this.walletFk,
-      required this.sharedTransactionsShow,
       this.budgetTransactionFilters,
       this.memberTransactionFilters,
       this.sharedKey,
@@ -2919,11 +2658,6 @@ class Budget extends DataClass implements Insertable<Budget> {
     map['pinned'] = Variable<bool>(pinned);
     map['order'] = Variable<int>(order);
     map['wallet_fk'] = Variable<int>(walletFk);
-    {
-      final converter = $BudgetsTable.$convertersharedTransactionsShow;
-      map['shared_transactions_show'] =
-          Variable<int>(converter.toSql(sharedTransactionsShow));
-    }
     if (!nullToAbsent || budgetTransactionFilters != null) {
       final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
       map['budget_transaction_filters'] =
@@ -2982,7 +2716,6 @@ class Budget extends DataClass implements Insertable<Budget> {
       pinned: Value(pinned),
       order: Value(order),
       walletFk: Value(walletFk),
-      sharedTransactionsShow: Value(sharedTransactionsShow),
       budgetTransactionFilters: budgetTransactionFilters == null && nullToAbsent
           ? const Value.absent()
           : Value(budgetTransactionFilters),
@@ -3030,8 +2763,6 @@ class Budget extends DataClass implements Insertable<Budget> {
       pinned: serializer.fromJson<bool>(json['pinned']),
       order: serializer.fromJson<int>(json['order']),
       walletFk: serializer.fromJson<int>(json['walletFk']),
-      sharedTransactionsShow: $BudgetsTable.$convertersharedTransactionsShow
-          .fromJson(serializer.fromJson<int>(json['sharedTransactionsShow'])),
       budgetTransactionFilters:
           serializer.fromJson<List<BudgetTransactionFilters>?>(
               json['budgetTransactionFilters']),
@@ -3068,9 +2799,6 @@ class Budget extends DataClass implements Insertable<Budget> {
       'pinned': serializer.toJson<bool>(pinned),
       'order': serializer.toJson<int>(order),
       'walletFk': serializer.toJson<int>(walletFk),
-      'sharedTransactionsShow': serializer.toJson<int>($BudgetsTable
-          .$convertersharedTransactionsShow
-          .toJson(sharedTransactionsShow)),
       'budgetTransactionFilters': serializer
           .toJson<List<BudgetTransactionFilters>?>(budgetTransactionFilters),
       'memberTransactionFilters':
@@ -3102,7 +2830,6 @@ class Budget extends DataClass implements Insertable<Budget> {
           bool? pinned,
           int? order,
           int? walletFk,
-          SharedTransactionsShow? sharedTransactionsShow,
           Value<List<BudgetTransactionFilters>?> budgetTransactionFilters =
               const Value.absent(),
           Value<List<String>?> memberTransactionFilters = const Value.absent(),
@@ -3132,8 +2859,6 @@ class Budget extends DataClass implements Insertable<Budget> {
         pinned: pinned ?? this.pinned,
         order: order ?? this.order,
         walletFk: walletFk ?? this.walletFk,
-        sharedTransactionsShow:
-            sharedTransactionsShow ?? this.sharedTransactionsShow,
         budgetTransactionFilters: budgetTransactionFilters.present
             ? budgetTransactionFilters.value
             : this.budgetTransactionFilters,
@@ -3172,7 +2897,6 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('pinned: $pinned, ')
           ..write('order: $order, ')
           ..write('walletFk: $walletFk, ')
-          ..write('sharedTransactionsShow: $sharedTransactionsShow, ')
           ..write('budgetTransactionFilters: $budgetTransactionFilters, ')
           ..write('memberTransactionFilters: $memberTransactionFilters, ')
           ..write('sharedKey: $sharedKey, ')
@@ -3202,7 +2926,6 @@ class Budget extends DataClass implements Insertable<Budget> {
         pinned,
         order,
         walletFk,
-        sharedTransactionsShow,
         budgetTransactionFilters,
         memberTransactionFilters,
         sharedKey,
@@ -3231,7 +2954,6 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.pinned == this.pinned &&
           other.order == this.order &&
           other.walletFk == this.walletFk &&
-          other.sharedTransactionsShow == this.sharedTransactionsShow &&
           other.budgetTransactionFilters == this.budgetTransactionFilters &&
           other.memberTransactionFilters == this.memberTransactionFilters &&
           other.sharedKey == this.sharedKey &&
@@ -3258,7 +2980,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<bool> pinned;
   final Value<int> order;
   final Value<int> walletFk;
-  final Value<SharedTransactionsShow> sharedTransactionsShow;
   final Value<List<BudgetTransactionFilters>?> budgetTransactionFilters;
   final Value<List<String>?> memberTransactionFilters;
   final Value<String?> sharedKey;
@@ -3283,7 +3004,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.pinned = const Value.absent(),
     this.order = const Value.absent(),
     this.walletFk = const Value.absent(),
-    this.sharedTransactionsShow = const Value.absent(),
     this.budgetTransactionFilters = const Value.absent(),
     this.memberTransactionFilters = const Value.absent(),
     this.sharedKey = const Value.absent(),
@@ -3309,7 +3029,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.pinned = const Value.absent(),
     required int order,
     required int walletFk,
-    this.sharedTransactionsShow = const Value.absent(),
     this.budgetTransactionFilters = const Value.absent(),
     this.memberTransactionFilters = const Value.absent(),
     this.sharedKey = const Value.absent(),
@@ -3342,7 +3061,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<bool>? pinned,
     Expression<int>? order,
     Expression<int>? walletFk,
-    Expression<int>? sharedTransactionsShow,
     Expression<String>? budgetTransactionFilters,
     Expression<String>? memberTransactionFilters,
     Expression<String>? sharedKey,
@@ -3369,8 +3087,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (pinned != null) 'pinned': pinned,
       if (order != null) 'order': order,
       if (walletFk != null) 'wallet_fk': walletFk,
-      if (sharedTransactionsShow != null)
-        'shared_transactions_show': sharedTransactionsShow,
       if (budgetTransactionFilters != null)
         'budget_transaction_filters': budgetTransactionFilters,
       if (memberTransactionFilters != null)
@@ -3401,7 +3117,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<bool>? pinned,
       Value<int>? order,
       Value<int>? walletFk,
-      Value<SharedTransactionsShow>? sharedTransactionsShow,
       Value<List<BudgetTransactionFilters>?>? budgetTransactionFilters,
       Value<List<String>?>? memberTransactionFilters,
       Value<String?>? sharedKey,
@@ -3427,8 +3142,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       pinned: pinned ?? this.pinned,
       order: order ?? this.order,
       walletFk: walletFk ?? this.walletFk,
-      sharedTransactionsShow:
-          sharedTransactionsShow ?? this.sharedTransactionsShow,
       budgetTransactionFilters:
           budgetTransactionFilters ?? this.budgetTransactionFilters,
       memberTransactionFilters:
@@ -3496,11 +3209,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     if (walletFk.present) {
       map['wallet_fk'] = Variable<int>(walletFk.value);
     }
-    if (sharedTransactionsShow.present) {
-      final converter = $BudgetsTable.$convertersharedTransactionsShow;
-      map['shared_transactions_show'] =
-          Variable<int>(converter.toSql(sharedTransactionsShow.value));
-    }
     if (budgetTransactionFilters.present) {
       final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
       map['budget_transaction_filters'] =
@@ -3554,7 +3262,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('pinned: $pinned, ')
           ..write('order: $order, ')
           ..write('walletFk: $walletFk, ')
-          ..write('sharedTransactionsShow: $sharedTransactionsShow, ')
           ..write('budgetTransactionFilters: $budgetTransactionFilters, ')
           ..write('memberTransactionFilters: $memberTransactionFilters, ')
           ..write('sharedKey: $sharedKey, ')
@@ -3873,348 +3580,6 @@ class CategoryBudgetLimitsCompanion
           ..write('budgetFk: $budgetFk, ')
           ..write('amount: $amount, ')
           ..write('dateTimeModified: $dateTimeModified')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $LabelsTable extends Labels
-    with TableInfo<$LabelsTable, TransactionLabel> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $LabelsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _label_pkMeta =
-      const VerificationMeta('label_pk');
-  @override
-  late final GeneratedColumn<int> label_pk = GeneratedColumn<int>(
-      'label_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _categoryFkMeta =
-      const VerificationMeta('categoryFk');
-  @override
-  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
-      'category_fk', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES categories (category_pk)'));
-  static const VerificationMeta _dateCreatedMeta =
-      const VerificationMeta('dateCreated');
-  @override
-  late final GeneratedColumn<DateTime> dateCreated = GeneratedColumn<DateTime>(
-      'date_created', aliasedName, false,
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: false,
-      clientDefault: () => new DateTime.now());
-  static const VerificationMeta _dateTimeModifiedMeta =
-      const VerificationMeta('dateTimeModified');
-  @override
-  late final GeneratedColumn<DateTime> dateTimeModified =
-      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
-          type: DriftSqlType.dateTime,
-          requiredDuringInsert: false,
-          defaultValue: Constant(DateTime.now()));
-  static const VerificationMeta _orderMeta = const VerificationMeta('order');
-  @override
-  late final GeneratedColumn<int> order = GeneratedColumn<int>(
-      'order', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [label_pk, name, categoryFk, dateCreated, dateTimeModified, order];
-  @override
-  String get aliasedName => _alias ?? 'labels';
-  @override
-  String get actualTableName => 'labels';
-  @override
-  VerificationContext validateIntegrity(Insertable<TransactionLabel> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('label_pk')) {
-      context.handle(_label_pkMeta,
-          label_pk.isAcceptableOrUnknown(data['label_pk']!, _label_pkMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('category_fk')) {
-      context.handle(
-          _categoryFkMeta,
-          categoryFk.isAcceptableOrUnknown(
-              data['category_fk']!, _categoryFkMeta));
-    } else if (isInserting) {
-      context.missing(_categoryFkMeta);
-    }
-    if (data.containsKey('date_created')) {
-      context.handle(
-          _dateCreatedMeta,
-          dateCreated.isAcceptableOrUnknown(
-              data['date_created']!, _dateCreatedMeta));
-    }
-    if (data.containsKey('date_time_modified')) {
-      context.handle(
-          _dateTimeModifiedMeta,
-          dateTimeModified.isAcceptableOrUnknown(
-              data['date_time_modified']!, _dateTimeModifiedMeta));
-    }
-    if (data.containsKey('order')) {
-      context.handle(
-          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
-    } else if (isInserting) {
-      context.missing(_orderMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {label_pk};
-  @override
-  TransactionLabel map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TransactionLabel(
-      label_pk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}label_pk'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      categoryFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
-      dateCreated: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
-      dateTimeModified: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
-      order: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
-    );
-  }
-
-  @override
-  $LabelsTable createAlias(String alias) {
-    return $LabelsTable(attachedDatabase, alias);
-  }
-}
-
-class TransactionLabel extends DataClass
-    implements Insertable<TransactionLabel> {
-  final int label_pk;
-  final String name;
-  final int categoryFk;
-  final DateTime dateCreated;
-  final DateTime? dateTimeModified;
-  final int order;
-  const TransactionLabel(
-      {required this.label_pk,
-      required this.name,
-      required this.categoryFk,
-      required this.dateCreated,
-      this.dateTimeModified,
-      required this.order});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['label_pk'] = Variable<int>(label_pk);
-    map['name'] = Variable<String>(name);
-    map['category_fk'] = Variable<int>(categoryFk);
-    map['date_created'] = Variable<DateTime>(dateCreated);
-    if (!nullToAbsent || dateTimeModified != null) {
-      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
-    }
-    map['order'] = Variable<int>(order);
-    return map;
-  }
-
-  LabelsCompanion toCompanion(bool nullToAbsent) {
-    return LabelsCompanion(
-      label_pk: Value(label_pk),
-      name: Value(name),
-      categoryFk: Value(categoryFk),
-      dateCreated: Value(dateCreated),
-      dateTimeModified: dateTimeModified == null && nullToAbsent
-          ? const Value.absent()
-          : Value(dateTimeModified),
-      order: Value(order),
-    );
-  }
-
-  factory TransactionLabel.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TransactionLabel(
-      label_pk: serializer.fromJson<int>(json['label_pk']),
-      name: serializer.fromJson<String>(json['name']),
-      categoryFk: serializer.fromJson<int>(json['categoryFk']),
-      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
-      dateTimeModified:
-          serializer.fromJson<DateTime?>(json['dateTimeModified']),
-      order: serializer.fromJson<int>(json['order']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'label_pk': serializer.toJson<int>(label_pk),
-      'name': serializer.toJson<String>(name),
-      'categoryFk': serializer.toJson<int>(categoryFk),
-      'dateCreated': serializer.toJson<DateTime>(dateCreated),
-      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
-      'order': serializer.toJson<int>(order),
-    };
-  }
-
-  TransactionLabel copyWith(
-          {int? label_pk,
-          String? name,
-          int? categoryFk,
-          DateTime? dateCreated,
-          Value<DateTime?> dateTimeModified = const Value.absent(),
-          int? order}) =>
-      TransactionLabel(
-        label_pk: label_pk ?? this.label_pk,
-        name: name ?? this.name,
-        categoryFk: categoryFk ?? this.categoryFk,
-        dateCreated: dateCreated ?? this.dateCreated,
-        dateTimeModified: dateTimeModified.present
-            ? dateTimeModified.value
-            : this.dateTimeModified,
-        order: order ?? this.order,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('TransactionLabel(')
-          ..write('label_pk: $label_pk, ')
-          ..write('name: $name, ')
-          ..write('categoryFk: $categoryFk, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('dateTimeModified: $dateTimeModified, ')
-          ..write('order: $order')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      label_pk, name, categoryFk, dateCreated, dateTimeModified, order);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is TransactionLabel &&
-          other.label_pk == this.label_pk &&
-          other.name == this.name &&
-          other.categoryFk == this.categoryFk &&
-          other.dateCreated == this.dateCreated &&
-          other.dateTimeModified == this.dateTimeModified &&
-          other.order == this.order);
-}
-
-class LabelsCompanion extends UpdateCompanion<TransactionLabel> {
-  final Value<int> label_pk;
-  final Value<String> name;
-  final Value<int> categoryFk;
-  final Value<DateTime> dateCreated;
-  final Value<DateTime?> dateTimeModified;
-  final Value<int> order;
-  const LabelsCompanion({
-    this.label_pk = const Value.absent(),
-    this.name = const Value.absent(),
-    this.categoryFk = const Value.absent(),
-    this.dateCreated = const Value.absent(),
-    this.dateTimeModified = const Value.absent(),
-    this.order = const Value.absent(),
-  });
-  LabelsCompanion.insert({
-    this.label_pk = const Value.absent(),
-    required String name,
-    required int categoryFk,
-    this.dateCreated = const Value.absent(),
-    this.dateTimeModified = const Value.absent(),
-    required int order,
-  })  : name = Value(name),
-        categoryFk = Value(categoryFk),
-        order = Value(order);
-  static Insertable<TransactionLabel> custom({
-    Expression<int>? label_pk,
-    Expression<String>? name,
-    Expression<int>? categoryFk,
-    Expression<DateTime>? dateCreated,
-    Expression<DateTime>? dateTimeModified,
-    Expression<int>? order,
-  }) {
-    return RawValuesInsertable({
-      if (label_pk != null) 'label_pk': label_pk,
-      if (name != null) 'name': name,
-      if (categoryFk != null) 'category_fk': categoryFk,
-      if (dateCreated != null) 'date_created': dateCreated,
-      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
-      if (order != null) 'order': order,
-    });
-  }
-
-  LabelsCompanion copyWith(
-      {Value<int>? label_pk,
-      Value<String>? name,
-      Value<int>? categoryFk,
-      Value<DateTime>? dateCreated,
-      Value<DateTime?>? dateTimeModified,
-      Value<int>? order}) {
-    return LabelsCompanion(
-      label_pk: label_pk ?? this.label_pk,
-      name: name ?? this.name,
-      categoryFk: categoryFk ?? this.categoryFk,
-      dateCreated: dateCreated ?? this.dateCreated,
-      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
-      order: order ?? this.order,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (label_pk.present) {
-      map['label_pk'] = Variable<int>(label_pk.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (categoryFk.present) {
-      map['category_fk'] = Variable<int>(categoryFk.value);
-    }
-    if (dateCreated.present) {
-      map['date_created'] = Variable<DateTime>(dateCreated.value);
-    }
-    if (dateTimeModified.present) {
-      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
-    }
-    if (order.present) {
-      map['order'] = Variable<int>(order.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('LabelsCompanion(')
-          ..write('label_pk: $label_pk, ')
-          ..write('name: $name, ')
-          ..write('categoryFk: $categoryFk, ')
-          ..write('dateCreated: $dateCreated, ')
-          ..write('dateTimeModified: $dateTimeModified, ')
-          ..write('order: $order')
           ..write(')'))
         .toString();
   }
@@ -5475,6 +4840,267 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   }
 }
 
+class $DeleteLogsTable extends DeleteLogs
+    with TableInfo<$DeleteLogsTable, DeleteLog> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DeleteLogsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _deleteLogPkMeta =
+      const VerificationMeta('deleteLogPk');
+  @override
+  late final GeneratedColumn<int> deleteLogPk = GeneratedColumn<int>(
+      'delete_log_pk', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<DeleteLogType, int> type =
+      GeneratedColumn<int>('type', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<DeleteLogType>($DeleteLogsTable.$convertertype);
+  static const VerificationMeta _entryPkMeta =
+      const VerificationMeta('entryPk');
+  @override
+  late final GeneratedColumn<int> entryPk = GeneratedColumn<int>(
+      'entry_pk', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, false,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [deleteLogPk, type, entryPk, dateTimeModified];
+  @override
+  String get aliasedName => _alias ?? 'delete_logs';
+  @override
+  String get actualTableName => 'delete_logs';
+  @override
+  VerificationContext validateIntegrity(Insertable<DeleteLog> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('delete_log_pk')) {
+      context.handle(
+          _deleteLogPkMeta,
+          deleteLogPk.isAcceptableOrUnknown(
+              data['delete_log_pk']!, _deleteLogPkMeta));
+    }
+    context.handle(_typeMeta, const VerificationResult.success());
+    if (data.containsKey('entry_pk')) {
+      context.handle(_entryPkMeta,
+          entryPk.isAcceptableOrUnknown(data['entry_pk']!, _entryPkMeta));
+    } else if (isInserting) {
+      context.missing(_entryPkMeta);
+    }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {deleteLogPk};
+  @override
+  DeleteLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DeleteLog(
+      deleteLogPk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}delete_log_pk'])!,
+      type: $DeleteLogsTable.$convertertype.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}type'])!),
+      entryPk: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}entry_pk'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified'])!,
+    );
+  }
+
+  @override
+  $DeleteLogsTable createAlias(String alias) {
+    return $DeleteLogsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<DeleteLogType, int, int> $convertertype =
+      const EnumIndexConverter<DeleteLogType>(DeleteLogType.values);
+}
+
+class DeleteLog extends DataClass implements Insertable<DeleteLog> {
+  final int deleteLogPk;
+  final DeleteLogType type;
+  final int entryPk;
+  final DateTime dateTimeModified;
+  const DeleteLog(
+      {required this.deleteLogPk,
+      required this.type,
+      required this.entryPk,
+      required this.dateTimeModified});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['delete_log_pk'] = Variable<int>(deleteLogPk);
+    {
+      final converter = $DeleteLogsTable.$convertertype;
+      map['type'] = Variable<int>(converter.toSql(type));
+    }
+    map['entry_pk'] = Variable<int>(entryPk);
+    map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    return map;
+  }
+
+  DeleteLogsCompanion toCompanion(bool nullToAbsent) {
+    return DeleteLogsCompanion(
+      deleteLogPk: Value(deleteLogPk),
+      type: Value(type),
+      entryPk: Value(entryPk),
+      dateTimeModified: Value(dateTimeModified),
+    );
+  }
+
+  factory DeleteLog.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DeleteLog(
+      deleteLogPk: serializer.fromJson<int>(json['deleteLogPk']),
+      type: $DeleteLogsTable.$convertertype
+          .fromJson(serializer.fromJson<int>(json['type'])),
+      entryPk: serializer.fromJson<int>(json['entryPk']),
+      dateTimeModified: serializer.fromJson<DateTime>(json['dateTimeModified']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'deleteLogPk': serializer.toJson<int>(deleteLogPk),
+      'type':
+          serializer.toJson<int>($DeleteLogsTable.$convertertype.toJson(type)),
+      'entryPk': serializer.toJson<int>(entryPk),
+      'dateTimeModified': serializer.toJson<DateTime>(dateTimeModified),
+    };
+  }
+
+  DeleteLog copyWith(
+          {int? deleteLogPk,
+          DeleteLogType? type,
+          int? entryPk,
+          DateTime? dateTimeModified}) =>
+      DeleteLog(
+        deleteLogPk: deleteLogPk ?? this.deleteLogPk,
+        type: type ?? this.type,
+        entryPk: entryPk ?? this.entryPk,
+        dateTimeModified: dateTimeModified ?? this.dateTimeModified,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('DeleteLog(')
+          ..write('deleteLogPk: $deleteLogPk, ')
+          ..write('type: $type, ')
+          ..write('entryPk: $entryPk, ')
+          ..write('dateTimeModified: $dateTimeModified')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(deleteLogPk, type, entryPk, dateTimeModified);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DeleteLog &&
+          other.deleteLogPk == this.deleteLogPk &&
+          other.type == this.type &&
+          other.entryPk == this.entryPk &&
+          other.dateTimeModified == this.dateTimeModified);
+}
+
+class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
+  final Value<int> deleteLogPk;
+  final Value<DeleteLogType> type;
+  final Value<int> entryPk;
+  final Value<DateTime> dateTimeModified;
+  const DeleteLogsCompanion({
+    this.deleteLogPk = const Value.absent(),
+    this.type = const Value.absent(),
+    this.entryPk = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
+  });
+  DeleteLogsCompanion.insert({
+    this.deleteLogPk = const Value.absent(),
+    required DeleteLogType type,
+    required int entryPk,
+    this.dateTimeModified = const Value.absent(),
+  })  : type = Value(type),
+        entryPk = Value(entryPk);
+  static Insertable<DeleteLog> custom({
+    Expression<int>? deleteLogPk,
+    Expression<int>? type,
+    Expression<int>? entryPk,
+    Expression<DateTime>? dateTimeModified,
+  }) {
+    return RawValuesInsertable({
+      if (deleteLogPk != null) 'delete_log_pk': deleteLogPk,
+      if (type != null) 'type': type,
+      if (entryPk != null) 'entry_pk': entryPk,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
+    });
+  }
+
+  DeleteLogsCompanion copyWith(
+      {Value<int>? deleteLogPk,
+      Value<DeleteLogType>? type,
+      Value<int>? entryPk,
+      Value<DateTime>? dateTimeModified}) {
+    return DeleteLogsCompanion(
+      deleteLogPk: deleteLogPk ?? this.deleteLogPk,
+      type: type ?? this.type,
+      entryPk: entryPk ?? this.entryPk,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (deleteLogPk.present) {
+      map['delete_log_pk'] = Variable<int>(deleteLogPk.value);
+    }
+    if (type.present) {
+      final converter = $DeleteLogsTable.$convertertype;
+      map['type'] = Variable<int>(converter.toSql(type.value));
+    }
+    if (entryPk.present) {
+      map['entry_pk'] = Variable<int>(entryPk.value);
+    }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeleteLogsCompanion(')
+          ..write('deleteLogPk: $deleteLogPk, ')
+          ..write('type: $type, ')
+          ..write('entryPk: $entryPk, ')
+          ..write('dateTimeModified: $dateTimeModified')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FinanceDatabase extends GeneratedDatabase {
   _$FinanceDatabase(QueryExecutor e) : super(e);
   late final $WalletsTable wallets = $WalletsTable(this);
@@ -5483,12 +5109,12 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
   late final $BudgetsTable budgets = $BudgetsTable(this);
   late final $CategoryBudgetLimitsTable categoryBudgetLimits =
       $CategoryBudgetLimitsTable(this);
-  late final $LabelsTable labels = $LabelsTable(this);
   late final $AssociatedTitlesTable associatedTitles =
       $AssociatedTitlesTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final $ScannerTemplatesTable scannerTemplates =
       $ScannerTemplatesTable(this);
+  late final $DeleteLogsTable deleteLogs = $DeleteLogsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5499,9 +5125,9 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
         transactions,
         budgets,
         categoryBudgetLimits,
-        labels,
         associatedTitles,
         appSettings,
-        scannerTemplates
+        scannerTemplates,
+        deleteLogs
       ];
 }

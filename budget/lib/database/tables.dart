@@ -6,6 +6,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drift/drift.dart';
@@ -13,7 +14,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 31;
+int schemaVersionGlobal = 33;
 
 // Generate database code
 // flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -40,17 +41,6 @@ enum TransactionSpecialType {
 enum SharedOwnerMember {
   owner,
   member,
-}
-
-enum SharedTransactionsShow {
-  fromEveryone,
-  onlyIfOwner,
-  onlyIfOwnerIfShared,
-  onlyIfShared,
-  onlyIfNotShared,
-  excludeOther,
-  excludeOtherIfShared,
-  excludeOtherIfNotShared,
 }
 
 enum BudgetTransactionFilters {
@@ -126,6 +116,25 @@ class DoubleListInColumnConverter extends TypeConverter<List<double>, String> {
   }
 }
 
+enum DeleteLogType {
+  TransactionWallet,
+  TransactionCategory,
+  Budget,
+  CategoryBudgetLimit,
+  Transaction,
+  TransactionAssociatedTitle,
+  ScannerTemplate,
+}
+
+@DataClassName('DeleteLog')
+class DeleteLogs extends Table {
+  IntColumn get deleteLogPk => integer().autoIncrement()();
+  IntColumn get type => intEnum<DeleteLogType>()();
+  IntColumn get entryPk => integer()();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now()))();
+}
+
 @DataClassName('TransactionWallet')
 class Wallets extends Table {
   IntColumn get walletPk => integer().autoIncrement()();
@@ -148,8 +157,8 @@ class Transactions extends Table {
   TextColumn get note => text().withLength(max: NOTE_LIMIT)();
   IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
-  TextColumn get labelFks =>
-      text().map(const IntListInColumnConverter()).nullable()();
+  // TextColumn get labelFks =>
+  //     text().map(const IntListInColumnConverter()).nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   DateTimeColumn get dateTimeCreated =>
@@ -198,11 +207,11 @@ class Categories extends Table {
   IntColumn get methodAdded => intEnum<MethodAdded>().nullable()();
   // Attributes to configure sharing of transactions:
   // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
-  TextColumn get sharedKey => text().nullable()();
-  IntColumn get sharedOwnerMember => intEnum<SharedOwnerMember>().nullable()();
-  DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
-  TextColumn get sharedMembers =>
-      text().map(const StringListInColumnConverter()).nullable()();
+  // TextColumn get sharedKey => text().nullable()();
+  // IntColumn get sharedOwnerMember => intEnum<SharedOwnerMember>().nullable()();
+  // DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
+  // TextColumn get sharedMembers =>
+  //     text().map(const StringListInColumnConverter()).nullable()();
 }
 
 @DataClassName('CategoryBudgetLimit')
@@ -232,17 +241,17 @@ class AssociatedTitles extends Table {
   BoolColumn get isExactMatch => boolean().withDefault(const Constant(false))();
 }
 
-@DataClassName('TransactionLabel')
-class Labels extends Table {
-  IntColumn get label_pk => integer().autoIncrement()();
-  TextColumn get name => text().withLength(max: NAME_LIMIT)();
-  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
-  DateTimeColumn get dateCreated =>
-      dateTime().clientDefault(() => new DateTime.now())();
-  DateTimeColumn get dateTimeModified =>
-      dateTime().withDefault(Constant(DateTime.now())).nullable()();
-  IntColumn get order => integer()();
-}
+// @DataClassName('TransactionLabel')
+// class Labels extends Table {
+//   IntColumn get label_pk => integer().autoIncrement()();
+//   TextColumn get name => text().withLength(max: NAME_LIMIT)();
+//   IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
+//   DateTimeColumn get dateCreated =>
+//       dateTime().clientDefault(() => new DateTime.now())();
+//   DateTimeColumn get dateTimeModified =>
+//       dateTime().withDefault(Constant(DateTime.now())).nullable()();
+//   IntColumn get order => integer()();
+// }
 
 @DataClassName('Budget')
 class Budgets extends Table {
@@ -268,8 +277,6 @@ class Budgets extends Table {
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
   IntColumn get order => integer()();
   IntColumn get walletFk => integer().references(Wallets, #walletPk)();
-  IntColumn get sharedTransactionsShow =>
-      intEnum<SharedTransactionsShow>().withDefault(const Constant(0))();
   TextColumn get budgetTransactionFilters => text()
       .nullable()
       .withDefault(const Constant(null))
@@ -342,11 +349,12 @@ class CategoryWithTotal {
   Transactions,
   Categories,
   CategoryBudgetLimits,
-  Labels,
+  // Labels,
   AssociatedTitles,
   Budgets,
   AppSettings,
   ScannerTemplates,
+  DeleteLogs,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -379,13 +387,13 @@ class FinanceDatabase extends _$FinanceDatabase {
                 transactions, transactions.transactionOwnerEmail);
             await migrator.addColumn(transactions, transactions.sharedKey);
             await migrator.addColumn(scannerTemplates, scannerTemplates.ignore);
-            await migrator.addColumn(categories, categories.sharedKey);
+            // await migrator.addColumn(categories, categories.sharedKey);
             await migrator.addColumn(
                 transactions, transactions.dateTimeCreated);
           }
           if (from <= 15) {
-            await migrator.addColumn(categories, categories.sharedOwnerMember);
-            await migrator.addColumn(categories, categories.sharedDateUpdated);
+            // await migrator.addColumn(categories, categories.sharedOwnerMember);
+            // await migrator.addColumn(categories, categories.sharedDateUpdated);
           }
           if (from <= 19) {
             await migrator.addColumn(transactions, transactions.sharedStatus);
@@ -393,12 +401,12 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 20) {
             await migrator.addColumn(
                 transactions, transactions.sharedDateUpdated);
-            await migrator.addColumn(budgets, budgets.sharedTransactionsShow);
+            // await migrator.addColumn(budgets, budgets.sharedTransactionsShow);
           }
           if (from <= 21) {
             await migrator.addColumn(
                 transactions, transactions.transactionOriginalOwnerEmail);
-            await migrator.addColumn(categories, categories.sharedMembers);
+            // await migrator.addColumn(categories, categories.sharedMembers);
           }
           if (from <= 21) {
             await migrator.addColumn(wallets, wallets.currency);
@@ -440,12 +448,21 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.addColumn(categories, categories.dateTimeModified);
             await migrator.addColumn(
                 categoryBudgetLimits, categoryBudgetLimits.dateTimeModified);
-            await migrator.addColumn(labels, labels.dateTimeModified);
+            // await migrator.addColumn(labels, labels.dateTimeModified);
             await migrator.addColumn(
                 associatedTitles, associatedTitles.dateTimeModified);
             await migrator.addColumn(budgets, budgets.dateTimeModified);
             await migrator.addColumn(
                 scannerTemplates, scannerTemplates.dateTimeModified);
+          }
+          if (from <= 31) {
+            await migrator.alterTable(TableMigration(budgets));
+          }
+          if (from <= 32) {
+            await migrator.createTable($DeleteLogsTable(database));
+            await migrator.alterTable(TableMigration(categories));
+            await migrator.alterTable(TableMigration(transactions));
+            await migrator.deleteTable("Labels");
           }
         },
       );
@@ -459,19 +476,19 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get all filtered transactions from earliest to oldest date created, paginated
-  Stream<List<Transaction>> watchAllTransactionsFiltered(
-      {int? categoryPk, String? itemPk, int? limit, int? offset}) {
-    return (categoryPk != null
-            ? (select(transactions)
-              ..where((tbl) => tbl.categoryFk.equals(categoryPk)))
-            : itemPk != null
-                ? (select(transactions)
-                  ..where((tbl) => tbl.labelFks.contains(itemPk)))
-                : select(transactions)
-          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-        .watch();
-  }
+  // Stream<List<Transaction>> watchAllTransactionsFiltered(
+  //     {int? categoryPk, String? itemPk, int? limit, int? offset}) {
+  //   return (categoryPk != null
+  //           ? (select(transactions)
+  //             ..where((tbl) => tbl.categoryFk.equals(categoryPk)))
+  //           : itemPk != null
+  //               ? (select(transactions)
+  //                 ..where((tbl) => tbl.labelFks.contains(itemPk)))
+  //               : select(transactions)
+  //         ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)])
+  //         ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+  //       .watch();
+  // }
 
   //get transactions that occurred on a given date
   Stream<List<Transaction>> getTransactionWithDate(DateTime date) {
@@ -1149,6 +1166,44 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Future<List<DeleteLog>> getAllNewDeleteLogs(DateTime lastSynced) async {
+    return (select(deleteLogs)
+          ..where(
+              (tbl) => tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced)))
+        .get();
+  }
+
+  Future<bool> createDeleteLog(DeleteLogType type, int deletedPk) async {
+    await into(deleteLogs).insert(
+      DeleteLogsCompanion.insert(
+        type: type,
+        entryPk: deletedPk,
+        dateTimeModified: Value(DateTime.now()),
+      ),
+    );
+    createSyncBackup(changeMadeSync: true);
+    return true;
+  }
+
+  Future<bool> createDeleteLogs(
+      DeleteLogType type, List<int> deletedPks) async {
+    List<DeleteLogsCompanion> deleteLogsToInsert = [];
+    for (int deletePk in deletedPks) {
+      deleteLogsToInsert.add(
+        DeleteLogsCompanion.insert(
+          type: type,
+          entryPk: deletePk,
+          dateTimeModified: Value(DateTime.now()),
+        ),
+      );
+    }
+    await batch((batch) {
+      batch.insertAll(deleteLogs, deleteLogsToInsert, mode: InsertMode.replace);
+    });
+    createSyncBackup(changeMadeSync: true);
+    return true;
+  }
+
   //Overwrite settings entry, it will always have id 0
   Future<int> createOrUpdateSettings(AppSetting setting) {
     return into(appSettings).insertOnConflictUpdate(setting);
@@ -1475,6 +1530,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   // ************************************************************
   // The following functions should only be used for data sync
   // Unless another use case makes sense
+  // These are also not logged into the Delete log!
   // ************************************************************
 
   // This doesn't handle shared transactions!
@@ -1498,6 +1554,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Future<int> deleteBatchWalletsGivenPks(
+      List<int> walletPks, DateTime dateModifiedToCheck) async {
+    return (delete(wallets)
+          ..where((tbl) =>
+              tbl.walletPk.isIn(walletPks) &
+              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+        .go();
+  }
+
   Future<bool> deleteBatchWallets(
       List<TransactionWallet> walletsDeleting) async {
     await batch((batch) {
@@ -1505,6 +1570,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         batch.delete(wallets, wallet);
     });
     return true;
+  }
+
+  Future<int> deleteBatchCategoriesGivenPks(
+      List<int> categoryPks, DateTime dateModifiedToCheck) async {
+    return (delete(categories)
+          ..where((tbl) =>
+              tbl.categoryPk.isIn(categoryPks) &
+              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+        .go();
   }
 
   Future<bool> deleteBatchCategories(
@@ -1516,12 +1590,30 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Future<int> deleteBatchBudgetsGivenPks(
+      List<int> budgetPks, DateTime dateModifiedToCheck) async {
+    return (delete(budgets)
+          ..where((tbl) =>
+              tbl.budgetPk.isIn(budgetPks) &
+              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+        .go();
+  }
+
   // This doesn't handle shared budgets!
   Future<bool> deleteBatchBudgets(List<Budget> budgetsDeleting) async {
     await batch((batch) {
       for (Budget budget in budgetsDeleting) batch.delete(budgets, budget);
     });
     return true;
+  }
+
+  Future<int> deleteBatchCategoryBudgetLimitsGivenPks(
+      List<int> categoryLimitPks, DateTime dateModifiedToCheck) async {
+    return (delete(categoryBudgetLimits)
+          ..where((tbl) =>
+              tbl.categoryLimitPk.isIn(categoryLimitPks) &
+              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+        .go();
   }
 
   Future<bool> deleteBatchCategoryBudgetLimit(
@@ -1532,6 +1624,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         batch.delete(categoryBudgetLimits, categoryBudgetLimit);
     });
     return true;
+  }
+
+  Future<int> deleteBatchAssociatedTitlesGivenTransactionPks(
+      List<int> associatedTitlePks, DateTime dateModifiedToCheck) async {
+    return (delete(associatedTitles)
+          ..where((tbl) =>
+              tbl.associatedTitlePk.isIn(associatedTitlePks) &
+              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+        .go();
   }
 
   // This doesn't handle order of titles!
@@ -1545,6 +1646,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Future<int> deleteBatchTransactionsGivenPks(
+      List<int> transactionPks, DateTime dateModifiedToCheck) async {
+    return (delete(transactions)
+          ..where((tbl) =>
+              tbl.transactionPk.isIn(transactionPks) &
+              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+        .go();
+  }
+
   // This doesn't handle shared transactions!
   // updateShared is always false
   Future<bool> deleteBatchTransactions(
@@ -1554,6 +1664,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         batch.delete(transactions, transaction);
     });
     return true;
+  }
+
+  Future<int> deleteBatchScannerTemplatesGivenPks(
+      List<int> scannerTemplatePks, DateTime dateModifiedToCheck) async {
+    return (delete(scannerTemplates)
+          ..where((tbl) =>
+              tbl.scannerTemplatePk.isIn(scannerTemplatePks) &
+              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+        .go();
   }
 
   Future<bool> deleteBatchScannerTemplates(
@@ -1656,6 +1775,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> deleteFromSharedTransaction(sharedTransactionKey) async {
+    await createDeleteLog(DeleteLogType.Transaction, sharedTransactionKey);
     return (delete(transactions)
           ..where((t) => t.sharedKey.equals(sharedTransactionKey)))
         .go();
@@ -1887,6 +2007,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     await shiftBudgets(-1, budget.order);
     await deleteCategoryBudgetLimitsInBudget(budget.budgetPk);
+    await createDeleteLog(DeleteLogType.Budget, budget.budgetPk);
     return (delete(budgets)..where((b) => b.budgetPk.equals(budget.budgetPk)))
         .go();
   }
@@ -1905,6 +2026,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         sendTransactionDelete(transactionToDelete, budget);
       }
     }
+    await createDeleteLog(DeleteLogType.Transaction, transactionPk);
     return (delete(transactions)
           ..where((t) => t.transactionPk.equals(transactionPk)))
         .go();
@@ -1926,24 +2048,28 @@ class FinanceDatabase extends _$FinanceDatabase {
       }
     }
 
+    await createDeleteLogs(DeleteLogType.Transaction, transactionPks);
     return (delete(transactions)
           ..where((t) => t.transactionPk.isIn(transactionPks)))
         .go();
   }
 
-  Future deleteCategoryBudgetLimitsInBudget(int budgetPk) {
+  Future deleteCategoryBudgetLimitsInBudget(int budgetPk) async {
+    await createDeleteLog(DeleteLogType.Budget, budgetPk);
     return (delete(categoryBudgetLimits)
           ..where((t) => t.budgetFk.equals(budgetPk)))
         .go();
   }
 
-  Future deleteCategoryBudgetLimitsInCategory(int categoryPk) {
+  Future deleteCategoryBudgetLimitsInCategory(int categoryPk) async {
+    await createDeleteLog(DeleteLogType.TransactionCategory, categoryPk);
     return (delete(categoryBudgetLimits)
           ..where((t) => t.categoryFk.equals(categoryPk)))
         .go();
   }
 
-  Future deleteCategoryBudgetLimit(int categoryLimitPk) {
+  Future deleteCategoryBudgetLimit(int categoryLimitPk) async {
+    await createDeleteLog(DeleteLogType.CategoryBudgetLimit, categoryLimitPk);
     return (delete(categoryBudgetLimits)
           ..where((t) => t.categoryLimitPk.equals(categoryLimitPk)))
         .go();
@@ -1970,6 +2096,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     print("DELETING");
     print(categoryPk);
     print(await deleteCategoryBudgetLimitsInCategory(categoryPk));
+    await createDeleteLog(DeleteLogType.TransactionCategory, categoryPk);
     return (delete(categories)..where((c) => c.categoryPk.equals(categoryPk)))
         .go();
   }
@@ -1985,6 +2112,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //delete transactions that belong to specific category key
   Future deleteCategoryTransactions(int categoryPk) async {
+    await createDeleteLog(DeleteLogType.TransactionCategory, categoryPk);
     return (delete(transactions)..where((t) => t.categoryFk.equals(categoryPk)))
         .go();
   }
@@ -2001,17 +2129,27 @@ class FinanceDatabase extends _$FinanceDatabase {
     updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
         pagesNeedingRefresh: [], updateGlobalState: false);
     await database.shiftWallets(-1, order);
+    await createDeleteLog(DeleteLogType.TransactionWallet, walletPk);
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
   }
 
   Future deleteScannerTemplate(int scannerTemplatePk) async {
+    await createDeleteLog(DeleteLogType.ScannerTemplate, scannerTemplatePk);
     return (delete(scannerTemplates)
           ..where((s) => s.scannerTemplatePk.equals(scannerTemplatePk)))
         .go();
   }
 
   //delete transactions that belong to specific wallet key
-  Future deleteWalletsTransactions(int walletPk) {
+  Future deleteWalletsTransactions(int walletPk) async {
+    List<Transaction> transactionPkForDelete = await (select(transactions)
+          ..where((tbl) {
+            return tbl.walletFk.equals(walletPk);
+          }))
+        .get();
+    List<int> transactionIds =
+        transactionPkForDelete.map((t) => t.transactionPk).toList();
+    await createDeleteLogs(DeleteLogType.Transaction, transactionIds);
     return (delete(transactions)..where((t) => t.walletFk.equals(walletPk)))
         .go();
   }
@@ -2019,6 +2157,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   //delete associated title given key
   Future deleteAssociatedTitle(int associatedTitlePk, int order) async {
     await database.shiftAssociatedTitles(-1, order);
+    await createDeleteLog(
+        DeleteLogType.TransactionAssociatedTitle, associatedTitlePk);
     return (delete(associatedTitles)
           ..where((t) => t.associatedTitlePk.equals(associatedTitlePk)))
         .go();

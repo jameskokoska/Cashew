@@ -345,11 +345,12 @@ void discardChangesPopup(context,
       currentObject != null) {
     Navigator.maybePop(context);
   }
+  previousObject = previousObject.copyWith(dateTimeModified: Value(null));
+
   print(previousObject);
   print(currentObject);
-  previousObject = previousObject.copyWith(dateTimeModified: Value(null));
-  if (previousObject != currentObject &&
-      previousObject != null &&
+
+  if (previousObject != null &&
       currentObject != null &&
       previousObject.toString() == currentObject.toString()) {
     print(previousObject.toString());

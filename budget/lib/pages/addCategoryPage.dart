@@ -158,13 +158,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       iconName: selectedImage,
       methodAdded:
           widget.category != null ? widget.category!.methodAdded : null,
-      sharedKey: widget.category != null ? currentInstance!.sharedKey : null,
-      sharedOwnerMember:
-          widget.category != null ? currentInstance!.sharedOwnerMember : null,
-      sharedDateUpdated:
-          widget.category != null ? currentInstance!.sharedDateUpdated : null,
-      sharedMembers:
-          widget.category != null ? currentInstance!.sharedMembers : null,
     );
   }
 

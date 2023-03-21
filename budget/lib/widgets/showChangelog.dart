@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Client syncing should be complete
+    Delete log propagation
+    Delete log
+    Database cleanup
     When reordering items, modified date is updated
     Fixed starting position of month selector on web with side navbar
     Option to sync all changes

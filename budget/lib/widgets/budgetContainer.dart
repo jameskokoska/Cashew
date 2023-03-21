@@ -1121,8 +1121,10 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.budget.sharedTransactionsShow ==
-        SharedTransactionsShow.onlyIfOwner) return SizedBox.shrink();
+    // if (widget.budget.sharedTransactionsShow ==
+    //     SharedTransactionsShow.onlyIfOwner) return SizedBox.shrink();
+    if (widget.budget.memberTransactionFilters ==
+        appStateSettings["currentUserEmail"]) return SizedBox.shrink();
     if (mergedStreams == null) return SizedBox.shrink();
     return StreamBuilder<List<double?>>(
       stream: mergedStreams,

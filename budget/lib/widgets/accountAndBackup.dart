@@ -313,178 +313,62 @@ Future<bool> syncData() async {
           await database.createOrUpdateScannerTemplate(newEntry);
       }
 
-      List<TransactionWallet> incomingTransactionWallets =
-          await databaseSync.getAllNewWallets(DateTime(0));
-      List<TransactionWallet> currentTransactionWallets =
-          await database.getAllNewWallets(DateTime(0));
-      Set<String> incomingTransactionWalletIds = Set.from(
-          incomingTransactionWallets
-              .map((TransactionWallet t) => t.walletPk.toString()));
-      Map<String, DateTime> TransactionWalletModifiedTimes = Map.fromIterable(
-          currentTransactionWallets,
-          key: (t) => t.walletPk.toString(),
-          value: (t) => t.dateTimeModified);
-      List<TransactionWallet> deletedTransactionWallets = [];
-      for (TransactionWallet t in currentTransactionWallets) {
-        if (!incomingTransactionWalletIds.contains(t.walletPk.toString()) &&
-            TransactionWalletModifiedTimes[t.walletPk.toString()] != null &&
-            TransactionWalletModifiedTimes[t.walletPk.toString()]!
-                .isBefore(lastSynced)) {
-          deletedTransactionWallets.add(t);
-        }
-      }
-      print("DELETE WALLETS");
-      print(deletedTransactionWallets);
-      database.deleteBatchWallets(deletedTransactionWallets);
+      // print("CURRENT DELETE LOG");
+      // print(await database.getAllNewDeleteLogs(lastSynced));
 
-      List<TransactionCategory> incomingTransactionCategories =
-          await databaseSync.getAllNewCategories(DateTime(0));
-      List<TransactionCategory> currentTransactionCategories =
-          await database.getAllNewCategories(DateTime(0));
-      Set<String> incomingTransactionCategoryIds = Set.from(
-          incomingTransactionCategories
-              .map((TransactionCategory t) => t.categoryPk.toString()));
-      Map<String, DateTime> TransactionCategoryModifiedTimes = Map.fromIterable(
-          currentTransactionCategories,
-          key: (t) => t.categoryPk.toString(),
-          value: (t) => t.dateTimeModified);
-      List<TransactionCategory> deletedTransactionCategories = [];
-      for (TransactionCategory t in currentTransactionCategories) {
-        if (!incomingTransactionCategoryIds.contains(t.categoryPk.toString()) &&
-            TransactionCategoryModifiedTimes[t.categoryPk.toString()] != null &&
-            TransactionCategoryModifiedTimes[t.categoryPk.toString()]!
-                .isBefore(lastSynced)) {
-          deletedTransactionCategories.add(t);
-        }
-      }
-      print("DELETE CATEGORIES");
-      print(deletedTransactionCategories);
-      database.deleteBatchCategories(deletedTransactionCategories);
+      List<DeleteLog> deleteLogs =
+          await databaseSync.getAllNewDeleteLogs(lastSynced);
 
-      List<Budget> incomingBudgets =
-          await databaseSync.getAllNewBudgets(DateTime(0));
-      List<Budget> currentBudgets =
-          await database.getAllNewBudgets(DateTime(0));
-      Set<String> incomingBudgetIds =
-          Set.from(incomingBudgets.map((Budget t) => t.budgetPk.toString()));
-      Map<String, DateTime> BudgetModifiedTimes = Map.fromIterable(
-          currentBudgets,
-          key: (t) => t.budgetPk.toString(),
-          value: (t) => t.dateTimeModified);
-      List<Budget> deletedBudgets = [];
-      for (Budget t in currentBudgets) {
-        if (!incomingBudgetIds.contains(t.budgetPk.toString()) &&
-            BudgetModifiedTimes[t.budgetPk.toString()] != null &&
-            BudgetModifiedTimes[t.budgetPk.toString()]!.isBefore(lastSynced)) {
-          deletedBudgets.add(t);
-        }
-      }
-      print("DELETE BUDGETS");
-      print(deletedBudgets);
-      database.deleteBatchBudgets(deletedBudgets);
+      print("DELETE LOGS");
+      print(deleteLogs);
 
-      List<CategoryBudgetLimit> incomingCategoryBudgetLimits =
-          await databaseSync.getAllNewCategoryBudgetLimits(DateTime(0));
-      List<CategoryBudgetLimit> currentCategoryBudgetLimits =
-          await database.getAllNewCategoryBudgetLimits(DateTime(0));
-      Set<String> incomingCategoryBudgetLimitIds = Set.from(
-          incomingCategoryBudgetLimits
-              .map((CategoryBudgetLimit t) => t.categoryLimitPk.toString()));
-      Map<String, DateTime> CategoryBudgetLimitModifiedTimes = Map.fromIterable(
-          currentCategoryBudgetLimits,
-          key: (t) => t.categoryLimitPk.toString(),
-          value: (t) => t.dateTimeModified);
-      List<CategoryBudgetLimit> deletedCategoryBudgetLimits = [];
-      for (CategoryBudgetLimit t in currentCategoryBudgetLimits) {
-        if (!incomingCategoryBudgetLimitIds
-                .contains(t.categoryLimitPk.toString()) &&
-            CategoryBudgetLimitModifiedTimes[t.categoryLimitPk.toString()] !=
-                null &&
-            CategoryBudgetLimitModifiedTimes[t.categoryLimitPk.toString()]!
-                .isBefore(lastSynced)) {
-          deletedCategoryBudgetLimits.add(t);
+      Map<DeleteLogType, List<int>> deleteLogsByType = {};
+      deleteLogs.sort((a, b) => a.type.index.compareTo(b.type.index));
+      deleteLogs.forEach((log) {
+        if (!deleteLogsByType.containsKey(log.type)) {
+          deleteLogsByType[log.type] = [];
         }
-      }
-      print("DELETE CATEGORIES LIMITS");
-      print(deletedCategoryBudgetLimits);
-      database.deleteBatchCategoryBudgetLimit(deletedCategoryBudgetLimits);
+        deleteLogsByType[log.type]?.add(log.entryPk);
+      });
 
-      List<TransactionAssociatedTitle> incomingTransactionAssociatedTitles =
-          await databaseSync.getAllNewAssociatedTitles(DateTime(0));
-      List<TransactionAssociatedTitle> currentTransactionAssociatedTitles =
-          await database.getAllNewAssociatedTitles(DateTime(0));
-      Set<String> incomingTransactionAssociatedTitleIds = Set.from(
-          incomingTransactionAssociatedTitles.map(
-              (TransactionAssociatedTitle t) =>
-                  t.associatedTitlePk.toString()));
-      Map<String, DateTime> TransactionAssociatedTitleModifiedTimes =
-          Map.fromIterable(currentTransactionAssociatedTitles,
-              key: (t) => t.associatedTitlePk.toString(),
-              value: (t) => t.dateTimeModified);
-      List<TransactionAssociatedTitle> deletedTransactionAssociatedTitles = [];
-      for (TransactionAssociatedTitle t in currentTransactionAssociatedTitles) {
-        if (!incomingTransactionAssociatedTitleIds
-                .contains(t.associatedTitlePk.toString()) &&
-            TransactionAssociatedTitleModifiedTimes[
-                    t.associatedTitlePk.toString()] !=
-                null &&
-            TransactionAssociatedTitleModifiedTimes[
-                    t.associatedTitlePk.toString()]!
-                .isBefore(lastSynced)) {
-          deletedTransactionAssociatedTitles.add(t);
-        }
+      if (deleteLogsByType[DeleteLogType.TransactionWallet] != null &&
+          deleteLogsByType[DeleteLogType.TransactionWallet]!.isNotEmpty) {
+        await database.deleteBatchWalletsGivenPks(
+            deleteLogsByType[DeleteLogType.TransactionWallet]!, lastSynced);
       }
-      print("DELETE ASSOCIATED TITLES");
-      print(deletedTransactionAssociatedTitles);
-      database.deleteBatchAssociatedTitles(deletedTransactionAssociatedTitles);
+      if (deleteLogsByType[DeleteLogType.TransactionCategory] != null &&
+          deleteLogsByType[DeleteLogType.TransactionCategory]!.isNotEmpty) {
+        await database.deleteBatchCategoriesGivenPks(
+            deleteLogsByType[DeleteLogType.TransactionCategory]!, lastSynced);
+      }
+      if (deleteLogsByType[DeleteLogType.Budget] != null &&
+          deleteLogsByType[DeleteLogType.Budget]!.isNotEmpty) {
+        await database.deleteBatchBudgetsGivenPks(
+            deleteLogsByType[DeleteLogType.Budget]!, lastSynced);
+      }
+      if (deleteLogsByType[DeleteLogType.CategoryBudgetLimit] != null &&
+          deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!.isNotEmpty) {
+        await database.deleteBatchCategoryBudgetLimitsGivenPks(
+            deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!, lastSynced);
+      }
+      if (deleteLogsByType[DeleteLogType.TransactionAssociatedTitle] != null &&
+          deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!
+              .isNotEmpty) {
+        await database.deleteBatchAssociatedTitlesGivenTransactionPks(
+            deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!,
+            lastSynced);
+      }
+      if (deleteLogsByType[DeleteLogType.Transaction] != null &&
+          deleteLogsByType[DeleteLogType.Transaction]!.isNotEmpty) {
+        await database.deleteBatchTransactionsGivenPks(
+            deleteLogsByType[DeleteLogType.Transaction]!, lastSynced);
+      }
 
-      List<Transaction> incomingTransactions =
-          await databaseSync.getAllNewTransactions(DateTime(0));
-      List<Transaction> currentTransactions =
-          await database.getAllNewTransactions(DateTime(0));
-      Set<String> incomingTransactionIds = Set.from(incomingTransactions
-          .map((Transaction t) => t.transactionPk.toString()));
-      Map<String, DateTime> transactionModifiedTimes = Map.fromIterable(
-          currentTransactions,
-          key: (t) => t.transactionPk.toString(),
-          value: (t) => t.dateTimeModified);
-      List<Transaction> deletedTransactions = [];
-      for (Transaction t in currentTransactions) {
-        if (!incomingTransactionIds.contains(t.transactionPk.toString()) &&
-            transactionModifiedTimes[t.transactionPk.toString()] != null &&
-            transactionModifiedTimes[t.transactionPk.toString()]!
-                .isBefore(lastSynced)) {
-          deletedTransactions.add(t);
-        }
+      if (deleteLogsByType[DeleteLogType.ScannerTemplate] != null &&
+          deleteLogsByType[DeleteLogType.ScannerTemplate]!.isNotEmpty) {
+        await database.deleteBatchScannerTemplatesGivenPks(
+            deleteLogsByType[DeleteLogType.ScannerTemplate]!, lastSynced);
       }
-      print("DELETE TRANSACTIONS");
-      print(deletedTransactions);
-      database.deleteBatchTransactions(deletedTransactions);
-
-      List<ScannerTemplate> incomingScannerTemplates =
-          await databaseSync.getAllNewScannerTemplates(DateTime(0));
-      List<ScannerTemplate> currentScannerTemplates =
-          await database.getAllNewScannerTemplates(DateTime(0));
-      Set<String> incomingScannerTemplateIds = Set.from(incomingScannerTemplates
-          .map((ScannerTemplate t) => t.scannerTemplatePk.toString()));
-      Map<String, DateTime> scannerTemplateModifiedTimes = Map.fromIterable(
-          currentScannerTemplates,
-          key: (t) => t.scannerTemplatePk.toString(),
-          value: (t) => t.dateTimeModified);
-      List<ScannerTemplate> deletedScannerTemplates = [];
-      for (ScannerTemplate t in currentScannerTemplates) {
-        if (!incomingScannerTemplateIds
-                .contains(t.scannerTemplatePk.toString()) &&
-            scannerTemplateModifiedTimes[t.scannerTemplatePk.toString()] !=
-                null &&
-            scannerTemplateModifiedTimes[t.scannerTemplatePk.toString()]!
-                .isBefore(lastSynced)) {
-          deletedScannerTemplates.add(t);
-        }
-      }
-      print("DELETE SCANNER TEMPLATES");
-      print(deletedScannerTemplates);
-      database.deleteBatchScannerTemplates(deletedScannerTemplates);
 
       // check for wallet mismatch, since settings are not synced
       if (checkPrimaryWallet() == false) {
