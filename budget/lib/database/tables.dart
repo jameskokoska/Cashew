@@ -422,38 +422,93 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.addColumn(categories, categories.methodAdded);
           }
           if (from <= 24) {
-            await migrator.addColumn(budgets, budgets.sharedAllMembersEver);
+            try {
+              await migrator.addColumn(budgets, budgets.sharedAllMembersEver);
+            } catch (e) {
+              print(e.toString);
+            }
           }
           if (from <= 25) {
-            await migrator.addColumn(budgets, budgets.addedTransactionsOnly);
+            try {
+              await migrator.addColumn(budgets, budgets.addedTransactionsOnly);
+            } catch (e) {
+              print(e.toString);
+            }
           }
           if (from <= 26) {
-            await migrator.addColumn(
-                transactions, transactions.upcomingTransactionNotification);
+            try {
+              await migrator.addColumn(
+                  transactions, transactions.upcomingTransactionNotification);
+            } catch (e) {
+              print(e.toString);
+            }
           }
           if (from <= 27) {
             await migrator.createTable($CategoryBudgetLimitsTable(database));
           }
           if (from <= 28) {
-            await migrator.addColumn(budgets, budgets.budgetTransactionFilters);
-            await migrator.addColumn(budgets, budgets.memberTransactionFilters);
+            try {
+              await migrator.addColumn(
+                  budgets, budgets.budgetTransactionFilters);
+            } catch (e) {
+              print(e.toString);
+            }
+            try {
+              await migrator.addColumn(
+                  budgets, budgets.memberTransactionFilters);
+            } catch (e) {
+              print(e.toString);
+            }
           }
           if (from <= 29) {
+            try {
+              await migrator.addColumn(budgets, budgets.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
             await migrator.alterTable(TableMigration(budgets));
           }
           if (from <= 30) {
-            await migrator.addColumn(wallets, wallets.dateTimeModified);
-            await migrator.addColumn(
-                transactions, transactions.dateTimeModified);
-            await migrator.addColumn(categories, categories.dateTimeModified);
-            await migrator.addColumn(
-                categoryBudgetLimits, categoryBudgetLimits.dateTimeModified);
+            try {
+              await migrator.addColumn(wallets, wallets.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
+            try {
+              await migrator.addColumn(
+                  transactions, transactions.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
+            try {
+              await migrator.addColumn(categories, categories.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
+            try {
+              await migrator.addColumn(
+                  categoryBudgetLimits, categoryBudgetLimits.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
+            try {
+              await migrator.addColumn(
+                  associatedTitles, associatedTitles.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
+            try {
+              await migrator.addColumn(budgets, budgets.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
+            try {
+              await migrator.addColumn(
+                  scannerTemplates, scannerTemplates.dateTimeModified);
+            } catch (e) {
+              print(e.toString);
+            }
             // await migrator.addColumn(labels, labels.dateTimeModified);
-            await migrator.addColumn(
-                associatedTitles, associatedTitles.dateTimeModified);
-            await migrator.addColumn(budgets, budgets.dateTimeModified);
-            await migrator.addColumn(
-                scannerTemplates, scannerTemplates.dateTimeModified);
           }
           if (from <= 31) {
             await migrator.alterTable(TableMigration(budgets));

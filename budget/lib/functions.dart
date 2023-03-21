@@ -729,26 +729,30 @@ double getKeyboardHeight(context) {
 }
 
 Future<String> getDeviceInfo() async {
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  try {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
-  if (kIsWeb) {
-    WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
-    return webBrowserInfo.userAgent ?? "Web";
-  } else if (Platform.isAndroid) {
-    AndroidDeviceInfo info = await deviceInfo.androidInfo;
-    return info.model;
-  } else if (Platform.isIOS) {
-    IosDeviceInfo info = await deviceInfo.iosInfo;
-    return info.utsname.machine ?? info.model ?? "iOS";
-  } else if (Platform.isLinux) {
-    LinuxDeviceInfo info = await deviceInfo.linuxInfo;
-    return info.machineId ?? "Linux";
-  } else if (Platform.isMacOS) {
-    MacOsDeviceInfo info = await deviceInfo.macOsInfo;
-    return info.computerName;
-  } else if (Platform.isWindows) {
-    WindowsDeviceInfo info = await deviceInfo.windowsInfo;
-    return info.computerName;
+    if (kIsWeb) {
+      WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+      return webBrowserInfo.userAgent ?? "Web";
+    } else if (Platform.isAndroid) {
+      AndroidDeviceInfo info = await deviceInfo.androidInfo;
+      return info.model;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo info = await deviceInfo.iosInfo;
+      return info.utsname.machine ?? info.model ?? "iOS";
+    } else if (Platform.isLinux) {
+      LinuxDeviceInfo info = await deviceInfo.linuxInfo;
+      return info.machineId ?? "Linux";
+    } else if (Platform.isMacOS) {
+      MacOsDeviceInfo info = await deviceInfo.macOsInfo;
+      return info.computerName;
+    } else if (Platform.isWindows) {
+      WindowsDeviceInfo info = await deviceInfo.windowsInfo;
+      return info.computerName;
+    }
+    return "";
+  } catch (e) {
+    return "Unknown";
   }
-  return "";
 }

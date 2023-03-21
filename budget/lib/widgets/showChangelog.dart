@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    If user logged out/not logged in to Google, cloud functions do not activate/try to activate
+    Migration fixes for database (when adding new columns, catches duplicate column)
+    When new settings are added, default settings applied when old backup restored
     Client syncing should be complete
     Delete log propagation
     Delete log

@@ -259,6 +259,7 @@ Future<bool> compareSharedToCurrentBudgets(
 
 Timer? cloudTimeoutTimer;
 Future<bool> getCloudBudgets() async {
+  if (appStateSettings["currentUserEmail"] == "") return false;
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (cloudTimeoutTimer?.isActive == true) {
     // openSnackbar(SnackbarMessage(title: "Please wait..."));
@@ -614,6 +615,7 @@ Future<bool> deleteOnServer(
 }
 
 Future<bool> syncPendingQueueOnServer() async {
+  if (appStateSettings["currentUserEmail"] == "") return false;
   print("syncing pending queue");
   Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
       appStateSettings["sendTransactionsToServerQueue"];

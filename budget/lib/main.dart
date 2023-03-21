@@ -174,6 +174,14 @@ Future<bool> initializeSettings() async {
       await sharedPreferences.setString('userSettings', storedSettings);
       print(storedSettings);
       userSettings = json.decode(storedSettings);
+      //we need to load any defaults to migrate if on an older version backup restores
+      //Set to defaults if a new setting is added, but no entry saved
+      Map<String, dynamic> userPreferencesDefault = defaultPreferences();
+      userPreferencesDefault.forEach((key, value) {
+        if (userSettings[key] == null) {
+          userSettings[key] = userPreferencesDefault[key];
+        }
+      });
       updateSettings("databaseJustImported", false);
       print("Settings were restored");
     } catch (e) {

@@ -63,6 +63,7 @@ String getCurrentDeviceName() {
 // if changeMadeSync show loading and check if syncEveryChange is turned on
 Timer? syncTimeoutTimer;
 Future<bool> createSyncBackup({bool changeMadeSync = false}) async {
+  if (appStateSettings["currentUserEmail"] == "") return false;
   if (appStateSettings["backupSync"] == false) return false;
   if (changeMadeSync == true && appStateSettings["syncEveryChange"] == false)
     return false;
@@ -128,6 +129,7 @@ Future<bool> createSyncBackup({bool changeMadeSync = false}) async {
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData() async {
   if (appStateSettings["backupSync"] == false) return false;
+  if (appStateSettings["currentUserEmail"] == "") return false;
 
   bool hasSignedIn = false;
   if (user == null) {
@@ -529,11 +531,13 @@ Future<bool> testIfHasGmailAccess() async {
 Future<bool> signOutGoogle() async {
   await googleSignIn?.signOut();
   user = null;
+  updateSettings("currentUserEmail", "");
   print("Signedout");
   return true;
 }
 
 Future<void> createBackupInBackground(context) async {
+  if (appStateSettings["currentUserEmail"] == "") return;
   // print(entireAppLoaded);
   print("last backup:");
   print(appStateSettings["lastBackup"]);
@@ -989,7 +993,7 @@ class _BackupManagementState extends State<BackupManagement> {
               : SizedBox.shrink(),
           widget.isClientSync
               ? Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: AnimatedSize(
                     duration: Duration(milliseconds: 800),
                     curve: Curves.easeInOutCubicEmphasized,

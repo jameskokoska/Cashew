@@ -105,10 +105,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       loadingIndeterminateKey.currentState!.setVisibility(true);
       try {
         await syncData();
-        if (appStateSettings["currentUserEmail"] != "") {
-          await syncPendingQueueOnServer(); //sync before download
-          await getCloudBudgets();
-        }
+        await syncPendingQueueOnServer(); //sync before download
+        await getCloudBudgets();
         await createBackupInBackground(context);
       } catch (e) {
         print("Error running sync functions on load: " + e.toString());
