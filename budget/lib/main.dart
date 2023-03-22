@@ -250,6 +250,7 @@ Future<bool> initializeDatabase() async {
         currency: "usd",
         dateTimeModified: null,
       ),
+      customDateTimeModified: DateTime(0),
     );
   }
   return true;
@@ -483,10 +484,11 @@ class App extends StatelessWidget {
             AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
         splashColor: appStateSettings["materialYou"]
             ? darkenPastel(
-                lightenPastel(
-                    getSettingConstants(appStateSettings)["accentColor"],
-                    amount: 0.86),
-                amount: 0.1)
+                    lightenPastel(
+                        getSettingConstants(appStateSettings)["accentColor"],
+                        amount: 0.56),
+                    amount: 0.1)
+                .withOpacity(0.5)
             : null,
       ),
       darkTheme: ThemeData(
@@ -506,6 +508,14 @@ class App extends StatelessWidget {
                 amount: 0.92)
             : Colors.black,
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
+        splashColor: appStateSettings["materialYou"]
+            ? darkenPastel(
+                    lightenPastel(
+                        getSettingConstants(appStateSettings)["accentColor"],
+                        amount: 0.86),
+                    amount: 0.1)
+                .withOpacity(0.2)
+            : null,
       ),
       scrollBehavior: ScrollBehavior(),
       themeMode: getSettingConstants(appStateSettings)["theme"],

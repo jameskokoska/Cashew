@@ -29,6 +29,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
 
 class PageNavigationFramework extends StatefulWidget {
   const PageNavigationFramework({Key? key}) : super(key: key);
@@ -83,8 +84,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   int currentPage = 0;
   bool refresh = false;
 
-  final pageController = PageController();
-
   void changePage(int page, {bool switchNavbar = true}) {
     if (switchNavbar) {
       sidebarStateKey.currentState?.setSelectedIndex(page);
@@ -93,9 +92,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     setState(() {
       currentPage = page;
     });
-    // pageController.animateToPage(page,
-    //     duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
-    if (pageController.hasClients) pageController.jumpToPage(page);
     setState(() {
       refresh = false;
     });
@@ -172,20 +168,15 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                         : Brightness.light,
                 statusBarColor: kIsWeb ? Colors.black : Colors.transparent),
             child: Scaffold(
-              body: kIsWeb
-                  ? FadeIndexedStack(
-                      children: [...pages, ...pagesExtended],
-                      index: currentPage,
-                      duration: appStateSettings["batterySaver"]
-                          ? Duration.zero
-                          : Duration(milliseconds: 300),
-                    )
-                  : PageView(
-                      controller: pageController,
-                      onPageChanged: (int index) {},
-                      children: [...pages, ...pagesExtended],
-                      physics: NeverScrollableScrollPhysics(),
-                    ),
+              body: FadeIndexedStack(
+                children: [...pages, ...pagesExtended],
+                index: currentPage,
+                duration: !kIsWeb
+                    ? Duration.zero
+                    : appStateSettings["batterySaver"]
+                        ? Duration.zero
+                        : Duration(milliseconds: 300),
+              ),
               extendBody: true,
               resizeToAvoidBottomInset: false,
               bottomNavigationBar: BottomNavBar(
@@ -345,7 +336,6 @@ class FadeIndexedStack extends StatefulWidget {
   final Duration duration;
   final AlignmentGeometry alignment;
   final TextDirection? textDirection;
-  final Clip clipBehavior;
   final StackFit sizing;
 
   const FadeIndexedStack({
@@ -357,7 +347,6 @@ class FadeIndexedStack extends StatefulWidget {
     ),
     this.alignment = AlignmentDirectional.topStart,
     this.textDirection,
-    this.clipBehavior = Clip.hardEdge,
     this.sizing = StackFit.loose,
   });
 
@@ -394,11 +383,10 @@ class FadeIndexedStackState extends State<FadeIndexedStack>
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _controller,
-      child: IndexedStack(
+      child: LazyIndexedStack(
         index: widget.index,
         alignment: widget.alignment,
         textDirection: widget.textDirection,
-        clipBehavior: widget.clipBehavior,
         sizing: widget.sizing,
         children: widget.children,
       ),

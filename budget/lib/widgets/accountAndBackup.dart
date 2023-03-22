@@ -207,11 +207,13 @@ Future<bool> syncData() async {
         getDeviceFromSyncBackupFileName(file.name));
 
     print("COMPARING TIMES");
-    print(file.modifiedTime);
+    print(file.modifiedTime?.toLocal());
     print(lastSynced);
-    if (file.modifiedTime == null || lastSynced.isAfter(file.modifiedTime!)) {
+    if (file.modifiedTime == null ||
+        lastSynced.isAfter(file.modifiedTime!.toLocal())) {
       print(
           "no need to restore backup from this client, no new backup file to pull data from");
+      continue;
     }
 
     String? fileId = file.id;
@@ -252,7 +254,7 @@ Future<bool> syncData() async {
           current = null;
         }
         if (current == null ||
-            current.dateTimeModified != newEntry.dateTimeModified)
+            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
           await database.createOrUpdateWallet(newEntry);
       }
       print("NEW WALLETS");
@@ -268,7 +270,7 @@ Future<bool> syncData() async {
           current = null;
         }
         if (current == null ||
-            current.dateTimeModified != newEntry.dateTimeModified)
+            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
           await database.createOrUpdateCategory(newEntry);
       }
       print("NEW CATEGORIES");
@@ -283,7 +285,7 @@ Future<bool> syncData() async {
           current = null;
         }
         if (current == null ||
-            current.dateTimeModified != newEntry.dateTimeModified)
+            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
           await database.createOrUpdateBudget(newEntry,
               updateSharedEntry: false);
       }
@@ -301,7 +303,7 @@ Future<bool> syncData() async {
           current = null;
         }
         if (current == null ||
-            current.dateTimeModified != newEntry.dateTimeModified)
+            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
           await database.createOrUpdateCategoryLimit(newEntry);
       }
       print("NEW CATEGORY LIMITS");
@@ -318,7 +320,7 @@ Future<bool> syncData() async {
           current = null;
         }
         if (current == null ||
-            current.dateTimeModified != newEntry.dateTimeModified)
+            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
           transactionsToUpdate.add(newEntry);
       }
       await database.createOrUpdateBatchTransactionsOnly(transactionsToUpdate);
@@ -337,7 +339,7 @@ Future<bool> syncData() async {
           current = null;
         }
         if (current == null ||
-            current.dateTimeModified != newEntry.dateTimeModified)
+            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
           titlesToUpdate.add(newEntry);
       }
       await database.createOrUpdateBatchAssociatedTitlesOnly(titlesToUpdate);
@@ -354,7 +356,7 @@ Future<bool> syncData() async {
           current = null;
         }
         if (current == null ||
-            current.dateTimeModified != newEntry.dateTimeModified)
+            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
           await database.createOrUpdateScannerTemplate(newEntry);
       }
 
@@ -379,40 +381,39 @@ Future<bool> syncData() async {
       if (deleteLogsByType[DeleteLogType.TransactionWallet] != null &&
           deleteLogsByType[DeleteLogType.TransactionWallet]!.isNotEmpty) {
         await database.deleteBatchWalletsGivenPks(
-            deleteLogsByType[DeleteLogType.TransactionWallet]!, lastSynced);
+            deleteLogsByType[DeleteLogType.TransactionWallet]!);
       }
       if (deleteLogsByType[DeleteLogType.TransactionCategory] != null &&
           deleteLogsByType[DeleteLogType.TransactionCategory]!.isNotEmpty) {
         await database.deleteBatchCategoriesGivenPks(
-            deleteLogsByType[DeleteLogType.TransactionCategory]!, lastSynced);
+            deleteLogsByType[DeleteLogType.TransactionCategory]!);
       }
       if (deleteLogsByType[DeleteLogType.Budget] != null &&
           deleteLogsByType[DeleteLogType.Budget]!.isNotEmpty) {
         await database.deleteBatchBudgetsGivenPks(
-            deleteLogsByType[DeleteLogType.Budget]!, lastSynced);
+            deleteLogsByType[DeleteLogType.Budget]!);
       }
       if (deleteLogsByType[DeleteLogType.CategoryBudgetLimit] != null &&
           deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!.isNotEmpty) {
         await database.deleteBatchCategoryBudgetLimitsGivenPks(
-            deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!, lastSynced);
+            deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!);
       }
       if (deleteLogsByType[DeleteLogType.TransactionAssociatedTitle] != null &&
           deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!
               .isNotEmpty) {
         await database.deleteBatchAssociatedTitlesGivenTransactionPks(
-            deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!,
-            lastSynced);
+            deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!);
       }
       if (deleteLogsByType[DeleteLogType.Transaction] != null &&
           deleteLogsByType[DeleteLogType.Transaction]!.isNotEmpty) {
         await database.deleteBatchTransactionsGivenPks(
-            deleteLogsByType[DeleteLogType.Transaction]!, lastSynced);
+            deleteLogsByType[DeleteLogType.Transaction]!);
       }
 
       if (deleteLogsByType[DeleteLogType.ScannerTemplate] != null &&
           deleteLogsByType[DeleteLogType.ScannerTemplate]!.isNotEmpty) {
         await database.deleteBatchScannerTemplatesGivenPks(
-            deleteLogsByType[DeleteLogType.ScannerTemplate]!, lastSynced);
+            deleteLogsByType[DeleteLogType.ScannerTemplate]!);
       }
 
       // check for wallet mismatch, since settings are not synced
@@ -1222,7 +1223,6 @@ class _BackupManagementState extends State<BackupManagement> {
                                     ? Theme.of(context)
                                         .colorScheme
                                         .secondaryContainer
-                                        .withOpacity(0.5)
                                     : Theme.of(context)
                                         .colorScheme
                                         .lightDarkAccentHeavyLight,
@@ -1299,6 +1299,16 @@ class _BackupManagementState extends State<BackupManagement> {
                                             padding: const EdgeInsets.only(
                                                 left: 8.0),
                                             child: ButtonIcon(
+                                                color: appStateSettings[
+                                                        "materialYou"]
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .onSecondaryContainer
+                                                        .withOpacity(0.08)
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .lightDarkAccentHeavy
+                                                        .withOpacity(0.7),
                                                 onTap: () {
                                                   openPopup(
                                                     context,

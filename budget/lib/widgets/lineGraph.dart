@@ -186,7 +186,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               );
             },
             reservedSize: 28,
-            interval: widget.maxPair.x / (getIsFullScreen(context) ? 8 : 4),
+            interval: widget.maxPair.x / (getIsFullScreen(context) ? 6 : 4),
           ),
         ),
         leftTitles: AxisTitles(
@@ -342,7 +342,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         show: true,
         verticalInterval:
             ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
-                (getIsFullScreen(context) ? 8 : 4),
+                (getIsFullScreen(context) ? 6 : 4),
         // This interval needs more work, maybe follow the one from budgetHistoryLineGraph.dart
         // horizontalInterval:
         //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) /

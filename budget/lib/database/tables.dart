@@ -1228,6 +1228,10 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
+  Future<List<DeleteLog>> getAllDeleteLogs() async {
+    return select(deleteLogs).get();
+  }
+
   Future<bool> createDeleteLog(DeleteLogType type, int deletedPk) async {
     await into(deleteLogs).insert(
       DeleteLogsCompanion.insert(
@@ -1236,6 +1240,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         dateTimeModified: Value(DateTime.now()),
       ),
     );
+    print((await getAllDeleteLogs()).length);
     createSyncBackup(changeMadeSync: true);
     return true;
   }
@@ -1270,7 +1275,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //create or update a new wallet
-  Future<int> createOrUpdateWallet(TransactionWallet wallet) {
+  Future<int> createOrUpdateWallet(TransactionWallet wallet,
+      {DateTime? customDateTimeModified}) {
     //when the first wallet is created this will most likely be null, as we initialize the database before settings
     final Map<dynamic, dynamic> cachedWalletCurrencies =
         appStateSettings["cachedWalletCurrencies"] ?? {};
@@ -1284,8 +1290,8 @@ class FinanceDatabase extends _$FinanceDatabase {
           mode: InsertMode.insertOrReplace);
     }
 
-    return into(wallets).insertOnConflictUpdate(
-        wallet.copyWith(dateTimeModified: Value(DateTime.now())));
+    return into(wallets).insertOnConflictUpdate(wallet.copyWith(
+        dateTimeModified: Value(customDateTimeModified ?? DateTime.now())));
   }
 
   //create or update a new wallet
@@ -1612,13 +1618,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<int> deleteBatchWalletsGivenPks(
-      List<int> walletPks, DateTime dateModifiedToCheck) async {
-    return (delete(wallets)
-          ..where((tbl) =>
-              tbl.walletPk.isIn(walletPks) &
-              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
-        .go();
+  Future<int> deleteBatchWalletsGivenPks(List<int> walletPks) async {
+    return (delete(wallets)..where((tbl) => tbl.walletPk.isIn(walletPks))).go();
   }
 
   Future<bool> deleteBatchWallets(
@@ -1630,12 +1631,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<int> deleteBatchCategoriesGivenPks(
-      List<int> categoryPks, DateTime dateModifiedToCheck) async {
+  Future<int> deleteBatchCategoriesGivenPks(List<int> categoryPks) async {
     return (delete(categories)
-          ..where((tbl) =>
-              tbl.categoryPk.isIn(categoryPks) &
-              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+          ..where((tbl) => tbl.categoryPk.isIn(categoryPks)))
         .go();
   }
 
@@ -1648,13 +1646,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<int> deleteBatchBudgetsGivenPks(
-      List<int> budgetPks, DateTime dateModifiedToCheck) async {
-    return (delete(budgets)
-          ..where((tbl) =>
-              tbl.budgetPk.isIn(budgetPks) &
-              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
-        .go();
+  Future<int> deleteBatchBudgetsGivenPks(List<int> budgetPks) async {
+    return (delete(budgets)..where((tbl) => tbl.budgetPk.isIn(budgetPks))).go();
   }
 
   // This doesn't handle shared budgets!
@@ -1666,11 +1659,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> deleteBatchCategoryBudgetLimitsGivenPks(
-      List<int> categoryLimitPks, DateTime dateModifiedToCheck) async {
+      List<int> categoryLimitPks) async {
     return (delete(categoryBudgetLimits)
-          ..where((tbl) =>
-              tbl.categoryLimitPk.isIn(categoryLimitPks) &
-              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+          ..where((tbl) => tbl.categoryLimitPk.isIn(categoryLimitPks)))
         .go();
   }
 
@@ -1685,11 +1676,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> deleteBatchAssociatedTitlesGivenTransactionPks(
-      List<int> associatedTitlePks, DateTime dateModifiedToCheck) async {
+      List<int> associatedTitlePks) async {
     return (delete(associatedTitles)
-          ..where((tbl) =>
-              tbl.associatedTitlePk.isIn(associatedTitlePks) &
-              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+          ..where((tbl) => tbl.associatedTitlePk.isIn(associatedTitlePks)))
         .go();
   }
 
@@ -1704,12 +1693,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<int> deleteBatchTransactionsGivenPks(
-      List<int> transactionPks, DateTime dateModifiedToCheck) async {
+  Future<int> deleteBatchTransactionsGivenPks(List<int> transactionPks) async {
     return (delete(transactions)
-          ..where((tbl) =>
-              tbl.transactionPk.isIn(transactionPks) &
-              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+          ..where((tbl) => tbl.transactionPk.isIn(transactionPks)))
         .go();
   }
 
@@ -1725,11 +1711,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> deleteBatchScannerTemplatesGivenPks(
-      List<int> scannerTemplatePks, DateTime dateModifiedToCheck) async {
+      List<int> scannerTemplatePks) async {
     return (delete(scannerTemplates)
-          ..where((tbl) =>
-              tbl.scannerTemplatePk.isIn(scannerTemplatePks) &
-              tbl.dateTimeModified.isSmallerThanValue(dateModifiedToCheck)))
+          ..where((tbl) => tbl.scannerTemplatePk.isIn(scannerTemplatePks)))
         .go();
   }
 

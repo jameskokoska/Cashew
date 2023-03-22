@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+Fixed sync replacing newer changes with older ones
+Fixed navigation issues on mobile (using page controller - uses lazy indexed stack now)
     Fixed device id name on web devices
     Navigation sidebar disabled when onboarding
     New account and backup buttons

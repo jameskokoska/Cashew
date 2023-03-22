@@ -7,6 +7,7 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 
 bool getIsFullScreen(context) {
+  return getWidthNavigationSidebar(context) > 0;
   double maxWidth = 700;
   return MediaQuery.of(context).size.width > maxWidth;
 }

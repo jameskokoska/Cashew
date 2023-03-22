@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 Map<String, dynamic> defaultPreferences() {
   return {
     "databaseJustImported": false,
-    "backupLimit": 10,
+    "backupLimit": 20,
     "backupSync": true,
     "syncEveryChange": kIsWeb,
     "devicesHaveBeenSynced": 1,

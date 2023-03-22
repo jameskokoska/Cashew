@@ -739,7 +739,7 @@ Future<String> getDeviceInfo() async {
         .replaceAll("(", "")
         .replaceAll(")", "")
         .replaceAll(";", "")
-        .replaceAll(" ", "")
+        .trim()
         .capitalizeFirst;
   }
   try {

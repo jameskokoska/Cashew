@@ -66,7 +66,7 @@ class PopupFramework extends StatelessWidget {
                                           EdgeInsets.only(left: 2, bottom: 4),
                                       child: TextFont(
                                         text: subtitle ?? "",
-                                        fontSize: 17,
+                                        fontSize: 15,
                                         maxLines: 5,
                                       ),
                                     ),
