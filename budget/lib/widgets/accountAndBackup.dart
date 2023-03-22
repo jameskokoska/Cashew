@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
@@ -33,7 +32,6 @@ import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:google_sign_in/google_sign_in.dart' as signIn;
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
@@ -166,6 +164,14 @@ Future<bool> createSyncBackup(
   return true;
 }
 
+class SyncLog {
+  SyncLog(this.deleteLogType, this.updateLogType, this.pk);
+
+  DeleteLogType? deleteLogType;
+  UpdateLogType? updateLogType;
+  int pk;
+}
+
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData() async {
   if (appStateSettings["backupSync"] == false) return false;
@@ -254,12 +260,9 @@ Future<bool> syncData() async {
     FinanceDatabase databaseSync = await constructDb('syncdb');
 
     try {
-      // labels table is not synced because it is not used
-      // settings table is not synced
-      // deletions dont get synced! should log deletions somewhere?
-
       List<TransactionWallet> newWallets =
           await databaseSync.getAllNewWallets(lastSynced);
+      List<TransactionWallet> walletsToUpdate = [];
       for (TransactionWallet newEntry in newWallets) {
         TransactionWallet? current;
         try {
@@ -269,13 +272,15 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          await database.createOrUpdateWallet(newEntry);
+          walletsToUpdate.add(newEntry);
       }
+      await database.createOrUpdateBatchWalletsOnly(walletsToUpdate);
       print("NEW WALLETS");
       print(newWallets);
 
       List<TransactionCategory> newCategories =
           await databaseSync.getAllNewCategories(lastSynced);
+      List<TransactionCategory> categoriesToUpdate = [];
       for (TransactionCategory newEntry in newCategories) {
         TransactionCategory? current;
         try {
@@ -285,13 +290,14 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          await database.createOrUpdateCategory(newEntry,
-              updateSharedEntry: false);
+          categoriesToUpdate.add(newEntry);
       }
+      await database.createOrUpdateBatchCategoriesOnly(categoriesToUpdate);
       print("NEW CATEGORIES");
       print(newCategories);
 
       List<Budget> newBudgets = await databaseSync.getAllNewBudgets(lastSynced);
+      List<Budget> budgetsToUpdate = [];
       for (Budget newEntry in newBudgets) {
         // don't sync already shared transactions (these are handled and shared by the server)
         // if (newEntry.sharedKey != null) continue;
@@ -303,14 +309,15 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          await database.createOrUpdateBudget(newEntry,
-              updateSharedEntry: false);
+          budgetsToUpdate.add(newEntry);
       }
+      await database.createOrUpdateBatchBudgetsOnly(budgetsToUpdate);
       print("NEW BUDGETS");
       print(newBudgets);
 
       List<CategoryBudgetLimit> newCategoryBudgetLimits =
           await databaseSync.getAllNewCategoryBudgetLimits(lastSynced);
+      List<CategoryBudgetLimit> categoryBudgetLimitsToUpdate = [];
       for (CategoryBudgetLimit newEntry in newCategoryBudgetLimits) {
         CategoryBudgetLimit? current;
         try {
@@ -321,8 +328,10 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          await database.createOrUpdateCategoryLimit(newEntry);
+          categoryBudgetLimitsToUpdate.add(newEntry);
       }
+      await database
+          .createOrUpdateBatchCategoryLimitsOnly(categoryBudgetLimitsToUpdate);
       print("NEW CATEGORY LIMITS");
       print(newCategoryBudgetLimits);
 
@@ -365,6 +374,7 @@ Future<bool> syncData() async {
       print("NEW TITLES");
       print(newTitles);
 
+      List<ScannerTemplate> scannerTemplatesToUpdate = [];
       for (ScannerTemplate newEntry
           in (await databaseSync.getAllNewScannerTemplates(lastSynced))) {
         ScannerTemplate? current;
@@ -376,11 +386,10 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          await database.createOrUpdateScannerTemplate(newEntry);
+          scannerTemplatesToUpdate.add(newEntry);
       }
-
-      // print("CURRENT DELETE LOG");
-      // print(await database.getAllNewDeleteLogs(lastSynced));
+      await database
+          .createOrUpdateBatchScannerTemplatesOnly(scannerTemplatesToUpdate);
 
       List<DeleteLog> deleteLogs =
           await databaseSync.getAllNewDeleteLogs(lastSynced);
@@ -435,10 +444,6 @@ Future<bool> syncData() async {
         await database.deleteBatchWalletsGivenPks(
             deleteLogsByType[DeleteLogType.TransactionWallet]!);
       }
-      // check for wallet mismatch, since settings are not synced
-      if (checkPrimaryWallet() == false) {
-        setPrimaryWallet((await database.getAllWallets())[0]);
-      }
       setDateOfLastSyncedWithClient(
           getDeviceFromSyncBackupFileName(file.name), syncStarted);
     } catch (e) {
@@ -456,6 +461,17 @@ Future<bool> syncData() async {
     }
 
     databaseSync.close();
+  }
+
+  try {
+    print("UPDATED WALLET CURRENCY");
+    TransactionWallet selectedWallet =
+        await database.getWalletInstance(appStateSettings["selectedWallet"]);
+    updateSettings("selectedWalletCurrency", selectedWallet.currency,
+        updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+  } catch (e) {
+    print("Selected wallet not found: " + e.toString());
+    await setPrimaryWallet((await database.getAllWallets())[0]);
   }
 
   updateSettings("lastSynced", syncStarted.toString(),
@@ -1371,6 +1387,12 @@ class _BackupManagementState extends State<BackupManagement> {
                                                       });
                                                       // bottomSheetControllerGlobal
                                                       //     .snapToExtent(0);
+                                                      if (widget.isClientSync)
+                                                        updateSettings(
+                                                            "devicesHaveBeenSynced",
+                                                            appStateSettings[
+                                                                    "devicesHaveBeenSynced"] -
+                                                                1);
                                                       loadingIndeterminateKey
                                                           .currentState!
                                                           .setVisibility(false);

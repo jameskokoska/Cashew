@@ -260,7 +260,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     onPressed: () {
                       deleteWalletPopup(context, widget.wallet!,
                           afterDelete: () {
-                        Navigator.pop(context);
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
                       });
                     },
                     icon: Icon(Icons.delete_rounded),

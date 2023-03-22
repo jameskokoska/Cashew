@@ -363,6 +363,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                       }
                     },
                     onDragStart: (_) {
+                      database.fixOrderCategories();
                       HapticFeedback.heavyImpact();
                     },
                   ),

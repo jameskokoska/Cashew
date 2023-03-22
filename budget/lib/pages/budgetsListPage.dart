@@ -61,6 +61,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
                 padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
                 sliver: SliverReorderableList(
                   onReorder: (_intPrevious, _intNew) async {
+                    database.fixOrderBudgets();
                     Budget oldBudget = snapshot.data![_intPrevious];
 
                     // print(oldBudget.name);

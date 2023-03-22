@@ -672,7 +672,7 @@ Future<bool> getExchangeRates() async {
   print("Getting exchange rates for current wallets");
   List<String?> uniqueCurrencies =
       await database.getUniqueCurrenciesFromWallets();
-  Map<String, dynamic> cachedCurrencyExchange =
+  Map<dynamic, dynamic> cachedCurrencyExchange =
       appStateSettings["cachedCurrencyExchange"];
   try {
     Uri url = Uri.parse(
@@ -684,7 +684,7 @@ Future<bool> getExchangeRates() async {
   } catch (e) {
     print(e.toString());
   }
-  print(cachedCurrencyExchange);
+  // print(cachedCurrencyExchange);
   updateSettings("cachedCurrencyExchange", cachedCurrencyExchange,
       updateGlobalState: true);
   return true;

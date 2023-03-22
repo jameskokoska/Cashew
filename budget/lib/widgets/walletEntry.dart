@@ -163,13 +163,14 @@ class _WalletEntryState extends State<WalletEntry>
   }
 }
 
-setPrimaryWallet(TransactionWallet wallet) async {
-  updateSettings("selectedWallet", wallet.walletPk,
+Future<bool> setPrimaryWallet(TransactionWallet wallet) async {
+  await updateSettings("selectedWallet", wallet.walletPk,
       pagesNeedingRefresh: [0, 1, 2]);
   TransactionWallet defaultWallet =
       await database.getWalletInstance(wallet.walletPk);
   updateSettings("selectedWalletCurrency", defaultWallet.currency,
       updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+  return true;
 }
 
 Future<bool> checkPrimaryWallet() async {

@@ -39,6 +39,14 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
   String searchValue = "";
 
   @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      database.fixOrderCategories();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {

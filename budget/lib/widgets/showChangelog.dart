@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Primary wallet import fix for caches currency selected
+    Sync fixes now replaces old entries directly without updating
+    Sync fixes with shared transactions/budgets
+    Order of budgets, categories, wallets, titles fixed when editing
     When category is updated through sync, shared transactions are not
     Fixed deleting category leads to wrong transactions sent to delete for sync
     Sync no longer syncs shared budgets/transactions

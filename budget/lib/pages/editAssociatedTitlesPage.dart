@@ -1,4 +1,3 @@
-
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -37,6 +36,14 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
   bool dragDownToDismissEnabled = true;
   int currentReorder = -1;
   String searchValue = "";
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      database.fixOrderAssociatedTitles();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

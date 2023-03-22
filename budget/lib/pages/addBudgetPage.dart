@@ -657,7 +657,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     onPressed: () {
                       deleteBudgetPopup(context, widget.budget!,
                           afterDelete: () {
-                        Navigator.pop(context);
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
                       });
                     },
                     icon: Icon(Icons.delete_rounded),

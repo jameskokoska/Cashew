@@ -240,7 +240,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     onPressed: () {
                       deleteCategoryPopup(context, widgetCategory!,
                           afterDelete: () {
-                        Navigator.pop(context);
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
                       });
                     },
                     icon: Icon(Icons.delete_rounded),
@@ -413,13 +414,14 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                           transactionEdited);
                                     }
                                     Navigator.pop(context);
-                                    Navigator.pop(context);
                                     await database.deleteCategory(
                                         widget.category!.categoryPk,
                                         widget.category!.order);
                                     openSnackbar(SnackbarMessage(
                                         title: "Merged into " + category.name));
                                   }
+                                  Navigator.of(context)
+                                      .popUntil((route) => route.isFirst);
                                 });
                               },
                             ),

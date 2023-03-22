@@ -1,4 +1,3 @@
-import 'package:async/async.dart' show StreamZip;
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -6,7 +5,6 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -345,6 +343,8 @@ class CategoryWithTotal {
   });
 }
 
+// when adding a new table, make sure to enable syncing and that
+// all relevant delete queries create delete logs
 @DriftDatabase(tables: [
   Wallets,
   Transactions,
@@ -1283,14 +1283,10 @@ class FinanceDatabase extends _$FinanceDatabase {
     print(cachedWalletCurrencies);
     updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
         pagesNeedingRefresh: [], updateGlobalState: false);
-    if (wallet.colour == null) {
-      return into(wallets).insert(
-          wallet.copyWith(dateTimeModified: Value(DateTime.now())),
-          mode: InsertMode.insertOrReplace);
-    }
-
-    return into(wallets).insertOnConflictUpdate(wallet.copyWith(
-        dateTimeModified: Value(customDateTimeModified ?? DateTime.now())));
+    return into(wallets).insert(
+        wallet.copyWith(
+            dateTimeModified: Value(customDateTimeModified ?? DateTime.now())),
+        mode: InsertMode.insertOrReplace);
   }
 
   //create or update a new wallet
@@ -1329,33 +1325,38 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Future<TransactionAssociatedTitle> getRelatingAssociatedTitleWithCategory(
       String searchFor, int categoryFk,
-      {int? limit, int? offset}) {
-    return (select(associatedTitles)
-          ..where((t) =>
-              t.title.lower().like(searchFor.toLowerCase().trim()) &
-              t.categoryFk.equals(categoryFk))
-        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
-        )
-        .getSingle();
+      {int? limit, int? offset}) async {
+    return (await (select(associatedTitles)
+              ..where((t) =>
+                  t.title.lower().like(searchFor.toLowerCase().trim()) &
+                  t.categoryFk.equals(categoryFk))
+            // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
+            )
+            .get())
+        .first;
   }
 
   Future<TransactionAssociatedTitle> getRelatingAssociatedTitle(
       String searchFor,
       {int? limit,
-      int? offset}) {
-    return (select(associatedTitles)
-          ..where((t) => t.title.lower().like(searchFor.toLowerCase().trim()))
-        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
-        )
-        .getSingle();
+      int? offset}) async {
+    return (await (select(associatedTitles)
+              ..where(
+                  (t) => t.title.lower().like(searchFor.toLowerCase().trim()))
+            // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
+            )
+            .get())
+        .first;
   }
 
   Future<TransactionCategory> getRelatingCategory(String searchFor,
-      {int? limit, int? offset}) {
-    return (select(categories)
-          ..where((c) => c.name.lower().like(searchFor.toLowerCase().trim()))
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-        .getSingle();
+      {int? limit, int? offset}) async {
+    return (await (select(categories)
+              ..where(
+                  (c) => c.name.lower().like(searchFor.toLowerCase().trim()))
+              ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+            .get())
+        .first;
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
@@ -1476,6 +1477,60 @@ class FinanceDatabase extends _$FinanceDatabase {
     );
   }
 
+  Future<bool> fixOrderBudgets() async {
+    List<Budget> budgetsList = await (select(budgets)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+        .get();
+    for (int i = 0; i < budgetsList.length; i++) {
+      budgetsList[i] = budgetsList[i].copyWith(order: i);
+    }
+    await batch((batch) {
+      batch.insertAll(budgets, budgetsList, mode: InsertMode.replace);
+    });
+    return true;
+  }
+
+  Future<bool> fixOrderCategories() async {
+    List<TransactionCategory> categoriesList = await (select(categories)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+        .get();
+    for (int i = 0; i < categoriesList.length; i++) {
+      categoriesList[i] = categoriesList[i].copyWith(order: i);
+    }
+    await batch((batch) {
+      batch.insertAll(categories, categoriesList, mode: InsertMode.replace);
+    });
+    return true;
+  }
+
+  Future<bool> fixOrderWallets() async {
+    List<TransactionWallet> walletsList = await (select(wallets)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+        .get();
+    for (int i = 0; i < walletsList.length; i++) {
+      walletsList[i] = walletsList[i].copyWith(order: i);
+    }
+    await batch((batch) {
+      batch.insertAll(wallets, walletsList, mode: InsertMode.replace);
+    });
+    return true;
+  }
+
+  Future<bool> fixOrderAssociatedTitles() async {
+    List<TransactionAssociatedTitle> associatedTitlesList =
+        await (select(associatedTitles)
+              ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+            .get();
+    for (int i = 0; i < associatedTitlesList.length; i++) {
+      associatedTitlesList[i] = associatedTitlesList[i].copyWith(order: i);
+    }
+    await batch((batch) {
+      batch.insertAll(associatedTitles, associatedTitlesList,
+          mode: InsertMode.replace);
+    });
+    return true;
+  }
+
   Future<bool> shiftAssociatedTitles(
       int direction, int pastIndexIncluding) async {
     List<TransactionAssociatedTitle> associatedTitlesList =
@@ -1525,6 +1580,13 @@ class FinanceDatabase extends _$FinanceDatabase {
         transaction.amount.isNaN) {
       return 0;
     }
+
+    // we are saying we still need this category!
+    TransactionCategory categoryInUse =
+        await getCategoryInstance(transaction.categoryFk);
+    await createOrUpdateCategory(
+        categoryInUse.copyWith(dateTimeModified: Value(DateTime.now())),
+        updateSharedEntry: false);
 
     // Update the servers entry of the transaction
     if (transaction.paid && updateSharedEntry == true) {
@@ -1602,6 +1664,51 @@ class FinanceDatabase extends _$FinanceDatabase {
       List<Transaction> transactionsInserting) async {
     await batch((batch) {
       batch.insertAll(transactions, transactionsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
+  Future<bool> createOrUpdateBatchWalletsOnly(
+      List<TransactionWallet> walletsInserting) async {
+    await batch((batch) {
+      batch.insertAll(wallets, walletsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
+  Future<bool> createOrUpdateBatchCategoriesOnly(
+      List<TransactionCategory> categoriesInserting) async {
+    await batch((batch) {
+      batch.insertAll(categories, categoriesInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
+  Future<bool> createOrUpdateBatchBudgetsOnly(
+      List<Budget> budgetsInserting) async {
+    await batch((batch) {
+      batch.insertAll(budgets, budgetsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
+  Future<bool> createOrUpdateBatchCategoryLimitsOnly(
+      List<CategoryBudgetLimit> limitsInserting) async {
+    await batch((batch) {
+      batch.insertAll(categoryBudgetLimits, limitsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
+  Future<bool> createOrUpdateBatchScannerTemplatesOnly(
+      List<ScannerTemplate> templatesInserting) async {
+    await batch((batch) {
+      batch.insertAll(scannerTemplates, templatesInserting,
           mode: InsertMode.insertOrReplace);
     });
     return true;
@@ -1745,9 +1852,11 @@ class FinanceDatabase extends _$FinanceDatabase {
 
       try {
         // entry exists, update it
-        sharedBudget = await (select(budgets)
+        List<Budget> sharedBudgets = await (select(budgets)
               ..where((t) => t.sharedKey.equals(budget.sharedKey ?? "")))
-            .getSingle();
+            .get();
+        if (sharedBudgets.isEmpty) throw ("Need to make a new entry");
+        sharedBudget = sharedBudgets.first;
         sharedBudget = budget.copyWith(
             budgetPk: sharedBudget.budgetPk,
             order: sharedBudget.order,
@@ -1767,8 +1876,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<Budget> getSharedBudget(sharedKey) async {
-    return await (select(budgets)..where((t) => t.sharedKey.equals(sharedKey)))
-        .getSingle();
+    return (await (select(budgets)..where((t) => t.sharedKey.equals(sharedKey)))
+            .get())
+        .first;
   }
 
   Future<List<Transaction>> getAllTransactionsFromCategory(categoryPk) {
@@ -1820,9 +1930,10 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> deleteFromSharedTransaction(sharedTransactionKey) async {
-    Transaction transactionToDelete = await (select(transactions)
-          ..where((t) => t.sharedKey.equals(sharedTransactionKey)))
-        .getSingle();
+    Transaction transactionToDelete = (await (select(transactions)
+              ..where((t) => t.sharedKey.equals(sharedTransactionKey)))
+            .get())
+        .first;
     await createDeleteLog(
         DeleteLogType.Transaction, transactionToDelete.transactionPk);
     return (delete(transactions)
@@ -1885,8 +1996,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get category given name
-  Future<TransactionCategory> getCategoryInstanceGivenName(String name) {
-    return (select(categories)..where((t) => t.name.equals(name))).getSingle();
+  Future<TransactionCategory> getCategoryInstanceGivenName(String name) async {
+    return (await (select(categories)..where((t) => t.name.equals(name))).get())
+        .first;
   }
 
   Stream<List<TransactionCategory>> watchAllCategories(
@@ -2025,8 +2137,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get wallet given name
-  Future<TransactionWallet> getWalletInstanceGivenName(String name) {
-    return (select(wallets)..where((w) => w.name.equals(name))).getSingle();
+  Future<TransactionWallet> getWalletInstanceGivenName(String name) async {
+    return (await (select(wallets)..where((w) => w.name.equals(name))).get())
+        .first;
   }
 
   // get wallet given id

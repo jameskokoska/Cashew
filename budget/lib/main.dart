@@ -164,6 +164,21 @@ Future<Map<String, dynamic>> getUserSettings() async {
   }
 }
 
+Future<bool> updateCachedWalletCurrencies() async {
+  List<TransactionWallet> wallets = await database.getAllWallets();
+  for (TransactionWallet wallet in wallets) {
+    if (wallet.currency == null)
+      await database.createOrUpdateWallet(
+        wallet.copyWith(currency: Value("usd")),
+      );
+    else
+      await database.createOrUpdateWallet(
+        wallet,
+      );
+  }
+  return true;
+}
+
 Future<bool> initializeSettings() async {
   Map<String, dynamic> userSettings = await getUserSettings();
   if (userSettings["databaseJustImported"] == true) {
@@ -191,7 +206,7 @@ Future<bool> initializeSettings() async {
   appStateSettings = userSettings;
 
   packageInfoGlobal = await PackageInfo.fromPlatform();
-  print(await rootBundle.loadString('assets/static/generated/currencies.json'));
+  // print(await rootBundle.loadString('assets/static/generated/currencies.json'));
   currenciesJSON = await json.decode(
       await rootBundle.loadString('assets/static/generated/currencies.json'));
 
@@ -205,14 +220,7 @@ Future<bool> initializeSettings() async {
   if (appStateSettings["cachedWalletCurrencies"] == null ||
       appStateSettings["cachedWalletCurrencies"].keys.length <= 0) {
     print("wallet cache is empty, need to add in values");
-    List<TransactionWallet> wallets = await database.getAllWallets();
-    for (TransactionWallet wallet in wallets) {
-      if (wallet.currency == null)
-        await database
-            .createOrUpdateWallet(wallet.copyWith(currency: Value("usd")));
-      else
-        await database.createOrUpdateWallet(wallet);
-    }
+    await updateCachedWalletCurrencies();
   }
 
   String? retrievedClientID = await sharedPreferences.getString("clientID");
