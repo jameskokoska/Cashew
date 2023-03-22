@@ -1,3 +1,6 @@
+import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -18,6 +21,28 @@ class DebugPage extends StatelessWidget {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
       listWidgets: [
+        Button(
+            label: "Create random",
+            onTap: () async {
+              List<TransactionCategory> categories =
+                  await database.getAllCategories();
+              for (int i = 0; i < 10; i++) {
+                await database.createOrUpdateTransaction(
+                  Transaction(
+                    transactionPk: DateTime.now().millisecondsSinceEpoch,
+                    name: "Test" + randomDouble[i].toString(),
+                    amount: randomInt[i].toDouble(),
+                    note: "",
+                    categoryFk: categories[i].categoryPk,
+                    walletFk: 0,
+                    dateCreated: DateTime.now(),
+                    income: false,
+                    paid: true,
+                    skipPaid: false,
+                  ),
+                );
+              }
+            }),
         Button(
             label: "TAPME",
             onTap: () {

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Sync now works on a sequential log system - this ensures all changes are processed in order!
     Primary wallet import fix for caches currency selected
     Sync fixes now replaces old entries directly without updating
     Sync fixes with shared transactions/budgets

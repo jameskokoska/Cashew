@@ -165,11 +165,24 @@ Future<bool> createSyncBackup(
 }
 
 class SyncLog {
-  SyncLog(this.deleteLogType, this.updateLogType, this.pk);
+  SyncLog({
+    this.deleteLogType,
+    this.updateLogType,
+    required this.transactionDateTime,
+    required this.pk,
+    this.itemToUpdate,
+  });
 
   DeleteLogType? deleteLogType;
   UpdateLogType? updateLogType;
+  DateTime? transactionDateTime;
   int pk;
+  dynamic itemToUpdate;
+
+  @override
+  String toString() {
+    return "SyncLog(deleteLogType: $deleteLogType, updateLogType: $updateLogType, transactionDateTime: $transactionDateTime, pk: $pk, itemToUpdate: $itemToUpdate)";
+  }
 }
 
 // load the latest backup and import any newly modified data into the db
@@ -217,6 +230,8 @@ Future<bool> syncData() async {
 
   print("LOADING SYNC DB");
   DateTime syncStarted = DateTime.now();
+  List<SyncLog> syncLogs = [];
+  List<String> filesSyncing = [];
 
   for (drive.File file in filesToDownloadSyncChanges) {
     // we don't want to restore this clients backup
@@ -239,6 +254,7 @@ Future<bool> syncData() async {
     String? fileId = file.id;
     if (fileId == null) continue;
     print("SYNCING WITH " + (file.name ?? ""));
+    filesSyncing.add(file.name ?? "");
 
     List<int> dataStore = [];
     dynamic response = await driveApi.files
@@ -262,190 +278,112 @@ Future<bool> syncData() async {
     try {
       List<TransactionWallet> newWallets =
           await databaseSync.getAllNewWallets(lastSynced);
-      List<TransactionWallet> walletsToUpdate = [];
       for (TransactionWallet newEntry in newWallets) {
-        TransactionWallet? current;
-        try {
-          current = await database.getWalletInstance(newEntry.walletPk);
-        } catch (e) {
-          current = null;
-        }
-        if (current == null ||
-            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          walletsToUpdate.add(newEntry);
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.TransactionWallet,
+          pk: newEntry.walletPk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
       }
-      await database.createOrUpdateBatchWalletsOnly(walletsToUpdate);
       print("NEW WALLETS");
       print(newWallets);
 
       List<TransactionCategory> newCategories =
           await databaseSync.getAllNewCategories(lastSynced);
-      List<TransactionCategory> categoriesToUpdate = [];
       for (TransactionCategory newEntry in newCategories) {
-        TransactionCategory? current;
-        try {
-          current = await database.getCategoryInstance(newEntry.categoryPk);
-        } catch (e) {
-          current = null;
-        }
-        if (current == null ||
-            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          categoriesToUpdate.add(newEntry);
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.TransactionCategory,
+          pk: newEntry.categoryPk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
       }
-      await database.createOrUpdateBatchCategoriesOnly(categoriesToUpdate);
       print("NEW CATEGORIES");
       print(newCategories);
 
       List<Budget> newBudgets = await databaseSync.getAllNewBudgets(lastSynced);
-      List<Budget> budgetsToUpdate = [];
       for (Budget newEntry in newBudgets) {
-        // don't sync already shared transactions (these are handled and shared by the server)
-        // if (newEntry.sharedKey != null) continue;
-        Budget? current;
-        try {
-          current = await database.getBudgetInstance(newEntry.budgetPk);
-        } catch (e) {
-          current = null;
-        }
-        if (current == null ||
-            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          budgetsToUpdate.add(newEntry);
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.Budget,
+          pk: newEntry.budgetPk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
       }
-      await database.createOrUpdateBatchBudgetsOnly(budgetsToUpdate);
       print("NEW BUDGETS");
       print(newBudgets);
 
       List<CategoryBudgetLimit> newCategoryBudgetLimits =
           await databaseSync.getAllNewCategoryBudgetLimits(lastSynced);
-      List<CategoryBudgetLimit> categoryBudgetLimitsToUpdate = [];
       for (CategoryBudgetLimit newEntry in newCategoryBudgetLimits) {
-        CategoryBudgetLimit? current;
-        try {
-          current = await database
-              .getCategoryBudgetLimitInstance(newEntry.categoryLimitPk);
-        } catch (e) {
-          current = null;
-        }
-        if (current == null ||
-            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          categoryBudgetLimitsToUpdate.add(newEntry);
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.CategoryBudgetLimit,
+          pk: newEntry.categoryLimitPk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
       }
-      await database
-          .createOrUpdateBatchCategoryLimitsOnly(categoryBudgetLimitsToUpdate);
       print("NEW CATEGORY LIMITS");
       print(newCategoryBudgetLimits);
 
       List<Transaction> newTransactions =
           await databaseSync.getAllNewTransactions(lastSynced);
-      List<Transaction> transactionsToUpdate = [];
       for (Transaction newEntry in newTransactions) {
-        // don't sync already shared transactions (these are handled and shared by the server)
-        // if (newEntry.sharedKey != null) continue;
-        Transaction? current;
-        try {
-          current = await database.getTransactionFromPk(newEntry.transactionPk);
-        } catch (e) {
-          current = null;
-        }
-        if (current == null ||
-            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          transactionsToUpdate.add(newEntry);
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.Transaction,
+          pk: newEntry.transactionPk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
       }
-      await database.createOrUpdateBatchTransactionsOnly(transactionsToUpdate);
       print("NEW TRANSACTIONS");
       print(newTransactions);
 
       List<TransactionAssociatedTitle> newTitles =
           await databaseSync.getAllNewAssociatedTitles(lastSynced);
-      List<TransactionAssociatedTitle> titlesToUpdate = [];
       for (TransactionAssociatedTitle newEntry in newTitles) {
-        TransactionAssociatedTitle? current;
-        try {
-          current = await database
-              .getAssociatedTitleInstance(newEntry.associatedTitlePk);
-        } catch (e) {
-          current = null;
-        }
-        if (current == null ||
-            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          titlesToUpdate.add(newEntry);
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.TransactionAssociatedTitle,
+          pk: newEntry.associatedTitlePk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
       }
-      await database.createOrUpdateBatchAssociatedTitlesOnly(titlesToUpdate);
       print("NEW TITLES");
       print(newTitles);
 
-      List<ScannerTemplate> scannerTemplatesToUpdate = [];
       for (ScannerTemplate newEntry
           in (await databaseSync.getAllNewScannerTemplates(lastSynced))) {
-        ScannerTemplate? current;
-        try {
-          current = await database
-              .getScannerTemplateInstance(newEntry.scannerTemplatePk);
-        } catch (e) {
-          current = null;
-        }
-        if (current == null ||
-            current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          scannerTemplatesToUpdate.add(newEntry);
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.ScannerTemplate,
+          pk: newEntry.scannerTemplatePk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
       }
-      await database
-          .createOrUpdateBatchScannerTemplatesOnly(scannerTemplatesToUpdate);
 
       List<DeleteLog> deleteLogs =
           await databaseSync.getAllNewDeleteLogs(lastSynced);
 
+      for (DeleteLog deleteLog in deleteLogs) {
+        syncLogs.add(SyncLog(
+          deleteLogType: deleteLog.type,
+          updateLogType: null,
+          pk: deleteLog.entryPk,
+          transactionDateTime: deleteLog.dateTimeModified,
+        ));
+      }
+
       print("DELETE LOGS");
       print(deleteLogs);
-
-      Map<DeleteLogType, List<int>> deleteLogsByType = {};
-      deleteLogs.sort((a, b) => a.type.index.compareTo(b.type.index));
-      deleteLogs.forEach((log) {
-        if (!deleteLogsByType.containsKey(log.type)) {
-          deleteLogsByType[log.type] = [];
-        }
-        deleteLogsByType[log.type]?.add(log.entryPk);
-      });
-
-      if (deleteLogsByType[DeleteLogType.ScannerTemplate] != null &&
-          deleteLogsByType[DeleteLogType.ScannerTemplate]!.isNotEmpty) {
-        await database.deleteBatchScannerTemplatesGivenPks(
-            deleteLogsByType[DeleteLogType.ScannerTemplate]!);
-      }
-      if (deleteLogsByType[DeleteLogType.Transaction] != null &&
-          deleteLogsByType[DeleteLogType.Transaction]!.isNotEmpty) {
-        print("DELETING THESE TRANSACTIONS");
-        print(deleteLogsByType[DeleteLogType.Transaction]);
-        await database.deleteBatchTransactionsGivenPks(
-            deleteLogsByType[DeleteLogType.Transaction]!);
-      }
-      if (deleteLogsByType[DeleteLogType.TransactionAssociatedTitle] != null &&
-          deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!
-              .isNotEmpty) {
-        await database.deleteBatchAssociatedTitlesGivenTransactionPks(
-            deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!);
-      }
-      if (deleteLogsByType[DeleteLogType.CategoryBudgetLimit] != null &&
-          deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!.isNotEmpty) {
-        await database.deleteBatchCategoryBudgetLimitsGivenPks(
-            deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!);
-      }
-      if (deleteLogsByType[DeleteLogType.Budget] != null &&
-          deleteLogsByType[DeleteLogType.Budget]!.isNotEmpty) {
-        await database.deleteBatchBudgetsGivenPks(
-            deleteLogsByType[DeleteLogType.Budget]!);
-      }
-      if (deleteLogsByType[DeleteLogType.TransactionCategory] != null &&
-          deleteLogsByType[DeleteLogType.TransactionCategory]!.isNotEmpty) {
-        await database.deleteBatchCategoriesGivenPks(
-            deleteLogsByType[DeleteLogType.TransactionCategory]!);
-      }
-      if (deleteLogsByType[DeleteLogType.TransactionWallet] != null &&
-          deleteLogsByType[DeleteLogType.TransactionWallet]!.isNotEmpty) {
-        await database.deleteBatchWalletsGivenPks(
-            deleteLogsByType[DeleteLogType.TransactionWallet]!);
-      }
-      setDateOfLastSyncedWithClient(
-          getDeviceFromSyncBackupFileName(file.name), syncStarted);
     } catch (e) {
       print("SYNC FAILED");
       print(e.toString());
@@ -456,12 +394,18 @@ Future<bool> syncData() async {
           icon: Icons.warning_amber_rounded,
         ),
       );
+      filesSyncing.remove(file.name ?? "");
       databaseSync.close();
       return false;
     }
 
     databaseSync.close();
   }
+
+  database.processSyncLogs(syncLogs);
+  for (String fileName in filesSyncing)
+    setDateOfLastSyncedWithClient(
+        getDeviceFromSyncBackupFileName(fileName), syncStarted);
 
   try {
     print("UPDATED WALLET CURRENCY");

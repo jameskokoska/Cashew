@@ -5,6 +5,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -116,6 +117,16 @@ class DoubleListInColumnConverter extends TypeConverter<List<double>, String> {
 }
 
 enum DeleteLogType {
+  TransactionWallet,
+  TransactionCategory,
+  Budget,
+  CategoryBudgetLimit,
+  Transaction,
+  TransactionAssociatedTitle,
+  ScannerTemplate,
+}
+
+enum UpdateLogType {
   TransactionWallet,
   TransactionCategory,
   Budget,
@@ -1658,6 +1669,182 @@ class FinanceDatabase extends _$FinanceDatabase {
   // These are also not logged into the Delete log!
   // ************************************************************
 
+  Future<bool> processSyncLogs(List<SyncLog> syncLogs) async {
+    syncLogs.sort(
+        (a, b) => a.transactionDateTime!.compareTo(b.transactionDateTime!));
+
+    await batch((batch) {
+      for (SyncLog syncLog in syncLogs) {
+        if (syncLog.deleteLogType != null) {
+          print("Sync Log: Deleting " +
+              syncLog.deleteLogType.toString() +
+              " " +
+              syncLog.pk.toString());
+        } else if (syncLog.updateLogType != null) {
+          String name = "";
+          try {
+            name = syncLog.itemToUpdate?.title;
+          } catch (e) {}
+          try {
+            name = syncLog.itemToUpdate?.name;
+          } catch (e) {}
+          print(
+            "Sync Log: Creating " +
+                syncLog.updateLogType.toString() +
+                " " +
+                name,
+          );
+        }
+
+        if (syncLog.deleteLogType == DeleteLogType.TransactionWallet) {
+          batch.deleteWhere(
+            wallets,
+            (tbl) =>
+                tbl.walletPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+        } else if (syncLog.deleteLogType == DeleteLogType.TransactionCategory) {
+          batch.deleteWhere(
+            categories,
+            (tbl) =>
+                tbl.categoryPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+        } else if (syncLog.deleteLogType == DeleteLogType.Budget) {
+          batch.deleteWhere(
+            budgets,
+            (tbl) =>
+                tbl.budgetPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+        } else if (syncLog.deleteLogType == DeleteLogType.CategoryBudgetLimit) {
+          batch.deleteWhere(
+            categoryBudgetLimits,
+            (tbl) =>
+                tbl.categoryLimitPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+        } else if (syncLog.deleteLogType == DeleteLogType.Transaction) {
+          batch.deleteWhere(
+            transactions,
+            (tbl) =>
+                tbl.transactionPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+        } else if (syncLog.deleteLogType ==
+            DeleteLogType.TransactionAssociatedTitle) {
+          batch.deleteWhere(
+            associatedTitles,
+            (tbl) =>
+                tbl.associatedTitlePk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+        } else if (syncLog.deleteLogType == DeleteLogType.ScannerTemplate) {
+          batch.deleteWhere(scannerTemplates,
+              (tbl) => tbl.scannerTemplatePk.equals(syncLog.pk));
+        } else if (syncLog.updateLogType == UpdateLogType.TransactionWallet) {
+          batch.update(
+            wallets,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.walletPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(wallets, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        } else if (syncLog.updateLogType == UpdateLogType.TransactionCategory) {
+          batch.update(
+            categories,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.categoryPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(categories, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        } else if (syncLog.updateLogType == UpdateLogType.Budget) {
+          batch.update(
+            budgets,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.budgetPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(budgets, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        } else if (syncLog.updateLogType == UpdateLogType.CategoryBudgetLimit) {
+          batch.update(
+            categoryBudgetLimits,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.categoryLimitPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(categoryBudgetLimits, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        } else if (syncLog.updateLogType == UpdateLogType.Transaction) {
+          batch.update(
+            transactions,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.transactionPk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(transactions, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        } else if (syncLog.updateLogType ==
+            UpdateLogType.TransactionAssociatedTitle) {
+          batch.update(
+            associatedTitles,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.associatedTitlePk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(associatedTitles, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        } else if (syncLog.updateLogType == UpdateLogType.ScannerTemplate) {
+          batch.update(
+            scannerTemplates,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.scannerTemplatePk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(scannerTemplates, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        }
+      }
+    });
+    return true;
+  }
+
   // This doesn't handle shared transactions!
   // updateShared is always false
   Future<bool> createOrUpdateBatchTransactionsOnly(
@@ -1669,168 +1856,168 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<bool> createOrUpdateBatchWalletsOnly(
-      List<TransactionWallet> walletsInserting) async {
-    await batch((batch) {
-      batch.insertAll(wallets, walletsInserting,
-          mode: InsertMode.insertOrReplace);
-    });
-    return true;
-  }
+  // Future<bool> createOrUpdateBatchWalletsOnly(
+  //     List<TransactionWallet> walletsInserting) async {
+  //   await batch((batch) {
+  //     batch.insertAll(wallets, walletsInserting,
+  //         mode: InsertMode.insertOrReplace);
+  //   });
+  //   return true;
+  // }
 
-  Future<bool> createOrUpdateBatchCategoriesOnly(
-      List<TransactionCategory> categoriesInserting) async {
-    await batch((batch) {
-      batch.insertAll(categories, categoriesInserting,
-          mode: InsertMode.insertOrReplace);
-    });
-    return true;
-  }
+  // Future<bool> createOrUpdateBatchCategoriesOnly(
+  //     List<TransactionCategory> categoriesInserting) async {
+  //   await batch((batch) {
+  //     batch.insertAll(categories, categoriesInserting,
+  //         mode: InsertMode.insertOrReplace);
+  //   });
+  //   return true;
+  // }
 
-  Future<bool> createOrUpdateBatchBudgetsOnly(
-      List<Budget> budgetsInserting) async {
-    await batch((batch) {
-      batch.insertAll(budgets, budgetsInserting,
-          mode: InsertMode.insertOrReplace);
-    });
-    return true;
-  }
+  // Future<bool> createOrUpdateBatchBudgetsOnly(
+  //     List<Budget> budgetsInserting) async {
+  //   await batch((batch) {
+  //     batch.insertAll(budgets, budgetsInserting,
+  //         mode: InsertMode.insertOrReplace);
+  //   });
+  //   return true;
+  // }
 
-  Future<bool> createOrUpdateBatchCategoryLimitsOnly(
-      List<CategoryBudgetLimit> limitsInserting) async {
-    await batch((batch) {
-      batch.insertAll(categoryBudgetLimits, limitsInserting,
-          mode: InsertMode.insertOrReplace);
-    });
-    return true;
-  }
+  // Future<bool> createOrUpdateBatchCategoryLimitsOnly(
+  //     List<CategoryBudgetLimit> limitsInserting) async {
+  //   await batch((batch) {
+  //     batch.insertAll(categoryBudgetLimits, limitsInserting,
+  //         mode: InsertMode.insertOrReplace);
+  //   });
+  //   return true;
+  // }
 
-  Future<bool> createOrUpdateBatchScannerTemplatesOnly(
-      List<ScannerTemplate> templatesInserting) async {
-    await batch((batch) {
-      batch.insertAll(scannerTemplates, templatesInserting,
-          mode: InsertMode.insertOrReplace);
-    });
-    return true;
-  }
+  // Future<bool> createOrUpdateBatchScannerTemplatesOnly(
+  //     List<ScannerTemplate> templatesInserting) async {
+  //   await batch((batch) {
+  //     batch.insertAll(scannerTemplates, templatesInserting,
+  //         mode: InsertMode.insertOrReplace);
+  //   });
+  //   return true;
+  // }
 
-  // This doesn't handle order of titles!
-  Future<bool> createOrUpdateBatchAssociatedTitlesOnly(
-      List<TransactionAssociatedTitle> associatedTitlesInserting) async {
-    await batch((batch) {
-      batch.insertAll(associatedTitles, associatedTitlesInserting,
-          mode: InsertMode.insertOrReplace);
-    });
-    return true;
-  }
+  // // This doesn't handle order of titles!
+  // Future<bool> createOrUpdateBatchAssociatedTitlesOnly(
+  //     List<TransactionAssociatedTitle> associatedTitlesInserting) async {
+  //   await batch((batch) {
+  //     batch.insertAll(associatedTitles, associatedTitlesInserting,
+  //         mode: InsertMode.insertOrReplace);
+  //   });
+  //   return true;
+  // }
 
-  Future<int> deleteBatchWalletsGivenPks(List<int> walletPks) async {
-    return (delete(wallets)..where((tbl) => tbl.walletPk.isIn(walletPks))).go();
-  }
+  // Future<int> deleteBatchWalletsGivenPks(List<int> walletPks) async {
+  //   return (delete(wallets)..where((tbl) => tbl.walletPk.isIn(walletPks))).go();
+  // }
 
-  Future<bool> deleteBatchWallets(
-      List<TransactionWallet> walletsDeleting) async {
-    await batch((batch) {
-      for (TransactionWallet wallet in walletsDeleting)
-        batch.delete(wallets, wallet);
-    });
-    return true;
-  }
+  // Future<bool> deleteBatchWallets(
+  //     List<TransactionWallet> walletsDeleting) async {
+  //   await batch((batch) {
+  //     for (TransactionWallet wallet in walletsDeleting)
+  //       batch.delete(wallets, wallet);
+  //   });
+  //   return true;
+  // }
 
-  Future<int> deleteBatchCategoriesGivenPks(List<int> categoryPks) async {
-    return (delete(categories)
-          ..where((tbl) => tbl.categoryPk.isIn(categoryPks)))
-        .go();
-  }
+  // Future<int> deleteBatchCategoriesGivenPks(List<int> categoryPks) async {
+  //   return (delete(categories)
+  //         ..where((tbl) => tbl.categoryPk.isIn(categoryPks)))
+  //       .go();
+  // }
 
-  Future<bool> deleteBatchCategories(
-      List<TransactionCategory> categoriesDeleting) async {
-    await batch((batch) {
-      for (TransactionCategory category in categoriesDeleting)
-        batch.delete(categories, category);
-    });
-    return true;
-  }
+  // Future<bool> deleteBatchCategories(
+  //     List<TransactionCategory> categoriesDeleting) async {
+  //   await batch((batch) {
+  //     for (TransactionCategory category in categoriesDeleting)
+  //       batch.delete(categories, category);
+  //   });
+  //   return true;
+  // }
 
-  Future<int> deleteBatchBudgetsGivenPks(List<int> budgetPks) async {
-    return (delete(budgets)..where((tbl) => tbl.budgetPk.isIn(budgetPks))).go();
-  }
+  // Future<int> deleteBatchBudgetsGivenPks(List<int> budgetPks) async {
+  //   return (delete(budgets)..where((tbl) => tbl.budgetPk.isIn(budgetPks))).go();
+  // }
 
-  // This doesn't handle shared budgets!
-  Future<bool> deleteBatchBudgets(List<Budget> budgetsDeleting) async {
-    await batch((batch) {
-      for (Budget budget in budgetsDeleting) batch.delete(budgets, budget);
-    });
-    return true;
-  }
+  // // This doesn't handle shared budgets!
+  // Future<bool> deleteBatchBudgets(List<Budget> budgetsDeleting) async {
+  //   await batch((batch) {
+  //     for (Budget budget in budgetsDeleting) batch.delete(budgets, budget);
+  //   });
+  //   return true;
+  // }
 
-  Future<int> deleteBatchCategoryBudgetLimitsGivenPks(
-      List<int> categoryLimitPks) async {
-    return (delete(categoryBudgetLimits)
-          ..where((tbl) => tbl.categoryLimitPk.isIn(categoryLimitPks)))
-        .go();
-  }
+  // Future<int> deleteBatchCategoryBudgetLimitsGivenPks(
+  //     List<int> categoryLimitPks) async {
+  //   return (delete(categoryBudgetLimits)
+  //         ..where((tbl) => tbl.categoryLimitPk.isIn(categoryLimitPks)))
+  //       .go();
+  // }
 
-  Future<bool> deleteBatchCategoryBudgetLimit(
-      List<CategoryBudgetLimit> categoryBudgetLimitDeleting) async {
-    await batch((batch) {
-      for (CategoryBudgetLimit categoryBudgetLimit
-          in categoryBudgetLimitDeleting)
-        batch.delete(categoryBudgetLimits, categoryBudgetLimit);
-    });
-    return true;
-  }
+  // Future<bool> deleteBatchCategoryBudgetLimit(
+  //     List<CategoryBudgetLimit> categoryBudgetLimitDeleting) async {
+  //   await batch((batch) {
+  //     for (CategoryBudgetLimit categoryBudgetLimit
+  //         in categoryBudgetLimitDeleting)
+  //       batch.delete(categoryBudgetLimits, categoryBudgetLimit);
+  //   });
+  //   return true;
+  // }
 
-  Future<int> deleteBatchAssociatedTitlesGivenTransactionPks(
-      List<int> associatedTitlePks) async {
-    return (delete(associatedTitles)
-          ..where((tbl) => tbl.associatedTitlePk.isIn(associatedTitlePks)))
-        .go();
-  }
+  // Future<int> deleteBatchAssociatedTitlesGivenTransactionPks(
+  //     List<int> associatedTitlePks) async {
+  //   return (delete(associatedTitles)
+  //         ..where((tbl) => tbl.associatedTitlePk.isIn(associatedTitlePks)))
+  //       .go();
+  // }
 
-  // This doesn't handle order of titles!
-  Future<bool> deleteBatchAssociatedTitles(
-      List<TransactionAssociatedTitle> associatedTitlesDeleting) async {
-    await batch((batch) {
-      for (TransactionAssociatedTitle associatedTitle
-          in associatedTitlesDeleting)
-        batch.delete(associatedTitles, associatedTitle);
-    });
-    return true;
-  }
+  // // This doesn't handle order of titles!
+  // Future<bool> deleteBatchAssociatedTitles(
+  //     List<TransactionAssociatedTitle> associatedTitlesDeleting) async {
+  //   await batch((batch) {
+  //     for (TransactionAssociatedTitle associatedTitle
+  //         in associatedTitlesDeleting)
+  //       batch.delete(associatedTitles, associatedTitle);
+  //   });
+  //   return true;
+  // }
 
-  Future<int> deleteBatchTransactionsGivenPks(List<int> transactionPks) async {
-    return (delete(transactions)
-          ..where((tbl) => tbl.transactionPk.isIn(transactionPks)))
-        .go();
-  }
+  // Future<int> deleteBatchTransactionsGivenPks(List<int> transactionPks) async {
+  //   return (delete(transactions)
+  //         ..where((tbl) => tbl.transactionPk.isIn(transactionPks)))
+  //       .go();
+  // }
 
-  // This doesn't handle shared transactions!
-  // updateShared is always false
-  Future<bool> deleteBatchTransactions(
-      List<Transaction> transactionsDeleting) async {
-    await batch((batch) {
-      for (Transaction transaction in transactionsDeleting)
-        batch.delete(transactions, transaction);
-    });
-    return true;
-  }
+  // // This doesn't handle shared transactions!
+  // // updateShared is always false
+  // Future<bool> deleteBatchTransactions(
+  //     List<Transaction> transactionsDeleting) async {
+  //   await batch((batch) {
+  //     for (Transaction transaction in transactionsDeleting)
+  //       batch.delete(transactions, transaction);
+  //   });
+  //   return true;
+  // }
 
-  Future<int> deleteBatchScannerTemplatesGivenPks(
-      List<int> scannerTemplatePks) async {
-    return (delete(scannerTemplates)
-          ..where((tbl) => tbl.scannerTemplatePk.isIn(scannerTemplatePks)))
-        .go();
-  }
+  // Future<int> deleteBatchScannerTemplatesGivenPks(
+  //     List<int> scannerTemplatePks) async {
+  //   return (delete(scannerTemplates)
+  //         ..where((tbl) => tbl.scannerTemplatePk.isIn(scannerTemplatePks)))
+  //       .go();
+  // }
 
-  Future<bool> deleteBatchScannerTemplates(
-      List<ScannerTemplate> scannerTemplatesDeleting) async {
-    await batch((batch) {
-      for (ScannerTemplate scannerTemplate in scannerTemplatesDeleting)
-        batch.delete(scannerTemplates, scannerTemplate);
-    });
-    return true;
-  }
+  // Future<bool> deleteBatchScannerTemplates(
+  //     List<ScannerTemplate> scannerTemplatesDeleting) async {
+  //   await batch((batch) {
+  //     for (ScannerTemplate scannerTemplate in scannerTemplatesDeleting)
+  //       batch.delete(scannerTemplates, scannerTemplate);
+  //   });
+  //   return true;
+  // }
 
   // ************************************************************
   // ************************************************************
