@@ -670,7 +670,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               label: widget.budget == null ? "Add Budget" : "Save Changes",
               onTap: () async {
                 await addBudget();
-                createSyncBackup(changeMadeSync: true);
               },
               disabled: !(canAddBudget ?? false),
             ),

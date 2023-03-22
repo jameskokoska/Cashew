@@ -343,7 +343,10 @@ void discardChangesPopup(context,
   if (previousObject == currentObject &&
       previousObject != null &&
       currentObject != null) {
-    Navigator.maybePop(context);
+    Navigator.pop(context);
+  }
+  if (previousObject == null) {
+    Navigator.pop(context);
   }
   previousObject = previousObject.copyWith(dateTimeModified: Value(null));
 

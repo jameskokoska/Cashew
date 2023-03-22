@@ -273,7 +273,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
               label: widget.wallet == null ? "Add Wallet" : "Save Changes",
               onTap: () async {
                 await addWallet();
-                createSyncBackup(changeMadeSync: true);
               },
               disabled: !(canAddWallet ?? false),
             ),

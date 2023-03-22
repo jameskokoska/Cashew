@@ -184,6 +184,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 .changePage(7, switchNavbar: true);
                           },
                         ),
+                        EditDataButtons(selectedIndex: selectedIndex),
                       ],
                     ),
                     Spacer(),
@@ -193,7 +194,6 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        EditDataButtons(selectedIndex: selectedIndex),
                         GoogleAccountLoginButton(
                           navigationSidebarButton: true,
                           onTap: () {
@@ -395,14 +395,32 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        NavigationSidebarButton(
+          icon: Icons.data_object_rounded,
+          label: "Edit Data",
+          isSelected: false,
+          onTap: () {
+            setState(() {
+              showEditDataButtons = !showEditDataButtons;
+            });
+          },
+          trailing: AnimatedRotation(
+            duration: Duration(milliseconds: 600),
+            curve: Curves.easeInOutCubicEmphasized,
+            turns: showEditDataButtons ? 0 : -0.5,
+            child: Icon(
+              Icons.arrow_drop_up_rounded,
+            ),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: AnimatedSize(
-            duration: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 400),
             curve: Curves.easeInOutCubicEmphasized,
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.topCenter,
             child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 200),
+              duration: Duration(milliseconds: 300),
               child: !showEditDataButtons
                   ? Container(key: ValueKey(1))
                   : Column(
@@ -445,24 +463,6 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         ),
                       ],
                     ),
-            ),
-          ),
-        ),
-        NavigationSidebarButton(
-          icon: Icons.data_object_rounded,
-          label: "Edit Data",
-          isSelected: false,
-          onTap: () {
-            setState(() {
-              showEditDataButtons = !showEditDataButtons;
-            });
-          },
-          trailing: AnimatedRotation(
-            duration: Duration(milliseconds: 500),
-            curve: Curves.easeInOutCubicEmphasized,
-            turns: showEditDataButtons ? 0 : -0.25,
-            child: Icon(
-              Icons.arrow_drop_up_rounded,
             ),
           ),
         ),

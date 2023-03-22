@@ -253,7 +253,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               label: widget.category == null ? "Add Category" : "Save Changes",
               onTap: () async {
                 await addCategory();
-                createSyncBackup(changeMadeSync: true);
               },
               disabled: !(canAddCategory ?? false),
             ),

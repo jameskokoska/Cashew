@@ -514,7 +514,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     setSelectedAmount: setSelectedAmount,
                     next: () async {
                       await addTransaction();
-                      createSyncBackup(changeMadeSync: true);
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
@@ -688,7 +687,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       setSelectedAmount: setSelectedAmount,
                                       next: () async {
                                         await addTransaction();
-                                        createSyncBackup(changeMadeSync: true);
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
@@ -725,7 +723,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 setSelectedAmount: setSelectedAmount,
                                 next: () async {
                                   await addTransaction();
-                                  createSyncBackup(changeMadeSync: true);
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 },
@@ -741,7 +738,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             : textAddTransaction ?? "",
                         onTap: () async {
                           bool result = await addTransaction();
-                          if (result) createSyncBackup(changeMadeSync: true);
                           if (result) Navigator.of(context).pop();
                         },
                       ),
@@ -904,7 +900,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         );
                                       } else {
                                         await addTransaction();
-                                        createSyncBackup(changeMadeSync: true);
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                       }

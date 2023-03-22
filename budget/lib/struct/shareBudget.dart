@@ -360,6 +360,7 @@ Future<int> downloadTransactionsFromBudgets(
     Budget sharedBudget = await database.getSharedBudget(budget.id);
     Query transactionsFromServer;
     if (sharedBudget.sharedDateUpdated == null) {
+      print("Download all transactions");
       transactionsFromServer =
           db.collection('budgets').doc(budget.id).collection('transactions');
     } else {
@@ -461,6 +462,7 @@ Future<int> downloadTransactionsFromBudgets(
 }
 
 Future<bool> sendTransactionSet(Transaction transaction, Budget budget) async {
+  print("SETTING UP TRANSACTION TO BE SET: " + transaction.toString());
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
@@ -509,6 +511,7 @@ Future<bool> setOnServer(
     sharedDateUpdated: Value(DateTime.now()),
     sharedOldKey: Value(transaction.sharedKey),
   );
+  print("Transaction updated on server: " + transaction.toString());
   await database.createOrUpdateTransaction(transaction,
       updateSharedEntry: false);
   return true;

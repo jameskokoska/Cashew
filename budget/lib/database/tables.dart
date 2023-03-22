@@ -9,6 +9,8 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+import 'package:async/async.dart';
 import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
@@ -23,10 +25,9 @@ int schemaVersionGlobal = 33;
 const int NAME_LIMIT = 250;
 const int NOTE_LIMIT = 500;
 const int COLOUR_LIMIT = 50;
-const int CURRENCY_LIMIT = 3;
 
 // Query Constants
-const int DEFAULT_LIMIT = 50;
+const int DEFAULT_LIMIT = 5000;
 const int DEFAULT_OFFSET = 0;
 
 enum BudgetReoccurence { custom, daily, weekly, monthly, yearly }
@@ -1241,7 +1242,6 @@ class FinanceDatabase extends _$FinanceDatabase {
       ),
     );
     print((await getAllDeleteLogs()).length);
-    createSyncBackup(changeMadeSync: true);
     return true;
   }
 
@@ -1260,7 +1260,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     await batch((batch) {
       batch.insertAll(deleteLogs, deleteLogsToInsert, mode: InsertMode.replace);
     });
-    createSyncBackup(changeMadeSync: true);
     return true;
   }
 
@@ -1798,16 +1797,19 @@ class FinanceDatabase extends _$FinanceDatabase {
       Transaction sharedTransaction;
       try {
         // entry exists, update it
-        sharedTransaction = await (select(transactions)
+        List<Transaction> sharedTransactions = await (select(transactions)
               ..where((t) =>
                   t.sharedKey.equals(transaction.sharedKey ?? "") |
                   t.sharedOldKey.equals(transaction.sharedKey ?? "")))
-            .getSingle();
+            .get();
+        if (sharedTransactions.isEmpty) throw ("Need to make a new entry");
+        sharedTransaction = sharedTransactions[0];
         sharedTransaction = transaction.copyWith(
             transactionPk: sharedTransaction.transactionPk);
         return into(transactions).insertOnConflictUpdate(sharedTransaction
             .copyWith(dateTimeModified: Value(DateTime.now())));
       } catch (e) {
+        print(e.toString());
         // new entry is needed
         return into(transactions).insertOnConflictUpdate(
             transaction.copyWith(dateTimeModified: Value(DateTime.now())));
@@ -1904,7 +1906,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit, int? offset, List<int>? categoryFks, bool? allCategories}) {
     return (select(categories)
           ..where((c) => (allCategories != false
-              ? c.categoryPk.isNotNull()
+              ? Constant(true)
               : c.categoryPk.isIn(categoryFks ?? [])))
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
@@ -2162,7 +2164,13 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //delete transactions that belong to specific category key
   Future deleteCategoryTransactions(int categoryPk) async {
-    await createDeleteLog(DeleteLogType.TransactionCategory, categoryPk);
+    List<Transaction> transactionsToDelete = await (select(transactions)
+          ..where((t) => t.categoryFk.equals(categoryPk)))
+        .get();
+    List<int> transactionPks = transactionsToDelete
+        .map((transaction) => transaction.transactionPk)
+        .toList();
+    await createDeleteLogs(DeleteLogType.Transaction, transactionPks);
     return (delete(transactions)..where((t) => t.categoryFk.equals(categoryPk)))
         .go();
   }
@@ -2832,5 +2840,34 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(transactions)
           ..where((t) => t.transactionPk.equals(transactionPk)))
         .getSingle();
+  }
+
+  // when a change is made we can listen to it, debounce and sync after debounce timer
+  // this is handled in navigationFramework
+  Stream<dynamic> watchAllForAutoSync() {
+    StreamGroup streamGroup = StreamGroup<dynamic>();
+    streamGroup.add(select(transactions).watch());
+    streamGroup.add(select(categories).watch());
+    streamGroup.add(select(wallets).watch());
+    streamGroup.add(select(budgets).watch());
+    streamGroup.add(select(categoryBudgetLimits).watch());
+    streamGroup.add(select(associatedTitles).watch());
+    streamGroup.add(select(scannerTemplates).watch());
+    return streamGroup.stream;
+  }
+
+  // transactions not belonging to a category should be deleted
+  Future<bool> deleteWanderingTransactions() async {
+    List<TransactionCategory> allCategories = await getAllCategories();
+    List<int> categoryPks =
+        allCategories.map((category) => category.categoryPk).toList();
+    List<Transaction> wanderingTransactions = await (select(transactions)
+          ..where((t) => t.categoryFk.isNotIn(categoryPks)))
+        .get();
+    for (Transaction transaction in wanderingTransactions) {
+      await deleteTransaction(transaction.transactionPk,
+          updateSharedEntry: true);
+    }
+    return true;
   }
 }

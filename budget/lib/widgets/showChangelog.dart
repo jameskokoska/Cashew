@@ -8,8 +8,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
-Fixed sync replacing newer changes with older ones
-Fixed navigation issues on mobile (using page controller - uses lazy indexed stack now)
+    When category is updated through sync, shared transactions are not
+    Fixed deleting category leads to wrong transactions sent to delete for sync
+    Sync no longer syncs shared budgets/transactions
+    Fixed sync replacing newer changes with older ones
+    Fixed navigation issues on mobile (using page controller - uses lazy indexed stack now)
     Fixed device id name on web devices
     Navigation sidebar disabled when onboarding
     New account and backup buttons

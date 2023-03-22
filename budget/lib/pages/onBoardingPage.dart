@@ -346,13 +346,16 @@ class OnBoardPage extends StatelessWidget {
   final List<Widget> widgets;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.25),
-        Column(
-          children: widgets,
-        )
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+          Column(
+            children: widgets,
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+        ],
+      ),
     );
   }
 }

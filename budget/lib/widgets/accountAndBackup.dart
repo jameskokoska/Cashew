@@ -8,6 +8,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
+import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
@@ -88,11 +89,24 @@ Future<bool> setDateOfLastSyncedWithClient(
 
 // if changeMadeSync show loading and check if syncEveryChange is turned on
 Timer? syncTimeoutTimer;
-Future<bool> createSyncBackup({bool changeMadeSync = false}) async {
+Debouncer backupDebounce = Debouncer(milliseconds: 5000);
+Future<bool> createSyncBackup(
+    {bool changeMadeSync = false,
+    bool changeMadeSyncWaitForDebounce = true}) async {
   if (appStateSettings["currentUserEmail"] == "") return false;
   if (appStateSettings["backupSync"] == false) return false;
   if (changeMadeSync == true && appStateSettings["syncEveryChange"] == false)
     return false;
+  // create the auto syncs after 10 seconds of no changes
+  if (changeMadeSync == true &&
+      appStateSettings["syncEveryChange"] == true &&
+      changeMadeSyncWaitForDebounce == true) {
+    print("Running sync debouncer");
+    backupDebounce.run(() {
+      createSyncBackup(
+          changeMadeSync: true, changeMadeSyncWaitForDebounce: false);
+    });
+  }
 
   print("Creating sync backup");
   if (changeMadeSync) loadingIndeterminateKey.currentState!.setVisibility(true);
@@ -102,7 +116,7 @@ Future<bool> createSyncBackup({bool changeMadeSync = false}) async {
       loadingIndeterminateKey.currentState!.setVisibility(false);
     return false;
   } else {
-    syncTimeoutTimer = Timer(Duration(milliseconds: 10000), () {
+    syncTimeoutTimer = Timer(Duration(milliseconds: 5000), () {
       syncTimeoutTimer!.cancel();
     });
   }
@@ -271,13 +285,16 @@ Future<bool> syncData() async {
         }
         if (current == null ||
             current.dateTimeModified!.isBefore(newEntry.dateTimeModified!))
-          await database.createOrUpdateCategory(newEntry);
+          await database.createOrUpdateCategory(newEntry,
+              updateSharedEntry: false);
       }
       print("NEW CATEGORIES");
       print(newCategories);
 
       List<Budget> newBudgets = await databaseSync.getAllNewBudgets(lastSynced);
       for (Budget newEntry in newBudgets) {
+        // don't sync already shared transactions (these are handled and shared by the server)
+        // if (newEntry.sharedKey != null) continue;
         Budget? current;
         try {
           current = await database.getBudgetInstance(newEntry.budgetPk);
@@ -313,6 +330,8 @@ Future<bool> syncData() async {
           await databaseSync.getAllNewTransactions(lastSynced);
       List<Transaction> transactionsToUpdate = [];
       for (Transaction newEntry in newTransactions) {
+        // don't sync already shared transactions (these are handled and shared by the server)
+        // if (newEntry.sharedKey != null) continue;
         Transaction? current;
         try {
           current = await database.getTransactionFromPk(newEntry.transactionPk);
@@ -378,25 +397,17 @@ Future<bool> syncData() async {
         deleteLogsByType[log.type]?.add(log.entryPk);
       });
 
-      if (deleteLogsByType[DeleteLogType.TransactionWallet] != null &&
-          deleteLogsByType[DeleteLogType.TransactionWallet]!.isNotEmpty) {
-        await database.deleteBatchWalletsGivenPks(
-            deleteLogsByType[DeleteLogType.TransactionWallet]!);
+      if (deleteLogsByType[DeleteLogType.ScannerTemplate] != null &&
+          deleteLogsByType[DeleteLogType.ScannerTemplate]!.isNotEmpty) {
+        await database.deleteBatchScannerTemplatesGivenPks(
+            deleteLogsByType[DeleteLogType.ScannerTemplate]!);
       }
-      if (deleteLogsByType[DeleteLogType.TransactionCategory] != null &&
-          deleteLogsByType[DeleteLogType.TransactionCategory]!.isNotEmpty) {
-        await database.deleteBatchCategoriesGivenPks(
-            deleteLogsByType[DeleteLogType.TransactionCategory]!);
-      }
-      if (deleteLogsByType[DeleteLogType.Budget] != null &&
-          deleteLogsByType[DeleteLogType.Budget]!.isNotEmpty) {
-        await database.deleteBatchBudgetsGivenPks(
-            deleteLogsByType[DeleteLogType.Budget]!);
-      }
-      if (deleteLogsByType[DeleteLogType.CategoryBudgetLimit] != null &&
-          deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!.isNotEmpty) {
-        await database.deleteBatchCategoryBudgetLimitsGivenPks(
-            deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!);
+      if (deleteLogsByType[DeleteLogType.Transaction] != null &&
+          deleteLogsByType[DeleteLogType.Transaction]!.isNotEmpty) {
+        print("DELETING THESE TRANSACTIONS");
+        print(deleteLogsByType[DeleteLogType.Transaction]);
+        await database.deleteBatchTransactionsGivenPks(
+            deleteLogsByType[DeleteLogType.Transaction]!);
       }
       if (deleteLogsByType[DeleteLogType.TransactionAssociatedTitle] != null &&
           deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!
@@ -404,18 +415,26 @@ Future<bool> syncData() async {
         await database.deleteBatchAssociatedTitlesGivenTransactionPks(
             deleteLogsByType[DeleteLogType.TransactionAssociatedTitle]!);
       }
-      if (deleteLogsByType[DeleteLogType.Transaction] != null &&
-          deleteLogsByType[DeleteLogType.Transaction]!.isNotEmpty) {
-        await database.deleteBatchTransactionsGivenPks(
-            deleteLogsByType[DeleteLogType.Transaction]!);
+      if (deleteLogsByType[DeleteLogType.CategoryBudgetLimit] != null &&
+          deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!.isNotEmpty) {
+        await database.deleteBatchCategoryBudgetLimitsGivenPks(
+            deleteLogsByType[DeleteLogType.CategoryBudgetLimit]!);
       }
-
-      if (deleteLogsByType[DeleteLogType.ScannerTemplate] != null &&
-          deleteLogsByType[DeleteLogType.ScannerTemplate]!.isNotEmpty) {
-        await database.deleteBatchScannerTemplatesGivenPks(
-            deleteLogsByType[DeleteLogType.ScannerTemplate]!);
+      if (deleteLogsByType[DeleteLogType.Budget] != null &&
+          deleteLogsByType[DeleteLogType.Budget]!.isNotEmpty) {
+        await database.deleteBatchBudgetsGivenPks(
+            deleteLogsByType[DeleteLogType.Budget]!);
       }
-
+      if (deleteLogsByType[DeleteLogType.TransactionCategory] != null &&
+          deleteLogsByType[DeleteLogType.TransactionCategory]!.isNotEmpty) {
+        await database.deleteBatchCategoriesGivenPks(
+            deleteLogsByType[DeleteLogType.TransactionCategory]!);
+      }
+      if (deleteLogsByType[DeleteLogType.TransactionWallet] != null &&
+          deleteLogsByType[DeleteLogType.TransactionWallet]!.isNotEmpty) {
+        await database.deleteBatchWalletsGivenPks(
+            deleteLogsByType[DeleteLogType.TransactionWallet]!);
+      }
       // check for wallet mismatch, since settings are not synced
       if (checkPrimaryWallet() == false) {
         setPrimaryWallet((await database.getAllWallets())[0]);
@@ -815,6 +834,8 @@ Future<void> loadBackup(
           final dbFolder = await getApplicationDocumentsDirectory();
           final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
           await dbFile.writeAsBytes(dataStore);
+          // we need to be able to sync with others after the restore
+          await sharedPreferences.setString("dateOfLastSyncedWithClient", "{}");
           // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
           //     text: 'Database');
         }

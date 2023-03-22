@@ -212,7 +212,6 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   height: 50,
                   onTap: () async {
                     await addTitle();
-                    createSyncBackup(changeMadeSync: true);
                   },
                 )
               : Button(

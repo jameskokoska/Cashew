@@ -15,6 +15,7 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
@@ -60,7 +61,9 @@ GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
     GlobalKey();
 GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
+bool runningCloudFunctions = false;
 Future<bool> runAllCloudFunctions(context) async {
+  runningCloudFunctions = true;
   loadingIndeterminateKey.currentState!.setVisibility(true);
   try {
     await syncData();
@@ -71,9 +74,13 @@ Future<bool> runAllCloudFunctions(context) async {
   } catch (e) {
     print("Error running sync functions on load: " + e.toString());
     loadingIndeterminateKey.currentState!.setVisibility(false);
+    runningCloudFunctions = false;
     return false;
   }
   loadingIndeterminateKey.currentState!.setVisibility(false);
+  Future.delayed(Duration(milliseconds: 2000), () {
+    runningCloudFunctions = false;
+  });
   return true;
 }
 
@@ -115,7 +122,13 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);
       await runAllCloudFunctions(context);
+      database.deleteWanderingTransactions();
       entireAppLoaded = true;
+      database.watchAllForAutoSync().listen((event) {
+        if (runningCloudFunctions == false) {
+          createSyncBackup(changeMadeSync: true);
+        }
+      });
     });
 
     pages = [
