@@ -1596,8 +1596,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     TransactionCategory categoryInUse =
         await getCategoryInstance(transaction.categoryFk);
     await createOrUpdateCategory(
-        categoryInUse.copyWith(dateTimeModified: Value(DateTime.now())),
-        updateSharedEntry: false);
+      categoryInUse.copyWith(dateTimeModified: Value(DateTime.now())),
+      updateSharedEntry: false,
+    );
 
     // Update the servers entry of the transaction
     if (transaction.paid && updateSharedEntry == true) {
@@ -2029,7 +2030,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     int result = await into(categories).insert(
         category.copyWith(dateTimeModified: Value(DateTime.now())),
         mode: InsertMode.insertOrReplace);
-    updateTransactionOnServerAfterChangingCategoryInformation(category);
+    if (updateSharedEntry)
+      updateTransactionOnServerAfterChangingCategoryInformation(category);
     return result;
   }
 
