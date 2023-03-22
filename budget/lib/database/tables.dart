@@ -2025,10 +2025,11 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // create or update a category
   Future<int> createOrUpdateCategory(TransactionCategory category,
-      {bool updateSharedEntry = true}) async {
+      {bool updateSharedEntry = true, DateTime? customDateTimeModified}) async {
     // We need to ensure the value is set back to null, so insert/replace
     int result = await into(categories).insert(
-        category.copyWith(dateTimeModified: Value(DateTime.now())),
+        category.copyWith(
+            dateTimeModified: Value(customDateTimeModified ?? DateTime.now())),
         mode: InsertMode.insertOrReplace);
     if (updateSharedEntry)
       updateTransactionOnServerAfterChangingCategoryInformation(category);

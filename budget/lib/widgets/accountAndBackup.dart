@@ -1056,10 +1056,10 @@ class _BackupManagementState extends State<BackupManagement> {
                                     updateGlobalState: false);
                               },
                               initialValue: appStateSettings["syncEveryChange"],
-                              title: "Sync Every Change",
+                              title: "Sync on Every Change",
                               descriptionWithValue: (value) {
                                 return value
-                                    ? "Syncing every change made"
+                                    ? "Syncing on every change"
                                     : "Syncing on refresh/launch";
                               },
                               icon: Icons.all_inbox_rounded,

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Shared transactions only updated when category properly changes for shared transactions only
+    Initial categories updated time set to 0
     Fixed cached wallet offset on restoring sync
     Sync now works on a sequential log system - this ensures all changes are processed in order!
     Primary wallet import fix for caches currency selected

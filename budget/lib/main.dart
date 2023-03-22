@@ -245,7 +245,8 @@ Future<bool> initializeDatabase() async {
   //Initialize default categories
   if ((await database.getAllCategories()).length <= 0) {
     for (TransactionCategory category in defaultCategories()) {
-      await database.createOrUpdateCategory(category);
+      await database.createOrUpdateCategory(category,
+          customDateTimeModified: DateTime(0));
     }
   }
   if ((await database.getAllWallets()).length <= 0) {
