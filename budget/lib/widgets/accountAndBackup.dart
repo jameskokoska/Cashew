@@ -409,6 +409,14 @@ Future<bool> syncData() async {
 
   try {
     print("UPDATED WALLET CURRENCY");
+    for (TransactionWallet wallet in await database.getAllWallets()) {
+      final Map<dynamic, dynamic> cachedWalletCurrencies =
+          appStateSettings["cachedWalletCurrencies"] ?? {};
+      cachedWalletCurrencies[wallet.walletPk.toString()] =
+          wallet.currency ?? "";
+      updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
+          pagesNeedingRefresh: [], updateGlobalState: false);
+    }
     TransactionWallet selectedWallet =
         await database.getWalletInstance(appStateSettings["selectedWallet"]);
     updateSettings("selectedWalletCurrency", selectedWallet.currency,
