@@ -190,16 +190,7 @@ Future<void> parseEmailsInBackground(context,
             await gmailApi.users.messages.get(user!.id.toString(), message.id!);
         DateTime messageDate = DateTime.fromMillisecondsSinceEpoch(
             int.parse(messageData.internalDate ?? ""));
-        String messageEncoded = messageData.payload?.parts?[0].body?.data ?? "";
-        String messageString;
-        if (messageEncoded == "") {
-          messageString = (messageData.snippet ?? "") +
-              "\n\n" +
-              "There was an error getting the rest of this email.";
-        } else {
-          messageString =
-              parseHtmlString(utf8.decode(base64.decode(messageEncoded)));
-        }
+        String messageString = getEmailMessage(messageData);
         print("Adding transaction based on email");
 
         String? title;
@@ -692,17 +683,7 @@ class EmailsList extends StatelessWidget {
           List<ScannerTemplate> scannerTemplates = snapshot.data!;
           List<Widget> messageTxt = [];
           for (var m in messagesList) {
-            String messageShort = m.snippet ?? "";
-            String messageEncoded = m.payload?.parts?[0].body?.data ?? "";
-            String messageString;
-            if (messageEncoded == "") {
-              messageString = (m.snippet ?? "") +
-                  "\n\n" +
-                  "There was an error getting the rest of this email.";
-            } else {
-              messageString =
-                  parseHtmlString(utf8.decode(base64.decode(messageEncoded)));
-            }
+            String messageString = getEmailMessage(m);
             bool doesEmailContain = false;
             String? title;
             double? amountDouble;
@@ -825,7 +806,7 @@ class EmailsList extends StatelessWidget {
                                   : SizedBox(),
                               TextFont(
                                 fontSize: 13,
-                                text: messageShort,
+                                text: messageString,
                                 maxLines: 10,
                               ),
                             ],
@@ -847,4 +828,30 @@ class EmailsList extends StatelessWidget {
       },
     );
   }
+}
+
+String getEmailMessage(gMail.Message messageData) {
+  String messageEncoded = messageData.payload?.parts?[0].body?.data ?? "";
+  String messageString;
+  if (messageEncoded == "") {
+    gMail.MessagePart payload = messageData.payload!;
+    try {
+      String htmlString = utf8
+          .decode(payload.body!.dataAsBytes)
+          .replaceAll("[^\\x00-\\x7F]", "");
+      String parsedString = parseHtmlString(htmlString);
+      messageString = parsedString;
+    } catch (e) {
+      messageString = (messageData.snippet ?? "") +
+          "\n\n" +
+          "There was an error getting the rest of the email";
+    }
+  } else {
+    messageString = parseHtmlString(utf8.decode(base64.decode(messageEncoded)));
+  }
+  return messageString
+      .split(RegExp(r"[ \t\r\f\v]+"))
+      .join(" ")
+      .replaceAll(new RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), '\n\n')
+      .replaceAll(RegExp(r"(?<=\n) +"), "");
 }

@@ -993,10 +993,10 @@ class _BackupManagementState extends State<BackupManagement> {
 
     return PopupFramework(
       title: widget.isClientSync
-          ? "Manage Devices"
+          ? "Devices"
           : widget.isManaging
-              ? "Manage Backups"
-              : "Choose a Backup to Restore",
+              ? "Backups"
+              : "Restore a Backup",
       subtitle: widget.isClientSync
           ? "Manage the syncing of data between multiple devices. May incur extra data usage."
           : widget.isManaging

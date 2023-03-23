@@ -6,7 +6,6 @@ import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -350,7 +349,14 @@ class NavigationSidebarButton extends StatelessWidget {
               ? Theme.of(context).colorScheme.secondaryContainer
               : null,
           onTap: () {
-            navigatorKey.currentState!.popUntil((route) => route.isFirst);
+            // pop all routes without animation
+            navigatorKey.currentState!.pushAndRemoveUntil(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) => SizedBox(),
+                  transitionDuration: Duration(seconds: 0),
+                ),
+                (route) => route.isFirst);
+            navigatorKey.currentState!.pop();
             onTap();
           },
           child: Padding(

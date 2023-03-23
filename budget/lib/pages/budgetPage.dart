@@ -13,7 +13,9 @@ import 'package:budget/widgets/categoryLimits.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -282,8 +284,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         widget.budget.amount - totalSpent >= 0
                                             ? Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                    getWidthNavigationSidebar(
+                                                                context) >
+                                                            0
+                                                        ? MainAxisAlignment
+                                                            .center
+                                                        : MainAxisAlignment
+                                                            .start,
                                                 children: [
                                                   Row(
                                                     mainAxisAlignment:
@@ -356,7 +363,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                               )
                                             : Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                    getWidthNavigationSidebar(
+                                                                context) >
+                                                            0
+                                                        ? MainAxisAlignment
+                                                            .center
+                                                        : MainAxisAlignment
+                                                            .start,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.end,
                                                 children: [
@@ -416,29 +429,36 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                 ],
                                               ),
                                         Container(height: 10),
-                                        BudgetTimeline(
-                                          dateForRange: dateForRange,
-                                          budget: widget.budget,
-                                          large: true,
-                                          percent: totalSpent /
-                                              widget.budget.amount *
-                                              100,
-                                          yourPercent: totalSpent == 0
-                                              ? 0
-                                              : snapshotTotalSpentByCurrentUserOnly
-                                                          .data! ==
-                                                      null
-                                                  ? 0
-                                                  : (snapshotTotalSpentByCurrentUserOnly
-                                                              .data! /
-                                                          totalSpent *
-                                                          100)
-                                                      .abs(),
-                                          todayPercent: widget.isPastBudget ==
-                                                  true
-                                              ? -1
-                                              : getPercentBetweenDates(
-                                                  budgetRange, dateForRange),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                getHorizontalPaddingConstrained(
+                                                    context),
+                                          ),
+                                          child: BudgetTimeline(
+                                            dateForRange: dateForRange,
+                                            budget: widget.budget,
+                                            large: true,
+                                            percent: totalSpent /
+                                                widget.budget.amount *
+                                                100,
+                                            yourPercent: totalSpent == 0
+                                                ? 0
+                                                : snapshotTotalSpentByCurrentUserOnly
+                                                            .data! ==
+                                                        null
+                                                    ? 0
+                                                    : (snapshotTotalSpentByCurrentUserOnly
+                                                                .data! /
+                                                            totalSpent *
+                                                            100)
+                                                        .abs(),
+                                            todayPercent: widget.isPastBudget ==
+                                                    true
+                                                ? -1
+                                                : getPercentBetweenDates(
+                                                    budgetRange, dateForRange),
+                                          ),
                                         ),
                                         widget.isPastBudget == true
                                             ? SizedBox.shrink()

@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed parsing emails with certain format
+    Pie chart only larger if double column enabled
+    When navbar switches pages, routes popped without animation
     Shared transactions only updated when category properly changes for shared transactions only
     Initial categories updated time set to 0
     Fixed cached wallet offset on restoring sync

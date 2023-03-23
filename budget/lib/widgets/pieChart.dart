@@ -61,8 +61,8 @@ class PieChartWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: getWidthNavigationSidebar(context) <= 0 ? 200 : 300,
-      height: getWidthNavigationSidebar(context) <= 0 ? 200 : 300,
+      width: enableDoubleColumn(context) == false ? 200 : 300,
+      height: enableDoubleColumn(context) == false ? 200 : 300,
       child: Stack(
         children: [
           PieChartDisplay(
@@ -74,8 +74,8 @@ class PieChartWrapper extends StatelessWidget {
           IgnorePointer(
             child: Center(
               child: Container(
-                width: getWidthNavigationSidebar(context) <= 0 ? 105 : 130,
-                height: getWidthNavigationSidebar(context) <= 0 ? 105 : 130,
+                width: enableDoubleColumn(context) == false ? 105 : 130,
+                height: enableDoubleColumn(context) == false ? 105 : 130,
                 decoration: BoxDecoration(
                   color: middleColor?.withOpacity(0.2) ??
                       Theme.of(context).colorScheme.white.withOpacity(0.2),
@@ -87,8 +87,8 @@ class PieChartWrapper extends StatelessWidget {
           IgnorePointer(
             child: Center(
               child: Container(
-                width: getWidthNavigationSidebar(context) <= 0 ? 80 : 110,
-                height: getWidthNavigationSidebar(context) <= 0 ? 80 : 110,
+                width: enableDoubleColumn(context) == false ? 80 : 110,
+                height: enableDoubleColumn(context) == false ? 80 : 110,
                 decoration: BoxDecoration(
                     color:
                         middleColor ?? Theme.of(context).colorScheme.background,
@@ -204,7 +204,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     return List.generate(widget.data.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = getWidthNavigationSidebar(context) <= 0
+      final radius = enableDoubleColumn(context) == false
           ? isTouched
               ? 106.0
               : 100.0
