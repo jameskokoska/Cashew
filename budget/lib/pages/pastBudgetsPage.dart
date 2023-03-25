@@ -19,6 +19,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:async/async.dart' show StreamZip;
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class PastBudgetsPage extends StatelessWidget {
   const PastBudgetsPage({super.key, required int this.budgetPk});
@@ -62,6 +64,12 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       loadLines(amountLoaded);
     });
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant _PastBudgetsPageContent oldWidget) {
+    if (oldWidget.budget != widget.budget) loadLines(amountLoaded);
+    super.didUpdateWidget(oldWidget);
   }
 
   void loadLines(amountLoaded) async {
@@ -142,18 +150,20 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           defaultColor: Theme.of(context).colorScheme.primary),
       brightness: determineBrightnessTheme(context),
     );
+    Color backgroundColor = appStateSettings["materialYou"]
+        ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
+        : Theme.of(context).canvasColor;
 
     return PageFramework(
-      backgroundColor: appStateSettings["materialYou"]
-          ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
-          : null,
+      backgroundColor: backgroundColor,
       key: budgetHistoryKey,
       title: "Budget History",
       subtitle: Padding(
-        padding: const EdgeInsets.only(left: 20, bottom: 6),
+        padding: EdgeInsets.only(
+            left: enableDoubleColumn(context) ? 0 : 20, bottom: 6),
         child: TextFont(
           text: widget.budget.name,
-          fontSize: 20,
+          fontSize: enableDoubleColumn(context) ? 30 : 20,
           maxLines: 5,
           fontWeight: FontWeight.bold,
         ),
@@ -185,250 +195,290 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       dragDownToDismiss: true,
       dragDownToDissmissBackground: Theme.of(context).colorScheme.background,
       slivers: [
-        StreamBuilder<List<double?>>(
-          stream: mergedStreamsBudgetTotal,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              double maxY = 100;
-              List<FlSpot> spots = [];
-              List<FlSpot> initialSpots = [];
+        SliverStickyHeader(
+          header: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                color: backgroundColor,
+                child: StreamBuilder<List<double?>>(
+                  stream: mergedStreamsBudgetTotal,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      double maxY = 100;
+                      List<FlSpot> spots = [];
+                      List<FlSpot> initialSpots = [];
 
-              for (int i = snapshot.data!.length - 1; i >= 0; i--) {
-                if ((snapshot.data![i] ?? 0).abs() > maxY)
-                  maxY = (snapshot.data![i] ?? 0).abs();
-                spots.add(FlSpot(
-                  snapshot.data!.length - 1 - i.toDouble(),
-                  (snapshot.data![i] ?? 0).abs() == 0
-                      ? 0.001
-                      : (snapshot.data![i] ?? 0).abs(),
-                ));
-                initialSpots.add(
-                  FlSpot(
-                    snapshot.data!.length - 1 - i.toDouble(),
-                    0.000000000001,
-                  ),
-                );
-              }
-              return SliverToBoxAdapter(
-                child: BudgetHistoryLineGraph(
-                  onTouchedIndex: (index) {
-                    // debounce to avoid duplicate key on AnimatedSwitcher
-                    onTouchedBudgetIndex(index);
+                      for (int i = snapshot.data!.length - 1; i >= 0; i--) {
+                        if ((snapshot.data![i] ?? 0).abs() > maxY)
+                          maxY = (snapshot.data![i] ?? 0).abs();
+                        spots.add(FlSpot(
+                          snapshot.data!.length - 1 - i.toDouble(),
+                          (snapshot.data![i] ?? 0).abs() == 0
+                              ? 0.001
+                              : (snapshot.data![i] ?? 0).abs(),
+                        ));
+                        initialSpots.add(
+                          FlSpot(
+                            snapshot.data!.length - 1 - i.toDouble(),
+                            0.000000000001,
+                          ),
+                        );
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 7),
+                        child: BudgetHistoryLineGraph(
+                          onTouchedIndex: (index) {
+                            // debounce to avoid duplicate key on AnimatedSwitcher
+                            onTouchedBudgetIndex(index);
+                          },
+                          color: dynamicPastel(
+                              context, budgetColorScheme.primary,
+                              amountLight: 0.4, amountDark: 0.2),
+                          dateRanges: dateTimeRanges,
+                          maxY: widget.budget.amount + 0.0000000000001 > maxY
+                              ? widget.budget.amount + 0.0000000000001
+                              : maxY,
+                          spots: spots,
+                          initialSpots: initialSpots,
+                          horizontalLineAt: widget.budget.amount,
+                          budget: widget.budget,
+                        ),
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
                   },
-                  color: dynamicPastel(context, budgetColorScheme.primary,
-                      amountLight: 0.4, amountDark: 0.2),
-                  dateRanges: dateTimeRanges,
-                  maxY: widget.budget.amount + 0.0000000000001 > maxY
-                      ? widget.budget.amount + 0.0000000000001
-                      : maxY,
-                  spots: spots,
-                  initialSpots: initialSpots,
-                  horizontalLineAt: widget.budget.amount,
-                  budget: widget.budget,
-                ),
-              );
-            } else {
-              return SliverToBoxAdapter();
-            }
-          },
-        ),
-        SliverToBoxAdapter(
-          child: WatchAllWallets(
-              noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
-              childFunction: (wallets) {
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    top: 13,
-                    bottom: 8,
-                  ),
-                  child: BudgetSpenderSummary(
-                    budget: widget.budget,
-                    budgetRange: budgetRange,
-                    budgetColorScheme: budgetColorScheme,
-                    setSelectedMember: (member) {},
-                    disableMemberSelection: true,
-                    wallets: wallets,
-                    allTime: true,
-                    isLarge: true,
-                  ),
-                );
-              }),
-        ),
-        getWidthNavigationSidebar(context) <= 0
-            ? SliverPadding(
-                padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      DateTime datePast = DateTime(
-                        DateTime.now().year -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.yearly
-                                ? index * widget.budget.periodLength
-                                : 0),
-                        DateTime.now().month -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.monthly
-                                ? index * widget.budget.periodLength
-                                : 0),
-                        DateTime.now().day -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.daily
-                                ? index * widget.budget.periodLength
-                                : 0) -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.weekly
-                                ? index * 7 * widget.budget.periodLength
-                                : 0),
-                        0,
-                        0,
-                        1,
-                      );
-                      return AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          boxShadow: touchedBudgetIndex == null ||
-                                  amountLoaded - touchedBudgetIndex! - 1 ==
-                                      index
-                              ? boxShadowCheck(boxShadowGeneral(context))
-                              : [BoxShadow(color: Colors.transparent)],
-                        ),
-                        child: AnimatedSize(
-                          duration: Duration(milliseconds: 1000),
-                          curve: Curves.easeInOutCubicEmphasized,
-                          child: AnimatedSwitcher(
-                            duration: Duration(milliseconds: 200),
-                            child: touchedBudgetIndex == null ||
-                                    amountLoaded - touchedBudgetIndex! - 1 ==
-                                        index
-                                ? Padding(
-                                    padding: EdgeInsets.only(
-                                        top: index == 0 ? 0 : 13.0),
-                                    child: PastBudgetContainer(
-                                      budget: widget.budget,
-                                      smallBudgetContainer: true,
-                                      showTodayForSmallBudget:
-                                          (index == 0 ? true : false),
-                                      dateForRange: datePast,
-                                      isPastBudget: index == 0 ? false : true,
-                                      isPastBudgetButCurrentPeriod: index == 0,
-                                      budgetColorScheme: budgetColorScheme,
-                                    ),
-                                  )
-                                : Container(
-                                    key: ValueKey(
-                                        datePast.millisecondsSinceEpoch),
-                                  ),
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: amountLoaded, //snapshot.data?.length
-                  ),
-                ),
-              )
-            : SliverPadding(
-                padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 600,
-                    mainAxisExtent: 95,
-                    crossAxisSpacing: 10,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      DateTime datePast = DateTime(
-                        DateTime.now().year -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.yearly
-                                ? index * widget.budget.periodLength
-                                : 0),
-                        DateTime.now().month -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.monthly
-                                ? index * widget.budget.periodLength
-                                : 0),
-                        DateTime.now().day -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.daily
-                                ? index * widget.budget.periodLength
-                                : 0) -
-                            (widget.budget.reoccurrence ==
-                                    BudgetReoccurence.weekly
-                                ? index * 7 * widget.budget.periodLength
-                                : 0),
-                        0,
-                        0,
-                        1,
-                      );
-                      return AnimatedOpacity(
-                        duration: Duration(milliseconds: 200),
-                        opacity: touchedBudgetIndex == null ||
-                                amountLoaded - touchedBudgetIndex! - 1 == index
-                            ? 1
-                            : 0.5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow:
-                                boxShadowCheck(boxShadowGeneral(context)),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 13.0),
-                            child: PastBudgetContainer(
-                              budget: widget.budget,
-                              smallBudgetContainer: true,
-                              showTodayForSmallBudget:
-                                  (index == 0 ? true : false),
-                              dateForRange: datePast,
-                              isPastBudget: index == 0 ? false : true,
-                              isPastBudgetButCurrentPeriod: index == 0,
-                              budgetColorScheme: budgetColorScheme,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: amountLoaded,
-                  ),
                 ),
               ),
-        SliverToBoxAdapter(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 30),
-              child: Opacity(
-                opacity: 0.5,
-                child: Tappable(
-                  color: budgetColorScheme.secondaryContainer,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    child: TextFont(
-                      text: "View More",
-                      textAlign: TextAlign.center,
-                      fontSize: 16,
-                      textColor: budgetColorScheme.onSecondaryContainer,
+              Transform.translate(
+                offset: Offset(0, -1),
+                child: Container(
+                  height: 12,
+                  foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        backgroundColor,
+                        backgroundColor.withOpacity(0.0),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0.1, 1],
                     ),
                   ),
-                  onTap: () {
-                    loadLines(amountLoaded + 3);
-                    setState(() {
-                      getWidthNavigationSidebar(context) <= 0
-                          ? amountLoaded += 3
-                          : amountLoaded += 5;
-                    });
-                    Future.delayed(Duration(milliseconds: 150), () {
-                      budgetHistoryKey.currentState!
-                          .scrollToBottom(duration: 4000);
-                    });
-                  },
-                  borderRadius: 10,
                 ),
               ),
-            ),
+            ],
+          ),
+          sliver: MultiSliver(
+            children: [
+              SliverToBoxAdapter(
+                child: WatchAllWallets(
+                    noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
+                    childFunction: (wallets) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 8,
+                        ),
+                        child: BudgetSpenderSummary(
+                          budget: widget.budget,
+                          budgetRange: budgetRange,
+                          budgetColorScheme: budgetColorScheme,
+                          setSelectedMember: (member) {},
+                          disableMemberSelection: true,
+                          wallets: wallets,
+                          allTime: true,
+                          isLarge: true,
+                        ),
+                      );
+                    }),
+              ),
+              getWidthNavigationSidebar(context) <= 0
+                  ? SliverPadding(
+                      padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            DateTime datePast = DateTime(
+                              DateTime.now().year -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.yearly
+                                      ? index * widget.budget.periodLength
+                                      : 0),
+                              DateTime.now().month -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.monthly
+                                      ? index * widget.budget.periodLength
+                                      : 0),
+                              DateTime.now().day -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.daily
+                                      ? index * widget.budget.periodLength
+                                      : 0) -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.weekly
+                                      ? index * 7 * widget.budget.periodLength
+                                      : 0),
+                              0,
+                              0,
+                              1,
+                            );
+                            return AnimatedContainer(
+                              duration: Duration(milliseconds: 200),
+                              decoration: BoxDecoration(
+                                boxShadow: touchedBudgetIndex == null ||
+                                        amountLoaded -
+                                                touchedBudgetIndex! -
+                                                1 ==
+                                            index
+                                    ? boxShadowCheck(boxShadowGeneral(context))
+                                    : [BoxShadow(color: Colors.transparent)],
+                              ),
+                              child: AnimatedSize(
+                                duration: Duration(milliseconds: 1000),
+                                curve: Curves.easeInOutCubicEmphasized,
+                                child: AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 200),
+                                  child: touchedBudgetIndex == null ||
+                                          amountLoaded -
+                                                  touchedBudgetIndex! -
+                                                  1 ==
+                                              index
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              top: index == 0 ? 0 : 13.0),
+                                          child: PastBudgetContainer(
+                                            budget: widget.budget,
+                                            smallBudgetContainer: true,
+                                            showTodayForSmallBudget:
+                                                (index == 0 ? true : false),
+                                            dateForRange: datePast,
+                                            isPastBudget:
+                                                index == 0 ? false : true,
+                                            isPastBudgetButCurrentPeriod:
+                                                index == 0,
+                                            budgetColorScheme:
+                                                budgetColorScheme,
+                                          ),
+                                        )
+                                      : Container(
+                                          key: ValueKey(
+                                              datePast.millisecondsSinceEpoch),
+                                        ),
+                                ),
+                              ),
+                            );
+                          },
+                          childCount: amountLoaded, //snapshot.data?.length
+                        ),
+                      ),
+                    )
+                  : SliverPadding(
+                      padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 600,
+                          mainAxisExtent: 95,
+                          crossAxisSpacing: 10,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            DateTime datePast = DateTime(
+                              DateTime.now().year -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.yearly
+                                      ? index * widget.budget.periodLength
+                                      : 0),
+                              DateTime.now().month -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.monthly
+                                      ? index * widget.budget.periodLength
+                                      : 0),
+                              DateTime.now().day -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.daily
+                                      ? index * widget.budget.periodLength
+                                      : 0) -
+                                  (widget.budget.reoccurrence ==
+                                          BudgetReoccurence.weekly
+                                      ? index * 7 * widget.budget.periodLength
+                                      : 0),
+                              0,
+                              0,
+                              1,
+                            );
+                            return AnimatedOpacity(
+                              duration: Duration(milliseconds: 200),
+                              opacity: touchedBudgetIndex == null ||
+                                      amountLoaded - touchedBudgetIndex! - 1 ==
+                                          index
+                                  ? 1
+                                  : 0.5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  boxShadow:
+                                      boxShadowCheck(boxShadowGeneral(context)),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 13.0),
+                                  child: PastBudgetContainer(
+                                    budget: widget.budget,
+                                    smallBudgetContainer: true,
+                                    showTodayForSmallBudget:
+                                        (index == 0 ? true : false),
+                                    dateForRange: datePast,
+                                    isPastBudget: index == 0 ? false : true,
+                                    isPastBudgetButCurrentPeriod: index == 0,
+                                    budgetColorScheme: budgetColorScheme,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          childCount: amountLoaded,
+                        ),
+                      ),
+                    ),
+              SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Tappable(
+                        color: budgetColorScheme.secondaryContainer,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 8),
+                          child: TextFont(
+                            text: "View More",
+                            textAlign: TextAlign.center,
+                            fontSize: 16,
+                            textColor: budgetColorScheme.onSecondaryContainer,
+                          ),
+                        ),
+                        onTap: () {
+                          loadLines(amountLoaded + 3);
+                          setState(() {
+                            getWidthNavigationSidebar(context) <= 0
+                                ? amountLoaded += 3
+                                : amountLoaded += 5;
+                          });
+                          Future.delayed(Duration(milliseconds: 150), () {
+                            budgetHistoryKey.currentState!
+                                .scrollToBottom(duration: 4000);
+                          });
+                        },
+                        borderRadius: 10,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(child: SizedBox(height: 10)),
+            ],
           ),
         ),
-        SliverToBoxAdapter(child: SizedBox(height: 10)),
       ],
     );
   }

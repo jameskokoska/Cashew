@@ -2345,7 +2345,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // delete budget given key
-  Future deleteBudget(context, Budget budget) async {
+  Future<int> deleteBudget(context, Budget budget) async {
     if (budget.sharedKey != null) {
       dynamic response = await deleteSharedBudgetPopup(context, budget);
       if (response == false) {

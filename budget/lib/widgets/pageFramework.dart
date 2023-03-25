@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -433,7 +434,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           ? Theme.of(context).colorScheme.secondaryContainer
           : appBarBackgroundColor,
       floating: false,
-      pinned: pinned,
+      pinned: enableDoubleColumn(context) ? true : pinned,
       expandedHeight: expandedHeight,
       collapsedHeight: collapsedHeight,
       actions: [
@@ -451,10 +452,12 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
         if (collapsedHeight == expandedHeight) percent = 1;
         return ClipRRect(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(15),
+            bottom: getWidthNavigationSidebar(context) > 0
+                ? Radius.circular(0)
+                : Radius.circular(15),
           ),
           child: FlexibleSpaceBar(
-            centerTitle: false,
+            centerTitle: enableDoubleColumn(context) ? true : false,
             titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
             title: animationControllerShift == null
                 ? titleWidget ??
@@ -464,14 +467,19 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       textColor:
                           Theme.of(context).colorScheme.onSecondaryContainer,
-                      textAlign: TextAlign.left,
+                      textAlign: enableDoubleColumn(context)
+                          ? TextAlign.center
+                          : TextAlign.left,
                     )
                 : customTitleBuilder == null
                     ? Transform.translate(
-                        offset: Offset(
-                          backButtonEnabled ? 40 * percent : 0,
-                          -(subtitleSize ?? 0) * (1 - percent),
-                        ),
+                        offset: enableDoubleColumn(context)
+                            ? Offset(0, 0)
+                            //  Offset(0, -(1 - percent) * 40)
+                            : Offset(
+                                backButtonEnabled ? 40 * percent : 0,
+                                -(subtitleSize ?? 0) * (1 - percent),
+                              ),
                         child: titleWidget ??
                             TextFont(
                               text: title,
@@ -482,7 +490,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                                       .colorScheme
                                       .onSecondaryContainer
                                   : textColor,
-                              textAlign: TextAlign.left,
+                              textAlign: enableDoubleColumn(context)
+                                  ? TextAlign.center
+                                  : TextAlign.left,
                             ),
                       )
                     : customTitleBuilder!(animationControllerShift!),
@@ -510,7 +520,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                           );
                         },
                         child: Align(
-                          alignment: subtitleAlignment,
+                          alignment: enableDoubleColumn(context)
+                              ? Alignment.center
+                              : subtitleAlignment,
                           child: FadeTransition(
                             opacity: animationController0at50!,
                             child: subtitle,
@@ -525,7 +537,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       }),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(15),
+          bottom: getWidthNavigationSidebar(context) > 0
+              ? Radius.circular(0)
+              : Radius.circular(15),
         ),
       ),
     );

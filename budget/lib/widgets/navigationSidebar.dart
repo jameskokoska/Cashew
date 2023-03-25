@@ -225,7 +225,8 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           curve: Curves.easeInOutCubic,
                           child: AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
-                            child: appStateSettings["currentUserEmail"] == ""
+                            child: appStateSettings["currentUserEmail"] == "" ||
+                                    appStateSettings["backupSync"] == false
                                 ? Container(
                                     key: ValueKey(1),
                                   )

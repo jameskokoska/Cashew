@@ -1,4 +1,5 @@
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
@@ -275,7 +276,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                           previousOnBoardPage();
                         },
                         icon: Icons.arrow_back_rounded,
-                        size: 45,
+                        size: getWidthNavigationSidebar(context) <= 0 ? 45 : 55,
                       ),
                     ),
                     Row(
@@ -327,7 +328,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                           nextOnBoardPage(children.length);
                         },
                         icon: Icons.arrow_forward_rounded,
-                        size: 45,
+                        size: getWidthNavigationSidebar(context) <= 0 ? 45 : 55,
                       ),
                     ),
                   ],

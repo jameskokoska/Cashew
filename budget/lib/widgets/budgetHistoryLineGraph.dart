@@ -112,7 +112,12 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
     final tooltipsOnBar = lineBarsData[0];
 
     return Container(
-      height: getWidthNavigationSidebar(context) <= 0 ? 190 : 350,
+      height: MediaQuery.of(context).size.height * 0.3 >
+              (getWidthNavigationSidebar(context) <= 0 ? 190 : 350)
+          ? getWidthNavigationSidebar(context) <= 0
+              ? 190
+              : 350
+          : MediaQuery.of(context).size.height * 0.3,
       padding: const EdgeInsets.only(
         left: 10,
         right: 25,

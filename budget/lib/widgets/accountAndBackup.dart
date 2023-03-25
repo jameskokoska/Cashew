@@ -1026,7 +1026,7 @@ class _BackupManagementState extends State<BackupManagement> {
               ? SettingsContainerSwitch(
                   onSwitched: (value) {
                     updateSettings("backupSync", value,
-                        pagesNeedingRefresh: [], updateGlobalState: false);
+                        pagesNeedingRefresh: [], updateGlobalState: true);
                     setState(() {
                       backupSync = value;
                     });

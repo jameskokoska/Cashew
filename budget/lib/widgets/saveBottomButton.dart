@@ -56,9 +56,7 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
             foregroundDecoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  determineBrightnessTheme(context) == Brightness.light
-                      ? Colors.white.withOpacity(0.0)
-                      : Colors.black.withOpacity(0.0),
+                  Theme.of(context).canvasColor.withOpacity(0.0),
                   Theme.of(context).canvasColor,
                 ],
                 begin: Alignment.topCenter,

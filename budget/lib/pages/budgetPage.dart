@@ -284,9 +284,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         widget.budget.amount - totalSpent >= 0
                                             ? Row(
                                                 mainAxisAlignment:
-                                                    getWidthNavigationSidebar(
-                                                                context) >
-                                                            0
+                                                    enableDoubleColumn(context)
                                                         ? MainAxisAlignment
                                                             .center
                                                         : MainAxisAlignment
@@ -363,9 +361,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                               )
                                             : Row(
                                                 mainAxisAlignment:
-                                                    getWidthNavigationSidebar(
-                                                                context) >
-                                                            0
+                                                    enableDoubleColumn(context)
                                                         ? MainAxisAlignment
                                                             .center
                                                         : MainAxisAlignment

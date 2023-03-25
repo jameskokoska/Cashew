@@ -6,7 +6,6 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -100,11 +99,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   bool selectedPin = true;
   bool selectedShared = false;
   bool selectedAddedTransactionsOnly = false;
-  List<BudgetTransactionFilters> selectedBudgetTransactionFilters = [
-    ...allBudgetTransactionFilters
-  ];
+  List<BudgetTransactionFilters>? selectedBudgetTransactionFilters = null;
   List<String> allMembersOfAllBudgets = [];
-  List<String> selectedMemberTransactionFilters = [];
+  List<String>? selectedMemberTransactionFilters;
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -497,8 +494,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       allMembersOfAllBudgets = await database.getAllMembersOfBudgets();
-      if (widget.budget == null)
-        selectedMemberTransactionFilters = [...allMembersOfAllBudgets];
       setState(() {});
     });
     if (widget.budget != null) {
@@ -523,9 +518,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : HexColor(widget.budget!.colour);
 
       selectedBudgetTransactionFilters =
-          widget.budget!.budgetTransactionFilters ?? [];
+          widget.budget!.budgetTransactionFilters ?? null;
       selectedMemberTransactionFilters =
-          widget.budget!.memberTransactionFilters ?? [];
+          widget.budget!.memberTransactionFilters ?? null;
 
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {
@@ -1000,11 +995,13 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                 SizedBox(height: 5),
                                 SelectChips(
                                   items: [
+                                    "All",
                                     BudgetTransactionFilters.addedToOtherBudget,
                                     BudgetTransactionFilters
                                         .sharedToOtherBudget,
                                   ],
                                   getLabel: (item) {
+                                    if (item == "All") return "All";
                                     return item ==
                                             BudgetTransactionFilters
                                                 .addedToOtherBudget
@@ -1016,39 +1013,111 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                             : "";
                                   },
                                   onSelected: (item) {
-                                    if (selectedBudgetTransactionFilters
+                                    if (item == "All" &&
+                                        selectedBudgetTransactionFilters ==
+                                            null) {
+                                      selectedBudgetTransactionFilters = [];
+                                      setState(() {});
+                                      determineBottomButton();
+                                      return;
+                                    } else if (item == "All" &&
+                                        selectedBudgetTransactionFilters !=
+                                            null) {
+                                      selectedBudgetTransactionFilters = null;
+                                      setState(() {});
+                                      determineBottomButton();
+                                      return;
+                                    }
+                                    if (selectedBudgetTransactionFilters ==
+                                        null)
+                                      selectedBudgetTransactionFilters = [];
+                                    if (selectedBudgetTransactionFilters!
                                         .contains(item))
-                                      selectedBudgetTransactionFilters
+                                      selectedBudgetTransactionFilters!
                                           .remove(item);
                                     else
-                                      selectedBudgetTransactionFilters
+                                      selectedBudgetTransactionFilters!
                                           .add(item);
                                     setState(() {});
+                                    determineBottomButton();
                                   },
                                   getSelected: (item) {
-                                    return selectedBudgetTransactionFilters
+                                    if (item == "All" &&
+                                        selectedBudgetTransactionFilters ==
+                                            null) return true;
+                                    if (selectedBudgetTransactionFilters ==
+                                        null) return true;
+                                    return selectedBudgetTransactionFilters!
                                         .contains(item);
                                   },
                                 ),
-                                SelectChips(
-                                  items: allMembersOfAllBudgets,
-                                  getLabel: (item) {
-                                    return getMemberNickname(item);
-                                  },
-                                  onSelected: (item) {
-                                    if (selectedMemberTransactionFilters
-                                        .contains(item))
-                                      selectedMemberTransactionFilters
-                                          .remove(item);
-                                    else
-                                      selectedMemberTransactionFilters
-                                          .add(item);
-                                    setState(() {});
-                                  },
-                                  getSelected: (item) {
-                                    return selectedMemberTransactionFilters
-                                        .contains(item);
-                                  },
+                                AnimatedSize(
+                                  duration: Duration(milliseconds: 400),
+                                  curve: Curves.easeInOut,
+                                  child: AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 300),
+                                    child: selectedBudgetTransactionFilters ==
+                                                null ||
+                                            selectedBudgetTransactionFilters!
+                                                .contains(
+                                                    BudgetTransactionFilters
+                                                        .sharedToOtherBudget)
+                                        ? SelectChips(
+                                            key: ValueKey(2),
+                                            items: [
+                                              "All",
+                                              ...allMembersOfAllBudgets
+                                            ],
+                                            getLabel: (item) {
+                                              return getMemberNickname(item);
+                                            },
+                                            onSelected: (item) {
+                                              if (item == "All" &&
+                                                  selectedMemberTransactionFilters ==
+                                                      null) {
+                                                selectedMemberTransactionFilters =
+                                                    [];
+                                                setState(() {});
+                                                determineBottomButton();
+                                                return;
+                                              } else if (item == "All" &&
+                                                  selectedMemberTransactionFilters !=
+                                                      null) {
+                                                selectedMemberTransactionFilters =
+                                                    null;
+                                                setState(() {});
+                                                determineBottomButton();
+                                                return;
+                                              }
+                                              if (selectedMemberTransactionFilters ==
+                                                  null) {
+                                                selectedMemberTransactionFilters =
+                                                    [];
+                                              }
+                                              if (selectedMemberTransactionFilters!
+                                                  .contains(item)) {
+                                                selectedMemberTransactionFilters!
+                                                    .remove(item);
+                                              } else {
+                                                selectedMemberTransactionFilters!
+                                                    .add(item);
+                                              }
+                                              setState(() {});
+                                              determineBottomButton();
+                                            },
+                                            getSelected: (item) {
+                                              if (item == "All" &&
+                                                  selectedMemberTransactionFilters ==
+                                                      null) return true;
+                                              if (item != "All" &&
+                                                  selectedMemberTransactionFilters ==
+                                                      null) return true;
+                                              return selectedMemberTransactionFilters!
+                                                  .contains(item);
+                                            },
+                                          )
+                                        : Container(key: ValueKey(1)),
+                                  ),
                                 ),
                               ],
                             ),

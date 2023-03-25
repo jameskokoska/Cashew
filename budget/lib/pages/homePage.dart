@@ -367,7 +367,7 @@ class HomePageState extends State<HomePage>
                                   onTap: () {},
                                   height: null,
                                   width: null,
-                                  padding: EdgeInsets.all(5),
+                                  padding: EdgeInsets.all(0),
                                   openPage: AddBudgetPage(title: "Add Budget"),
                                 ),
                               ),

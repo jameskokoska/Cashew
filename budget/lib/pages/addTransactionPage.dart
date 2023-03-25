@@ -5,7 +5,6 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -1227,8 +1226,26 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           in extractLinks(selectedNote ?? ""))
                                         Tappable(
                                           onTap: () {
-                                            if (link.startsWith("www."))
-                                              link = "http://" + link;
+                                            if (link.contains("http://"))
+                                              link = "http://www." +
+                                                  link
+                                                      .replaceFirst("www.", "")
+                                                      .replaceFirst(
+                                                          "http://", "");
+                                            else if (link.contains("https://"))
+                                              link = "https://www." +
+                                                  link
+                                                      .replaceFirst("www.", "")
+                                                      .replaceFirst(
+                                                          "https://", "");
+                                            else
+                                              link = "http://www." +
+                                                  link
+                                                      .replaceFirst("www.", "")
+                                                      .replaceFirst(
+                                                          "https://", "")
+                                                      .replaceFirst(
+                                                          "http://", "");
                                             openUrl(link);
                                           },
                                           color: darkenPastel(
@@ -1247,9 +1264,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                               children: [
                                                 Icon(Icons.link_rounded),
                                                 SizedBox(width: 10),
-                                                TextFont(
-                                                  text: link,
-                                                  fontSize: 16,
+                                                Expanded(
+                                                  child: TextFont(
+                                                    text: link
+                                                        .replaceFirst(
+                                                            "www.", "")
+                                                        .replaceFirst(
+                                                            "http://", "")
+                                                        .replaceFirst(
+                                                            "https://", ""),
+                                                    fontSize: 16,
+                                                    maxLines: 1,
+                                                  ),
                                                 ),
                                               ],
                                             ),

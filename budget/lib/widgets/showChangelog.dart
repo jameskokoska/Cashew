@@ -8,6 +8,16 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed delete shared budget cancel saying it deleted budget
+    Max width for popup
+    Can only select other users if Shared to Other Budgets filter enabled
+    Links properly append http and www.
+    Links properly cropped
+    Can select all users and all filters respects the default null value (means all selected) in add budget page
+    If syncing setting disabled sidebar setting hidden
+    Title centered when screen wide enough
+    Budget history graph pinned to top when scrolling through
+    Budget history graph updates properly when budget changes attributes
     Fixed parsing emails with certain format
     Pie chart only larger if double column enabled
     When navbar switches pages, routes popped without animation

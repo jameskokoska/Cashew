@@ -375,7 +375,8 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
     onCancelLabel: "Cancel",
     onSubmit: () async {
       Navigator.pop(context, true);
-      await database.deleteBudget(context, budget);
+      int result = await database.deleteBudget(context, budget);
+      if (result == -1) return;
       openSnackbar(SnackbarMessage(title: "Deleted budget"));
       if (afterDelete != null) afterDelete();
     },
