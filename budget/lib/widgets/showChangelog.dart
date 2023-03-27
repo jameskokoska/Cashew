@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Tap amount left/spent to toggle between setting on budget page
     Fixed delete shared budget cancel saying it deleted budget
     Max width for popup
     Can only select other users if Shared to Other Budgets filter enabled

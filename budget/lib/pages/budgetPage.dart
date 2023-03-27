@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:async/async.dart' show StreamZip;
+import 'package:flutter/services.dart';
 
 class BudgetPage extends StatelessWidget {
   const BudgetPage({
@@ -281,150 +282,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     ),
                                     child: Column(
                                       children: [
-                                        widget.budget.amount - totalSpent >= 0
-                                            ? Row(
-                                                mainAxisAlignment:
-                                                    enableDoubleColumn(context)
-                                                        ? MainAxisAlignment
-                                                            .center
-                                                        : MainAxisAlignment
-                                                            .start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Container(
-                                                        child: CountNumber(
-                                                          count: appStateSettings[
-                                                                  "showTotalSpentForBudget"]
-                                                              ? totalSpent
-                                                              : widget.budget
-                                                                      .amount -
-                                                                  totalSpent,
-                                                          duration: Duration(
-                                                              milliseconds:
-                                                                  700),
-                                                          dynamicDecimals: true,
-                                                          initialCount: (0),
-                                                          textBuilder:
-                                                              (number) {
-                                                            return TextFont(
-                                                              text: convertToMoney(
-                                                                  number,
-                                                                  finalNumber: appStateSettings[
-                                                                          "showTotalSpentForBudget"]
-                                                                      ? totalSpent
-                                                                      : widget.budget
-                                                                              .amount -
-                                                                          totalSpent),
-                                                              fontSize: 25,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              textColor:
-                                                                  budgetColorScheme
-                                                                      .onSecondaryContainer,
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                bottom: 3.8),
-                                                        child: TextFont(
-                                                          text: (appStateSettings[
-                                                                      "showTotalSpentForBudget"]
-                                                                  ? " spent of "
-                                                                  : " left of ") +
-                                                              convertToMoney(
-                                                                  widget.budget
-                                                                      .amount),
-                                                          fontSize: 16,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          textColor:
-                                                              budgetColorScheme
-                                                                  .onSecondaryContainer,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                            : Row(
-                                                mainAxisAlignment:
-                                                    enableDoubleColumn(context)
-                                                        ? MainAxisAlignment
-                                                            .center
-                                                        : MainAxisAlignment
-                                                            .start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Container(
-                                                    child: CountNumber(
-                                                      count: appStateSettings[
-                                                              "showTotalSpentForBudget"]
-                                                          ? totalSpent
-                                                          : -1 *
-                                                              (widget.budget
-                                                                      .amount -
-                                                                  totalSpent),
-                                                      duration: Duration(
-                                                          milliseconds: 700),
-                                                      dynamicDecimals: true,
-                                                      initialCount: (0),
-                                                      textBuilder: (number) {
-                                                        return TextFont(
-                                                          text: convertToMoney(
-                                                              number,
-                                                              finalNumber: appStateSettings[
-                                                                      "showTotalSpentForBudget"]
-                                                                  ? totalSpent
-                                                                  : -1 *
-                                                                      (widget.budget
-                                                                              .amount -
-                                                                          totalSpent)),
-                                                          fontSize: 25,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          textColor:
-                                                              budgetColorScheme
-                                                                  .onSecondaryContainer,
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 3.8),
-                                                    child: TextFont(
-                                                      text: (appStateSettings[
-                                                                  "showTotalSpentForBudget"]
-                                                              ? " spent of "
-                                                              : " overspent of ") +
-                                                          convertToMoney(widget
-                                                              .budget.amount),
-                                                      fontSize: 16,
-                                                      textAlign: TextAlign.left,
-                                                      textColor: budgetColorScheme
-                                                          .onSecondaryContainer,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                        Container(height: 10),
+                                        TotalSpent(
+                                          budget: widget.budget,
+                                          budgetColorScheme: budgetColorScheme,
+                                          totalSpent: totalSpent,
+                                        ),
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                             horizontal:
@@ -983,6 +845,149 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
         }
         return SizedBox.shrink();
       },
+    );
+  }
+}
+
+class TotalSpent extends StatefulWidget {
+  const TotalSpent({
+    super.key,
+    required this.budgetColorScheme,
+    required this.totalSpent,
+    required this.budget,
+  });
+
+  final ColorScheme budgetColorScheme;
+  final double totalSpent;
+  final Budget budget;
+
+  @override
+  State<TotalSpent> createState() => _TotalSpentState();
+}
+
+class _TotalSpentState extends State<TotalSpent> {
+  bool showTotalSpent = appStateSettings["showTotalSpentForBudget"];
+
+  _swapTotalSpentDisplay() {
+    setState(() {
+      showTotalSpent = !showTotalSpent;
+    });
+    updateSettings("showTotalSpentForBudget", showTotalSpent,
+        pagesNeedingRefresh: [0, 2], updateGlobalState: false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        _swapTotalSpentDisplay();
+      },
+      onLongPress: () {
+        HapticFeedback.heavyImpact();
+        _swapTotalSpentDisplay();
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 200),
+          child: widget.budget.amount - widget.totalSpent >= 0
+              ? Row(
+                  key: ValueKey(showTotalSpent),
+                  mainAxisAlignment: enableDoubleColumn(context)
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          child: CountNumber(
+                            count: showTotalSpent
+                                ? widget.totalSpent
+                                : widget.budget.amount - widget.totalSpent,
+                            duration: Duration(milliseconds: 400),
+                            dynamicDecimals: true,
+                            initialCount: (0),
+                            textBuilder: (number) {
+                              return TextFont(
+                                text: convertToMoney(number,
+                                    finalNumber: showTotalSpent
+                                        ? widget.totalSpent
+                                        : widget.budget.amount -
+                                            widget.totalSpent),
+                                fontSize: 25,
+                                textAlign: TextAlign.left,
+                                fontWeight: FontWeight.bold,
+                                textColor: widget
+                                    .budgetColorScheme.onSecondaryContainer,
+                              );
+                            },
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 3.8),
+                          child: TextFont(
+                            text:
+                                (showTotalSpent ? " spent of " : " left of ") +
+                                    convertToMoney(widget.budget.amount),
+                            fontSize: 16,
+                            textAlign: TextAlign.left,
+                            textColor:
+                                widget.budgetColorScheme.onSecondaryContainer,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: enableDoubleColumn(context)
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      child: CountNumber(
+                        count: showTotalSpent
+                            ? widget.totalSpent
+                            : -1 * (widget.budget.amount - widget.totalSpent),
+                        duration: Duration(milliseconds: 400),
+                        dynamicDecimals: true,
+                        initialCount: (0),
+                        textBuilder: (number) {
+                          return TextFont(
+                            text: convertToMoney(number,
+                                finalNumber: showTotalSpent
+                                    ? widget.totalSpent
+                                    : -1 *
+                                        (widget.budget.amount -
+                                            widget.totalSpent)),
+                            fontSize: 25,
+                            textAlign: TextAlign.left,
+                            fontWeight: FontWeight.bold,
+                            textColor:
+                                widget.budgetColorScheme.onSecondaryContainer,
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 3.8),
+                      child: TextFont(
+                        text:
+                            (showTotalSpent ? " spent of " : " overspent of ") +
+                                convertToMoney(widget.budget.amount),
+                        fontSize: 16,
+                        textAlign: TextAlign.left,
+                        textColor:
+                            widget.budgetColorScheme.onSecondaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      ),
     );
   }
 }
