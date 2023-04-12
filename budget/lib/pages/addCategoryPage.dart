@@ -4,7 +4,6 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -436,7 +435,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFont(
                 text: "Associated Titles",
-                textColor: Theme.of(context).colorScheme.textLight,
+                textColor: getColor(context, "textLight"),
                 fontSize: 16,
               ),
             ),
@@ -446,7 +445,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
               child: TextFont(
                 text:
                     "If a transaction title contains any of the phrases listed, it will be added to this category",
-                textColor: Theme.of(context).colorScheme.textLight,
+                textColor: getColor(context, "textLight"),
                 fontSize: 13,
                 maxLines: 10,
               ),
@@ -596,7 +595,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
           );
         },
         borderRadius: 15,
-        color: Theme.of(context).colorScheme.lightDarkAccent,
+        color: getColor(context, "lightDarkAccent"),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -629,7 +628,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
                 );
               },
               borderRadius: 15,
-              color: Theme.of(context).colorScheme.lightDarkAccent,
+              color: getColor(context, "lightDarkAccent"),
               child: Padding(
                 padding: const EdgeInsets.all(14),
                 child: Icon(
@@ -668,7 +667,7 @@ class AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget getButton(onTap) {
       return Tappable(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).canvasColor,
         borderRadius: borderRadius,
         child: Container(
           decoration: BoxDecoration(
@@ -676,7 +675,7 @@ class AddButton extends StatelessWidget {
               width: 1.5,
               color: appStateSettings["materialYou"]
                   ? Theme.of(context).colorScheme.secondaryContainer
-                  : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                  : getColor(context, "lightDarkAccentHeavy")!,
             ),
             borderRadius: BorderRadius.circular(borderRadius),
           ),
@@ -688,7 +687,7 @@ class AddButton extends StatelessWidget {
               fontWeight: FontWeight.bold,
               textColor: appStateSettings["materialYou"]
                   ? Theme.of(context).colorScheme.secondaryContainer
-                  : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                  : getColor(context, "lightDarkAccentHeavy")!,
             ),
           ),
         ),

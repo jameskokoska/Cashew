@@ -85,7 +85,7 @@ class CategoryIcon extends StatelessWidget {
                                     Theme.of(context).colorScheme.primary),
                             amountLight: 0.55,
                             amountDark: 0.35)
-                        : Theme.of(context).colorScheme.canvasContainer,
+                        : getColor(context, "canvasContainer"),
                 onTap: onTap,
                 onLongPress: canEditByLongPress
                     ? () {

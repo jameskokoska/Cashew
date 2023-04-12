@@ -51,16 +51,15 @@ class _DropdownSelectState extends State<DropdownSelect> {
           bottom: widget.compact ? 2 : 10),
       decoration: BoxDecoration(
         color: widget.backgroundColor == null
-            ? Theme.of(context).colorScheme.lightDarkAccent
+            ? getColor(context, "lightDarkAccent")
             : widget.backgroundColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButton<String>(
         underline: Container(),
-        style:
-            TextStyle(color: Theme.of(context).colorScheme.black, fontSize: 15),
+        style: TextStyle(color: getColor(context, "black"), fontSize: 15),
         dropdownColor: widget.backgroundColor == null
-            ? Theme.of(context).colorScheme.lightDarkAccent
+            ? getColor(context, "lightDarkAccent")
             : widget.backgroundColor,
         isDense: true,
         value: currentValue ?? widget.initial,

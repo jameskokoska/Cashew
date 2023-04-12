@@ -167,14 +167,14 @@ class HomePageState extends State<HomePage>
     );
     Widget viewAllTransactionsButton = Center(
       child: Tappable(
-        color: Theme.of(context).colorScheme.lightDarkAccent,
+        color: getColor(context, "lightDarkAccent"),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           child: TextFont(
             text: "View All Transactions",
             textAlign: TextAlign.center,
             fontSize: 16,
-            textColor: Theme.of(context).colorScheme.textLight,
+            textColor: getColor(context, "textLight"),
           ),
         ),
         onTap: () {
@@ -196,9 +196,7 @@ class HomePageState extends State<HomePage>
                   controller: _scrollController,
                   children: [
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                    Container(
-                        height: 1,
-                        color: Theme.of(context).colorScheme.background),
+                    Container(height: 1, color: Theme.of(context).canvasColor),
                     Container(
                       // Subtract one (1) here because of the thickness of the wiper above
                       height: 179 - 1 + MediaQuery.of(context).padding.top,
@@ -469,9 +467,8 @@ class HomePageState extends State<HomePage>
                                     decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(15)),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .lightDarkAccentHeavyLight,
+                                      color: getColor(
+                                          context, "lightDarkAccentHeavyLight"),
                                       boxShadow: boxShadowCheck(
                                           boxShadowGeneral(context)),
                                     ),
@@ -669,9 +666,7 @@ class HomePageState extends State<HomePage>
                         : viewAllTransactionsButton,
                     SizedBox(height: 40),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                    Container(
-                        height: 1,
-                        color: Theme.of(context).colorScheme.background),
+                    Container(height: 1, color: Theme.of(context).canvasColor),
                   ],
                 ),
               ),
@@ -718,7 +713,7 @@ class SlidingSelector extends StatelessWidget {
               height: alternateTheme ? 40 : 45,
               child: Material(
                 borderRadius: BorderRadius.circular(15),
-                color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+                color: getColor(context, "lightDarkAccentHeavyLight"),
                 child: Theme(
                   data: ThemeData().copyWith(
                     splashColor: Theme.of(context).splashColor,
@@ -738,15 +733,11 @@ class SlidingSelector extends StatelessWidget {
                               .colorScheme
                               .primary
                               .withOpacity(0.3)
-                          : Theme.of(context)
-                              .colorScheme
-                              .black
-                              .withOpacity(0.15),
+                          : getColor(context, "black").withOpacity(0.15),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    labelColor: Theme.of(context).colorScheme.black,
-                    unselectedLabelColor:
-                        Theme.of(context).colorScheme.textLight,
+                    labelColor: getColor(context, "black"),
+                    unselectedLabelColor: getColor(context, "textLight"),
                     tabs: [
                       Tab(
                         child: Padding(
@@ -809,13 +800,13 @@ class UpcomingTransactions extends StatelessWidget {
       decoration:
           BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
       child: OpenContainerNavigation(
-        closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+        closedColor: getColor(context, "lightDarkAccentHeavyLight"),
         openPage: UpcomingOverdueTransactions(
             overdueTransactions: overdueTransactions),
         borderRadius: 15,
         button: (openContainer) {
           return Tappable(
-            color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+            color: getColor(context, "lightDarkAccentHeavyLight"),
             onTap: () {
               openContainer();
             },
@@ -855,10 +846,8 @@ class UpcomingTransactions extends StatelessWidget {
                                         : (snapshot.data ?? 0).abs()),
                                 fontSize: 24,
                                 textColor: overdueTransactions
-                                    ? Theme.of(context).colorScheme.unPaidRed
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .unPaidYellow,
+                                    ? getColor(context, "unPaidRed")
+                                    : getColor(context, "unPaidYellow"),
                                 fontWeight: FontWeight.bold,
                               );
                             },
@@ -880,7 +869,7 @@ class UpcomingTransactions extends StatelessWidget {
                                   pluralString(
                                       snapshot.data![0] == 1, " transaction"),
                           fontSize: 13,
-                          textColor: Theme.of(context).colorScheme.textLight,
+                          textColor: getColor(context, "textLight"),
                         );
                       },
                     ),

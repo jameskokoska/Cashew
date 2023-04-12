@@ -60,7 +60,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                     textBuilder: (number) {
                       return TextFont(
                         fontSize: 15,
-                        textColor: Theme.of(context).colorScheme.textLight,
+                        textColor: getColor(context, "textLight"),
                         text: convertToMoney(number,
                                 finalNumber: snapshot.data ?? 0) +
                             " / " +
@@ -174,7 +174,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                   category: widget.category,
                   percent: (selectedAmount / widget.budgetLimit) * 100,
                   progressBackgroundColor:
-                      Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                      getColor(context, "lightDarkAccentHeavy"),
                   size: 28,
                   insetPadding: 18,
                 ),
@@ -197,7 +197,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                               .toString() +
                           "% of budget",
                       fontSize: 14,
-                      textColor: Theme.of(context).colorScheme.textLight,
+                      textColor: getColor(context, "textLight"),
                     ),
                   ],
                 ),

@@ -527,7 +527,7 @@ class BudgetContainer extends StatelessWidget {
       ),
       child: OpenContainerNavigation(
         borderRadius: 20,
-        closedColor: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+        closedColor: getColor(context, "lightDarkAccentHeavyLight"),
         button: (openContainer) {
           return Tappable(
             onTap: () {
@@ -546,7 +546,7 @@ class BudgetContainer extends StatelessWidget {
                 : null,
             borderRadius: 20,
             child: widget,
-            color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+            color: getColor(context, "lightDarkAccentHeavyLight"),
           );
         },
         openPage: BudgetPage(
@@ -580,7 +580,7 @@ class DaySpending extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.fitWidth,
         child: TextFont(
-          textColor: Theme.of(context).colorScheme.black.withAlpha(80),
+          textColor: getColor(context, "black").withAlpha(80),
           text: amount < 0
               ? "You should save " +
                   convertToMoney(amount.abs()) +
@@ -808,10 +808,8 @@ class BudgetProgress extends StatelessWidget {
                                   amountLight: 0.87,
                                   amountDark: 0.75)
                           : large
-                              ? Theme.of(context).colorScheme.lightDarkAccent
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .lightDarkAccentHeavy,
+                              ? getColor(context, "lightDarkAccent")
+                              : getColor(context, "lightDarkAccentHeavy"),
                     ),
                     height: large ? 24.2 : 19.2,
                   ),
@@ -1013,7 +1011,7 @@ class TodayIndicator extends StatelessWidget {
                     child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color: Theme.of(context).colorScheme.black),
+                            color: getColor(context, "black")),
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: 3, right: 5, left: 5, bottom: 3),
@@ -1021,7 +1019,7 @@ class TodayIndicator extends StatelessWidget {
                             textAlign: TextAlign.center,
                             text: "Today",
                             fontSize: large ? 10 : 9,
-                            textColor: Theme.of(context).colorScheme.white,
+                            textColor: getColor(context, "white"),
                           ),
                         )),
                   ),
@@ -1032,10 +1030,7 @@ class TodayIndicator extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.vertical(bottom: Radius.circular(5)),
-                        color: Theme.of(context)
-                            .colorScheme
-                            .black
-                            .withOpacity(0.4),
+                        color: getColor(context, "black").withOpacity(0.4),
                       ),
                     ),
                   ),
@@ -1216,10 +1211,8 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                               : spender.amount / totalSpent * 100,
                           progressBackgroundColor:
                               selectedMember == spender.member
-                                  ? Theme.of(context).colorScheme.white
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .lightDarkAccentHeavy,
+                                  ? getColor(context, "white")
+                                  : getColor(context, "lightDarkAccentHeavy")!,
                           color: widget.budgetColorScheme.primary,
                           size: widget.isLarge ? 28 : 28,
                           insetPadding: widget.isLarge ? 23 : 18,
@@ -1250,11 +1243,9 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                       "% of budget",
                                   fontSize: 14,
                                   textColor: selectedMember == spender.member
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .black
+                                      ? getColor(context, "black")
                                           .withOpacity(0.4)
-                                      : Theme.of(context).colorScheme.textLight,
+                                      : getColor(context, "textLight"),
                                 )
                               ],
                             ),
@@ -1290,13 +1281,9 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                       fontSize: 14,
                                       textColor:
                                           selectedMember == spender.member
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .black
+                                              ? getColor(context, "black")
                                                   .withOpacity(0.4)
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .textLight,
+                                              : getColor(context, "textLight"),
                                     );
                                   }
                                   return SizedBox.shrink();

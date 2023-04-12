@@ -25,6 +25,7 @@ import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
 /*
@@ -67,7 +68,6 @@ void main() async {
   entireAppLoaded = false;
   await initializeDatabase();
   await initializeSettings();
-
   runApp(RestartApp(child: InitializeApp(key: appStateKey)));
 }
 
@@ -236,6 +236,10 @@ Future<bool> initializeSettings() async {
   } else {
     clientID = retrievedClientID;
   }
+
+  timeDilation = appStateSettings["animationSpeed"];
+
+  generateColors();
 
   return true;
 }
@@ -468,10 +472,12 @@ class App extends StatelessWidget {
           },
         ),
       },
+      themeAnimationDuration: Duration(milliseconds: 700),
       key: ValueKey(1),
       title: 'Cashew',
       navigatorKey: navigatorKey,
       theme: ThemeData(
+        fontFamily: appStateSettings["font"],
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
           brightness: Brightness.light,
@@ -499,8 +505,10 @@ class App extends StatelessWidget {
                     amount: 0.1)
                 .withOpacity(0.5)
             : null,
+        extensions: <ThemeExtension<dynamic>>[appColorsLight],
       ),
       darkTheme: ThemeData(
+        fontFamily: appStateSettings["font"],
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
           brightness: Brightness.dark,
@@ -525,6 +533,7 @@ class App extends StatelessWidget {
                     amount: 0.1)
                 .withOpacity(0.2)
             : null,
+        extensions: <ThemeExtension<dynamic>>[appColorsDark],
       ),
       scrollBehavior: ScrollBehavior(),
       themeMode: getSettingConstants(appStateSettings)["theme"],

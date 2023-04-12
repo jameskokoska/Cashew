@@ -176,8 +176,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                       currentReorder:
                           currentReorder != -1 && currentReorder != index,
                       index: index,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.lightDarkAccent,
+                      backgroundColor: getColor(context, "lightDarkAccent")!,
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,

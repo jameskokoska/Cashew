@@ -9,7 +9,6 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
-import '../functions.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class AccountsPage extends StatefulWidget {
@@ -214,7 +213,7 @@ class OutlinedButtonStacked extends StatelessWidget {
           border: Border.all(
             color: (appStateSettings["materialYou"]
                 ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
-                : Theme.of(context).colorScheme.lightDarkAccentHeavy),
+                : getColor(context, "lightDarkAccentHeavy")!),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(15),

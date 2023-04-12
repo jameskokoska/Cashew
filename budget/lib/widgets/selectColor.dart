@@ -386,7 +386,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
             child: ColorPicker(
               colorSliderPosition: colorSliderPosition,
               shadeSliderPosition: shadeSliderPosition,
-              ringColor: Theme.of(context).colorScheme.black,
+              ringColor: getColor(context, "black")!,
               ringSize: 10,
               width: getWidthBottomSheet(context) - 100,
               onChange: (color, colorSliderPositionPassed,

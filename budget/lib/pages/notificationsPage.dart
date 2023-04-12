@@ -11,7 +11,7 @@ class NotificationsPage extends StatelessWidget {
       title: "Notifications",
       navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
         DailyNotificationsSettings(),
         UpcomingTransactionsNotificationsSettings()

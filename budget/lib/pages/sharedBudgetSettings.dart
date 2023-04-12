@@ -119,7 +119,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
               text: widget.budget.sharedOwnerMember == SharedOwnerMember.owner
                   ? "Add Members"
                   : "Members",
-              textColor: Theme.of(context).colorScheme.textLight,
+              textColor: getColor(context, "textLight"),
               fontSize: 16,
             ),
           ),
@@ -128,7 +128,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextFont(
               text: "Only group owners can edit members",
-              textColor: Theme.of(context).colorScheme.textLight,
+              textColor: getColor(context, "textLight"),
               fontSize: 13,
               maxLines: 10,
             ),
@@ -163,7 +163,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
             text: widget.budget.sharedOwnerMember == SharedOwnerMember.owner
                 ? "Add Members"
                 : "Members",
-            textColor: Theme.of(context).colorScheme.textLight,
+            textColor: getColor(context, "textLight"),
             fontSize: 16,
           ),
         ),
@@ -172,7 +172,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TextFont(
             text: "Only group owners can edit members",
-            textColor: Theme.of(context).colorScheme.textLight,
+            textColor: getColor(context, "textLight"),
             fontSize: 13,
             maxLines: 10,
           ),
@@ -213,17 +213,13 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                     period: Duration(milliseconds: 1000),
                     baseColor: appStateSettings["materialYou"]
                         ? Theme.of(context).colorScheme.secondaryContainer
-                        : Theme.of(context)
-                            .colorScheme
-                            .lightDarkAccentHeavyLight,
+                        : getColor(context, "lightDarkAccentHeavyLight")!,
                     highlightColor: appStateSettings["materialYou"]
                         ? Theme.of(context)
                             .colorScheme
                             .secondaryContainer
                             .withOpacity(0.2)
-                        : Theme.of(context)
-                            .colorScheme
-                            .lightDarkAccentHeavy
+                        : getColor(context, "lightDarkAccentHeavy")!
                             .withAlpha(20),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -238,24 +234,19 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                         margin: const EdgeInsets.only(bottom: 8.0, top: 4.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context)
-                              .colorScheme
-                              .lightDarkAccent
+                          color: getColor(context, "lightDarkAccent")!
                               .withOpacity(0.5),
                           border: Border.all(
                             width: 1.5,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavy,
+                            color: getColor(context, "lightDarkAccentHeavy")!,
                           ),
                         ),
                         child: Center(
                           child: TextFont(
                             text: "+",
                             fontWeight: FontWeight.bold,
-                            textColor: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavy,
+                            textColor:
+                                getColor(context, "lightDarkAccentHeavy")!,
                           ),
                         ),
                       ),
@@ -274,17 +265,13 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                               (1000 + randomDouble[i % 10] * 520).toInt()),
                       baseColor: appStateSettings["materialYou"]
                           ? Theme.of(context).colorScheme.secondaryContainer
-                          : Theme.of(context)
-                              .colorScheme
-                              .lightDarkAccentHeavyLight,
+                          : getColor(context, "lightDarkAccentHeavyLight")!,
                       highlightColor: appStateSettings["materialYou"]
                           ? Theme.of(context)
                               .colorScheme
                               .secondaryContainer
                               .withOpacity(0.2)
-                          : Theme.of(context)
-                              .colorScheme
-                              .lightDarkAccentHeavy
+                          : getColor(context, "lightDarkAccentHeavy")!
                               .withAlpha(20),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -296,9 +283,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                               horizontal: 25, vertical: 15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccent
+                            color: getColor(context, "lightDarkAccent")!
                                 .withOpacity(0.5),
                           ),
                           child: Column(
@@ -529,7 +514,7 @@ class CategoryMemberContainer extends StatelessWidget {
             );
         },
         borderRadius: 15,
-        color: Theme.of(context).colorScheme.lightDarkAccent,
+        color: getColor(context, "lightDarkAccent"),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -588,7 +573,7 @@ class CategoryMemberContainer extends StatelessWidget {
                       );
                     },
                     borderRadius: 15,
-                    color: Theme.of(context).colorScheme.lightDarkAccent,
+                    color: getColor(context, "lightDarkAccent"),
                     child: Padding(
                       padding: const EdgeInsets.all(14),
                       child: Icon(

@@ -1,11 +1,14 @@
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -75,6 +78,187 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     if (percent >= 0 && percent <= 1) {
       _animationControllerSearch.value = 1 - percent;
     }
+  }
+
+  Future<void> selectFilters(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Filters",
+        padding: false,
+        child: Column(
+          children: [
+            Container(
+              height: 100,
+              child: SelectCategory(
+                horizontalList: true,
+                showSelectedAllCategoriesIfNoneSelected: true,
+              ),
+            ),
+            AmountRangeSlider(),
+            SelectChips(
+              items: [
+                "All",
+                SearchFilters.income,
+                SearchFilters.expense,
+              ],
+              getLabel: (item) {
+                if (item == "All") return "All";
+                return item == SearchFilters.income
+                    ? "Income"
+                    : item == SearchFilters.expense
+                        ? "Expense"
+                        : "";
+              },
+              onSelected: (item) {
+                if (item == "All") {
+                  return;
+                }
+              },
+              getSelected: (item) {
+                if (item == "All") return true;
+                return false;
+              },
+            ),
+            SelectChips(
+              items: [
+                "All",
+                TransactionSpecialType.upcoming,
+                TransactionSpecialType.subscription,
+                TransactionSpecialType.repetitive,
+              ],
+              getLabel: (item) {
+                if (item == "All") return "All";
+                return item == TransactionSpecialType.upcoming
+                    ? "Upcoming"
+                    : item == TransactionSpecialType.subscription
+                        ? "Subscription"
+                        : item == TransactionSpecialType.repetitive
+                            ? "Repetitive"
+                            : "";
+              },
+              onSelected: (item) {
+                if (item == "All") {
+                  return;
+                }
+              },
+              getSelected: (item) {
+                if (item == "All") return true;
+                return false;
+              },
+            ),
+            SelectChips(
+              items: [
+                "All",
+                SearchFilters.paid,
+                SearchFilters.unpaid,
+              ],
+              getLabel: (item) {
+                if (item == "All") return "All";
+                return item == SearchFilters.paid
+                    ? "Paid"
+                    : item == SearchFilters.unpaid
+                        ? "Unpaid"
+                        : "";
+              },
+              onSelected: (item) {
+                if (item == "All") {
+                  return;
+                }
+              },
+              getSelected: (item) {
+                if (item == "All") return true;
+                return false;
+              },
+            ),
+            SelectChips(
+              items: [
+                "All",
+                BudgetTransactionFilters.addedToOtherBudget,
+                BudgetTransactionFilters.sharedToOtherBudget,
+              ],
+              getLabel: (item) {
+                if (item == "All") return "All";
+                return item == BudgetTransactionFilters.addedToOtherBudget
+                    ? "Added to Other Budgets"
+                    : item == BudgetTransactionFilters.sharedToOtherBudget
+                        ? "Shared to Other Budgets"
+                        : "";
+              },
+              onSelected: (item) {
+                if (item == "All") {
+                  return;
+                }
+              },
+              getSelected: (item) {
+                if (item == "All") return true;
+                return false;
+              },
+            ),
+            SelectChips(
+              items: [
+                "All",
+                MethodAdded.csv,
+                MethodAdded.shared,
+                MethodAdded.email,
+              ],
+              getLabel: (item) {
+                if (item == "All") return "All";
+                return item == MethodAdded.csv
+                    ? "CSV"
+                    : item == MethodAdded.shared
+                        ? "Shared"
+                        : item == MethodAdded.email
+                            ? "Email"
+                            : "";
+              },
+              onSelected: (item) {
+                if (item == "All") {
+                  return;
+                }
+              },
+              getSelected: (item) {
+                if (item == "All") return true;
+                return false;
+              },
+            ),
+            SelectChips(
+              items: [
+                "All",
+                SharedOwnerMember.owner,
+                SharedOwnerMember.member,
+              ],
+              getLabel: (item) {
+                if (item == "All") return "All";
+                return item == SharedOwnerMember.owner
+                    ? "Owner"
+                    : item == SharedOwnerMember.member
+                        ? "Member"
+                        : "";
+              },
+              onSelected: (item) {
+                if (item == "All") {
+                  return;
+                }
+              },
+              getSelected: (item) {
+                if (item == "All") return true;
+                return false;
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Button(
+                label: "Apply Filters",
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> selectDateRange(BuildContext context) async {
@@ -170,12 +354,19 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                             autoFocus: true,
                           ),
                         ),
-                        SizedBox(width: 10),
+                        SizedBox(width: 7),
                         ButtonIcon(
                           onTap: () {
                             selectDateRange(context);
                           },
                           icon: Icons.calendar_month_rounded,
+                        ),
+                        SizedBox(width: 7),
+                        ButtonIcon(
+                          onTap: () {
+                            selectFilters(context);
+                          },
+                          icon: Icons.filter_alt_rounded,
                         ),
                         SizedBox(width: 20),
                       ],
@@ -219,7 +410,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       child: TextFont(
                         fontSize: 13,
                         textAlign: TextAlign.center,
-                        textColor: Theme.of(context).colorScheme.textLight,
+                        textColor: getColor(context, "textLight"),
                         text: "Showing transactions from" +
                             "\n" +
                             getWordedDateShortMore(selectedStartDate,
@@ -239,6 +430,55 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
           ),
         ],
       ),
+    );
+  }
+}
+
+class AmountRangeSlider extends StatefulWidget {
+  const AmountRangeSlider({super.key});
+
+  @override
+  State<AmountRangeSlider> createState() => _AmountSlideRangerState();
+}
+
+class _AmountSlideRangerState extends State<AmountRangeSlider> {
+  RangeValues _currentRangeValues = const RangeValues(40, 80);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        RangeSlider(
+          values: _currentRangeValues,
+          max: 100,
+          min: 0,
+          labels: RangeLabels(
+            _currentRangeValues.start.round().toString(),
+            _currentRangeValues.end.round().toString(),
+          ),
+          onChanged: (RangeValues values) {
+            setState(() {
+              _currentRangeValues = values;
+            });
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextFont(
+                text: convertToMoney(_currentRangeValues.start),
+                fontSize: 15,
+              ),
+              TextFont(
+                text: convertToMoney(_currentRangeValues.end),
+                fontSize: 15,
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

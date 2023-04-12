@@ -195,7 +195,7 @@ class _UpcomingTransactionsNotificationsSettingsState
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Theme.of(context).colorScheme.lightDarkAccent,
+                color: getColor(context, "lightDarkAccent"),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),

@@ -171,7 +171,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+              color: getColor(context, "lightDarkAccentHeavy")!,
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -228,7 +228,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+              color: getColor(context, "lightDarkAccentHeavy")!,
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -302,7 +302,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+              color: getColor(context, "lightDarkAccentHeavy")!,
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -454,7 +454,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextFont(
                       text: "Default Category",
-                      textColor: Theme.of(context).colorScheme.textLight,
+                      textColor: getColor(context, "textLight"),
                       fontSize: 16,
                     ),
                   ),
@@ -464,7 +464,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     child: TextFont(
                       text:
                           "Categories are also automatically set based on the Associated Title.",
-                      textColor: Theme.of(context).colorScheme.textLight,
+                      textColor: getColor(context, "textLight"),
                       fontSize: 11,
                       maxLines: 5,
                     ),
@@ -491,8 +491,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                               title: "Select Email",
                               padding: false,
                               child: EmailsList(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.white,
+                                backgroundColor: getColor(context, "white"),
                                 messagesList: widget.messagesList,
                                 onTap: (messageString) {
                                   setMessageString(messageString);
@@ -599,9 +598,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                                 horizontal: 18, vertical: 15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .lightDarkAccentHeavy,
+                              color: getColor(context, "lightDarkAccentHeavy")!,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -699,7 +696,7 @@ class TemplateInfoBox extends StatelessWidget {
       color: selectedText == "" ||
               (extraCheck != null && extraCheck!(selectedText) == false)
           ? Theme.of(context).colorScheme.selectableColorRed.withOpacity(0.5)
-          : Theme.of(context).colorScheme.lightDarkAccent,
+          : getColor(context, "lightDarkAccent"),
       borderRadius: 15,
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -734,8 +731,7 @@ class TemplateInfoBox extends StatelessWidget {
                 ? TextFont(
                     fontSize: 14,
                     text: extraCheckMessage ?? "",
-                    textColor:
-                        Theme.of(context).colorScheme.black.withOpacity(0.9),
+                    textColor: getColor(context, "black").withOpacity(0.9),
                     maxLines: 10,
                   )
                 : SizedBox.shrink(),
@@ -745,8 +741,8 @@ class TemplateInfoBox extends StatelessWidget {
               text: secondaryLabel,
               textColor: selectedText == "" ||
                       (extraCheck != null && extraCheck!(selectedText) == false)
-                  ? Theme.of(context).colorScheme.black.withOpacity(0.5)
-                  : Theme.of(context).colorScheme.textLight,
+                  ? getColor(context, "black").withOpacity(0.5)
+                  : getColor(context, "textLight"),
               maxLines: 10,
             )
           ],

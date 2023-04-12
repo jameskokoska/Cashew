@@ -106,7 +106,7 @@ Future<T?> openPopup<T extends Object?>(
                     ? dynamicPastel(context,
                         Theme.of(context).colorScheme.secondaryContainer,
                         amount: 0.5)
-                    : Theme.of(context).colorScheme.lightDarkAccent,
+                    : getColor(context, "lightDarkAccent"),
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: boxShadowGeneral(context),
               ),
@@ -268,7 +268,7 @@ Future<T?> openPopupCustom<T extends Object?>(
                   ? dynamicPastel(
                       context, Theme.of(context).colorScheme.secondaryContainer,
                       amount: 0.5)
-                  : Theme.of(context).colorScheme.lightDarkAccent,
+                  : getColor(context, "lightDarkAccent"),
               borderRadius: BorderRadius.circular(10),
               boxShadow: boxShadowGeneral(context),
             ),
@@ -332,7 +332,7 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
                   ? dynamicPastel(
                       context, Theme.of(context).colorScheme.secondaryContainer,
                       amount: 0.5)
-                  : Theme.of(context).colorScheme.lightDarkAccent,
+                  : getColor(context, "lightDarkAccent"),
               borderRadius: BorderRadius.circular(10),
             ),
             child: CircularProgressIndicator(),

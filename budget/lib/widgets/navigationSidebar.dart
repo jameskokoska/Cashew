@@ -58,7 +58,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
       decoration: BoxDecoration(
         border: Border(
           right: BorderSide(
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: getColor(context, "lightDarkAccent"),
             width: 3,
           ),
         ),
@@ -96,16 +96,13 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   TextFont(
-                                    textColor:
-                                        Theme.of(context).colorScheme.black,
+                                    textColor: getColor(context, "black"),
                                     fontSize: 48,
                                     fontWeight: FontWeight.bold,
                                     text: DateFormat('h:mm').format(now),
                                   ),
                                   TextFont(
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .black
+                                    textColor: getColor(context, "black")
                                         .withOpacity(0.5),
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -113,9 +110,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                   ),
                                   SizedBox(height: 5),
                                   TextFont(
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .black
+                                    textColor: getColor(context, "black")
                                         .withOpacity(0.5),
                                     fontSize: 18,
                                     text: DateFormat('MMMM d, y').format(now),
@@ -270,10 +265,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                                                 e.toString());
                                                       }
                                                       return TextFont(
-                                                        textColor:
-                                                            Theme.of(context)
-                                                                .colorScheme
-                                                                .textLight,
+                                                        textColor: getColor(
+                                                            context,
+                                                            "textLight"),
                                                         fontSize: 13,
                                                         text: "Synced " +
                                                             (timeLastSynced ==

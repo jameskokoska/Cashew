@@ -65,8 +65,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             navbar: false,
             appBarBackgroundColor:
                 Theme.of(context).colorScheme.secondaryContainer,
-            appBarBackgroundColorStart:
-                Theme.of(context).colorScheme.background,
+            appBarBackgroundColorStart: Theme.of(context).canvasColor,
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
@@ -265,9 +264,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(
-                child: Container(
-                    height: 70,
-                    color: Theme.of(context).colorScheme.background),
+                child:
+                    Container(height: 70, color: Theme.of(context).canvasColor),
               ),
             ],
           ),
@@ -310,13 +308,12 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                   text: getWordedDateShortMore(transaction.dateCreated),
                   fontWeight: small ? FontWeight.normal : FontWeight.bold,
                   fontSize: small ? 14 : 18,
-                  textColor:
-                      small ? Theme.of(context).colorScheme.textLight : null,
+                  textColor: small ? getColor(context, "textLight") : null,
                 ),
                 daysDifference != 0
                     ? TextFont(
                         fontSize: small ? 14 : 16,
-                        textColor: Theme.of(context).colorScheme.textLight,
+                        textColor: getColor(context, "textLight"),
                         text: " • " +
                             daysDifference.abs().toString() +
                             " " +

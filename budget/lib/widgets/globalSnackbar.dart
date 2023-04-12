@@ -160,7 +160,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                 margin: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.shadowColorLight,
+                    color: getColor(context, "shadowColorLight"),
                     blurRadius: 20,
                     offset: Offset(0, 0),
                     spreadRadius: 3,
@@ -173,7 +173,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                       animateOut();
                     },
                     borderRadius: 13,
-                    color: Theme.of(context).colorScheme.lightDarkAccent,
+                    color: getColor(context, "lightDarkAccent"),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),

@@ -513,8 +513,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                       return Scaffold(
                         extendBodyBehindAppBar: false,
                         appBar: AppBar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
+                          backgroundColor: Theme.of(context).canvasColor,
                           elevation: 0,
                           title: MediaQuery.of(context).padding.top >= 25
                               ? FadeTransition(
@@ -679,7 +678,7 @@ class CashFlow extends StatelessWidget {
                 text: "Total cash flow: " + convertToMoney(snapshot.data!),
                 fontSize: 13,
                 textAlign: TextAlign.center,
-                textColor: Theme.of(context).colorScheme.textLight,
+                textColor: getColor(context, "textLight"),
               ),
             );
           }
@@ -729,7 +728,7 @@ class FakeTextInput extends StatelessWidget {
       color: backgroundColor ??
           (appStateSettings["materialYou"]
               ? Theme.of(context).colorScheme.secondaryContainer
-              : Theme.of(context).colorScheme.canvasContainer),
+              : getColor(context, "canvasContainer")),
       borderRadius: 15,
       child: Container(
         margin: EdgeInsets.only(
@@ -744,13 +743,12 @@ class FakeTextInput extends StatelessWidget {
                 ? TextFont(
                     text: label,
                     fontSize: 15,
-                    textColor:
-                        Theme.of(context).colorScheme.black.withOpacity(0.6),
+                    textColor: getColor(context, "black").withOpacity(0.6),
                   )
                 : TextFont(
                     text: content ?? "",
                     fontSize: 15,
-                    textColor: Theme.of(context).colorScheme.black,
+                    textColor: getColor(context, "black"),
                   ),
             Icon(
               icon,
@@ -773,7 +771,7 @@ class GhostTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color = appStateSettings["materialYou"]
         ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.2)
-        : Theme.of(context).colorScheme.lightDarkAccentHeavy.withOpacity(0.2);
+        : getColor(context, "lightDarkAccentHeavy").withOpacity(0.2);
     return Padding(
       padding: const EdgeInsets.only(top: 2),
       child: ListView.builder(
@@ -959,7 +957,7 @@ class _MonthSelectorState extends State<MonthSelector> {
             bool isToday = currentDateTime.month == DateTime.now().month &&
                 currentDateTime.year == DateTime.now().year;
             return Container(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).canvasColor,
               child: Stack(
                 children: [
                   Container(
@@ -982,8 +980,7 @@ class _MonthSelectorState extends State<MonthSelector> {
                                       key: ValueKey(1),
                                       fontSize: 14,
                                       text: getMonth(currentDateTime.month - 1),
-                                      textColor:
-                                          Theme.of(context).colorScheme.black,
+                                      textColor: getColor(context, "black"),
                                       fontWeight: isToday
                                           ? FontWeight.bold
                                           : FontWeight.normal,
@@ -992,9 +989,7 @@ class _MonthSelectorState extends State<MonthSelector> {
                                       key: ValueKey(2),
                                       fontSize: 14,
                                       text: getMonth(currentDateTime.month - 1),
-                                      textColor: Theme.of(context)
-                                          .colorScheme
-                                          .textLight,
+                                      textColor: getColor(context, "textLight"),
                                       fontWeight: isToday
                                           ? FontWeight.bold
                                           : FontWeight.normal,
@@ -1009,18 +1004,16 @@ class _MonthSelectorState extends State<MonthSelector> {
                                             fontSize: 9,
                                             text:
                                                 currentDateTime.year.toString(),
-                                            textColor: Theme.of(context)
-                                                .colorScheme
-                                                .black,
+                                            textColor:
+                                                getColor(context, "black"),
                                           )
                                         : TextFont(
                                             key: ValueKey(2),
                                             fontSize: 9,
                                             text:
                                                 currentDateTime.year.toString(),
-                                            textColor: Theme.of(context)
-                                                .colorScheme
-                                                .textLight,
+                                            textColor:
+                                                getColor(context, "textLight"),
                                           ),
                                   )
                                 : SizedBox(),
@@ -1042,9 +1035,7 @@ class _MonthSelectorState extends State<MonthSelector> {
                                     topRight: Radius.circular(40),
                                     topLeft: Radius.circular(40),
                                   ),
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .lightDarkAccent,
+                                  color: getColor(context, "lightDarkAccent"),
                                 ),
                                 width: 75,
                                 height: 7,
@@ -1058,7 +1049,7 @@ class _MonthSelectorState extends State<MonthSelector> {
                     child: Container(
                       width: 100,
                       height: 2,
-                      color: Theme.of(context).colorScheme.lightDarkAccent,
+                      color: getColor(context, "lightDarkAccent"),
                     ),
                   ),
                   Align(
@@ -1074,7 +1065,7 @@ class _MonthSelectorState extends State<MonthSelector> {
                             topRight: Radius.circular(40),
                             topLeft: Radius.circular(40),
                           ),
-                          color: Theme.of(context).colorScheme.black,
+                          color: getColor(context, "black"),
                         ),
                         width: 100,
                         height: 4,

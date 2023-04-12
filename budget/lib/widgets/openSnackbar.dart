@@ -20,11 +20,11 @@ openSnackbar(SnackbarMessage message, {bool postIfQueue = true}) {
   //             ? dynamicPastel(context, Theme.of(context).colorScheme.error,
   //                 amountLight: 0.5)
   //             : (textColor == null
-  //                 ? Theme.of(context).colorScheme.black
+  //                 ? getColor(context, "black")
   //                 : textColor),
   //       ),
   //       backgroundColor: backgroundColor == null
-  //           ? Theme.of(context).colorScheme.lightDarkAccentHeavy
+  //           ? getColor(context, "lightDarkAccent")Heavy
   //           : backgroundColor),
   // );
   return;

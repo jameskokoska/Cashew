@@ -1,7 +1,7 @@
+import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:flutter/material.dart';
-import '../colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class TextFont extends StatelessWidget {
@@ -44,14 +44,15 @@ class TextFont extends StatelessWidget {
   Widget build(BuildContext context) {
     var finalTextColor;
     if (this.textColor == null) {
-      finalTextColor = Theme.of(context).colorScheme.black;
+      finalTextColor = getColor(context, "black");
     } else {
       finalTextColor = textColor;
     }
     final TextStyle textStyle = TextStyle(
       fontWeight: this.fontWeight,
       fontSize: this.fontSize,
-      fontFamily: 'Avenir',
+      fontFamily: appStateSettings["font"],
+      fontFamilyFallback: ['Inter'],
       color: finalTextColor,
       decoration: TextDecoration.underline,
       decorationStyle: TextDecorationStyle.double,
@@ -69,7 +70,8 @@ class TextFont extends StatelessWidget {
     );
     Widget textWidget(textPassed) {
       return Transform.translate(
-        offset: Offset(0, this.fontSize * 0.1),
+        offset: Offset(0,
+            this.fontSize * (appStateSettings["font"] == "Avenir" ? 0.1 : 0)),
         child: autoSizeText
             ? AutoSizeText(
                 textPassed,

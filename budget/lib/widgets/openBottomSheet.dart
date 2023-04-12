@@ -45,7 +45,7 @@ Future openBottomSheet(
           ? dynamicPastel(
               context, Theme.of(context).colorScheme.secondaryContainer,
               amount: 0.3)
-          : Theme.of(context).colorScheme.lightDarkAccent, builder: (context) {
+          : getColor(context, "lightDarkAccent")!, builder: (context) {
     return SlidingSheetDialog(
       maxWidth: getWidthBottomSheet(context),
       scrollSpec: ScrollSpec(
@@ -76,7 +76,7 @@ Future openBottomSheet(
           ? dynamicPastel(
               context, Theme.of(context).colorScheme.secondaryContainer,
               amount: 0.3)
-          : Theme.of(context).colorScheme.lightDarkAccent,
+          : getColor(context, "lightDarkAccent"),
       // headerBuilder: (context, _) {
       //   if (handle) {
       //     return Padding(
@@ -136,7 +136,7 @@ Future openBottomSheet(
 //                 bottom: MediaQuery.of(contextBuilder).viewInsets.bottom,
 //               ),
 //               decoration: BoxDecoration(
-//                 color: Theme.of(context).colorScheme.lightDarkAccent,
+//                 color: getColor(context, "lightDarkAccent"),
 //                 borderRadius: BorderRadius.only(
 //                   topRight: Radius.circular(20),
 //                   topLeft: Radius.circular(20),

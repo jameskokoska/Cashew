@@ -43,7 +43,7 @@ class _WalletEntryState extends State<WalletEntry>
         openPage: WatchedWalletDetailsPage(walletPk: widget.wallet.walletPk),
         button: (openContainer) {
           return Tappable(
-            color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+            color: getColor(context, "lightDarkAccentHeavyLight"),
             borderRadius: 15,
             child: AnimatedContainer(
               decoration: BoxDecoration(
@@ -128,9 +128,7 @@ class _WalletEntryState extends State<WalletEntry>
                                       pluralString(snapshot.data![0] == 1,
                                           " transaction"),
                                   fontSize: 14,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .black
+                                  textColor: getColor(context, "black")!
                                       .withOpacity(0.65),
                                 );
                               } else {

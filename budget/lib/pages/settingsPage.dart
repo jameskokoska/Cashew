@@ -63,7 +63,7 @@ class SettingsPageState extends State<SettingsPage>
       backButton: false,
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         // SettingsContainerOpenPage(
@@ -107,6 +107,7 @@ class SettingsPageState extends State<SettingsPage>
           title: "Material You",
           onSwitched: (value) {
             updateSettings("materialYou", value, updateGlobalState: true);
+            generateColors();
           },
           initialValue: appStateSettings["materialYou"],
           icon: Icons.brush_rounded,
@@ -124,6 +125,16 @@ class SettingsPageState extends State<SettingsPage>
             } else if (value == "System") {
               updateSettings("theme", "system");
             }
+          },
+        ),
+        SettingsContainerDropdown(
+          title: "Font",
+          icon: Icons.font_download_rounded,
+          initial: appStateSettings["font"],
+          items: ["Avenir", "Inter", "DMSans", "OpenSans", "Metropolis"],
+          onChanged: (value) {
+            updateSettings("font", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
           },
         ),
         EnterName(),

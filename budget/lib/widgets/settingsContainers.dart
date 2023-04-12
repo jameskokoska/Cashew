@@ -121,7 +121,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return OpenContainerNavigation(
-      closedColor: Theme.of(context).colorScheme.background,
+      closedColor: Theme.of(context).canvasColor,
       borderRadius: 0,
       button: (openContainer) {
         return SettingsContainer(
@@ -238,7 +238,7 @@ class SettingsContainerOutlined extends StatelessWidget {
             border: Border.all(
               color: (appStateSettings["materialYou"]
                   ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
-                  : Theme.of(context).colorScheme.lightDarkAccentHeavy),
+                  : getColor(context, "lightDarkAccentHeavy")!),
               width: 2,
             ),
             borderRadius: BorderRadius.circular(10),

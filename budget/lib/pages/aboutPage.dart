@@ -13,8 +13,6 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -27,7 +25,7 @@ class AboutPage extends StatelessWidget {
       title: "About",
       navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         Padding(
@@ -75,7 +73,7 @@ class AboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
           child: Tappable(
             onTap: () {},
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -101,7 +99,7 @@ class AboutPage extends StatelessWidget {
                     fontSize: 16,
                     textAlign: TextAlign.center,
                     maxLines: 5,
-                    textColor: Theme.of(context).colorScheme.textLight,
+                    textColor: getColor(context, "textLight"),
                   ),
                 ],
               ),
@@ -112,7 +110,7 @@ class AboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
           child: Tappable(
             onTap: () {},
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -320,7 +318,7 @@ class AboutInfoBox extends StatelessWidget {
         onTap: () async {
           openUrl(link);
         },
-        color: Theme.of(context).colorScheme.lightDarkAccent,
+        color: getColor(context, "lightDarkAccent"),
         borderRadius: 15,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -338,7 +336,7 @@ class AboutInfoBox extends StatelessWidget {
                 text: link,
                 fontSize: 14,
                 textAlign: TextAlign.center,
-                textColor: Theme.of(context).colorScheme.textLight,
+                textColor: getColor(context, "textLight"),
               ),
             ],
           ),

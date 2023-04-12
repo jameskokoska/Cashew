@@ -1,4 +1,3 @@
-import 'package:budget/colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/struct/iconObjects.dart';
@@ -149,7 +148,7 @@ class ImageIcon extends StatelessWidget {
       decoration: outline
           ? BoxDecoration(
               border: Border.all(
-                color: Theme.of(context).colorScheme.accentColorHeavy,
+                color: Theme.of(context).colorScheme.primary,
                 width: 3,
               ),
               borderRadius: BorderRadius.all(Radius.circular(500)),

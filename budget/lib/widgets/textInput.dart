@@ -77,7 +77,7 @@ class TextInput extends StatelessWidget {
               : backgroundColor ??
                   (appStateSettings["materialYou"]
                       ? Theme.of(context).colorScheme.secondaryContainer
-                      : Theme.of(context).colorScheme.canvasContainer),
+                      : getColor(context, "canvasContainer")),
           borderRadius: borderRadius ?? BorderRadius.circular(15),
         ),
         child: Center(
@@ -104,19 +104,21 @@ class TextInput extends StatelessWidget {
             autofocus: autoFocus,
             onEditingComplete: onEditingComplete,
             style: TextStyle(
-                fontSize:
-                    fontSize != null ? fontSize : (bubbly == false ? 18 : 15),
-                height: kIsWeb
-                    ? null
-                    : bubbly == true
-                        ? 1.7
-                        : 1.3,
-                fontWeight: fontWeight,
-                fontFamily: "Avenir"),
-            cursorColor: Theme.of(context).colorScheme.accentColorHeavy,
+              fontSize:
+                  fontSize != null ? fontSize : (bubbly == false ? 18 : 15),
+              height: kIsWeb
+                  ? null
+                  : bubbly == true
+                      ? 1.7
+                      : 1.3,
+              fontWeight: fontWeight,
+              fontFamily: appStateSettings["font"],
+            ),
+            cursorColor: dynamicPastel(
+                context, HexColor(appStateSettings["accentColor"]),
+                amount: 0.5),
             decoration: new InputDecoration(
-              hintStyle:
-                  TextStyle(color: Theme.of(context).colorScheme.textLight),
+              hintStyle: TextStyle(color: getColor(context, "textLight")),
               alignLabelWithHint: true,
               prefix: prefix != null ? TextFont(text: prefix ?? "") : null,
               suffix: suffix != null ? TextFont(text: suffix ?? "") : null,
@@ -168,9 +170,7 @@ class TextInput extends StatelessWidget {
                                 .colorScheme
                                 .primary
                                 .withOpacity(0.2)
-                            : Theme.of(context)
-                                .colorScheme
-                                .lightDarkAccentHeavy,
+                            : getColor(context, "lightDarkAccentHeavy"),
                         width: 2,
                       ),
                     )

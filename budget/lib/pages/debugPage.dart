@@ -8,6 +8,7 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:universal_html/html.dart' as html;
 
 class DebugPage extends StatelessWidget {
@@ -19,8 +20,19 @@ class DebugPage extends StatelessWidget {
       title: "Debug",
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
+        SliderSelector(
+          min: 0,
+          max: 3,
+          initialValue: appStateSettings["animationSpeed"],
+          onChange: (value) {
+            if (value == 0) value = 0.0000001;
+            updateSettings("animationSpeed", value);
+            timeDilation = value;
+          },
+          divisions: 30,
+        ),
         Button(
             label: "Create random",
             onTap: () async {
@@ -95,9 +107,7 @@ class DebugPage extends StatelessWidget {
         ColorBox(color: Theme.of(context).colorScheme.surface, name: "surface"),
         ColorBox(
             color: Theme.of(context).colorScheme.onSurface, name: "onSurface"),
-        ColorBox(
-            color: Theme.of(context).colorScheme.background,
-            name: "background"),
+        ColorBox(color: Theme.of(context).canvasColor, name: "background"),
         ColorBox(
             color: Theme.of(context).colorScheme.onBackground,
             name: "onBackground"),
@@ -161,6 +171,46 @@ class DebugPage extends StatelessWidget {
             color: Theme.of(context).colorScheme.onErrorContainer,
             name: "onErrorContainer"),
       ],
+    );
+  }
+}
+
+class SliderSelector extends StatefulWidget {
+  const SliderSelector({
+    super.key,
+    required this.onChange,
+    required this.initialValue,
+    this.divisions,
+    required this.min,
+    required this.max,
+  });
+
+  final Function(double) onChange;
+  final double initialValue;
+  final int? divisions;
+  final double min;
+  final double max;
+
+  @override
+  State<SliderSelector> createState() => _SliderSelectorState();
+}
+
+class _SliderSelectorState extends State<SliderSelector> {
+  late double _currentSliderValue = widget.initialValue;
+  @override
+  Widget build(BuildContext context) {
+    return Slider(
+      min: widget.min,
+      max: widget.max,
+      value: _currentSliderValue,
+      divisions: widget.divisions,
+      label: _currentSliderValue.toStringAsFixed(1).toString(),
+      onChanged: (double value) {
+        widget.onChange(value);
+        setState(() {
+          _currentSliderValue = value;
+        });
+      },
     );
   }
 }

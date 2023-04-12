@@ -50,8 +50,8 @@ class CategoryEntry extends StatelessWidget {
                 category: category,
                 percent: categorySpent / totalSpent * 100,
                 progressBackgroundColor: selected
-                    ? Theme.of(context).colorScheme.white
-                    : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                    ? getColor(context, "white")
+                    : getColor(context, "lightDarkAccentHeavy"),
               ),
               SizedBox(height: 5),
               TextFont(
@@ -60,7 +60,7 @@ class CategoryEntry extends StatelessWidget {
                 maxLines: 1,
                 text: convertToMoney(categorySpent),
                 fontSize: 13,
-                textColor: Theme.of(context).colorScheme.textLight,
+                textColor: getColor(context, "textLight"),
               ),
             ],
           ),
@@ -84,8 +84,8 @@ class CategoryEntry extends StatelessWidget {
                   ? categorySpent / categoryBudgetLimit!.amount * 100
                   : categorySpent / totalSpent * 100,
               progressBackgroundColor: selected
-                  ? Theme.of(context).colorScheme.white
-                  : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                  ? getColor(context, "white")
+                  : getColor(context, "lightDarkAccentHeavy"),
               size: 28,
               insetPadding: 18,
             ),
@@ -119,15 +119,11 @@ class CategoryEntry extends StatelessWidget {
                                             categoryBudgetLimit!.amount *
                                             100) >
                                         100
-                                    ? Theme.of(context).colorScheme.unPaidRed
+                                    ? getColor(context, "unPaidRed")
                                     : (selected
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .black
+                                        ? getColor(context, "black")
                                             .withOpacity(0.4)
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .textLight),
+                                        : getColor(context, "textLight")),
                               ),
                               TextFont(
                                 text: " of " +
@@ -136,11 +132,9 @@ class CategoryEntry extends StatelessWidget {
                                     " limit",
                                 fontSize: 14,
                                 textColor: selected
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .black
+                                    ? getColor(context, "black")
                                         .withOpacity(0.4)
-                                    : Theme.of(context).colorScheme.textLight,
+                                    : getColor(context, "textLight"),
                               ),
                             ],
                           )
@@ -150,11 +144,8 @@ class CategoryEntry extends StatelessWidget {
                                 "% of budget",
                             fontSize: 14,
                             textColor: selected
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .black
-                                    .withOpacity(0.4)
-                                : Theme.of(context).colorScheme.textLight,
+                                ? getColor(context, "black").withOpacity(0.4)
+                                : getColor(context, "textLight"),
                           )
                   ],
                 ),
@@ -192,8 +183,8 @@ class CategoryEntry extends StatelessWidget {
                       pluralString(transactionCount == 1, " transaction"),
                   fontSize: 14,
                   textColor: selected
-                      ? Theme.of(context).colorScheme.black.withOpacity(0.4)
-                      : Theme.of(context).colorScheme.textLight,
+                      ? getColor(context, "black").withOpacity(0.4)
+                      : getColor(context, "textLight"),
                 )
               ],
             ),

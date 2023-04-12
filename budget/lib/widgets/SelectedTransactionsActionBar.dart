@@ -62,9 +62,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                         BoxShadow(
                           color:
                               Theme.of(context).brightness == Brightness.light
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .shadowColorLight
+                                  ? getColor(context, "shadowColorLight")
                                       .withOpacity(0.3)
                                   : Colors.black.withOpacity(0.5),
                           blurRadius: 20,
@@ -401,7 +399,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                         postIfQueue: false,
                       );
                     },
-                    color: Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                    color: getColor(context, "lightDarkAccentHeavy"),
                   )
                 : Button(
                     label: "Apply",

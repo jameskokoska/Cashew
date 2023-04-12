@@ -771,7 +771,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           indicator: BoxDecoration(
                             color: categoryColor,
                           ),
-                          labelColor: Theme.of(context).colorScheme.black,
+                          labelColor: getColor(context, "black"),
                           unselectedLabelColor: Colors.white.withOpacity(0.3),
                           tabs: [
                             Tab(
@@ -1147,7 +1147,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   child: Tappable(
                     color: (appStateSettings["materialYou"]
                         ? Theme.of(context).colorScheme.secondaryContainer
-                        : Theme.of(context).colorScheme.canvasContainer),
+                        : getColor(context, "canvasContainer")),
                     onTap: () {
                       openBottomSheet(
                         context,
@@ -1183,7 +1183,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         Tappable(
                           color: (appStateSettings["materialYou"]
                               ? Theme.of(context).colorScheme.secondaryContainer
-                              : Theme.of(context).colorScheme.canvasContainer),
+                              : getColor(context, "canvasContainer")),
                           onTap: () {
                             openBottomSheet(
                               context,
@@ -1249,13 +1249,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                             openUrl(link);
                                           },
                                           color: darkenPastel(
-                                              appStateSettings["materialYou"]
+                                              (appStateSettings["materialYou"]
                                                   ? Theme.of(context)
                                                       .colorScheme
                                                       .secondaryContainer
-                                                  : Theme.of(context)
-                                                      .colorScheme
-                                                      .canvasContainer,
+                                                  : getColor(context,
+                                                      "canvasContainer")),
                                               amount: 0.2),
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -1305,7 +1304,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       .transactionOriginalOwnerEmail ??
                                   ""),
                           fontSize: 13,
-                          textColor: Theme.of(context).colorScheme.textLight,
+                          textColor: getColor(context, "textLight"),
                           textAlign: TextAlign.center,
                           maxLines: 4,
                         ),
@@ -1318,7 +1317,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 //       Container(height: 20),
                 //       TextInput(
                 //         backgroundColor:
-                //             Theme.of(context).colorScheme.canvasContainer,
+                //             getColor(context, "canvasContainer"),
                 //         padding: EdgeInsets.zero,
                 //
                 //         labelText: "Title",
@@ -1328,7 +1327,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 //       Container(height: 14),
                 //       TextInput(
                 //         backgroundColor:
-                //             Theme.of(context).colorScheme.canvasContainer,
+                //             getColor(context, "canvasContainer"),
                 //         padding: EdgeInsets.zero,
                 //
                 //         labelText: "Notes",
@@ -1436,7 +1435,7 @@ class DateButton extends StatelessWidget {
                         child: TextFont(
                           text: "Yesterday?",
                           fontSize: 15,
-                          textColor: Theme.of(context).colorScheme.textLight,
+                          textColor: getColor(context, "textLight"),
                         ),
                       ),
                       onTap: () {
@@ -1904,7 +1903,7 @@ class _EnterTextButtonState extends State<EnterTextButton> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 19),
       child: Tappable(
-        color: Theme.of(context).colorScheme.canvasContainer,
+        color: getColor(context, "canvasContainer"),
         onTap: () {
           openBottomSheet(
             context,
@@ -2107,10 +2106,11 @@ class _SelectChipsState extends State<SelectChips> {
               onLongPress: () {
                 if (widget.onLongPress != null) widget.onLongPress!(item);
               },
+              color: Colors.transparent,
               child: ChoiceChip(
                 selectedColor: appStateSettings["materialYou"]
                     ? null
-                    : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                    : getColor(context, "lightDarkAccentHeavy"),
                 side: widget.getCustomBorderColor == null
                     ? null
                     : BorderSide(

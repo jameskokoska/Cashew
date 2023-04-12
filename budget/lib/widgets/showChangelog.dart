@@ -8,6 +8,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Started filters page
+    Animation speed debug setting (modifies time dilation)
+    Changed how colors are managed to follow flutters theming engine closely
+    Added fallback font for missing characters
+    Added font picker
+    Fixed backup time of specific client
     Tap amount left/spent to toggle between setting on budget page
     Fixed delete shared budget cancel saying it deleted budget
     Max width for popup

@@ -882,8 +882,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                           selectedAddedTransactionsOnly == true
                                       ? "Only transactions added to this budget will be shared with others users you share this budget to"
                                       : "Only the transactions you explicitly add to this budget will be shown in this budget",
-                              textColor:
-                                  Theme.of(context).colorScheme.textLight,
+                              textColor: getColor(context, "textLight"),
                               fontSize: 13,
                               maxLines: 3,
                             ),
@@ -1189,7 +1188,7 @@ class TappableTextEntry extends StatelessWidget {
                     width: 1.5,
                     color: appStateSettings["materialYou"]
                         ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
-                        : Theme.of(context).colorScheme.lightDarkAccentHeavy)),
+                        : getColor(context, "lightDarkAccentHeavy")!)),
           ),
           child: IntrinsicWidth(
             child: Align(
@@ -1209,8 +1208,8 @@ class TappableTextEntry extends StatelessWidget {
                 textColor: title == null ||
                         title == "" ||
                         title == showPlaceHolderWhenTextEquals
-                    ? Theme.of(context).colorScheme.textLight
-                    : Theme.of(context).colorScheme.black,
+                    ? getColor(context, "textLight")
+                    : getColor(context, "black"),
               ),
             ),
           ),
@@ -1282,7 +1281,7 @@ class SliverStickyLabelDivider extends StatelessWidget {
                         TextFont(
                           text: info,
                           fontSize: 15,
-                          textColor: Theme.of(context).colorScheme.textLight,
+                          textColor: getColor(context, "textLight"),
                         ),
                         extraInfo == null
                             ? SizedBox.shrink()
@@ -1290,8 +1289,7 @@ class SliverStickyLabelDivider extends StatelessWidget {
                                 child: TextFont(
                                   text: extraInfo ?? "",
                                   fontSize: 15,
-                                  textColor:
-                                      Theme.of(context).colorScheme.textLight,
+                                  textColor: getColor(context, "textLight"),
                                   textAlign: TextAlign.end,
                                 ),
                               ),

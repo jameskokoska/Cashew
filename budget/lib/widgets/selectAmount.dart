@@ -732,7 +732,7 @@ class CalculatorButton extends StatelessWidget {
                     .colorScheme
                     .secondaryContainer
                     .withOpacity(0.9)
-                : Theme.of(context).colorScheme.lightDarkAccentHeavy,
+                : getColor(context, "lightDarkAccentHeavy"),
             borderRadius: BorderRadius.only(
               topRight: topRight ? Radius.circular(15) : Radius.circular(0),
               topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),

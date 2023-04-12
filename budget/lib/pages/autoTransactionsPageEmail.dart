@@ -58,7 +58,7 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
       title: "Auto Transactions",
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       actions: [
         RefreshButton(onTap: () async {
           loadingIndeterminateKey.currentState!.setVisibility(true);
@@ -596,7 +596,7 @@ class ScannerTemplateEntry extends StatelessWidget {
         button: (openContainer) {
           return Tappable(
             borderRadius: 15,
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: getColor(context, "lightDarkAccent"),
             onTap: openContainer,
             child: Padding(
               padding: const EdgeInsets.only(
@@ -725,7 +725,7 @@ class EmailsList extends StatelessWidget {
                               .selectableColorGreen
                               .withOpacity(0.5)
                           : backgroundColor ??
-                              Theme.of(context).colorScheme.lightDarkAccent,
+                              getColor(context, "lightDarkAccent"),
                   onTap: () {
                     if (onTap != null) onTap!(messageString);
                   },

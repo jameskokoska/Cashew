@@ -132,19 +132,19 @@ class TransactionEntry extends StatelessWidget {
 
     Color textColor = transaction.paid
         ? transaction.income == true
-            ? Theme.of(context).colorScheme.incomeGreen
-            : Theme.of(context).colorScheme.black
+            ? getColor(context, "incomeGreen")
+            : getColor(context, "black")
         : transaction.skipPaid
-            ? Theme.of(context).colorScheme.textLight
+            ? getColor(context, "textLight")
             : transaction.dateCreated.millisecondsSinceEpoch <=
                     DateTime.now().millisecondsSinceEpoch
-                ? Theme.of(context).colorScheme.unPaidRed
-                : Theme.of(context).colorScheme.unPaidYellow;
+                ? getColor(context, "unPaidRed")
+                : getColor(context, "unPaidYellow");
     Color iconColor = dynamicPastel(
         context, Theme.of(context).colorScheme.primary,
         amount: 0.3);
 
-    Color textColorLight = Theme.of(context).colorScheme.textLight;
+    Color textColorLight = getColor(context, "textLight");
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -204,9 +204,7 @@ class TransactionEntry extends StatelessWidget {
                                     .colorScheme
                                     .onPrimaryContainer
                                     .withOpacity(0.13)
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .lightDarkAccentHeavy
+                                : getColor(context, "lightDarkAccentHeavy")
                                     .withAlpha(200)
                             : Colors.transparent,
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -306,10 +304,9 @@ class TransactionEntry extends StatelessWidget {
                                                                           .name,
                                                                   fontSize:
                                                                       12.5,
-                                                                  textColor: Theme.of(
-                                                                          context)
-                                                                      .colorScheme
-                                                                      .black
+                                                                  textColor: getColor(
+                                                                          context,
+                                                                          "black")
                                                                       .withOpacity(
                                                                           0.7),
                                                                 ),
@@ -357,9 +354,8 @@ class TransactionEntry extends StatelessWidget {
                                                               : Icons
                                                                   .upload_rounded,
                                                       size: 14,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .black
+                                                      color: getColor(
+                                                              context, "black")
                                                           .withOpacity(0.7),
                                                     ),
                                                   ),
@@ -375,9 +371,8 @@ class TransactionEntry extends StatelessWidget {
                                                         ? Icons.download_rounded
                                                         : Icons.upload_rounded,
                                                     size: 14,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .black
+                                                    color: getColor(
+                                                            context, "black")
                                                         .withOpacity(0.7),
                                                   ),
                                                 ),
@@ -414,10 +409,9 @@ class TransactionEntry extends StatelessWidget {
                                                                     " for " +
                                                                     snapshot.data!.name,
                                                                 fontSize: 12.5,
-                                                                textColor: Theme.of(
-                                                                        context)
-                                                                    .colorScheme
-                                                                    .black
+                                                                textColor: getColor(
+                                                                        context,
+                                                                        "black")
                                                                     .withOpacity(
                                                                         0.7),
                                                               );
@@ -522,9 +516,8 @@ class TransactionEntry extends StatelessWidget {
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 6, horizontal: 7),
                                             decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .lightDarkAccent,
+                                                color: getColor(
+                                                    context, "lightDarkAccent"),
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(10))),
                                             child: TextFont(
@@ -693,17 +686,14 @@ class TransactionEntry extends StatelessWidget {
                                   margin: EdgeInsets.symmetric(horizontal: 15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .lightDarkAccent,
+                                    color: getColor(context, "lightDarkAccent"),
                                     boxShadow: boxShadowCheck(
                                       [
                                         BoxShadow(
                                           color: Theme.of(context).brightness ==
                                                   Brightness.light
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .shadowColorLight
+                                              ? getColor(context,
+                                                      "shadowColorLight")
                                                   .withOpacity(0.3)
                                               : Colors.black.withOpacity(0.5),
                                           blurRadius: 20,
@@ -714,8 +704,7 @@ class TransactionEntry extends StatelessWidget {
                                     ),
                                   ),
                                   textStyle: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.black,
+                                      color: getColor(context, "black"),
                                       fontFamily: 'Avenir'),
                                   triggerMode: TooltipTriggerMode.tap,
                                   showDuration: Duration(milliseconds: 10000),
@@ -976,7 +965,7 @@ class _InfiniteRotationAnimationState extends State<InfiniteRotationAnimation>
 //         decoration: BoxDecoration(
 //           borderRadius: BorderRadius.circular(size * 0.8),
 //           color: selected
-//               ? Theme.of(context).colorScheme.accentColor.withOpacity(0.8)
+//               ? .colors["accentColor"].withOpacity(0.8)
 //               : Theme.of(context)
 //                   .colorScheme
 //                   .lightDarkAccentHeavy
@@ -1074,13 +1063,13 @@ class DateDivider extends StatelessWidget {
               text: getWordedDate(date,
                   includeMonthDate: true, includeYearIfNotCurrentYear: true),
               fontSize: 14,
-              textColor: Theme.of(context).colorScheme.textLight,
+              textColor: getColor(context, "textLight"),
             ),
             info != null
                 ? TextFont(
                     text: info!,
                     fontSize: 14,
-                    textColor: Theme.of(context).colorScheme.textLight,
+                    textColor: getColor(context, "textLight"),
                   )
                 : SizedBox()
           ],

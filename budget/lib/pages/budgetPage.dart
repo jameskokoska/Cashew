@@ -169,7 +169,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             title: widget.budget.name,
             appBarBackgroundColor: budgetColorScheme.secondaryContainer,
             appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
-            textColor: Theme.of(context).colorScheme.black,
+            textColor: getColor(context, "black"),
             navbar: false,
             dragDownToDismiss: true,
             dragDownToDissmissBackground: budgetColorScheme.secondaryContainer,
@@ -426,8 +426,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 maxLines: 10,
                                 textAlign: TextAlign.center,
                                 fontSize: 13,
-                                textColor:
-                                    Theme.of(context).colorScheme.textLight,
+                                textColor: getColor(context, "textLight"),
                                 // fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -527,8 +526,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     convertToMoney(totalSpent),
                                 fontSize: 13,
                                 textAlign: TextAlign.center,
-                                textColor:
-                                    Theme.of(context).colorScheme.textLight,
+                                textColor: getColor(context, "textLight"),
                               ),
                             );
                           }
@@ -554,7 +552,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               getMemberNickname(
                                   (widget.budget.sharedMembers ?? [""])[0]),
                           fontSize: 13,
-                          textColor: Theme.of(context).colorScheme.textLight,
+                          textColor: getColor(context, "textLight"),
                           textAlign: TextAlign.center,
                           maxLines: 4,
                         ),
@@ -562,8 +560,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(
-                child: Container(
-                    height: 1, color: Theme.of(context).colorScheme.background),
+                child: Container(height: 1, color: pageBackgroundColor),
               ),
               SliverToBoxAdapter(child: SizedBox(height: 45))
             ],

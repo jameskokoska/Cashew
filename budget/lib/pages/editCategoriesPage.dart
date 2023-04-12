@@ -177,9 +177,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                             pluralString(snapshot.data![0] == 1,
                                                 " transaction"),
                                         fontSize: 14,
-                                        textColor: Theme.of(context)
-                                            .colorScheme
-                                            .black
+                                        textColor: getColor(context, "black")!
                                             .withOpacity(0.65),
                                       );
                                     } else {
@@ -187,9 +185,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                         textAlign: TextAlign.left,
                                         text: "/ transactions",
                                         fontSize: 14,
-                                        textColor: Theme.of(context)
-                                            .colorScheme
-                                            .black
+                                        textColor: getColor(context, "black")!
                                             .withOpacity(0.65),
                                       );
                                     }

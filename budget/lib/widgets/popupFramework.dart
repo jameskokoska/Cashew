@@ -33,7 +33,7 @@ class PopupFramework extends StatelessWidget {
                     ? dynamicPastel(context,
                         Theme.of(context).colorScheme.secondaryContainer,
                         amount: 0.3)
-                    : Theme.of(context).colorScheme.lightDarkAccent,
+                    : getColor(context, "lightDarkAccent"),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

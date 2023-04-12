@@ -190,10 +190,10 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       subtitleAnimationSpeed: 9.8,
       subtitleAlignment: Alignment.bottomLeft,
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
-      textColor: Theme.of(context).colorScheme.black,
+      textColor: getColor(context, "black"),
       navbar: false,
       dragDownToDismiss: true,
-      dragDownToDissmissBackground: Theme.of(context).colorScheme.background,
+      dragDownToDissmissBackground: Theme.of(context).canvasColor,
       slivers: [
         SliverStickyHeader(
           header: Column(
@@ -725,8 +725,7 @@ class PastBudgetContainer extends StatelessWidget {
                                   context, budgetColorScheme.primary,
                                   amountLight: 0.4, amountDark: 0.2),
                               overageColor: budgetColorScheme.tertiary,
-                              overageShadowColor:
-                                  Theme.of(context).colorScheme.white,
+                              overageShadowColor: getColor(context, "white"),
                             ),
                           ),
                         ],
@@ -752,7 +751,7 @@ class PastBudgetContainer extends StatelessWidget {
                 budgetColorScheme.secondaryContainer,
                 amount: 0.5,
               )
-            : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+            : getColor(context, "lightDarkAccentHeavyLight"),
         button: (openContainer) {
           return Tappable(
             onTap: () {
@@ -775,7 +774,7 @@ class PastBudgetContainer extends StatelessWidget {
                     budgetColorScheme.secondaryContainer,
                     amount: 0.5,
                   )
-                : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+                : getColor(context, "lightDarkAccentHeavyLight"),
           );
         },
         openPage: BudgetPage(

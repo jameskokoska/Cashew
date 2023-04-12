@@ -63,7 +63,7 @@ class WalletDetailsPage extends StatelessWidget {
       title: wallet == null ? "All Spending" : wallet!.name,
       navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).colorScheme.background,
+      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
         SizedBox(height: 10),
         Padding(
@@ -242,7 +242,7 @@ class IncomeTransactionsSummary extends StatelessWidget {
           BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
       child: Tappable(
         borderRadius: 15,
-        color: Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+        color: getColor(context, "lightDarkAccentHeavyLight"),
         onTap: () {},
         child: Container(
           child: Padding(
@@ -279,7 +279,7 @@ class IncomeTransactionsSummary extends StatelessWidget {
                           ),
                           fontSize: 21,
                           textColor: incomeTransactions
-                              ? Theme.of(context).colorScheme.incomeGreen
+                              ? getColor(context, "incomeGreen")
                               : Theme.of(context).colorScheme.error,
                           fontWeight: FontWeight.bold,
                         );
@@ -302,7 +302,7 @@ class IncomeTransactionsSummary extends StatelessWidget {
                                   pluralString(
                                       snapshot.data![0] == 1, " transaction"),
                       fontSize: 13,
-                      textColor: Theme.of(context).colorScheme.textLight,
+                      textColor: getColor(context, "textLight"),
                     );
                   },
                 ),

@@ -317,7 +317,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextFont(
                   text: "Select Currency",
-                  textColor: Theme.of(context).colorScheme.textLight,
+                  textColor: getColor(context, "textLight"),
                   fontSize: 16,
                 ),
               ),
@@ -347,7 +347,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     child: Tappable(
                       color: selectedCurrency == key
                           ? Theme.of(context).colorScheme.secondaryContainer
-                          : Theme.of(context).colorScheme.lightDarkAccent,
+                          : getColor(context, "lightDarkAccent"),
                       borderRadius: 13,
                       onTap: () {
                         FocusScopeNode currentFocus = FocusScope.of(context);

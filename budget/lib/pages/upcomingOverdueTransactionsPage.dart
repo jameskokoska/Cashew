@@ -66,10 +66,8 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                                           : (snapshot.data ?? 0).abs()),
                                   fontSize: 25,
                                   textColor: overdueTransactions
-                                      ? Theme.of(context).colorScheme.unPaidRed
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .unPaidYellow,
+                                      ? getColor(context, "unPaidRed")
+                                      : getColor(context, "unPaidYellow"),
                                   fontWeight: FontWeight.bold,
                                 );
                               },
@@ -93,8 +91,7 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                                       pluralString(snapshot.data![0] == 1,
                                           " transaction"),
                               fontSize: 15,
-                              textColor:
-                                  Theme.of(context).colorScheme.textLight,
+                              textColor: getColor(context, "textLight"),
                             );
                           },
                         ),

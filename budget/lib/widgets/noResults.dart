@@ -25,7 +25,7 @@ class NoResults extends StatelessWidget {
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
                   !appStateSettings["materialYou"]
-                      ? Theme.of(context).colorScheme.black.withOpacity(0.1)
+                      ? getColor(context, "black").withOpacity(0.1)
                       : tintColor == null
                           ? Theme.of(context)
                               .colorScheme
@@ -51,7 +51,7 @@ class NoResults extends StatelessWidget {
               fontSize: 15,
               text: message,
               textAlign: TextAlign.center,
-              textColor: Theme.of(context).colorScheme.textLight,
+              textColor: getColor(context, "textLight"),
             ),
             // Lottie.asset('assets/animations/search-animation.json'),
           ],

@@ -87,7 +87,7 @@ class GlobalLoadingIndeterminateState
           child: LinearProgressIndicator(
             color: dynamicPastel(context, Theme.of(context).colorScheme.primary,
                 amount: 0.5),
-            backgroundColor: Theme.of(context).colorScheme.white,
+            backgroundColor: getColor(context, "white"),
             minHeight: 3,
           ),
         ),

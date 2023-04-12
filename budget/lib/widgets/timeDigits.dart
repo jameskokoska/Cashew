@@ -1,4 +1,3 @@
-
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class TimeDigits extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: getColor(context, "lightDarkAccent"),
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
@@ -37,7 +36,7 @@ class TimeDigits extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: getColor(context, "lightDarkAccent"),
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
@@ -54,7 +53,7 @@ class TimeDigits extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.lightDarkAccent,
+            color: getColor(context, "lightDarkAccent"),
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),

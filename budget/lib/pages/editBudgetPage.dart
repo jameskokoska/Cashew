@@ -246,20 +246,18 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                                     snapshot.data![0] == 1,
                                                     " transaction"),
                                             fontSize: 14,
-                                            textColor: Theme.of(context)
-                                                .colorScheme
-                                                .black
-                                                .withOpacity(0.65),
+                                            textColor:
+                                                getColor(context, "black")!
+                                                    .withOpacity(0.65),
                                           );
                                         } else {
                                           return TextFont(
                                             textAlign: TextAlign.left,
                                             text: "/ transactions",
                                             fontSize: 14,
-                                            textColor: Theme.of(context)
-                                                .colorScheme
-                                                .black
-                                                .withOpacity(0.65),
+                                            textColor:
+                                                getColor(context, "black")!
+                                                    .withOpacity(0.65),
                                           );
                                         }
                                       },

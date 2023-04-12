@@ -231,7 +231,7 @@ Future<bool> syncData() async {
   print("LOADING SYNC DB");
   DateTime syncStarted = DateTime.now();
   List<SyncLog> syncLogs = [];
-  List<String> filesSyncing = [];
+  List<drive.File> filesSyncing = [];
 
   for (drive.File file in filesToDownloadSyncChanges) {
     // we don't want to restore this clients backup
@@ -254,7 +254,7 @@ Future<bool> syncData() async {
     String? fileId = file.id;
     if (fileId == null) continue;
     print("SYNCING WITH " + (file.name ?? ""));
-    filesSyncing.add(file.name ?? "");
+    filesSyncing.add(file);
 
     List<int> dataStore = [];
     dynamic response = await driveApi.files
@@ -394,7 +394,7 @@ Future<bool> syncData() async {
           icon: Icons.warning_amber_rounded,
         ),
       );
-      filesSyncing.remove(file.name ?? "");
+      filesSyncing.remove(file);
       databaseSync.close();
       return false;
     }
@@ -402,10 +402,10 @@ Future<bool> syncData() async {
     databaseSync.close();
   }
 
-  database.processSyncLogs(syncLogs);
-  for (String fileName in filesSyncing)
-    setDateOfLastSyncedWithClient(
-        getDeviceFromSyncBackupFileName(fileName), syncStarted);
+  await database.processSyncLogs(syncLogs);
+  for (drive.File file in filesSyncing)
+    setDateOfLastSyncedWithClient(getDeviceFromSyncBackupFileName(file.name),
+        file.modifiedTime?.toLocal() ?? DateTime(0));
 
   try {
     print("UPDATED WALLET CURRENCY");
@@ -1212,9 +1212,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                     ? Theme.of(context)
                                         .colorScheme
                                         .secondaryContainer
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .lightDarkAccentHeavyLight,
+                                    : getColor(
+                                        context, "lightDarkAccentHeavyLight"),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 15),
@@ -1294,9 +1293,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                                         .colorScheme
                                                         .onSecondaryContainer
                                                         .withOpacity(0.08)
-                                                    : Theme.of(context)
-                                                        .colorScheme
-                                                        .lightDarkAccentHeavy
+                                                    : getColor(context,
+                                                            "lightDarkAccentHeavy")
                                                         .withOpacity(0.7),
                                                 onTap: () {
                                                   openPopup(
@@ -1389,10 +1387,10 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
           Duration(milliseconds: (1000 + randomDouble[i % 10] * 520).toInt()),
       baseColor: appStateSettings["materialYou"]
           ? Theme.of(context).colorScheme.secondaryContainer
-          : Theme.of(context).colorScheme.lightDarkAccentHeavyLight,
+          : getColor(context, "lightDarkAccentHeavyLight"),
       highlightColor: appStateSettings["materialYou"]
           ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.2)
-          : Theme.of(context).colorScheme.lightDarkAccentHeavy.withAlpha(20),
+          : getColor(context, "lightDarkAccentHeavy").withAlpha(20),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Tappable(
@@ -1403,10 +1401,7 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                   .colorScheme
                   .secondaryContainer
                   .withOpacity(0.5)
-              : Theme.of(context)
-                  .colorScheme
-                  .lightDarkAccentHeavy
-                  .withOpacity(0.5),
+              : getColor(context, "lightDarkAccentHeavy").withOpacity(0.5),
           child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               child: Row(

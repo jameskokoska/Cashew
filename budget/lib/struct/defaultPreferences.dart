@@ -55,5 +55,7 @@ Map<String, dynamic> defaultPreferences() {
     "lineGraphReferenceBudgetPk": null,
     "showPastSpendingTrajectory": false,
     "lastSynced": null,
+    "font": "Avenir",
+    "animationSpeed": 1.0,
   };
 }

@@ -3,118 +3,117 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
 //import 'package:budget/colors.dart';
-//Theme.of(context).colorScheme.lightDarkAccent
+//getColor(context, "lightDarkAccent")
 
-extension ColorsDefined on ColorScheme {
-  Color get white =>
-      brightness == Brightness.light ? Colors.white : Colors.black;
-  Color get black =>
-      brightness == Brightness.light ? Colors.black : Colors.white;
-  Color get textLight => brightness == Brightness.light
-      ? appStateSettings["materialYou"]
+late AppColors appColorsLight;
+
+late AppColors appColorsDark;
+
+Color getColor(BuildContext context, String colorName) {
+  return Theme.of(context).extension<AppColors>()!.colors[colorName] ??
+      Colors.red;
+}
+
+generateColors() {
+  appColorsLight = AppColors(
+    colors: {
+      "white": Colors.white,
+      "black": Colors.black,
+      "textLight": appStateSettings["materialYou"]
           ? Colors.black.withOpacity(0.4)
-          : Color(0xFF888888)
-      : appStateSettings["materialYou"]
-          ? Colors.white.withOpacity(0.25)
-          : Color(0xFF494949);
-  Color get textLightHeavy =>
-      brightness == Brightness.light ? Color(0xFF888888) : Color(0xFF1D1D1D);
-  Color get lightDarkAccent => brightness == Brightness.light
-      ? appStateSettings["materialYou"]
+          : Color(0xFF888888),
+      "lightDarkAccent": appStateSettings["materialYou"]
           ? lightenPastel(HexColor(appStateSettings["accentColor"]),
               amount: 0.8)
-          : Color(0xFFFAFAFA)
-      : appStateSettings["materialYou"]
-          ? darkenPastel(HexColor(appStateSettings["accentColor"]),
-              amount: 0.83)
-          : Color(0xFF161616);
-  Color get lightDarkAccentHeavyLight => brightness == Brightness.light
-      ? appStateSettings["materialYou"]
+          : Color(0xFFFAFAFA),
+      "lightDarkAccentHeavyLight": appStateSettings["materialYou"]
           ? lightenPastel(HexColor(appStateSettings["accentColor"]),
               amount: 0.92)
           : (appStateSettings["batterySaver"]
               ? Color(0xFFFAFAFA)
-              : Color(0xFFFFFFFF))
-      : appStateSettings["materialYou"]
+              : Color(0xFFFFFFFF)),
+      "canvasContainer": const Color(0xFFEBEBEB),
+      "lightDarkAccentHeavy": Color(0xFFEBEBEB),
+      "shadowColor": const Color(0x655A5A5A),
+      "shadowColorLight": const Color(0x2D5A5A5A), //
+      "unPaidYellow": Color(0xFFE2CE13),
+      "unPaidRed": Color(0xFFEB4848),
+      "incomeGreen": Color(0xFF55A246),
+    },
+  );
+  appColorsDark = AppColors(
+    colors: {
+      "white": Colors.black,
+      "black": Colors.white,
+      "textLight": appStateSettings["materialYou"]
+          ? Colors.white.withOpacity(0.25)
+          : Color(0xFF494949),
+      "lightDarkAccent": appStateSettings["materialYou"]
+          ? darkenPastel(HexColor(appStateSettings["accentColor"]),
+              amount: 0.83)
+          : Color(0xFF161616),
+      "lightDarkAccentHeavyLight": appStateSettings["materialYou"]
           ? darkenPastel(HexColor(appStateSettings["accentColor"]), amount: 0.8)
-          : Color(0xFF242424);
-  Color get canvasContainer => brightness == Brightness.light
-      ? const Color(0xFFEBEBEB)
-      : const Color(0xFF242424);
-  Color get lightDarkAccentHeavy => brightness == Brightness.light
-      ? Color(0xFFEBEBEB)
-      : const Color(0xFF444444);
-  Color get shadowColor => brightness == Brightness.light
-      ? const Color(0x655A5A5A)
-      : const Color(0x69BDBDBD);
-  Color get shadowColorLight => brightness == Brightness.light
-      ? const Color(0x2D5A5A5A)
-      : appStateSettings["materialYou"]
+          : Color(0xFF242424),
+      "canvasContainer": const Color(0xFF242424),
+      "lightDarkAccentHeavy": const Color(0xFF444444),
+      "shadowColor": const Color(0x69BDBDBD),
+      "shadowColorLight": appStateSettings["materialYou"]
           ? Colors.transparent
-          : Color(0x28747474);
-  // Color get accentColor => brightness == Brightness.light
-  //     ? const Color(0xFF4668A8)
-  //     : const Color(0xFF1B447A);
-  // Color get accentColorHeavy => brightness == Brightness.light
-  //     ? const Color(0xFF29457A)
-  //     : const Color(0xFF5586C5);
-  Color get unPaidYellow =>
-      brightness == Brightness.light ? Color(0xFFE2CE13) : Color(0xFFDED583);
-  Color get unPaidRed =>
-      brightness == Brightness.light ? Color(0xFFEB4848) : Color(0xFFDE8383);
-  Color get incomeGreen =>
-      brightness == Brightness.light ? Color(0xFF55A246) : Color(0xFF50BC65);
+          : Color(0x28747474),
+      "unPaidYellow": Color(0xFFDED583),
+      "unPaidRed": Color(0xFFDE8383),
+      "incomeGreen": Color(0xFF50BC65),
+    },
+  );
+}
 
-  Color get accentColor => brightness == Brightness.light
-      ? getSettingConstants(appStateSettings)["accentColor"]
-      : getSettingConstants(appStateSettings)["accentColor"];
-  Color get accentColorHeavy => brightness == Brightness.light
-      ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
-          amount: 0)
-      : lightenPastel(getSettingConstants(appStateSettings)["accentColor"],
-          amount: 0.5);
+extension ColorsDefined on ColorScheme {
+  Color get selectableColorRed => Colors.red.shade400;
+  Color get selectableColorGreen => Colors.green.shade400;
+  Color get selectableColorBlue => Colors.blue.shade400;
+  Color get selectableColorPurple => Colors.purple.shade400;
+  Color get selectableColorOrange => Colors.orange.shade400;
+  Color get selectableColorBlueGrey => Colors.blueGrey.shade400;
+  Color get selectableColorYellow => Colors.yellow.shade400;
+  Color get selectableColorAqua => Colors.teal.shade400;
+  Color get selectableColorInidigo => Colors.indigo;
+  Color get selectableColorGrey => Colors.grey.shade400;
+  Color get selectableColorBrown => Colors.brown.shade400;
+  Color get selectableColorDeepPurple => Colors.deepPurple.shade400;
+  Color get selectableColorDeepOrange => Colors.deepOrange.shade400;
+  Color get selectableColorCyan => Colors.cyan.shade400;
+}
 
-  Color get selectableColorRed => brightness == Brightness.light
-      ? Colors.red.shade400
-      : Colors.red.shade400;
-  Color get selectableColorGreen => brightness == Brightness.light
-      ? Colors.green.shade400
-      : Colors.green.shade400;
-  Color get selectableColorBlue => brightness == Brightness.light
-      ? Colors.blue.shade400
-      : Colors.blue.shade400;
-  Color get selectableColorPurple => brightness == Brightness.light
-      ? Colors.purple.shade400
-      : Colors.purple.shade400;
-  Color get selectableColorOrange => brightness == Brightness.light
-      ? Colors.orange.shade400
-      : Colors.orange.shade400;
-  Color get selectableColorBlueGrey => brightness == Brightness.light
-      ? Colors.blueGrey.shade400
-      : Colors.blueGrey.shade400;
-  Color get selectableColorYellow => brightness == Brightness.light
-      ? Colors.yellow.shade400
-      : Colors.yellow.shade400;
-  Color get selectableColorAqua => brightness == Brightness.light
-      ? Colors.teal.shade400
-      : Colors.teal.shade400;
-  Color get selectableColorInidigo =>
-      brightness == Brightness.light ? Colors.indigo : Colors.indigo;
-  Color get selectableColorGrey => brightness == Brightness.light
-      ? Colors.grey.shade400
-      : Colors.grey.shade400;
-  Color get selectableColorBrown => brightness == Brightness.light
-      ? Colors.brown.shade400
-      : Colors.brown.shade400;
-  Color get selectableColorDeepPurple => brightness == Brightness.light
-      ? Colors.deepPurple.shade400
-      : Colors.deepPurple.shade400;
-  Color get selectableColorDeepOrange => brightness == Brightness.light
-      ? Colors.deepOrange.shade400
-      : Colors.deepOrange.shade400;
-  Color get selectableColorCyan => brightness == Brightness.light
-      ? Colors.cyan.shade400
-      : Colors.cyan.shade400;
+class AppColors extends ThemeExtension<AppColors> {
+  const AppColors({
+    required this.colors,
+  });
+
+  final Map<String, Color?> colors;
+
+  @override
+  AppColors copyWith({Map<String, Color?>? colors}) {
+    return AppColors(
+      colors: colors ?? this.colors,
+    );
+  }
+
+  @override
+  AppColors lerp(ThemeExtension<AppColors>? other, double t) {
+    if (other is! AppColors) {
+      return this;
+    }
+
+    final Map<String, Color?> lerpColors = {};
+    colors.forEach((key, value) {
+      lerpColors[key] = Color.lerp(colors[key], other.colors[key], t);
+    });
+
+    return AppColors(
+      colors: lerpColors,
+    );
+  }
 }
 
 Color darken(Color color, [double amount = .1]) {

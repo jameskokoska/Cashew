@@ -152,9 +152,8 @@ class _ImportCSVState extends State<ImportCSV> {
                           ),
                           TableRow(
                             decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .lightDarkAccentHeavy),
+                                color:
+                                    getColor(context, "lightDarkAccentHeavy")!),
                             children: <Widget>[
                               for (dynamic entry in firstEntry)
                                 Padding(
@@ -213,8 +212,7 @@ class _ImportCSVState extends State<ImportCSV> {
                                   assignedColumns[key]!["setHeaderIndex"] =
                                       _getHeaderIndex(headers, setHeaderValue);
                                 },
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                backgroundColor: Theme.of(context).canvasColor,
                                 checkInitialValue: true,
                               ),
                             ],

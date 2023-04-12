@@ -58,14 +58,9 @@ class BottomNavBarState extends State<BottomNavBar> {
                 [
                   BoxShadow(
                     color: MediaQuery.of(context).size.width >= 600
-                        ? Theme.of(context)
-                            .colorScheme
-                            .shadowColorLight
-                            .withOpacity(0.3)
+                        ? getColor(context, "shadowColorLight").withOpacity(0.3)
                         : Theme.of(context).brightness == Brightness.light
-                            ? Theme.of(context)
-                                .colorScheme
-                                .shadowColorLight
+                            ? getColor(context, "shadowColorLight")
                                 .withOpacity(0.35)
                             : Colors.black.withOpacity(0.8),
                     blurRadius: 20,
@@ -80,13 +75,11 @@ class BottomNavBarState extends State<BottomNavBar> {
               child: NavigationBarTheme(
                 data: NavigationBarThemeData(
                   backgroundColor: appStateSettings["materialYou"]
-                      ? dynamicPastel(
-                          context, Theme.of(context).colorScheme.primary,
-                          amount: 0.9)
-                      : Theme.of(context).colorScheme.lightDarkAccent,
+                      ? null
+                      : getColor(context, "lightDarkAccent"),
                   surfaceTintColor: appStateSettings["materialYou"]
                       ? null
-                      : Theme.of(context).colorScheme.lightDarkAccent,
+                      : getColor(context, "lightDarkAccent"),
                   indicatorColor: appStateSettings["materialYou"]
                       ? dynamicPastel(
                           context, Theme.of(context).colorScheme.primary,

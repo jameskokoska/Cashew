@@ -424,7 +424,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                   },
                   icon: Icon(
                     Icons.arrow_back_rounded,
-                    color: Theme.of(context).colorScheme.black,
+                    color: getColor(context, "black"),
                   ),
                 ),
               ),
@@ -500,7 +500,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
               children: [
                 Container(
                   color: appBarBackgroundColorStart == null
-                      ? Theme.of(context).colorScheme.background
+                      ? Theme.of(context).canvasColor
                       : appBarBackgroundColorStart,
                 ),
                 subtitle != null &&

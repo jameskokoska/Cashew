@@ -35,7 +35,6 @@ enum TransactionSpecialType {
   upcoming,
   subscription,
   repetitive,
-  transactionTab
 }
 
 enum SharedOwnerMember {
@@ -58,6 +57,13 @@ enum ThemeSetting { dark, light }
 enum MethodAdded { email, shared, csv }
 
 enum SharedStatus { waiting, shared, error }
+
+enum SearchFilters {
+  income,
+  expense,
+  paid,
+  unpaid,
+}
 
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
