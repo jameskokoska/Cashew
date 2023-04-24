@@ -92,8 +92,8 @@ class SettingsPageState extends State<SettingsPage>
                   setSelectedColor: (color) {
                     selectedColor = color;
                     updateSettings("accentColor", toHexString(color));
-                    updateSettings("accentSystemColor", false,
-                        pagesNeedingRefresh: [3]);
+                    updateSettings("accentSystemColor", false);
+                    generateColors();
                   },
                   useSystemColorPrompt: true,
                 ),
@@ -157,9 +157,15 @@ class SettingsPageState extends State<SettingsPage>
         biometricsAvailable
             ? SettingsContainerSwitch(
                 title: "Require Biometrics",
-                onSwitched: (value) {
-                  updateSettings("requireAuth", value,
-                      updateGlobalState: false);
+                onSwitched: (value) async {
+                  bool result = await checkBiometrics(
+                    checkAlways: true,
+                    message: "Please verify your identity.",
+                  );
+                  if (result)
+                    updateSettings("requireAuth", value,
+                        updateGlobalState: false);
+                  return result;
                 },
                 initialValue: appStateSettings["requireAuth"],
                 icon: Icons.lock_rounded,

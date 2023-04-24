@@ -294,7 +294,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     if (selectedTitle != null &&
         selectedCategory != null &&
         selectedTitle != "")
-      addAssociatedTitles(selectedTitle!, selectedCategory!);
+      await addAssociatedTitles(selectedTitle!, selectedCategory!);
     Transaction createdTransaction = await createTransaction();
     if ([
       TransactionSpecialType.repetitive,
@@ -1610,9 +1610,13 @@ class _SelectTitleState extends State<SelectTitle> {
                       int categoryFk = result[1];
                       bool foundFromCategoryLocal = result[2];
 
-                      if (categoryFk != -1 &&
-                          categoryFk != 0 &&
-                          selectedTitleLocal != null) {
+                      if (selectedTitleLocal == null) {
+                        selectedTitleLocal = await getLikeAssociatedTitle(text);
+                        categoryFk = selectedTitleLocal?.categoryFk ?? -1;
+                        foundFromCategoryLocal = false;
+                      }
+
+                      if (categoryFk != -1 && categoryFk != 0) {
                         TransactionCategory? foundCategory =
                             await database.getCategoryInstance(categoryFk);
                         // Update the size of the bottom sheet
@@ -1659,6 +1663,11 @@ class _SelectTitleState extends State<SelectTitle> {
                               color: Colors.transparent,
                               onTap: () {
                                 widget.setSelectedCategory(selectedCategory!);
+                                if (foundFromCategory == false)
+                                  widget.setSelectedTitle(
+                                      selectedAssociatedTitle!.title);
+                                else
+                                  widget.setSelectedTitle("");
                                 Navigator.pop(context);
                                 if (widget.next != null) {
                                   widget.next!();
@@ -1975,6 +1984,15 @@ getRelatingAssociatedTitleLimited(String text) async {
   return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
 }
 
+Future<TransactionAssociatedTitle?> getLikeAssociatedTitle(String text) async {
+  if (text.trim() == "" || text.trim().length < 2) {
+    return null;
+  }
+  List<TransactionAssociatedTitle> similarTitles =
+      await database.getSimilarAssociatedTitles(title: text);
+  return similarTitles.isEmpty ? null : similarTitles[0];
+}
+
 getRelatingAssociatedTitle(String text) async {
   List<TransactionAssociatedTitle> allTitles =
       (await database.getAllAssociatedTitles());
@@ -2014,7 +2032,7 @@ getRelatingAssociatedTitle(String text) async {
   return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
 }
 
-addAssociatedTitles(
+Future<bool> addAssociatedTitles(
     String selectedTitle, TransactionCategory selectedCategory) async {
   if (appStateSettings["autoAddAssociatedTitles"]) {
     List result = await getRelatingAssociatedTitle(selectedTitle);
@@ -2033,7 +2051,7 @@ addAssociatedTitles(
       await database.createOrUpdateAssociatedTitle(
           checkIfAlreadyExists.copyWith(order: length));
       print("already has this title, moved to top");
-      return;
+      return true;
     } catch (e) {
       print(e.toString());
     }
@@ -2063,6 +2081,7 @@ addAssociatedTitles(
       );
     }
   }
+  return true;
 }
 
 class SelectChips extends StatefulWidget {
@@ -2081,7 +2100,7 @@ class SelectChips extends StatefulWidget {
   final bool Function(dynamic) getSelected;
   final Function(dynamic) onSelected;
   final String Function(dynamic) getLabel;
-  final Color Function(dynamic)? getCustomBorderColor;
+  final Color? Function(dynamic)? getCustomBorderColor;
   final Widget? extraWidget;
   final Function(dynamic)? onLongPress;
   final bool wrapped;
@@ -2111,10 +2130,11 @@ class _SelectChipsState extends State<SelectChips> {
                 selectedColor: appStateSettings["materialYou"]
                     ? null
                     : getColor(context, "lightDarkAccentHeavy"),
-                side: widget.getCustomBorderColor == null
+                side: widget.getCustomBorderColor == null ||
+                        widget.getCustomBorderColor!(item) == null
                     ? null
                     : BorderSide(
-                        color: widget.getCustomBorderColor!(item),
+                        color: widget.getCustomBorderColor!(item)!,
                       ),
                 label: TextFont(
                   text: label,

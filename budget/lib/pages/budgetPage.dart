@@ -441,7 +441,18 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 13),
                   child: Container(
-                    padding: EdgeInsets.only(left: 10, right: 5),
+                    padding:
+                        EdgeInsets.only(left: 5, right: 7, bottom: 12, top: 18),
+                    margin: EdgeInsets.symmetric(horizontal: 13),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      color: appStateSettings["materialYou"]
+                          ? dynamicPastel(
+                              context, budgetColorScheme.secondaryContainer,
+                              amount: 0.5)
+                          : getColor(context, "lightDarkAccentHeavyLight"),
+                      boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+                    ),
                     child: BudgetLineGraph(
                       budget: widget.budget,
                       dateForRange: dateForRange,
@@ -510,9 +521,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             double totalSpent = 0;
+                            int totalTransactions = 0;
                             snapshot.data!.forEach((category) {
                               totalSpent = totalSpent + category.total.abs();
                               totalSpent = totalSpent.abs();
+                              totalTransactions =
+                                  totalTransactions + category.transactionCount;
                             });
                             return Padding(
                               padding: const EdgeInsets.only(
@@ -523,7 +537,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               ),
                               child: TextFont(
                                 text: "Total cash flow: " +
-                                    convertToMoney(totalSpent),
+                                    convertToMoney(totalSpent) +
+                                    "\n" +
+                                    totalTransactions.toString() +
+                                    " transactions",
                                 fontSize: 13,
                                 textAlign: TextAlign.center,
                                 textColor: getColor(context, "textLight"),

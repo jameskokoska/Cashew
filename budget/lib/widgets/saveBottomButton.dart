@@ -100,6 +100,9 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
             ),
           ),
         ),
+        SizedBox(
+          height: MediaQuery.of(context).viewInsets.bottom,
+        )
       ],
     );
   }

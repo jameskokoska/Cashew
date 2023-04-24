@@ -1004,7 +1004,6 @@ class TodayIndicator extends StatelessWidget {
           child: OverflowBox(
             maxWidth: 500,
             child: SizedBox(
-              width: 38,
               child: Column(
                 children: [
                   SlideFadeTransition(
@@ -1212,7 +1211,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                           progressBackgroundColor:
                               selectedMember == spender.member
                                   ? getColor(context, "white")
-                                  : getColor(context, "lightDarkAccentHeavy")!,
+                                  : getColor(context, "lightDarkAccentHeavy"),
                           color: widget.budgetColorScheme.primary,
                           size: widget.isLarge ? 28 : 28,
                           insetPadding: widget.isLarge ? 23 : 18,

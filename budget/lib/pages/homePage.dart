@@ -6,6 +6,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/budgetPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
@@ -201,7 +202,7 @@ class HomePageState extends State<HomePage>
                       // Subtract one (1) here because of the thickness of the wiper above
                       height: 179 - 1 + MediaQuery.of(context).padding.top,
                       alignment: Alignment.bottomLeft,
-                      padding: EdgeInsets.only(left: 18, bottom: 22, right: 18),
+                      padding: EdgeInsets.only(left: 9, bottom: 22, right: 9),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -212,25 +213,29 @@ class HomePageState extends State<HomePage>
                             children: [
                               !showUsername
                                   ? SizedBox()
-                                  : AnimatedBuilder(
-                                      animation: _animationControllerHeader,
-                                      builder: (_, child) {
-                                        return Transform.translate(
-                                          offset: Offset(
-                                              0,
-                                              20 -
-                                                  20 *
-                                                      (_animationControllerHeader
-                                                          .value)),
-                                          child: child,
-                                        );
-                                      },
-                                      child: FadeTransition(
-                                        opacity: _animationControllerHeader2,
-                                        child: TextFont(
-                                          text: getWelcomeMessage(),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
+                                  : Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 9),
+                                      child: AnimatedBuilder(
+                                        animation: _animationControllerHeader,
+                                        builder: (_, child) {
+                                          return Transform.translate(
+                                            offset: Offset(
+                                                0,
+                                                20 -
+                                                    20 *
+                                                        (_animationControllerHeader
+                                                            .value)),
+                                            child: child,
+                                          );
+                                        },
+                                        child: FadeTransition(
+                                          opacity: _animationControllerHeader2,
+                                          child: TextFont(
+                                            text: getWelcomeMessage(),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -245,18 +250,28 @@ class HomePageState extends State<HomePage>
                                         : (_animationControllerHeader.value) *
                                                 0.5 +
                                             0.5,
-                                    child: child,
+                                    child: Tappable(
+                                      onTap: () {
+                                        enterNameBottomSheet(context);
+                                      },
+                                      borderRadius: 15,
+                                      child: child ?? SizedBox.shrink(),
+                                    ),
                                   );
                                 },
-                                child: TextFont(
-                                  text: !showUsername
-                                      ? "Home"
-                                      : appStateSettings["username"] ?? "",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 39,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 9),
+                                  child: TextFont(
+                                    text: !showUsername
+                                        ? "Home"
+                                        : appStateSettings["username"] ?? "",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 39,
+                                    textColor: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                  ),
                                 ),
                               ),
                             ],
@@ -458,10 +473,7 @@ class HomePageState extends State<HomePage>
                                   padding: const EdgeInsets.only(bottom: 13),
                                   child: Container(
                                     padding: EdgeInsets.only(
-                                        left: 10,
-                                        right: 10,
-                                        bottom: 10,
-                                        top: 20),
+                                        left: 5, right: 7, bottom: 12, top: 18),
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 13),
                                     decoration: BoxDecoration(

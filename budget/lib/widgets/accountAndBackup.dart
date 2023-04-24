@@ -244,8 +244,10 @@ Future<bool> syncData() async {
     print("COMPARING TIMES");
     print(file.modifiedTime?.toLocal());
     print(lastSynced);
+    print(lastSynced != file.modifiedTime!.toLocal());
     if (file.modifiedTime == null ||
-        lastSynced.isAfter(file.modifiedTime!.toLocal())) {
+        lastSynced.isAfter(file.modifiedTime!.toLocal()) ||
+        lastSynced == file.modifiedTime!.toLocal()) {
       print(
           "no need to restore backup from this client, no new backup file to pull data from");
       continue;

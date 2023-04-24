@@ -8,6 +8,15 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed wallet currencies icons
+    Biometrics unlock required verification to enable/disable
+    Improved biometrics unlock page
+    Rename nickname by tapping on homepage
+    Improved recommended titles when adding transactions
+    Opted for MultiExecutor for database
+    Total transaction count at bottom of budget page
+    New app icon
+    Added line graph background on budget page
     Started filters page
     Animation speed debug setting (modifies time dilation)
     Changed how colors are managed to follow flutters theming engine closely

@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -81,6 +82,11 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
   }
 
   Future<void> selectFilters(BuildContext context) async {
+    List<Budget> allSharedBudgets = [];
+    List<Budget> allAddedTransactionBudgets = [];
+    allSharedBudgets = await database.getAllBudgets(sharedBudgetsOnly: true);
+    allAddedTransactionBudgets =
+        await database.getAllBudgetsAddedTransactionsOnly();
     openBottomSheet(
       context,
       PopupFramework(
@@ -193,6 +199,41 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               getSelected: (item) {
                 if (item == "All") return true;
                 return false;
+              },
+            ),
+            SelectChips(
+              items: [
+                "All",
+                ...[for (Budget budget in allSharedBudgets) budget],
+                ...[for (Budget budget in allAddedTransactionBudgets) budget]
+              ],
+              getLabel: (item) {
+                if (item == "All") return "All";
+                return item?.name ?? "No Budget";
+              },
+              onSelected: (item) {
+                // setSelectedBudgetPk(
+                //   item,
+                //   isSharedBudget: item?.sharedKey != null,
+                // );
+              },
+              getSelected: (item) {
+                // return selectedBudgetPk == item?.budgetPk;
+                return true;
+              },
+              getCustomBorderColor: (item) {
+                if (item == "All") return null;
+                return dynamicPastel(
+                  context,
+                  lightenPastel(
+                    HexColor(
+                      item?.colour,
+                      defaultColor: Colors.transparent,
+                    ),
+                    amount: 0.3,
+                  ),
+                  amount: 0.4,
+                );
               },
             ),
             SelectChips(

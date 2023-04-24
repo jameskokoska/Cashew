@@ -970,6 +970,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Future<List<TransactionAssociatedTitle>> getSimilarAssociatedTitles(
+      {required String title, int? limit, int? offset}) {
+    return (select(associatedTitles)
+          ..where((t) =>
+              (t.title.lower().like("%" + (title).toLowerCase().trim() + "%")))
+          ..orderBy([(t) => OrderingTerm.desc(t.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .get();
+  }
+
   // watch all budgets that have been created that are pinned
   Stream<List<Budget>> watchAllPinnedBudgets({int? limit, int? offset}) {
     return (select(budgets)

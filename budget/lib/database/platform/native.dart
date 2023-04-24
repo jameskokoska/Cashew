@@ -13,7 +13,10 @@ FinanceDatabase constructDb(String dbName) {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, dbName + '.sqlite'));
-    return NativeDatabase(file);
+    // return NativeDatabase(file);
+    QueryExecutor foregroundExecutor = NativeDatabase(file);
+    QueryExecutor backgroundExecutor = NativeDatabase.createInBackground(file);
+    return MultiExecutor(read: foregroundExecutor, write: backgroundExecutor);
   });
   return FinanceDatabase(db);
 }

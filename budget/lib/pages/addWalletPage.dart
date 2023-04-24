@@ -3,7 +3,6 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -375,14 +374,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             IntrinsicWidth(
                               child: Row(
                                 children: [
-                                  Text(
-                                    currencies[key]["Symbol"],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  TextFont(text: currencies[key]["Code"]),
+                                  TextFont(
+                                      text: currencies[key]["Symbol"] +
+                                          " " +
+                                          currencies[key]["Code"]),
                                 ],
                               ),
                             )
