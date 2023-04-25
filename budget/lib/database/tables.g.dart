@@ -66,6 +66,14 @@ class $WalletsTable extends Wallets
   late final GeneratedColumn<String> currency = GeneratedColumn<String>(
       'currency', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _decimalsMeta =
+      const VerificationMeta('decimals');
+  @override
+  late final GeneratedColumn<int> decimals = GeneratedColumn<int>(
+      'decimals', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(2));
   @override
   List<GeneratedColumn> get $columns => [
         walletPk,
@@ -75,7 +83,8 @@ class $WalletsTable extends Wallets
         dateCreated,
         dateTimeModified,
         order,
-        currency
+        currency,
+        decimals
       ];
   @override
   String get aliasedName => _alias ?? 'wallets';
@@ -126,6 +135,10 @@ class $WalletsTable extends Wallets
       context.handle(_currencyMeta,
           currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
     }
+    if (data.containsKey('decimals')) {
+      context.handle(_decimalsMeta,
+          decimals.isAcceptableOrUnknown(data['decimals']!, _decimalsMeta));
+    }
     return context;
   }
 
@@ -151,6 +164,8 @@ class $WalletsTable extends Wallets
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       currency: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}currency']),
+      decimals: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}decimals'])!,
     );
   }
 
@@ -170,6 +185,7 @@ class TransactionWallet extends DataClass
   final DateTime? dateTimeModified;
   final int order;
   final String? currency;
+  final int decimals;
   const TransactionWallet(
       {required this.walletPk,
       required this.name,
@@ -178,7 +194,8 @@ class TransactionWallet extends DataClass
       required this.dateCreated,
       this.dateTimeModified,
       required this.order,
-      this.currency});
+      this.currency,
+      required this.decimals});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -198,6 +215,7 @@ class TransactionWallet extends DataClass
     if (!nullToAbsent || currency != null) {
       map['currency'] = Variable<String>(currency);
     }
+    map['decimals'] = Variable<int>(decimals);
     return map;
   }
 
@@ -218,6 +236,7 @@ class TransactionWallet extends DataClass
       currency: currency == null && nullToAbsent
           ? const Value.absent()
           : Value(currency),
+      decimals: Value(decimals),
     );
   }
 
@@ -234,6 +253,7 @@ class TransactionWallet extends DataClass
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
       order: serializer.fromJson<int>(json['order']),
       currency: serializer.fromJson<String?>(json['currency']),
+      decimals: serializer.fromJson<int>(json['decimals']),
     );
   }
   @override
@@ -248,6 +268,7 @@ class TransactionWallet extends DataClass
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
       'currency': serializer.toJson<String?>(currency),
+      'decimals': serializer.toJson<int>(decimals),
     };
   }
 
@@ -259,7 +280,8 @@ class TransactionWallet extends DataClass
           DateTime? dateCreated,
           Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
-          Value<String?> currency = const Value.absent()}) =>
+          Value<String?> currency = const Value.absent(),
+          int? decimals}) =>
       TransactionWallet(
         walletPk: walletPk ?? this.walletPk,
         name: name ?? this.name,
@@ -271,6 +293,7 @@ class TransactionWallet extends DataClass
             : this.dateTimeModified,
         order: order ?? this.order,
         currency: currency.present ? currency.value : this.currency,
+        decimals: decimals ?? this.decimals,
       );
   @override
   String toString() {
@@ -282,14 +305,15 @@ class TransactionWallet extends DataClass
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
-          ..write('currency: $currency')
+          ..write('currency: $currency, ')
+          ..write('decimals: $decimals')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(walletPk, name, colour, iconName, dateCreated,
-      dateTimeModified, order, currency);
+      dateTimeModified, order, currency, decimals);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -301,7 +325,8 @@ class TransactionWallet extends DataClass
           other.dateCreated == this.dateCreated &&
           other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
-          other.currency == this.currency);
+          other.currency == this.currency &&
+          other.decimals == this.decimals);
 }
 
 class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
@@ -313,6 +338,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
   final Value<DateTime?> dateTimeModified;
   final Value<int> order;
   final Value<String?> currency;
+  final Value<int> decimals;
   const WalletsCompanion({
     this.walletPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -322,6 +348,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
     this.currency = const Value.absent(),
+    this.decimals = const Value.absent(),
   });
   WalletsCompanion.insert({
     this.walletPk = const Value.absent(),
@@ -332,6 +359,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.dateTimeModified = const Value.absent(),
     required int order,
     this.currency = const Value.absent(),
+    this.decimals = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionWallet> custom({
@@ -343,6 +371,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
     Expression<String>? currency,
+    Expression<int>? decimals,
   }) {
     return RawValuesInsertable({
       if (walletPk != null) 'wallet_pk': walletPk,
@@ -353,6 +382,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
       if (currency != null) 'currency': currency,
+      if (decimals != null) 'decimals': decimals,
     });
   }
 
@@ -364,7 +394,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeModified,
       Value<int>? order,
-      Value<String?>? currency}) {
+      Value<String?>? currency,
+      Value<int>? decimals}) {
     return WalletsCompanion(
       walletPk: walletPk ?? this.walletPk,
       name: name ?? this.name,
@@ -374,6 +405,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
       currency: currency ?? this.currency,
+      decimals: decimals ?? this.decimals,
     );
   }
 
@@ -404,6 +436,9 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     if (currency.present) {
       map['currency'] = Variable<String>(currency.value);
     }
+    if (decimals.present) {
+      map['decimals'] = Variable<int>(decimals.value);
+    }
     return map;
   }
 
@@ -417,7 +452,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
-          ..write('currency: $currency')
+          ..write('currency: $currency, ')
+          ..write('decimals: $decimals')
           ..write(')'))
         .toString();
   }

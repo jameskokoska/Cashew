@@ -4,16 +4,21 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
 class NoResults extends StatelessWidget {
-  const NoResults({Key? key, required this.message, this.tintColor})
-      : super(key: key);
+  const NoResults({
+    Key? key,
+    required this.message,
+    this.tintColor,
+    this.padding = const EdgeInsets.only(top: 35, right: 30, left: 30),
+  }) : super(key: key);
   final String message;
   final Color? tintColor;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(top: 35, right: 30, left: 30),
+        padding: padding,
         child: Column(
           children: [
             Container(

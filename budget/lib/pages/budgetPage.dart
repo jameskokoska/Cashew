@@ -441,8 +441,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 13),
                   child: Container(
-                    padding:
-                        EdgeInsets.only(left: 5, right: 7, bottom: 12, top: 18),
                     margin: EdgeInsets.symmetric(horizontal: 13),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -462,6 +460,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       budgetRange: budgetRange,
                       budgetColorScheme: budgetColorScheme,
                       showIfNone: false,
+                      padding: EdgeInsets.only(
+                          left: 5, right: 7, bottom: 12, top: 18),
                     ),
                   ),
                 ),
@@ -665,6 +665,7 @@ class BudgetLineGraph extends StatefulWidget {
     required this.budgetColorScheme,
     this.showPastSpending = true,
     this.showIfNone = true,
+    this.padding = EdgeInsets.zero,
     super.key,
   });
 
@@ -677,6 +678,7 @@ class BudgetLineGraph extends StatefulWidget {
   final ColorScheme budgetColorScheme;
   final bool showPastSpending;
   final bool showIfNone;
+  final EdgeInsets padding;
 
   @override
   State<BudgetLineGraph> createState() => _BudgetLineGraphState();
@@ -828,33 +830,37 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               widget.selectedCategoryPk != -1 && widget.selectedCategory != null
                   ? HexColor(widget.selectedCategory!.colour)
                   : widget.budgetColorScheme.primary;
-          if (totalZeroes == pointsList[0].length) return SizedBox.shrink();
-          return LineChartWrapper(
-            color: lineColor,
-            verticalLineAt: widget.isPastBudget == true
-                ? null
-                : (widget.budgetRange.end
-                        .difference((widget.dateForRange ?? DateTime.now()))
-                        .inDays)
-                    .toDouble(),
-            endDate: widget.budgetRange.end,
-            points: pointsList,
-            isCurved: true,
-            colors: [
-              for (int index = 0; index < snapshot.data!.length; index++)
-                index == 0
-                    ? lineColor
-                    : (widget.selectedCategoryPk != -1 &&
-                                widget.selectedCategory != null
-                            ? lineColor
-                            : widget.budgetColorScheme.tertiary)
-                        .withOpacity((index) / snapshot.data!.length)
-            ],
-            horizontalLineAt: widget.budget.amount *
-                ((DateTime.now().millisecondsSinceEpoch -
-                        widget.budgetRange.start.millisecondsSinceEpoch) /
-                    (widget.budgetRange.end.millisecondsSinceEpoch -
-                        widget.budgetRange.start.millisecondsSinceEpoch)),
+          if (widget.showIfNone == false && totalZeroes == pointsList[0].length)
+            return SizedBox.shrink();
+          return Padding(
+            padding: widget.padding,
+            child: LineChartWrapper(
+              color: lineColor,
+              verticalLineAt: widget.isPastBudget == true
+                  ? null
+                  : (widget.budgetRange.end
+                          .difference((widget.dateForRange ?? DateTime.now()))
+                          .inDays)
+                      .toDouble(),
+              endDate: widget.budgetRange.end,
+              points: pointsList,
+              isCurved: true,
+              colors: [
+                for (int index = 0; index < snapshot.data!.length; index++)
+                  index == 0
+                      ? lineColor
+                      : (widget.selectedCategoryPk != -1 &&
+                                  widget.selectedCategory != null
+                              ? lineColor
+                              : widget.budgetColorScheme.tertiary)
+                          .withOpacity((index) / snapshot.data!.length)
+              ],
+              horizontalLineAt: widget.budget.amount *
+                  ((DateTime.now().millisecondsSinceEpoch -
+                          widget.budgetRange.start.millisecondsSinceEpoch) /
+                      (widget.budgetRange.end.millisecondsSinceEpoch -
+                          widget.budgetRange.start.millisecondsSinceEpoch)),
+            ),
           );
         }
         return SizedBox.shrink();

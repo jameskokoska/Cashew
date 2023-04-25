@@ -423,6 +423,8 @@ Future<bool> syncData() async {
         await database.getWalletInstance(appStateSettings["selectedWallet"]);
     updateSettings("selectedWalletCurrency", selectedWallet.currency,
         updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+    updateSettings("selectedWalletDecimals", selectedWallet.decimals,
+        updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
   } catch (e) {
     print("Selected wallet not found: " + e.toString());
     await setPrimaryWallet((await database.getAllWallets())[0]);

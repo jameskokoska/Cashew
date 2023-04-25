@@ -5,6 +5,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,16 @@ class DebugPage extends StatelessWidget {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
+        SettingsContainerDropdown(
+          title: "Font",
+          icon: Icons.font_download_rounded,
+          initial: appStateSettings["font"],
+          items: ["Avenir", "Inter", "DMSans", "OpenSans", "Metropolis"],
+          onChanged: (value) {
+            updateSettings("font", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+        ),
         SliderSelector(
           min: 0,
           max: 3,

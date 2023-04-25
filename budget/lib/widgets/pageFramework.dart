@@ -99,6 +99,11 @@ class PageFrameworkState extends State<PageFramework>
         duration: Duration(milliseconds: duration), curve: Curves.elasticOut);
   }
 
+  void scrollTo(double position, {duration = 1200}) {
+    _scrollController.animateTo(position,
+        duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
+  }
+
   void initState() {
     super.initState();
     _animationControllerShift = AnimationController(

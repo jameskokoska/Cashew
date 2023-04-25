@@ -32,46 +32,54 @@ extension CapExtension on String {
       .join(" ");
 }
 
-String convertToMoney(double amount,
-    {String? currencyKey, bool showCurrency = true, double? finalNumber}) {
-  {
-    if (amount == -0.0) {
-      amount = amount.abs();
-    }
-    if (amount == double.infinity) {
-      return "Infinity";
-    }
-    final currency = new NumberFormat("#,##0.00", "en_US");
-    String formatOutput = currency.format(amount);
-    if (finalNumber != null &&
-        !finalNumber.abs().toStringAsFixed(5).split(".")[1].startsWith("00")) {
-      return (showCurrency ? getCurrencyString(currencyKey: currencyKey) : '') +
-          currency.format(amount);
-    }
-    if ((finalNumber != null &&
-            finalNumber
-                .abs()
-                .toStringAsFixed(5)
-                .split(".")[1]
-                .startsWith("00")) ||
-        formatOutput.substring(formatOutput.length - 2) == "00") {
-      // Do not show the zeroes
-      return (showCurrency ? getCurrencyString(currencyKey: currencyKey) : '') +
-          formatOutput.replaceRange(
-              formatOutput.length - 3, formatOutput.length, '');
-    }
-    return (showCurrency ? getCurrencyString(currencyKey: currencyKey) : '') +
-        currency.format(amount);
-  }
-}
+String convertToMoney(
+  double amount, {
+  String? currencyKey,
+  bool showCurrency = true,
+  double? finalNumber,
+  int? decimals,
+}) {
+  int numberDecimals = decimals ?? appStateSettings["selectedWalletDecimals"];
+  numberDecimals = numberDecimals > 2 && amount.toString().split('.').length > 1
+      ? amount.toString().split('.')[1].length < numberDecimals
+          ? amount.toString().split('.')[1].length
+          : numberDecimals
+      : numberDecimals;
 
-int moneyDecimals(double amount) {
-  final currency = new NumberFormat("#,##0.00", "en_US");
-  String formatOutput = currency.format(amount);
-  if (formatOutput.substring(formatOutput.length - 2) == "00") {
-    return 0;
+  if (amount == -0.0) {
+    amount = amount.abs();
   }
-  return 2;
+  if (amount == double.infinity) {
+    return "Infinity";
+  }
+  NumberFormat currency = new NumberFormat.currency(
+    decimalDigits: numberDecimals,
+    locale: Platform.localeName,
+    symbol: (showCurrency ? getCurrencyString(currencyKey: currencyKey) : ''),
+  );
+  String formatOutput = currency.format(amount);
+
+  if (finalNumber != null &&
+      !finalNumber
+          .abs()
+          .toStringAsFixed(numberDecimals)
+          .split(".")[1]
+          .startsWith("0" * numberDecimals)) {
+    return currency.format(amount);
+  }
+  if ((finalNumber != null &&
+          finalNumber
+              .abs()
+              .toStringAsFixed(numberDecimals)
+              .split(".")[1]
+              .startsWith("0" * numberDecimals)) ||
+      formatOutput.substring(formatOutput.length - numberDecimals) ==
+          "0" * numberDecimals) {
+    // Do not show the zeroes
+    return formatOutput.replaceRange(
+        formatOutput.length - numberDecimals - 1, formatOutput.length, '');
+  }
+  return currency.format(amount);
 }
 
 // assume selected wallets currency

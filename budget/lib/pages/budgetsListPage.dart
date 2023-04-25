@@ -4,8 +4,10 @@ import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    hide SliverReorderableList, ReorderableDelayedDragStartListener;
 import 'package:flutter/services.dart';
+import 'package:budget/struct/reorderable_list.dart';
 
 class BudgetsListPage extends StatefulWidget {
   const BudgetsListPage({Key? key}) : super(key: key);
@@ -74,6 +76,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
                       await database.moveBudget(
                           oldBudget.budgetPk, _intNew, oldBudget.order);
                     }
+                    return true;
                   },
                   onReorderStart: (index) {
                     HapticFeedback.heavyImpact();

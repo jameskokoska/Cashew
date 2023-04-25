@@ -13,6 +13,7 @@ Map<String, dynamic> defaultPreferences() {
     "theme": "system",
     "selectedWallet": 0,
     "selectedWalletCurrency": "usd",
+    "selectedWalletDecimals": 2,
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "accentSystemColor": true,

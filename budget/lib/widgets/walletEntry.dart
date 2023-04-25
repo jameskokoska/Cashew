@@ -97,8 +97,9 @@ class _WalletEntryState extends State<WalletEntry>
                             builder: (context, snapshot) {
                               return CountNumber(
                                 count: (snapshot.data ?? 0 * -1),
-                                duration: Duration(milliseconds: 4000),
+                                duration: Duration(milliseconds: 1500),
                                 dynamicDecimals: true,
+                                decimals: widget.wallet.decimals,
                                 initialCount: (snapshot.data ?? 0 * -1),
                                 textBuilder: (number) {
                                   return TextFont(
@@ -128,7 +129,7 @@ class _WalletEntryState extends State<WalletEntry>
                                       pluralString(snapshot.data![0] == 1,
                                           " transaction"),
                                   fontSize: 14,
-                                  textColor: getColor(context, "black")!
+                                  textColor: getColor(context, "black")
                                       .withOpacity(0.65),
                                 );
                               } else {
@@ -167,6 +168,8 @@ Future<bool> setPrimaryWallet(TransactionWallet wallet) async {
   TransactionWallet defaultWallet =
       await database.getWalletInstance(wallet.walletPk);
   updateSettings("selectedWalletCurrency", defaultWallet.currency,
+      updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+  updateSettings("selectedWalletDecimals", defaultWallet.decimals,
       updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
   return true;
 }

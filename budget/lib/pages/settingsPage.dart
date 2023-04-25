@@ -127,16 +127,6 @@ class SettingsPageState extends State<SettingsPage>
             }
           },
         ),
-        SettingsContainerDropdown(
-          title: "Font",
-          icon: Icons.font_download_rounded,
-          initial: appStateSettings["font"],
-          items: ["Avenir", "Inter", "DMSans", "OpenSans", "Metropolis"],
-          onChanged: (value) {
-            updateSettings("font", value,
-                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          },
-        ),
         EnterName(),
         SettingsHeader(title: "Preferences"),
         // In the future, each wallet will have its own currency

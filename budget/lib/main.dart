@@ -264,6 +264,7 @@ Future<bool> initializeDatabase() async {
         order: 0,
         currency: "usd",
         dateTimeModified: null,
+        decimals: 2,
       ),
       customDateTimeModified: DateTime(0),
     );

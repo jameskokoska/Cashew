@@ -1,4 +1,3 @@
-import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -16,9 +15,10 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
+import 'package:budget/struct/reorderable_list.dart';
 
 class EditAssociatedTitlesPage extends StatefulWidget {
   EditAssociatedTitlesPage({
@@ -130,129 +130,141 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
               icon: Icons.add_box_rounded,
             ),
           ),
-          StreamBuilder<List<TransactionAssociatedTitle>>(
-            stream: database.watchAllAssociatedTitles(
-                searchFor: searchValue == "" ? null : searchValue),
-            builder: (context, snapshot) {
-              // print(snapshot.data);
-              if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
-                return SliverToBoxAdapter(
-                  child: NoResults(
-                    message: "No associated category titles found.",
-                  ),
-                );
-              }
-              if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-                return SliverReorderableList(
-                  onReorderStart: (index) {
-                    HapticFeedback.heavyImpact();
-                    setState(() {
-                      dragDownToDismissEnabled = false;
-                      currentReorder = index;
-                    });
-                  },
-                  onReorderEnd: (_) {
-                    setState(() {
-                      dragDownToDismissEnabled = true;
-                      currentReorder = -1;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    TransactionAssociatedTitle associatedTitle =
-                        snapshot.data![index];
-                    return EditRowEntry(
-                      canReorder: searchValue == "" &&
-                          (snapshot.data ?? []).length != 1,
-                      onTap: () {
-                        openBottomSheet(
-                          context,
-                          AddAssociatedTitlePage(
-                            title: "Add Title",
-                            associatedTitle: associatedTitle,
-                          ),
-                        );
-                      },
-                      padding: EdgeInsets.symmetric(vertical: 7, horizontal: 7),
-                      currentReorder:
-                          currentReorder != -1 && currentReorder != index,
-                      index: index,
-                      backgroundColor: getColor(context, "lightDarkAccent")!,
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CategoryIcon(
-                            categoryPk: associatedTitle.categoryFk,
-                            size: 25,
-                            margin: EdgeInsets.zero,
-                            sizePadding: 20,
-                            borderRadius: 15,
-                          ),
-                          SizedBox(width: 15),
-                          Expanded(
-                            child: TextFont(
-                              text: associatedTitle.title +
-                                  " - " +
-                                  associatedTitle.order.toString(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19,
-                              maxLines: 10,
+          StreamBuilder<Map<int, TransactionCategory>>(
+              stream: database.watchAllCategoriesMapped(),
+              builder: (context, mappedCategoriesSnapshot) {
+                return StreamBuilder<List<TransactionAssociatedTitle>>(
+                  stream: database.watchAllAssociatedTitles(
+                      searchFor: searchValue == "" ? null : searchValue),
+                  builder: (context, snapshot) {
+                    // print(snapshot.data);
+                    if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
+                      return SliverToBoxAdapter(
+                        child: NoResults(
+                          message: "No associated category titles found.",
+                        ),
+                      );
+                    }
+                    if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+                      return SliverReorderableList(
+                        onReorderStart: (index) {
+                          HapticFeedback.heavyImpact();
+                          setState(() {
+                            dragDownToDismissEnabled = false;
+                            currentReorder = index;
+                          });
+                        },
+                        onReorderEnd: (_) {
+                          setState(() {
+                            dragDownToDismissEnabled = true;
+                            currentReorder = -1;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          TransactionAssociatedTitle associatedTitle =
+                              snapshot.data![index];
+                          return EditRowEntry(
+                            canReorder: searchValue == "" &&
+                                (snapshot.data ?? []).length != 1,
+                            onTap: () {
+                              openBottomSheet(
+                                context,
+                                AddAssociatedTitlePage(
+                                  title: "Add Title",
+                                  associatedTitle: associatedTitle,
+                                ),
+                              );
+                            },
+                            padding: EdgeInsets.symmetric(
+                                vertical: 7, horizontal: 7),
+                            currentReorder:
+                                currentReorder != -1 && currentReorder != index,
+                            index: index,
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 3),
+                                CategoryIcon(
+                                  categoryPk: associatedTitle.categoryFk,
+                                  size: 25,
+                                  margin: EdgeInsets.zero,
+                                  sizePadding: 20,
+                                  borderRadius: 1000,
+                                  category: mappedCategoriesSnapshot
+                                      .data![associatedTitle.categoryFk],
+                                ),
+                                SizedBox(width: 15),
+                                Expanded(
+                                  child: TextFont(
+                                    text: associatedTitle.title
+                                    // +
+                                    //     " - " +
+                                    //     associatedTitle.order.toString()
+                                    ,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 19,
+                                    maxLines: 10,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      onDelete: () {
-                        openPopup(
-                          context,
-                          title: "Delete " + associatedTitle.title + "?",
-                          icon: Icons.delete_rounded,
-                          onCancel: () {
-                            Navigator.pop(context);
-                          },
-                          onCancelLabel: "Cancel",
-                          onSubmit: () async {
-                            await database.deleteAssociatedTitle(
-                                associatedTitle.associatedTitlePk,
-                                associatedTitle.order);
-                            Navigator.pop(context);
-                            openSnackbar(
-                              SnackbarMessage(
-                                  title: "Deleted " + associatedTitle.title,
-                                  icon: Icons.delete),
-                            );
-                          },
-                          onSubmitLabel: "Delete",
-                        );
-                      },
-                      openPage: Container(),
-                      key: ValueKey(index),
+                            onDelete: () {
+                              openPopup(
+                                context,
+                                title: "Delete " + associatedTitle.title + "?",
+                                icon: Icons.delete_rounded,
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                                onCancelLabel: "Cancel",
+                                onSubmit: () async {
+                                  await database.deleteAssociatedTitle(
+                                      associatedTitle.associatedTitlePk,
+                                      associatedTitle.order);
+                                  Navigator.pop(context);
+                                  openSnackbar(
+                                    SnackbarMessage(
+                                        title:
+                                            "Deleted " + associatedTitle.title,
+                                        icon: Icons.delete),
+                                  );
+                                },
+                                onSubmitLabel: "Delete",
+                              );
+                            },
+                            openPage: Container(),
+                            key: ValueKey(index),
+                          );
+                        },
+                        itemCount: snapshot.data!.length,
+                        onReorder: (_intPrevious, _intNew) async {
+                          TransactionAssociatedTitle oldTitle =
+                              snapshot.data![_intPrevious];
+                          _intNew = snapshot.data!.length - _intNew;
+                          _intPrevious = snapshot.data!.length - _intPrevious;
+                          if (_intNew > _intPrevious) {
+                            await database.moveAssociatedTitle(
+                                oldTitle.associatedTitlePk,
+                                _intNew - 1,
+                                oldTitle.order);
+                          } else {
+                            await database.moveAssociatedTitle(
+                                oldTitle.associatedTitlePk,
+                                _intNew,
+                                oldTitle.order);
+                          }
+
+                          return true;
+                        },
+                      );
+                    }
+                    return SliverToBoxAdapter(
+                      child: Container(),
                     );
                   },
-                  itemCount: snapshot.data!.length,
-                  onReorder: (_intPrevious, _intNew) async {
-                    TransactionAssociatedTitle oldTitle =
-                        snapshot.data![_intPrevious];
-
-                    _intNew = snapshot.data!.length - _intNew;
-                    _intPrevious = snapshot.data!.length - _intPrevious;
-
-                    if (_intNew > _intPrevious) {
-                      await database.moveAssociatedTitle(
-                          oldTitle.associatedTitlePk,
-                          _intNew - 1,
-                          oldTitle.order);
-                    } else {
-                      await database.moveAssociatedTitle(
-                          oldTitle.associatedTitlePk, _intNew, oldTitle.order);
-                    }
-                  },
                 );
-              }
-              return SliverToBoxAdapter(
-                child: Container(),
-              );
-            },
-          ),
+              }),
           SliverToBoxAdapter(
             child: SizedBox(height: 85),
           ),

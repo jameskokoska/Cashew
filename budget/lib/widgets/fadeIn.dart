@@ -228,7 +228,7 @@ class CountNumber extends StatefulWidget {
     this.duration = const Duration(milliseconds: 3000),
     this.curve = Curves.easeOutQuint,
     this.initialCount = 0,
-    this.decimals = 2,
+    this.decimals,
     this.dynamicDecimals = false,
     this.lazyFirstRender = true,
   }) : super(key: key);
@@ -239,7 +239,7 @@ class CountNumber extends StatefulWidget {
   final Duration duration;
   final Curve curve;
   final double initialCount;
-  final int decimals;
+  final int? decimals;
   final bool dynamicDecimals;
   final bool lazyFirstRender;
 
@@ -248,14 +248,22 @@ class CountNumber extends StatefulWidget {
 }
 
 class _CountNumberState extends State<CountNumber> {
+  late int finalDecimalPlaces =
+      ((widget.decimals ?? appStateSettings["selectedWalletDecimals"]) > 2
+          ? widget.count.toString().split('.')[1].length <
+                  (widget.decimals ??
+                      appStateSettings["selectedWalletDecimals"])
+              ? widget.count.toString().split('.')[1].length
+              : (widget.decimals ?? appStateSettings["selectedWalletDecimals"])
+          : (widget.decimals ?? appStateSettings["selectedWalletDecimals"]));
   double previousAmount = 0;
-  int decimals = 2;
+  late int decimals = finalDecimalPlaces;
   bool lazyFirstRender = true;
   @override
   void initState() {
     super.initState();
     previousAmount = widget.initialCount;
-    decimals = widget.decimals;
+    decimals = finalDecimalPlaces;
     lazyFirstRender = widget.lazyFirstRender;
   }
 
@@ -265,13 +273,22 @@ class _CountNumberState extends State<CountNumber> {
       if (widget.count % 1 == 0) {
         decimals = 0;
       } else {
-        decimals = widget.decimals;
+        decimals =
+            ((widget.decimals ?? appStateSettings["selectedWalletDecimals"]) > 2
+                ? widget.count.toString().split('.')[1].length <
+                        (widget.decimals ??
+                            appStateSettings["selectedWalletDecimals"])
+                    ? widget.count.toString().split('.')[1].length
+                    : (widget.decimals ??
+                        appStateSettings["selectedWalletDecimals"])
+                : (widget.decimals ??
+                    appStateSettings["selectedWalletDecimals"]));
       }
     }
 
     if (appStateSettings["batterySaver"]) {
       return widget.textBuilder(
-        double.parse((widget.count).toStringAsFixed(widget.decimals)),
+        double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)),
       );
     }
 

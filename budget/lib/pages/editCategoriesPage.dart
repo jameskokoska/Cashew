@@ -18,9 +18,10 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
+import 'package:budget/struct/reorderable_list.dart';
 
 class EditCategoriesPage extends StatefulWidget {
   EditCategoriesPage({
@@ -125,13 +126,6 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                   },
                   itemBuilder: (context, index) {
                     TransactionCategory category = snapshot.data![index];
-                    Color backgroundColor = dynamicPastel(
-                        context,
-                        HexColor(category.colour,
-                            defaultColor:
-                                Theme.of(context).colorScheme.primary),
-                        amountLight: 0.55,
-                        amountDark: 0.35);
                     return EditRowEntry(
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,
@@ -140,15 +134,16 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       key: ValueKey(index),
-                      backgroundColor: backgroundColor,
                       content: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CategoryIcon(
                             categoryPk: category.categoryPk,
-                            size: 40,
+                            size: 31,
                             category: category,
                             canEditByLongPress: false,
+                            borderRadius: 1000,
+                            sizePadding: 23,
                           ),
                           Container(width: 5),
                           Expanded(
@@ -157,9 +152,11 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 TextFont(
-                                  text: category.name +
-                                      " - " +
-                                      category.order.toString(),
+                                  text: category.name
+                                  // +
+                                  //     " - " +
+                                  //     category.order.toString()
+                                  ,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 19,
                                 ),
@@ -177,7 +174,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                             pluralString(snapshot.data![0] == 1,
                                                 " transaction"),
                                         fontSize: 14,
-                                        textColor: getColor(context, "black")!
+                                        textColor: getColor(context, "black")
                                             .withOpacity(0.65),
                                       );
                                     } else {
@@ -185,7 +182,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                         textAlign: TextAlign.left,
                                         text: "/ transactions",
                                         fontSize: 14,
-                                        textColor: getColor(context, "black")!
+                                        textColor: getColor(context, "black")
                                             .withOpacity(0.65),
                                       );
                                     }
@@ -218,6 +215,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                       await database.moveCategory(
                           oldCategory.categoryPk, _intNew, oldCategory.order);
                     }
+                    return true;
                   },
                 );
               }

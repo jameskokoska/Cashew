@@ -19,8 +19,9 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
+import 'package:budget/struct/reorderable_list.dart';
 
 class EditBudgetPage extends StatefulWidget {
   EditBudgetPage({
@@ -222,7 +223,8 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                 fontSize: 15,
                               ),
                               Container(height: 2),
-                              budget.sharedKey == null
+                              budget.sharedKey == null &&
+                                      !budget.addedTransactionsOnly
                                   ? TextFont(
                                       text: budget.categoryFks == null ||
                                               budget.categoryFks!.length == 0
@@ -247,7 +249,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                                     " transaction"),
                                             fontSize: 14,
                                             textColor:
-                                                getColor(context, "black")!
+                                                getColor(context, "black")
                                                     .withOpacity(0.65),
                                           );
                                         } else {
@@ -256,7 +258,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                             text: "/ transactions",
                                             fontSize: 14,
                                             textColor:
-                                                getColor(context, "black")!
+                                                getColor(context, "black")
                                                     .withOpacity(0.65),
                                           );
                                         }
@@ -344,6 +346,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                       await database.moveBudget(
                           oldBudget.budgetPk, _intNew, oldBudget.order);
                     }
+                    return true;
                   },
                 );
               }

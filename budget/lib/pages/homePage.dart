@@ -254,6 +254,9 @@ class HomePageState extends State<HomePage>
                                       onTap: () {
                                         enterNameBottomSheet(context);
                                       },
+                                      onLongPress: () {
+                                        enterNameBottomSheet(context);
+                                      },
                                       borderRadius: 15,
                                       child: child ?? SizedBox.shrink(),
                                     ),
@@ -846,7 +849,7 @@ class UpcomingTransactions extends StatelessWidget {
                                     snapshot.data == null
                                 ? 0
                                 : (snapshot.data ?? 0).abs(),
-                            duration: Duration(milliseconds: 2500),
+                            duration: Duration(milliseconds: 1500),
                             dynamicDecimals: true,
                             initialCount: (0),
                             textBuilder: (number) {
@@ -856,11 +859,15 @@ class UpcomingTransactions extends StatelessWidget {
                                             snapshot.data == null
                                         ? 0
                                         : (snapshot.data ?? 0).abs()),
-                                fontSize: 24,
                                 textColor: overdueTransactions
                                     ? getColor(context, "unPaidRed")
                                     : getColor(context, "unPaidYellow"),
                                 fontWeight: FontWeight.bold,
+                                autoSizeText: true,
+                                fontSize: 24,
+                                maxFontSize: 24,
+                                minFontSize: 10,
+                                maxLines: 1,
                               );
                             },
                           );

@@ -165,6 +165,7 @@ class _SelectColorState extends State<SelectColor> {
                       Color accentColor = SystemTheme.accentColor.accent;
                       updateSettings("accentColor", toHexString(accentColor),
                           updateGlobalState: true);
+                      generateColors();
                     } else {
                       widget.setSelectedColor!(selectedColor);
                     }
@@ -386,7 +387,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
             child: ColorPicker(
               colorSliderPosition: colorSliderPosition,
               shadeSliderPosition: shadeSliderPosition,
-              ringColor: getColor(context, "black")!,
+              ringColor: getColor(context, "black"),
               ringSize: 10,
               width: getWidthBottomSheet(context) - 100,
               onChange: (color, colorSliderPositionPassed,

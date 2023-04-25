@@ -49,6 +49,7 @@ class SelectAmount extends StatefulWidget {
 }
 
 class _SelectAmountState extends State<SelectAmount> {
+  late int numberDecimals;
   String amount = "";
 
   FocusNode _focusNode = FocusNode();
@@ -62,10 +63,16 @@ class _SelectAmountState extends State<SelectAmount> {
     super.initState();
     selectedWallet = widget.selectedWallet;
     walletPkForCurrency = widget.walletPkForCurrency;
-    amount = widget.amountPassed;
-    if (amount.endsWith(".0")) {
-      amount = widget.amountPassed.replaceAll(".0", "");
-    }
+    numberDecimals = widget.selectedWallet?.decimals ??
+        appStateSettings["selectedWalletDecimals"];
+    try {
+      amount =
+          double.parse(widget.amountPassed).toStringAsFixed(numberDecimals);
+    } catch (e) {}
+    amount = removeTrailingZeroes(amount);
+    // if (amount.endsWith(".0")) {
+    //   amount = widget.amountPassed.replaceAll(".0", "");
+    // }
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
       if (event.runtimeType == KeyDownEvent &&
               event.logicalKey.keyLabel == "Go Back" ||
@@ -332,7 +339,8 @@ class _SelectAmountState extends State<SelectAmount> {
   bool canChange() {
     if (includesOperations(amount, false)) {
       return true;
-    } else if (amount.contains(".") && amount.split(".")[1].length >= 2) {
+    } else if (amount.contains(".") &&
+        amount.split(".")[1].length >= numberDecimals) {
       return false;
     }
     return true;
@@ -343,22 +351,29 @@ class _SelectAmountState extends State<SelectAmount> {
     _focusAttachment.reparent();
     String amountConverted = amount == ""
         ? "0"
-        : includesOperations(amount, false)
-            ? convertToMoney(calculateResult(amount), showCurrency: false)
-            : convertToMoney(
-                    double.tryParse(amount.substring(amount.length - 1) ==
-                                    "." ||
-                                (amount.length > 2 &&
-                                    amount.substring(amount.length - 2) == ".0")
-                            ? amount.substring(0, amount.length - 1)
-                            : amount) ??
-                        0,
-                    showCurrency: false) +
-                (amount.substring(amount.length - 1) == "." ? "." : "") +
-                (amount.length > 2 &&
-                        amount.substring(amount.length - 2) == ".0"
-                    ? ".0"
-                    : "");
+        : numberDecimals > 2
+            ? includesOperations(amount, false)
+                ? calculateResult(amount).toString()
+                : amount
+            : includesOperations(amount, false)
+                ? convertToMoney(calculateResult(amount), showCurrency: false)
+                : convertToMoney(
+                        double.tryParse(
+                                amount.substring(amount.length - 1) == "." ||
+                                        (amount.length > numberDecimals &&
+                                            amount.substring(amount.length -
+                                                    numberDecimals) ==
+                                                ".0")
+                                    ? amount.substring(0, amount.length - 1)
+                                    : amount) ??
+                            0,
+                        showCurrency: false) +
+                    (amount.substring(amount.length - 1) == "." ? "." : "") +
+                    (amount.length > numberDecimals &&
+                            amount.substring(amount.length - numberDecimals) ==
+                                ".0"
+                        ? ".0"
+                        : "");
     return Column(
       children: [
         Center(
@@ -511,6 +526,18 @@ class _SelectAmountState extends State<SelectAmount> {
                                                 widget.allWallets![index];
                                             walletPkForCurrency = widget
                                                 .allWallets![index].walletPk;
+                                            numberDecimals = selectedWallet
+                                                    ?.decimals ??
+                                                appStateSettings[
+                                                    "selectedWalletDecimals"];
+                                            try {
+                                              amount = double.parse(amount)
+                                                  .toStringAsFixed(
+                                                      numberDecimals);
+                                            } catch (e) {}
+                                            amount =
+                                                removeTrailingZeroes(amount);
+                                            addToAmount("");
                                           });
                                         },
                                       ),
@@ -1067,4 +1094,18 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
       ],
     );
   }
+}
+
+String removeTrailingZeroes(String input) {
+  if (!input.contains('.')) {
+    return input;
+  }
+  int index = input.length - 1;
+  while (input[index] == '0') {
+    index--;
+  }
+  if (input[index] == '.') {
+    index--;
+  }
+  return input.substring(0, index + 1);
 }

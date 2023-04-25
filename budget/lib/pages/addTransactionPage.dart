@@ -926,15 +926,19 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     count: selectedAmount ?? 0,
                                     duration: Duration(milliseconds: 1000),
                                     dynamicDecimals: true,
+                                    decimals: selectedWallet?.decimals,
                                     initialCount: selectedAmount ?? 0,
                                     textBuilder: (number) {
                                       return Align(
                                         alignment: Alignment.centerRight,
                                         child: TextFont(
                                           textAlign: TextAlign.right,
-                                          text: convertToMoney(number,
-                                              showCurrency: false,
-                                              finalNumber: selectedAmount ?? 0),
+                                          text: convertToMoney(
+                                            number,
+                                            showCurrency: false,
+                                            finalNumber: selectedAmount ?? 0,
+                                            decimals: selectedWallet?.decimals,
+                                          ),
                                           walletPkForCurrency: selectedWalletPk,
                                           onlyShowCurrencyIcon: appStateSettings[
                                                       "cachedWalletCurrencies"]
@@ -944,6 +948,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold,
                                           maxLines: 1,
+                                          autoSizeText: true,
                                         ),
                                       );
                                     },

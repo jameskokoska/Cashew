@@ -15,7 +15,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 33;
+int schemaVersionGlobal = 34;
 
 // Generate database code
 // flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -163,6 +163,7 @@ class Wallets extends Table {
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
   IntColumn get order => integer()();
   TextColumn get currency => text().nullable()();
+  IntColumn get decimals => integer().withDefault(Constant(2))();
 }
 
 @DataClassName('Transaction')
@@ -536,6 +537,9 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.alterTable(TableMigration(categories));
             await migrator.alterTable(TableMigration(transactions));
             await migrator.deleteTable("Labels");
+          }
+          if (from <= 33) {
+            await migrator.addColumn(wallets, wallets.decimals);
           }
         },
       );
@@ -1007,49 +1011,46 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Budget> budgetsList = await (select(budgets)
           ..orderBy([(b) => OrderingTerm.asc(b.order)]))
         .get();
-    if (newPosition > oldPosition) {
-      for (Budget budget in budgetsList) {
-        await (update(budgets)
-              ..where(
-                (b) =>
-                    b.budgetPk.equals(budget.budgetPk) &
-                    b.order.isBiggerOrEqualValue(oldPosition) &
-                    b.order.isSmallerOrEqualValue(newPosition),
-              ))
-            .write(
-          BudgetsCompanion(
-            order: Value(budget.order - 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
+
+    await batch((batch) {
+      if (newPosition > oldPosition) {
+        for (Budget budget in budgetsList) {
+          batch.update(
+            budgets,
+            BudgetsCompanion(
+              order: Value(budget.order - 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (b) =>
+                b.budgetPk.equals(budget.budgetPk) &
+                b.order.isBiggerOrEqualValue(oldPosition) &
+                b.order.isSmallerOrEqualValue(newPosition),
+          );
+        }
+      } else {
+        for (Budget budget in budgetsList) {
+          batch.update(
+            budgets,
+            BudgetsCompanion(
+              order: Value(budget.order + 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (b) =>
+                b.budgetPk.equals(budget.budgetPk) &
+                b.order.isBiggerOrEqualValue(newPosition) &
+                b.order.isSmallerOrEqualValue(oldPosition),
+          );
+        }
       }
-    } else {
-      for (Budget budget in budgetsList) {
-        await (update(budgets)
-              ..where(
-                (b) =>
-                    b.budgetPk.equals(budget.budgetPk) &
-                    b.order.isBiggerOrEqualValue(newPosition) &
-                    b.order.isSmallerOrEqualValue(oldPosition),
-              ))
-            .write(
-          BudgetsCompanion(
-            order: Value(budget.order + 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
-      }
-    }
-    await (update(budgets)
-          ..where(
-            (b) => b.budgetPk.equals(budgetPk),
-          ))
-        .write(
-      BudgetsCompanion(
-        order: Value(newPosition),
-        dateTimeModified: Value(DateTime.now()),
-      ),
-    );
+      batch.update(
+        budgets,
+        BudgetsCompanion(
+          order: Value(newPosition),
+          dateTimeModified: Value(DateTime.now()),
+        ),
+        where: (b) => b.budgetPk.equals(budgetPk),
+      );
+    });
   }
 
   Future<bool> shiftBudgets(int direction, int pastIndexIncluding) async {
@@ -1179,49 +1180,45 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<TransactionWallet> walletsList = await (select(wallets)
           ..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .get();
-    if (newPosition > oldPosition) {
-      for (TransactionWallet wallet in walletsList) {
-        await (update(wallets)
-              ..where(
-                (w) =>
-                    w.walletPk.equals(wallet.walletPk) &
-                    w.order.isBiggerOrEqualValue(oldPosition) &
-                    w.order.isSmallerOrEqualValue(newPosition),
-              ))
-            .write(
-          WalletsCompanion(
-            order: Value(wallet.order - 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
+    await batch((batch) {
+      if (newPosition > oldPosition) {
+        for (TransactionWallet wallet in walletsList) {
+          batch.update(
+            wallets,
+            WalletsCompanion(
+              order: Value(wallet.order - 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (w) =>
+                w.walletPk.equals(wallet.walletPk) &
+                w.order.isBiggerOrEqualValue(oldPosition) &
+                w.order.isSmallerOrEqualValue(newPosition),
+          );
+        }
+      } else {
+        for (TransactionWallet wallet in walletsList) {
+          batch.update(
+            wallets,
+            WalletsCompanion(
+              order: Value(wallet.order + 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (w) =>
+                w.walletPk.equals(wallet.walletPk) &
+                w.order.isBiggerOrEqualValue(newPosition) &
+                w.order.isSmallerOrEqualValue(oldPosition),
+          );
+        }
       }
-    } else {
-      for (TransactionWallet wallet in walletsList) {
-        await (update(wallets)
-              ..where(
-                (w) =>
-                    w.walletPk.equals(wallet.walletPk) &
-                    w.order.isBiggerOrEqualValue(newPosition) &
-                    w.order.isSmallerOrEqualValue(oldPosition),
-              ))
-            .write(
-          WalletsCompanion(
-            order: Value(wallet.order + 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
-      }
-    }
-    await (update(wallets)
-          ..where(
-            (w) => w.walletPk.equals(walletPk),
-          ))
-        .write(
-      WalletsCompanion(
-        order: Value(newPosition),
-        dateTimeModified: Value(DateTime.now()),
-      ),
-    );
+      batch.update(
+        wallets,
+        WalletsCompanion(
+          order: Value(newPosition),
+          dateTimeModified: Value(DateTime.now()),
+        ),
+        where: (w) => w.walletPk.equals(walletPk),
+      );
+    });
   }
 
   Future<bool> shiftWallets(int direction, int pastIndexIncluding) async {
@@ -1413,6 +1410,12 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watchSingle();
   }
 
+  Stream<TransactionCategory> watchCategory(int categoryPk,
+      {int? limit, int? offset}) {
+    return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
+        .watchSingle();
+  }
+
   Future<CategoryBudgetLimit> getCategoryBudgetLimitInstance(
       int categoryLimitPk,
       {int? limit,
@@ -1457,51 +1460,47 @@ class FinanceDatabase extends _$FinanceDatabase {
         await (select(associatedTitles)
               ..orderBy([(t) => OrderingTerm.asc(t.order)]))
             .get();
-    if (newPosition > oldPosition) {
-      for (TransactionAssociatedTitle associatedTitle in associatedTitlesList) {
-        await (update(associatedTitles)
-              ..where(
-                (t) =>
-                    t.associatedTitlePk
-                        .equals(associatedTitle.associatedTitlePk) &
-                    t.order.isBiggerOrEqualValue(oldPosition) &
-                    t.order.isSmallerOrEqualValue(newPosition),
-              ))
-            .write(
-          AssociatedTitlesCompanion(
-            order: Value(associatedTitle.order - 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
+    await batch((batch) {
+      if (newPosition > oldPosition) {
+        for (TransactionAssociatedTitle associatedTitle
+            in associatedTitlesList) {
+          batch.update(
+            associatedTitles,
+            AssociatedTitlesCompanion(
+              order: Value(associatedTitle.order - 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (t) =>
+                t.associatedTitlePk.equals(associatedTitle.associatedTitlePk) &
+                t.order.isBiggerOrEqualValue(oldPosition) &
+                t.order.isSmallerOrEqualValue(newPosition),
+          );
+        }
+      } else {
+        for (TransactionAssociatedTitle associatedTitle
+            in associatedTitlesList) {
+          batch.update(
+            associatedTitles,
+            AssociatedTitlesCompanion(
+              order: Value(associatedTitle.order + 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (t) =>
+                t.associatedTitlePk.equals(associatedTitle.associatedTitlePk) &
+                t.order.isBiggerOrEqualValue(newPosition) &
+                t.order.isSmallerOrEqualValue(oldPosition),
+          );
+        }
       }
-    } else {
-      for (TransactionAssociatedTitle associatedTitle in associatedTitlesList) {
-        await (update(associatedTitles)
-              ..where(
-                (t) =>
-                    t.associatedTitlePk
-                        .equals(associatedTitle.associatedTitlePk) &
-                    t.order.isBiggerOrEqualValue(newPosition) &
-                    t.order.isSmallerOrEqualValue(oldPosition),
-              ))
-            .write(
-          AssociatedTitlesCompanion(
-            order: Value(associatedTitle.order + 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
-      }
-    }
-    await (update(associatedTitles)
-          ..where(
-            (t) => t.associatedTitlePk.equals(associatedTitlePk),
-          ))
-        .write(
-      AssociatedTitlesCompanion(
-        order: Value(newPosition),
-        dateTimeModified: Value(DateTime.now()),
-      ),
-    );
+      batch.update(
+        associatedTitles,
+        AssociatedTitlesCompanion(
+          order: Value(newPosition),
+          dateTimeModified: Value(DateTime.now()),
+        ),
+        where: (t) => t.associatedTitlePk.equals(associatedTitlePk),
+      );
+    });
   }
 
   Future<bool> fixOrderBudgets() async {
@@ -2220,6 +2219,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<Map<int, TransactionCategory>> watchAllCategoriesMapped(
+      {int? limit, int? offset}) {
+    return (select(categories)
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch()
+        .map((categoryList) =>
+            {for (var category in categoryList) category.categoryPk: category});
+  }
+
   Future<List<TransactionCategory>> getAllCategories(
       {int? limit, int? offset, List<int>? categoryFks, bool? allCategories}) {
     return (select(categories)
@@ -2229,6 +2237,16 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .get();
+  }
+
+  Future<List<int>> getAllCategoryPks(
+      {int? limit, int? offset, List<int>? categoryFks, bool? allCategories}) {
+    return (select(categories)
+          ..orderBy([(c) => OrderingTerm.asc(c.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .get()
+        .then(
+            (result) => result.map((category) => category.categoryPk).toList());
   }
 
   Future<List<Budget>> getAllBudgets({bool? sharedBudgetsOnly}) {
@@ -2272,49 +2290,45 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<TransactionCategory> categoriesList = await (select(categories)
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
-    if (newPosition > oldPosition) {
-      for (TransactionCategory category in categoriesList) {
-        await (update(categories)
-              ..where(
-                (c) =>
-                    c.categoryPk.equals(category.categoryPk) &
-                    c.order.isBiggerOrEqualValue(oldPosition) &
-                    c.order.isSmallerOrEqualValue(newPosition),
-              ))
-            .write(
-          CategoriesCompanion(
-            order: Value(category.order - 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
+    await batch((batch) {
+      if (newPosition > oldPosition) {
+        for (TransactionCategory category in categoriesList) {
+          batch.update(
+            categories,
+            CategoriesCompanion(
+              order: Value(category.order - 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (c) =>
+                c.categoryPk.equals(category.categoryPk) &
+                c.order.isBiggerOrEqualValue(oldPosition) &
+                c.order.isSmallerOrEqualValue(newPosition),
+          );
+        }
+      } else {
+        for (TransactionCategory category in categoriesList) {
+          batch.update(
+            categories,
+            CategoriesCompanion(
+              order: Value(category.order + 1),
+              dateTimeModified: Value(DateTime.now()),
+            ),
+            where: (c) =>
+                c.categoryPk.equals(category.categoryPk) &
+                c.order.isBiggerOrEqualValue(newPosition) &
+                c.order.isSmallerOrEqualValue(oldPosition),
+          );
+        }
       }
-    } else {
-      for (TransactionCategory category in categoriesList) {
-        await (update(categories)
-              ..where(
-                (c) =>
-                    c.categoryPk.equals(category.categoryPk) &
-                    c.order.isBiggerOrEqualValue(newPosition) &
-                    c.order.isSmallerOrEqualValue(oldPosition),
-              ))
-            .write(
-          CategoriesCompanion(
-            order: Value(category.order + 1),
-            dateTimeModified: Value(DateTime.now()),
-          ),
-        );
-      }
-    }
-    await (update(categories)
-          ..where(
-            (c) => c.categoryPk.equals(categoryPk),
-          ))
-        .write(
-      CategoriesCompanion(
-        order: Value(newPosition),
-        dateTimeModified: Value(DateTime.now()),
-      ),
-    );
+      batch.update(
+        categories,
+        CategoriesCompanion(
+          order: Value(newPosition),
+          dateTimeModified: Value(DateTime.now()),
+        ),
+        where: (c) => c.categoryPk.equals(categoryPk),
+      );
+    });
   }
 
   Future<bool> shiftCategories(int direction, int pastIndexIncluding) async {

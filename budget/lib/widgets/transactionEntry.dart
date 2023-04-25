@@ -727,20 +727,22 @@ class TransactionEntry extends StatelessWidget {
                               Row(
                                 children: [
                                   CountNumber(
-                                    count: (transaction.amount.abs()),
+                                    count: (transaction.amount.abs()) *
+                                        (amountRatioToPrimaryCurrencyGivenPk(
+                                                transaction.walletFk) ??
+                                            1),
                                     duration: Duration(milliseconds: 2000),
                                     dynamicDecimals: true,
-                                    initialCount: (transaction.amount.abs()),
+                                    initialCount: (transaction.amount.abs()) *
+                                        (amountRatioToPrimaryCurrencyGivenPk(
+                                                transaction.walletFk) ??
+                                            1),
                                     textBuilder: (number) {
                                       return TextFont(
                                         text: convertToMoney(
-                                            number *
-                                                (amountRatioToPrimaryCurrencyGivenPk(
-                                                        transaction.walletFk) ??
-                                                    1),
-                                            showCurrency: false,
-                                            finalNumber:
-                                                (transaction.amount.abs())),
+                                          number,
+                                          showCurrency: false,
+                                        ),
                                         fontSize: 19 -
                                             (transaction.walletFk !=
                                                     appStateSettings[
@@ -750,7 +752,7 @@ class TransactionEntry extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                         textColor: textColor,
                                         walletPkForCurrency:
-                                            transaction.walletFk,
+                                            appStateSettings["selectedWallet"],
                                         onlyShowCurrencyIcon: true,
                                       );
                                     },
@@ -763,8 +765,11 @@ class TransactionEntry extends StatelessWidget {
                                       padding: const EdgeInsets.only(top: 1),
                                       child: TextFont(
                                         text: convertToMoney(
-                                            transaction.amount.abs(),
-                                            showCurrency: false),
+                                          transaction.amount.abs(),
+                                          showCurrency: false,
+                                          decimals: 2,
+                                          // TODO this should match the decimal count of transaction.walletFk
+                                        ),
                                         fontSize: 12,
                                         textColor: textColor.withOpacity(0.6),
                                         walletPkForCurrency:

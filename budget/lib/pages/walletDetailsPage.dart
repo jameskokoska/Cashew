@@ -277,11 +277,15 @@ class IncomeTransactionsSummary extends StatelessWidget {
                                 ? 0
                                 : (snapshot.data ?? 0).abs(),
                           ),
-                          fontSize: 21,
                           textColor: incomeTransactions
                               ? getColor(context, "incomeGreen")
                               : Theme.of(context).colorScheme.error,
                           fontWeight: FontWeight.bold,
+                          autoSizeText: true,
+                          fontSize: 21,
+                          maxFontSize: 21,
+                          minFontSize: 10,
+                          maxLines: 1,
                         );
                       },
                     );

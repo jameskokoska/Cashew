@@ -8,6 +8,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Changed design of edit/reorder cards
+    Reordering now uses batch updating
+    Fixed reordering animation glitches
+    Improved currency picker, add wallet page
+    Popup can scroll when too large
+    Started on custom decimal place precision for wallet
     Fixed wallet currencies icons
     Biometrics unlock required verification to enable/disable
     Improved biometrics unlock page

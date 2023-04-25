@@ -15,9 +15,10 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
+import 'package:budget/struct/reorderable_list.dart';
 
 class EditWalletsPage extends StatefulWidget {
   EditWalletsPage({
@@ -182,7 +183,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                                       pluralString(snapshot.data![0] == 1,
                                           " transaction"),
                                   fontSize: 14,
-                                  textColor: getColor(context, "black")!
+                                  textColor: getColor(context, "black")
                                       .withOpacity(0.65),
                                 );
                               } else {
@@ -190,7 +191,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                                     textAlign: TextAlign.left,
                                     text: "/ transactions",
                                     fontSize: 14,
-                                    textColor: getColor(context, "black")!
+                                    textColor: getColor(context, "black")
                                         .withOpacity(0.65));
                               }
                             },
@@ -218,6 +219,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                       await database.moveWallet(
                           oldWallet.walletPk, _intNew, oldWallet.order);
                     }
+                    return true;
                   },
                 );
               }
@@ -257,6 +259,8 @@ void deleteWalletPopup(context, TransactionWallet wallet,
             updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
         TransactionWallet defaultWallet = await database.getWalletInstance(0);
         updateSettings("selectedWalletCurrency", defaultWallet.currency,
+            updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+        updateSettings("selectedWalletDecimals", defaultWallet.decimals,
             updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
       }
       Navigator.pop(context);

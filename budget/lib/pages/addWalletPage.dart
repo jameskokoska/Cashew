@@ -1,13 +1,17 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
@@ -32,6 +36,8 @@ class AddWalletPage extends StatefulWidget {
 }
 
 class _AddWalletPageState extends State<AddWalletPage> {
+  GlobalKey<PageFrameworkState> addWalletPageKey = GlobalKey();
+
   bool? canAddWallet;
 
   String? selectedTitle;
@@ -41,6 +47,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   bool customCurrencyIcon = false;
   String? searchCurrency = "";
   String selectedCurrency = "";
+  int selectedDecimals = 2;
 
   late FocusNode _periodLengthFocusNode;
 
@@ -106,6 +113,12 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Future addWallet() async {
     print("Added wallet");
     await database.createOrUpdateWallet(await createTransactionWallet());
+    if (appStateSettings["selectedWallet"] == widget.wallet?.walletPk) {
+      updateSettings("selectedWalletDecimals", selectedDecimals,
+          updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+      updateSettings("selectedWalletCurrency", selectedCurrency,
+          updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+    }
     Navigator.pop(context);
   }
 
@@ -122,6 +135,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
       dateTimeModified: null,
       order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
       currency: selectedCurrency,
+      decimals: selectedDecimals,
     );
   }
 
@@ -150,6 +164,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           ? null
           : HexColor(widget.wallet!.colour);
       selectedCurrency = widget.wallet!.currency ?? "usd";
+      selectedDecimals = widget.wallet!.decimals;
     } else {}
     populateCurrencies();
   }
@@ -204,6 +219,50 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> currencyList = [];
+    for (int index = 0; index < currencies.keys.length; index++) {
+      String key = currencies.keys.toList()[index];
+      currencyList.add(Padding(
+        padding: const EdgeInsets.only(left: 18.0, right: 18, bottom: 5),
+        child: Tappable(
+          color: selectedCurrency == key
+              ? Theme.of(context).colorScheme.secondaryContainer
+              : getColor(context, "lightDarkAccent"),
+          borderRadius: 13,
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+            setSelectedCurrency(key);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    TextFont(
+                        text: currencies[key]?["CountryName"] ??
+                            currencies[key]?["Currency"]),
+                  ],
+                ),
+                Row(
+                  children: [
+                    TextFont(
+                        text: currencies[key]["Symbol"] +
+                            " " +
+                            currencies[key]["Code"]),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ));
+    }
+
     return WillPopScope(
       onWillPop: () async {
         if (widget.wallet != null) {
@@ -226,6 +285,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           }
         },
         child: PageFramework(
+          key: addWalletPageKey,
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
           title: widget.title,
@@ -253,6 +313,23 @@ class _AddWalletPageState extends State<AddWalletPage> {
             }
           },
           actions: [
+            IconButton(
+              tooltip: "Info",
+              onPressed: () {
+                openPopup(
+                  context,
+                  title: "Exchange Rate Notice",
+                  description:
+                      "The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app, you acknowledge that you understand and accept these limitations and that you assume full responsibility for any decisions made based on the information provided within the app.",
+                  icon: Icons.info,
+                  onCancel: () {
+                    Navigator.pop(context);
+                  },
+                  onCancelLabel: "OK",
+                );
+              },
+              icon: Icon(Icons.info),
+            ),
             widget.wallet != null && widget.wallet!.walletPk != 0
                 ? IconButton(
                     tooltip: "Delete wallet",
@@ -311,85 +388,74 @@ class _AddWalletPageState extends State<AddWalletPage> {
             SliverToBoxAdapter(
               child: SizedBox(height: 15),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextFont(
-                  text: "Select Currency",
-                  textColor: getColor(context, "textLight"),
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 10),
-            ),
-            SliverToBoxAdapter(
-              child: TextInput(
-                labelText: "Search currencies...",
-                icon: Icons.search_rounded,
-                onChanged: (text) {
-                  searchCurrencies(text);
-                },
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 15),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  String key = currencies.keys.toList()[index];
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 18.0, right: 18, bottom: 5),
-                    child: Tappable(
-                      color: selectedCurrency == key
-                          ? Theme.of(context).colorScheme.secondaryContainer
-                          : getColor(context, "lightDarkAccent"),
-                      borderRadius: 13,
-                      onTap: () {
-                        FocusScopeNode currentFocus = FocusScope.of(context);
-                        if (!currentFocus.hasPrimaryFocus) {
-                          currentFocus.unfocus();
-                        }
-                        setSelectedCurrency(key);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
-                        child: Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            IntrinsicWidth(
-                              child: Row(
-                                children: [
-                                  TextFont(
-                                      text: currencies[key]?["CountryName"] ??
-                                          currencies[key]?["Currency"]),
-                                ],
-                              ),
-                            ),
-                            IntrinsicWidth(
-                              child: Row(
-                                children: [
-                                  TextFont(
-                                      text: currencies[key]["Symbol"] +
-                                          " " +
-                                          currencies[key]["Code"]),
-                                ],
-                              ),
-                            )
-                          ],
+            SliverStickyLabelDivider(
+              info: "Select Currency",
+              sliver: ColumnSliver(children: [
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Focus(
+                        onFocusChange: (hasFocus) {
+                          if (hasFocus)
+                            addWalletPageKey.currentState?.scrollTo(200);
+                        },
+                        child: TextInput(
+                          labelText: "Search currencies...",
+                          icon: Icons.search_rounded,
+                          onChanged: (text) {
+                            searchCurrencies(text);
+                          },
+                          padding: EdgeInsets.only(left: 18),
                         ),
                       ),
                     ),
-                  );
-                },
-                childCount: currencies.keys.length, //snapshot.data?.length
-              ),
+                    SizedBox(width: 10),
+                    ButtonIcon(
+                        onTap: () {
+                          openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "Decimal Precision",
+                              child: SelectAmountValue(
+                                amountPassed: selectedDecimals.toString(),
+                                setSelectedAmount: (amount, _) {
+                                  selectedDecimals = amount.toInt();
+                                  if (amount > 10) {
+                                    selectedDecimals = 10;
+                                  } else if (amount < 0) {
+                                    selectedDecimals = 0;
+                                  }
+                                  setState(() {});
+                                },
+                                next: () async {
+                                  determineBottomButton();
+                                  Navigator.pop(context);
+                                },
+                                nextLabel: "Set Amount",
+                              ),
+                            ),
+                          );
+                        },
+                        icon: Icons.more_horiz_rounded),
+                    SizedBox(width: 18),
+                  ],
+                ),
+                SizedBox(height: 15),
+                currencyList.length <= 1
+                    ? NoResults(
+                        message: "No currencies found.",
+                      )
+                    : SizedBox.shrink(),
+                ...currencyList,
+                currencyList.length < 5
+                    ? SizedBox(
+                        height: 180,
+                      )
+                    : SizedBox.shrink(),
+              ]),
             ),
+
             SliverToBoxAdapter(child: SizedBox(height: 60)),
             // SliverToBoxAdapter(
             //   child: KeyboardHeightAreaAnimated(),

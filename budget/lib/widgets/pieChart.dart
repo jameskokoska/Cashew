@@ -78,7 +78,7 @@ class PieChartWrapper extends StatelessWidget {
                 height: enableDoubleColumn(context) == false ? 105 : 130,
                 decoration: BoxDecoration(
                   color: middleColor?.withOpacity(0.2) ??
-                      getColor(context, "white")!.withOpacity(0.2),
+                      getColor(context, "white").withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
               ),

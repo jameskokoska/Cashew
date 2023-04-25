@@ -99,8 +99,13 @@ Future<T?> openPopup<T extends Object?>(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: getWidthBottomSheet(context)),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+              margin: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: MediaQuery.of(context).padding.top + 20,
+                bottom: MediaQuery.of(context).padding.bottom + 20,
+              ),
               decoration: BoxDecoration(
                 color: appStateSettings["materialYou"]
                     ? dynamicPastel(context,
@@ -110,114 +115,116 @@ Future<T?> openPopup<T extends Object?>(
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: boxShadowGeneral(context),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: 7),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 10),
-                    child: Icon(
-                      icon,
-                      size: 65,
-                      color: Theme.of(context).colorScheme.primary,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 17),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 10),
+                      child: Icon(
+                        icon,
+                        size: 65,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 10),
-                    child: TextFont(
-                      textAlign: TextAlign.center,
-                      text: title ?? "",
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                      maxLines: 5,
-                      textColor:
-                          Theme.of(context).colorScheme.onPrimaryContainer,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 10),
+                      child: TextFont(
+                        textAlign: TextAlign.center,
+                        text: title ?? "",
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        maxLines: 5,
+                        textColor:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
                     ),
-                  ),
-                  description != "" && description != null
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 10),
-                          child: TextFont(
-                            textAlign: TextAlign.center,
-                            text: description,
-                            fontSize: 17,
-                            maxLines: 100,
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                  onSubmitLabel != null || onCancelLabel != null
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Wrap(
-                            alignment: WrapAlignment.center,
-                            runSpacing: 10,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  onCancelLabel != null
-                                      ? Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Button(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondaryContainer,
-                                              label: onCancelLabel,
-                                              height: 50,
-                                              onTap: onCancel ?? () {}),
-                                        )
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  onExtraLabel != null
-                                      ? Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Button(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondaryContainer,
-                                              label: onExtraLabel,
-                                              height: 50,
-                                              onTap: onExtra ?? () {}),
-                                        )
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  onSubmitLabel != null
-                                      ? Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Button(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiaryContainer,
-                                              label: onSubmitLabel,
-                                              height: 50,
-                                              onTap: onSubmit ?? () {}),
-                                        )
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                  SizedBox(height: 6),
-                ],
+                    description != "" && description != null
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10),
+                            child: TextFont(
+                              textAlign: TextAlign.center,
+                              text: description,
+                              fontSize: 17,
+                              maxLines: 100,
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    onSubmitLabel != null || onCancelLabel != null
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Wrap(
+                              alignment: WrapAlignment.center,
+                              runSpacing: 10,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    onCancelLabel != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Button(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondaryContainer,
+                                                label: onCancelLabel,
+                                                height: 50,
+                                                onTap: onCancel ?? () {}),
+                                          )
+                                        : SizedBox.shrink(),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    onExtraLabel != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Button(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondaryContainer,
+                                                label: onExtraLabel,
+                                                height: 50,
+                                                onTap: onExtra ?? () {}),
+                                          )
+                                        : SizedBox.shrink(),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    onSubmitLabel != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Button(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .tertiaryContainer,
+                                                label: onSubmitLabel,
+                                                height: 50,
+                                                onTap: onSubmit ?? () {}),
+                                          )
+                                        : SizedBox.shrink(),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    SizedBox(height: 16),
+                  ],
+                ),
               ),
             ),
           ),
