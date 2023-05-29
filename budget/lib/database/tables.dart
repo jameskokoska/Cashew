@@ -593,9 +593,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               return onlyShowIfFollowsFilters(tbl,
                       budgetTransactionFilters: budgetTransactionFilters,
                       memberTransactionFilters: memberTransactionFilters) &
-                  dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day) &
+                  isOnDay(dateCreated, date) &
                   onlyShowBasedOnCategoryFks(tbl, categoryFks) &
                   onlyShowBasedOnIncome(tbl, income) &
                   onlyShowIfMember(tbl, member) &
@@ -615,9 +613,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               return onlyShowIfFollowsFilters(tbl,
                       budgetTransactionFilters: budgetTransactionFilters,
                       memberTransactionFilters: memberTransactionFilters) &
-                  dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day) &
+                  isOnDay(dateCreated, date) &
                   onlyShowBasedOnIncome(tbl, income) &
                   onlyShowIfMember(tbl, member) &
                   onlyShowIfCertainBudget(
@@ -636,9 +632,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               return onlyShowIfFollowsFilters(tbl,
                       budgetTransactionFilters: budgetTransactionFilters,
                       memberTransactionFilters: memberTransactionFilters) &
-                  dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day) &
+                  isOnDay(dateCreated, date) &
                   onlyShowBasedOnIncome(tbl, income) &
                   onlyShowIfMember(tbl, member) &
                   onlyShowIfCertainBudget(
@@ -660,6 +654,14 @@ class FinanceDatabase extends _$FinanceDatabase {
               category: row.readTable(categories),
               transaction: row.readTable(transactions));
         }).toList());
+  }
+
+  Expression<bool> isOnDay(
+      GeneratedColumn<DateTime> dateColumn, DateTime date) {
+    return dateColumn.isBetweenValues(
+        DateTime(date.year, date.month, date.day),
+        DateTime(date.year, date.month, date.day + 1)
+            .subtract(Duration(microseconds: 1)));
   }
 
   Stream<List<DateTime?>> getUniqueDates({
@@ -714,9 +716,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day) &
+              return isOnDay(dateCreated, date) &
                   tbl.categoryFk.isIn(categoryFks);
             }))
           .join([
@@ -727,9 +727,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = (select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day);
+              return isOnDay(dateCreated, date);
             }))
           .join([
         leftOuterJoin(categories,
@@ -739,9 +737,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = ((select(transactions)
             ..where((tbl) {
               final dateCreated = tbl.dateCreated;
-              return dateCreated.year.equals(date.year) &
-                  dateCreated.month.equals(date.month) &
-                  dateCreated.day.equals(date.day);
+              return isOnDay(dateCreated, date);
             }))
           .join([
         innerJoin(categories,
@@ -1109,7 +1105,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Future<List<TransactionWallet>> getAllWallets({int? limit, int? offset}) {
     return (select(wallets)
-          ..orderBy([(w) => OrderingTerm.asc(w.dateCreated)])
+          ..orderBy([(w) => OrderingTerm.asc(w.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .get();
   }
@@ -2564,21 +2560,18 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<CategoryWithTotal>> totalCategoryTotalStream(
       List<Stream<List<CategoryWithTotal>>> mergedStreams) {
     return StreamZip(mergedStreams).map((lists) {
-      final Map<TransactionCategory, double> categoryTotals = {};
+      final Map<int, CategoryWithTotal> categoryTotals = {};
       for (final list in lists) {
         for (final item in list) {
-          categoryTotals[item.category] =
-              (categoryTotals[item.category] ?? 0) + item.total;
+          categoryTotals[item.category.categoryPk] = CategoryWithTotal(
+            category: item.category,
+            total: item.total +
+                (categoryTotals[item.category.categoryPk]?.total ?? 0),
+            transactionCount: item.transactionCount,
+          );
         }
       }
-      return lists
-          .expand((list) => list)
-          .map((item) => CategoryWithTotal(
-                category: item.category,
-                total: categoryTotals[item.category] ?? 0,
-                transactionCount: item.transactionCount,
-              ))
-          .toList();
+      return categoryTotals.values.toList();
     });
   }
 

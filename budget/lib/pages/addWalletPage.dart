@@ -442,7 +442,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                   ],
                 ),
                 SizedBox(height: 15),
-                currencyList.length <= 1
+                currencyList.length <= 0
                     ? NoResults(
                         message: "No currencies found.",
                       )

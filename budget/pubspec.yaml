@@ -72,6 +72,7 @@ dependencies:
   timer_builder: ^2.0.0
   device_info_plus: ^8.1.0
   flutter_lazy_indexed_stack: ^0.0.4
+  device_preview: ^1.1.0
   
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:

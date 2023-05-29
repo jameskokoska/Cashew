@@ -116,7 +116,7 @@ class TextInput extends StatelessWidget {
             ),
             cursorColor: dynamicPastel(
                 context, HexColor(appStateSettings["accentColor"]),
-                amount: 0.5),
+                amount: 0.1, inverse: true),
             decoration: new InputDecoration(
               hintStyle: TextStyle(color: getColor(context, "textLight")),
               alignLabelWithHint: true,

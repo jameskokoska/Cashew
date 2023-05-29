@@ -350,9 +350,9 @@ class TransactionEntry extends StatelessWidget {
                                                                   appStateSettings[
                                                                       "currentUserEmail"]
                                                               ? Icons
-                                                                  .download_rounded
+                                                                  .arrow_circle_down_rounded
                                                               : Icons
-                                                                  .upload_rounded,
+                                                                  .arrow_circle_up_rounded,
                                                       size: 14,
                                                       color: getColor(
                                                               context, "black")
@@ -368,8 +368,10 @@ class TransactionEntry extends StatelessWidget {
                                                     transaction.transactionOwnerEmail !=
                                                             appStateSettings[
                                                                 "currentUserEmail"]
-                                                        ? Icons.download_rounded
-                                                        : Icons.upload_rounded,
+                                                        ? Icons
+                                                            .arrow_circle_down_rounded
+                                                        : Icons
+                                                            .arrow_circle_up_rounded,
                                                     size: 14,
                                                     color: getColor(
                                                             context, "black")
@@ -742,6 +744,11 @@ class TransactionEntry extends StatelessWidget {
                                         text: convertToMoney(
                                           number,
                                           showCurrency: false,
+                                          finalNumber: (transaction.amount
+                                                  .abs()) *
+                                              (amountRatioToPrimaryCurrencyGivenPk(
+                                                      transaction.walletFk) ??
+                                                  1),
                                         ),
                                         fontSize: 19 -
                                             (transaction.walletFk !=

@@ -79,7 +79,6 @@ Widget getTransactionsSlivers(
             continue;
           }
           previousDate = date;
-
           transactionsWidgets.add(
             StreamBuilder<List<TransactionWithCategory>>(
               stream: database.getTransactionCategoryWithDay(

@@ -8,6 +8,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Improved contrast of cursor color in text input
+    Removed today indicator on custom budget time period if progress larger than 100
+    Added edit button to budget list page
+    Added button to convert selected currency to primary wallet
+    Order of wallets followed in add transaction
+    Fixed timezones - use isOnDay instead of date.year.equals etc https://github.com/simolus3/drift/issues/1933#issuecomment-1189561299
+    Fixed duplicated category totals when using different currencies
     Changed design of edit/reorder cards
     Reordering now uses batch updating
     Fixed reordering animation glitches

@@ -1,4 +1,6 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -6,8 +8,6 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
-import 'package:flutter/services.dart';
-import 'package:budget/struct/reorderable_list.dart';
 
 class BudgetsListPage extends StatefulWidget {
   const BudgetsListPage({Key? key}) : super(key: key);
@@ -40,6 +40,21 @@ class BudgetsListPageState extends State<BudgetsListPage>
       title: "Budgets",
       backButton: false,
       horizontalPadding: getHorizontalPaddingConstrained(context),
+      actions: [
+        IconButton(
+          tooltip: "Edit budget",
+          onPressed: () {
+            pushRoute(
+              context,
+              EditBudgetPage(title: "Edit Budgets"),
+            );
+          },
+          icon: Icon(
+            Icons.edit_rounded,
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
+          ),
+        ),
+      ],
       slivers: [
         StreamBuilder<List<Budget>>(
           stream: database.watchAllBudgets(),
@@ -59,59 +74,61 @@ class BudgetsListPageState extends State<BudgetsListPage>
               );
             }
             if (snapshot.hasData) {
-              return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
-                sliver: SliverReorderableList(
-                  onReorder: (_intPrevious, _intNew) async {
-                    database.fixOrderBudgets();
-                    Budget oldBudget = snapshot.data![_intPrevious];
+              // return SliverPadding(
+              //   padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
+              //   sliver: SliverReorderableList(
+              //     onReorder: (_intPrevious, _intNew) async {
+              //       database.fixOrderBudgets();
+              //       Budget oldBudget = snapshot.data![_intPrevious];
 
-                    // print(oldBudget.name);
-                    // print(oldBudget.order);
+              //       // print(oldBudget.name);
+              //       // print(oldBudget.order);
 
-                    if (_intNew > _intPrevious) {
-                      await database.moveBudget(
-                          oldBudget.budgetPk, _intNew - 1, oldBudget.order);
-                    } else {
-                      await database.moveBudget(
-                          oldBudget.budgetPk, _intNew, oldBudget.order);
-                    }
-                    return true;
-                  },
-                  onReorderStart: (index) {
-                    HapticFeedback.heavyImpact();
-                  },
-                  itemBuilder: (context, index) {
-                    return ReorderableDelayedDragStartListener(
-                      index: index,
-                      key: ValueKey(snapshot.data![index].budgetPk),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: BudgetContainer(
-                          budget: snapshot.data![index],
-                          longPressToEdit: false,
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: snapshot.data!.length,
-                ),
-              );
-
-              //   SliverList(
-              //     delegate: SliverChildBuilderDelegate(
-              //       (BuildContext context, int index) {
-              //         return Padding(
+              //       if (_intNew > _intPrevious) {
+              //         await database.moveBudget(
+              //             oldBudget.budgetPk, _intNew - 1, oldBudget.order);
+              //       } else {
+              //         await database.moveBudget(
+              //             oldBudget.budgetPk, _intNew, oldBudget.order);
+              //       }
+              //       return true;
+              //     },
+              //     onReorderStart: (index) {
+              //       HapticFeedback.heavyImpact();
+              //     },
+              //     itemBuilder: (context, index) {
+              //       return ReorderableDelayedDragStartListener(
+              //         index: index,
+              //         key: ValueKey(snapshot.data![index].budgetPk),
+              //         child: Padding(
               //           padding: const EdgeInsets.only(bottom: 16.0),
               //           child: BudgetContainer(
               //             budget: snapshot.data![index],
+              //             longPressToEdit: false,
               //           ),
-              //         );
-              //       },
-              //       childCount: snapshot.data?.length, //snapshot.data?.length
-              //     ),
+              //         ),
+              //       );
+              //     },
+              //     itemCount: snapshot.data!.length,
               //   ),
               // );
+
+              return SliverPadding(
+                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: BudgetContainer(
+                          budget: snapshot.data![index],
+                        ),
+                      );
+                    },
+                    childCount: snapshot.data?.length, //snapshot.data?.length
+                  ),
+                ),
+              );
             } else {
               return SliverToBoxAdapter();
             }

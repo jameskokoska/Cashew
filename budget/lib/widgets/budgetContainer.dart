@@ -846,8 +846,8 @@ class BudgetProgress extends StatelessWidget {
             ),
           ),
         ),
-        todayPercent <= 0
-            ? Container(height: 35)
+        todayPercent < 0 || todayPercent > 100
+            ? Container(height: 39)
             : TodayIndicator(
                 percent: todayPercent,
                 large: large,
@@ -1008,19 +1008,20 @@ class TodayIndicator extends StatelessWidget {
                 children: [
                   SlideFadeTransition(
                     child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: getColor(context, "black")),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: 3, right: 5, left: 5, bottom: 3),
-                          child: TextFont(
-                            textAlign: TextAlign.center,
-                            text: "Today",
-                            fontSize: large ? 10 : 9,
-                            textColor: getColor(context, "white"),
-                          ),
-                        )),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: getColor(context, "black")),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: 3, right: 5, left: 5, bottom: 3),
+                        child: TextFont(
+                          textAlign: TextAlign.center,
+                          text: "Today",
+                          fontSize: large ? 10 : 9,
+                          textColor: getColor(context, "white"),
+                        ),
+                      ),
+                    ),
                   ),
                   FadeIn(
                     child: Container(

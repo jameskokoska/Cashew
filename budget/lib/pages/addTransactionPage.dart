@@ -954,18 +954,68 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     },
                                   ),
                                 ),
-                                AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 350),
-                                  child: Container(
-                                    key: ValueKey(selectedCategory?.name ?? ""),
-                                    width: double.infinity,
-                                    child: TextFont(
-                                      textAlign: TextAlign.right,
-                                      fontSize: 18,
-                                      text: selectedCategory?.name ?? "",
-                                    ),
-                                  ),
-                                ),
+                                appStateSettings["cachedWalletCurrencies"]
+                                                .keys
+                                                .length <=
+                                            1 ||
+                                        appStateSettings["selectedWallet"] ==
+                                            selectedWalletPk
+                                    ? AnimatedSwitcher(
+                                        duration: Duration(milliseconds: 350),
+                                        child: Container(
+                                          key: ValueKey(
+                                              selectedCategory?.name ?? ""),
+                                          width: double.infinity,
+                                          child: TextFont(
+                                            textAlign: TextAlign.right,
+                                            fontSize: 18,
+                                            text: selectedCategory?.name ?? "",
+                                          ),
+                                        ),
+                                      )
+                                    : AnimatedSwitcher(
+                                        duration: Duration(milliseconds: 350),
+                                        child: CountNumber(
+                                          key: ValueKey(selectedWalletPk),
+                                          count: (selectedAmount ?? 0) *
+                                              (amountRatioToPrimaryCurrencyGivenPk(
+                                                      selectedWalletPk) ??
+                                                  1),
+                                          duration:
+                                              Duration(milliseconds: 1000),
+                                          dynamicDecimals: true,
+                                          decimals: selectedWallet?.decimals,
+                                          initialCount: (selectedAmount ?? 0) *
+                                              (amountRatioToPrimaryCurrencyGivenPk(
+                                                      selectedWalletPk) ??
+                                                  1),
+                                          textBuilder: (number) {
+                                            return Align(
+                                              alignment: Alignment.centerRight,
+                                              child: TextFont(
+                                                textAlign: TextAlign.right,
+                                                text: convertToMoney(
+                                                  number,
+                                                  showCurrency: false,
+                                                  finalNumber: (selectedAmount ??
+                                                          0) *
+                                                      (amountRatioToPrimaryCurrencyGivenPk(
+                                                              selectedWalletPk) ??
+                                                          1),
+                                                  decimals:
+                                                      selectedWallet?.decimals,
+                                                ),
+                                                walletPkForCurrency:
+                                                    appStateSettings[
+                                                        "selectedWallet"],
+                                                fontSize: 18,
+                                                maxLines: 1,
+                                                autoSizeText: true,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
