@@ -239,7 +239,7 @@ Future<bool> initializeSettings() async {
     clientID = retrievedClientID;
   }
 
-  timeDilation = appStateSettings["animationSpeed"];
+  timeDilation = double.parse(appStateSettings["animationSpeed"].toString());
 
   generateColors();
 
