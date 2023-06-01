@@ -487,6 +487,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 budget: widget.budget,
                 dateDividerColor: pageBackgroundColor,
                 transactionBackgroundColor: pageBackgroundColor,
+                categoryTintColor: budgetColorScheme.primary,
               ),
               SliverToBoxAdapter(
                 child: WatchAllWallets(
@@ -528,6 +529,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               totalTransactions =
                                   totalTransactions + category.transactionCount;
                             });
+                            if (totalSpent == 0 && totalTransactions == 0)
+                              return SizedBox.shrink();
                             return Padding(
                               padding: const EdgeInsets.only(
                                 left: 10,

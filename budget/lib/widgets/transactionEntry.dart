@@ -58,6 +58,7 @@ class TransactionEntry extends StatelessWidget {
     this.onSelected,
     this.containerColor,
     this.useHorizontalPaddingConstrained = true,
+    this.categoryTintColor,
   }) : super(key: key);
 
   final Widget openPage;
@@ -67,6 +68,7 @@ class TransactionEntry extends StatelessWidget {
   final Function(Transaction transaction, bool selected)? onSelected;
   final Color? containerColor;
   final bool useHorizontalPaddingConstrained;
+  final Color? categoryTintColor;
 
   final double fabSize = 50;
 
@@ -220,6 +222,7 @@ class TransactionEntry extends StatelessWidget {
                             onTap: () {
                               openContainer();
                             },
+                            tintColor: categoryTintColor,
                           ),
                           Container(
                             width: 12,

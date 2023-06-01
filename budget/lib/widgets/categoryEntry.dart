@@ -22,6 +22,7 @@ class CategoryEntry extends StatelessWidget {
     this.categoryBudgetLimit,
     this.isTiled = false,
     this.onLongPress,
+    this.extraText = " of budget",
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -35,6 +36,7 @@ class CategoryEntry extends StatelessWidget {
   final bool isTiled;
   final CategoryBudgetLimit? categoryBudgetLimit;
   final Function? onLongPress;
+  final String extraText;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +143,8 @@ class CategoryEntry extends StatelessWidget {
                         : TextFont(
                             text: (categorySpent / totalSpent * 100)
                                     .toStringAsFixed(0) +
-                                "% of budget",
+                                "%" +
+                                extraText,
                             fontSize: 14,
                             textColor: selected
                                 ? getColor(context, "black").withOpacity(0.4)

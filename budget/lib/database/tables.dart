@@ -579,6 +579,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String search = "",
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
+    List<int> walletFks = const [],
     bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
     required List<String>? memberTransactionFilters,
@@ -595,6 +596,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                       memberTransactionFilters: memberTransactionFilters) &
                   isOnDay(dateCreated, date) &
                   onlyShowBasedOnCategoryFks(tbl, categoryFks) &
+                  onlyShowBasedOnWalletFks(tbl, walletFks) &
                   onlyShowBasedOnIncome(tbl, income) &
                   onlyShowIfMember(tbl, member) &
                   onlyShowIfCertainBudget(
@@ -665,36 +667,50 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<DateTime?>> getUniqueDates({
-    required DateTime start,
-    required DateTime end,
+    required DateTime? start,
+    required DateTime? end,
     String search = "",
     // Search will be ignored... if these params are passed in
     List<int> categoryFks = const [],
+    List<int> walletFks = const [],
     bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
     required List<String>? memberTransactionFilters,
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
+    int? limit,
   }) {
-    DateTime startDate = DateTime(start.year, start.month, start.day);
-    DateTime endDate = DateTime(end.year, end.month, end.day);
+    DateTime? startDate =
+        start == null ? null : DateTime(start.year, start.month, start.day);
+    DateTime? endDate =
+        end == null ? null : DateTime(end.year, end.month, end.day);
 
     final query = selectOnly(transactions, distinct: true)
-      ..orderBy([OrderingTerm.asc(transactions.dateCreated)])
+      ..orderBy(limit == null
+          ? [OrderingTerm.asc(transactions.dateCreated)]
+          : [OrderingTerm.desc(transactions.dateCreated)])
       ..where(onlyShowIfFollowsFilters(transactions,
               budgetTransactionFilters: budgetTransactionFilters,
               memberTransactionFilters: memberTransactionFilters) &
           onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
           onlyShowBasedOnCategoryFks(transactions, categoryFks) &
+          onlyShowBasedOnWalletFks(transactions, walletFks) &
           onlyShowBasedOnIncome(transactions, income) &
           onlyShowIfMember(transactions, member) &
           onlyShowIfCertainBudget(
               transactions, onlyShowTransactionsBelongingToBudget))
       ..addColumns([transactions.dateCreated])
-      ..where(transactions.dateCreated.isNotNull());
+      ..where(transactions.dateCreated.isNotNull())
+      ..limit(limit ?? DEFAULT_LIMIT, offset: null);
 
-    return query.map((row) => row.read(transactions.dateCreated)).watch();
+    if (limit == null)
+      return query.map((row) => row.read(transactions.dateCreated)).watch();
+    else
+      return query
+          .map((row) => row.read(transactions.dateCreated))
+          .watch()
+          .map((list) => list.reversed.toList());
   }
 
   Future<List<String?>> getUniqueCurrenciesFromWallets() {
@@ -2256,6 +2272,14 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
+  Stream<List<Budget>> watchAllAddableBudgets() {
+    return (select(budgets)
+          ..where((b) => (b.sharedKey.isNotNull() |
+              (b.addedTransactionsOnly.equals(true) & b.sharedKey.isNull())))
+          ..orderBy([(c) => OrderingTerm.asc(c.order)]))
+        .watch();
+  }
+
   Future<List<String>> getAllMembersOfBudgets() async {
     List<Budget> sharedBudgets = await getAllBudgets(sharedBudgetsOnly: true);
     Set<String> members = {};
@@ -2571,7 +2595,10 @@ class FinanceDatabase extends _$FinanceDatabase {
           );
         }
       }
-      return categoryTotals.values.toList();
+      List<CategoryWithTotal> categoryWithTotalsSorted = categoryTotals.values
+          .toList()
+        ..sort((a, b) => a.total.compareTo(b.total));
+      return categoryWithTotalsSorted;
     });
   }
 
@@ -2832,18 +2859,33 @@ class FinanceDatabase extends _$FinanceDatabase {
         : Constant(true));
   }
 
+  Expression<bool> onlyShowBasedOnWalletFks(
+      $TransactionsTable tbl, List<int> walletFks) {
+    return (walletFks.length >= 1
+        ? tbl.walletFk.isIn(walletFks)
+        : Constant(true));
+  }
+
+  // Start date is in the past
+  // End date is in the future
+  // Start -> End
   Expression<bool> onlyShowBasedOnTimeRange($TransactionsTable tbl,
-      DateTime startDate, DateTime endDate, Budget? budget,
+      DateTime? startDate, DateTime? endDate, Budget? budget,
       {bool? allTime = false}) {
     return (budget != null &&
             // Only if an Added only, Custom budget -> show all transactions belonging to it, even if outside the date range
             (budget.addedTransactionsOnly == true &&
                 budget.sharedKey == null &&
                 budget.reoccurrence == BudgetReoccurence.custom)
-        ? transactions.dateCreated.isNotNull()
-        : (allTime == true
-            ? transactions.dateCreated.isNotNull()
-            : transactions.dateCreated.isBetweenValues(startDate, endDate)));
+        ? Constant(true)
+        : (allTime == true || (startDate == null && endDate == null)
+            ? Constant(true)
+            : startDate == null && endDate != null
+                ? transactions.dateCreated.isSmallerOrEqualValue(endDate)
+                : startDate != null && endDate == null
+                    ? transactions.dateCreated.isBiggerOrEqualValue(startDate)
+                    : transactions.dateCreated
+                        .isBetweenValues(startDate!, endDate!)));
   }
 
   Expression<bool> onlyShowIfCertainBudget(

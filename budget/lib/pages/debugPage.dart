@@ -33,6 +33,17 @@ class DebugPage extends StatelessWidget {
                 updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
           },
         ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
+            updateSettings("colorTintCategoryIcon", value,
+                pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          title: "Category Icon Tint",
+          description:
+              "Color category icons to follow color, material you must be enabled",
+          initialValue: appStateSettings["colorTintCategoryIcon"],
+          icon: Icons.mark_email_unread_rounded,
+        ),
         SliderSelector(
           min: 0,
           max: 3,

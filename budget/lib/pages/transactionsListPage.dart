@@ -25,10 +25,11 @@ import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 Widget getTransactionsSlivers(
-  DateTime startDay,
-  DateTime endDay, {
+  DateTime? startDay,
+  DateTime? endDay, {
   search = "",
   List<int> categoryFks = const [],
+  List<int> walletFks = const [],
   Function(Transaction, bool)? onSelected,
   String? listID,
   bool? income,
@@ -42,7 +43,9 @@ Widget getTransactionsSlivers(
   Budget? budget,
   Color? dateDividerColor,
   Color? transactionBackgroundColor,
+  Color? categoryTintColor,
   bool useHorizontalPaddingConstrained = true,
+  int? limit,
 }) {
   return StreamBuilder<List<DateTime?>>(
     stream: database.getUniqueDates(
@@ -50,6 +53,7 @@ Widget getTransactionsSlivers(
       end: endDay,
       search: search,
       categoryFks: categoryFks,
+      walletFks: walletFks,
       income: income,
       budgetTransactionFilters: budgetTransactionFilters,
       memberTransactionFilters: memberTransactionFilters,
@@ -57,6 +61,7 @@ Widget getTransactionsSlivers(
       onlyShowTransactionsBelongingToBudget:
           onlyShowTransactionsBelongingToBudget,
       budget: budget,
+      limit: limit,
     ),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
@@ -85,6 +90,7 @@ Widget getTransactionsSlivers(
                 date,
                 search: search,
                 categoryFks: categoryFks,
+                walletFks: walletFks,
                 income: income,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters,
@@ -127,6 +133,7 @@ Widget getTransactionsSlivers(
                           AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
                             child: TransactionEntry(
+                              categoryTintColor: categoryTintColor,
                               useHorizontalPaddingConstrained:
                                   useHorizontalPaddingConstrained,
                               containerColor: transactionBackgroundColor,
@@ -178,6 +185,7 @@ Widget getTransactionsSlivers(
                                       : "");
                           }
                           return TransactionEntry(
+                            categoryTintColor: categoryTintColor,
                             useHorizontalPaddingConstrained:
                                 useHorizontalPaddingConstrained,
                             containerColor: transactionBackgroundColor,
@@ -220,6 +228,7 @@ Widget getTransactionsSlivers(
                           curve: Curves.easeInOut,
                           animation: animation,
                           child: TransactionEntry(
+                            categoryTintColor: categoryTintColor,
                             useHorizontalPaddingConstrained:
                                 useHorizontalPaddingConstrained,
                             containerColor: transactionBackgroundColor,

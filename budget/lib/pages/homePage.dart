@@ -16,7 +16,7 @@ import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
-import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
@@ -164,24 +164,6 @@ class HomePageState extends State<HomePage>
             useHorizontalPaddingConstrained: false,
           ),
         ),
-      ),
-    );
-    Widget viewAllTransactionsButton = Center(
-      child: Tappable(
-        color: getColor(context, "lightDarkAccent"),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          child: TextFont(
-            text: "View All Transactions",
-            textAlign: TextAlign.center,
-            fontSize: 16,
-            textColor: getColor(context, "textLight"),
-          ),
-        ),
-        onTap: () {
-          PageNavigationFramework.changePage(context, 1, switchNavbar: true);
-        },
-        borderRadius: 10,
       ),
     );
     return SwipeToSelectTransactions(
@@ -648,7 +630,8 @@ class HomePageState extends State<HomePage>
                                       upcomingTransactionSliversHome,
                                       transactionSliversHome,
                                       SizedBox(height: 7),
-                                      viewAllTransactionsButton,
+                                      Center(
+                                          child: ViewAllTransactionsButton()),
                                     ],
                                   ),
                                 ),
@@ -678,7 +661,7 @@ class HomePageState extends State<HomePage>
                         : Container(height: 7),
                     enableDoubleColumn(context) == true
                         ? SizedBox.shrink()
-                        : viewAllTransactionsButton,
+                        : Center(child: ViewAllTransactionsButton()),
                     SizedBox(height: 40),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(height: 1, color: Theme.of(context).canvasColor),

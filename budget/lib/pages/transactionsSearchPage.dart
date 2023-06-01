@@ -104,12 +104,10 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
             AmountRangeSlider(),
             SelectChips(
               items: [
-                "All",
                 SearchFilters.income,
                 SearchFilters.expense,
               ],
               getLabel: (item) {
-                if (item == "All") return "All";
                 return item == SearchFilters.income
                     ? "Income"
                     : item == SearchFilters.expense
@@ -117,24 +115,19 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         : "";
               },
               onSelected: (item) {
-                if (item == "All") {
-                  return;
-                }
+                return;
               },
               getSelected: (item) {
-                if (item == "All") return true;
                 return false;
               },
             ),
             SelectChips(
               items: [
-                "All",
                 TransactionSpecialType.upcoming,
                 TransactionSpecialType.subscription,
                 TransactionSpecialType.repetitive,
               ],
               getLabel: (item) {
-                if (item == "All") return "All";
                 return item == TransactionSpecialType.upcoming
                     ? "Upcoming"
                     : item == TransactionSpecialType.subscription
@@ -143,24 +136,17 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                             ? "Repetitive"
                             : "";
               },
-              onSelected: (item) {
-                if (item == "All") {
-                  return;
-                }
-              },
+              onSelected: (item) {},
               getSelected: (item) {
-                if (item == "All") return true;
                 return false;
               },
             ),
             SelectChips(
               items: [
-                "All",
                 SearchFilters.paid,
                 SearchFilters.unpaid,
               ],
               getLabel: (item) {
-                if (item == "All") return "All";
                 return item == SearchFilters.paid
                     ? "Paid"
                     : item == SearchFilters.unpaid
@@ -168,83 +154,74 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         : "";
               },
               onSelected: (item) {
-                if (item == "All") {
-                  return;
-                }
+                return;
               },
               getSelected: (item) {
-                if (item == "All") return true;
                 return false;
               },
             ),
             SelectChips(
               items: [
-                "All",
                 BudgetTransactionFilters.addedToOtherBudget,
                 BudgetTransactionFilters.sharedToOtherBudget,
               ],
               getLabel: (item) {
-                if (item == "All") return "All";
                 return item == BudgetTransactionFilters.addedToOtherBudget
                     ? "Added to Other Budgets"
                     : item == BudgetTransactionFilters.sharedToOtherBudget
                         ? "Shared to Other Budgets"
                         : "";
               },
-              onSelected: (item) {
-                if (item == "All") {
-                  return;
-                }
-              },
+              onSelected: (item) {},
               getSelected: (item) {
-                if (item == "All") return true;
                 return false;
               },
             ),
-            SelectChips(
-              items: [
-                "All",
-                ...[for (Budget budget in allSharedBudgets) budget],
-                ...[for (Budget budget in allAddedTransactionBudgets) budget]
-              ],
-              getLabel: (item) {
-                if (item == "All") return "All";
-                return item?.name ?? "No Budget";
-              },
-              onSelected: (item) {
-                // setSelectedBudgetPk(
-                //   item,
-                //   isSharedBudget: item?.sharedKey != null,
-                // );
-              },
-              getSelected: (item) {
-                // return selectedBudgetPk == item?.budgetPk;
-                return true;
-              },
-              getCustomBorderColor: (item) {
-                if (item == "All") return null;
-                return dynamicPastel(
-                  context,
-                  lightenPastel(
-                    HexColor(
-                      item?.colour,
-                      defaultColor: Colors.transparent,
-                    ),
-                    amount: 0.3,
-                  ),
-                  amount: 0.4,
-                );
+            StreamBuilder<List<Budget>>(
+              stream: database.watchAllAddableBudgets(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return SelectChips(
+                    items: snapshot.data!,
+                    getLabel: (item) {
+                      return item?.name ?? "No Budget";
+                    },
+                    onSelected: (item) {
+                      // setSelectedBudgetPk(
+                      //   item,
+                      //   isSharedBudget: item?.sharedKey != null,
+                      // );
+                    },
+                    getSelected: (item) {
+                      // return selectedBudgetPk == item?.budgetPk;
+                      return true;
+                    },
+                    getCustomBorderColor: (item) {
+                      return dynamicPastel(
+                        context,
+                        lightenPastel(
+                          HexColor(
+                            item?.colour,
+                            defaultColor: Colors.transparent,
+                          ),
+                          amount: 0.3,
+                        ),
+                        amount: 0.4,
+                      );
+                    },
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
               },
             ),
             SelectChips(
               items: [
-                "All",
                 MethodAdded.csv,
                 MethodAdded.shared,
                 MethodAdded.email,
               ],
               getLabel: (item) {
-                if (item == "All") return "All";
                 return item == MethodAdded.csv
                     ? "CSV"
                     : item == MethodAdded.shared
@@ -253,37 +230,25 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                             ? "Email"
                             : "";
               },
-              onSelected: (item) {
-                if (item == "All") {
-                  return;
-                }
-              },
+              onSelected: (item) {},
               getSelected: (item) {
-                if (item == "All") return true;
                 return false;
               },
             ),
             SelectChips(
               items: [
-                "All",
                 SharedOwnerMember.owner,
                 SharedOwnerMember.member,
               ],
               getLabel: (item) {
-                if (item == "All") return "All";
                 return item == SharedOwnerMember.owner
                     ? "Owner"
                     : item == SharedOwnerMember.member
                         ? "Member"
                         : "";
               },
-              onSelected: (item) {
-                if (item == "All") {
-                  return;
-                }
-              },
+              onSelected: (item) {},
               getSelected: (item) {
-                if (item == "All") return true;
                 return false;
               },
             ),

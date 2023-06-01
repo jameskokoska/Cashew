@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -22,6 +23,8 @@ class CategoryIcon extends StatelessWidget {
     this.category, //pass this in to not look it up again
     this.borderRadius = 18,
     this.canEditByLongPress = true,
+    this.tintColor,
+    this.tintEnabled = true,
   }) : super(key: key);
 
   final int categoryPk;
@@ -36,6 +39,8 @@ class CategoryIcon extends StatelessWidget {
   final TransactionCategory? category;
   final double borderRadius;
   final bool canEditByLongPress;
+  final Color? tintColor;
+  final bool tintEnabled;
 
   categoryIconWidget(context, TransactionCategory? category) {
     return Column(
@@ -78,13 +83,21 @@ class CategoryIcon extends StatelessWidget {
                 color: noBackground && category != null
                     ? Colors.transparent
                     : category != null
-                        ? dynamicPastel(
-                            context,
-                            HexColor(category.colour,
-                                defaultColor:
-                                    Theme.of(context).colorScheme.primary),
-                            amountLight: 0.55,
-                            amountDark: 0.35)
+                        ? appStateSettings["colorTintCategoryIcon"] &&
+                                tintEnabled
+                            ? dynamicPastel(
+                                context,
+                                tintColor ??
+                                    Theme.of(context).colorScheme.primary,
+                                amount: 0.5,
+                              )
+                            : dynamicPastel(
+                                context,
+                                HexColor(category.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary),
+                                amountLight: 0.55,
+                                amountDark: 0.35)
                         : getColor(context, "canvasContainer"),
                 onTap: onTap,
                 onLongPress: canEditByLongPress
@@ -101,11 +114,34 @@ class CategoryIcon extends StatelessWidget {
                 borderRadius: borderRadius - 3,
                 child: Center(
                   child: (category != null && category.iconName != null
-                      ? Image(
-                          image: AssetImage(
-                              "assets/categories/" + (category.iconName ?? "")),
-                          width: size,
-                        )
+                      ? !appStateSettings["colorTintCategoryIcon"] ||
+                              !tintEnabled
+                          ? Image(
+                              image: AssetImage("assets/categories/" +
+                                  (category.iconName ?? "")),
+                              width: size,
+                            )
+                          : ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                tintColor ??
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.7),
+                                BlendMode.srcATop,
+                              ),
+                              child: ColorFiltered(
+                                colorFilter: greyScale,
+                                child: Opacity(
+                                  opacity: 1,
+                                  child: Image(
+                                    image: AssetImage("assets/categories/" +
+                                        (category.iconName ?? "")),
+                                    width: size,
+                                  ),
+                                ),
+                              ),
+                            )
                       : Container()),
                 ),
               ),

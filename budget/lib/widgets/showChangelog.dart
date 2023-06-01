@@ -8,6 +8,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Wallet summary and all spending now shows 10 days of recent transactions
+    All spending totals sorted by total
+    Tintable category icons debug option
+    Budgets are watched in budget selection
+    Removed "All" filter
+    Can't add income transactions to a budget
+    Kotlin version upgraded
     Improved contrast of cursor color in text input
     Removed today indicator on custom budget time period if progress larger than 100
     Added edit button to budget list page

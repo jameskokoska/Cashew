@@ -2,7 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// default settings, defaultSettings
+// default settings, defaultSettings, initial settings
 Map<String, dynamic> defaultPreferences() {
   return {
     "databaseJustImported": false,
@@ -44,6 +44,7 @@ Map<String, dynamic> defaultPreferences() {
     "notificationHourUpcomingTransactions": 11,
     "notificationMinuteUpcomingTransactions": 0,
     "materialYou": false,
+    "colorTintCategoryIcon": false,
     "sendTransactionsToServerQueue": {},
     "currentUserEmail": "",
     "usersNicknames": {},
