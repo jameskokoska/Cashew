@@ -2398,7 +2398,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<int> deleteBudget(context, Budget budget) async {
     if (budget.sharedKey != null) {
       dynamic response = await deleteSharedBudgetPopup(context, budget);
-      if (response == false) {
+      // we do != true because if user taps barrier dismiss it can still move on to delete...
+      if (response != true) {
         return -1;
       }
       loadingIndeterminateKey.currentState!.setVisibility(true);
@@ -2408,6 +2409,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         bool result = await leaveSharedBudget(budget);
       }
       loadingIndeterminateKey.currentState!.setVisibility(false);
+    } else if (budget.addedTransactionsOnly) {
+      if ((await getTotalCountOfTransactionsInBudget(budget.budgetPk) ?? 0) >
+          0) {
+        dynamic response =
+            await deleteAddedTransactionsOnlyBudgetPopup(context, budget);
+        // we do != true because if user taps barrier dismiss it can still move on to delete...
+        if (response != true) {
+          return -1;
+        }
+      }
     }
 
     await shiftBudgets(-1, budget.order);
@@ -3094,12 +3105,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalCount)).get();
   }
 
-  Future<List<int?>> getTotalCountOfTransactionsInBudget(int budgetPk) async {
+  Future<int?> getTotalCountOfTransactionsInBudget(int budgetPk) async {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..where(transactions.sharedReferenceBudgetPk.equals(budgetPk))
       ..addColumns([totalCount]);
-    return query.map((row) => row.read(totalCount)).get();
+    final result = await query.map((row) => row.read(totalCount)).getSingle();
+    return result;
   }
 
   // get all transactions that occurred in a given time period that belong to categories

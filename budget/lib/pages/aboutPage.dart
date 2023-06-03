@@ -33,21 +33,25 @@ class AboutPage extends StatelessWidget {
           child: Column(
             children: [
               Tappable(
+                borderRadius: 15,
                 onLongPress: () {
                   pushRoute(
                     context,
                     DebugPage(),
                   );
                 },
-                child: TextFont(
-                  text: "Cashew",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  textAlign: TextAlign.center,
-                  maxLines: 5,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 5, right: 10, bottom: 5, left: 10),
+                  child: TextFont(
+                    text: "Cashew",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    textAlign: TextAlign.center,
+                    maxLines: 5,
+                  ),
                 ),
               ),
-              SizedBox(height: 5),
               Tappable(
                 onTap: () {
                   showChangelog(context, forceShow: true);
@@ -64,7 +68,7 @@ class AboutPage extends StatelessWidget {
                   maxLines: 5,
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 5),
             ],
           ),
         ),
@@ -150,6 +154,7 @@ class AboutPage extends StatelessWidget {
                       OnBoardingPage(popNavigationWhenDone: true),
                     );
                   },
+                  expandedLayout: true,
                 ),
               ),
             ),
@@ -162,6 +167,7 @@ class AboutPage extends StatelessWidget {
                   onTap: () {
                     showChangelog(context, forceShow: true);
                   },
+                  expandedLayout: true,
                 ),
               ),
             ),

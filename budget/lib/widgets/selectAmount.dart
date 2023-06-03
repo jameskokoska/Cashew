@@ -803,7 +803,6 @@ class _SelectAmountState extends State<SelectAmount> {
                           key: Key("addSuccess"),
                           label: widget.nextLabel ?? "",
                           width: MediaQuery.of(context).size.width,
-                          height: 50,
                           onTap: () {
                             if (widget.allowZero && amount == "") {
                               widget.setSelectedAmount(0, "");
@@ -826,7 +825,6 @@ class _SelectAmountState extends State<SelectAmount> {
                           key: Key("addNoSuccess"),
                           label: widget.nextLabel ?? "",
                           width: MediaQuery.of(context).size.width,
-                          height: 50,
                           onTap: () {},
                           color: Colors.grey,
                         ),
@@ -1190,7 +1188,6 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
                   key: Key("addSuccess"),
                   label: widget.nextLabel ?? "",
                   width: MediaQuery.of(context).size.width,
-                  height: 50,
                   onTap: () {
                     if (widget.next != null) {
                       widget.next!();
@@ -1201,7 +1198,6 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
                   key: Key("addNoSuccess"),
                   label: widget.nextLabel ?? "",
                   width: MediaQuery.of(context).size.width,
-                  height: 50,
                   onTap: () {},
                   color: Colors.grey,
                 ),

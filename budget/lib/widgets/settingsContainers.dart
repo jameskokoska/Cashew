@@ -238,7 +238,7 @@ class SettingsContainerOutlined extends StatelessWidget {
             border: Border.all(
               color: (appStateSettings["materialYou"]
                   ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
-                  : getColor(context, "lightDarkAccentHeavy")!),
+                  : getColor(context, "lightDarkAccentHeavy")),
               width: 2,
             ),
             borderRadius: BorderRadius.circular(10),

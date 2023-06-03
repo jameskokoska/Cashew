@@ -12,7 +12,7 @@ class Button extends StatefulWidget {
     Key? key,
     required this.label,
     this.width,
-    this.height,
+    // this.height,
     this.fontSize = 15,
     required this.onTap,
     this.color,
@@ -23,10 +23,11 @@ class Button extends StatefulWidget {
     this.iconColor,
     this.borderRadius = 20,
     this.changeScale = true,
+    this.expandedLayout = false,
   }) : super(key: key);
   final String label;
   final double? width;
-  final double? height;
+  // final double? height;
   final double fontSize;
   final VoidCallback onTap;
   final Color? color;
@@ -37,6 +38,7 @@ class Button extends StatefulWidget {
   final Color? iconColor;
   final double borderRadius;
   final bool changeScale;
+  final bool expandedLayout;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -64,6 +66,14 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Widget text = TextFont(
+      text: widget.label,
+      fontSize: widget.fontSize,
+      textColor: widget.textColor ??
+          Theme.of(context).colorScheme.onSecondaryContainer,
+      maxLines: 5,
+      textAlign: TextAlign.center,
+    );
     return Padding(
       padding: EdgeInsets.only(
           bottom: widget.hasBottomExtraSafeArea == true
@@ -93,7 +103,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
           borderRadius: widget.borderRadius,
           child: Container(
             width: widget.width,
-            height: widget.height,
+            // height: widget.height,
             padding: widget.padding,
             child: Center(
               child: Row(
@@ -114,14 +124,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                           ),
                         )
                       : SizedBox.shrink(),
-                  TextFont(
-                    text: widget.label,
-                    fontSize: widget.fontSize,
-                    textColor: widget.textColor ??
-                        Theme.of(context).colorScheme.onSecondaryContainer,
-                    maxLines: 5,
-                    textAlign: TextAlign.center,
-                  ),
+                  widget.expandedLayout ? Expanded(child: text) : text,
                 ],
               ),
             ),

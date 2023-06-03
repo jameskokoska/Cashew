@@ -78,12 +78,14 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           ),
         ),
         actions: [
-          RefreshButton(onTap: () async {
-            loadingIndeterminateKey.currentState!.setVisibility(true);
-            await syncPendingQueueOnServer();
-            await getCloudBudgets();
-            loadingIndeterminateKey.currentState!.setVisibility(false);
-          }),
+          appStateSettings["sharedBudgets"] == false
+              ? SizedBox.shrink()
+              : RefreshButton(onTap: () async {
+                  loadingIndeterminateKey.currentState!.setVisibility(true);
+                  await syncPendingQueueOnServer();
+                  await getCloudBudgets();
+                  loadingIndeterminateKey.currentState!.setVisibility(false);
+                }),
         ],
         slivers: [
           SliverToBoxAdapter(
@@ -108,14 +110,15 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           ),
           SliverToBoxAdapter(
             child: SettingsContainerSwitch(
-              title: "Total Spent Label",
-              description: "Instead of the remaining amount",
+              title: "Total Spent",
+              descriptionWithValue: (value) =>
+                  value ? "Showing total spent" : "Showing remaining amount",
               onSwitched: (value) {
                 updateSettings("showTotalSpentForBudget", value,
                     pagesNeedingRefresh: [0, 2], updateGlobalState: false);
               },
               initialValue: appStateSettings["showTotalSpentForBudget"],
-              icon: Icons.data_array_rounded,
+              icon: Icons.center_focus_weak_rounded,
             ),
           ),
           StreamBuilder<List<Budget>>(
@@ -234,7 +237,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                               " category budget",
                                       fontSize: 14,
                                     )
-                                  : FutureBuilder<List<int?>>(
+                                  : FutureBuilder<int?>(
                                       future: database
                                           .getTotalCountOfTransactionsInBudget(
                                               budget.budgetPk),
@@ -243,9 +246,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                             snapshot.data != null) {
                                           return TextFont(
                                             textAlign: TextAlign.left,
-                                            text: snapshot.data![0].toString() +
+                                            text: snapshot.data!.toString() +
                                                 pluralString(
-                                                    snapshot.data![0] == 1,
+                                                    snapshot.data! == 1,
                                                     " transaction"),
                                             fontSize: 14,
                                             textColor:
@@ -380,6 +383,24 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
       if (result == -1) return;
       openSnackbar(SnackbarMessage(title: "Deleted budget"));
       if (afterDelete != null) afterDelete();
+    },
+    onSubmitLabel: "Delete",
+  );
+}
+
+Future<dynamic> deleteAddedTransactionsOnlyBudgetPopup(context, Budget budget) {
+  return openPopup(
+    context,
+    title: "Delete Budget?",
+    description:
+        "All transactions belonging to this budget will no longer be connected to a budget.",
+    icon: Icons.delete_rounded,
+    onCancel: () {
+      Navigator.pop(context, false);
+    },
+    onCancelLabel: "Cancel",
+    onSubmit: () async {
+      Navigator.pop(context, true);
     },
     onSubmitLabel: "Delete",
   );

@@ -16,7 +16,7 @@ import './colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 // Add bottom padding for web Safari browsers
 double bottomPaddingSafeArea = getOSInsideWeb() == "iOS" ? 20 : 0;
@@ -790,4 +790,34 @@ void openUrl(String link) async {
       Uri.parse(link),
       mode: LaunchMode.externalApplication,
     );
+}
+
+List<String> popularCurrencies = [
+  'usd', // United States Dollar
+  'eur', // Euro
+  'jpy', // Japanese Yen
+  'gbp', // British Pound Sterling
+  'aud', // Australian Dollar
+  'cad', // Canadian Dollar
+  'chf', // Swiss Franc
+  'cny', // Chinese Yuan
+  'sek', // Swedish Krona
+  'nzd', // New Zealand Dollar
+  'mxn', // Mexican Peso
+  'inr', // Indian Rupee
+  'nok', // Norwegian Krone
+  'krw', // South Korean Won
+  'btc', // Bitcoin
+];
+
+String getDevicesDefaultCurrencyCode() {
+  String? currentCountryCode =
+      WidgetsBinding.instance.window.locale.countryCode;
+  print(currentCountryCode);
+  for (String currencyKey in currenciesJSON.keys) {
+    if (currenciesJSON[currencyKey]["CountryCode"] == currentCountryCode) {
+      return currencyKey;
+    }
+  }
+  return popularCurrencies[0];
 }

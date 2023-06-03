@@ -174,7 +174,6 @@ Future<T?> openPopup<T extends Object?>(
                                                     .colorScheme
                                                     .secondaryContainer,
                                                 label: onCancelLabel,
-                                                height: 50,
                                                 onTap: onCancel ?? () {}),
                                           )
                                         : SizedBox.shrink(),
@@ -193,7 +192,6 @@ Future<T?> openPopup<T extends Object?>(
                                                     .colorScheme
                                                     .secondaryContainer,
                                                 label: onExtraLabel,
-                                                height: 50,
                                                 onTap: onExtra ?? () {}),
                                           )
                                         : SizedBox.shrink(),
@@ -212,7 +210,6 @@ Future<T?> openPopup<T extends Object?>(
                                                     .colorScheme
                                                     .tertiaryContainer,
                                                 label: onSubmitLabel,
-                                                height: 50,
                                                 onTap: onSubmit ?? () {}),
                                           )
                                         : SizedBox.shrink(),

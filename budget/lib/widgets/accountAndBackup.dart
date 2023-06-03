@@ -475,6 +475,8 @@ Future<bool> signInGoogle(
     Function()? next}) async {
   bool isConnected = false;
 
+  if (appStateSettings["emailScanning"] == false) gMailPermissions = false;
+
   try {
     if (gMailPermissions == true && !(await testIfHasGmailAccess())) {
       await signOutGoogle();

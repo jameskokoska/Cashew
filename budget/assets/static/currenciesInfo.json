@@ -4,7 +4,7 @@
     "CountryName": "Albania",
     "Currency": "Lek",
     "Code": "ALL",
-    "Symbol": "Lek"
+    "Symbol": "L"
   },
   {
     "Flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/afghanistan.png",
@@ -669,7 +669,7 @@
     "CountryName": "Switzerland",
     "Currency": "Franc",
     "Code": "CHF",
-    "Symbol": "CHF"
+    "Symbol": "₣"
   },
   {
     "Flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/suriname.png",

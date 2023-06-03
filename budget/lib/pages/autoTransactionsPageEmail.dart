@@ -121,6 +121,7 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
 Future<void> parseEmailsInBackground(context,
     {bool sayUpdates = false, bool forceParse = false}) async {
   if (appStateSettings["currentUserEmail"] == "") return;
+  if (appStateSettings["emailScanning"] == false) return;
   print(entireAppLoaded);
   //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
   if (entireAppLoaded == false || forceParse) {

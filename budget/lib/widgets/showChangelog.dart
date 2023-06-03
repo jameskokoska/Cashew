@@ -8,6 +8,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Improved budget page and budget widget size and formatting
+    Improved wallet selection size and formatting
+    Moved extra settings to debug page
+    Disabled email scanning and shared budgets - only accessible in debug menu
+    Added warning when deleting added transactions only budget
+    Improved CSV import with custom date format
+    Default wallet on first startup follows locale
+    New currency picker
     Wallet summary and all spending now shows 10 days of recent transactions
     All spending totals sorted by total
     Tintable category icons debug option

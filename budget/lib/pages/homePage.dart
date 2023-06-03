@@ -287,18 +287,14 @@ class HomePageState extends State<HomePage>
                         ? KeepAlive(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 13.0),
-                              child: Container(
-                                height: 85.0,
-                                child: StreamBuilder<List<TransactionWallet>>(
-                                  stream: database.watchAllWallets(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return ListView(
-                                        addAutomaticKeepAlives: true,
-                                        clipBehavior: Clip.none,
-                                        scrollDirection: Axis.horizontal,
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 7),
+                              child: StreamBuilder<List<TransactionWallet>>(
+                                stream: database.watchAllWallets(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           for (TransactionWallet wallet
                                               in snapshot.data!)
@@ -308,119 +304,55 @@ class HomePageState extends State<HomePage>
                                                   wallet.walletPk,
                                               wallet: wallet,
                                             ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 6, right: 6 + 8),
-                                            child: AddButton(
-                                              onTap: () {},
-                                              height: null,
-                                              width: 110,
-                                              openPage: AddWalletPage(
-                                                title: "Add Wallet",
+                                          Stack(
+                                            children: [
+                                              Visibility(
+                                                maintainSize: true,
+                                                maintainAnimation: true,
+                                                maintainState: true,
+                                                child: Opacity(
+                                                  opacity: 0,
+                                                  child: WalletEntry(
+                                                    selected: appStateSettings[
+                                                            "selectedWallet"] ==
+                                                        snapshot.data![snapshot
+                                                                .data!.length -
+                                                            1],
+                                                    wallet: snapshot.data![
+                                                        snapshot.data!.length -
+                                                            1],
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                              Positioned.fill(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 6, right: 6),
+                                                  child: AddButton(
+                                                    onTap: () {},
+                                                    openPage: AddWalletPage(
+                                                      title: "Add Wallet",
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
-                                      );
-                                    }
-                                    return Container();
-                                  },
-                                ),
+                                      ),
+                                      clipBehavior: Clip.none,
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 7),
+                                    );
+                                  }
+                                  return Container();
+                                },
                               ),
                             ),
                           )
                         : SizedBox.shrink(),
-                    KeepAlive(
-                      child: StreamBuilder<List<Budget>>(
-                        stream: database.watchAllPinnedBudgets(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data!.length == 0) {
-                              return SizedBox.shrink();
-                            }
-                            // if (snapshot.data!.length == 1) {
-                            //   return Padding(
-                            //     padding: const EdgeInsets.only(
-                            //         left: 13, right: 13, bottom: 13),
-                            //     child: BudgetContainer(
-                            //       budget: snapshot.data![0],
-                            //     ),
-                            //   );
-                            // }
-                            List<Widget> budgetItems = [
-                              ...(snapshot.data?.map((Budget budget) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 3),
-                                      child: BudgetContainer(
-                                        budget: budget,
-                                      ),
-                                    );
-                                  }).toList() ??
-                                  []),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 3, right: 3),
-                                child: AddButton(
-                                  onTap: () {},
-                                  height: null,
-                                  width: null,
-                                  padding: EdgeInsets.all(0),
-                                  openPage: AddBudgetPage(title: "Add Budget"),
-                                ),
-                              ),
-                            ];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 13),
-                              child: getIsFullScreen(context)
-                                  ? SizedBox(
-                                      height: 183,
-                                      child: ListView(
-                                        addAutomaticKeepAlives: true,
-                                        clipBehavior: Clip.none,
-                                        scrollDirection: Axis.horizontal,
-                                        children: [
-                                          for (Widget widget in budgetItems)
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 7),
-                                              child: SizedBox(
-                                                width: 500,
-                                                child: widget,
-                                              ),
-                                            )
-                                        ],
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
-                                      ),
-                                    )
-                                  : CarouselSlider(
-                                      options: CarouselOptions(
-                                        height: 183,
-                                        enableInfiniteScroll: false,
-                                        enlargeCenterPage: true,
-                                        enlargeStrategy:
-                                            CenterPageEnlargeStrategy.height,
-                                        viewportFraction: 0.95,
-                                        clipBehavior: Clip.none,
-                                        // onPageChanged: (index, reason) {
-                                        //   if (index == snapshot.data!.length) {
-                                        //     pushRoute(context,
-                                        //         AddBudgetPage(title: "Add Budget"));
-                                        //   }
-                                        // },
-                                        enlargeFactor: 0.3,
-                                      ),
-                                      items: budgetItems,
-                                    ),
-                            );
-                          } else {
-                            return SizedBox.shrink();
-                          }
-                        },
-                      ),
-                    ),
+                    HomePageBudgets(),
 
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -674,6 +606,131 @@ class HomePageState extends State<HomePage>
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class HomePageBudgets extends StatefulWidget {
+  const HomePageBudgets({super.key});
+
+  @override
+  State<HomePageBudgets> createState() => _HomePageBudgetsState();
+}
+
+class _HomePageBudgetsState extends State<HomePageBudgets> {
+  double height = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return KeepAlive(
+      child: StreamBuilder<List<Budget>>(
+        stream: database.watchAllPinnedBudgets(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data!.length == 0) {
+              return SizedBox.shrink();
+            }
+            // if (snapshot.data!.length == 1) {
+            //   return Padding(
+            //     padding: const EdgeInsets.only(
+            //         left: 13, right: 13, bottom: 13),
+            //     child: BudgetContainer(
+            //       budget: snapshot.data![0],
+            //     ),
+            //   );
+            // }
+            List<Widget> budgetItems = [
+              ...(snapshot.data?.map((Budget budget) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      child: BudgetContainer(
+                        budget: budget,
+                      ),
+                    );
+                  }).toList() ??
+                  []),
+              Padding(
+                padding: const EdgeInsets.only(left: 3, right: 3),
+                child: AddButton(
+                  onTap: () {},
+                  height: null,
+                  width: null,
+                  padding: EdgeInsets.all(0),
+                  openPage: AddBudgetPage(title: "Add Budget"),
+                ),
+              ),
+            ];
+            return Stack(
+              children: [
+                Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Opacity(
+                    opacity: 0,
+                    child: WidgetSize(
+                      onChange: (Size size) {
+                        print(size);
+                        setState(() {
+                          height = size.height;
+                        });
+                      },
+                      child: BudgetContainer(
+                        budget: snapshot.data![0],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 13),
+                  child: getIsFullScreen(context)
+                      ? SizedBox(
+                          height: height,
+                          child: ListView(
+                            addAutomaticKeepAlives: true,
+                            clipBehavior: Clip.none,
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              for (Widget widget in budgetItems)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 7),
+                                  child: SizedBox(
+                                    width: 500,
+                                    child: widget,
+                                  ),
+                                )
+                            ],
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                          ),
+                        )
+                      : CarouselSlider(
+                          options: CarouselOptions(
+                            height: height,
+                            enableInfiniteScroll: false,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                            viewportFraction: 0.95,
+                            clipBehavior: Clip.none,
+                            // onPageChanged: (index, reason) {
+                            //   if (index == snapshot.data!.length) {
+                            //     pushRoute(context,
+                            //         AddBudgetPage(title: "Add Budget"));
+                            //   }
+                            // },
+                            enlargeFactor: 0.3,
+                          ),
+                          items: budgetItems,
+                        ),
+                ),
+              ],
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
       ),
     );
   }

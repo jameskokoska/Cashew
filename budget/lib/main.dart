@@ -68,6 +68,8 @@ void main() async {
   database = await constructDb('db');
   notificationPayload = await initializeNotifications();
   entireAppLoaded = false;
+  currenciesJSON = await json.decode(
+      await rootBundle.loadString('assets/static/generated/currencies.json'));
   await initializeDatabase();
   await initializeSettings();
   runApp(RestartApp(child: InitializeApp(key: appStateKey)));
@@ -208,9 +210,6 @@ Future<bool> initializeSettings() async {
   appStateSettings = userSettings;
 
   packageInfoGlobal = await PackageInfo.fromPlatform();
-  // print(await rootBundle.loadString('assets/static/generated/currencies.json'));
-  currenciesJSON = await json.decode(
-      await rootBundle.loadString('assets/static/generated/currencies.json'));
 
   // Do some actions based on loaded settings
   if (appStateSettings["accentSystemColor"] == true) {
@@ -262,7 +261,7 @@ Future<bool> initializeDatabase() async {
         name: "Wallet",
         dateCreated: DateTime.now(),
         order: 0,
-        currency: "usd",
+        currency: getDevicesDefaultCurrencyCode(),
         dateTimeModified: null,
         decimals: 2,
       ),

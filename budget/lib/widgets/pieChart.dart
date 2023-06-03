@@ -303,11 +303,15 @@ class _Badge extends StatelessWidget {
                         color: Theme.of(context).canvasColor,
                       ),
                       child: Center(
-                        child: TextFont(
-                          text: percent.toStringAsFixed(0) + '%',
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          textAlign: TextAlign.center,
+                        child: MediaQuery(
+                          child: TextFont(
+                            text: percent.toStringAsFixed(0) + '%',
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            textAlign: TextAlign.center,
+                          ),
+                          data: MediaQuery.of(context)
+                              .copyWith(textScaleFactor: 1.0),
                         ),
                       ),
                     ),

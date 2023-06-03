@@ -1073,9 +1073,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 ),
                 AnimatedSize(
                   duration: Duration(milliseconds: 400),
-                  curve: Curves.easeInOut,
+                  curve: Curves.easeOutCubic,
                   child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
+                    duration: Duration(milliseconds: 400),
                     child: selectedType == TransactionSpecialType.repetitive ||
                             selectedType == TransactionSpecialType.subscription
                         ? Wrap(
@@ -1804,7 +1804,6 @@ class _SelectTitleState extends State<SelectTitle> {
             ? Button(
                 label: "Select Category",
                 width: getWidthBottomSheet(context),
-                height: 50,
                 onTap: () {
                   Navigator.pop(context);
                   if (widget.next != null) {

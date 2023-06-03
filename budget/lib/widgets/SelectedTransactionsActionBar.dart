@@ -78,64 +78,66 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              iconSize: getWidthNavigationSidebar(context) > 0
-                                  ? 23
-                                  : null,
-                              padding: getWidthNavigationSidebar(context) > 0
-                                  ? EdgeInsets.all(12)
-                                  : null,
-                              color: Theme.of(context).colorScheme.secondary,
-                              icon: Icon(
-                                Icons.arrow_back_rounded,
+                        Flexible(
+                          child: Row(
+                            children: [
+                              IconButton(
+                                iconSize: getWidthNavigationSidebar(context) > 0
+                                    ? 23
+                                    : null,
+                                padding: getWidthNavigationSidebar(context) > 0
+                                    ? EdgeInsets.all(12)
+                                    : null,
                                 color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              onPressed: () {
-                                globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
-                              },
-                            ),
-                            WatchAllWallets(
-                              childFunction: (wallets) =>
-                                  StreamBuilder<double?>(
-                                stream: database.watchTotalSpentGivenList(
-                                    listOfIDs, wallets),
-                                builder: (context, snapshot) {
-                                  return CountNumber(
-                                    count:
-                                        snapshot.hasData ? snapshot.data! : 0,
-                                    duration: Duration(milliseconds: 250),
-                                    dynamicDecimals: true,
-                                    initialCount: (0),
-                                    textBuilder: (number) {
-                                      return TextFont(
-                                        text: convertToMoney(number,
-                                            finalNumber: snapshot.hasData
-                                                ? snapshot.data!
-                                                : 0),
-                                        fontSize: getWidthNavigationSidebar(
-                                                    context) <=
-                                                0
-                                            ? 17.5
-                                            : 19,
-                                        textAlign: TextAlign.left,
-                                      );
-                                    },
-                                  );
+                                icon: Icon(
+                                  Icons.arrow_back_rounded,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                onPressed: () {
+                                  globalSelectedID.value[pageID] = [];
+                                  globalSelectedID.notifyListeners();
                                 },
                               ),
-                            ),
-                            TextFont(
-                                fontSize:
-                                    getWidthNavigationSidebar(context) <= 0
-                                        ? 17
-                                        : 19,
-                                text: " (" +
-                                    listOfIDs.length.toString() +
-                                    " selected)"),
-                          ],
+                              WatchAllWallets(
+                                childFunction: (wallets) =>
+                                    StreamBuilder<double?>(
+                                  stream: database.watchTotalSpentGivenList(
+                                      listOfIDs, wallets),
+                                  builder: (context, snapshot) {
+                                    return CountNumber(
+                                      count:
+                                          snapshot.hasData ? snapshot.data! : 0,
+                                      duration: Duration(milliseconds: 250),
+                                      dynamicDecimals: true,
+                                      initialCount: (0),
+                                      textBuilder: (number) {
+                                        return Flexible(
+                                          child: TextFont(
+                                            text: convertToMoney(number,
+                                                    finalNumber:
+                                                        snapshot.hasData
+                                                            ? snapshot.data!
+                                                            : 0) +
+                                                " (" +
+                                                listOfIDs.length.toString() +
+                                                " selected)",
+                                            fontSize: getWidthNavigationSidebar(
+                                                        context) <=
+                                                    0
+                                                ? 17.5
+                                                : 19,
+                                            textAlign: TextAlign.left,
+                                            maxLines: 2,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Row(
                           children: [

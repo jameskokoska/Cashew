@@ -59,5 +59,7 @@ Map<String, dynamic> defaultPreferences() {
     "lastSynced": null,
     "font": "Avenir",
     "animationSpeed": 1.0,
+    "sharedBudgets": false,
+    "emailScanning": false,
   };
 }

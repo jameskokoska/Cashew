@@ -1,7 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -209,7 +208,6 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                       ? "Add Title"
                       : "Save Changes",
                   width: MediaQuery.of(context).size.width,
-                  height: 50,
                   onTap: () async {
                     await addTitle();
                   },
@@ -219,7 +217,6 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                       ? "Add Title"
                       : "Save Changes",
                   width: MediaQuery.of(context).size.width,
-                  height: 50,
                   onTap: () {},
                   color: Colors.grey,
                 ),

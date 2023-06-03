@@ -103,12 +103,14 @@ class CategoryEntry extends StatelessWidget {
                     TextFont(
                       text: category.name,
                       fontSize: 18,
+                      maxLines: 2,
                     ),
                     SizedBox(
                       height: 1,
                     ),
                     categoryBudgetLimit != null
-                        ? Row(
+                        ? Wrap(
+                            direction: Axis.horizontal,
                             children: [
                               TextFont(
                                 text: (categorySpent /

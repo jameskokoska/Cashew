@@ -265,6 +265,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                     dragWidgetBuilder: (index, child) {
                       return Opacity(opacity: 0.5, child: child);
                     },
+                    childAspectRatio: 0.96,
                     padding: EdgeInsets.only(top: 5),
                     controller: _scrollController,
                     crossAxisSpacing: 0,
@@ -455,7 +456,6 @@ class _SelectCategoryState extends State<SelectCategory> {
                                       key: Key("addSuccess"),
                                       label: widget.nextLabel ?? "",
                                       width: MediaQuery.of(context).size.width,
-                                      height: 50,
                                       onTap: () {
                                         if (widget.next != null) {
                                           widget.next!();
@@ -466,7 +466,6 @@ class _SelectCategoryState extends State<SelectCategory> {
                                       key: Key("addNoSuccess"),
                                       label: widget.nextLabel ?? "",
                                       width: MediaQuery.of(context).size.width,
-                                      height: 50,
                                       onTap: () {},
                                       color: Colors.grey,
                                     ),

@@ -113,6 +113,20 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
       child: Stack(
         children: [
           PageFramework(
+            subtitle: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: Transform.translate(
+                offset: Offset(0, 8),
+                child: TotalSpent(
+                  budget: widget.budget,
+                  budgetColorScheme: budgetColorScheme,
+                  totalSpent: 100,
+                ),
+              ),
+            ),
+            subtitleAlignment: Alignment.bottomLeft,
+            subtitleSize: 10,
+            subtitleAnimationSpeed: 10,
             backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
@@ -263,17 +277,18 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           return SliverToBoxAdapter(
                             child: Column(children: [
                               Transform.translate(
-                                offset: Offset(0, -20),
+                                offset: Offset(0, -10),
                                 child: WidgetSize(
                                   onChange: (size) {
                                     budgetHeaderHeight = size.height - 20;
                                   },
                                   child: Container(
                                     padding: EdgeInsets.only(
-                                        top: 15,
-                                        bottom: 22,
-                                        left: 22,
-                                        right: 22),
+                                      top: 20,
+                                      bottom: 22,
+                                      left: 22,
+                                      right: 22,
+                                    ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.vertical(
                                           bottom: Radius.circular(10)),
@@ -282,11 +297,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     ),
                                     child: Column(
                                       children: [
-                                        TotalSpent(
-                                          budget: widget.budget,
-                                          budgetColorScheme: budgetColorScheme,
-                                          totalSpent: totalSpent,
-                                        ),
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                             horizontal:
@@ -322,7 +332,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                             ? SizedBox.shrink()
                                             : Padding(
                                                 padding: const EdgeInsets.only(
-                                                    top: 18, bottom: 0),
+                                                    top: 15, bottom: 0),
                                                 child: DaySpending(
                                                   budget: widget.budget,
                                                   amount:
@@ -335,7 +345,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                   budgetRange: budgetRange,
                                                 ),
                                               ),
-                                        Container(height: 3),
                                       ],
                                     ),
                                   ),

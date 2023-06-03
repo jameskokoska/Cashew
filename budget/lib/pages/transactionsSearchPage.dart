@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/homePage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -163,7 +164,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
             SelectChips(
               items: [
                 BudgetTransactionFilters.addedToOtherBudget,
-                BudgetTransactionFilters.sharedToOtherBudget,
+                ...(appStateSettings["sharedBudgets"]
+                    ? [BudgetTransactionFilters.sharedToOtherBudget]
+                    : []),
               ],
               getLabel: (item) {
                 return item == BudgetTransactionFilters.addedToOtherBudget
@@ -235,23 +238,25 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 return false;
               },
             ),
-            SelectChips(
-              items: [
-                SharedOwnerMember.owner,
-                SharedOwnerMember.member,
-              ],
-              getLabel: (item) {
-                return item == SharedOwnerMember.owner
-                    ? "Owner"
-                    : item == SharedOwnerMember.member
-                        ? "Member"
-                        : "";
-              },
-              onSelected: (item) {},
-              getSelected: (item) {
-                return false;
-              },
-            ),
+            appStateSettings["sharedBudgets"]
+                ? SelectChips(
+                    items: [
+                      SharedOwnerMember.owner,
+                      SharedOwnerMember.member,
+                    ],
+                    getLabel: (item) {
+                      return item == SharedOwnerMember.owner
+                          ? "Owner"
+                          : item == SharedOwnerMember.member
+                              ? "Member"
+                              : "";
+                    },
+                    onSelected: (item) {},
+                    getSelected: (item) {
+                      return false;
+                    },
+                  )
+                : SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Button(

@@ -219,15 +219,6 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.line_axis,
         ),
         SettingsContainerSwitch(
-          title: "Show past spending trajectory",
-          onSwitched: (value) {
-            updateSettings("showPastSpendingTrajectory", value,
-                pagesNeedingRefresh: [0], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["showPastSpendingTrajectory"],
-          icon: Icons.blur_circular_rounded,
-        ),
-        SettingsContainerSwitch(
           title: "Overdue and Upcoming",
           description: "Sections on home page",
           onSwitched: (value) {
@@ -237,42 +228,6 @@ class SettingsPageState extends State<SettingsPage>
           initialValue: appStateSettings["showOverdueUpcoming"],
           icon: Icons.upcoming_rounded,
         ),
-        SettingsContainerSwitch(
-          title: "Use Cumulative Spending",
-          description: "For spending line graphs",
-          onSwitched: (value) {
-            updateSettings("showCumulativeSpending", value,
-                pagesNeedingRefresh: [0, 3], updateGlobalState: false);
-            // if (value == true) {
-            //   updateSettings("removeZeroTransactionEntries", false,
-            //       pagesNeedingRefresh: [0], updateGlobalState: false);
-            // }
-          },
-          initialValue: appStateSettings["showCumulativeSpending"],
-          icon: Icons.show_chart_rounded,
-        ),
-        SettingsContainerSwitch(
-          key: ValueKey(1),
-          title: "Hide Zero Transactions",
-          description: "On spending line graphs",
-          onSwitched: (value) {
-            updateSettings("removeZeroTransactionEntries", value,
-                pagesNeedingRefresh: [0], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["removeZeroTransactionEntries"],
-          icon: Icons.money_off_rounded,
-        ),
-        SettingsContainerSwitch(
-          title: "Battery Saver",
-          description: "Optimize the UI and increase performance",
-          onSwitched: (value) {
-            updateSettings("batterySaver", value,
-                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          },
-          initialValue: appStateSettings["batterySaver"],
-          icon: Icons.battery_charging_full_rounded,
-        ),
-
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
@@ -280,11 +235,14 @@ class SettingsPageState extends State<SettingsPage>
         //   icon: Icons.auto_fix_high_rounded,
         // ),
         ImportCSV(),
-        SettingsContainerOpenPage(
-          openPage: AutoTransactionsPageEmail(),
-          title: "Auto Email Transactions",
-          icon: Icons.mark_email_unread_rounded,
-        ),
+
+        appStateSettings["emailScanning"]
+            ? SettingsContainerOpenPage(
+                openPage: AutoTransactionsPageEmail(),
+                title: "Auto Email Transactions",
+                icon: Icons.mark_email_unread_rounded,
+              )
+            : SizedBox.shrink(),
       ],
     );
   }

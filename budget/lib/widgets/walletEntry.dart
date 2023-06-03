@@ -11,24 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/colors.dart';
 
-class WalletEntry extends StatefulWidget {
-  WalletEntry({
-    Key? key,
-    required this.wallet,
-    required this.selected,
-  }) : super(key: key);
-
+class WalletEntry extends StatelessWidget {
+  const WalletEntry({super.key, required this.wallet, required this.selected});
   final TransactionWallet wallet;
   final bool selected;
-
-  @override
-  State<WalletEntry> createState() => _WalletEntryState();
-}
-
-class _WalletEntryState extends State<WalletEntry>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +26,7 @@ class _WalletEntryState extends State<WalletEntry>
       ),
       child: OpenContainerNavigation(
         borderRadius: 15,
-        openPage: WatchedWalletDetailsPage(walletPk: widget.wallet.walletPk),
+        openPage: WatchedWalletDetailsPage(walletPk: wallet.walletPk),
         button: (openContainer) {
           return Tappable(
             color: getColor(context, "lightDarkAccentHeavyLight"),
@@ -50,8 +36,8 @@ class _WalletEntryState extends State<WalletEntry>
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
                   width: 2,
-                  color: widget.selected
-                      ? HexColor(widget.wallet.colour,
+                  color: selected
+                      ? HexColor(wallet.colour,
                               defaultColor:
                                   Theme.of(context).colorScheme.primary)
                           .withOpacity(0.7)
@@ -60,17 +46,18 @@ class _WalletEntryState extends State<WalletEntry>
               ),
               duration: Duration(milliseconds: 450),
               child: Padding(
-                padding: const EdgeInsets.only(left: 18, right: 18),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
                     Positioned(
-                      right: -10,
-                      top: 8,
+                      right: -11,
+                      top: -5,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
-                          color: HexColor(widget.wallet.colour,
+                          color: HexColor(wallet.colour,
                                   defaultColor:
                                       Theme.of(context).colorScheme.primary)
                               .withOpacity(0.7),
@@ -87,23 +74,23 @@ class _WalletEntryState extends State<WalletEntry>
                           Padding(
                             padding: const EdgeInsets.only(right: 17),
                             child: TextFont(
-                              text: widget.wallet.name,
+                              text: wallet.name,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           StreamBuilder<double?>(
-                            stream: database
-                                .watchTotalOfWallet(widget.wallet.walletPk),
+                            stream:
+                                database.watchTotalOfWallet(wallet.walletPk),
                             builder: (context, snapshot) {
                               return CountNumber(
                                 count: (snapshot.data ?? 0 * -1),
                                 duration: Duration(milliseconds: 1500),
                                 dynamicDecimals: true,
-                                decimals: widget.wallet.decimals,
+                                decimals: wallet.decimals,
                                 initialCount: (snapshot.data ?? 0 * -1),
                                 textBuilder: (number) {
                                   return TextFont(
-                                    walletPkForCurrency: widget.wallet.walletPk,
+                                    walletPkForCurrency: wallet.walletPk,
                                     textAlign: TextAlign.left,
                                     text: convertToMoney(
                                       number,
@@ -120,7 +107,7 @@ class _WalletEntryState extends State<WalletEntry>
                           StreamBuilder<List<int?>>(
                             stream:
                                 database.watchTotalCountOfTransactionsInWallet(
-                                    widget.wallet.walletPk),
+                                    wallet.walletPk),
                             builder: (context, snapshot) {
                               if (snapshot.hasData && snapshot.data != null) {
                                 return TextFont(
@@ -145,15 +132,15 @@ class _WalletEntryState extends State<WalletEntry>
               ),
             ),
             onTap: () async {
-              if (widget.selected) {
+              if (selected) {
                 openContainer();
               } else {
-                setPrimaryWallet(widget.wallet);
+                setPrimaryWallet(wallet);
               }
             },
             onLongPress: () {
-              pushRoute(context,
-                  AddWalletPage(title: "Edit Wallet", wallet: widget.wallet));
+              pushRoute(
+                  context, AddWalletPage(title: "Edit Wallet", wallet: wallet));
             },
           );
         },

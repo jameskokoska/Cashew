@@ -5,7 +5,6 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -16,6 +15,7 @@ import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/currencyPicker.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -392,71 +392,51 @@ class _AddWalletPageState extends State<AddWalletPage> {
               info: "Select Currency",
               sliver: ColumnSliver(children: [
                 SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Focus(
-                        onFocusChange: (hasFocus) {
-                          if (hasFocus)
-                            addWalletPageKey.currentState?.scrollTo(200);
-                        },
-                        child: TextInput(
-                          labelText: "Search currencies...",
-                          icon: Icons.search_rounded,
-                          onChanged: (text) {
-                            searchCurrencies(text);
-                          },
-                          padding: EdgeInsets.only(left: 18),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    ButtonIcon(
-                        onTap: () {
-                          openBottomSheet(
-                            context,
-                            PopupFramework(
-                              title: "Decimal Precision",
-                              child: SelectAmountValue(
-                                amountPassed: selectedDecimals.toString(),
-                                setSelectedAmount: (amount, _) {
-                                  selectedDecimals = amount.toInt();
-                                  if (amount > 10) {
-                                    selectedDecimals = 10;
-                                  } else if (amount < 0) {
-                                    selectedDecimals = 0;
-                                  }
-                                  setState(() {});
-                                },
-                                next: () async {
-                                  determineBottomButton();
-                                  Navigator.pop(context);
-                                },
-                                nextLabel: "Set Amount",
+                CurrencyPicker(
+                  onSelected: setSelectedCurrency,
+                  initialCurrency: selectedCurrency,
+                  onHasFocus: () {
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      addWalletPageKey.currentState?.scrollTo(250);
+                    });
+                  },
+                  extraButton: Row(
+                    children: [
+                      SizedBox(width: 10),
+                      ButtonIcon(
+                          onTap: () {
+                            openBottomSheet(
+                              context,
+                              PopupFramework(
+                                title: "Decimal Precision",
+                                child: SelectAmountValue(
+                                  amountPassed: selectedDecimals.toString(),
+                                  setSelectedAmount: (amount, _) {
+                                    selectedDecimals = amount.toInt();
+                                    if (amount > 10) {
+                                      selectedDecimals = 10;
+                                    } else if (amount < 0) {
+                                      selectedDecimals = 0;
+                                    }
+                                    setState(() {});
+                                  },
+                                  next: () async {
+                                    determineBottomButton();
+                                    Navigator.pop(context);
+                                  },
+                                  nextLabel: "Set Amount",
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        icon: Icons.more_horiz_rounded),
-                    SizedBox(width: 18),
-                  ],
+                            );
+                          },
+                          icon: Icons.more_horiz_rounded),
+                      SizedBox(width: 18),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 15),
-                currencyList.length <= 0
-                    ? NoResults(
-                        message: "No currencies found.",
-                      )
-                    : SizedBox.shrink(),
-                ...currencyList,
-                currencyList.length < 5
-                    ? SizedBox(
-                        height: 180,
-                      )
-                    : SizedBox.shrink(),
               ]),
             ),
-
-            SliverToBoxAdapter(child: SizedBox(height: 60)),
+            SliverToBoxAdapter(child: SizedBox(height: 90)),
             // SliverToBoxAdapter(
             //   child: KeyboardHeightAreaAnimated(),
             // ),

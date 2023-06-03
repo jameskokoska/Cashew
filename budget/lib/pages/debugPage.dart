@@ -19,10 +19,61 @@ class DebugPage extends StatelessWidget {
     return PageFramework(
       dragDownToDismiss: true,
       title: "Debug",
+      subtitle: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+        child: TextFont(text: "Use at your own risk"),
+      ),
+      subtitleAlignment: Alignment.bottomLeft,
+      subtitleAnimationSpeed: 10,
+      subtitleSize: 10,
       navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
+        SettingsContainerSwitch(
+          title: "Use Cumulative Spending",
+          description: "For spending line graphs",
+          onSwitched: (value) {
+            updateSettings("showCumulativeSpending", value,
+                pagesNeedingRefresh: [0, 3], updateGlobalState: false);
+            // if (value == true) {
+            //   updateSettings("removeZeroTransactionEntries", false,
+            //       pagesNeedingRefresh: [0], updateGlobalState: false);
+            // }
+          },
+          initialValue: appStateSettings["showCumulativeSpending"],
+          icon: Icons.show_chart_rounded,
+        ),
+        SettingsContainerSwitch(
+          key: ValueKey(1),
+          title: "Hide Zero Transactions",
+          description: "On spending line graphs",
+          onSwitched: (value) {
+            updateSettings("removeZeroTransactionEntries", value,
+                pagesNeedingRefresh: [0], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["removeZeroTransactionEntries"],
+          icon: Icons.money_off_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "Show past spending trajectory",
+          onSwitched: (value) {
+            updateSettings("showPastSpendingTrajectory", value,
+                pagesNeedingRefresh: [0], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["showPastSpendingTrajectory"],
+          icon: Icons.blur_circular_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "Battery Saver",
+          description: "Optimize the UI and increase performance",
+          onSwitched: (value) {
+            updateSettings("batterySaver", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          initialValue: appStateSettings["batterySaver"],
+          icon: Icons.battery_charging_full_rounded,
+        ),
         SettingsContainerDropdown(
           title: "Font",
           icon: Icons.font_download_rounded,
@@ -44,6 +95,27 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["colorTintCategoryIcon"],
           icon: Icons.mark_email_unread_rounded,
         ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
+            updateSettings("emailScanning", value,
+                pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          title: "Enable Email Scanning",
+          description: "Not verified by Google. Still in testing.",
+          initialValue: appStateSettings["emailScanning"],
+          icon: Icons.mark_email_unread_rounded,
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
+            updateSettings("sharedBudgets", value,
+                pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          title: "Enable Shared Budgets",
+          description:
+              "In testing, share budgets and transactions with other users.",
+          initialValue: appStateSettings["sharedBudgets"],
+          icon: Icons.mark_email_unread_rounded,
+        ),
         SliderSelector(
           min: 0,
           max: 3,
@@ -55,6 +127,7 @@ class DebugPage extends StatelessWidget {
           },
           divisions: 30,
         ),
+        SizedBox(height: 10),
         Button(
             label: "Create random",
             onTap: () async {
@@ -77,8 +150,9 @@ class DebugPage extends StatelessWidget {
                 );
               }
             }),
+        SizedBox(height: 20),
         Button(
-            label: "TAPME",
+            label: "Snackbar Test",
             onTap: () {
               openSnackbar(
                 SnackbarMessage(

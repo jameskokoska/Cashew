@@ -46,42 +46,36 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Transform.translate(
-          offset: Offset(0, 1),
-          child: Container(
-            height: 12,
-            foregroundDecoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).canvasColor.withOpacity(0.0),
-                  Theme.of(context).canvasColor,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.1, 1],
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 100),
+      curve: Curves.easeInOutCubic,
+      transform: Matrix4.translationValues(
+        0.0,
+        isKeyboardOpen ? 100.0 : 0.0,
+        0.0,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Transform.translate(
+            offset: Offset(0, 1),
+            child: Container(
+              height: 12,
+              foregroundDecoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).canvasColor.withOpacity(0.0),
+                    Theme.of(context).canvasColor,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.1, 1],
+                ),
               ),
             ),
           ),
-        ),
-        Tappable(
-          onTap: widget.disabled ? () {} : widget.onTap,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.easeInOutCubic,
-            margin: isKeyboardOpen
-                ? EdgeInsets.zero
-                : EdgeInsets.only(bottom: bottomPaddingSafeArea),
-            padding: isKeyboardOpen
-                ? EdgeInsets.zero
-                : const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 5,
-                  ),
-            color: Theme.of(context).canvasColor,
-            height: isKeyboardOpen ? 47 : 60,
+          Tappable(
+            onTap: widget.disabled ? () {} : widget.onTap,
             child: AnimatedClipRRect(
               duration: Duration(milliseconds: 500),
               borderRadius: isKeyboardOpen
@@ -99,11 +93,11 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).viewInsets.bottom,
-        )
-      ],
+          SizedBox(
+            height: MediaQuery.of(context).viewInsets.bottom,
+          )
+        ],
+      ),
     );
   }
 }

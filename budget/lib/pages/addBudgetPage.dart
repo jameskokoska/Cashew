@@ -894,7 +894,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           items: [
                             "All Transactions",
                             "Added Only",
-                            "Shared Group Budget"
+                            ...(appStateSettings["sharedBudgets"]
+                                ? ["Shared Group Budget"]
+                                : [])
                           ],
                           getLabel: (item) {
                             if (item == "Shared Group Budget")
@@ -1188,7 +1190,7 @@ class TappableTextEntry extends StatelessWidget {
                     width: 1.5,
                     color: appStateSettings["materialYou"]
                         ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
-                        : getColor(context, "lightDarkAccentHeavy")!)),
+                        : getColor(context, "lightDarkAccentHeavy"))),
           ),
           child: IntrinsicWidth(
             child: Align(
