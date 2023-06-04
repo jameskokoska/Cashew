@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added web app link to sync page
+    Copy to clipboard on long press for AboutInfoBox links
     Improved budget page and budget widget size and formatting
     Improved wallet selection size and formatting
     Moved extra settings to debug page

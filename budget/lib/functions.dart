@@ -5,11 +5,15 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
-import 'package:universal_html/html.dart' hide Navigator, Platform;
+import 'package:flutter/services.dart';
+import 'package:universal_html/src/html.dart'
+    hide Navigator, Platform, Clipboard;
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import './colors.dart';
@@ -820,4 +824,16 @@ String getDevicesDefaultCurrencyCode() {
     }
   }
   return popularCurrencies[0];
+}
+
+void copyToClipboard(String text) async {
+  HapticFeedback.mediumImpact();
+  await Clipboard.setData(ClipboardData(text: text));
+  openSnackbar(
+    SnackbarMessage(
+      title: "Copied to clipboard",
+      icon: Icons.copy_rounded,
+      timeout: Duration(milliseconds: 2500),
+    ),
+  );
 }

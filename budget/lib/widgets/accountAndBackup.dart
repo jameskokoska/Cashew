@@ -6,6 +6,7 @@ import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -1010,6 +1011,27 @@ class _BackupManagementState extends State<BackupManagement> {
               : "This will overwrite all previous data",
       child: Column(
         children: [
+          widget.isClientSync && kIsWeb == false
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: AboutInfoBox(
+                        title: "Web App",
+                        link: "https://budget-track.web.app/",
+                        color: appStateSettings["materialYou"]
+                            ? Theme.of(context).colorScheme.secondaryContainer
+                            : getColor(context, "lightDarkAccentHeavyLight"),
+                        padding: EdgeInsets.only(
+                          left: 5,
+                          right: 5,
+                          bottom: 10,
+                          top: 5,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : SizedBox.shrink(),
           widget.isManaging && widget.isClientSync == false
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 0),

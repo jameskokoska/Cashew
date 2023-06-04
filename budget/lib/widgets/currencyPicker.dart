@@ -229,8 +229,8 @@ class CurrencyItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
-              width: 2,
-              color: selected
+              width: appStateSettings["materialYou"] ? 2 : 0,
+              color: appStateSettings["materialYou"] == true && selected
                   ? Theme.of(context).colorScheme.secondary
                   : Colors.transparent,
             ),

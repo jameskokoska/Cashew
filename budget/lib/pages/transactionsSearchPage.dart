@@ -282,6 +282,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         end: selectedEndDate,
       ),
       builder: (BuildContext context, Widget? child) {
+        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
         return Theme(
           data: Theme.of(context).brightness == Brightness.light
               ? ThemeData.light().copyWith(
@@ -298,7 +299,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 ),
-          child: child ?? Container(),
+          child: child ?? SizedBox.shrink(),
         );
       },
       initialEntryMode: DatePickerEntryMode.input,

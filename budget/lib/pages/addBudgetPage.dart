@@ -185,6 +185,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime(DateTime.now().year + 2),
       builder: (BuildContext context, Widget? child) {
+        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
         return Theme(
           data: Theme.of(context).brightness == Brightness.light
               ? ThemeData.light().copyWith(
@@ -201,7 +202,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 ),
-          child: child ?? Container(),
+          child: child ?? SizedBox.shrink(),
         );
       },
     );
@@ -251,6 +252,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 DateTime.now().day, DateTime.now().hour + 5),
       ),
       builder: (BuildContext context, Widget? child) {
+        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
         return Theme(
           data: Theme.of(context).brightness == Brightness.light
               ? ThemeData.light().copyWith(
@@ -267,7 +269,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 ),
-          child: child ?? Container(),
+          child: child ?? SizedBox.shrink(),
         );
       },
     );

@@ -18,7 +18,7 @@ part 'tables.g.dart';
 int schemaVersionGlobal = 34;
 
 // Generate database code
-// flutter packages pub run build_runner build --delete-conflicting-outputs
+// dart run build_runner build
 
 // Character Limits
 const int NAME_LIMIT = 250;

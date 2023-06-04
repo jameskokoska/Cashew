@@ -95,6 +95,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime(DateTime.now().year + 2),
       builder: (BuildContext context, Widget? child) {
+        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
         return Theme(
           data: Theme.of(context).brightness == Brightness.light
               ? ThemeData.light().copyWith(
@@ -111,7 +112,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   buttonTheme:
                       ButtonThemeData(textTheme: ButtonTextTheme.primary),
                 ),
-          child: child ?? Container(),
+          child: child ?? SizedBox.shrink(),
         );
       },
     );

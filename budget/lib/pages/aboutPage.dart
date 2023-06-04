@@ -313,20 +313,28 @@ class AboutInfoBox extends StatelessWidget {
     Key? key,
     required this.title,
     required this.link,
+    this.color,
+    this.padding,
   }) : super(key: key);
 
   final String title;
   final String link;
+  final Color? color;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
       child: Tappable(
         onTap: () async {
           openUrl(link);
         },
-        color: getColor(context, "lightDarkAccent"),
+        onLongPress: () {
+          copyToClipboard(link);
+        },
+        color: color ?? getColor(context, "lightDarkAccent"),
         borderRadius: 15,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),

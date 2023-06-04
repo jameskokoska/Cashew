@@ -601,7 +601,8 @@ class SliverReorderableListState extends State<SliverReorderableList>
     if (_autoScroller?.scrollable != _scrollable) {
       _autoScroller?.stopAutoScroll();
       _autoScroller = EdgeDraggingAutoScroller(_scrollable,
-          onScrollViewScrolled: _handleScrollableAutoScrolled);
+          onScrollViewScrolled: _handleScrollableAutoScrolled,
+          velocityScalar: 1);
     }
   }
 

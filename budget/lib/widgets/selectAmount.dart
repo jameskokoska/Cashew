@@ -4,8 +4,6 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -415,16 +413,7 @@ class _SelectAmountState extends State<SelectAmount> {
                           children: [
                             Tappable(
                               onLongPress: () async {
-                                HapticFeedback.mediumImpact();
-                                await Clipboard.setData(
-                                    ClipboardData(text: amountConverted));
-                                openSnackbar(
-                                  SnackbarMessage(
-                                    title: "Copied to clipboard",
-                                    icon: Icons.copy_rounded,
-                                    timeout: Duration(milliseconds: 2500),
-                                  ),
-                                );
+                                copyToClipboard(amountConverted);
                               },
                               color: Colors.transparent,
                               borderRadius: 10,
