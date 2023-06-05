@@ -681,10 +681,17 @@ String getMemberNickname(member) {
   }
 }
 
+bool isNumber(dynamic value) {
+  if (value == null) {
+    return false;
+  }
+  return num.tryParse(value.toString()) != null;
+}
+
 Future<bool> getExchangeRates() async {
   print("Getting exchange rates for current wallets");
-  List<String?> uniqueCurrencies =
-      await database.getUniqueCurrenciesFromWallets();
+  // List<String?> uniqueCurrencies =
+  //     await database.getUniqueCurrenciesFromWallets();
   Map<dynamic, dynamic> cachedCurrencyExchange =
       appStateSettings["cachedCurrencyExchange"];
   try {
@@ -727,6 +734,22 @@ double? amountRatioToPrimaryCurrency(String? walletCurrency) {
           .toDouble();
   double exchangeRateFromCurrentToUSD =
       1 / appStateSettings["cachedCurrencyExchange"][walletCurrency].toDouble();
+  return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
+}
+
+double? amountRatioFromToCurrency(
+    String walletCurrencyBefore, String walletCurrencyAfter) {
+  if (appStateSettings["cachedCurrencyExchange"][walletCurrencyBefore] ==
+          null ||
+      appStateSettings["cachedCurrencyExchange"][walletCurrencyAfter] == null) {
+    return null;
+  }
+  double exchangeRateFromUSDToTarget =
+      appStateSettings["cachedCurrencyExchange"][walletCurrencyAfter]
+          .toDouble();
+  double exchangeRateFromCurrentToUSD = 1 /
+      appStateSettings["cachedCurrencyExchange"][walletCurrencyBefore]
+          .toDouble();
   return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
 }
 

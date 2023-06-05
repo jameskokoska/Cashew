@@ -51,7 +51,7 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
       curve: Curves.easeInOutCubic,
       transform: Matrix4.translationValues(
         0.0,
-        isKeyboardOpen ? 100.0 : 0.0,
+        isKeyboardOpen ? getKeyboardHeight(context) : 0.0,
         0.0,
       ),
       child: Column(

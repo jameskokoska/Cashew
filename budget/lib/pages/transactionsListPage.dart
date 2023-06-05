@@ -1,4 +1,5 @@
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -46,6 +47,7 @@ Widget getTransactionsSlivers(
   Color? categoryTintColor,
   bool useHorizontalPaddingConstrained = true,
   int? limit,
+  bool showNoResults = true,
 }) {
   return StreamBuilder<List<DateTime?>>(
     stream: database.getUniqueDates(
@@ -65,6 +67,15 @@ Widget getTransactionsSlivers(
     ),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
+        if (snapshot.data!.length <= 0 && showNoResults == true) {
+          if (slivers) {
+            return SliverToBoxAdapter(
+                child:
+                    NoResults(message: "No transactions within time range."));
+          } else {
+            return NoResults(message: "No transactions within time range.");
+          }
+        }
         List<Widget> transactionsWidgets = [];
         // List<DateTime> dates = [];
         // for (DateTime indexDay = startDay;
@@ -690,21 +701,7 @@ class CashFlow extends StatelessWidget {
               ),
             );
           }
-          // return NoResults(
-          //   message: "There are no transactions in this time range.",
-          // );
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 85, right: 35, left: 35),
-              child: TextFont(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                text: "No transactions within time range.",
-                maxLines: 3,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+          return SizedBox.shrink();
         },
       ),
     );

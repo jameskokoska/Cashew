@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +200,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   addToAmount(String input) {
-    // bottomSheetControllerGlobal.snapToExtent(0);
+    bottomSheetControllerGlobal.snapToExtent(0);
     String amountClone = amount;
     if (input == "." &&
         !decimalCheck(operationsWithSpaces(amountClone + "."))) {
@@ -251,6 +252,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   void removeToAmount() {
+    bottomSheetControllerGlobal.snapToExtent(0);
     setState(() {
       if (amount.length > 0) {
         amount = amount.substring(0, amount.length - 1);
@@ -266,6 +268,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   void removeAll() {
+    bottomSheetControllerGlobal.snapToExtent(0);
     setState(() {
       amount = "";
     });
@@ -276,6 +279,9 @@ class _SelectAmountState extends State<SelectAmount> {
                 ? calculateResult(amount)
                 : double.tryParse(amount) ?? 0),
         amount);
+    Future.delayed(Duration(milliseconds: 100), () {
+      bottomSheetControllerGlobal.snapToExtent(0);
+    });
   }
 
   bool includesOperations(String input, bool includeDecimal) {
@@ -411,33 +417,35 @@ class _SelectAmountState extends State<SelectAmount> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Tappable(
-                              onLongPress: () async {
-                                copyToClipboard(amountConverted);
-                              },
-                              color: Colors.transparent,
-                              borderRadius: 10,
-                              onTap: () {},
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8.0,
-                                  bottom: 5,
-                                  left: 5,
-                                  top: 5,
-                                ),
-                                child: TextFont(
-                                  autoSizeText: true,
-                                  maxLines: 1,
-                                  minFontSize: 16,
-                                  walletPkForCurrency: walletPkForCurrency ??
-                                      appStateSettings["selectedWallet"],
-                                  onlyShowCurrencyIcon:
-                                      widget.onlyShowCurrencyIcon,
-                                  text: amountConverted,
-                                  // text: amount,
-                                  textAlign: TextAlign.right,
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold,
+                            Flexible(
+                              child: Tappable(
+                                onLongPress: () async {
+                                  copyToClipboard(amountConverted);
+                                },
+                                color: Colors.transparent,
+                                borderRadius: 10,
+                                onTap: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 8.0,
+                                    bottom: 5,
+                                    left: 5,
+                                    top: 5,
+                                  ),
+                                  child: TextFont(
+                                    autoSizeText: true,
+                                    maxLines: 1,
+                                    minFontSize: 16,
+                                    walletPkForCurrency: walletPkForCurrency ??
+                                        appStateSettings["selectedWallet"],
+                                    onlyShowCurrencyIcon:
+                                        widget.onlyShowCurrencyIcon,
+                                    text: amountConverted,
+                                    // text: amount,
+                                    textAlign: TextAlign.right,
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
@@ -447,108 +455,125 @@ class _SelectAmountState extends State<SelectAmount> {
                                             .length <=
                                         1
                                 ? SizedBox.shrink()
-                                : AnimatedSize(
-                                    duration: Duration(milliseconds: 600),
-                                    curve: Curves.easeInOutCubicEmphasized,
-                                    child: AnimatedSwitcher(
-                                      duration: Duration(milliseconds: 200),
-                                      child: selectedWallet?.walletPk ==
-                                              appStateSettings["selectedWallet"]
-                                          ? Container(
-                                              key: ValueKey(1),
-                                            )
-                                          : Tappable(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondaryContainer,
-                                              borderRadius: 13,
-                                              onTap: () {
-                                                TransactionWallet?
-                                                    walletBefore =
-                                                    selectedWallet;
-                                                // get the index of the primary wallet
-                                                int index = 0;
-                                                for (TransactionWallet wallet
-                                                    in widget.allWallets ??
-                                                        []) {
-                                                  if (wallet.walletPk ==
+                                : MediaQuery(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 3.0),
+                                      child: AnimatedSize(
+                                        duration: Duration(milliseconds: 600),
+                                        curve: Curves.easeInOutCubicEmphasized,
+                                        child: AnimatedSwitcher(
+                                          duration: Duration(milliseconds: 200),
+                                          child:
+                                              selectedWallet?.walletPk ==
                                                       appStateSettings[
-                                                          "selectedWallet"]) {
-                                                    break;
-                                                  }
-                                                  index++;
-                                                }
+                                                          "selectedWallet"]
+                                                  ? Container(
+                                                      key: ValueKey(1),
+                                                    )
+                                                  : Tappable(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .secondaryContainer,
+                                                      borderRadius: 13,
+                                                      onTap: () {
+                                                        TransactionWallet?
+                                                            walletBefore =
+                                                            selectedWallet;
+                                                        // get the index of the primary wallet
+                                                        int index = 0;
+                                                        for (TransactionWallet wallet
+                                                            in widget
+                                                                    .allWallets ??
+                                                                []) {
+                                                          if (wallet.walletPk ==
+                                                              appStateSettings[
+                                                                  "selectedWallet"]) {
+                                                            break;
+                                                          }
+                                                          index++;
+                                                        }
 
-                                                if (widget.setSelectedWallet !=
-                                                    null)
-                                                  widget.setSelectedWallet!(
-                                                      widget
-                                                          .allWallets![index]);
-                                                setState(() {
-                                                  selectedWallet =
-                                                      widget.allWallets![index];
-                                                  walletPkForCurrency = widget
-                                                      .allWallets![index]
-                                                      .walletPk;
-                                                  numberDecimals = selectedWallet
-                                                          ?.decimals ??
-                                                      appStateSettings[
-                                                          "selectedWalletDecimals"];
-                                                  print((walletBefore == null
-                                                      ? 1
-                                                      : (amountRatioToPrimaryCurrencyGivenPk(
-                                                              walletBefore
-                                                                  .walletPk) ??
-                                                          1)));
-                                                  try {
-                                                    amount = (double.parse(
-                                                                amount) *
-                                                            (walletBefore ==
-                                                                    null
-                                                                ? 1
-                                                                : (amountRatioToPrimaryCurrencyGivenPk(
-                                                                        walletBefore
-                                                                            .walletPk) ??
-                                                                    1)))
-                                                        .toStringAsFixed(
-                                                            numberDecimals);
-                                                  } catch (e) {}
-                                                  amount = removeTrailingZeroes(
-                                                      amount);
-                                                  addToAmount("");
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 7),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .currency_exchange_rounded,
-                                                      size: 16,
+                                                        if (widget
+                                                                .setSelectedWallet !=
+                                                            null)
+                                                          widget.setSelectedWallet!(
+                                                              widget.allWallets![
+                                                                  index]);
+                                                        setState(() {
+                                                          selectedWallet =
+                                                              widget.allWallets![
+                                                                  index];
+                                                          walletPkForCurrency =
+                                                              widget
+                                                                  .allWallets![
+                                                                      index]
+                                                                  .walletPk;
+                                                          numberDecimals = selectedWallet
+                                                                  ?.decimals ??
+                                                              appStateSettings[
+                                                                  "selectedWalletDecimals"];
+                                                          print((walletBefore ==
+                                                                  null
+                                                              ? 1
+                                                              : (amountRatioToPrimaryCurrencyGivenPk(
+                                                                      walletBefore
+                                                                          .walletPk) ??
+                                                                  1)));
+                                                          try {
+                                                            amount = (double.parse(
+                                                                        amount) *
+                                                                    (walletBefore ==
+                                                                            null
+                                                                        ? 1
+                                                                        : (amountRatioToPrimaryCurrencyGivenPk(walletBefore.walletPk) ??
+                                                                            1)))
+                                                                .toStringAsFixed(
+                                                                    numberDecimals);
+                                                          } catch (e) {}
+                                                          amount =
+                                                              removeTrailingZeroes(
+                                                                  amount);
+                                                          addToAmount("");
+                                                        });
+                                                      },
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 7),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .currency_exchange_rounded,
+                                                              size: 16,
+                                                            ),
+                                                            SizedBox(height: 2),
+                                                            TextFont(
+                                                              text: appStateSettings[
+                                                                      "cachedWalletCurrencies"][appStateSettings[
+                                                                          "selectedWallet"]
+                                                                      .toString()]
+                                                                  .toUpperCase(),
+                                                              fontSize: 11,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
                                                     ),
-                                                    SizedBox(height: 2),
-                                                    TextFont(
-                                                      text: appStateSettings[
-                                                                  "cachedWalletCurrencies"]
-                                                              [appStateSettings[
-                                                                      "selectedWallet"]
-                                                                  .toString()]
-                                                          .toUpperCase(),
-                                                      fontSize: 11,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                        ),
+                                      ),
                                     ),
+                                    data: MediaQuery.of(context)
+                                        .copyWith(textScaleFactor: 1.0),
                                   ),
                           ],
                         ),

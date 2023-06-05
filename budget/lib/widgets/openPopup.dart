@@ -52,16 +52,18 @@ import 'package:budget/widgets/textWidgets.dart';
 // ),
 
 Future<T?> openPopup<T extends Object?>(
-  context, {
+  BuildContext context, {
   IconData? icon,
   String? title,
   String? description,
   String? onSubmitLabel,
   String? onCancelLabel,
   String? onExtraLabel,
+  String? onExtraLabel2,
   VoidCallback? onSubmit,
   VoidCallback? onCancel,
   VoidCallback? onExtra,
+  VoidCallback? onExtra2,
   bool barrierDismissible = true,
 }) {
   //Minimize keyboard when tap non interactive widget
@@ -161,60 +163,68 @@ Future<T?> openPopup<T extends Object?>(
                               alignment: WrapAlignment.center,
                               runSpacing: 10,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    onCancelLabel != null
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Button(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondaryContainer,
-                                                label: onCancelLabel,
-                                                onTap: onCancel ?? () {}),
-                                          )
-                                        : SizedBox.shrink(),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    onExtraLabel != null
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Button(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondaryContainer,
-                                                label: onExtraLabel,
-                                                onTap: onExtra ?? () {}),
-                                          )
-                                        : SizedBox.shrink(),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    onSubmitLabel != null
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Button(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .tertiaryContainer,
-                                                label: onSubmitLabel,
-                                                onTap: onSubmit ?? () {}),
-                                          )
-                                        : SizedBox.shrink(),
-                                  ],
-                                ),
+                                onCancelLabel != null
+                                    ? IntrinsicWidth(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Button(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            label: onCancelLabel,
+                                            onTap: onCancel ?? () {},
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox.shrink(),
+                                onExtraLabel != null
+                                    ? IntrinsicWidth(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Button(
+                                            expandedLayout: true,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            label: onExtraLabel,
+                                            onTap: onExtra ?? () {},
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox.shrink(),
+                                onSubmitLabel != null
+                                    ? IntrinsicWidth(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Button(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiaryContainer,
+                                            label: onSubmitLabel,
+                                            onTap: onSubmit ?? () {},
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox.shrink(),
+                                onExtraLabel2 != null
+                                    ? IntrinsicWidth(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Button(
+                                            expandedLayout: true,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            label: onExtraLabel2,
+                                            onTap: onExtra2 ?? () {},
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox.shrink(),
                               ],
                             ),
                           )
@@ -232,7 +242,7 @@ Future<T?> openPopup<T extends Object?>(
 }
 
 Future<T?> openPopupCustom<T extends Object?>(
-  context, {
+  BuildContext context, {
   String? title,
   bool barrierDismissible = true,
   required Widget child,

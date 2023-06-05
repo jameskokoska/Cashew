@@ -225,55 +225,45 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             totalSpent = totalSpent.abs();
                           });
                           snapshot.data!.asMap().forEach((index, category) {
-                            categoryEntries.add(
-                              StreamBuilder<CategoryBudgetLimit>(
-                                stream: database
-                                    .getCategoryLimit(widget.budget.budgetPk,
-                                        category.category.categoryPk)
-                                    .$1,
-                                builder: (context, snapshot) {
-                                  return CategoryEntry(
-                                    onLongPress: () {
-                                      enterCategoryLimitPopup(
-                                        context,
-                                        category.category,
-                                        snapshot.data,
-                                        widget.budget.budgetPk,
-                                        (p0) => null,
-                                      );
-                                    },
-                                    categoryBudgetLimit: snapshot.data,
-                                    budgetColorScheme: budgetColorScheme,
-                                    category: category.category,
-                                    totalSpent: totalSpent,
-                                    transactionCount: category.transactionCount,
-                                    categorySpent: category.total.abs(),
-                                    onTap: () {
-                                      if (selectedCategoryPk ==
-                                          category.category.categoryPk) {
-                                        setState(() {
-                                          selectedCategoryPk = -1;
-                                          selectedCategory = null;
-                                        });
-                                        _pieChartDisplayStateKey.currentState!
-                                            .setTouchedIndex(-1);
-                                      } else {
-                                        setState(() {
-                                          selectedCategoryPk =
-                                              category.category.categoryPk;
-                                          selectedCategory = category.category;
-                                        });
-                                        _pieChartDisplayStateKey.currentState!
-                                            .setTouchedIndex(index);
-                                      }
-                                    },
-                                    selected: selectedCategoryPk ==
-                                        category.category.categoryPk,
-                                    allSelected: selectedCategoryPk == -1,
-                                  );
-                                },
-                              ),
-                            );
+                            categoryEntries.add(CategoryEntry(
+                              onLongPress: () {
+                                enterCategoryLimitPopup(
+                                  context,
+                                  category.category,
+                                  category.categoryBudgetLimit,
+                                  widget.budget.budgetPk,
+                                  (p0) => null,
+                                );
+                              },
+                              categoryBudgetLimit: category.categoryBudgetLimit,
+                              budgetColorScheme: budgetColorScheme,
+                              category: category.category,
+                              totalSpent: totalSpent,
+                              transactionCount: category.transactionCount,
+                              categorySpent: category.total.abs(),
+                              onTap: () {
+                                if (selectedCategoryPk ==
+                                    category.category.categoryPk) {
+                                  setState(() {
+                                    selectedCategoryPk = -1;
+                                    selectedCategory = null;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(-1);
+                                } else {
+                                  setState(() {
+                                    selectedCategoryPk =
+                                        category.category.categoryPk;
+                                    selectedCategory = category.category;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(index);
+                                }
+                              },
+                              selected: selectedCategoryPk ==
+                                  category.category.categoryPk,
+                              allSelected: selectedCategoryPk == -1,
+                            ));
                           });
                           return SliverToBoxAdapter(
                             child: Column(children: [
@@ -357,26 +347,23 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   message:
                                       "There are no transactions for this budget within the current dates.",
                                 ),
-                              Transform.translate(
-                                offset: Offset(0, -10),
-                                child: BudgetSpenderSummary(
-                                  budget: widget.budget,
-                                  budgetRange: budgetRange,
-                                  budgetColorScheme: budgetColorScheme,
-                                  setSelectedMember: (member) {
-                                    setState(() {
-                                      selectedMember = member;
-                                      selectedCategory = null;
-                                      selectedCategoryPk = -1;
-                                    });
-                                    _pieChartDisplayStateKey.currentState!
-                                        .setTouchedIndex(-1);
-                                  },
-                                  wallets: wallets,
-                                ),
+                              BudgetSpenderSummary(
+                                budget: widget.budget,
+                                budgetRange: budgetRange,
+                                budgetColorScheme: budgetColorScheme,
+                                setSelectedMember: (member) {
+                                  setState(() {
+                                    selectedMember = member;
+                                    selectedCategory = null;
+                                    selectedCategoryPk = -1;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(-1);
+                                },
+                                wallets: wallets,
                               ),
                               if (snapshot.data!.length > 0)
-                                SizedBox(height: 20),
+                                SizedBox(height: 30),
                               if (snapshot.data!.length > 0)
                                 Container(
                                   decoration: BoxDecoration(
@@ -477,6 +464,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 ),
               ),
               getTransactionsSlivers(
+                showNoResults: false,
                 budgetRange.start,
                 budgetRange.end,
                 categoryFks: selectedCategoryPk != -1

@@ -143,6 +143,7 @@ class HomePageState extends State<HomePage>
         child: SizedBox(
           key: ValueKey(selectedSlidingSelector),
           child: getTransactionsSlivers(
+            showNoResults: false,
             DateTime(
               DateTime.now().year,
               DateTime.now().month,
@@ -306,21 +307,26 @@ class HomePageState extends State<HomePage>
                                             ),
                                           Stack(
                                             children: [
-                                              Visibility(
-                                                maintainSize: true,
-                                                maintainAnimation: true,
-                                                maintainState: true,
-                                                child: Opacity(
-                                                  opacity: 0,
-                                                  child: WalletEntry(
-                                                    selected: appStateSettings[
-                                                            "selectedWallet"] ==
-                                                        snapshot.data![snapshot
-                                                                .data!.length -
-                                                            1],
-                                                    wallet: snapshot.data![
-                                                        snapshot.data!.length -
-                                                            1],
+                                              SizedBox(
+                                                width: 130,
+                                                child: Visibility(
+                                                  maintainSize: true,
+                                                  maintainAnimation: true,
+                                                  maintainState: true,
+                                                  child: Opacity(
+                                                    opacity: 0,
+                                                    child: WalletEntry(
+                                                      selected: appStateSettings[
+                                                              "selectedWallet"] ==
+                                                          snapshot.data![
+                                                              snapshot.data!
+                                                                      .length -
+                                                                  1],
+                                                      wallet: snapshot.data![
+                                                          snapshot.data!
+                                                                  .length -
+                                                              1],
+                                                    ),
                                                   ),
                                                 ),
                                               ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -691,10 +693,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         end == null ? null : DateTime(end.year, end.month, end.day);
 
     final query = selectOnly(transactions, distinct: true)
+      ..join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ])
       ..orderBy(limit == null
           ? [OrderingTerm.asc(transactions.dateCreated)]
           : [OrderingTerm.desc(transactions.dateCreated)])
-      ..where(onlyShowIfFollowsFilters(transactions,
+      ..where((categories.name.lower().like("%" + search.toLowerCase() + "%") |
+              transactions.name.like("%" + search + "%")) &
+          onlyShowIfFollowsFilters(transactions,
               budgetTransactionFilters: budgetTransactionFilters,
               memberTransactionFilters: memberTransactionFilters) &
           onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
@@ -2561,6 +2569,30 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
   }
 
+  Future<bool> moveWalletTransactons(int walletPk, int toWalletPk) async {
+    List<Transaction> transactionsForMove = await (select(transactions)
+          ..where((tbl) {
+            return tbl.walletFk.equals(walletPk);
+          }))
+        .get();
+    List<Transaction> allTransactionsToUpdate = [];
+    for (Transaction transaction in transactionsForMove) {
+      allTransactionsToUpdate.add(transaction.copyWith(
+        amount: (amountRatioFromToCurrency(
+                    appStateSettings["cachedWalletCurrencies"]
+                        [walletPk.toString()],
+                    appStateSettings["cachedWalletCurrencies"]
+                        [toWalletPk.toString()]) ??
+                1) *
+            transaction.amount,
+        dateTimeModified: Value(DateTime.now()),
+        walletFk: toWalletPk,
+      ));
+    }
+    await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
+    return true;
+  }
+
   Future deleteScannerTemplate(int scannerTemplatePk) async {
     await createDeleteLog(DeleteLogType.ScannerTemplate, scannerTemplatePk);
     return (delete(scannerTemplates)
@@ -2609,6 +2641,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             total: item.total +
                 (categoryTotals[item.category.categoryPk]?.total ?? 0),
             transactionCount: item.transactionCount,
+            categoryBudgetLimit: item.categoryBudgetLimit,
           );
         }
       }
@@ -2962,8 +2995,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             categoryBudgetLimits,
             categoryBudgetLimits.categoryFk.equalsExp(categories.categoryPk) &
                 evaluateIfNull(
-                    categoryBudgetLimits.categoryFk
-                        .equals(budget?.budgetPk ?? 0),
+                    categoryBudgetLimits.budgetFk.equals(budget?.budgetPk ?? 0),
                     budget,
                     false))
       ])
@@ -2972,8 +3004,9 @@ class FinanceDatabase extends _$FinanceDatabase {
             ..orderBy([OrderingTerm.asc(totalAmt)]))
           .map((row) {
         final TransactionCategory category = row.readTable(categories);
-        final CategoryBudgetLimit categoryBudgetLimit =
-            row.readTable(categoryBudgetLimits);
+        CategoryBudgetLimit? categoryBudgetLimit =
+            row.readTableOrNull(categoryBudgetLimits);
+
         final double? total = (row.read(totalAmt) ?? 0) *
             (amountRatioToPrimaryCurrency(wallet.currency) ?? 0);
         final int? transactionCount = row.read(totalCount);
@@ -2984,6 +3017,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             transactionCount: transactionCount ?? -1);
       }).watch());
     }
+
+    return totalCategoryTotalStream(mergedStreams);
 
     // Stream<List<TransactionCategory>> allCategoriesWatched =
     //     watchAllCategories();
@@ -3005,8 +3040,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     //   });
     //   return allCategoriesWithTotals;
     // });
-
-    return totalCategoryTotalStream(mergedStreams);
   }
 
   Stream<double?> watchTotalOfWallet(int? walletPk, {bool? isIncome = null}) {

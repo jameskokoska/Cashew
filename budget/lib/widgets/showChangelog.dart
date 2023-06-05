@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    No results/search results found indication 
+    If deleting a wallet, can choose to transfer transactions to another wallet
+    Category Budget Limits merged with Category with Total
+    Select amount wrap fixes
+    Fixed time picker font size
     Added web app link to sync page
     Copy to clipboard on long press for AboutInfoBox links
     Improved budget page and budget widget size and formatting
