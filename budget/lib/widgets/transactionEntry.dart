@@ -251,8 +251,10 @@ class TransactionEntry extends StatelessWidget {
                                       )
                                     : category == null
                                         ? StreamBuilder<TransactionCategory>(
-                                            stream: database.getCategory(
-                                                transaction.categoryFk),
+                                            stream: database
+                                                .getCategory(
+                                                    transaction.categoryFk)
+                                                .$1,
                                             builder: (context, snapshot) {
                                               if (snapshot.hasData) {
                                                 return TextFont(

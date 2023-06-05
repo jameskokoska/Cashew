@@ -39,8 +39,8 @@ Future openBottomSheet(
   FocusScope.of(context).unfocus();
   bottomSheetControllerGlobal = new SheetController();
   return await showSlidingBottomSheet(context,
-      resizeToAvoidBottomInset:
-          getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
+      resizeToAvoidBottomInset: resizeForKeyboard,
+      // getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
       bottomPaddingColor: appStateSettings["materialYou"]
           ? dynamicPastel(
               context, Theme.of(context).colorScheme.secondaryContainer,

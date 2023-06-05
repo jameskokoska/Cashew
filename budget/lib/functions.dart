@@ -23,7 +23,8 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:universal_io/io.dart';
 
 // Add bottom padding for web Safari browsers
-double bottomPaddingSafeArea = getOSInsideWeb() == "iOS" ? 20 : 0;
+// double bottomPaddingSafeArea = getOSInsideWeb() == "iOS" ? 20 : 0;
+double bottomPaddingSafeArea = 0;
 
 extension CapExtension on String {
   String get capitalizeFirst =>
@@ -584,17 +585,17 @@ String pluralString(bool condition, String string) {
     return string + "s";
 }
 
-String? getOSInsideWeb() {
-  if (kIsWeb) {
-    final userAgent = window.navigator.userAgent.toString().toLowerCase();
-    if (userAgent.contains("(macintosh")) return "iOS";
-    if (userAgent.contains("(iphone")) return "iOS";
-    if (userAgent.contains("(linux")) return "Android";
-    return "web";
-  } else {
-    return null;
-  }
-}
+// String? getOSInsideWeb() {
+//   if (kIsWeb) {
+//     final userAgent = window.navigator.userAgent.toString().toLowerCase();
+//     if (userAgent.contains("(macintosh")) return "iOS";
+//     if (userAgent.contains("(iphone")) return "iOS";
+//     if (userAgent.contains("(linux")) return "Android";
+//     return "web";
+//   } else {
+//     return null;
+//   }
+// }
 
 restartApp(context) async {
   // For now, enforce this until better solution found
@@ -731,13 +732,13 @@ double? amountRatioToPrimaryCurrency(String? walletCurrency) {
 
 bool getIsKeyboardOpen(context) {
   return EdgeInsets.zero !=
-      EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,
-          WidgetsBinding.instance.window.devicePixelRatio);
+      EdgeInsets.fromViewPadding(
+          View.of(context).viewInsets, View.of(context).devicePixelRatio);
 }
 
 double getKeyboardHeight(context) {
-  return EdgeInsets.fromWindowPadding(WidgetsBinding.instance.window.viewInsets,
-          WidgetsBinding.instance.window.devicePixelRatio)
+  return EdgeInsets.fromViewPadding(
+          View.of(context).viewInsets, View.of(context).devicePixelRatio)
       .bottom;
 }
 
@@ -816,7 +817,7 @@ List<String> popularCurrencies = [
 
 String getDevicesDefaultCurrencyCode() {
   String? currentCountryCode =
-      WidgetsBinding.instance.window.locale.countryCode;
+      WidgetsBinding.instance.platformDispatcher.locale.countryCode;
   print(currentCountryCode);
   for (String currencyKey in currenciesJSON.keys) {
     if (currenciesJSON[currencyKey]["CountryCode"] == currentCountryCode) {

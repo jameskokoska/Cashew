@@ -227,9 +227,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           snapshot.data!.asMap().forEach((index, category) {
                             categoryEntries.add(
                               StreamBuilder<CategoryBudgetLimit>(
-                                stream: database.watchCategoryLimit(
-                                    widget.budget.budgetPk,
-                                    category.category.categoryPk),
+                                stream: database
+                                    .getCategoryLimit(widget.budget.budgetPk,
+                                        category.category.categoryPk)
+                                    .$1,
                                 builder: (context, snapshot) {
                                   return CategoryEntry(
                                     onLongPress: () {

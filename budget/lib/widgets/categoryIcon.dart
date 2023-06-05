@@ -174,7 +174,7 @@ class CategoryIcon extends StatelessWidget {
       return categoryIconWidget(context, category);
     }
     return StreamBuilder<TransactionCategory>(
-      stream: database.getCategory(categoryPk),
+      stream: database.getCategory(categoryPk).$1,
       builder: (context, snapshot) {
         return categoryIconWidget(context, snapshot.data);
       },
