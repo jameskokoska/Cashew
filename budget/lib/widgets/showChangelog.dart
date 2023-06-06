@@ -8,6 +8,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Started edit home page sections
+    When adding a budget in transactions page, it defaults to added only budget
+    Edit Category list shows income/expense category
+    No results icon in Subscriptions page
+    Adding budget on transaction page defaults to Added Transactions only
+    No result respects upcoming transactions in budget page
     No results/search results found indication 
     If deleting a wallet, can choose to transfer transactions to another wallet
     Category Budget Limits merged with Category with Total

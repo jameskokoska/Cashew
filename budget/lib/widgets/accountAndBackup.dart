@@ -825,6 +825,7 @@ Future<void> loadBackup(
               title: "Backup Restored",
               icon: Icons.settings_backup_restore_rounded),
         );
+        Navigator.pop(context);
         restartApp(context);
       },
       onError: (error) {

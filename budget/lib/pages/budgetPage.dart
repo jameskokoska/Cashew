@@ -341,12 +341,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   ),
                                 ),
                               ),
-                              if (snapshot.data!.length <= 0)
-                                NoResults(
-                                  tintColor: budgetColorScheme.primary,
-                                  message:
-                                      "There are no transactions for this budget within the current dates.",
-                                ),
                               BudgetSpenderSummary(
                                 budget: widget.budget,
                                 budgetRange: budgetRange,
@@ -464,7 +458,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 ),
               ),
               getTransactionsSlivers(
-                showNoResults: false,
                 budgetRange.start,
                 budgetRange.end,
                 categoryFks: selectedCategoryPk != -1

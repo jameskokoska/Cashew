@@ -1142,7 +1142,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   width: 40,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 1),
-                                  openPage: AddBudgetPage(title: "Add Budget"),
+                                  openPage: AddBudgetPage(
+                                    title: "Add Budget",
+                                    isAddedOnlyBudget: true,
+                                  ),
                                   borderRadius: 8,
                                 ),
                                 items: [null, ...snapshot.data!],

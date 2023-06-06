@@ -27,6 +27,7 @@ class BudgetContainer extends StatelessWidget {
     this.isPastBudget = false,
     this.isPastBudgetButCurrentPeriod = false,
     this.longPressToEdit = true,
+    this.intermediatePadding = true,
   }) : super(key: key);
 
   final Budget budget;
@@ -35,6 +36,7 @@ class BudgetContainer extends StatelessWidget {
   final bool? isPastBudget;
   final bool? isPastBudgetButCurrentPeriod;
   final bool longPressToEdit;
+  final bool intermediatePadding;
 
   @override
   Widget build(BuildContext context) {
@@ -259,8 +261,10 @@ class BudgetContainer extends StatelessWidget {
                             ],
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 16.5),
+                            padding: intermediatePadding
+                                ? EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 16.5)
+                                : EdgeInsets.symmetric(horizontal: 15),
                             child: BudgetTimeline(
                               budget: budget,
                               percent: (totalSpent / budget.amount * 100).abs(),

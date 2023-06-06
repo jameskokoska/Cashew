@@ -31,8 +31,10 @@ class AddBudgetPage extends StatefulWidget {
     Key? key,
     required this.title,
     this.budget,
+    this.isAddedOnlyBudget = false,
   }) : super(key: key);
   final String title;
+  final bool isAddedOnlyBudget;
 
   //When a transaction is passed in, we are editing that transaction
   final Budget? budget;
@@ -496,6 +498,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       allMembersOfAllBudgets = await database.getAllMembersOfBudgets();
+      if (widget.isAddedOnlyBudget) {
+        setAddedTransactionsOnly(true);
+        setSelectedShared(false);
+      }
       setState(() {});
     });
     if (widget.budget != null) {
@@ -1000,8 +1006,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                   items: [
                                     "All",
                                     BudgetTransactionFilters.addedToOtherBudget,
-                                    BudgetTransactionFilters
-                                        .sharedToOtherBudget,
+                                    ...(appStateSettings["sharedBudgets"]
+                                        ? [
+                                            BudgetTransactionFilters
+                                                .sharedToOtherBudget
+                                          ]
+                                        : []),
                                   ],
                                   getLabel: (item) {
                                     if (item == "All") return "All";
@@ -1059,12 +1069,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                   curve: Curves.easeInOut,
                                   child: AnimatedSwitcher(
                                     duration: Duration(milliseconds: 300),
-                                    child: selectedBudgetTransactionFilters ==
-                                                null ||
-                                            selectedBudgetTransactionFilters!
-                                                .contains(
-                                                    BudgetTransactionFilters
-                                                        .sharedToOtherBudget)
+                                    child: appStateSettings["sharedBudgets"] ==
+                                                true &&
+                                            (selectedBudgetTransactionFilters ==
+                                                    null ||
+                                                selectedBudgetTransactionFilters!
+                                                    .contains(
+                                                        BudgetTransactionFilters
+                                                            .sharedToOtherBudget))
                                         ? SelectChips(
                                             key: ValueKey(2),
                                             items: [
@@ -1129,6 +1141,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 ],
               ),
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 8)),
             CategoryLimits(
               selectedCategories: selectedCategories ?? [],
               budgetPk:
