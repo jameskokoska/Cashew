@@ -151,6 +151,12 @@ class PieChartDisplayState extends State<PieChartDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.data.length <= 0) return SizedBox.shrink();
+    int numberZeroTransactions = 0;
+    for (CategoryWithTotal categoryWithTotal in widget.data) {
+      if (categoryWithTotal.total == 0) numberZeroTransactions++;
+    }
+    if (numberZeroTransactions == widget.data.length) return SizedBox.shrink();
     return PinWheelReveal(
       delay: Duration(milliseconds: 0),
       duration: Duration(milliseconds: 850),
@@ -202,7 +208,6 @@ class PieChartDisplayState extends State<PieChartDisplay> {
   List<PieChartSectionData> showingSections() {
     return List.generate(widget.data.length, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 20.0 : 16.0;
       final radius = enableDoubleColumn(context) == false
           ? isTouched
               ? 106.0
@@ -218,7 +223,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                 defaultColor: Theme.of(context).colorScheme.primary),
             amountLight: 0.3,
             amountDark: 0.1),
-        value: (widget.data[i].total / widget.totalSpent).abs(),
+        value: widget.totalSpent == 0
+            ? 0
+            : (widget.data[i].total / widget.totalSpent).abs(),
         title: "",
         radius: radius,
         badgeWidget: _Badge(
@@ -233,7 +240,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           assetImage: AssetImage(
             "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),
-          percent: (widget.data[i].total / widget.totalSpent * 100).abs(),
+          percent: widget.totalSpent == 0
+              ? 0
+              : (widget.data[i].total / widget.totalSpent * 100).abs(),
           isTouched: isTouched,
         ),
         titlePositionPercentageOffset: 1.4,

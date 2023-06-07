@@ -36,10 +36,18 @@ generateColors() {
       "lightDarkAccentHeavy": Color(0xFFEBEBEB),
       "shadowColor": const Color(0x655A5A5A),
       "shadowColorLight": const Color(0x2D5A5A5A), //
-      "unPaidUpcoming": Color(0xFFE2CE13),
-      "unPaidOverdue": Color(0xFFEB4848),
-      "incomeAmount": Color(0xFF55A246),
-      "expenseAmount": Color(0xFFA24646),
+      "unPaidUpcoming": appStateSettings["legacyTransactionAmountColors"]
+          ? Color(0xFFE2CE13)
+          : Color(0xFF58A4C2),
+      "unPaidOverdue": appStateSettings["legacyTransactionAmountColors"]
+          ? Color(0xFFEB4848)
+          : Color(0xFF6577E0),
+      "incomeAmount": appStateSettings["legacyTransactionAmountColors"]
+          ? Color(0xFF59A849)
+          : Color(0xFF59A849),
+      "expenseAmount": appStateSettings["legacyTransactionAmountColors"]
+          ? Colors.black
+          : Color(0xFFCA5A5A),
     },
   );
   appColorsDark = AppColors(
@@ -62,10 +70,18 @@ generateColors() {
       "shadowColorLight": appStateSettings["materialYou"]
           ? Colors.transparent
           : Color(0x28747474),
-      "unPaidUpcoming": Color(0xFFDED583),
-      "unPaidOverdue": Color(0xFFDE8383),
-      "incomeAmount": Color(0xFF62CA77),
-      "expenseAmount": Color(0xFFDA7272),
+      "unPaidUpcoming": appStateSettings["legacyTransactionAmountColors"]
+          ? Color(0xFFDED583)
+          : Color(0xFF7DB6CC),
+      "unPaidOverdue": appStateSettings["legacyTransactionAmountColors"]
+          ? Color(0xFFDE8383)
+          : Color(0xFF8395FF),
+      "incomeAmount": appStateSettings["legacyTransactionAmountColors"]
+          ? Color(0xFF62CA77)
+          : Color(0xFF62CA77),
+      "expenseAmount": appStateSettings["legacyTransactionAmountColors"]
+          ? Colors.white
+          : Color(0xFFDA7272),
     },
   );
 }

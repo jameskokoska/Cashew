@@ -222,6 +222,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                     if (snapshot.data!.length <= 0) {
                       return SliverToBoxAdapter(
                           child: NoResults(
+                              padding: const EdgeInsets.only(
+                                top: 15,
+                                right: 30,
+                                left: 30,
+                              ),
                               message: "No subscription transactions."));
                     }
                     return SliverList(

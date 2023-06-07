@@ -216,6 +216,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
           //         ? widget.budget.budgetPk
           //         : null,
           // budget: widget.budget,
+          income: null,
         ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -234,7 +235,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                   category: category.category,
                   totalSpent: totalSpent,
                   transactionCount: category.transactionCount,
-                  categorySpent: category.total.abs(),
+                  categorySpent: category.total,
                   onTap: () {
                     if (selectedCategoryPk == category.category.categoryPk) {
                       setState(() {
@@ -256,6 +257,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                   },
                   selected: selectedCategoryPk == category.category.categoryPk,
                   allSelected: selectedCategoryPk == -1,
+                  showIncomeExpenseIcons: true,
                 ),
               );
             });

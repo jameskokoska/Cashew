@@ -2963,6 +2963,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     Budget? budget,
     bool allTime = false,
     int? walletPk,
+    bool? income = false,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -2979,7 +2980,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   transactions, startDate, endDate, budget, allTime: allTime) &
               isInCategory(tbl, allCategories, categoryFks) &
               tbl.paid.equals(true) &
-              tbl.income.equals(false) &
+              evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
               transactions.walletFk.equals(wallet.walletPk) &
               onlyShowIfFollowsFilters(tbl,
                   budgetTransactionFilters: budgetTransactionFilters,

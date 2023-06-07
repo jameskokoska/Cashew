@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
@@ -23,6 +25,7 @@ class CategoryEntry extends StatelessWidget {
     this.isTiled = false,
     this.onLongPress,
     this.extraText = " of budget",
+    this.showIncomeExpenseIcons = false,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -37,6 +40,7 @@ class CategoryEntry extends StatelessWidget {
   final CategoryBudgetLimit? categoryBudgetLimit;
   final Function? onLongPress;
   final String extraText;
+  final bool showIncomeExpenseIcons;
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +147,10 @@ class CategoryEntry extends StatelessWidget {
                             ],
                           )
                         : TextFont(
-                            text: (categorySpent / totalSpent * 100)
-                                    .toStringAsFixed(0) +
+                            text: (totalSpent == 0
+                                    ? "0"
+                                    : (categorySpent / totalSpent * 100)
+                                        .toStringAsFixed(0)) +
                                 "%" +
                                 extraText,
                             fontSize: 14,
@@ -163,10 +169,31 @@ class CategoryEntry extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    categorySpent == 0
+                        ? SizedBox.shrink()
+                        : Transform.translate(
+                            offset: Offset(3, 0),
+                            child: Transform.rotate(
+                              angle: categorySpent >= 0 ? pi : 0,
+                              child: Icon(
+                                Icons.arrow_drop_down_rounded,
+                                color: showIncomeExpenseIcons
+                                    ? categorySpent > 0
+                                        ? getColor(context, "incomeAmount")
+                                        : getColor(context, "expenseAmount")
+                                    : getColor(context, "black"),
+                              ),
+                            ),
+                          ),
                     TextFont(
                       fontWeight: FontWeight.bold,
-                      text: convertToMoney(categorySpent),
+                      text: convertToMoney(categorySpent.abs()),
                       fontSize: 20,
+                      textColor: showIncomeExpenseIcons && categorySpent != 0
+                          ? categorySpent > 0
+                              ? getColor(context, "incomeAmount")
+                              : getColor(context, "expenseAmount")
+                          : getColor(context, "black"),
                     ),
                     // categoryBudgetLimit == null
                     //     ? SizedBox.shrink()

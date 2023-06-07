@@ -123,9 +123,9 @@ class DebugPage extends StatelessWidget {
           },
           title: "Legacy transaction amount colors",
           description:
-              "Use a less traditional transaction amount color scheme.",
+              "Required restart. Use a less traditional transaction amount color scheme.",
           initialValue: appStateSettings["legacyTransactionAmountColors"],
-          icon: Icons.share_rounded,
+          icon: Icons.color_lens,
         ),
         SliderSelector(
           min: 0,
