@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/budgetPage.dart';
@@ -85,6 +86,7 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     bool showUsername = appStateSettings["username"] != "";
     Widget slidingSelector = SlidingSelector(
         useHorizontalPaddingConstrained: false,
@@ -143,6 +145,7 @@ class HomePageState extends State<HomePage>
         child: SizedBox(
           key: ValueKey(selectedSlidingSelector),
           child: getTransactionsSlivers(
+            showNoResults: false,
             DateTime(
               DateTime.now().year,
               DateTime.now().month,
@@ -178,11 +181,35 @@ class HomePageState extends State<HomePage>
                 child: ListView(
                   controller: _scrollController,
                   children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        PopupMenuButton<String>(
+                          icon: Opacity(
+                            opacity: 0.5,
+                            child: Icon(Icons.more_vert_rounded),
+                          ),
+                          onSelected: (option) {
+                            if (option == "Edit")
+                              pushRoute(context, EditHomePage());
+                          },
+                          itemBuilder: (BuildContext context) {
+                            return {'Edit'}.map((String choice) {
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ],
+                    ),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(height: 1, color: Theme.of(context).canvasColor),
                     Container(
                       // Subtract one (1) here because of the thickness of the wiper above
-                      height: 179 - 1 + MediaQuery.of(context).padding.top,
+                      height: 179 - 1 + MediaQuery.of(context).padding.top - 48,
                       alignment: Alignment.bottomLeft,
                       padding: EdgeInsets.only(left: 9, bottom: 22, right: 9),
                       child: Row(
@@ -306,21 +333,26 @@ class HomePageState extends State<HomePage>
                                             ),
                                           Stack(
                                             children: [
-                                              Visibility(
-                                                maintainSize: true,
-                                                maintainAnimation: true,
-                                                maintainState: true,
-                                                child: Opacity(
-                                                  opacity: 0,
-                                                  child: WalletEntry(
-                                                    selected: appStateSettings[
-                                                            "selectedWallet"] ==
-                                                        snapshot.data![snapshot
-                                                                .data!.length -
-                                                            1],
-                                                    wallet: snapshot.data![
-                                                        snapshot.data!.length -
-                                                            1],
+                                              SizedBox(
+                                                width: 130,
+                                                child: Visibility(
+                                                  maintainSize: true,
+                                                  maintainAnimation: true,
+                                                  maintainState: true,
+                                                  child: Opacity(
+                                                    opacity: 0,
+                                                    child: WalletEntry(
+                                                      selected: appStateSettings[
+                                                              "selectedWallet"] ==
+                                                          snapshot.data![
+                                                              snapshot.data!
+                                                                      .length -
+                                                                  1],
+                                                      wallet: snapshot.data![
+                                                          snapshot.data!
+                                                                  .length -
+                                                              1],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -353,7 +385,6 @@ class HomePageState extends State<HomePage>
                           )
                         : SizedBox.shrink(),
                     HomePageBudgets(),
-
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -623,13 +654,21 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
 
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["showPinnedBudgets"] == false)
+      return SizedBox.shrink();
     return KeepAlive(
       child: StreamBuilder<List<Budget>>(
-        stream: database.watchAllPinnedBudgets(),
+        stream: database.getAllPinnedBudgets().$1,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.length == 0) {
-              return SizedBox.shrink();
+              return AddButton(
+                onTap: () {},
+                height: 160,
+                width: null,
+                padding: const EdgeInsets.only(left: 13, right: 13, bottom: 13),
+                openPage: AddBudgetPage(title: "Add Budget"),
+              );
             }
             // if (snapshot.data!.length == 1) {
             //   return Padding(
@@ -645,6 +684,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 3),
                       child: BudgetContainer(
+                        intermediatePadding: false,
                         budget: budget,
                       ),
                     );
@@ -671,7 +711,6 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                     opacity: 0,
                     child: WidgetSize(
                       onChange: (Size size) {
-                        print(size);
                         setState(() {
                           height = size.height;
                         });

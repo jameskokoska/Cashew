@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
@@ -93,18 +94,6 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                 },
                 autoFocus: false,
               ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: SettingsContainerSwitch(
-              title: "Show Wallet Switcher",
-              description: "At the top of the home page",
-              onSwitched: (value) {
-                updateSettings("showWalletSwitcher", value,
-                    pagesNeedingRefresh: [0], updateGlobalState: false);
-              },
-              initialValue: appStateSettings["showWalletSwitcher"],
-              icon: Icons.account_balance_wallet_rounded,
             ),
           ),
           StreamBuilder<List<TransactionWallet>>(
@@ -249,10 +238,73 @@ void deleteWalletPopup(context, TransactionWallet wallet,
       Navigator.pop(context);
     },
     onCancelLabel: "Cancel",
+    onExtraLabel2: "Move Transactions To Another Wallet and Delete",
+    onExtra2: () async {
+      Navigator.pop(context);
+      var result = await openPopupCustom(
+        context,
+        title: "Select Wallet",
+        child: StreamBuilder<List<TransactionWallet>>(
+          stream: database.watchAllWallets(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<TransactionWallet> walletsWithoutOneDeleted = snapshot.data!;
+              walletsWithoutOneDeleted.removeWhere(
+                  (TransactionWallet w) => w.walletPk == wallet.walletPk);
+              return SelectChips(
+                wrapped: true,
+                items: walletsWithoutOneDeleted,
+                getLabel: (item) {
+                  return item.name;
+                },
+                onSelected: (item) {
+                  Navigator.pop(context, item.walletPk);
+                },
+                getSelected: (item) {
+                  return false;
+                },
+                getCustomBorderColor: (item) {
+                  return dynamicPastel(
+                    context,
+                    lightenPastel(
+                      HexColor(
+                        item?.colour,
+                        defaultColor: Colors.transparent,
+                      ),
+                      amount: 0.3,
+                    ),
+                    amount: 0.4,
+                  );
+                },
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+      );
+      if (isNumber(result)) {
+        await database.moveWalletTransactons(
+            wallet.walletPk, int.parse(result.toString()));
+        if (appStateSettings["selectedWallet"] == wallet.walletPk) {
+          updateSettings("selectedWallet", 0,
+              updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          TransactionWallet defaultWallet = await database.getWalletInstance(0);
+          updateSettings("selectedWalletCurrency", defaultWallet.currency,
+              updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          updateSettings("selectedWalletDecimals", defaultWallet.decimals,
+              updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+        }
+        database.deleteWallet(wallet.walletPk, wallet.order);
+        Navigator.pop(context);
+        openSnackbar(
+          SnackbarMessage(title: "Deleted " + wallet.name, icon: Icons.delete),
+        );
+        if (afterDelete != null) afterDelete();
+      } else {}
+    },
     onSubmit: () async {
-      database.deleteWallet(wallet.walletPk, wallet.order);
-      database.deleteWalletsTransactions(wallet.walletPk);
-
+      await database.deleteWalletsTransactions(wallet.walletPk);
       // If we delete the selected wallet, set it back to the default
       if (appStateSettings["selectedWallet"] == wallet.walletPk) {
         updateSettings("selectedWallet", 0,
@@ -263,6 +315,7 @@ void deleteWalletPopup(context, TransactionWallet wallet,
         updateSettings("selectedWalletDecimals", defaultWallet.decimals,
             updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
       }
+      database.deleteWallet(wallet.walletPk, wallet.order);
       Navigator.pop(context);
       openSnackbar(
         SnackbarMessage(title: "Deleted " + wallet.name, icon: Icons.delete),

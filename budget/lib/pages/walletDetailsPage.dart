@@ -142,6 +142,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                 walletFks: walletPk == null ? [] : [walletPk],
                 limit: selectedCategoryPk == -1 ? 0 : 10,
                 listID: listID,
+                showNoResults: false,
               ),
               selectedCategoryPk == -1
                   ? SliverToBoxAdapter(

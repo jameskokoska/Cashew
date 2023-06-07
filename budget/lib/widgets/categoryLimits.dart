@@ -83,8 +83,10 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                                 widget.selectedCategories
                                     .contains(category.categoryPk)
                             ? StreamBuilder<CategoryBudgetLimit>(
-                                stream: database.watchCategoryLimit(
-                                    widget.budgetPk, category.categoryPk),
+                                stream: database
+                                    .getCategoryLimit(
+                                        widget.budgetPk, category.categoryPk)
+                                    .$1,
                                 builder: (context, snapshot) {
                                   return CategoryLimitEntry(
                                     category: category,

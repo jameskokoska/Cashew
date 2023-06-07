@@ -8,6 +8,21 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Budgets pinned picker and spending graph selection in edit home page
+    Moved settings to edit home page
+    Doesn't show wallet picker if only one wallet, ignores cached amounts
+    Fixed budget total in budget details page
+    Started edit home page sections
+    When adding a budget in transactions page, it defaults to added only budget
+    Edit Category list shows income/expense category
+    No results icon in Subscriptions page
+    Adding budget on transaction page defaults to Added Transactions only
+    No result respects upcoming transactions in budget page
+    No results/search results found indication 
+    If deleting a wallet, can choose to transfer transactions to another wallet
+    Category Budget Limits merged with Category with Total
+    Select amount wrap fixes
+    Fixed time picker font size
     Added web app link to sync page
     Copy to clipboard on long press for AboutInfoBox links
     Improved budget page and budget widget size and formatting

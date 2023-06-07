@@ -117,10 +117,55 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               child: Transform.translate(
                 offset: Offset(0, 8),
-                child: TotalSpent(
-                  budget: widget.budget,
-                  budgetColorScheme: budgetColorScheme,
-                  totalSpent: 100,
+                child: WatchAllWallets(
+                  noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
+                  childFunction: (wallets) => StreamBuilder<double?>(
+                    stream: database.watchTotalSpentByCurrentUserOnly(
+                      budgetRange.start,
+                      budgetRange.end,
+                      widget.budget.budgetPk,
+                      wallets,
+                    ),
+                    builder: (context, snapshotTotalSpentByCurrentUserOnly) {
+                      return StreamBuilder<List<CategoryWithTotal>>(
+                        stream: database
+                            .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                          budgetRange.start,
+                          budgetRange.end,
+                          widget.budget.categoryFks ?? [],
+                          widget.budget.allCategoryFks,
+                          widget.budget.budgetTransactionFilters,
+                          widget.budget.memberTransactionFilters,
+                          wallets,
+                          member: selectedMember,
+                          onlyShowTransactionsBelongingToBudget:
+                              widget.budget.sharedKey != null ||
+                                      widget.budget.addedTransactionsOnly ==
+                                          true
+                                  ? widget.budget.budgetPk
+                                  : null,
+                          budget: widget.budget,
+                        ),
+                        builder: (context, snapshot) {
+                          double totalSpent = 0;
+                          if (snapshot.hasData)
+                            snapshot.data!.forEach((category) {
+                              totalSpent = totalSpent + category.total.abs();
+                              totalSpent = totalSpent.abs();
+                            });
+                          if (snapshot.hasData) {
+                            return TotalSpent(
+                              budget: widget.budget,
+                              budgetColorScheme: budgetColorScheme,
+                              totalSpent: totalSpent,
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -225,54 +270,45 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             totalSpent = totalSpent.abs();
                           });
                           snapshot.data!.asMap().forEach((index, category) {
-                            categoryEntries.add(
-                              StreamBuilder<CategoryBudgetLimit>(
-                                stream: database.watchCategoryLimit(
-                                    widget.budget.budgetPk,
-                                    category.category.categoryPk),
-                                builder: (context, snapshot) {
-                                  return CategoryEntry(
-                                    onLongPress: () {
-                                      enterCategoryLimitPopup(
-                                        context,
-                                        category.category,
-                                        snapshot.data,
-                                        widget.budget.budgetPk,
-                                        (p0) => null,
-                                      );
-                                    },
-                                    categoryBudgetLimit: snapshot.data,
-                                    budgetColorScheme: budgetColorScheme,
-                                    category: category.category,
-                                    totalSpent: totalSpent,
-                                    transactionCount: category.transactionCount,
-                                    categorySpent: category.total.abs(),
-                                    onTap: () {
-                                      if (selectedCategoryPk ==
-                                          category.category.categoryPk) {
-                                        setState(() {
-                                          selectedCategoryPk = -1;
-                                          selectedCategory = null;
-                                        });
-                                        _pieChartDisplayStateKey.currentState!
-                                            .setTouchedIndex(-1);
-                                      } else {
-                                        setState(() {
-                                          selectedCategoryPk =
-                                              category.category.categoryPk;
-                                          selectedCategory = category.category;
-                                        });
-                                        _pieChartDisplayStateKey.currentState!
-                                            .setTouchedIndex(index);
-                                      }
-                                    },
-                                    selected: selectedCategoryPk ==
-                                        category.category.categoryPk,
-                                    allSelected: selectedCategoryPk == -1,
-                                  );
-                                },
-                              ),
-                            );
+                            categoryEntries.add(CategoryEntry(
+                              onLongPress: () {
+                                enterCategoryLimitPopup(
+                                  context,
+                                  category.category,
+                                  category.categoryBudgetLimit,
+                                  widget.budget.budgetPk,
+                                  (p0) => null,
+                                );
+                              },
+                              categoryBudgetLimit: category.categoryBudgetLimit,
+                              budgetColorScheme: budgetColorScheme,
+                              category: category.category,
+                              totalSpent: totalSpent,
+                              transactionCount: category.transactionCount,
+                              categorySpent: category.total.abs(),
+                              onTap: () {
+                                if (selectedCategoryPk ==
+                                    category.category.categoryPk) {
+                                  setState(() {
+                                    selectedCategoryPk = -1;
+                                    selectedCategory = null;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(-1);
+                                } else {
+                                  setState(() {
+                                    selectedCategoryPk =
+                                        category.category.categoryPk;
+                                    selectedCategory = category.category;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(index);
+                                }
+                              },
+                              selected: selectedCategoryPk ==
+                                  category.category.categoryPk,
+                              allSelected: selectedCategoryPk == -1,
+                            ));
                           });
                           return SliverToBoxAdapter(
                             child: Column(children: [
@@ -350,32 +386,23 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   ),
                                 ),
                               ),
-                              if (snapshot.data!.length <= 0)
-                                NoResults(
-                                  tintColor: budgetColorScheme.primary,
-                                  message:
-                                      "There are no transactions for this budget within the current dates.",
-                                ),
-                              Transform.translate(
-                                offset: Offset(0, -10),
-                                child: BudgetSpenderSummary(
-                                  budget: widget.budget,
-                                  budgetRange: budgetRange,
-                                  budgetColorScheme: budgetColorScheme,
-                                  setSelectedMember: (member) {
-                                    setState(() {
-                                      selectedMember = member;
-                                      selectedCategory = null;
-                                      selectedCategoryPk = -1;
-                                    });
-                                    _pieChartDisplayStateKey.currentState!
-                                        .setTouchedIndex(-1);
-                                  },
-                                  wallets: wallets,
-                                ),
+                              BudgetSpenderSummary(
+                                budget: widget.budget,
+                                budgetRange: budgetRange,
+                                budgetColorScheme: budgetColorScheme,
+                                setSelectedMember: (member) {
+                                  setState(() {
+                                    selectedMember = member;
+                                    selectedCategory = null;
+                                    selectedCategoryPk = -1;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(-1);
+                                },
+                                wallets: wallets,
                               ),
                               if (snapshot.data!.length > 0)
-                                SizedBox(height: 20),
+                                SizedBox(height: 30),
                               if (snapshot.data!.length > 0)
                                 Container(
                                   decoration: BoxDecoration(

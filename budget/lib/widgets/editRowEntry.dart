@@ -24,6 +24,9 @@ class EditRowEntry extends StatelessWidget {
       this.canDelete = true,
       this.extraIcon,
       this.onExtra,
+      this.extraWidget,
+      this.extraWidgetsBelow,
+      this.showMoreWidget,
       Key? key})
       : super(key: key);
   final int index;
@@ -37,7 +40,10 @@ class EditRowEntry extends StatelessWidget {
   final bool canDelete;
   final IconData? extraIcon;
   final VoidCallback? onExtra;
+  final Widget? extraWidget;
+  final List<Widget>? extraWidgetsBelow;
   final Function()? onTap;
+  final Widget? showMoreWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -77,81 +83,89 @@ class EditRowEntry extends StatelessWidget {
               else
                 openContainer();
             },
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  backgroundColor != null
-                      ? Container(
-                          width: 5,
-                          color: dynamicPastel(
-                            context,
-                            backgroundColor!,
-                            amount: 0.1,
-                            inverse: true,
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                  Expanded(
-                    child: Container(
-                      padding: padding ??
-                          EdgeInsets.only(
-                            left: 25 - 3,
-                            right: 10,
-                            top: 15,
-                            bottom: 15,
-                          ),
-                      child: content,
-                    ),
-                  ),
-                  extraIcon != null
-                      ? Tappable(
-                          color: Colors.transparent,
-                          borderRadius: 18,
-                          child: Container(
-                              height: double.infinity,
-                              width: 40,
-                              child: Icon(extraIcon)),
-                          onTap: onExtra,
-                        )
-                      : SizedBox.shrink(),
-                  canDelete
-                      ? Tappable(
-                          color: Colors.transparent,
-                          borderRadius: 18,
-                          child: Container(
-                              height: double.infinity,
-                              width: 40,
-                              child: Icon(Icons.delete_rounded)),
-                          onTap: onDelete,
-                        )
-                      : SizedBox.shrink(),
-                  canReorder
-                      ? ReorderableDragStartListener(
-                          index: index,
-                          child: Tappable(
-                            color: Colors.transparent,
-                            borderRadius: 18,
-                            child: Container(
+            child: Column(
+              children: [
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      backgroundColor != null
+                          ? Container(
+                              width: 5,
+                              color: dynamicPastel(
+                                context,
+                                backgroundColor!,
+                                amount: 0.1,
+                                inverse: true,
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                      Expanded(
+                        child: Container(
+                          padding: padding ??
+                              EdgeInsets.only(
+                                left: 25 - 3,
+                                right: 10,
+                                top: 15,
+                                bottom: 15,
+                              ),
+                          child: content,
+                        ),
+                      ),
+                      extraIcon != null
+                          ? Tappable(
+                              color: Colors.transparent,
+                              borderRadius: 18,
+                              child: Container(
+                                  height: double.infinity,
+                                  width: 40,
+                                  child: Icon(extraIcon)),
+                              onTap: onExtra,
+                            )
+                          : SizedBox.shrink(),
+                      extraWidget ?? SizedBox.shrink(),
+                      canDelete
+                          ? Tappable(
+                              color: Colors.transparent,
+                              borderRadius: 18,
+                              child: Container(
+                                  height: double.infinity,
+                                  width: 40,
+                                  child: Icon(Icons.delete_rounded)),
+                              onTap: onDelete,
+                            )
+                          : SizedBox.shrink(),
+                      canReorder
+                          ? ReorderableDragStartListener(
+                              index: index,
+                              child: Tappable(
+                                color: Colors.transparent,
+                                borderRadius: 18,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        right: showMoreWidget == null ? 10 : 0),
+                                    width: 40,
+                                    height: double.infinity,
+                                    child: Icon(Icons.drag_handle_rounded)),
+                                onTap: () {},
+                              ),
+                            )
+                          : Opacity(
+                              opacity: 0.2,
+                              child: Container(
                                 margin: EdgeInsets.only(right: 10),
                                 width: 40,
                                 height: double.infinity,
-                                child: Icon(Icons.drag_handle_rounded)),
-                            onTap: () {},
-                          ),
-                        )
-                      : Opacity(
-                          opacity: 0.2,
-                          child: Container(
-                            margin: EdgeInsets.only(right: 10),
-                            width: 40,
-                            height: double.infinity,
-                            child: Icon(Icons.drag_handle_rounded),
-                          ),
-                        ),
-                ],
-              ),
+                                child: Icon(Icons.drag_handle_rounded),
+                              ),
+                            ),
+                      showMoreWidget ?? SizedBox.shrink(),
+                    ],
+                  ),
+                ),
+                ...(extraWidgetsBelow ?? [])
+              ],
             ),
           );
         },

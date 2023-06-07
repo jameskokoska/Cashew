@@ -161,73 +161,7 @@ class SettingsPageState extends State<SettingsPage>
                 icon: Icons.lock_rounded,
               )
             : SizedBox.shrink(),
-        SettingsContainer(
-          onTap: () async {
-            String defaultLabel = "Default (30 days)";
-            List<Budget> allBudgets = await database.getAllBudgets();
-            openBottomSheet(
-              context,
-              PopupFramework(
-                title: "Select Budget",
-                child: RadioItems(
-                  items: [
-                    defaultLabel,
-                    ...[
-                      for (Budget budget in allBudgets)
-                        budget.budgetPk.toString()
-                    ],
-                  ],
-                  displayFilter: (budgetPk) {
-                    for (Budget budget in allBudgets)
-                      if (budget.budgetPk.toString() == budgetPk.toString()) {
-                        return budget.name;
-                      }
-                    return defaultLabel;
-                  },
-                  initial:
-                      appStateSettings["lineGraphReferenceBudgetPk"] == null
-                          ? defaultLabel
-                          : appStateSettings["lineGraphReferenceBudgetPk"]
-                              .toString(),
-                  onChanged: (value) {
-                    if (value == defaultLabel) {
-                      updateSettings(
-                        "lineGraphReferenceBudgetPk",
-                        null,
-                        pagesNeedingRefresh: [0],
-                        updateGlobalState: false,
-                      );
-                      Navigator.pop(context);
-                      return;
-                    } else {
-                      Budget? budgetFound = null;
-                      updateSettings(
-                        "lineGraphReferenceBudgetPk",
-                        int.parse(value),
-                        pagesNeedingRefresh: [0],
-                        updateGlobalState: false,
-                      );
-                    }
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-            );
-          },
-          title: "Home Page Spending Graph",
-          description: "Select reference budget",
-          icon: Icons.line_axis,
-        ),
-        SettingsContainerSwitch(
-          title: "Overdue and Upcoming",
-          description: "Sections on home page",
-          onSwitched: (value) {
-            updateSettings("showOverdueUpcoming", value,
-                pagesNeedingRefresh: [0], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["showOverdueUpcoming"],
-          icon: Icons.upcoming_rounded,
-        ),
+
         SettingsHeader(title: "Automations"),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),

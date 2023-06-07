@@ -180,6 +180,44 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 return false;
               },
             ),
+            StreamBuilder<List<TransactionWallet>>(
+              stream: database.watchAllWallets(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return SelectChips(
+                    items: snapshot.data!,
+                    getLabel: (item) {
+                      return item?.name ?? "No Wallet";
+                    },
+                    onSelected: (item) {
+                      // setSelectedBudgetPk(
+                      //   item,
+                      //   isSharedBudget: item?.sharedKey != null,
+                      // );
+                    },
+                    getSelected: (item) {
+                      // return selectedBudgetPk == item?.budgetPk;
+                      return true;
+                    },
+                    getCustomBorderColor: (item) {
+                      return dynamicPastel(
+                        context,
+                        lightenPastel(
+                          HexColor(
+                            item?.colour,
+                            defaultColor: Colors.transparent,
+                          ),
+                          amount: 0.3,
+                        ),
+                        amount: 0.4,
+                      );
+                    },
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
             StreamBuilder<List<Budget>>(
               stream: database.watchAllAddableBudgets(),
               builder: (context, snapshot) {

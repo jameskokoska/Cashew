@@ -281,8 +281,13 @@ class AboutPage extends StatelessWidget {
                     description: "All data and preferences will be deleted!",
                     icon: Icons.warning_rounded,
                     onSubmit: () async {
-                      database.deleteEverything();
-                      await sharedPreferences.clear();
+                      Navigator.pop(context);
+                      openLoadingPopup(context);
+                      await Future.wait([
+                        database.deleteEverything(),
+                        sharedPreferences.clear()
+                      ]);
+                      Navigator.pop(context);
                       restartApp(context);
                     },
                     onSubmitLabel: "Erase",

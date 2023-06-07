@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -352,12 +354,14 @@ class TransactionWithCategory {
 
 class CategoryWithTotal {
   final TransactionCategory category;
+  final CategoryBudgetLimit? categoryBudgetLimit;
   final double total;
   final int transactionCount;
   CategoryWithTotal({
     required this.category,
     required this.total,
     this.transactionCount = 0,
+    this.categoryBudgetLimit,
   });
 }
 
@@ -568,9 +572,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   // }
 
   //get transactions that occurred on a given date
-  Stream<List<Transaction>> getTransactionWithDate(DateTime date) {
-    return (select(transactions)..where((tbl) => tbl.dateCreated.equals(date)))
-        .watch();
+  (Stream<List<Transaction>>, Future<List<Transaction>>) getTransactionWithDate(
+      DateTime date) {
+    final SimpleSelectStatement<$TransactionsTable, Transaction> query =
+        select(transactions)..where((tbl) => tbl.dateCreated.equals(date));
+    return (query.watch(), query.get());
   }
 
   //get transactions that occurred on a given day and category
@@ -687,10 +693,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         end == null ? null : DateTime(end.year, end.month, end.day);
 
     final query = selectOnly(transactions, distinct: true)
+      ..join([
+        leftOuterJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ])
       ..orderBy(limit == null
           ? [OrderingTerm.asc(transactions.dateCreated)]
           : [OrderingTerm.desc(transactions.dateCreated)])
-      ..where(onlyShowIfFollowsFilters(transactions,
+      ..where((categories.name.lower().like("%" + search.toLowerCase() + "%") |
+              transactions.name.like("%" + search + "%")) &
+          onlyShowIfFollowsFilters(transactions,
               budgetTransactionFilters: budgetTransactionFilters,
               memberTransactionFilters: memberTransactionFilters) &
           onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
@@ -997,12 +1009,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // watch all budgets that have been created that are pinned
-  Stream<List<Budget>> watchAllPinnedBudgets({int? limit, int? offset}) {
-    return (select(budgets)
-          ..where((tbl) => tbl.pinned.equals(true))
-          ..orderBy([(b) => OrderingTerm.asc(b.order)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-        .watch();
+  (Stream<List<Budget>>, Future<List<Budget>>) getAllPinnedBudgets(
+      {int? limit, int? offset}) {
+    final query = (select(budgets)
+      ..where((tbl) => tbl.pinned.equals(true))
+      ..orderBy([(b) => OrderingTerm.asc(b.order)])
+      ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET));
+    return (query.watch(), query.get());
   }
 
   Stream<Budget> getBudget(int budgetPk) {
@@ -1414,48 +1427,56 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  Stream<CategoryBudgetLimit> watchCategoryLimit(int budgetPk, int categoryPk,
-      {int? limit, int? offset}) {
-    return (select(categoryBudgetLimits)
-          ..where((t) =>
-              t.budgetFk.equals(budgetPk) & t.categoryFk.equals(categoryPk)))
-        .watchSingle();
+  Expression<bool> evaluateIfNull(
+      Expression<bool> expression, value, evaluationIfValueNull) {
+    if (value == null) return Constant(evaluationIfValueNull);
+    return expression;
   }
 
-  Stream<TransactionCategory> watchCategory(int categoryPk,
-      {int? limit, int? offset}) {
+  (Stream<CategoryBudgetLimit>, Future<CategoryBudgetLimit>) getCategoryLimit(
+      int? budgetPk, int? categoryPk) {
+    SimpleSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+        query = (select(categoryBudgetLimits)
+          ..where((t) =>
+              evaluateIfNull(t.budgetFk.equals(budgetPk ?? 0), budgetPk, true) &
+              evaluateIfNull(
+                  t.categoryFk.equals(categoryPk ?? 0), categoryPk, true)));
+    return (query.watchSingle(), query.getSingle());
+  }
+
+  (Stream<CategoryBudgetLimit>, Future<CategoryBudgetLimit>)
+      getCategoryBudgetLimitInstance(int categoryLimitPk) {
+    final SimpleSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+        query = (select(categoryBudgetLimits)
+          ..where((t) => t.categoryLimitPk.equals(categoryLimitPk)));
+    return (query.watchSingle(), query.getSingle());
+  }
+
+  Stream<TransactionCategory> watchCategory(int categoryPk) {
     return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
         .watchSingle();
   }
 
-  Future<CategoryBudgetLimit> getCategoryBudgetLimitInstance(
-      int categoryLimitPk,
-      {int? limit,
-      int? offset}) {
-    return (select(categoryBudgetLimits)
-          ..where((t) => t.categoryLimitPk.equals(categoryLimitPk)))
-        .getSingle();
+  (Stream<TransactionCategory>, Future<TransactionCategory>) getCategory(
+      int categoryPk) {
+    final SimpleSelectStatement<$CategoriesTable, TransactionCategory> query =
+        (select(categories)..where((t) => t.categoryPk.equals(categoryPk)));
+    return (query.watchSingle(), query.getSingle());
   }
 
-  Future<TransactionAssociatedTitle> getAssociatedTitleInstance(
-      int associatedTitlePk,
-      {int? limit,
-      int? offset}) {
-    return (select(associatedTitles)
-          ..where((t) => t.associatedTitlePk.equals(associatedTitlePk)))
-        .getSingle();
+  (Stream<TransactionAssociatedTitle>, Future<TransactionAssociatedTitle>)
+      getAssociatedTitleInstance(int associatedTitlePk) {
+    final SimpleSelectStatement<$AssociatedTitlesTable,
+        TransactionAssociatedTitle> query = (select(associatedTitles)
+      ..where((t) => t.associatedTitlePk.equals(associatedTitlePk)));
+    return (query.watchSingle(), query.getSingle());
   }
 
-  Future<List<CategoryBudgetLimit>> getCategoryLimit(int budgetPk,
-      {int? limit, int? offset}) {
-    return (select(categoryBudgetLimits)
-          ..where((t) => t.budgetFk.equals(budgetPk)))
-        .get();
-  }
-
-  Future<List<CategoryBudgetLimit>> getCategoryLimits(
-      {int? limit, int? offset}) {
-    return (select(categoryBudgetLimits)).get();
+  (Stream<List<CategoryBudgetLimit>>, Future<List<CategoryBudgetLimit>>)
+      getCategoryLimits() {
+    final SimpleSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+        query = (select(categoryBudgetLimits));
+    return (query.watch(), query.get());
   }
 
   //create or update a new associatedTitle
@@ -2194,12 +2215,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         mode: InsertMode.replace);
   }
 
-  // watch category given key
-  Stream<TransactionCategory> getCategory(int categoryPk) {
-    return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
-        .watchSingle();
-  }
-
   // get category given key
   Future<TransactionCategory> getCategoryInstance(int categoryPk) {
     return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
@@ -2555,6 +2570,30 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
   }
 
+  Future<bool> moveWalletTransactons(int walletPk, int toWalletPk) async {
+    List<Transaction> transactionsForMove = await (select(transactions)
+          ..where((tbl) {
+            return tbl.walletFk.equals(walletPk);
+          }))
+        .get();
+    List<Transaction> allTransactionsToUpdate = [];
+    for (Transaction transaction in transactionsForMove) {
+      allTransactionsToUpdate.add(transaction.copyWith(
+        amount: (amountRatioFromToCurrency(
+                    appStateSettings["cachedWalletCurrencies"]
+                        [walletPk.toString()],
+                    appStateSettings["cachedWalletCurrencies"]
+                        [toWalletPk.toString()]) ??
+                1) *
+            transaction.amount,
+        dateTimeModified: Value(DateTime.now()),
+        walletFk: toWalletPk,
+      ));
+    }
+    await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
+    return true;
+  }
+
   Future deleteScannerTemplate(int scannerTemplatePk) async {
     await createDeleteLog(DeleteLogType.ScannerTemplate, scannerTemplatePk);
     return (delete(scannerTemplates)
@@ -2603,6 +2642,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             total: item.total +
                 (categoryTotals[item.category.categoryPk]?.total ?? 0),
             transactionCount: item.transactionCount,
+            categoryBudgetLimit: item.categoryBudgetLimit,
           );
         }
       }
@@ -2951,22 +2991,35 @@ class FinanceDatabase extends _$FinanceDatabase {
         ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
       mergedStreams.add((query.join([
         leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
+            categories.categoryPk.equalsExp(transactions.categoryFk)),
+        leftOuterJoin(
+            categoryBudgetLimits,
+            categoryBudgetLimits.categoryFk.equalsExp(categories.categoryPk) &
+                evaluateIfNull(
+                    categoryBudgetLimits.budgetFk.equals(budget?.budgetPk ?? 0),
+                    budget,
+                    false))
       ])
             ..addColumns([totalAmt, totalCount])
             ..groupBy([categories.categoryPk])
             ..orderBy([OrderingTerm.asc(totalAmt)]))
           .map((row) {
         final TransactionCategory category = row.readTable(categories);
+        CategoryBudgetLimit? categoryBudgetLimit =
+            row.readTableOrNull(categoryBudgetLimits);
+
         final double? total = (row.read(totalAmt) ?? 0) *
             (amountRatioToPrimaryCurrency(wallet.currency) ?? 0);
         final int? transactionCount = row.read(totalCount);
         return CategoryWithTotal(
             category: category,
+            categoryBudgetLimit: categoryBudgetLimit,
             total: total ?? 0,
             transactionCount: transactionCount ?? -1);
       }).watch());
     }
+
+    return totalCategoryTotalStream(mergedStreams);
 
     // Stream<List<TransactionCategory>> allCategoriesWatched =
     //     watchAllCategories();
@@ -2988,8 +3041,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     //   });
     //   return allCategoriesWithTotals;
     // });
-
-    return totalCategoryTotalStream(mergedStreams);
   }
 
   Stream<double?> watchTotalOfWallet(int? walletPk, {bool? isIncome = null}) {

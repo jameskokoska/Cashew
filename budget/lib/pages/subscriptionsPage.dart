@@ -7,6 +7,7 @@ import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -220,17 +221,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0) {
                       return SliverToBoxAdapter(
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 85, right: 15, left: 15),
-                            child: TextFont(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                text: "No subscription transactions."),
-                          ),
-                        ),
-                      );
+                          child: NoResults(
+                              message: "No subscription transactions."));
                     }
                     return SliverList(
                       delegate: SliverChildBuilderDelegate(

@@ -160,6 +160,13 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 19,
                                 ),
+                                TextFont(
+                                  textAlign: TextAlign.left,
+                                  text: category.income ? "Income" : "Expense",
+                                  fontSize: 14,
+                                  textColor: getColor(context, "black")
+                                      .withOpacity(0.65),
+                                ),
                                 StreamBuilder<List<int?>>(
                                   stream: database
                                       .watchTotalCountOfTransactionsInWalletInCategory(
