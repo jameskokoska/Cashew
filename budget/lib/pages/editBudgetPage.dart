@@ -108,19 +108,6 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SettingsContainerSwitch(
-              title: "Total Spent",
-              descriptionWithValue: (value) =>
-                  value ? "Showing total spent" : "Showing remaining amount",
-              onSwitched: (value) {
-                updateSettings("showTotalSpentForBudget", value,
-                    pagesNeedingRefresh: [0, 2], updateGlobalState: false);
-              },
-              initialValue: appStateSettings["showTotalSpentForBudget"],
-              icon: Icons.center_focus_weak_rounded,
-            ),
-          ),
           StreamBuilder<List<Budget>>(
             stream: database.watchAllBudgets(
                 searchFor: searchValue == "" ? null : searchValue),

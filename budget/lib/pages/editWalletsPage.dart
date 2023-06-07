@@ -96,18 +96,6 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SettingsContainerSwitch(
-              title: "Show Wallet Switcher",
-              description: "At the top of the home page",
-              onSwitched: (value) {
-                updateSettings("showWalletSwitcher", value,
-                    pagesNeedingRefresh: [0], updateGlobalState: false);
-              },
-              initialValue: appStateSettings["showWalletSwitcher"],
-              icon: Icons.account_balance_wallet_rounded,
-            ),
-          ),
           StreamBuilder<List<TransactionWallet>>(
             stream: database.watchAllWallets(
                 searchFor: searchValue == "" ? null : searchValue),

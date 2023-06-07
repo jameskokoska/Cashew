@@ -1009,12 +1009,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // watch all budgets that have been created that are pinned
-  Stream<List<Budget>> watchAllPinnedBudgets({int? limit, int? offset}) {
-    return (select(budgets)
-          ..where((tbl) => tbl.pinned.equals(true))
-          ..orderBy([(b) => OrderingTerm.asc(b.order)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-        .watch();
+  (Stream<List<Budget>>, Future<List<Budget>>) getAllPinnedBudgets(
+      {int? limit, int? offset}) {
+    final query = (select(budgets)
+      ..where((tbl) => tbl.pinned.equals(true))
+      ..orderBy([(b) => OrderingTerm.asc(b.order)])
+      ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET));
+    return (query.watch(), query.get());
   }
 
   Stream<Budget> getBudget(int budgetPk) {

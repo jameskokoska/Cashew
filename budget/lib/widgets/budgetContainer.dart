@@ -56,19 +56,20 @@ class BudgetContainer extends StatelessWidget {
             childFunction: (wallets) => StreamBuilder<List<CategoryWithTotal>>(
               stream: database
                   .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                      budgetRange.start,
-                      budgetRange.end,
-                      budget.categoryFks ?? [],
-                      budget.allCategoryFks,
-                      budget.budgetTransactionFilters,
-                      budget.memberTransactionFilters,
-                      wallets,
-                      onlyShowTransactionsBelongingToBudget:
-                          budget.sharedKey != null ||
-                                  budget.addedTransactionsOnly == true
-                              ? budget.budgetPk
-                              : null,
-                      budget: budget),
+                budgetRange.start,
+                budgetRange.end,
+                budget.categoryFks ?? [],
+                budget.allCategoryFks,
+                budget.budgetTransactionFilters,
+                budget.memberTransactionFilters,
+                wallets,
+                onlyShowTransactionsBelongingToBudget:
+                    budget.sharedKey != null ||
+                            budget.addedTransactionsOnly == true
+                        ? budget.budgetPk
+                        : null,
+                budget: budget,
+              ),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   double totalSpent = 0;

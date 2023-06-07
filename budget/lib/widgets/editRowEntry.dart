@@ -26,6 +26,7 @@ class EditRowEntry extends StatelessWidget {
       this.onExtra,
       this.extraWidget,
       this.extraWidgetsBelow,
+      this.showMoreWidget,
       Key? key})
       : super(key: key);
   final int index;
@@ -42,6 +43,7 @@ class EditRowEntry extends StatelessWidget {
   final Widget? extraWidget;
   final List<Widget>? extraWidgetsBelow;
   final Function()? onTap;
+  final Widget? showMoreWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +143,8 @@ class EditRowEntry extends StatelessWidget {
                                 color: Colors.transparent,
                                 borderRadius: 18,
                                 child: Container(
-                                    margin: EdgeInsets.only(right: 10),
+                                    margin: EdgeInsets.only(
+                                        right: showMoreWidget == null ? 10 : 0),
                                     width: 40,
                                     height: double.infinity,
                                     child: Icon(Icons.drag_handle_rounded)),
@@ -157,6 +160,7 @@ class EditRowEntry extends StatelessWidget {
                                 child: Icon(Icons.drag_handle_rounded),
                               ),
                             ),
+                      showMoreWidget ?? SizedBox.shrink(),
                     ],
                   ),
                 ),

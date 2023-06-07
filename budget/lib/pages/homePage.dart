@@ -654,13 +654,21 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
 
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["showPinnedBudgets"] == false)
+      return SizedBox.shrink();
     return KeepAlive(
       child: StreamBuilder<List<Budget>>(
-        stream: database.watchAllPinnedBudgets(),
+        stream: database.getAllPinnedBudgets().$1,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.length == 0) {
-              return SizedBox.shrink();
+              return AddButton(
+                onTap: () {},
+                height: 160,
+                width: null,
+                padding: const EdgeInsets.only(left: 13, right: 13, bottom: 13),
+                openPage: AddBudgetPage(title: "Add Budget"),
+              );
             }
             // if (snapshot.data!.length == 1) {
             //   return Padding(
@@ -703,7 +711,6 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                     opacity: 0,
                     child: WidgetSize(
                       onChange: (Size size) {
-                        print(size);
                         setState(() {
                           height = size.height;
                         });

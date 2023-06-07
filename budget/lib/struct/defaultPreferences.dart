@@ -19,6 +19,7 @@ Map<String, dynamic> defaultPreferences() {
     "accentSystemColor": true,
     "showWalletSwitcher": true,
     "showOverdueUpcoming": true,
+    "showPinnedBudgets": true,
     "showTotalSpentForBudget": false,
     "roundedGraphLines": true,
     "showCumulativeSpending": true,
@@ -61,5 +62,6 @@ Map<String, dynamic> defaultPreferences() {
     "animationSpeed": 1.0,
     "sharedBudgets": false,
     "emailScanning": false,
+    "legacyTransactionAmountColors": false,
   };
 }

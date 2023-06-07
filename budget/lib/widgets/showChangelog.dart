@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Budgets pinned picker and spending graph selection in edit home page
+    Moved settings to edit home page
+    Doesn't show wallet picker if only one wallet, ignores cached amounts
+    Fixed budget total in budget details page
     Started edit home page sections
     When adding a budget in transactions page, it defaults to added only budget
     Edit Category list shows income/expense category

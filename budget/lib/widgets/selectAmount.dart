@@ -450,6 +450,7 @@ class _SelectAmountState extends State<SelectAmount> {
                               ),
                             ),
                             widget.allWallets == null ||
+                                    widget.allWallets!.length <= 1 ||
                                     appStateSettings["cachedWalletCurrencies"]
                                             .keys
                                             .length <=
@@ -583,6 +584,7 @@ class _SelectAmountState extends State<SelectAmount> {
                 ),
               ),
               widget.allWallets == null ||
+                      widget.allWallets!.length <= 1 ||
                       appStateSettings["cachedWalletCurrencies"].keys.length <=
                           1
                   ? SizedBox.shrink()

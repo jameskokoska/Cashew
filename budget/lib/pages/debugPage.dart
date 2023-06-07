@@ -93,7 +93,7 @@ class DebugPage extends StatelessWidget {
           description:
               "Color category icons to follow color, material you must be enabled",
           initialValue: appStateSettings["colorTintCategoryIcon"],
-          icon: Icons.mark_email_unread_rounded,
+          icon: Icons.category_rounded,
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {
@@ -114,7 +114,18 @@ class DebugPage extends StatelessWidget {
           description:
               "In testing, share budgets and transactions with other users.",
           initialValue: appStateSettings["sharedBudgets"],
-          icon: Icons.mark_email_unread_rounded,
+          icon: Icons.share_rounded,
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
+            updateSettings("legacyTransactionAmountColors", value,
+                pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          title: "Legacy transaction amount colors",
+          description:
+              "Use a less traditional transaction amount color scheme.",
+          initialValue: appStateSettings["legacyTransactionAmountColors"],
+          icon: Icons.share_rounded,
         ),
         SliderSelector(
           min: 0,

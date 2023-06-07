@@ -117,10 +117,55 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               child: Transform.translate(
                 offset: Offset(0, 8),
-                child: TotalSpent(
-                  budget: widget.budget,
-                  budgetColorScheme: budgetColorScheme,
-                  totalSpent: 100,
+                child: WatchAllWallets(
+                  noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
+                  childFunction: (wallets) => StreamBuilder<double?>(
+                    stream: database.watchTotalSpentByCurrentUserOnly(
+                      budgetRange.start,
+                      budgetRange.end,
+                      widget.budget.budgetPk,
+                      wallets,
+                    ),
+                    builder: (context, snapshotTotalSpentByCurrentUserOnly) {
+                      return StreamBuilder<List<CategoryWithTotal>>(
+                        stream: database
+                            .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                          budgetRange.start,
+                          budgetRange.end,
+                          widget.budget.categoryFks ?? [],
+                          widget.budget.allCategoryFks,
+                          widget.budget.budgetTransactionFilters,
+                          widget.budget.memberTransactionFilters,
+                          wallets,
+                          member: selectedMember,
+                          onlyShowTransactionsBelongingToBudget:
+                              widget.budget.sharedKey != null ||
+                                      widget.budget.addedTransactionsOnly ==
+                                          true
+                                  ? widget.budget.budgetPk
+                                  : null,
+                          budget: widget.budget,
+                        ),
+                        builder: (context, snapshot) {
+                          double totalSpent = 0;
+                          if (snapshot.hasData)
+                            snapshot.data!.forEach((category) {
+                              totalSpent = totalSpent + category.total.abs();
+                              totalSpent = totalSpent.abs();
+                            });
+                          if (snapshot.hasData) {
+                            return TotalSpent(
+                              budget: widget.budget,
+                              budgetColorScheme: budgetColorScheme,
+                              totalSpent: totalSpent,
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
