@@ -123,7 +123,7 @@ class CategoryEntry extends StatelessWidget {
                                             categoryBudgetLimit!.amount *
                                             100) >
                                         100
-                                    ? getColor(context, "unPaidRed")
+                                    ? getColor(context, "unPaidOverdue")
                                     : (selected
                                         ? getColor(context, "black")
                                             .withOpacity(0.4)

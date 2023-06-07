@@ -900,8 +900,8 @@ class UpcomingTransactions extends StatelessWidget {
                                         ? 0
                                         : (snapshot.data ?? 0).abs()),
                                 textColor: overdueTransactions
-                                    ? getColor(context, "unPaidRed")
-                                    : getColor(context, "unPaidYellow"),
+                                    ? getColor(context, "unPaidOverdue")
+                                    : getColor(context, "unPaidUpcoming"),
                                 fontWeight: FontWeight.bold,
                                 autoSizeText: true,
                                 fontSize: 24,

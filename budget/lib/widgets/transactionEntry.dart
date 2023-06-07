@@ -134,14 +134,14 @@ class TransactionEntry extends StatelessWidget {
 
     Color textColor = transaction.paid
         ? transaction.income == true
-            ? getColor(context, "incomeGreen")
-            : getColor(context, "black")
+            ? getColor(context, "incomeAmount")
+            : getColor(context, "expenseAmount")
         : transaction.skipPaid
             ? getColor(context, "textLight")
             : transaction.dateCreated.millisecondsSinceEpoch <=
                     DateTime.now().millisecondsSinceEpoch
-                ? getColor(context, "unPaidRed")
-                : getColor(context, "unPaidYellow");
+                ? getColor(context, "unPaidOverdue")
+                : getColor(context, "unPaidUpcoming");
     Color iconColor = dynamicPastel(
         context, Theme.of(context).colorScheme.primary,
         amount: 0.3);
@@ -294,7 +294,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(
@@ -743,27 +743,47 @@ class TransactionEntry extends StatelessWidget {
                                                 transaction.walletFk) ??
                                             1),
                                     textBuilder: (number) {
-                                      return TextFont(
-                                        text: convertToMoney(
-                                          number,
-                                          showCurrency: false,
-                                          finalNumber: (transaction.amount
-                                                  .abs()) *
-                                              (amountRatioToPrimaryCurrencyGivenPk(
-                                                      transaction.walletFk) ??
-                                                  1),
-                                        ),
-                                        fontSize: 19 -
-                                            (transaction.walletFk !=
-                                                    appStateSettings[
-                                                        "selectedWallet"]
-                                                ? 1
-                                                : 0),
-                                        fontWeight: FontWeight.bold,
-                                        textColor: textColor,
-                                        walletPkForCurrency:
-                                            appStateSettings["selectedWallet"],
-                                        onlyShowCurrencyIcon: true,
+                                      return Row(
+                                        children: [
+                                          Transform.translate(
+                                            offset: Offset(3, 0),
+                                            child: AnimatedRotation(
+                                              duration:
+                                                  Duration(milliseconds: 2000),
+                                              curve: ElasticOutCurve(0.5),
+                                              turns:
+                                                  transaction.income ? 0.5 : 0,
+                                              child: Icon(
+                                                Icons.arrow_drop_down_rounded,
+                                                color: textColor,
+                                              ),
+                                            ),
+                                          ),
+                                          TextFont(
+                                            text: convertToMoney(
+                                              number,
+                                              showCurrency: false,
+                                              finalNumber: (transaction.amount
+                                                      .abs()) *
+                                                  (amountRatioToPrimaryCurrencyGivenPk(
+                                                          transaction
+                                                              .walletFk) ??
+                                                      1),
+                                            ),
+                                            fontSize: 19 -
+                                                (transaction.walletFk !=
+                                                        appStateSettings[
+                                                            "selectedWallet"]
+                                                    ? 1
+                                                    : 0),
+                                            fontWeight: FontWeight.bold,
+                                            textColor: textColor,
+                                            walletPkForCurrency:
+                                                appStateSettings[
+                                                    "selectedWallet"],
+                                            onlyShowCurrencyIcon: true,
+                                          ),
+                                        ],
                                       );
                                     },
                                   ),

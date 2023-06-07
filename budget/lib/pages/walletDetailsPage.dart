@@ -222,7 +222,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             List<Widget> categoryEntries = [];
             snapshot.data!.forEach((category) {
               totalSpent = totalSpent + category.total.abs();
-              totalSpent = totalSpent.abs();
             });
             snapshot.data!.asMap().forEach((index, category) {
               categoryEntries.add(
@@ -364,8 +363,8 @@ class IncomeTransactionsSummary extends StatelessWidget {
                                 : (snapshot.data ?? 0).abs(),
                           ),
                           textColor: incomeTransactions
-                              ? getColor(context, "incomeGreen")
-                              : Theme.of(context).colorScheme.error,
+                              ? getColor(context, "incomeAmount")
+                              : getColor(context, "expenseAmount"),
                           fontWeight: FontWeight.bold,
                           autoSizeText: true,
                           fontSize: 21,

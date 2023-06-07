@@ -36,9 +36,10 @@ generateColors() {
       "lightDarkAccentHeavy": Color(0xFFEBEBEB),
       "shadowColor": const Color(0x655A5A5A),
       "shadowColorLight": const Color(0x2D5A5A5A), //
-      "unPaidYellow": Color(0xFFE2CE13),
-      "unPaidRed": Color(0xFFEB4848),
-      "incomeGreen": Color(0xFF55A246),
+      "unPaidUpcoming": Color(0xFFE2CE13),
+      "unPaidOverdue": Color(0xFFEB4848),
+      "incomeAmount": Color(0xFF55A246),
+      "expenseAmount": Color(0xFFA24646),
     },
   );
   appColorsDark = AppColors(
@@ -61,9 +62,10 @@ generateColors() {
       "shadowColorLight": appStateSettings["materialYou"]
           ? Colors.transparent
           : Color(0x28747474),
-      "unPaidYellow": Color(0xFFDED583),
-      "unPaidRed": Color(0xFFDE8383),
-      "incomeGreen": Color(0xFF50BC65),
+      "unPaidUpcoming": Color(0xFFDED583),
+      "unPaidOverdue": Color(0xFFDE8383),
+      "incomeAmount": Color(0xFF62CA77),
+      "expenseAmount": Color(0xFFDA7272),
     },
   );
 }
