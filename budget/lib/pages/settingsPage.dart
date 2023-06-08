@@ -314,7 +314,7 @@ Future enterNameBottomSheet(context) async {
             icon: Icons.title_rounded,
             setSelectedText: (_) {},
             nextWithInput: (text) {
-              updateSettings("username", text, pagesNeedingRefresh: [0]);
+              updateSettings("username", text.trim(), pagesNeedingRefresh: [0]);
             },
             selectedText: appStateSettings["username"],
             placeholder: "Nickname",

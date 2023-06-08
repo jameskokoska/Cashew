@@ -557,6 +557,7 @@ class TransactionEntry extends StatelessWidget {
                                                 },
                                                 onSubmitLabel: "Remove",
                                                 onSubmit: () async {
+                                                  Navigator.pop(context);
                                                   await database
                                                       .deleteTransaction(
                                                           transaction
@@ -574,7 +575,6 @@ class TransactionEntry extends StatelessWidget {
                                                   await database
                                                       .createOrUpdateTransaction(
                                                           transactionNew);
-                                                  Navigator.pop(context);
                                                   setUpcomingNotifications(
                                                       context);
                                                 });
@@ -591,13 +591,13 @@ class TransactionEntry extends StatelessWidget {
                                                 },
                                                 onSubmitLabel: "Remove",
                                                 onSubmit: () async {
+                                                  Navigator.pop(context);
                                                   Transaction transactionNew =
                                                       transaction.copyWith(
                                                           skipPaid: false);
                                                   await database
                                                       .createOrUpdateTransaction(
                                                           transactionNew);
-                                                  Navigator.pop(context);
                                                   setUpcomingNotifications(
                                                       context);
                                                 });
@@ -617,6 +617,7 @@ class TransactionEntry extends StatelessWidget {
                                               },
                                               onExtraLabel: "Skip",
                                               onExtra: () async {
+                                                Navigator.pop(context);
                                                 Transaction transactionNew =
                                                     transaction.copyWith(
                                                         skipPaid: true,
@@ -632,7 +633,6 @@ class TransactionEntry extends StatelessWidget {
                                                         transactionNew);
                                                 await createNewSubscriptionTransaction(
                                                     context, transaction);
-                                                Navigator.pop(context);
                                                 setUpcomingNotifications(
                                                     context);
                                               },
@@ -640,6 +640,7 @@ class TransactionEntry extends StatelessWidget {
                                                   ? "Desposit"
                                                   : "Pay",
                                               onSubmit: () async {
+                                                Navigator.pop(context);
                                                 double amount =
                                                     transaction.amount;
                                                 if (transaction.amount == 0) {
@@ -674,7 +675,6 @@ class TransactionEntry extends StatelessWidget {
                                                         transactionNew);
                                                 await createNewSubscriptionTransaction(
                                                     context, transaction);
-                                                Navigator.pop(context);
                                                 setUpcomingNotifications(
                                                     context);
                                               },

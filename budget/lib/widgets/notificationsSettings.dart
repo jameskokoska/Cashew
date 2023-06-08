@@ -474,7 +474,7 @@ Future<bool> scheduleUpcomingTransactionsNotification(
       dateTime,
       notificationDetails,
       androidAllowWhileIdle: true,
-      payload: 'addTransaction',
+      payload: 'upcomingTransaction',
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );

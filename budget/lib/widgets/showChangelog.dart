@@ -8,6 +8,16 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added re-orderable homepage sections
+    Fixed if budget amount is 0
+    Tapping upcoming transaction notification opens Overdue transactions page
+    Fixed category budget limits if budget goal is 0
+    Listens to a day change and all data is updated accordingly
+    Title left empty if entered title matches exactly that of a category
+    Fixed initial selected amount
+    'You should save...' text removed for custom time range budgets out of range
+    Upcoming transactions paid/skip payment buttons fixes
+    Username trimmed
     Budgets pinned picker and spending graph selection in edit home page
     Moved settings to edit home page
     Doesn't show wallet picker if only one wallet, ignores cached amounts

@@ -70,7 +70,7 @@ class EditRowEntry extends StatelessWidget {
                 ? dynamicPastel(
                     context,
                     Theme.of(context).colorScheme.secondaryContainer,
-                    amount: 0.5,
+                    amount: 0.3,
                   )
                 : getColor(context, "lightDarkAccentHeavyLight"),
             onTap: () {

@@ -516,7 +516,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     walletPkForCurrency: selectedWalletPk,
                     onlyShowCurrencyIcon:
                         appStateSettings["selectedWallet"] == selectedWalletPk,
-                    amountPassed: selectedAmountCalculation ?? "",
+                    amountPassed: (selectedAmount ?? "0").toString(),
                     setSelectedAmount: setSelectedAmount,
                     next: () async {
                       await addTransaction();
@@ -689,7 +689,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           appStateSettings["selectedWallet"] ==
                                               selectedWalletPk,
                                       amountPassed:
-                                          selectedAmountCalculation ?? "",
+                                          (selectedAmount ?? "0").toString(),
                                       setSelectedAmount: setSelectedAmount,
                                       next: () async {
                                         await addTransaction();
@@ -725,7 +725,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 onlyShowCurrencyIcon:
                                     appStateSettings["selectedWallet"] ==
                                         selectedWalletPk,
-                                amountPassed: selectedAmountCalculation ?? "",
+                                amountPassed:
+                                    (selectedAmount ?? "0").toString(),
                                 setSelectedAmount: setSelectedAmount,
                                 next: () async {
                                   await addTransaction();
@@ -883,7 +884,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     //             "selectedWallet"] ==
                                     //         selectedWalletPk,
                                     onlyShowCurrencyIcon: true,
-                                    amountPassed: selectedAmountCalculation ??
+                                    amountPassed:
                                         (selectedAmount ?? "0").toString(),
                                     setSelectedAmount: setSelectedAmount,
                                     next: () async {
@@ -1659,7 +1660,16 @@ class _SelectTitleState extends State<SelectTitle> {
                     onEditingComplete: () {
                       //if selected a tag and a category is set, then go to enter amount
                       //else enter amount
-                      widget.setSelectedTitle(input ?? "");
+                      if (selectedCategory?.name
+                              .toString()
+                              .trim()
+                              .toLowerCase() ==
+                          input?.toString().trim().toLowerCase()) {
+                        widget.setSelectedTitle("");
+                      } else {
+                        widget.setSelectedTitle(input ?? "");
+                      }
+
                       if (selectedCategory != null) {
                         widget.setSelectedCategory(selectedCategory!);
                       }

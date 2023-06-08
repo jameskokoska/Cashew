@@ -67,7 +67,9 @@ class _SelectAmountState extends State<SelectAmount> {
     try {
       amount =
           double.parse(widget.amountPassed).toStringAsFixed(numberDecimals);
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
     amount = removeTrailingZeroes(amount);
     // if (amount.endsWith(".0")) {
     //   amount = widget.amountPassed.replaceAll(".0", "");
@@ -541,7 +543,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal: 8,
                                                                 vertical: 7),
                                                         child: Column(

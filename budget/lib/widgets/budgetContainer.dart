@@ -268,9 +268,12 @@ class BudgetContainer extends StatelessWidget {
                                 : EdgeInsets.symmetric(horizontal: 15),
                             child: BudgetTimeline(
                               budget: budget,
-                              percent: (totalSpent / budget.amount * 100).abs(),
-                              yourPercent:
-                                  snapshotTotalSpentByCurrentUserOnly.data ==
+                              percent: budget.amount == 0
+                                  ? 0
+                                  : (totalSpent / budget.amount * 100).abs(),
+                              yourPercent: budget.amount == 0
+                                  ? 0
+                                  : snapshotTotalSpentByCurrentUserOnly.data ==
                                           null
                                       ? 0
                                       : totalSpent == 0
@@ -379,28 +382,32 @@ class DaySpending extends StatelessWidget {
         fit: BoxFit.fitWidth,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: TextFont(
-            textColor: getColor(context, "black").withAlpha(80),
-            text: amount < 0
-                ? "You should save " +
-                    convertToMoney(amount.abs()) +
-                    " for " +
-                    budgetRange.end
-                        .difference(DateTime.now())
-                        .inDays
-                        .toString() +
-                    " more days."
-                : "You can keep spending " +
-                    convertToMoney(amount) +
-                    " for " +
-                    budgetRange.end
-                        .difference(DateTime.now())
-                        .inDays
-                        .toString() +
-                    " days.",
-            fontSize: large ? 15 : 13,
-            textAlign: TextAlign.center,
-          ),
+          child: large && budgetRange.end.difference(DateTime.now()).inDays < 0
+              ? SizedBox(height: 1)
+              : TextFont(
+                  textColor: getColor(context, "black").withAlpha(80),
+                  text: budgetRange.end.difference(DateTime.now()).inDays < 0
+                      ? ""
+                      : amount < 0
+                          ? "You should save " +
+                              convertToMoney(amount.abs()) +
+                              " for " +
+                              budgetRange.end
+                                  .difference(DateTime.now())
+                                  .inDays
+                                  .toString() +
+                              " more days."
+                          : "You can keep spending " +
+                              convertToMoney(amount) +
+                              " for " +
+                              budgetRange.end
+                                  .difference(DateTime.now())
+                                  .inDays
+                                  .toString() +
+                              " days.",
+                  fontSize: large ? 15 : 13,
+                  textAlign: TextAlign.center,
+                ),
         ),
       ),
     );

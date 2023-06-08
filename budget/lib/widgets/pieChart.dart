@@ -71,30 +71,34 @@ class PieChartWrapper extends StatelessWidget {
             setSelectedCategory: setSelectedCategory,
             key: pieChartDisplayStateKey,
           ),
-          IgnorePointer(
-            child: Center(
-              child: Container(
-                width: enableDoubleColumn(context) == false ? 105 : 130,
-                height: enableDoubleColumn(context) == false ? 105 : 130,
-                decoration: BoxDecoration(
-                  color: middleColor?.withOpacity(0.2) ??
-                      getColor(context, "white").withOpacity(0.2),
-                  shape: BoxShape.circle,
+          data.length <= 0
+              ? SizedBox.shrink()
+              : IgnorePointer(
+                  child: Center(
+                    child: Container(
+                      width: enableDoubleColumn(context) == false ? 105 : 130,
+                      height: enableDoubleColumn(context) == false ? 105 : 130,
+                      decoration: BoxDecoration(
+                        color: middleColor?.withOpacity(0.2) ??
+                            getColor(context, "white").withOpacity(0.2),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          IgnorePointer(
-            child: Center(
-              child: Container(
-                width: enableDoubleColumn(context) == false ? 80 : 110,
-                height: enableDoubleColumn(context) == false ? 80 : 110,
-                decoration: BoxDecoration(
-                    color: middleColor ?? Theme.of(context).canvasColor,
-                    shape: BoxShape.circle),
-              ),
-            ),
-          ),
+          data.length <= 0
+              ? SizedBox.shrink()
+              : IgnorePointer(
+                  child: Center(
+                    child: Container(
+                      width: enableDoubleColumn(context) == false ? 80 : 110,
+                      height: enableDoubleColumn(context) == false ? 80 : 110,
+                      decoration: BoxDecoration(
+                          color: middleColor ?? Theme.of(context).canvasColor,
+                          shape: BoxShape.circle),
+                    ),
+                  ),
+                ),
         ],
       ),
     );

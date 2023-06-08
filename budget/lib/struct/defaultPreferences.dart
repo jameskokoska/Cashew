@@ -20,6 +20,13 @@ Map<String, dynamic> defaultPreferences() {
     "showWalletSwitcher": true,
     "showOverdueUpcoming": true,
     "showPinnedBudgets": true,
+    "showSpendingGraph": true,
+    "homePageOrder": [
+      "wallets",
+      "budgets",
+      "overdueUpcoming",
+      "spendingGraph",
+    ],
     "showTotalSpentForBudget": false,
     "roundedGraphLines": true,
     "showCumulativeSpending": true,
@@ -63,5 +70,6 @@ Map<String, dynamic> defaultPreferences() {
     "sharedBudgets": false,
     "emailScanning": false,
     "legacyTransactionAmountColors": false,
+    "massEditSelectedTransactions": false,
   };
 }

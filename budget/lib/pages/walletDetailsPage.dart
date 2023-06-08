@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -326,11 +327,15 @@ class IncomeTransactionsSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:
-          BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
+      decoration: BoxDecoration(
+          boxShadow: appStateSettings["materialYou"] == false
+              ? boxShadowCheck(boxShadowGeneral(context))
+              : []),
       child: Tappable(
         borderRadius: 15,
-        color: getColor(context, "lightDarkAccentHeavyLight"),
+        color: appStateSettings["materialYou"]
+            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5)
+            : getColor(context, "lightDarkAccentHeavyLight"),
         onTap: () {},
         child: Container(
           child: Padding(

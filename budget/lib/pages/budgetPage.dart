@@ -343,9 +343,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                             dateForRange: dateForRange,
                                             budget: widget.budget,
                                             large: true,
-                                            percent: totalSpent /
-                                                widget.budget.amount *
-                                                100,
+                                            percent: widget.budget.amount == 0
+                                                ? 0
+                                                : totalSpent /
+                                                    widget.budget.amount *
+                                                    100,
                                             yourPercent: totalSpent == 0
                                                 ? 0
                                                 : snapshotTotalSpentByCurrentUserOnly

@@ -65,6 +65,15 @@ class DebugPage extends StatelessWidget {
           icon: Icons.blur_circular_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Mass edit selected transactions",
+          onSwitched: (value) {
+            updateSettings("massEditSelectedTransactions", value,
+                pagesNeedingRefresh: [0], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["massEditSelectedTransactions"],
+          icon: Icons.edit,
+        ),
+        SettingsContainerSwitch(
           title: "Battery Saver",
           description: "Optimize the UI and increase performance",
           onSwitched: (value) {

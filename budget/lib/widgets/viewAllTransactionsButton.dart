@@ -1,3 +1,4 @@
+import 'package:budget/main.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -30,7 +31,9 @@ class LowKeyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tappable(
-      color: getColor(context, "lightDarkAccent"),
+      color: appStateSettings["materialYou"]
+          ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5)
+          : getColor(context, "lightDarkAccent"),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: TextFont(

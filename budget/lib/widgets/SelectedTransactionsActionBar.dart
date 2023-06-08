@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -141,30 +142,38 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            IconButton(
-                              iconSize: getWidthNavigationSidebar(context) > 0
-                                  ? 23
-                                  : null,
-                              padding: getWidthNavigationSidebar(context) > 0
-                                  ? EdgeInsets.all(12)
-                                  : null,
-                              color: Theme.of(context).colorScheme.secondary,
-                              icon: Icon(
-                                Icons.edit,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              onPressed: () {
-                                openPopupCustom(
-                                  context,
-                                  title: "Edit " +
-                                      (value)[pageID]!.length.toString() +
-                                      " Selected",
-                                  child: EditSelectedTransactions(
-                                    transactionIDs: value[pageID]!,
+                            appStateSettings["massEditSelectedTransactions"] ==
+                                    false
+                                ? SizedBox.shrink()
+                                : IconButton(
+                                    iconSize:
+                                        getWidthNavigationSidebar(context) > 0
+                                            ? 23
+                                            : null,
+                                    padding:
+                                        getWidthNavigationSidebar(context) > 0
+                                            ? EdgeInsets.all(12)
+                                            : null,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                    onPressed: () {
+                                      openPopupCustom(
+                                        context,
+                                        title: "Edit " +
+                                            (value)[pageID]!.length.toString() +
+                                            " Selected",
+                                        child: EditSelectedTransactions(
+                                          transactionIDs: value[pageID]!,
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
                             IconButton(
                               iconSize: getWidthNavigationSidebar(context) > 0
                                   ? 23

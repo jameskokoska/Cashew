@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/reorderable_list.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/moreIcons.dart';
@@ -47,14 +48,15 @@ class _EditHomePageState extends State<EditHomePage> {
   bool dragDownToDismissEnabled = true;
   int currentReorder = -1;
 
-  late List<EditHomePageItem> editHomePageItems;
+  Map<String, EditHomePageItem> editHomePageItems = {};
+  List<dynamic> keyOrder = [];
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
       setState(() {
-        editHomePageItems = [
-          EditHomePageItem(
+        editHomePageItems = {
+          "wallets": EditHomePageItem(
             icon: Icons.account_balance_wallet_rounded,
             name: "Wallets",
             isEnabled: appStateSettings["showWalletSwitcher"],
@@ -63,7 +65,7 @@ class _EditHomePageState extends State<EditHomePage> {
                   pagesNeedingRefresh: [0], updateGlobalState: false);
             },
           ),
-          EditHomePageItem(
+          "budgets": EditHomePageItem(
             icon: MoreIcons.chart_pie,
             name: "Budgets",
             isEnabled: appStateSettings["showPinnedBudgets"],
@@ -133,7 +135,7 @@ class _EditHomePageState extends State<EditHomePage> {
               );
             },
           ),
-          EditHomePageItem(
+          "overdueUpcoming": EditHomePageItem(
             icon: Icons.upcoming_rounded,
             name: "Overdue and Upcoming",
             isEnabled: appStateSettings["showOverdueUpcoming"],
@@ -142,11 +144,14 @@ class _EditHomePageState extends State<EditHomePage> {
                   pagesNeedingRefresh: [0], updateGlobalState: false);
             },
           ),
-          EditHomePageItem(
+          "spendingGraph": EditHomePageItem(
             icon: Icons.insights_rounded,
             name: "Spending Graph",
-            isEnabled: true,
-            onSwitched: (value) {},
+            isEnabled: appStateSettings["showSpendingGraph"],
+            onSwitched: (value) {
+              updateSettings("showSpendingGraph", value,
+                  pagesNeedingRefresh: [0], updateGlobalState: false);
+            },
             extraWidgetsBelow: [],
             onTap: () async {
               String defaultLabel = "Default (30 days)";
@@ -200,7 +205,9 @@ class _EditHomePageState extends State<EditHomePage> {
               );
             },
           ),
-        ];
+        };
+        keyOrder = List<String>.from(appStateSettings["homePageOrder"]
+            .map((element) => element.toString()));
       });
       super.initState();
     });
@@ -230,20 +237,21 @@ class _EditHomePageState extends State<EditHomePage> {
             });
           },
           itemBuilder: (context, index) {
+            String key = keyOrder[index];
             return EditRowEntry(
               canReorder: true,
               currentReorder: currentReorder != -1 && currentReorder != index,
               padding: EdgeInsets.only(left: 18, right: 0, top: 16, bottom: 16),
-              key: ValueKey(index),
+              key: ValueKey(key),
               extraWidget: Row(
                 children: [
                   Switch(
                     activeColor: Theme.of(context).colorScheme.primary,
-                    value: editHomePageItems[index].isEnabled,
+                    value: editHomePageItems[key]!.isEnabled,
                     onChanged: (value) {
-                      editHomePageItems[index].onSwitched(value);
+                      editHomePageItems[key]!.onSwitched(value);
                       setState(() {
-                        editHomePageItems[index].isEnabled = value;
+                        editHomePageItems[key]!.isEnabled = value;
                       });
                     },
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -254,19 +262,19 @@ class _EditHomePageState extends State<EditHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
-                    editHomePageItems[index].icon,
+                    editHomePageItems[key]!.icon,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   SizedBox(width: 13),
                   Expanded(
                     child: TextFont(
-                      text: editHomePageItems[index].name,
+                      text: editHomePageItems[key]!.name,
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
                       maxLines: 5,
                     ),
                   ),
-                  editHomePageItems[index].onTap == null
+                  editHomePageItems[key]?.onTap == null
                       ? SizedBox.shrink()
                       : Padding(
                           padding: const EdgeInsets.only(right: 8.0),
@@ -278,26 +286,25 @@ class _EditHomePageState extends State<EditHomePage> {
                         ),
                 ],
               ),
-              extraWidgetsBelow: editHomePageItems[index].extraWidgetsBelow ??
+              extraWidgetsBelow: editHomePageItems[key]?.extraWidgetsBelow ??
                   [SizedBox.shrink()],
               canDelete: false,
               index: index,
               onDelete: () {},
-              onTap: editHomePageItems[index].onTap ?? () {},
+              onTap: editHomePageItems[key]?.onTap ?? () {},
               openPage: Container(),
             );
           },
-          itemCount: editHomePageItems.length,
+          itemCount: editHomePageItems.keys.length,
           onReorder: (oldIndex, newIndex) async {
             setState(() {
               if (oldIndex < newIndex) {
                 newIndex -= 1;
               }
-              final EditHomePageItem item =
-                  editHomePageItems.removeAt(oldIndex);
-              editHomePageItems.insert(newIndex, item);
+              final String item = keyOrder.removeAt(oldIndex);
+              keyOrder.insert(newIndex, item);
             });
-            print(editHomePageItems);
+            updateSettings("homePageOrder", keyOrder, pagesNeedingRefresh: [0]);
             return true;
           },
         ),

@@ -1,5 +1,6 @@
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:flutter/foundation.dart';
@@ -36,6 +37,13 @@ runNotificationPayLoadsNoContext(payloadData) {
     navigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => AddTransactionPage(title: "Add Transaction"),
+      ),
+    );
+  } else if (payloadData == "upcomingTransaction") {
+    navigatorKey.currentState!.push(
+      MaterialPageRoute(
+        builder: (context) =>
+            UpcomingOverdueTransactions(overdueTransactions: true),
       ),
     );
   }

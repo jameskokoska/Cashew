@@ -87,8 +87,8 @@ class CategoryEntry extends StatelessWidget {
             CategoryIconPercent(
               category: category,
               percent: categoryBudgetLimit != null
-                  ? categorySpent / categoryBudgetLimit!.amount * 100
-                  : categorySpent / totalSpent * 100,
+                  ? (categorySpent / categoryBudgetLimit!.amount * 100).abs()
+                  : (categorySpent / totalSpent * 100).abs(),
               progressBackgroundColor: selected
                   ? getColor(context, "white")
                   : getColor(context, "lightDarkAccentHeavy"),
@@ -150,6 +150,7 @@ class CategoryEntry extends StatelessWidget {
                             text: (totalSpent == 0
                                     ? "0"
                                     : (categorySpent / totalSpent * 100)
+                                        .abs()
                                         .toStringAsFixed(0)) +
                                 "%" +
                                 extraText,
@@ -169,7 +170,7 @@ class CategoryEntry extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    categorySpent == 0
+                    categorySpent == 0 || showIncomeExpenseIcons == false
                         ? SizedBox.shrink()
                         : Transform.translate(
                             offset: Offset(3, 0),

@@ -28,6 +28,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
+import 'package:clock/clock.dart';
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
 /*
@@ -242,6 +243,26 @@ Future<bool> initializeSettings() async {
 
   generateColors();
 
+  List<String> keyOrder = List<String>.from(
+      appStateSettings["homePageOrder"].map((element) => element.toString()));
+  List<String> defaultPrefPageOrder = List<String>.from(
+      defaultPreferences()["homePageOrder"]
+          .map((element) => element.toString()));
+  for (String key in keyOrder) {
+    if (!defaultPreferences()["homePageOrder"].contains(key)) {
+      appStateSettings["homePageOrder"] = defaultPrefPageOrder;
+      print("Fixed homepage ordering");
+      break;
+    }
+  }
+  for (String key in defaultPrefPageOrder) {
+    if (!keyOrder.contains(key)) {
+      appStateSettings["homePageOrder"] = defaultPrefPageOrder;
+      print("Fixed homepage ordering");
+      break;
+    }
+  }
+
   return true;
 }
 
@@ -288,6 +309,46 @@ Future<bool> checkBiometrics(
     didAuthenticate = true;
   }
   return didAuthenticate;
+}
+
+class WatchForDayChange extends StatefulWidget {
+  final Widget child;
+  const WatchForDayChange({required this.child, super.key});
+
+  @override
+  _WatchForDayChangeState createState() => _WatchForDayChangeState();
+}
+
+class _WatchForDayChangeState extends State<WatchForDayChange> {
+  late DateTime _currentDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentDate = DateTime.now();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    Future.delayed(Duration(seconds: 1), () {
+      if (DateTime.now().day != _currentDate.day) {
+        setState(() {
+          _currentDate = DateTime.now();
+        });
+        appStateKey.currentState?.refreshAppState();
+        homePageStateKey.currentState?.refreshState();
+        transactionsListPageStateKey.currentState?.refreshState();
+        budgetsListPageStateKey.currentState?.refreshState();
+        settingsPageStateKey.currentState?.refreshState();
+      }
+      _startTimer();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
 }
 
 class InitializeBiometrics extends StatefulWidget {
@@ -508,8 +569,8 @@ class App extends StatelessWidget {
             ? darkenPastel(
                     lightenPastel(
                         getSettingConstants(appStateSettings)["accentColor"],
-                        amount: 0.56),
-                    amount: 0.1)
+                        amount: 0.8),
+                    amount: 0.2)
                 .withOpacity(0.5)
             : null,
         extensions: <ThemeExtension<dynamic>>[appColorsLight],
@@ -577,24 +638,26 @@ class App extends StatelessWidget {
       ),
       builder: (context, child) {
         return InitializeBiometrics(
-          child: Stack(
-            children: [
-              Row(
-                children: [
-                  SizedBox(width: getWidthNavigationSidebar(context)),
-                  Expanded(
-                    child: child!,
-                  ),
-                ],
-              ),
-              NavigationSidebar(
-                key: sidebarStateKey,
-              ),
-              // The persistent global Widget stack (stays on navigation change)
-              GlobalSnackbar(key: snackbarKey),
-              GlobalLoadingProgress(key: loadingProgressKey),
-              GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
-            ],
+          child: WatchForDayChange(
+            child: Stack(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(width: getWidthNavigationSidebar(context)),
+                    Expanded(
+                      child: child!,
+                    ),
+                  ],
+                ),
+                NavigationSidebar(
+                  key: sidebarStateKey,
+                ),
+                // The persistent global Widget stack (stays on navigation change)
+                GlobalSnackbar(key: snackbarKey),
+                GlobalLoadingProgress(key: loadingProgressKey),
+                GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
+              ],
+            ),
           ),
         );
       },

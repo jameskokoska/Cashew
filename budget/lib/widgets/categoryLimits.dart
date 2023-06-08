@@ -114,12 +114,13 @@ class _CategoryLimitsState extends State<CategoryLimits> {
 }
 
 class CategoryLimitEntry extends StatefulWidget {
-  const CategoryLimitEntry(
-      {required this.category,
-      required this.budgetLimit,
-      required this.categoryLimit,
-      required this.budgetPk,
-      super.key});
+  const CategoryLimitEntry({
+    required this.category,
+    required this.budgetLimit,
+    required this.categoryLimit,
+    required this.budgetPk,
+    super.key,
+  });
 
   final TransactionCategory category;
   final double budgetLimit;
@@ -174,7 +175,9 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
               children: [
                 CategoryIconPercent(
                   category: widget.category,
-                  percent: (selectedAmount / widget.budgetLimit) * 100,
+                  percent: widget.budgetLimit == 0
+                      ? 0
+                      : (selectedAmount / widget.budgetLimit) * 100,
                   progressBackgroundColor:
                       getColor(context, "lightDarkAccentHeavy"),
                   size: 28,
@@ -194,9 +197,11 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                       height: 1,
                     ),
                     TextFont(
-                      text: ((selectedAmount / widget.budgetLimit) * 100)
-                              .toInt()
-                              .toString() +
+                      text: (widget.budgetLimit == 0
+                              ? "0"
+                              : ((selectedAmount / widget.budgetLimit) * 100)
+                                  .toInt()
+                                  .toString()) +
                           "% of budget",
                       fontSize: 14,
                       textColor: getColor(context, "textLight"),
