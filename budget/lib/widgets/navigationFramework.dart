@@ -26,9 +26,11 @@ import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
 
@@ -149,6 +151,15 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       EditAssociatedTitlesPage(title: "Edit Titles"), //12
       AboutPage(), //13
     ];
+
+    // SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
+    //   FeatureDiscovery.discoverFeatures(
+    //     context,
+    //     const <String>{
+    //       'add_transaction_button',
+    //     },
+    //   );
+    // });
   }
 
   @override
@@ -211,6 +222,44 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
               ),
               child: Stack(
                 children: [
+                  // DescribedFeatureOverlay(
+                  //   featureId: 'add_transaction_button',
+                  //   tapTarget: IgnorePointer(
+                  //     child: AnimateFAB(
+                  //       fab: FAB(
+                  //         tooltip: "Add Transaction",
+                  //         openPage: AddTransactionPage(
+                  //           title: "Add Transaction",
+                  //         ),
+                  //       ),
+                  //       condition: currentPage == 0 || currentPage == 1,
+                  //     ),
+                  //   ),
+                  //   pulseDuration: Duration(milliseconds: 3500),
+                  //   contentLocation: ContentLocation.above,
+                  //   title: TextFont(
+                  //     text: 'Add Transaction',
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: 22,
+                  //     maxLines: 3,
+                  //   ),
+                  //   description: TextFont(
+                  //     text: 'Tap the plus to add a transaction',
+                  //     fontSize: 17,
+                  //     maxLines: 10,
+                  //   ),
+                  //   backgroundColor: Theme.of(context).primaryColor,
+                  //   textColor: Colors.white,
+                  //   child: AnimateFAB(
+                  //     fab: FAB(
+                  //       tooltip: "Add Transaction",
+                  //       openPage: AddTransactionPage(
+                  //         title: "Add Transaction",
+                  //       ),
+                  //     ),
+                  //     condition: currentPage == 0 || currentPage == 1,
+                  //   ),
+                  // ),
                   AnimateFAB(
                     fab: FAB(
                       tooltip: "Add Transaction",

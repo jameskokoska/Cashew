@@ -256,26 +256,26 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 }
               },
             ),
-            SelectChips(
-              items: [
-                MethodAdded.csv,
-                MethodAdded.shared,
-                MethodAdded.email,
-              ],
-              getLabel: (item) {
-                return item == MethodAdded.csv
-                    ? "CSV"
-                    : item == MethodAdded.shared
-                        ? "Shared"
-                        : item == MethodAdded.email
-                            ? "Email"
-                            : "";
-              },
-              onSelected: (item) {},
-              getSelected: (item) {
-                return false;
-              },
-            ),
+            // SelectChips(
+            //   items: [
+            //     MethodAdded.csv,
+            //     MethodAdded.shared,
+            //     MethodAdded.email,
+            //   ],
+            //   getLabel: (item) {
+            //     return item == MethodAdded.csv
+            //         ? "CSV"
+            //         : item == MethodAdded.shared
+            //             ? "Shared"
+            //             : item == MethodAdded.email
+            //                 ? "Email"
+            //                 : "";
+            //   },
+            //   onSelected: (item) {},
+            //   getSelected: (item) {
+            //     return false;
+            //   },
+            // ),
             appStateSettings["sharedBudgets"]
                 ? SelectChips(
                     items: [
@@ -412,12 +412,14 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                           icon: Icons.calendar_month_rounded,
                         ),
                         SizedBox(width: 7),
-                        ButtonIcon(
-                          onTap: () {
-                            selectFilters(context);
-                          },
-                          icon: Icons.filter_alt_rounded,
-                        ),
+                        appStateSettings["searchFilters"] == true
+                            ? ButtonIcon(
+                                onTap: () {
+                                  selectFilters(context);
+                                },
+                                icon: Icons.filter_alt_rounded,
+                              )
+                            : SizedBox.shrink(),
                         SizedBox(width: 20),
                       ],
                     ),

@@ -97,7 +97,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   DateTime? selectedEndDate;
   Color? selectedColor;
   String selectedRecurrence = "Monthly";
-  String selectedRecurrenceDisplay = "month";
   bool selectedPin = true;
   bool selectedShared = false;
   bool selectedAddedTransactionsOnly = false;
@@ -120,25 +119,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     );
   }
 
-  Future<void> selectAmount(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Amount",
-        underTitleSpace: false,
-        child: SelectAmount(
-          onlyShowCurrencyIcon: true,
-          amountPassed: selectedAmountCalculation ?? "",
-          setSelectedAmount: setSelectedAmount,
-          next: () async {
-            Navigator.pop(context);
-          },
-          nextLabel: "Set Amount",
-        ),
-      ),
-    );
-  }
-
   Future<void> selectColor(BuildContext context) async {
     openBottomSheet(
       context,
@@ -150,74 +130,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         ),
       ),
     );
-  }
-
-  Future<void> selectRecurrence(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Select Period",
-        child: RadioItems(
-          items: ["Custom", "Daily", "Weekly", "Monthly", "Yearly"],
-          initial: selectedRecurrence,
-          onChanged: (value) {
-            if (value == "Custom") {
-              selectedEndDate = null;
-            }
-            setState(() {
-              selectedRecurrence = value;
-              if (selectedPeriodLength == 1) {
-                selectedRecurrenceDisplay = nameRecurrence[value];
-              } else {
-                selectedRecurrenceDisplay = namesRecurrence[value];
-              }
-            });
-            Navigator.of(context).pop();
-            determineBottomButton();
-          },
-        ),
-      ),
-    );
-  }
-
-  Future<void> selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedStartDate,
-      firstDate: DateTime(DateTime.now().year - 2),
-      lastDate: DateTime(DateTime.now().year + 2),
-      builder: (BuildContext context, Widget? child) {
-        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.primary,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.primary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.secondary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
-      },
-    );
-    setSelectedStartDate(picked);
-  }
-
-  setSelectedStartDate(DateTime? date) {
-    if (date != null && date != selectedStartDate) {
-      setState(() {
-        selectedStartDate = date;
-      });
-    }
-    determineBottomButton();
   }
 
   setSelectedShared(bool shared) {
@@ -240,67 +152,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       }
       setSelectedCategories([]);
     });
-  }
-
-  Future<void> selectDateRange(BuildContext context) async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(DateTime.now().year - 2),
-      lastDate: DateTime(DateTime.now().year + 2),
-      initialDateRange: DateTimeRange(
-        start: selectedStartDate,
-        end: selectedEndDate ??
-            DateTime(DateTime.now().year, DateTime.now().month,
-                DateTime.now().day, DateTime.now().hour + 5),
-      ),
-      builder: (BuildContext context, Widget? child) {
-        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.primary,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.primary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.secondary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
-      },
-    );
-    if (picked != null) {
-      determineBottomButton();
-      setState(() {
-        selectedStartDate = picked.start;
-        selectedEndDate = picked.end;
-      });
-    }
-  }
-
-  Future<void> selectPeriodLength(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Period Length",
-        child: SelectAmountValue(
-          amountPassed: selectedPeriodLength.toString(),
-          setSelectedAmount: (amount, _) {
-            setSelectedPeriodLength(amount);
-          },
-          next: () async {
-            Navigator.pop(context);
-          },
-          nextLabel: "Set Amount",
-        ),
-      ),
-    );
   }
 
   void setSelectedCategories(List<int> categories) {
@@ -333,19 +184,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     return;
   }
 
-  void setSelectedAmount(double amount, String amountCalculation) {
-    if (amount == selectedAmount) {
-      selectedAmountCalculation = amountCalculation;
-    } else {
-      setState(() {
-        selectedAmount = amount;
-        selectedAmountCalculation = amountCalculation;
-      });
-    }
-    determineBottomButton();
-    return;
-  }
-
   void setSelectedPin() {
     setState(() {
       selectedPin = !selectedPin;
@@ -358,30 +196,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     setState(() {
       selectedTitle = title;
     });
-    determineBottomButton();
-    return;
-  }
-
-  void setSelectedPeriodLength(double period) {
-    try {
-      setState(() {
-        selectedPeriodLength = period.toInt();
-        if (selectedPeriodLength == 1) {
-          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
-        } else {
-          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
-        }
-      });
-    } catch (e) {
-      setState(() {
-        selectedPeriodLength = 0;
-        if (selectedPeriodLength == 1) {
-          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
-        } else {
-          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
-        }
-      });
-    }
     determineBottomButton();
     return;
   }
@@ -513,12 +327,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       selectedAmount = widget.budget!.amount;
       selectedAddedTransactionsOnly = widget.budget!.addedTransactionsOnly;
       selectedPeriodLength = widget.budget!.periodLength;
-      selectedRecurrence = enumRecurrence[widget.budget!.reoccurrence];
-      if (selectedPeriodLength == 1) {
-        selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
-      } else {
-        selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
-      }
+      selectedRecurrence = widget.budget!.reoccurrence == null
+          ? "Monthly"
+          : enumRecurrence[widget.budget!.reoccurrence];
       selectedStartDate = widget.budget!.startDate;
       selectedEndDate = widget.budget!.endDate;
       selectedColor = widget.budget!.colour == null
@@ -698,163 +509,40 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     topContentPadding: 20,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.end,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      IntrinsicWidth(
-                        child: TappableTextEntry(
-                          title: convertToMoney(selectedAmount ?? 0),
-                          placeholder: convertToMoney(0),
-                          showPlaceHolderWhenTextEquals: convertToMoney(0),
-                          onTap: () {
-                            selectAmount(context);
-                          },
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          internalPadding:
-                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
-                        ),
-                      ),
-                      IntrinsicWidth(
-                        child: Row(
-                          children: [
-                            selectedRecurrence != "Custom"
-                                ? TappableTextEntry(
-                                    title:
-                                        "/ " + selectedPeriodLength.toString(),
-                                    placeholder: "/ 0",
-                                    showPlaceHolderWhenTextEquals: "/ 0",
-                                    onTap: () {
-                                      selectPeriodLength(context);
-                                    },
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    internalPadding: EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 4),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 3),
-                                  )
-                                : TextFont(
-                                    text: " /",
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            TappableTextEntry(
-                              title: selectedRecurrenceDisplay,
-                              placeholder: "",
-                              onTap: () {
-                                selectRecurrence(context);
-                              },
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              internalPadding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 4),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 3),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Transform.translate(
-                  offset: Offset(
-                      0,
-                      selectedEndDate == null && selectedRecurrence == "Custom"
-                          ? 0
-                          : -5),
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: selectedRecurrence != "Custom"
-                          ? Tappable(
-                              onTap: () {
-                                selectStartDate(context);
-                              },
-                              color: Colors.transparent,
-                              borderRadius: 15,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 8),
-                                child: Center(
-                                  child: Wrap(
-                                    crossAxisAlignment: WrapCrossAlignment.end,
-                                    runAlignment: WrapAlignment.center,
-                                    alignment: WrapAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 5.8),
-                                        child: TextFont(
-                                          text: "beginning ",
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      IgnorePointer(
-                                        child: TappableTextEntry(
-                                          title: getWordedDateShortMore(
-                                              selectedStartDate),
-                                          placeholder: "",
-                                          onTap: () {
-                                            selectAmount(context);
-                                          },
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 0, horizontal: 5),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Tappable(
-                              onTap: () {
-                                selectDateRange(context);
-                              },
-                              color: Colors.transparent,
-                              borderRadius: 15,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 8),
-                                child: Center(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IgnorePointer(
-                                        child: TappableTextEntry(
-                                          title: selectedEndDate == null
-                                              ? null
-                                              : getWordedDateShort(
-                                                      selectedStartDate) +
-                                                  " - " +
-                                                  getWordedDateShort(
-                                                      selectedEndDate!),
-                                          placeholder: "Select Custom Period",
-                                          onTap: () {},
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 2, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 0, horizontal: 5),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )),
+                BudgetDetails(
+                  determineBottomButton: () {
+                    determineBottomButton();
+                  },
+                  setSelectedAmount: (amount, _) {
+                    setState(() {
+                      selectedAmount = amount;
+                    });
+                  },
+                  initialSelectedAmount: selectedAmount,
+                  setSelectedPeriodLength: (length) {
+                    setState(() {
+                      selectedPeriodLength = length;
+                    });
+                  },
+                  initialSelectedPeriodLength: selectedPeriodLength,
+                  setSelectedRecurrence: (recurrence) {
+                    setState(() {
+                      selectedRecurrence = recurrence;
+                    });
+                  },
+                  initialSelectedRecurrence: selectedRecurrence,
+                  setSelectedStartDate: (date) {
+                    setState(() {
+                      selectedStartDate = date;
+                    });
+                  },
+                  initialSelectedStartDate: selectedStartDate,
+                  setSelectedEndDate: (date) {
+                    setState(() {
+                      selectedEndDate = date;
+                    });
+                  },
+                  initialSelectedEndDate: selectedEndDate,
                 ),
                 SizedBox(height: 17),
               ],
@@ -1146,7 +834,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               selectedCategories: selectedCategories ?? [],
               budgetPk:
                   widget.budget == null ? setBudgetPk : widget.budget!.budgetPk,
-              budgetLimit: selectedAmount ?? 1,
+              budgetLimit: selectedAmount ?? 0,
             ),
           ],
           listWidgets: [
@@ -1322,6 +1010,408 @@ class SliverStickyLabelDivider extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class BudgetDetails extends StatefulWidget {
+  const BudgetDetails({
+    super.key,
+    required this.determineBottomButton,
+    required this.setSelectedAmount,
+    required this.setSelectedPeriodLength,
+    required this.setSelectedRecurrence,
+    required this.setSelectedStartDate,
+    required this.setSelectedEndDate,
+    this.initialSelectedAmount,
+    this.initialSelectedPeriodLength,
+    this.initialSelectedStartDate,
+    this.initialSelectedEndDate,
+    this.initialSelectedRecurrence,
+  });
+  final Function determineBottomButton;
+  final Function(double, String) setSelectedAmount;
+  final Function(int) setSelectedPeriodLength;
+  final Function(String) setSelectedRecurrence;
+  final Function(DateTime) setSelectedStartDate;
+  final Function(DateTime?) setSelectedEndDate;
+  final double? initialSelectedAmount;
+  final int? initialSelectedPeriodLength;
+  final DateTime? initialSelectedStartDate;
+  final DateTime? initialSelectedEndDate;
+  final String? initialSelectedRecurrence;
+  @override
+  State<BudgetDetails> createState() => _BudgetDetailsState();
+}
+
+class _BudgetDetailsState extends State<BudgetDetails> {
+  late double? selectedAmount;
+  late int selectedPeriodLength;
+  late DateTime selectedStartDate;
+  late DateTime? selectedEndDate;
+  late String selectedRecurrence;
+  String selectedRecurrenceDisplay = "month";
+  @override
+  void initState() {
+    selectedAmount = widget.initialSelectedAmount;
+    selectedPeriodLength = widget.initialSelectedPeriodLength ?? 1;
+    selectedStartDate = widget.initialSelectedStartDate ??
+        DateTime(DateTime.now().year, DateTime.now().month, 1);
+    selectedEndDate = widget.initialSelectedEndDate;
+    selectedRecurrence = widget.initialSelectedRecurrence ?? "Monthly";
+
+    if (selectedPeriodLength == 1) {
+      selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+    } else {
+      selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+    }
+    super.initState();
+  }
+
+  Future<void> selectAmount(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Enter Amount",
+        underTitleSpace: false,
+        child: SelectAmount(
+          onlyShowCurrencyIcon: true,
+          amountPassed: selectedAmount.toString(),
+          setSelectedAmount: (amount, calculation) {
+            widget.setSelectedAmount(amount.abs(), calculation);
+            setState(() {
+              selectedAmount = amount.abs();
+            });
+            widget.determineBottomButton();
+          },
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "Set Amount",
+        ),
+      ),
+    );
+  }
+
+  Future<void> selectPeriodLength(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Enter Period Length",
+        child: SelectAmountValue(
+          amountPassed: selectedPeriodLength.toString(),
+          setSelectedAmount: (amount, _) {
+            setSelectedPeriodLength(amount);
+          },
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "Set Amount",
+        ),
+      ),
+    );
+  }
+
+  void setSelectedPeriodLength(double period) {
+    try {
+      setState(() {
+        selectedPeriodLength = period.toInt();
+        if (selectedPeriodLength == 1) {
+          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+        } else {
+          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+        }
+      });
+    } catch (e) {
+      setState(() {
+        selectedPeriodLength = 0;
+        if (selectedPeriodLength == 1) {
+          selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
+        } else {
+          selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
+        }
+      });
+    }
+    widget.setSelectedPeriodLength(selectedPeriodLength);
+    widget.determineBottomButton();
+    return;
+  }
+
+  Future<void> selectRecurrence(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "Select Period",
+        child: RadioItems(
+          items: ["Custom", "Daily", "Weekly", "Monthly", "Yearly"],
+          initial: selectedRecurrence,
+          onChanged: (value) {
+            if (value == "Custom") {
+              selectedEndDate = null;
+              widget.setSelectedEndDate(null);
+            }
+            setState(() {
+              selectedRecurrence = value;
+              widget.setSelectedRecurrence(value);
+              if (selectedPeriodLength == 1) {
+                selectedRecurrenceDisplay = nameRecurrence[value];
+              } else {
+                selectedRecurrenceDisplay = namesRecurrence[value];
+              }
+            });
+            Navigator.of(context).pop();
+            widget.determineBottomButton();
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> selectDateRange(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(DateTime.now().year - 2),
+      lastDate: DateTime(DateTime.now().year + 2),
+      initialDateRange: DateTimeRange(
+        start: selectedStartDate,
+        end: selectedEndDate ??
+            DateTime(
+              selectedStartDate.year,
+              selectedStartDate.month,
+              selectedStartDate.day + 7,
+            ),
+      ),
+      builder: (BuildContext context, Widget? child) {
+        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
+        return Theme(
+          data: Theme.of(context).brightness == Brightness.light
+              ? ThemeData.light().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.primary,
+                  colorScheme: ColorScheme.light(
+                      primary: Theme.of(context).colorScheme.primary),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                )
+              : ThemeData.dark().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.secondary,
+                  colorScheme: ColorScheme.dark(
+                      primary: Theme.of(context).colorScheme.secondary),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+          child: child ?? SizedBox.shrink(),
+        );
+      },
+    );
+    if (picked != null) {
+      widget.determineBottomButton();
+      setState(() {
+        selectedStartDate = picked.start;
+        selectedEndDate = picked.end;
+      });
+      widget.setSelectedStartDate(picked.start);
+      widget.setSelectedEndDate(picked.end);
+    }
+  }
+
+  Future<void> selectStartDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedStartDate,
+      firstDate: DateTime(DateTime.now().year - 2),
+      lastDate: DateTime(DateTime.now().year + 2),
+      builder: (BuildContext context, Widget? child) {
+        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
+        return Theme(
+          data: Theme.of(context).brightness == Brightness.light
+              ? ThemeData.light().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.primary,
+                  colorScheme: ColorScheme.light(
+                      primary: Theme.of(context).colorScheme.primary),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                )
+              : ThemeData.dark().copyWith(
+                  primaryColor: Theme.of(context).colorScheme.secondary,
+                  colorScheme: ColorScheme.dark(
+                      primary: Theme.of(context).colorScheme.secondary),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+          child: child ?? SizedBox.shrink(),
+        );
+      },
+    );
+    setSelectedStartDate(picked);
+  }
+
+  setSelectedStartDate(DateTime? date) {
+    if (date != null && date != selectedStartDate) {
+      widget.setSelectedStartDate(date);
+      setState(() {
+        selectedStartDate = date;
+      });
+    }
+    widget.determineBottomButton();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.end,
+            alignment: WrapAlignment.center,
+            children: [
+              IntrinsicWidth(
+                child: TappableTextEntry(
+                  title: convertToMoney(selectedAmount ?? 0),
+                  placeholder: convertToMoney(0),
+                  showPlaceHolderWhenTextEquals: convertToMoney(0),
+                  onTap: () {
+                    selectAmount(context);
+                  },
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                  internalPadding:
+                      EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                ),
+              ),
+              IntrinsicWidth(
+                child: Row(
+                  children: [
+                    selectedRecurrence != "Custom"
+                        ? TappableTextEntry(
+                            title: "/ " + selectedPeriodLength.toString(),
+                            placeholder: "/ 0",
+                            showPlaceHolderWhenTextEquals: "/ 0",
+                            onTap: () {
+                              selectPeriodLength(context);
+                            },
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            internalPadding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 3),
+                          )
+                        : TextFont(
+                            text: " /",
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    TappableTextEntry(
+                      title: selectedRecurrenceDisplay,
+                      placeholder: "",
+                      onTap: () {
+                        selectRecurrence(context);
+                      },
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      internalPadding:
+                          EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Transform.translate(
+          offset: Offset(
+              0,
+              selectedEndDate == null && selectedRecurrence == "Custom"
+                  ? 0
+                  : -5),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: selectedRecurrence != "Custom"
+                ? Tappable(
+                    onTap: () {
+                      selectStartDate(context);
+                    },
+                    color: Colors.transparent,
+                    borderRadius: 15,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                      child: Center(
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.end,
+                          runAlignment: WrapAlignment.center,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5.8),
+                              child: TextFont(
+                                text: "beginning ",
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IgnorePointer(
+                              child: TappableTextEntry(
+                                title:
+                                    getWordedDateShortMore(selectedStartDate),
+                                placeholder: "",
+                                onTap: () {
+                                  selectAmount(context);
+                                },
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                internalPadding: EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 4),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 5),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : Tappable(
+                    onTap: () {
+                      selectDateRange(context);
+                    },
+                    color: Colors.transparent,
+                    borderRadius: 15,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                      child: Center(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IgnorePointer(
+                              child: TappableTextEntry(
+                                title: selectedEndDate == null
+                                    ? null
+                                    : getWordedDateShort(selectedStartDate) +
+                                        " - " +
+                                        getWordedDateShort(selectedEndDate!),
+                                placeholder: "Select Custom Period",
+                                onTap: () {},
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                internalPadding: EdgeInsets.symmetric(
+                                    vertical: 2, horizontal: 4),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 5),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }

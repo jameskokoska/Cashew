@@ -51,7 +51,7 @@ Map<String, dynamic> defaultPreferences() {
     "notificationsUpcomingTransactions": true,
     "notificationHourUpcomingTransactions": 11,
     "notificationMinuteUpcomingTransactions": 0,
-    "materialYou": false,
+    "materialYou": true,
     "colorTintCategoryIcon": false,
     "sendTransactionsToServerQueue": {},
     "currentUserEmail": "",
@@ -71,5 +71,6 @@ Map<String, dynamic> defaultPreferences() {
     "emailScanning": false,
     "legacyTransactionAmountColors": false,
     "massEditSelectedTransactions": false,
+    "searchFilters": false,
   };
 }

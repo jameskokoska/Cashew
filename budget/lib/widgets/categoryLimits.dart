@@ -82,7 +82,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                         child: widget.selectedCategories.isEmpty ||
                                 widget.selectedCategories
                                     .contains(category.categoryPk)
-                            ? StreamBuilder<CategoryBudgetLimit>(
+                            ? StreamBuilder<CategoryBudgetLimit?>(
                                 stream: database
                                     .getCategoryLimit(
                                         widget.budgetPk, category.categoryPk)

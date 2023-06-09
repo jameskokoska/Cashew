@@ -27,8 +27,9 @@ import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
-import 'package:clock/clock.dart';
+import 'package:flutter/scheduler.dart' show SchedulerBinding, timeDilation;
+// import 'package:feature_discovery/feature_discovery.dart';
+
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
 /*
@@ -485,7 +486,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return
+        // FeatureDiscovery(
+        //   child:
+        MaterialApp(
       shortcuts: <ShortcutActivator, Intent>{
         LogicalKeySet(LogicalKeyboardKey.escape): const EscapeIntent(),
         LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit1):
@@ -661,6 +665,7 @@ class App extends StatelessWidget {
           ),
         );
       },
+      // ),
     );
   }
 }

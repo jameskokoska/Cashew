@@ -214,6 +214,7 @@ class SettingsContainerOutlined extends StatelessWidget {
     this.onTap,
     this.verticalPadding,
     this.iconSize,
+    this.isExpanded = true,
   }) : super(key: key);
 
   final String title;
@@ -223,10 +224,41 @@ class SettingsContainerOutlined extends StatelessWidget {
   final VoidCallback? onTap;
   final double? verticalPadding;
   final double? iconSize;
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
     double defaultIconSize = 25;
+    Widget textContent = description == null
+        ? TextFont(
+            fixParagraphMargin: true,
+            text: title,
+            fontSize: isExpanded == false ? 16 : 15,
+            fontWeight: FontWeight.bold,
+            maxLines: 1,
+            overflow: TextOverflow.clip,
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFont(
+                fixParagraphMargin: true,
+                text: title,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                maxLines: 1,
+              ),
+              Container(height: 3),
+              TextFont(
+                text: description!,
+                fontSize: 11,
+                maxLines: 5,
+                textColor:
+                    Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+              ),
+            ],
+          );
     return Padding(
       padding: EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
       child: Tappable(
@@ -250,8 +282,10 @@ class SettingsContainerOutlined extends StatelessWidget {
             bottom: verticalPadding ?? 14,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize:
+                isExpanded == false ? MainAxisSize.min : MainAxisSize.max,
             children: [
               icon == null
                   ? SizedBox.shrink()
@@ -266,40 +300,14 @@ class SettingsContainerOutlined extends StatelessWidget {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
-              Expanded(
-                child: description == null
-                    ? TextFont(
-                        fixParagraphMargin: true,
-                        text: title,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFont(
-                            fixParagraphMargin: true,
-                            text: title,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            maxLines: 1,
-                          ),
-                          Container(height: 3),
-                          TextFont(
-                            text: description!,
-                            fontSize: 11,
-                            maxLines: 5,
-                            textColor: Theme.of(context)
-                                .colorScheme
-                                .secondary
-                                .withOpacity(0.5),
-                          ),
-                        ],
+              isExpanded
+                  ? Expanded(child: textContent)
+                  : Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: textContent,
                       ),
-              ),
+                    ),
               Opacity(opacity: 0.5, child: afterWidget ?? SizedBox())
             ],
           ),

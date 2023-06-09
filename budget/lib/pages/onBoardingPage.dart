@@ -1,10 +1,26 @@
+import 'package:budget/colors.dart';
+import 'package:budget/database/tables.dart';
+import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:flutter/services.dart';
 import '../functions.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({Key? key, this.popNavigationWhenDone = false})
@@ -35,7 +51,34 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
   FocusNode _focusNode = FocusNode();
   late FocusAttachment _focusAttachment;
 
-  nextNavigation() {
+  double? selectedAmount;
+  int selectedPeriodLength = 1;
+  DateTime selectedStartDate =
+      DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime? selectedEndDate;
+  String selectedRecurrence = "Monthly";
+
+  nextNavigation() async {
+    if (selectedAmount != null && selectedAmount != 0) {
+      int order = await database.getAmountOfBudgets();
+      await database.createOrUpdateBudget(
+        Budget(
+          budgetPk: DateTime.now().millisecondsSinceEpoch,
+          name: "Budget",
+          amount: selectedAmount ?? 0,
+          startDate: selectedStartDate,
+          endDate: selectedEndDate ?? DateTime.now(),
+          allCategoryFks: true,
+          addedTransactionsOnly: false,
+          periodLength: selectedPeriodLength,
+          dateCreated: DateTime.now(),
+          pinned: true,
+          order: order,
+          walletFk: 0,
+          reoccurrence: mapRecurrence(selectedRecurrence),
+        ),
+      );
+    }
     if (widget.popNavigationWhenDone) {
       Navigator.pop(context);
     } else {
@@ -90,77 +133,41 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
     final List<Widget> children = [
-      OnBoardPage(
-        widgets: [
-          Container(
-            constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.height <=
-                        MediaQuery.of(context).size.width
-                    ? MediaQuery.of(context).size.height * 0.5
-                    : 300),
-            child: Image(
-              image: AssetImage("assets/landing/DepressedMan.png"),
-            ),
-          ),
-          SizedBox(height: 15),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: TextFont(
-              text: "Losing track of your transactions?",
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              fontSize: 25,
-              maxLines: 5,
-            ),
-          ),
-          SizedBox(height: 15),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: TextFont(
-              text: "It's important to be mindful of your purchases.",
-              textAlign: TextAlign.center,
-              fontSize: 16,
-              maxLines: 5,
-            ),
-          ),
-        ],
-      ),
-      OnBoardPage(
-        widgets: [
-          Container(
-            constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.height <=
-                        MediaQuery.of(context).size.width
-                    ? MediaQuery.of(context).size.height * 0.5
-                    : 300),
-            child: Image(
-              image: AssetImage("assets/landing/BankOrPig.png"),
-            ),
-          ),
-          SizedBox(height: 15),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: TextFont(
-              text: "Save money by knowing where your money is going.",
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              fontSize: 25,
-              maxLines: 5,
-            ),
-          ),
-          SizedBox(height: 15),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: TextFont(
-              text:
-                  "Identify and remove unnecessary spending habits from your life.",
-              textAlign: TextAlign.center,
-              fontSize: 16,
-              maxLines: 5,
-            ),
-          ),
-        ],
-      ),
+      // OnBoardPage(
+      //   widgets: [
+      //     Container(
+      //       constraints: BoxConstraints(
+      //           maxWidth: MediaQuery.of(context).size.height <=
+      //                   MediaQuery.of(context).size.width
+      //               ? MediaQuery.of(context).size.height * 0.5
+      //               : 300),
+      //       child: Image(
+      //         image: AssetImage("assets/landing/DepressedMan.png"),
+      //       ),
+      //     ),
+      //     SizedBox(height: 15),
+      //     Padding(
+      //       padding: const EdgeInsets.symmetric(horizontal: 25),
+      //       child: TextFont(
+      //         text: "Losing track of your spending?",
+      //         fontWeight: FontWeight.bold,
+      //         textAlign: TextAlign.center,
+      //         fontSize: 25,
+      //         maxLines: 5,
+      //       ),
+      //     ),
+      //     SizedBox(height: 15),
+      //     Padding(
+      //       padding: const EdgeInsets.symmetric(horizontal: 25),
+      //       child: TextFont(
+      //         text: "It's important to be mindful of your purchases.",
+      //         textAlign: TextAlign.center,
+      //         fontSize: 16,
+      //         maxLines: 5,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       OnBoardPage(
         widgets: [
           Container(
@@ -188,7 +195,78 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text: "Create budgets to understand your spending habits.",
+              text:
+                  "Enter your daily transactions to gain powerful insights into your spending habits.",
+              textAlign: TextAlign.center,
+              fontSize: 16,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 55),
+        ],
+      ),
+      OnBoardPage(
+        widgets: [
+          Container(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.height <=
+                        MediaQuery.of(context).size.width
+                    ? MediaQuery.of(context).size.height * 0.5
+                    : 300),
+            child: Image(
+              image: AssetImage("assets/landing/BankOrPig.png"),
+            ),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: TextFont(
+              text: "Set up a budget",
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              fontSize: 25,
+              maxLines: 5,
+            ),
+          ),
+          BudgetDetails(
+            determineBottomButton: () {},
+            setSelectedAmount: (amount, _) {
+              setState(() {
+                selectedAmount = amount;
+              });
+            },
+            initialSelectedAmount: selectedAmount,
+            setSelectedPeriodLength: (length) {
+              setState(() {
+                selectedPeriodLength = length;
+              });
+            },
+            initialSelectedPeriodLength: selectedPeriodLength,
+            setSelectedRecurrence: (recurrence) {
+              setState(() {
+                selectedRecurrence = recurrence;
+              });
+            },
+            initialSelectedRecurrence: selectedRecurrence,
+            setSelectedStartDate: (date) {
+              setState(() {
+                selectedStartDate = date;
+              });
+            },
+            initialSelectedStartDate: selectedStartDate,
+            setSelectedEndDate: (date) {
+              setState(() {
+                selectedEndDate = date;
+              });
+            },
+            initialSelectedEndDate: selectedEndDate,
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: TextFont(
+              text:
+                  "Choose an amount right for you.\nYou can always change it and add more budgets.",
               textAlign: TextAlign.center,
               fontSize: 16,
               maxLines: 5,
@@ -212,33 +290,86 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text: "Start getting on top of your transactions!",
+              text: "Welcome to Cashew!",
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
               fontSize: 25,
               maxLines: 5,
             ),
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 25),
+          SettingsContainerOutlined(
+            onTap: () async {
+              loadingIndeterminateKey.currentState?.setVisibility(true);
+              try {
+                await signInGoogle(
+                  context: context,
+                  waitForCompletion: false,
+                  drivePermissions: true,
+                  next: () {},
+                );
+                if (appStateSettings["username"] == "" && user != null) {
+                  updateSettings("username", user?.displayName ?? "",
+                      pagesNeedingRefresh: [0]);
+                }
+              } catch (e) {
+                print("Error signing in: " + e.toString());
+              }
+              List<drive.File>? files = (await getDriveFiles()).$2;
+              var result;
+              if ((files?.length ?? 0) > 0) {
+                result = await openPopup(
+                  context,
+                  icon: Icons.cloud_sync_rounded,
+                  title: "Backup Found",
+                  description: "Would you like to restore a backup?",
+                  onSubmit: () {
+                    Navigator.pop(context, true);
+                  },
+                  onCancel: () {
+                    Navigator.pop(context, false);
+                  },
+                  onSubmitLabel: "Restore",
+                  onCancelLabel: "Cancel",
+                );
+              }
+              if (result == true) {
+                chooseBackup(context);
+              } else {
+                nextNavigation();
+              }
+              loadingIndeterminateKey.currentState?.setVisibility(false);
+            },
+            title: "Sign In with Google",
+            icon: MoreIcons.google,
+            isExpanded: false,
+          ),
+          SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
               text:
-                  "Track your income, expenses, recurring scubscription transactions, and more!",
+                  "Keep your data backed up and synced across different platforms.",
               textAlign: TextAlign.center,
               fontSize: 16,
               maxLines: 5,
             ),
           ),
-          SizedBox(height: 20),
-          IntrinsicWidth(
-            child: Button(
-              label: "Let's go!",
-              onTap: () {
-                nextNavigation();
-              },
-            ),
+          SizedBox(height: 35),
+          LowKeyButton(
+            onTap: () {
+              nextNavigation();
+            },
+            text: "Continue Without Sign In",
           ),
+          // IntrinsicWidth(
+          //   child: Button(
+          //     label: "Let's go!",
+          //     onTap: () {
+          //       nextNavigation();
+          //     },
+          //   ),
+          // ),
         ],
       ),
     ];
@@ -254,6 +385,26 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           },
           controller: controller,
           children: children,
+        ),
+        Positioned(
+          bottom: 0,
+          child: IgnorePointer(
+            child: Container(
+              height: 100,
+              width: 1000,
+              foregroundDecoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).canvasColor.withOpacity(0.0),
+                    Theme.of(context).canvasColor,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.1, 1],
+                ),
+              ),
+            ),
+          ),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -276,7 +427,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                           previousOnBoardPage();
                         },
                         icon: Icons.arrow_back_rounded,
-                        size: getWidthNavigationSidebar(context) <= 0 ? 45 : 55,
+                        size: getWidthNavigationSidebar(context) <= 0 ? 50 : 65,
                       ),
                     ),
                     Row(
@@ -325,10 +476,11 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                       duration: Duration(milliseconds: 200),
                       child: ButtonIcon(
                         onTap: () {
-                          nextOnBoardPage(children.length);
+                          if (currentIndex < children.length - 1)
+                            nextOnBoardPage(children.length);
                         },
                         icon: Icons.arrow_forward_rounded,
-                        size: getWidthNavigationSidebar(context) <= 0 ? 45 : 55,
+                        size: getWidthNavigationSidebar(context) <= 0 ? 50 : 65,
                       ),
                     ),
                   ],
@@ -347,14 +499,17 @@ class OnBoardPage extends StatelessWidget {
   final List<Widget> widgets;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.25),
+    return Center(
+      child: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
           Column(
-            children: widgets,
+            children: [
+              SizedBox(height: 20),
+              ...widgets,
+              SizedBox(height: 80),
+            ],
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.25),
         ],
       ),
     );

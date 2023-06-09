@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Onboarding completed
     Added re-orderable homepage sections
     Fixed if budget amount is 0
     Tapping upcoming transaction notification opens Overdue transactions page

@@ -550,7 +550,7 @@ Future<bool> signInGoogle(
         description: "Check your connection and try again",
         icon: Icons.error_rounded,
         onTap: () async {},
-        timeout: Duration(milliseconds: 1400),
+        timeout: Duration(milliseconds: 3400),
       ),
     );
     updateSettings("currentUserEmail", "", updateGlobalState: false);
@@ -933,6 +933,16 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
   }
 }
 
+Future<(drive.DriveApi driveApi, List<drive.File>?)> getDriveFiles() async {
+  final authHeaders = await user!.authHeaders;
+  final authenticateClient = GoogleAuthClient(authHeaders);
+  drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
+
+  drive.FileList fileList = await driveApi.files
+      .list(spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+  return (driveApi, fileList.files);
+}
+
 class BackupManagement extends StatefulWidget {
   const BackupManagement({
     Key? key,
@@ -950,7 +960,7 @@ class BackupManagement extends StatefulWidget {
 class _BackupManagementState extends State<BackupManagement> {
   List<drive.File> filesState = [];
   List<int> deletedIndices = [];
-  drive.DriveApi? driveApiState;
+  late drive.DriveApi driveApiState;
   UniqueKey dropDownKey = UniqueKey();
   bool isLoading = true;
   bool autoBackups = appStateSettings["autoBackups"];
@@ -960,16 +970,9 @@ class _BackupManagementState extends State<BackupManagement> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      final authHeaders = await user!.authHeaders;
-      final authenticateClient = GoogleAuthClient(authHeaders);
-      drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
-      if (driveApi == null) {
-        throw "Failed to login to Google Drive";
-      }
-
-      drive.FileList fileList = await driveApi.files.list(
-          spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
-      List<drive.File>? files = fileList.files;
+      (drive.DriveApi, List<drive.File>?) result = await getDriveFiles();
+      drive.DriveApi driveApi = result.$1;
+      List<drive.File>? files = result.$2;
       if (files == null) {
         throw "No backups found.";
       }
@@ -1210,7 +1213,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                 );
                                 if (result == true)
                                   loadBackup(
-                                      context, driveApiState!, file.value);
+                                      context, driveApiState, file.value);
                               }
                               // else {
                               //   await openPopup(
@@ -1347,7 +1350,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                           .currentState!
                                                           .setVisibility(true);
                                                       await deleteBackup(
-                                                          driveApiState!,
+                                                          driveApiState,
                                                           file.value.id ?? "");
                                                       openSnackbar(
                                                         SnackbarMessage(

@@ -1433,7 +1433,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return expression;
   }
 
-  (Stream<CategoryBudgetLimit>, Future<CategoryBudgetLimit>) getCategoryLimit(
+  (Stream<CategoryBudgetLimit?>, Future<CategoryBudgetLimit?>) getCategoryLimit(
       int? budgetPk, int? categoryPk) {
     SimpleSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
         query = (select(categoryBudgetLimits)
@@ -1441,7 +1441,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               evaluateIfNull(t.budgetFk.equals(budgetPk ?? 0), budgetPk, true) &
               evaluateIfNull(
                   t.categoryFk.equals(categoryPk ?? 0), categoryPk, true)));
-    return (query.watchSingle(), query.getSingle());
+    return (query.watchSingleOrNull(), query.getSingleOrNull());
   }
 
   (Stream<CategoryBudgetLimit>, Future<CategoryBudgetLimit>)

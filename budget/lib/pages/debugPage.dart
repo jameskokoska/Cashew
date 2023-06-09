@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -129,12 +130,27 @@ class DebugPage extends StatelessWidget {
           onSwitched: (value) async {
             updateSettings("legacyTransactionAmountColors", value,
                 pagesNeedingRefresh: [0, 1, 2, 3]);
+            generateColors();
           },
           title: "Legacy transaction amount colors",
           description:
-              "Required restart. Use a less traditional transaction amount color scheme.",
+              "Use a less traditional transaction amount color scheme.",
           initialValue: appStateSettings["legacyTransactionAmountColors"],
           icon: Icons.color_lens,
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
+            updateSettings("searchFilters", value,
+                pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          title: "Search Filters",
+          description: "Filters for search. Work in progress",
+          initialValue: appStateSettings["searchFilters"],
+          icon: Icons.color_lens,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 13, right: 13),
+          child: TextFont(text: "Animation Scale"),
         ),
         SliderSelector(
           min: 0,
