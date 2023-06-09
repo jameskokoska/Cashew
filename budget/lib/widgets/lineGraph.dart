@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';

@@ -7,6 +7,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/foundation.dart';

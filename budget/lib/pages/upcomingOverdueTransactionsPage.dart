@@ -5,7 +5,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';

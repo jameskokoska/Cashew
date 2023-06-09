@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/main.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
@@ -8,24 +9,31 @@ class NoResults extends StatelessWidget {
     Key? key,
     required this.message,
     this.tintColor,
-    this.padding = const EdgeInsets.only(top: 35, right: 30, left: 30),
+    this.padding,
   }) : super(key: key);
   final String message;
   final Color? tintColor;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: padding,
+        padding: padding ??
+            EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.4 > 400 ? 100 : 35,
+              right: 30,
+              left: 30,
+            ),
         child: Column(
           children: [
             Container(
               constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.height <=
                           MediaQuery.of(context).size.width
-                      ? MediaQuery.of(context).size.height * 0.4
+                      ? MediaQuery.of(context).size.height * 0.4 > 400
+                          ? 400
+                          : MediaQuery.of(context).size.height * 0.4
                       : 270),
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(

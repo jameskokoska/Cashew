@@ -1,4 +1,5 @@
 import 'package:budget/main.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/textWidgets.dart';

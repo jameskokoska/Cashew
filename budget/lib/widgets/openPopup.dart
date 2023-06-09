@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:drift/drift.dart' hide Column;

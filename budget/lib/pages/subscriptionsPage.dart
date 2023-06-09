@@ -3,7 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -15,6 +15,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import '../functions.dart';
+import 'package:budget/struct/settings.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   const SubscriptionsPage({Key? key}) : super(key: key);
@@ -277,11 +278,15 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
 class UpcomingTransactionDateHeader extends StatelessWidget {
   const UpcomingTransactionDateHeader(
-      {Key? key, required this.transaction, this.small = false})
+      {Key? key,
+      required this.transaction,
+      this.small = false,
+      this.useHorizontalPaddingConstrained = true})
       : super(key: key);
 
   final Transaction transaction;
   final bool small;
+  final bool useHorizontalPaddingConstrained;
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +296,9 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
             .inDays;
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: getHorizontalPaddingConstrained(context),
+        horizontal: useHorizontalPaddingConstrained
+            ? getHorizontalPaddingConstrained(context)
+            : 0,
       ),
       child: Padding(
         padding: EdgeInsets.only(

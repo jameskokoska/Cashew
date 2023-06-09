@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:budget/struct/settings.dart';
 
 class SharedBudgetSettings extends StatefulWidget {
   SharedBudgetSettings({
@@ -213,13 +214,13 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                     period: Duration(milliseconds: 1000),
                     baseColor: appStateSettings["materialYou"]
                         ? Theme.of(context).colorScheme.secondaryContainer
-                        : getColor(context, "lightDarkAccentHeavyLight")!,
+                        : getColor(context, "lightDarkAccentHeavyLight"),
                     highlightColor: appStateSettings["materialYou"]
                         ? Theme.of(context)
                             .colorScheme
                             .secondaryContainer
                             .withOpacity(0.2)
-                        : getColor(context, "lightDarkAccentHeavy")!
+                        : getColor(context, "lightDarkAccentHeavy")
                             .withAlpha(20),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -234,11 +235,11 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                         margin: const EdgeInsets.only(bottom: 8.0, top: 4.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: getColor(context, "lightDarkAccent")!
+                          color: getColor(context, "lightDarkAccent")
                               .withOpacity(0.5),
                           border: Border.all(
                             width: 1.5,
-                            color: getColor(context, "lightDarkAccentHeavy")!,
+                            color: getColor(context, "lightDarkAccentHeavy"),
                           ),
                         ),
                         child: Center(
@@ -246,7 +247,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                             text: "+",
                             fontWeight: FontWeight.bold,
                             textColor:
-                                getColor(context, "lightDarkAccentHeavy")!,
+                                getColor(context, "lightDarkAccentHeavy"),
                           ),
                         ),
                       ),
@@ -265,13 +266,13 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                               (1000 + randomDouble[i % 10] * 520).toInt()),
                       baseColor: appStateSettings["materialYou"]
                           ? Theme.of(context).colorScheme.secondaryContainer
-                          : getColor(context, "lightDarkAccentHeavyLight")!,
+                          : getColor(context, "lightDarkAccentHeavyLight"),
                       highlightColor: appStateSettings["materialYou"]
                           ? Theme.of(context)
                               .colorScheme
                               .secondaryContainer
                               .withOpacity(0.2)
-                          : getColor(context, "lightDarkAccentHeavy")!
+                          : getColor(context, "lightDarkAccentHeavy")
                               .withAlpha(20),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -283,7 +284,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                               horizontal: 25, vertical: 15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: getColor(context, "lightDarkAccent")!
+                            color: getColor(context, "lightDarkAccent")
                                 .withOpacity(0.5),
                           ),
                           child: Column(

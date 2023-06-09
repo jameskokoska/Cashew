@@ -20,10 +20,12 @@ import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
+import 'package:budget/widgets/util/initializeBiometrics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import '../functions.dart';
+import 'package:budget/struct/settings.dart';
 
 //To get SHA1 Key run
 // ./gradlew signingReport
@@ -128,22 +130,9 @@ class SettingsPageState extends State<SettingsPage>
           },
         ),
         EnterName(),
-        SettingsHeader(title: "Preferences"),
-        // In the future, each wallet will have its own currency
-        // SettingsContainerDropdown(
-        //   title: "Currency Icon",
-        //   icon: Icons.emoji_symbols_rounded,
-        //   initial: appStateSettings["currencyIcon"],
-        //   items: ["\$", "£", "¥", "€", "₩", "₹"],
-        //   onChanged: (value) {
-        //     updateSettings(
-        //       "currencyIcon",
-        //       value,
-        //       pagesNeedingRefresh: [0, 1, 2, 3],
-        //       updateGlobalState: true,
-        //     );
-        //   },
-        // ),
+        biometricsAvailable
+            ? SettingsHeader(title: "Preferences")
+            : SizedBox.shrink(),
         biometricsAvailable
             ? SettingsContainerSwitch(
                 title: "Require Biometrics",

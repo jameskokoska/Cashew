@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
@@ -8,7 +9,7 @@ import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';

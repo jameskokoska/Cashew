@@ -2,10 +2,11 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/homePage.dart';
+import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/SelectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -429,7 +430,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   child: SizedBox(height: 13),
                 ),
                 SliverToBoxAdapter(
-                  child: SlidingSelector(
+                  child: SlidingSelectorIncomeExpense(
                       onSelected: (index) {
                         setState(() {
                           selectedIncome = index == 1

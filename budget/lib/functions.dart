@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:universal_io/io.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:budget/struct/settings.dart';
 
 // Add bottom padding for web Safari browsers
 // double bottomPaddingSafeArea = getOSInsideWeb() == "iOS" ? 20 : 0;
@@ -767,7 +769,7 @@ double getKeyboardHeight(context) {
 
 Future<String> getDeviceInfo() async {
   if (kIsWeb) {
-    String webBrowserInfo = window.navigator.userAgent.toString();
+    String webBrowserInfo = html.window.navigator.userAgent.toString();
     return webBrowserInfo
         .toLowerCase()
         .replaceAll("mozilla/5.0", "")

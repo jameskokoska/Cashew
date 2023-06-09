@@ -1,18 +1,24 @@
 import 'dart:convert';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/util/initializeBiometrics.dart';
+import 'package:budget/widgets/util/watchForDayChange.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:local_auth/local_auth.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
+import 'package:budget/database/initializeDatabase.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
+import 'package:budget/widgets/util/scrollBehaviorOverride.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -107,69 +113,6 @@ List<double> randomDouble = [
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;
 
-// setAppStateSettings
-Future<bool> updateSettings(setting, value,
-    {List<int> pagesNeedingRefresh = const [],
-    bool updateGlobalState = true}) async {
-  appStateSettings[setting] = value;
-  await sharedPreferences.setString(
-      'userSettings', json.encode(appStateSettings));
-  if (updateGlobalState == true) appStateKey.currentState?.refreshAppState();
-  //Refresh any pages listed
-  for (int page in pagesNeedingRefresh) {
-    if (page == 0) {
-      homePageStateKey.currentState?.refreshState();
-    } else if (page == 1) {
-      transactionsListPageStateKey.currentState?.refreshState();
-    } else if (page == 2) {
-      budgetsListPageStateKey.currentState?.refreshState();
-    } else if (page == 3) {
-      settingsPageStateKey.currentState?.refreshState();
-    }
-  }
-
-  return true;
-}
-
-Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
-  Map<String, dynamic> themeSetting = {
-    "system": ThemeMode.system,
-    "light": ThemeMode.light,
-    "dark": ThemeMode.dark,
-  };
-
-  Map<String, dynamic> userSettingsNew = {...userSettings};
-  userSettingsNew["theme"] = themeSetting[userSettings["theme"]];
-  userSettingsNew["accentColor"] = HexColor(userSettings["accentColor"]);
-  return userSettingsNew;
-}
-
-Future<Map<String, dynamic>> getUserSettings() async {
-  Map<String, dynamic> userPreferencesDefault = defaultPreferences();
-
-  String? userSettings = sharedPreferences.getString('userSettings');
-  try {
-    if (userSettings == null) {
-      throw ("no settings on file");
-    }
-    print("Found user settings on file");
-
-    var userSettingsJSON = json.decode(userSettings);
-    //Set to defaults if a new setting is added, but no entry saved
-    userPreferencesDefault.forEach((key, value) {
-      if (userSettingsJSON[key] == null) {
-        userSettingsJSON[key] = userPreferencesDefault[key];
-      }
-    });
-    return userSettingsJSON;
-  } catch (e) {
-    print("There was an error, settings corrupted");
-    await sharedPreferences.setString(
-        'userSettings', json.encode(userPreferencesDefault));
-    return userPreferencesDefault;
-  }
-}
-
 Future<bool> updateCachedWalletCurrencies() async {
   List<TransactionWallet> wallets = await database.getAllWallets();
   for (TransactionWallet wallet in wallets) {
@@ -185,261 +128,9 @@ Future<bool> updateCachedWalletCurrencies() async {
   return true;
 }
 
-Future<bool> initializeSettings() async {
-  Map<String, dynamic> userSettings = await getUserSettings();
-  if (userSettings["databaseJustImported"] == true) {
-    try {
-      print("Settings were loaded from backup, trying to restore");
-      String storedSettings = (await database.getSettings()).settingsJSON;
-      await sharedPreferences.setString('userSettings', storedSettings);
-      print(storedSettings);
-      userSettings = json.decode(storedSettings);
-      //we need to load any defaults to migrate if on an older version backup restores
-      //Set to defaults if a new setting is added, but no entry saved
-      Map<String, dynamic> userPreferencesDefault = defaultPreferences();
-      userPreferencesDefault.forEach((key, value) {
-        if (userSettings[key] == null) {
-          userSettings[key] = userPreferencesDefault[key];
-        }
-      });
-      updateSettings("databaseJustImported", false);
-      print("Settings were restored");
-    } catch (e) {
-      print("Error restoring imported settings " + e.toString());
-    }
-  }
-
-  appStateSettings = userSettings;
-
-  packageInfoGlobal = await PackageInfo.fromPlatform();
-
-  // Do some actions based on loaded settings
-  if (appStateSettings["accentSystemColor"] == true) {
-    await SystemTheme.accentColor.load();
-    Color accentColor = SystemTheme.accentColor.accent;
-    appStateSettings["accentColor"] = toHexString(accentColor);
-  }
-
-  if (appStateSettings["cachedWalletCurrencies"] == null ||
-      appStateSettings["cachedWalletCurrencies"].keys.length <= 0) {
-    print("wallet cache is empty, need to add in values");
-    await updateCachedWalletCurrencies();
-  }
-
-  String? retrievedClientID = await sharedPreferences.getString("clientID");
-  if (retrievedClientID == null) {
-    String systemID = await getDeviceInfo();
-    String newClientID = systemID
-            .substring(0, (systemID.length > 17 ? 17 : systemID.length))
-            .replaceAll("-", "_") +
-        "-" +
-        DateTime.now().millisecondsSinceEpoch.toString();
-    await sharedPreferences.setString('clientID', newClientID);
-    clientID = newClientID;
-  } else {
-    clientID = retrievedClientID;
-  }
-
-  timeDilation = double.parse(appStateSettings["animationSpeed"].toString());
-
-  generateColors();
-
-  List<String> keyOrder = List<String>.from(
-      appStateSettings["homePageOrder"].map((element) => element.toString()));
-  List<String> defaultPrefPageOrder = List<String>.from(
-      defaultPreferences()["homePageOrder"]
-          .map((element) => element.toString()));
-  for (String key in keyOrder) {
-    if (!defaultPreferences()["homePageOrder"].contains(key)) {
-      appStateSettings["homePageOrder"] = defaultPrefPageOrder;
-      print("Fixed homepage ordering");
-      break;
-    }
-  }
-  for (String key in defaultPrefPageOrder) {
-    if (!keyOrder.contains(key)) {
-      appStateSettings["homePageOrder"] = defaultPrefPageOrder;
-      print("Fixed homepage ordering");
-      break;
-    }
-  }
-
-  return true;
-}
-
-//Initialize default values in database
-Future<bool> initializeDatabase() async {
-  //Initialize default categories
-  if ((await database.getAllCategories()).length <= 0) {
-    for (TransactionCategory category in defaultCategories()) {
-      await database.createOrUpdateCategory(category,
-          customDateTimeModified: DateTime(0));
-    }
-  }
-  if ((await database.getAllWallets()).length <= 0) {
-    await database.createOrUpdateWallet(
-      TransactionWallet(
-        walletPk: 0,
-        name: "Wallet",
-        dateCreated: DateTime.now(),
-        order: 0,
-        currency: getDevicesDefaultCurrencyCode(),
-        dateTimeModified: null,
-        decimals: 2,
-      ),
-      customDateTimeModified: DateTime(0),
-    );
-  }
-  return true;
-}
-
-Future<bool> checkBiometrics(
-    {bool checkAlways = false,
-    String message = 'Please authenticate to continue.'}) async {
-  if (kIsWeb) return true;
-  final LocalAuthentication auth = LocalAuthentication();
-  final bool requireAuth = checkAlways || appStateSettings["requireAuth"];
-  biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
-      await auth.isDeviceSupported();
-  bool didAuthenticate = false;
-  if (requireAuth == true && biometricsAvailable == true) {
-    didAuthenticate = await auth.authenticate(
-        localizedReason: message,
-        options: const AuthenticationOptions(biometricOnly: true));
-  } else {
-    didAuthenticate = true;
-  }
-  return didAuthenticate;
-}
-
-class WatchForDayChange extends StatefulWidget {
-  final Widget child;
-  const WatchForDayChange({required this.child, super.key});
-
-  @override
-  _WatchForDayChangeState createState() => _WatchForDayChangeState();
-}
-
-class _WatchForDayChangeState extends State<WatchForDayChange> {
-  late DateTime _currentDate;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentDate = DateTime.now();
-    _startTimer();
-  }
-
-  void _startTimer() {
-    Future.delayed(Duration(seconds: 1), () {
-      if (DateTime.now().day != _currentDate.day) {
-        setState(() {
-          _currentDate = DateTime.now();
-        });
-        appStateKey.currentState?.refreshAppState();
-        homePageStateKey.currentState?.refreshState();
-        transactionsListPageStateKey.currentState?.refreshState();
-        budgetsListPageStateKey.currentState?.refreshState();
-        settingsPageStateKey.currentState?.refreshState();
-      }
-      _startTimer();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
-  }
-}
-
-class InitializeBiometrics extends StatefulWidget {
-  final Widget child;
-  const InitializeBiometrics({required this.child, super.key});
-
-  @override
-  State<InitializeBiometrics> createState() => _InitializeBiometricsState();
-}
-
-class _InitializeBiometricsState extends State<InitializeBiometrics> {
-  bool? authenticated;
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () async {
-      final bool result = await checkBiometrics();
-      setState(() {
-        authenticated = result;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (appStateSettings["requireAuth"] == false) {
-      return widget.child;
-    }
-    Widget child = Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Tappable(
-        onTap: () async {
-          setState(() {
-            authenticated = null;
-          });
-          final bool result = await checkBiometrics();
-          setState(() {
-            authenticated = result;
-          });
-        },
-        child: Column(
-          key: ValueKey(0),
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BreathingWidget(
-              child: Center(
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 500),
-                  switchInCurve: Curves.easeInOut,
-                  switchOutCurve: Curves.easeInOut,
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                    return FadeScaleTransition(
-                        animation: animation, child: child);
-                  },
-                  child: authenticated == false
-                      ? Icon(
-                          Icons.lock,
-                          size: 50,
-                          color: Theme.of(context).colorScheme.secondary,
-                        )
-                      : SizedBox.shrink(),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-    if (authenticated == true) {
-      child = SizedBox(key: ValueKey(1), child: widget.child);
-    }
-    return AnimatedSwitcher(
-      duration: Duration(milliseconds: 500),
-      switchInCurve: Curves.easeInOut,
-      switchOutCurve: Curves.easeInOut,
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeScaleTransition(animation: animation, child: child);
-      },
-      child: child,
-    );
-  }
-}
-
 GlobalKey<_InitializeAppState> appStateKey = GlobalKey();
 GlobalKey<PageNavigationFrameworkState> pageNavigationFrameworkKey =
     GlobalKey();
-
-Map<String, dynamic> appStateSettings = {};
 
 class InitializeApp extends StatefulWidget {
   InitializeApp({Key? key}) : super(key: key);
@@ -459,26 +150,6 @@ class _InitializeAppState extends State<InitializeApp> {
   }
 }
 
-class EscapeIntent extends Intent {
-  const EscapeIntent();
-}
-
-class Digit1Intent extends Intent {
-  const Digit1Intent();
-}
-
-class Digit2Intent extends Intent {
-  const Digit2Intent();
-}
-
-class Digit3Intent extends Intent {
-  const Digit3Intent();
-}
-
-class Digit4Intent extends Intent {
-  const Digit4Intent();
-}
-
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class App extends StatelessWidget {
@@ -490,60 +161,8 @@ class App extends StatelessWidget {
         // FeatureDiscovery(
         //   child:
         MaterialApp(
-      shortcuts: <ShortcutActivator, Intent>{
-        LogicalKeySet(LogicalKeyboardKey.escape): const EscapeIntent(),
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit1):
-            const Digit1Intent(),
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit2):
-            const Digit2Intent(),
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit3):
-            const Digit3Intent(),
-        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.digit4):
-            const Digit4Intent(),
-      },
-      actions: <Type, Action<Intent>>{
-        EscapeIntent: CallbackAction<EscapeIntent>(
-          onInvoke: (EscapeIntent intent) => {
-            if (navigatorKey.currentState!.canPop())
-              navigatorKey.currentState!.pop()
-            else
-              pageNavigationFrameworkKey.currentState!
-                  .changePage(0, switchNavbar: true)
-          },
-        ),
-        Digit1Intent: CallbackAction<Digit1Intent>(
-          onInvoke: (Digit1Intent intent) => {
-            // we are on the root of navigation pages
-            if (!navigatorKey.currentState!.canPop())
-              pageNavigationFrameworkKey.currentState!
-                  .changePage(0, switchNavbar: true)
-          },
-        ),
-        Digit2Intent: CallbackAction<Digit2Intent>(
-          onInvoke: (Digit2Intent intent) => {
-            // we are on the root of navigation pages
-            if (!navigatorKey.currentState!.canPop())
-              pageNavigationFrameworkKey.currentState!
-                  .changePage(1, switchNavbar: true)
-          },
-        ),
-        Digit3Intent: CallbackAction<Digit3Intent>(
-          onInvoke: (Digit3Intent intent) => {
-            // we are on the root of navigation pages
-            if (!navigatorKey.currentState!.canPop())
-              pageNavigationFrameworkKey.currentState!
-                  .changePage(2, switchNavbar: true)
-          },
-        ),
-        Digit4Intent: CallbackAction<Digit4Intent>(
-          onInvoke: (Digit4Intent intent) => {
-            // we are on the root of navigation pages
-            if (!navigatorKey.currentState!.canPop())
-              pageNavigationFrameworkKey.currentState!
-                  .changePage(3, switchNavbar: true)
-          },
-        ),
-      },
+      shortcuts: shortcuts,
+      actions: keyboardIntents,
       themeAnimationDuration: Duration(milliseconds: 700),
       key: ValueKey(1),
       title: 'Cashew',
@@ -607,7 +226,7 @@ class App extends StatelessWidget {
             : null,
         extensions: <ThemeExtension<dynamic>>[appColorsDark],
       ),
-      scrollBehavior: ScrollBehavior(),
+      scrollBehavior: ScrollBehaviorOverride(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
       home: SafeArea(
         top: false,
@@ -668,13 +287,4 @@ class App extends StatelessWidget {
       // ),
     );
   }
-}
-
-class ScrollBehavior extends MaterialScrollBehavior {
-  // Override behavior methods and getters like dragDevices
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
 }

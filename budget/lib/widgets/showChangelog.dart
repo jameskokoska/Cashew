@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
@@ -8,6 +9,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Refactors main.dart
+    Refactored homepage
+    No results formatting fixes on web
+    Fixed browser info on web
+    Fixed homepage on web
     Onboarding completed
     Added re-orderable homepage sections
     Fixed if budget amount is 0
