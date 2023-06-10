@@ -545,46 +545,56 @@ class TransactionsListPageState extends State<TransactionsListPage>
                           );
                         },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: IconButton(
-                            padding: EdgeInsets.all(15),
-                            icon: Icon(
-                              Icons.arrow_left_rounded,
-                              size: 30,
+                      getWidthNavigationSidebar(context) <= 0
+                          ? SizedBox.shrink()
+                          : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(15),
+                                  icon: Icon(
+                                    Icons.arrow_left_rounded,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    _pageController.animateToPage(
+                                      (_pageController.page ??
+                                                  _pageController.initialPage)
+                                              .round() -
+                                          1,
+                                      duration: Duration(milliseconds: 1000),
+                                      curve: Curves.easeInOutCubicEmphasized,
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                            onPressed: () {
-                              _pageController.animateToPage(
-                                int.parse(_pageController.page.toString()) - 1,
-                                duration: Duration(milliseconds: 1000),
-                                curve: Curves.easeInOutCubicEmphasized,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                            padding: EdgeInsets.all(15),
-                            icon: Icon(
-                              Icons.arrow_right_rounded,
-                              size: 30,
+                      getWidthNavigationSidebar(context) <= 0
+                          ? SizedBox.shrink()
+                          : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(15),
+                                  icon: Icon(
+                                    Icons.arrow_right_rounded,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    _pageController.animateToPage(
+                                      (_pageController.page ??
+                                                  _pageController.initialPage)
+                                              .round() +
+                                          1,
+                                      duration: Duration(milliseconds: 1000),
+                                      curve: Curves.easeInOutCubicEmphasized,
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                            onPressed: () {
-                              _pageController.animateToPage(
-                                int.parse(_pageController.page.toString()) + 1,
-                                duration: Duration(milliseconds: 1000),
-                                curve: Curves.easeInOutCubicEmphasized,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),

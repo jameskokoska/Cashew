@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Disabled change transaction page if navigation bar hidden
     Month is always centered on transaction page when changing screen sizes
     Fixed battery saver colors
     PageView on transactions page uses builder for infinite built on demand scrolling
