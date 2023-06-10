@@ -109,7 +109,6 @@ class SettingsPageState extends State<SettingsPage>
           title: "Material You",
           onSwitched: (value) {
             updateSettings("materialYou", value, updateGlobalState: true);
-            generateColors();
           },
           initialValue: appStateSettings["materialYou"],
           icon: Icons.brush_rounded,
@@ -130,9 +129,17 @@ class SettingsPageState extends State<SettingsPage>
           },
         ),
         EnterName(),
-        biometricsAvailable
-            ? SettingsHeader(title: "Preferences")
-            : SizedBox.shrink(),
+        SettingsHeader(title: "Preferences"),
+        SettingsContainerSwitch(
+          title: "Battery Saver",
+          description: "Optimize the UI and increase performance",
+          onSwitched: (value) {
+            updateSettings("batterySaver", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          initialValue: appStateSettings["batterySaver"],
+          icon: Icons.battery_charging_full_rounded,
+        ),
         biometricsAvailable
             ? SettingsContainerSwitch(
                 title: "Require Biometrics",

@@ -381,6 +381,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.textColor,
     this.onBackButton,
     this.expandedHeight = 200,
+    this.bottom,
   }) : super(key: key);
 
   final String title;
@@ -403,11 +404,13 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final VoidCallback? onBackButton;
   final double expandedHeight;
   final double collapsedHeight = 65;
+  final PreferredSizeWidget? bottom;
   @override
   Widget build(BuildContext context) {
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && backButton;
     return SliverAppBar(
+      bottom: bottom,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness:
             determineBrightnessTheme(context) == Brightness.light

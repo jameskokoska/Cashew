@@ -28,10 +28,13 @@ generateColors() {
               amount: 0.8)
           : Color(0xFFFAFAFA),
       "lightDarkAccentHeavyLight": appStateSettings["materialYou"]
-          ? lightenPastel(HexColor(appStateSettings["accentColor"]),
-              amount: 0.92)
+          ? (appStateSettings["batterySaver"]
+              ? lightenPastel(HexColor(appStateSettings["accentColor"]),
+                  amount: 0.5)
+              : lightenPastel(HexColor(appStateSettings["accentColor"]),
+                  amount: 0.92))
           : (appStateSettings["batterySaver"]
-              ? Color(0xFFFAFAFA)
+              ? Color(0xFFF3F3F3)
               : Color(0xFFFFFFFF)),
       "canvasContainer": const Color(0xFFEBEBEB),
       "lightDarkAccentHeavy": Color(0xFFEBEBEB),

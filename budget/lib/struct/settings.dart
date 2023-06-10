@@ -139,6 +139,10 @@ Future<bool> updateSettings(setting, value,
     }
   }
 
+  if (setting == "batterySaver" || setting == "materialYou") {
+    generateColors();
+  }
+
   return true;
 }
 

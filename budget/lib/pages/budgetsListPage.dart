@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -61,14 +62,12 @@ class BudgetsListPageState extends State<BudgetsListPage>
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
               return SliverToBoxAdapter(
-                child: Center(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 85, right: 15, left: 15),
-                    child: TextFont(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        text: "No budgets created."),
+                child: NoResults(
+                  message: "No budgets found.",
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height > 600 ? 100 : 35,
+                    right: 30,
+                    left: 30,
                   ),
                 ),
               );

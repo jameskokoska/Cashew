@@ -75,16 +75,6 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["massEditSelectedTransactions"],
           icon: Icons.edit,
         ),
-        SettingsContainerSwitch(
-          title: "Battery Saver",
-          description: "Optimize the UI and increase performance",
-          onSwitched: (value) {
-            updateSettings("batterySaver", value,
-                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          },
-          initialValue: appStateSettings["batterySaver"],
-          icon: Icons.battery_charging_full_rounded,
-        ),
         SettingsContainerDropdown(
           title: "Font",
           icon: Icons.font_download_rounded,
