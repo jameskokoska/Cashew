@@ -460,6 +460,7 @@ class LineChartWrapper extends StatelessWidget {
     this.horizontalLineAt,
     this.enableTouch = true,
     this.colors = const [],
+    this.keepHorizontalLineInView = false,
     Key? key,
   }) : super(key: key);
 
@@ -471,6 +472,7 @@ class LineChartWrapper extends StatelessWidget {
   final double? horizontalLineAt;
   final bool enableTouch;
   final List<Color> colors;
+  final bool keepHorizontalLineInView;
 
   List<List<Pair>> filterPointsList(List<List<Pair>> pointsList) {
     List<List<Pair>> pointsOut = [];
@@ -541,6 +543,11 @@ class LineChartWrapper extends StatelessWidget {
           max.y = pair.y;
         }
       }
+    }
+    if (keepHorizontalLineInView &&
+        horizontalLineAt != null &&
+        (max.y) < ((horizontalLineAt ?? 0) + (horizontalLineAt ?? 0) * 0.1)) {
+      max.y = (horizontalLineAt ?? 0) + (horizontalLineAt ?? 0) * 0.1;
     }
     return max;
   }

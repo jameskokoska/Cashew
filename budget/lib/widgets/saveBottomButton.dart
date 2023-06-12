@@ -46,12 +46,13 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
 
   @override
   Widget build(BuildContext context) {
+    print(getKeyboardHeight(context));
     return AnimatedContainer(
       duration: Duration(milliseconds: 100),
       curve: Curves.easeInOutCubic,
       transform: Matrix4.translationValues(
         0.0,
-        isKeyboardOpen ? getKeyboardHeight(context) : 0.0,
+        isKeyboardOpen ? 100 : 0.0,
         0.0,
       ),
       child: Column(

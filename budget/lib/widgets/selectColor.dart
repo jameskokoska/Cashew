@@ -341,12 +341,12 @@ class ThemeColorIcon extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(500)),
             ),
       child: Tappable(
-        color: Colors.transparent,
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.9),
         onTap: onTap,
         borderRadius: 500,
         child: Icon(
           Icons.color_lens_rounded,
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
         ),
       ),
     );

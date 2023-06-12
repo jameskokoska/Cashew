@@ -10,6 +10,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -563,6 +564,153 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   @override
   Widget build(BuildContext context) {
+    Widget transactionTextInput = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22),
+          child: Tappable(
+            color: (appStateSettings["materialYou"]
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : getColor(context, "canvasContainer")),
+            onTap: () {
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  child: SelectTitle(
+                    setSelectedTitle: setSelectedTitle,
+                    setSelectedCategory: setSelectedCategory,
+                    setSelectedTags: setSelectedTags,
+                    selectedTitle: selectedTitle,
+                  ),
+                ),
+              );
+            },
+            borderRadius: 15,
+            child: TextInput(
+              padding: EdgeInsets.zero,
+              labelText: "Title",
+              icon: Icons.title_rounded,
+              controller: _titleInputController,
+              onChanged: (text) async {
+                setSelectedTitle(text, setInput: false);
+              },
+            ),
+          ),
+        ),
+        Container(height: 14),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Column(
+              children: [
+                Tappable(
+                  color: (appStateSettings["materialYou"]
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : getColor(context, "canvasContainer")),
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        child: SelectNotes(
+                          setSelectedNote: setSelectedNoteController,
+                          selectedNote: selectedNote,
+                        ),
+                      ),
+                      snap: false,
+                    );
+                  },
+                  borderRadius: 15,
+                  child: TextInput(
+                    borderRadius: BorderRadius.zero,
+                    padding: EdgeInsets.zero,
+                    labelText: "Notes",
+                    icon: Icons.sticky_note_2_rounded,
+                    controller: _noteInputController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    minLines: 3,
+                    onChanged: (text) async {
+                      setSelectedNoteController(text);
+                    },
+                  ),
+                ),
+                AnimatedSize(
+                  duration: Duration(milliseconds: 1000),
+                  curve: Curves.easeInOutCubicEmphasized,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: extractLinks(selectedNote ?? "").length <= 0
+                        ? Container(
+                            key: ValueKey(1),
+                          )
+                        : Column(
+                            children: [
+                              for (String link
+                                  in extractLinks(selectedNote ?? ""))
+                                Tappable(
+                                  onTap: () {
+                                    if (link.contains("http://"))
+                                      link = "http://www." +
+                                          link
+                                              .replaceFirst("www.", "")
+                                              .replaceFirst("http://", "");
+                                    else if (link.contains("https://"))
+                                      link = "https://www." +
+                                          link
+                                              .replaceFirst("www.", "")
+                                              .replaceFirst("https://", "");
+                                    else
+                                      link = "http://www." +
+                                          link
+                                              .replaceFirst("www.", "")
+                                              .replaceFirst("https://", "")
+                                              .replaceFirst("http://", "");
+                                    openUrl(link);
+                                  },
+                                  color: darkenPastel(
+                                      (appStateSettings["materialYou"]
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer
+                                          : getColor(
+                                              context, "canvasContainer")),
+                                      amount: 0.2),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.link_rounded),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: TextFont(
+                                            text: link
+                                                .replaceFirst("www.", "")
+                                                .replaceFirst("http://", "")
+                                                .replaceFirst("https://", ""),
+                                            fontSize: 16,
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+
     Color categoryColor = dynamicPastel(
       context,
       HexColor(
@@ -1036,383 +1184,240 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 ],
               ),
             ),
-            Column(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: DateButton(
-                      key: ValueKey(selectedDate.toString()),
-                      onTap: () {
-                        selectDate(context);
-                      },
-                      selectedDate: selectedDate,
-                      setSelectedDate: setSelectedDate,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                SelectChips(
-                  items: [
-                    transactionTypeDisplayToEnum[null],
-                    transactionTypeDisplayToEnum[
-                        TransactionSpecialType.upcoming],
-                    transactionTypeDisplayToEnum[
-                        TransactionSpecialType.subscription],
-                    transactionTypeDisplayToEnum[
-                        TransactionSpecialType.repetitive]
-                  ],
-                  getLabel: (item) {
-                    return item;
-                  },
-                  onSelected: (item) {
-                    setSelectedType(item);
-                  },
-                  getSelected: (item) {
-                    return selectedTypeDisplay == item;
-                  },
-                ),
-                AnimatedSize(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.easeOutCubic,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 400),
-                    child: selectedType == TransactionSpecialType.repetitive ||
-                            selectedType == TransactionSpecialType.subscription
-                        ? Wrap(
-                            key: ValueKey(1),
-                            alignment: WrapAlignment.center,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              TextFont(
-                                text: "Repeat every",
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  TappableTextEntry(
-                                    title: selectedPeriodLength.toString(),
-                                    placeholder: "0",
-                                    showPlaceHolderWhenTextEquals: "0",
-                                    onTap: () {
-                                      selectPeriodLength(context);
-                                    },
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.bold,
-                                    internalPadding: EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 4),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 3),
-                                  ),
-                                  TappableTextEntry(
-                                    title: selectedRecurrenceDisplay,
-                                    placeholder: "",
-                                    onTap: () {
-                                      selectRecurrence(context);
-                                    },
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.bold,
-                                    internalPadding: EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 4),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 3),
-                                  ),
-                                ],
-                              )
-                            ],
-                          )
-                        : Container(),
-                  ),
-                ),
-
-                StreamBuilder<List<Budget>>(
-                  stream: database.watchAllAddableBudgets(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData)
-                      return selectedIncome == true ||
-                              snapshot.data!.length <= 0
-                          ? SizedBox.shrink()
-                          : Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: SelectChips(
-                                extraWidget: AddButton(
-                                  onTap: () {},
-                                  width: 40,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 1),
-                                  openPage: AddBudgetPage(
-                                    title: "Add Budget",
-                                    isAddedOnlyBudget: true,
-                                  ),
-                                  borderRadius: 8,
-                                ),
-                                items: [null, ...snapshot.data!],
-                                getLabel: (item) {
-                                  return item?.name ?? "No Budget";
-                                },
-                                onSelected: (item) {
-                                  setSelectedBudgetPk(
-                                    item,
-                                    isSharedBudget: item?.sharedKey != null,
-                                  );
-                                },
-                                getSelected: (item) {
-                                  return selectedBudgetPk == item?.budgetPk;
-                                },
-                                getCustomBorderColor: (item) {
-                                  return dynamicPastel(
-                                    context,
-                                    lightenPastel(
-                                      HexColor(
-                                        item?.colour,
-                                        defaultColor: Colors.transparent,
-                                      ),
-                                      amount: 0.3,
-                                    ),
-                                    amount: 0.4,
-                                  );
-                                },
-                              ),
-                            );
-                    else
-                      return SizedBox.shrink();
-                  },
-                ),
-                AnimatedSize(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.easeInOut,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: selectedBudgetPk != null &&
-                            selectedBudgetIsShared == true
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: SelectChips(
-                                items: selectedBudget?.sharedMembers ?? [],
-                                getLabel: (item) {
-                                  return getMemberNickname(item);
-                                },
-                                onSelected: (item) {
-                                  setSelectedPayer(item ?? "");
-                                },
-                                getSelected: (item) {
-                                  return selectedPayer == item;
-                                },
-                                onLongPress: (item) {
-                                  memberPopup(context, item ?? "");
-                                }),
-                          )
-                        : Container(
-                            key: ValueKey(1),
-                          ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22),
-                  child: Tappable(
-                    color: (appStateSettings["materialYou"]
-                        ? Theme.of(context).colorScheme.secondaryContainer
-                        : getColor(context, "canvasContainer")),
-                    onTap: () {
-                      openBottomSheet(
-                        context,
-                        PopupFramework(
-                          child: SelectTitle(
-                            setSelectedTitle: setSelectedTitle,
-                            setSelectedCategory: setSelectedCategory,
-                            setSelectedTags: setSelectedTags,
-                            selectedTitle: selectedTitle,
-                          ),
-                        ),
-                      );
-                    },
-                    borderRadius: 15,
-                    child: TextInput(
-                      padding: EdgeInsets.zero,
-                      labelText: "Title",
-                      icon: Icons.title_rounded,
-                      controller: _titleInputController,
-                      onChanged: (text) async {
-                        setSelectedTitle(text, setInput: false);
-                      },
-                    ),
-                  ),
-                ),
-                Container(height: 14),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                Flexible(
+                  child: FractionallySizedBox(
+                    widthFactor:
+                        enableDoubleColumn(context) == false ? 2 : 0.95,
                     child: Column(
                       children: [
-                        Tappable(
-                          color: (appStateSettings["materialYou"]
-                              ? Theme.of(context).colorScheme.secondaryContainer
-                              : getColor(context, "canvasContainer")),
-                          onTap: () {
-                            openBottomSheet(
-                              context,
-                              PopupFramework(
-                                child: SelectNotes(
-                                  setSelectedNote: setSelectedNoteController,
-                                  selectedNote: selectedNote,
-                                ),
-                              ),
-                              snap: false,
-                            );
-                          },
-                          borderRadius: 15,
-                          child: TextInput(
-                            borderRadius: BorderRadius.zero,
-                            padding: EdgeInsets.zero,
-                            labelText: "Notes",
-                            icon: Icons.sticky_note_2_rounded,
-                            controller: _noteInputController,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            minLines: 3,
-                            onChanged: (text) async {
-                              setSelectedNoteController(text);
-                            },
-                          ),
-                        ),
-                        AnimatedSize(
-                          duration: Duration(milliseconds: 1000),
-                          curve: Curves.easeInOutCubicEmphasized,
+                        Container(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
-                            child: extractLinks(selectedNote ?? "").length <= 0
-                                ? Container(
+                            child: DateButton(
+                              key: ValueKey(selectedDate.toString()),
+                              onTap: () {
+                                selectDate(context);
+                              },
+                              selectedDate: selectedDate,
+                              setSelectedDate: setSelectedDate,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        SelectChips(
+                          wrapped: enableDoubleColumn(context),
+                          items: [
+                            transactionTypeDisplayToEnum[null],
+                            transactionTypeDisplayToEnum[
+                                TransactionSpecialType.upcoming],
+                            transactionTypeDisplayToEnum[
+                                TransactionSpecialType.subscription],
+                            transactionTypeDisplayToEnum[
+                                TransactionSpecialType.repetitive]
+                          ],
+                          getLabel: (item) {
+                            return item;
+                          },
+                          onSelected: (item) {
+                            setSelectedType(item);
+                          },
+                          getSelected: (item) {
+                            return selectedTypeDisplay == item;
+                          },
+                        ),
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.easeOutCubic,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 400),
+                            child: selectedType ==
+                                        TransactionSpecialType.repetitive ||
+                                    selectedType ==
+                                        TransactionSpecialType.subscription
+                                ? Wrap(
                                     key: ValueKey(1),
-                                  )
-                                : Column(
+                                    alignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
                                     children: [
-                                      for (String link
-                                          in extractLinks(selectedNote ?? ""))
-                                        Tappable(
-                                          onTap: () {
-                                            if (link.contains("http://"))
-                                              link = "http://www." +
-                                                  link
-                                                      .replaceFirst("www.", "")
-                                                      .replaceFirst(
-                                                          "http://", "");
-                                            else if (link.contains("https://"))
-                                              link = "https://www." +
-                                                  link
-                                                      .replaceFirst("www.", "")
-                                                      .replaceFirst(
-                                                          "https://", "");
-                                            else
-                                              link = "http://www." +
-                                                  link
-                                                      .replaceFirst("www.", "")
-                                                      .replaceFirst(
-                                                          "https://", "")
-                                                      .replaceFirst(
-                                                          "http://", "");
-                                            openUrl(link);
-                                          },
-                                          color: darkenPastel(
-                                              (appStateSettings["materialYou"]
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .secondaryContainer
-                                                  : getColor(context,
-                                                      "canvasContainer")),
-                                              amount: 0.2),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 10),
-                                            child: Row(
-                                              children: [
-                                                Icon(Icons.link_rounded),
-                                                SizedBox(width: 10),
-                                                Expanded(
-                                                  child: TextFont(
-                                                    text: link
-                                                        .replaceFirst(
-                                                            "www.", "")
-                                                        .replaceFirst(
-                                                            "http://", "")
-                                                        .replaceFirst(
-                                                            "https://", ""),
-                                                    fontSize: 16,
-                                                    maxLines: 1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                      TextFont(
+                                        text: "Repeat every",
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TappableTextEntry(
+                                            title:
+                                                selectedPeriodLength.toString(),
+                                            placeholder: "0",
+                                            showPlaceHolderWhenTextEquals: "0",
+                                            onTap: () {
+                                              selectPeriodLength(context);
+                                            },
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
+                                            internalPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 4),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 3),
                                           ),
-                                        ),
+                                          TappableTextEntry(
+                                            title: selectedRecurrenceDisplay,
+                                            placeholder: "",
+                                            onTap: () {
+                                              selectRecurrence(context);
+                                            },
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
+                                            internalPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 4, horizontal: 4),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 3),
+                                          ),
+                                        ],
+                                      )
                                     ],
+                                  )
+                                : Container(),
+                          ),
+                        ),
+                        StreamBuilder<List<Budget>>(
+                          stream: database.watchAllAddableBudgets(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData)
+                              return selectedIncome == true ||
+                                      snapshot.data!.length <= 0
+                                  ? SizedBox.shrink()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: SelectChips(
+                                        wrapped: enableDoubleColumn(context),
+                                        extraWidget: AddButton(
+                                          onTap: () {},
+                                          width: 40,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 1),
+                                          openPage: AddBudgetPage(
+                                            title: "Add Budget",
+                                            isAddedOnlyBudget: true,
+                                          ),
+                                          borderRadius: 8,
+                                        ),
+                                        items: [null, ...snapshot.data!],
+                                        getLabel: (item) {
+                                          return item?.name ?? "No Budget";
+                                        },
+                                        onSelected: (item) {
+                                          setSelectedBudgetPk(
+                                            item,
+                                            isSharedBudget:
+                                                item?.sharedKey != null,
+                                          );
+                                        },
+                                        getSelected: (item) {
+                                          return selectedBudgetPk ==
+                                              item?.budgetPk;
+                                        },
+                                        getCustomBorderColor: (item) {
+                                          return dynamicPastel(
+                                            context,
+                                            lightenPastel(
+                                              HexColor(
+                                                item?.colour,
+                                                defaultColor:
+                                                    Colors.transparent,
+                                              ),
+                                              amount: 0.3,
+                                            ),
+                                            amount: 0.4,
+                                          );
+                                        },
+                                      ),
+                                    );
+                            else
+                              return SizedBox.shrink();
+                          },
+                        ),
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: selectedBudgetPk != null &&
+                                    selectedBudgetIsShared == true
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: SelectChips(
+                                        wrapped: enableDoubleColumn(context),
+                                        items:
+                                            selectedBudget?.sharedMembers ?? [],
+                                        getLabel: (item) {
+                                          return getMemberNickname(item);
+                                        },
+                                        onSelected: (item) {
+                                          setSelectedPayer(item ?? "");
+                                        },
+                                        getSelected: (item) {
+                                          return selectedPayer == item;
+                                        },
+                                        onLongPress: (item) {
+                                          memberPopup(context, item ?? "");
+                                        }),
+                                  )
+                                : Container(
+                                    key: ValueKey(1),
                                   ),
                           ),
-                        )
+                        ),
+                        SizedBox(height: 10),
+                        enableDoubleColumn(context)
+                            ? SizedBox.shrink()
+                            : transactionTextInput,
+                        widget.transaction == null ||
+                                widget.transaction!.sharedDateUpdated == null
+                            ? SizedBox.shrink()
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 28),
+                                child: TextFont(
+                                  text: "Synced " +
+                                      getTimeAgo(
+                                        widget.transaction!.sharedDateUpdated!,
+                                      ).toLowerCase() +
+                                      "\n Created by " +
+                                      (widget.transaction!
+                                              .transactionOriginalOwnerEmail ??
+                                          ""),
+                                  fontSize: 13,
+                                  textColor: getColor(context, "textLight"),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 4,
+                                ),
+                              ),
+                        Container(height: 100),
                       ],
                     ),
                   ),
                 ),
-                widget.transaction == null ||
-                        widget.transaction!.sharedDateUpdated == null
-                    ? SizedBox.shrink()
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 28),
-                        child: TextFont(
-                          text: "Synced " +
-                              getTimeAgo(
-                                widget.transaction!.sharedDateUpdated!,
-                              ).toLowerCase() +
-                              "\n Created by " +
-                              (widget.transaction!
-                                      .transactionOriginalOwnerEmail ??
-                                  ""),
-                          fontSize: 13,
-                          textColor: getColor(context, "textLight"),
-                          textAlign: TextAlign.center,
-                          maxLines: 4,
-                        ),
-                      ),
-
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 24),
-                //   child: Column(
-                //     children: [
-                //       Container(height: 20),
-                //       TextInput(
-                //         backgroundColor:
-                //             getColor(context, "canvasContainer"),
-                //         padding: EdgeInsets.zero,
-                //
-                //         labelText: "Title",
-                //         icon: Icons.title_rounded,
-                //         controller: _titleInputController,
-                //       ),
-                //       Container(height: 14),
-                //       TextInput(
-                //         backgroundColor:
-                //             getColor(context, "canvasContainer"),
-                //         padding: EdgeInsets.zero,
-                //
-                //         labelText: "Notes",
-                //         icon: Icons.edit,
-                //         controller: _noteInputController,
-                //         keyboardType: TextInputType.multiline,
-                //         maxLines: null,
-                //         minLines: 3,
-                //       ),
-                //       Container(height: 20),
-                //     ],
-                //   ),
-                // ),
-                Container(height: 20),
-                Container(height: 100),
+                Flexible(
+                  child: FractionallySizedBox(
+                    widthFactor:
+                        enableDoubleColumn(context) == false ? 0 : 0.95,
+                    child: enableDoubleColumn(context) == false
+                        ? SizedBox.shrink()
+                        : transactionTextInput,
+                  ),
+                ),
               ],
             ),
           ],
@@ -2233,6 +2238,7 @@ class _SelectChipsState extends State<SelectChips> {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 18),
         child: Wrap(
+          runSpacing: 10,
           children: children,
         ),
       );

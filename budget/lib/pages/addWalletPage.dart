@@ -47,12 +47,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Map<String, dynamic> currencies = {};
   bool customCurrencyIcon = false;
   String? searchCurrency = "";
-  String selectedCurrency = "";
+  String selectedCurrency = "usd"; //if no currency selected use empty string
   int selectedDecimals = 2;
-
-  late FocusNode _periodLengthFocusNode;
-
-  String? textAddWallet = "Add Wallet";
+  FocusNode _titleFocusNode = FocusNode();
 
   Future<void> selectColor(BuildContext context) async {
     openBottomSheet(
@@ -153,11 +150,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
   @override
   void initState() {
     super.initState();
-    _periodLengthFocusNode = FocusNode();
-
     if (widget.wallet != null) {
       //We are editing a wallet
-      textAddWallet = "Edit Wallet";
       //Fill in the information from the passed in wallet
       //Outside of future.delayed because of textinput when in web mode initial value
       selectedTitle = widget.wallet!.name;
@@ -172,7 +166,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   @override
   void dispose() {
-    _periodLengthFocusNode.dispose();
     super.dispose();
   }
 
@@ -347,19 +340,32 @@ class _AddWalletPageState extends State<AddWalletPage> {
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,
-            child: SaveBottomButton(
-              label: widget.wallet == null ? "Add Wallet" : "Save Changes",
-              onTap: () async {
-                await addWallet();
-              },
-              disabled: !(canAddWallet ?? false),
-            ),
+            child: selectedTitle == "" || selectedTitle == null
+                ? SaveBottomButton(
+                    label: "Set Title",
+                    onTap: () async {
+                      FocusScope.of(context).unfocus();
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        _titleFocusNode.requestFocus();
+                      });
+                    },
+                    disabled: false,
+                  )
+                : SaveBottomButton(
+                    label:
+                        widget.wallet == null ? "Add Wallet" : "Save Changes",
+                    onTap: () async {
+                      await addWallet();
+                    },
+                    disabled: !(canAddWallet ?? false),
+                  ),
           ),
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextInput(
+                  focusNode: _titleFocusNode,
                   labelText: "Name",
                   bubbly: false,
                   initialValue: selectedTitle,

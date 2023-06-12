@@ -132,11 +132,16 @@ class HomePageState extends State<HomePage>
                       children: [
                         enableDoubleColumn(context)
                             ? SizedBox(height: 48)
-                            : IconButton(
-                                onPressed: () {
-                                  pushRoute(context, EditHomePage());
-                                },
-                                icon: Icon(Icons.more_vert_rounded),
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 12, right: 4),
+                                child: IconButton(
+                                  padding: EdgeInsets.all(10),
+                                  onPressed: () {
+                                    pushRoute(context, EditHomePage());
+                                  },
+                                  icon: Icon(Icons.more_vert_rounded),
+                                ),
                               )
                         // PopupMenuButton<String>(
                         //   icon: Opacity(
@@ -162,7 +167,11 @@ class HomePageState extends State<HomePage>
                     Container(height: 1, color: Theme.of(context).canvasColor),
                     Container(
                       // Subtract one (1) here because of the thickness of the wiper above
-                      height: 179 - 1 + MediaQuery.of(context).padding.top - 48,
+                      height: 179 -
+                          1 +
+                          MediaQuery.of(context).padding.top -
+                          48 -
+                          12,
                       alignment: Alignment.bottomLeft,
                       padding: EdgeInsets.only(left: 9, bottom: 22, right: 9),
                       child: Row(

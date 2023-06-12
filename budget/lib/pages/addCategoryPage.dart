@@ -33,7 +33,7 @@ class AddCategoryPage extends StatefulWidget {
   }) : super(key: key);
   final String title;
 
-  //When a transaction is passed in, we are editing that transaction
+  //When a category is passed in, we are editing that transaction
   final TransactionCategory? category;
 
   @override
@@ -49,8 +49,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   bool? canAddCategory;
   TransactionCategory? widgetCategory;
   List<String>? selectedMembers;
-  late TextEditingController _titleController;
+  TextEditingController _titleController = TextEditingController();
   bool userAttemptedToChangeTitle = false;
+  FocusNode _titleFocusNode = FocusNode();
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -164,7 +165,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController();
     widgetCategory = widget.category;
     selectedColor = widget.category != null
         ? (widget.category!.colour == null
@@ -187,6 +187,13 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
     setState(() {
       canAddCategory = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _titleFocusNode.dispose();
+    _titleController.dispose();
+    super.dispose();
   }
 
   @override
@@ -250,13 +257,26 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,
-            child: SaveBottomButton(
-              label: widget.category == null ? "Add Category" : "Save Changes",
-              onTap: () async {
-                await addCategory();
-              },
-              disabled: !(canAddCategory ?? false),
-            ),
+            child: selectedTitle == "" || selectedTitle == null
+                ? SaveBottomButton(
+                    label: "Set Title",
+                    onTap: () async {
+                      FocusScope.of(context).unfocus();
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        _titleFocusNode.requestFocus();
+                      });
+                    },
+                    disabled: false,
+                  )
+                : SaveBottomButton(
+                    label: widget.category == null
+                        ? "Add Category"
+                        : "Save Changes",
+                    onTap: () async {
+                      await addCategory();
+                    },
+                    disabled: !(canAddCategory ?? false),
+                  ),
           ),
           listWidgets: [
             Row(
@@ -323,6 +343,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20, bottom: 40),
                       child: TextInput(
+                        focusNode: _titleFocusNode,
                         labelText: "Name",
                         bubbly: false,
                         controller: _titleController,

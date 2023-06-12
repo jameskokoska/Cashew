@@ -544,7 +544,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .symmetric(
+                                                                    .symmetric(
                                                                 horizontal: 8,
                                                                 vertical: 7),
                                                         child: Column(
@@ -817,7 +817,7 @@ class _SelectAmountState extends State<SelectAmount> {
                 padding: widget.padding,
                 child: AnimatedSwitcher(
                   duration: Duration(milliseconds: 500),
-                  child: widget.allowZero || amount != ""
+                  child: widget.allowZero || (amount != "" && amount != "0")
                       ? Button(
                           key: Key("addSuccess"),
                           label: widget.nextLabel ?? "",

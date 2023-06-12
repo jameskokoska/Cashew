@@ -873,6 +873,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
           return Padding(
             padding: widget.padding,
             child: LineChartWrapper(
+              keepHorizontalLineInView: true,
               color: lineColor,
               verticalLineAt: widget.isPastBudget == true
                   ? null

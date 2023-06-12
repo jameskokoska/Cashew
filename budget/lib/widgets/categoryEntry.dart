@@ -86,9 +86,7 @@ class CategoryEntry extends StatelessWidget {
             // ),
             CategoryIconPercent(
               category: category,
-              percent: categoryBudgetLimit != null
-                  ? (categorySpent / categoryBudgetLimit!.amount * 100).abs()
-                  : (categorySpent / totalSpent * 100).abs(),
+              percent: (categorySpent / totalSpent * 100).abs(),
               progressBackgroundColor: selected
                   ? getColor(context, "white")
                   : getColor(context, "lightDarkAccentHeavy"),
@@ -104,122 +102,156 @@ class CategoryEntry extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextFont(
-                      text: category.name,
-                      fontSize: 18,
-                      maxLines: 2,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextFont(
+                          text: category.name,
+                          fontSize: 17,
+                          maxLines: 2,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            categorySpent == 0 ||
+                                    showIncomeExpenseIcons == false
+                                ? SizedBox.shrink()
+                                : Transform.translate(
+                                    offset: Offset(3, 0),
+                                    child: Transform.rotate(
+                                      angle: categorySpent >= 0 ? pi : 0,
+                                      child: Icon(
+                                        Icons.arrow_drop_down_rounded,
+                                        color: showIncomeExpenseIcons
+                                            ? categorySpent > 0
+                                                ? getColor(
+                                                    context, "incomeAmount")
+                                                : getColor(
+                                                    context, "expenseAmount")
+                                            : getColor(context, "black"),
+                                      ),
+                                    ),
+                                  ),
+                            TextFont(
+                              fontWeight: FontWeight.bold,
+                              text: convertToMoney(categorySpent.abs()),
+                              fontSize: 20,
+                              textColor: categoryBudgetLimit != null &&
+                                      categorySpent >
+                                          (categoryBudgetLimit?.amount ?? 0)
+                                  ? getColor(context, "expenseAmount")
+                                  : showIncomeExpenseIcons && categorySpent != 0
+                                      ? categorySpent > 0
+                                          ? getColor(context, "incomeAmount")
+                                          : getColor(context, "expenseAmount")
+                                      : getColor(context, "black"),
+                            ),
+                            categoryBudgetLimit == null
+                                ? SizedBox.shrink()
+                                : Padding(
+                                    padding: const EdgeInsets.only(bottom: 1),
+                                    child: TextFont(
+                                      text: " / " +
+                                          convertToMoney(
+                                              categoryBudgetLimit!.amount),
+                                      fontSize: 14,
+                                      textColor: categoryBudgetLimit != null &&
+                                              categorySpent >
+                                                  (categoryBudgetLimit
+                                                          ?.amount ??
+                                                      0)
+                                          ? getColor(context, "expenseAmount")
+                                          : getColor(context, "black")
+                                              .withOpacity(0.3),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 1,
                     ),
-                    categoryBudgetLimit != null
-                        ? Wrap(
-                            direction: Axis.horizontal,
-                            children: [
-                              TextFont(
-                                text: (categorySpent /
-                                            categoryBudgetLimit!.amount *
-                                            100)
-                                        .toStringAsFixed(0) +
-                                    "%",
-                                fontSize: 14,
-                                textColor: (categorySpent /
-                                            categoryBudgetLimit!.amount *
-                                            100) >
-                                        100
-                                    ? getColor(context, "unPaidOverdue")
-                                    : (selected
-                                        ? getColor(context, "black")
-                                            .withOpacity(0.4)
-                                        : getColor(context, "textLight")),
-                              ),
-                              TextFont(
-                                text: " of " +
-                                    convertToMoney(
-                                        categoryBudgetLimit!.amount) +
-                                    " limit",
-                                fontSize: 14,
-                                textColor: selected
-                                    ? getColor(context, "black")
-                                        .withOpacity(0.4)
-                                    : getColor(context, "textLight"),
-                              ),
-                            ],
-                          )
-                        : TextFont(
-                            text: (totalSpent == 0
-                                    ? "0"
-                                    : (categorySpent / totalSpent * 100)
-                                        .abs()
-                                        .toStringAsFixed(0)) +
-                                "%" +
-                                extraText,
-                            fontSize: 14,
-                            textColor: selected
-                                ? getColor(context, "black").withOpacity(0.4)
-                                : getColor(context, "textLight"),
-                          )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: categoryBudgetLimit != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 3,
+                                    right: 13,
+                                    bottom: 3,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          color: selected
+                                              ? getColor(context, "white")
+                                              : getColor(context,
+                                                      "lightDarkAccentHeavy")
+                                                  .withOpacity(0.7),
+                                          height: 5,
+                                        ),
+                                        AnimatedFractionallySizedBox(
+                                          duration:
+                                              Duration(milliseconds: 1000),
+                                          curve:
+                                              Curves.easeInOutCubicEmphasized,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: Container(
+                                              color: HexColor(category.colour),
+                                              height: 5,
+                                            ),
+                                          ),
+                                          widthFactor: (categorySpent /
+                                                          categoryBudgetLimit!
+                                                              .amount)
+                                                      .abs() >
+                                                  1
+                                              ? 1
+                                              : (categorySpent /
+                                                      categoryBudgetLimit!
+                                                          .amount)
+                                                  .abs(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : TextFont(
+                                  text: (totalSpent == 0
+                                          ? "0"
+                                          : (categorySpent / totalSpent * 100)
+                                              .abs()
+                                              .toStringAsFixed(0)) +
+                                      "%" +
+                                      extraText,
+                                  fontSize: 14,
+                                  textColor: selected
+                                      ? getColor(context, "black")
+                                          .withOpacity(0.4)
+                                      : getColor(context, "textLight"),
+                                ),
+                        ),
+                        TextFont(
+                          text: transactionCount.toString() +
+                              pluralString(
+                                  transactionCount == 1, " transaction"),
+                          fontSize: 13,
+                          textColor: selected
+                              ? getColor(context, "black").withOpacity(0.4)
+                              : getColor(context, "textLight"),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    categorySpent == 0 || showIncomeExpenseIcons == false
-                        ? SizedBox.shrink()
-                        : Transform.translate(
-                            offset: Offset(3, 0),
-                            child: Transform.rotate(
-                              angle: categorySpent >= 0 ? pi : 0,
-                              child: Icon(
-                                Icons.arrow_drop_down_rounded,
-                                color: showIncomeExpenseIcons
-                                    ? categorySpent > 0
-                                        ? getColor(context, "incomeAmount")
-                                        : getColor(context, "expenseAmount")
-                                    : getColor(context, "black"),
-                              ),
-                            ),
-                          ),
-                    TextFont(
-                      fontWeight: FontWeight.bold,
-                      text: convertToMoney(categorySpent.abs()),
-                      fontSize: 20,
-                      textColor: showIncomeExpenseIcons && categorySpent != 0
-                          ? categorySpent > 0
-                              ? getColor(context, "incomeAmount")
-                              : getColor(context, "expenseAmount")
-                          : getColor(context, "black"),
-                    ),
-                    // categoryBudgetLimit == null
-                    //     ? SizedBox.shrink()
-                    //     : Padding(
-                    //         padding: const EdgeInsets.only(bottom: 1),
-                    //         child: TextFont(
-                    //           text: " / " +
-                    //               convertToMoney(categoryBudgetLimit!.amount),
-                    //           fontSize: 14,
-                    //         ),
-                    //       ),
-                  ],
-                ),
-                SizedBox(
-                  height: 0,
-                ),
-                TextFont(
-                  text: transactionCount.toString() +
-                      pluralString(transactionCount == 1, " transaction"),
-                  fontSize: 14,
-                  textColor: selected
-                      ? getColor(context, "black").withOpacity(0.4)
-                      : getColor(context, "textLight"),
-                )
-              ],
             ),
           ],
         ),

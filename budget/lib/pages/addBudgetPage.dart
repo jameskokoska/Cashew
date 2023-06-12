@@ -104,6 +104,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   List<BudgetTransactionFilters>? selectedBudgetTransactionFilters = null;
   List<String> allMembersOfAllBudgets = [];
   List<String>? selectedMemberTransactionFilters;
+  FocusNode _titleFocusNode = FocusNode();
+
+  // BudgetsCompanion budget = BudgetsCompanion();
 
   Future<void> selectTitle() async {
     openBottomSheet(
@@ -358,6 +361,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   @override
   void dispose() {
+    _titleFocusNode.dispose();
     super.dispose();
   }
 
@@ -410,6 +414,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       currentObject: await createBudget(),
     );
   }
+
+  GlobalKey<_BudgetDetailsState> _budgetDetailsStateKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -482,13 +488,35 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,
-            child: SaveBottomButton(
-              label: widget.budget == null ? "Add Budget" : "Save Changes",
-              onTap: () async {
-                await addBudget();
-              },
-              disabled: !(canAddBudget ?? false),
-            ),
+            child: selectedTitle == "" || selectedTitle == null
+                ? SaveBottomButton(
+                    label: "Set Title",
+                    onTap: () async {
+                      FocusScope.of(context).unfocus();
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        _titleFocusNode.requestFocus();
+                      });
+                    },
+                    disabled: false,
+                  )
+                : selectedAmount == 0
+                    ? SaveBottomButton(
+                        label: "Set Amount",
+                        onTap: () async {
+                          _budgetDetailsStateKey.currentState
+                              ?.selectAmount(context);
+                        },
+                        disabled: false,
+                      )
+                    : SaveBottomButton(
+                        label: widget.budget == null
+                            ? "Add Budget"
+                            : "Save Changes",
+                        onTap: () async {
+                          await addBudget();
+                        },
+                        disabled: !(canAddBudget ?? false),
+                      ),
           ),
           slivers: [
             ColumnSliver(
@@ -498,6 +526,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput(
+                    focusNode: _titleFocusNode,
                     labelText: "Name",
                     bubbly: false,
                     initialValue: selectedTitle,
@@ -511,6 +540,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   ),
                 ),
                 BudgetDetails(
+                  key: _budgetDetailsStateKey,
                   determineBottomButton: () {
                     determineBottomButton();
                   },
@@ -1103,6 +1133,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
         child: SelectAmountValue(
           amountPassed: selectedPeriodLength.toString(),
           setSelectedAmount: (amount, _) {
+            widget.determineBottomButton();
             setSelectedPeriodLength(amount);
           },
           next: () async {
@@ -1206,7 +1237,6 @@ class _BudgetDetailsState extends State<BudgetDetails> {
       },
     );
     if (picked != null) {
-      widget.determineBottomButton();
       setState(() {
         selectedStartDate = picked.start;
         selectedEndDate = picked.end;
@@ -1214,6 +1244,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
       widget.setSelectedStartDate(picked.start);
       widget.setSelectedEndDate(picked.end);
     }
+    widget.determineBottomButton();
   }
 
   Future<void> selectStartDate(BuildContext context) async {
