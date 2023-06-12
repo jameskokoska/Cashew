@@ -23,8 +23,9 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/showChangelog.dart';
-import 'package:budget/widgets/initializeNotifications.dart';
+import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
@@ -121,7 +122,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     Future.delayed(Duration.zero, () async {
       await showChangelog(context);
       runNotificationPayLoads(context);
-      await askForNotificationPermission();
+      await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
       await parseEmailsInBackground(context);

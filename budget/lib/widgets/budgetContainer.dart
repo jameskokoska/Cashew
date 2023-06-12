@@ -29,6 +29,7 @@ class BudgetContainer extends StatelessWidget {
     this.isPastBudgetButCurrentPeriod = false,
     this.longPressToEdit = true,
     this.intermediatePadding = true,
+    this.squishInactiveBudgetContainerHeight = false,
   }) : super(key: key);
 
   final Budget budget;
@@ -38,12 +39,15 @@ class BudgetContainer extends StatelessWidget {
   final bool? isPastBudgetButCurrentPeriod;
   final bool longPressToEdit;
   final bool intermediatePadding;
+  final bool squishInactiveBudgetContainerHeight;
 
   @override
   Widget build(BuildContext context) {
     DateTime dateForRangeLocal =
         dateForRange == null ? DateTime.now() : dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(budget, dateForRangeLocal);
+    bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
+        budgetRange.start.difference(DateTime.now()).inDays > 0;
     var widget = WatchAllWallets(
       childFunction: (wallets) => StreamBuilder<double?>(
         stream: database.watchTotalSpentByCurrentUserOnly(
@@ -264,8 +268,21 @@ class BudgetContainer extends StatelessWidget {
                           ),
                           Padding(
                             padding: intermediatePadding
-                                ? EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 16.5)
+                                ? EdgeInsets.only(
+                                    left: 15,
+                                    right: 15,
+                                    top: squishInactiveBudgetContainerHeight ==
+                                                true &&
+                                            isOutOfRange
+                                        ? 8.5
+                                        : 16.5,
+                                    bottom:
+                                        squishInactiveBudgetContainerHeight ==
+                                                    true &&
+                                                isOutOfRange
+                                            ? 0
+                                            : 8.5,
+                                  )
                                 : EdgeInsets.symmetric(horizontal: 15),
                             child: BudgetTimeline(
                               budget: budget,
@@ -289,22 +306,22 @@ class BudgetContainer extends StatelessWidget {
                               dateForRange: dateForRangeLocal,
                             ),
                           ),
-                          daysBetween(dateForRangeLocal, budgetRange.end) == 0
-                              ? Container()
-                              : Padding(
-                                  padding: EdgeInsets.only(
-                                    left: 10,
-                                    right: 10,
-                                    bottom: 17,
-                                  ),
-                                  child: DaySpending(
-                                    budget: budget,
-                                    amount: (budget.amount - totalSpent) /
-                                        daysBetween(
-                                            dateForRangeLocal, budgetRange.end),
-                                    budgetRange: budgetRange,
-                                  ),
-                                ),
+                          DaySpending(
+                            budget: budget,
+                            amount: (budget.amount - totalSpent) /
+                                daysBetween(dateForRangeLocal, budgetRange.end),
+                            budgetRange: budgetRange,
+                            padding: EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              bottom:
+                                  squishInactiveBudgetContainerHeight == true &&
+                                          isOutOfRange
+                                      ? 4
+                                      : 17,
+                              top: 8,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -369,46 +386,53 @@ class DaySpending extends StatelessWidget {
     required double this.amount,
     bool this.large = false,
     required this.budgetRange,
+    required this.padding,
   }) : super(key: key);
 
   final Budget budget;
   final bool large;
   final double amount;
   final DateTimeRange budgetRange;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FittedBox(
-        fit: BoxFit.fitWidth,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: large && budgetRange.end.difference(DateTime.now()).inDays < 0
-              ? SizedBox(height: 1)
-              : TextFont(
-                  textColor: getColor(context, "black").withAlpha(80),
-                  text: budgetRange.end.difference(DateTime.now()).inDays < 0
-                      ? ""
-                      : amount < 0
-                          ? "You should save " +
-                              convertToMoney(amount.abs()) +
-                              " for " +
-                              budgetRange.end
-                                  .difference(DateTime.now())
-                                  .inDays
-                                  .toString() +
-                              " more days."
-                          : "You can keep spending " +
-                              convertToMoney(amount) +
-                              " for " +
-                              budgetRange.end
-                                  .difference(DateTime.now())
-                                  .inDays
-                                  .toString() +
-                              " days.",
-                  fontSize: large ? 15 : 13,
-                  textAlign: TextAlign.center,
-                ),
+    bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
+        budgetRange.start.difference(DateTime.now()).inDays > 0;
+    return Padding(
+      padding: large && isOutOfRange ? EdgeInsets.zero : padding,
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: large && isOutOfRange
+                ? SizedBox(height: 1)
+                : TextFont(
+                    textColor: getColor(context, "black").withAlpha(80),
+                    text: isOutOfRange
+                        ? ""
+                        : amount < 0
+                            ? "You should save " +
+                                convertToMoney(amount.abs()) +
+                                " for " +
+                                budgetRange.end
+                                    .difference(DateTime.now())
+                                    .inDays
+                                    .toString() +
+                                " more days."
+                            : "You can keep spending " +
+                                convertToMoney(amount) +
+                                " for " +
+                                budgetRange.end
+                                    .difference(DateTime.now())
+                                    .inDays
+                                    .toString() +
+                                " days.",
+                    fontSize: large ? 15 : 13,
+                    textAlign: TextAlign.center,
+                  ),
+          ),
         ),
       ),
     );

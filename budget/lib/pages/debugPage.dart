@@ -20,7 +20,7 @@ class DebugPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageFramework(
       dragDownToDismiss: true,
-      title: "Debug",
+      title: "Debug Flags",
       subtitle: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
         child: TextFont(text: "Use at your own risk"),
@@ -131,6 +131,17 @@ class DebugPage extends StatelessWidget {
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {
+            updateSettings("incognitoKeyboard", value,
+                pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          title: "Incognito Text Input",
+          description:
+              "Use the incognito keyboard for text input (if supported)",
+          initialValue: appStateSettings["incognitoKeyboard"],
+          icon: Icons.keyboard_rounded,
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
             updateSettings("searchFilters", value,
                 pagesNeedingRefresh: [0, 1, 2, 3]);
           },
@@ -146,7 +157,7 @@ class DebugPage extends StatelessWidget {
         SliderSelector(
           min: 0,
           max: 3,
-          initialValue: appStateSettings["animationSpeed"],
+          initialValue: appStateSettings["animationSpeed"].toDouble(),
           onChange: (value) {
             if (value == 0) value = 0.0000001;
             updateSettings("animationSpeed", value);

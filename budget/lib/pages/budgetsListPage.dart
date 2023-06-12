@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/budgetContainer.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -40,7 +41,9 @@ class BudgetsListPageState extends State<BudgetsListPage>
       key: pageState,
       title: "Budgets",
       backButton: false,
-      horizontalPadding: getHorizontalPaddingConstrained(context),
+      horizontalPadding: enableDoubleColumn(context) == false
+          ? getHorizontalPaddingConstrained(context)
+          : 0,
       actions: [
         IconButton(
           tooltip: "Edit budget",
@@ -73,60 +76,41 @@ class BudgetsListPageState extends State<BudgetsListPage>
               );
             }
             if (snapshot.hasData) {
-              // return SliverPadding(
-              //   padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
-              //   sliver: SliverReorderableList(
-              //     onReorder: (_intPrevious, _intNew) async {
-              //       database.fixOrderBudgets();
-              //       Budget oldBudget = snapshot.data![_intPrevious];
-
-              //       // print(oldBudget.name);
-              //       // print(oldBudget.order);
-
-              //       if (_intNew > _intPrevious) {
-              //         await database.moveBudget(
-              //             oldBudget.budgetPk, _intNew - 1, oldBudget.order);
-              //       } else {
-              //         await database.moveBudget(
-              //             oldBudget.budgetPk, _intNew, oldBudget.order);
-              //       }
-              //       return true;
-              //     },
-              //     onReorderStart: (index) {
-              //       HapticFeedback.heavyImpact();
-              //     },
-              //     itemBuilder: (context, index) {
-              //       return ReorderableDelayedDragStartListener(
-              //         index: index,
-              //         key: ValueKey(snapshot.data![index].budgetPk),
-              //         child: Padding(
-              //           padding: const EdgeInsets.only(bottom: 16.0),
-              //           child: BudgetContainer(
-              //             budget: snapshot.data![index],
-              //             longPressToEdit: false,
-              //           ),
-              //         ),
-              //       );
-              //     },
-              //     itemCount: snapshot.data!.length,
-              //   ),
-              // );
-
               return SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: BudgetContainer(
-                          budget: snapshot.data![index],
+                sliver: enableDoubleColumn(context)
+                    ? SliverGrid(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 600.0,
+                          mainAxisExtent: 200,
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0,
+                          childAspectRatio: 5,
                         ),
-                      );
-                    },
-                    childCount: snapshot.data?.length, //snapshot.data?.length
-                  ),
-                ),
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return BudgetContainer(
+                              budget: snapshot.data![index],
+                            );
+                          },
+                          childCount: snapshot.data!.length,
+                        ),
+                      )
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: BudgetContainer(
+                                budget: snapshot.data![index],
+                                squishInactiveBudgetContainerHeight: true,
+                              ),
+                            );
+                          },
+                          childCount:
+                              snapshot.data?.length, //snapshot.data?.length
+                        ),
+                      ),
               );
             } else {
               return SliverToBoxAdapter();

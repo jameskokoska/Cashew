@@ -9,6 +9,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Add category button at bottom of category limits list in budget page
+    If custom budget range out of date, its height is smaller since less details are shown
+    Incognito keyboard debug option
+    Warning if missing notification permission
+    Fixed notifications permissions
+    Budgets in a grid on wider displays
     Disabled change transaction page if navigation bar hidden
     Month is always centered on transaction page when changing screen sizes
     Fixed battery saver colors

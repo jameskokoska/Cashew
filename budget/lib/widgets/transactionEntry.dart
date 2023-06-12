@@ -7,7 +7,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/initializeNotifications.dart';
+import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -297,7 +297,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .only(
+                                                                            .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(

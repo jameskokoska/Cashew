@@ -72,5 +72,6 @@ Map<String, dynamic> defaultPreferences() {
     "legacyTransactionAmountColors": false,
     "massEditSelectedTransactions": false,
     "searchFilters": false,
+    "incognitoKeyboard": false,
   };
 }

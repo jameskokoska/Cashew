@@ -20,6 +20,7 @@ class TextFont extends StatelessWidget {
   final TextOverflow? overflow;
   final bool? softWrap;
   final int? walletPkForCurrency;
+  // Only show the currency icon and not the currency code afterwards
   final bool onlyShowCurrencyIcon;
 
   const TextFont({

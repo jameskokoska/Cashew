@@ -836,6 +836,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               budgetPk:
                   widget.budget == null ? setBudgetPk : widget.budget!.budgetPk,
               budgetLimit: selectedAmount ?? 0,
+              showAddCategoryButton: selectedAllCategories,
             ),
           ],
           listWidgets: [

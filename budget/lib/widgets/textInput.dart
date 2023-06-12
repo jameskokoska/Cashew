@@ -87,7 +87,8 @@ class TextInput extends StatelessWidget {
                 textCapitalization ?? TextCapitalization.sentences,
             textAlignVertical: kIsWeb ? TextAlignVertical.bottom : null,
             //incognito keyboard
-            enableIMEPersonalizedLearning: false,
+            enableIMEPersonalizedLearning:
+                !appStateSettings["incognitoKeyboard"],
             scrollPadding: EdgeInsets.only(bottom: 80),
             focusNode: focusNode,
             keyboardType: keyboardType != null

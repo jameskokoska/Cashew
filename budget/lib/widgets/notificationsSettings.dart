@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:developer';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
@@ -381,7 +382,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
   );
 
   // schedule a week worth of notifications
-  for (int i = 1; i <= 7; i++) {
+  for (int i = 0; i <= 7; i++) {
     String chosenMessage =
         _reminderStrings[Random().nextInt(_reminderStrings.length)];
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
@@ -406,11 +407,9 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
         " with id " +
         i.toString());
   }
-  print(await flutterLocalNotificationsPlugin.getActiveNotifications());
 
-  final List<PendingNotificationRequest> pendingNotificationRequests =
-      await flutterLocalNotificationsPlugin.pendingNotificationRequests();
-  print(pendingNotificationRequests.first);
+  // final List<PendingNotificationRequest> pendingNotificationRequests =
+  //     await flutterLocalNotificationsPlugin.pendingNotificationRequests();
 
   return true;
 }
@@ -527,10 +526,7 @@ Future<bool> initializeNotificationsPlatform() async {
     return false;
   }
   try {
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission();
+    if (Platform.isAndroid) await checkNotificationsPermissionAndroid();
     tz.initializeTimeZones();
     DateTime dateTime = DateTime.now();
     tz.setLocalLocation(tz.getLocation(dateTime.timeZoneName));
@@ -539,5 +535,14 @@ Future<bool> initializeNotificationsPlatform() async {
     return false;
   }
   print("Notifications initialized");
+  return true;
+}
+
+Future<bool> checkNotificationsPermissionAndroid() async {
+  bool? result = await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
+  if (result != true) return false;
   return true;
 }

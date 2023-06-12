@@ -369,20 +369,16 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         ),
                                         widget.isPastBudget == true
                                             ? SizedBox.shrink()
-                                            : Padding(
+                                            : DaySpending(
+                                                budget: widget.budget,
+                                                amount: (widget.budget.amount -
+                                                        totalSpent) /
+                                                    daysBetween(dateForRange,
+                                                        budgetRange.end),
+                                                large: true,
+                                                budgetRange: budgetRange,
                                                 padding: const EdgeInsets.only(
                                                     top: 15, bottom: 0),
-                                                child: DaySpending(
-                                                  budget: widget.budget,
-                                                  amount:
-                                                      (widget.budget.amount -
-                                                              totalSpent) /
-                                                          daysBetween(
-                                                              dateForRange,
-                                                              budgetRange.end),
-                                                  large: true,
-                                                  budgetRange: budgetRange,
-                                                ),
                                               ),
                                       ],
                                     ),

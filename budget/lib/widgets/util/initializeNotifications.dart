@@ -60,6 +60,14 @@ void runNotificationPayLoads(context) {
         builder: (context) => AddTransactionPage(title: "Add Transaction"),
       ),
     );
+  } else if (notificationPayload == "upcomingTransaction") {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            UpcomingOverdueTransactions(overdueTransactions: true),
+      ),
+    );
   }
   notificationPayload = "";
 }
@@ -71,7 +79,6 @@ Future<void> setDailyNotificationOnLaunch(context) async {
       hour: appStateSettings["notificationHour"],
       minute: appStateSettings["notificationMinute"]);
   if (notificationsEnabled) {
-    await initializeNotificationsPlatform();
     await scheduleDailyNotification(context, timeOfDay);
   }
 }
@@ -84,15 +91,7 @@ Future<void> setUpcomingNotifications(context) async {
       hour: appStateSettings["notificationHourUpcomingTransactions"],
       minute: appStateSettings["notificationMinuteUpcomingTransactions"]);
   if (upcomingTransactionsNotificationsEnabled) {
-    await initializeNotificationsPlatform();
     await scheduleUpcomingTransactionsNotification(
         context, upcomingTransactionsTimeOfDay);
   }
-}
-
-Future<void> askForNotificationPermission() async {
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
 }

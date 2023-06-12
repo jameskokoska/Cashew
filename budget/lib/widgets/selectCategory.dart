@@ -117,7 +117,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                       right: index == snapshot.data!.length - 1 ? 12 - 4 : 0),
                   child: CategoryIcon(
                     categoryPk: category.categoryPk,
-                    size: 50,
+                    size: 42,
+                    sizePadding: 28,
                     label: true,
                     onTap: () {
                       if (widget.setSelectedCategory != null) {

@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.7"
+  app_settings:
+    dependency: "direct main"
+    description:
+      name: app_settings
+      sha256: "66715a323ac36d6c8201035ba678777c0d2ea869e4d7064300d95af10c3bb8cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0"
   archive:
     dependency: transitive
     description:
@@ -245,10 +253,10 @@ packages:
     dependency: transitive
     description:
       name: collection
-      sha256: f092b211a4319e98e5ff58223576de6c2803db36221657b46c82574721240687
+      sha256: "4a07be6cb69c84d677a6c3096fcf960cc3285a8330b4603e0d463d15d9bd934c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.2"
+    version: "1.17.1"
   convert:
     dependency: transitive
     description:
@@ -498,26 +506,26 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: f222919a34545931e47b06000836b5101baeffb0e6eb5a4691d2d42851740dd9
+      sha256: "812791d43ccfc1b443a0d39fa02a206fc228c597e28ff9337e09e3ca8d370391"
       url: "https://pub.dev"
     source: hosted
-    version: "12.0.4"
+    version: "14.1.1"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
       name: flutter_local_notifications_linux
-      sha256: "3c6d6db334f609a92be0c0915f40871ec56f5d2adf01e77ae364162c587c0ca8"
+      sha256: "33f741ef47b5f63cc7f78fe75eeeac7e19f171ff3c3df054d84c1e38bedb6a03"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "4.0.0+1"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
-      sha256: "5ec1feac5f7f7d9266759488bc5f76416152baba9aa1b26fe572246caa00d1ab"
+      sha256: "7cf643d6d5022f3baed0be777b0662cce5919c0a7b86e700299f22dc4ae660ef"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0"
+    version: "7.0.0+1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -763,18 +771,18 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: "1803e76e6653768d64ed8ff2e1e67bea3ad4b923eb5c56a295c3e634bad5960e"
+      sha256: "6501fbd55da300384b768785b83e5ce66991266cec21af89ab9ae7f5ce1c4cbb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.16"
+    version: "0.12.15"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: "9528f2f296073ff54cb9fee677df673ace1218163c3bc7628093e7eed5203d41"
+      sha256: "586678f20e112219ed0f73215f01bcdf1d769824ba2ebae45ad918a9bfde9bdb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.3.0"
   math_expressions:
     dependency: "direct main"
     description:
@@ -1255,10 +1263,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: "75760ffd7786fffdfb9597c35c5b27eaeec82be8edfb6d71d32651128ed7aab8"
+      sha256: daadc9baabec998b062c9091525aa95786508b1c48e9c30f1f891b8bf6ff2e64
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.5.2"
   timer_builder:
     dependency: "direct main"
     description:

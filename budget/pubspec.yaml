@@ -60,7 +60,7 @@ dependencies:
   lottie: ^1.4.3
   pausable_timer: ^1.0.0+6
   animated_fractionally_sized_box: ^2.0.1
-  flutter_local_notifications: ^12.0.2
+  flutter_local_notifications: ^14.0.0+1
   system_theme: ^2.0.0
   firebase_core: ^2.7.1
   firebase_auth: ^4.2.2
@@ -73,6 +73,7 @@ dependencies:
   timer_builder: ^2.0.0
   device_info_plus: ^8.1.0
   flutter_lazy_indexed_stack: ^0.0.4
+  app_settings: ^4.2.0
   # feature_discovery: ^0.14.1
   
 # flutter pub run flutter_launcher_icons:main

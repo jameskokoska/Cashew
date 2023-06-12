@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -18,11 +19,13 @@ class CategoryLimits extends StatefulWidget {
     required this.budgetPk,
     required this.budgetLimit,
     required this.selectedCategories,
+    required this.showAddCategoryButton,
     super.key,
   });
   final int budgetPk;
   final List<int> selectedCategories;
   final double budgetLimit;
+  final bool showAddCategoryButton;
 
   @override
   State<CategoryLimits> createState() => _CategoryLimitsState();
@@ -101,7 +104,23 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                                 key: ValueKey(2),
                               ),
                       ),
-                    )
+                    ),
+                  widget.showAddCategoryButton == false
+                      ? SizedBox.shrink()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 10,
+                          ),
+                          child: AddButton(
+                            onTap: () {},
+                            padding: EdgeInsets.zero,
+                            openPage: AddCategoryPage(
+                              title: "Add Category",
+                            ),
+                            width: null,
+                          ),
+                        ),
                 ],
               ),
             );
@@ -266,6 +285,7 @@ void enterCategoryLimitPopup(
           Navigator.pop(context);
         },
         nextLabel: "Set Limit",
+        onlyShowCurrencyIcon: true,
       ),
     ),
   );

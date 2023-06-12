@@ -428,7 +428,10 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                           previousOnBoardPage();
                         },
                         icon: Icons.arrow_back_rounded,
-                        size: getWidthNavigationSidebar(context) <= 0 ? 50 : 65,
+                        size: 50,
+                        padding: getWidthNavigationSidebar(context) <= 0
+                            ? null
+                            : EdgeInsets.all(6),
                       ),
                     ),
                     Row(
@@ -481,7 +484,10 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                             nextOnBoardPage(children.length);
                         },
                         icon: Icons.arrow_forward_rounded,
-                        size: getWidthNavigationSidebar(context) <= 0 ? 50 : 65,
+                        size: 50,
+                        padding: getWidthNavigationSidebar(context) <= 0
+                            ? null
+                            : EdgeInsets.all(6),
                       ),
                     ),
                   ],
