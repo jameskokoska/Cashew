@@ -2940,8 +2940,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ? transactions.dateCreated.isSmallerOrEqualValue(endDate)
                 : startDate != null && endDate == null
                     ? transactions.dateCreated.isBiggerOrEqualValue(startDate)
-                    : transactions.dateCreated
-                        .isBetweenValues(startDate!, endDate!)));
+                    : isOnDay(transactions.dateCreated, endDate!) |
+                        isOnDay(transactions.dateCreated, startDate!) |
+                        transactions.dateCreated
+                            .isBetweenValues(startDate!, endDate!)));
   }
 
   Expression<bool> onlyShowIfCertainBudget(

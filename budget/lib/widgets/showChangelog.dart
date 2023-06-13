@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed transfer wallets
+    Refactored the way currencies are handled
+    Fixed some transactions not displayed if they occured at the end day of a time period
     Horizontal progress bar for spending goals visualization in budgets page
     Add transaction page uses 2 columns on larger displays
     Spending target always shown on budget spending line graphs

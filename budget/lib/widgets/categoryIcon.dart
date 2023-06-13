@@ -181,7 +181,7 @@ class CategoryIcon extends StatelessWidget {
         },
       );
     } else {
-      return SizedBox.shrink();
+      return categoryIconWidget(context, null);
     }
   }
 }

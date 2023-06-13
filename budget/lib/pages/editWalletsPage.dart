@@ -290,8 +290,10 @@ void deleteWalletPopup(context, TransactionWallet wallet,
         ),
       );
       if (isNumber(result)) {
-        await database.moveWalletTransactons(Provider.of<AllWallets>(context),
-            wallet.walletPk, int.parse(result.toString()));
+        await database.moveWalletTransactons(
+            Provider.of<AllWallets>(context, listen: false),
+            wallet.walletPk,
+            int.parse(result.toString()));
         if (appStateSettings["selectedWallet"] == wallet.walletPk) {
           setPrimaryWallet(0);
         }

@@ -23,6 +23,8 @@ class HomeUpcomingTransactionSlivers extends StatelessWidget {
         child: StreamBuilder<List<Transaction>>(
           stream: database.watchAllUpcomingTransactions(
             // upcoming in 3 days
+            startDate: DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day + 1),
             endDate: DateTime(DateTime.now().year, DateTime.now().month,
                 DateTime.now().day + 4),
           ),
