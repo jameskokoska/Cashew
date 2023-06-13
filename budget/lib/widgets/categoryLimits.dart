@@ -13,6 +13,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:provider/provider.dart';
 
 class CategoryLimits extends StatefulWidget {
   const CategoryLimits({
@@ -64,10 +65,12 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                       return TextFont(
                         fontSize: 15,
                         textColor: getColor(context, "textLight"),
-                        text: convertToMoney(number,
+                        text: convertToMoney(
+                                Provider.of<AllWallets>(context), number,
                                 finalNumber: snapshot.data ?? 0) +
                             " / " +
-                            convertToMoney(widget.budgetLimit),
+                            convertToMoney(Provider.of<AllWallets>(context),
+                                widget.budgetLimit),
                       );
                     },
                   );
@@ -230,9 +233,11 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
               ],
             ),
             TappableTextEntry(
-              title: convertToMoney(selectedAmount),
-              placeholder: convertToMoney(0),
-              showPlaceHolderWhenTextEquals: convertToMoney(0),
+              title: convertToMoney(
+                  Provider.of<AllWallets>(context), selectedAmount),
+              placeholder: convertToMoney(Provider.of<AllWallets>(context), 0),
+              showPlaceHolderWhenTextEquals:
+                  convertToMoney(Provider.of<AllWallets>(context), 0),
               onTap: () {
                 enterCategoryLimitPopup(
                   context,

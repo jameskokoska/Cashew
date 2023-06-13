@@ -23,10 +23,12 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
+import 'package:provider/provider.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -568,7 +570,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(height: 20),
+        enableDoubleColumn(context)
+            ? Container(height: 20)
+            : Container(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22),
           child: Tappable(
@@ -1001,7 +1005,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   noBackground: true,
                                   key: ValueKey(
                                       selectedCategory?.categoryPk ?? ""),
-                                  categoryPk: selectedCategory?.categoryPk ?? 0,
+                                  category: selectedCategory,
                                   size: 60,
                                 ),
                               ),
@@ -1092,17 +1096,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         child: TextFont(
                                           textAlign: TextAlign.right,
                                           text: convertToMoney(
+                                            Provider.of<AllWallets>(context),
                                             number,
                                             showCurrency: false,
                                             finalNumber: selectedAmount ?? 0,
                                             decimals: selectedWallet?.decimals,
                                           ),
                                           walletPkForCurrency: selectedWalletPk,
-                                          onlyShowCurrencyIcon: appStateSettings[
-                                                      "cachedWalletCurrencies"]
-                                                  .keys
-                                                  .length <=
-                                              1,
+                                          onlyShowCurrencyIcon:
+                                              Provider.of<AllWallets>(context)
+                                                      .list
+                                                      .length <=
+                                                  1,
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold,
                                           maxLines: 1,
@@ -1112,9 +1117,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     },
                                   ),
                                 ),
-                                appStateSettings["cachedWalletCurrencies"]
-                                                .keys
-                                                .length <=
+                                Provider.of<AllWallets>(context).list.length <=
                                             1 ||
                                         appStateSettings["selectedWallet"] ==
                                             selectedWalletPk
@@ -1137,14 +1140,22 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           key: ValueKey(selectedWalletPk),
                                           count: (selectedAmount ?? 0) *
                                               (amountRatioToPrimaryCurrencyGivenPk(
+                                                      Provider.of<AllWallets>(
+                                                          context),
                                                       selectedWalletPk) ??
                                                   1),
                                           duration:
                                               Duration(milliseconds: 1000),
                                           dynamicDecimals: true,
-                                          decimals: selectedWallet?.decimals,
+                                          decimals:
+                                              Provider.of<AllWallets>(context)
+                                                  .indexedByPk[appStateSettings[
+                                                      "selectedWallet"]]
+                                                  ?.decimals,
                                           initialCount: (selectedAmount ?? 0) *
                                               (amountRatioToPrimaryCurrencyGivenPk(
+                                                      Provider.of<AllWallets>(
+                                                          context),
                                                       selectedWalletPk) ??
                                                   1),
                                           textBuilder: (number) {
@@ -1153,16 +1164,24 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                               child: TextFont(
                                                 textAlign: TextAlign.right,
                                                 text: convertToMoney(
-                                                  number,
-                                                  showCurrency: false,
-                                                  finalNumber: (selectedAmount ??
-                                                          0) *
-                                                      (amountRatioToPrimaryCurrencyGivenPk(
-                                                              selectedWalletPk) ??
-                                                          1),
-                                                  decimals:
-                                                      selectedWallet?.decimals,
-                                                ),
+                                                    Provider.of<AllWallets>(
+                                                        context),
+                                                    number,
+                                                    showCurrency: false,
+                                                    finalNumber: (selectedAmount ??
+                                                            0) *
+                                                        (amountRatioToPrimaryCurrencyGivenPk(
+                                                                Provider.of<
+                                                                        AllWallets>(
+                                                                    context),
+                                                                selectedWalletPk) ??
+                                                            1),
+                                                    decimals: Provider.of<
+                                                            AllWallets>(context)
+                                                        .indexedByPk[
+                                                            appStateSettings[
+                                                                "selectedWallet"]]
+                                                        ?.decimals),
                                                 walletPkForCurrency:
                                                     appStateSettings[
                                                         "selectedWallet"],
@@ -1191,7 +1210,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 Flexible(
                   child: FractionallySizedBox(
                     widthFactor:
-                        enableDoubleColumn(context) == false ? 2 : 0.95,
+                        enableDoubleColumn(context) == false ? 1 : 0.95,
                     child: Column(
                       children: [
                         Container(height: 10),
@@ -1379,7 +1398,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   ),
                           ),
                         ),
-                        SizedBox(height: 10),
                         enableDoubleColumn(context)
                             ? SizedBox.shrink()
                             : transactionTextInput,
@@ -1409,15 +1427,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     ),
                   ),
                 ),
-                Flexible(
-                  child: FractionallySizedBox(
-                    widthFactor:
-                        enableDoubleColumn(context) == false ? 0 : 0.95,
-                    child: enableDoubleColumn(context) == false
-                        ? SizedBox.shrink()
-                        : transactionTextInput,
-                  ),
-                ),
+                enableDoubleColumn(context) == false
+                    ? SizedBox.shrink()
+                    : Flexible(
+                        child: FractionallySizedBox(
+                          widthFactor: 0.95,
+                          child: transactionTextInput,
+                        ),
+                      ),
               ],
             ),
           ],
@@ -1771,7 +1788,7 @@ class _SelectTitleState extends State<SelectTitle> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       TextFont(
-                                        text: selectedCategory!.name,
+                                        text: selectedCategory?.name ?? "",
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -2165,90 +2182,4 @@ Future<bool> addAssociatedTitles(
     }
   }
   return true;
-}
-
-class SelectChips extends StatefulWidget {
-  const SelectChips({
-    super.key,
-    required this.items,
-    required this.getSelected,
-    required this.onSelected,
-    required this.getLabel,
-    this.getCustomBorderColor,
-    this.extraWidget,
-    this.onLongPress,
-    this.wrapped = false,
-  });
-  final List<dynamic> items;
-  final bool Function(dynamic) getSelected;
-  final Function(dynamic) onSelected;
-  final String Function(dynamic) getLabel;
-  final Color? Function(dynamic)? getCustomBorderColor;
-  final Widget? extraWidget;
-  final Function(dynamic)? onLongPress;
-  final bool wrapped;
-
-  @override
-  State<SelectChips> createState() => _SelectChipsState();
-}
-
-class _SelectChipsState extends State<SelectChips> {
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> children = [
-      ...List<Widget>.generate(
-        widget.items.length,
-        (int index) {
-          dynamic item = widget.items[index];
-          bool selected = widget.getSelected(item);
-          String label = widget.getLabel(item);
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Tappable(
-              onLongPress: () {
-                if (widget.onLongPress != null) widget.onLongPress!(item);
-              },
-              color: Colors.transparent,
-              child: ChoiceChip(
-                selectedColor: appStateSettings["materialYou"]
-                    ? null
-                    : getColor(context, "lightDarkAccentHeavy"),
-                side: widget.getCustomBorderColor == null ||
-                        widget.getCustomBorderColor!(item) == null
-                    ? null
-                    : BorderSide(
-                        color: widget.getCustomBorderColor!(item)!,
-                      ),
-                label: TextFont(
-                  text: label,
-                  fontSize: 15,
-                ),
-                selected: selected,
-                onSelected: (bool selected) {
-                  widget.onSelected(item);
-                },
-              ),
-            ),
-          );
-        },
-      ).toList(),
-      widget.extraWidget ?? SizedBox.shrink()
-    ];
-    if (widget.wrapped)
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18),
-        child: Wrap(
-          runSpacing: 10,
-          children: children,
-        ),
-      );
-    return SizedBox(
-      height: 40,
-      child: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 18),
-        scrollDirection: Axis.horizontal,
-        children: children,
-      ),
-    );
-  }
 }

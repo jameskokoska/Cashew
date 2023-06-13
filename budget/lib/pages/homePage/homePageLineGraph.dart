@@ -21,6 +21,7 @@ import 'package:budget/widgets/upcomingTransactions.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePageLineGraph extends StatelessWidget {
   const HomePageLineGraph({super.key, required this.selectedSlidingSelector});
@@ -92,11 +93,15 @@ class HomePageLineGraph extends StatelessWidget {
                                   if (transaction.income) {
                                     totalForDay += transaction.amount.abs() *
                                         (amountRatioToPrimaryCurrencyGivenPk(
+                                                Provider.of<AllWallets>(
+                                                    context),
                                                 transaction.walletFk) ??
                                             0);
                                   } else {
                                     totalForDay -= transaction.amount.abs() *
                                         (amountRatioToPrimaryCurrencyGivenPk(
+                                                Provider.of<AllWallets>(
+                                                    context),
                                                 transaction.walletFk) ??
                                             0);
                                   }

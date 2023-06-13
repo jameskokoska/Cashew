@@ -22,6 +22,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
+import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:html/parser.dart';
@@ -800,7 +801,10 @@ class EmailsList extends StatelessWidget {
                                           child: TextFont(
                                             fontSize: 15,
                                             text: "Amount: " +
-                                                convertToMoney(amountDouble),
+                                                convertToMoney(
+                                                    Provider.of<AllWallets>(
+                                                        context),
+                                                    amountDouble),
                                             maxLines: 10,
                                             fontWeight: FontWeight.bold,
                                           ),

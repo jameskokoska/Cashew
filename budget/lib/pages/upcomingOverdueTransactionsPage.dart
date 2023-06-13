@@ -11,6 +11,7 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UpcomingOverdueTransactions extends StatelessWidget {
   const UpcomingOverdueTransactions(
@@ -44,36 +45,37 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      WatchAllWallets(
-                        childFunction: (wallets) => StreamBuilder<double?>(
-                          stream: database.watchTotalOfUpcomingOverdue(
-                              overdueTransactions, wallets),
-                          builder: (context, snapshot) {
-                            return CountNumber(
-                              count: snapshot.hasData == false ||
-                                      snapshot.data == null
-                                  ? 0
-                                  : (snapshot.data ?? 0).abs(),
-                              duration: Duration(milliseconds: 700),
-                              dynamicDecimals: true,
-                              initialCount: (0),
-                              textBuilder: (number) {
-                                return TextFont(
-                                  text: convertToMoney(number,
-                                      finalNumber: snapshot.hasData == false ||
-                                              snapshot.data == null
-                                          ? 0
-                                          : (snapshot.data ?? 0).abs()),
-                                  fontSize: 25,
-                                  textColor: overdueTransactions
-                                      ? getColor(context, "unPaidOverdue")
-                                      : getColor(context, "unPaidUpcoming"),
-                                  fontWeight: FontWeight.bold,
-                                );
-                              },
-                            );
-                          },
+                      StreamBuilder<double?>(
+                        stream: database.watchTotalOfUpcomingOverdue(
+                          Provider.of<AllWallets>(context),
+                          overdueTransactions,
                         ),
+                        builder: (context, snapshot) {
+                          return CountNumber(
+                            count: snapshot.hasData == false ||
+                                    snapshot.data == null
+                                ? 0
+                                : (snapshot.data ?? 0).abs(),
+                            duration: Duration(milliseconds: 700),
+                            dynamicDecimals: true,
+                            initialCount: (0),
+                            textBuilder: (number) {
+                              return TextFont(
+                                text: convertToMoney(
+                                    Provider.of<AllWallets>(context), number,
+                                    finalNumber: snapshot.hasData == false ||
+                                            snapshot.data == null
+                                        ? 0
+                                        : (snapshot.data ?? 0).abs()),
+                                fontSize: 25,
+                                textColor: overdueTransactions
+                                    ? getColor(context, "unPaidOverdue")
+                                    : getColor(context, "unPaidUpcoming"),
+                                fontWeight: FontWeight.bold,
+                              );
+                            },
+                          );
+                        },
                       ),
                       SizedBox(width: 8),
                       Padding(

@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:budget/colors.dart';
+import 'package:provider/provider.dart';
 
 class SelectAmount extends StatefulWidget {
   SelectAmount({
@@ -64,10 +65,10 @@ class _SelectAmountState extends State<SelectAmount> {
     selectedWallet = widget.selectedWallet;
     walletPkForCurrency = widget.walletPkForCurrency;
     numberDecimals = widget.selectedWallet?.decimals ??
-        appStateSettings["selectedWalletDecimals"];
+        Provider.of<AllWallets>(context, listen: false).indexedByPk[appStateSettings["selectedWallet"]]?.decimals ??
+        2;
     try {
-      amount =
-          double.parse(widget.amountPassed).toStringAsFixed(numberDecimals);
+      amount = double.parse(widget.amountPassed).toStringAsFixed(numberDecimals);
     } catch (e) {
       print(e.toString());
     }
@@ -76,108 +77,73 @@ class _SelectAmountState extends State<SelectAmount> {
     //   amount = widget.amountPassed.replaceAll(".0", "");
     // }
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
-      if (event.runtimeType == KeyDownEvent &&
-              event.logicalKey.keyLabel == "Go Back" ||
-          event.logicalKey == LogicalKeyboardKey.escape) {
+      if (event.runtimeType == KeyDownEvent && event.logicalKey.keyLabel == "Go Back" || event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.pop(context);
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit0) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit0) {
         addToAmount("0");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit1) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit1) {
         addToAmount("1");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit2) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit2) {
         addToAmount("2");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit3) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit3) {
         addToAmount("3");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit4) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit4) {
         addToAmount("4");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit5) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit5) {
         addToAmount("5");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit6) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit6) {
         addToAmount("6");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit7) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit7) {
         addToAmount("7");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit8) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit8) {
         addToAmount("8");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit9) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit9) {
         addToAmount("9");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad0) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad0) {
         addToAmount("0");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad1) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad1) {
         addToAmount("1");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad2) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad2) {
         addToAmount("2");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad3) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad3) {
         addToAmount("3");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad4) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad4) {
         addToAmount("4");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad5) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad5) {
         addToAmount("5");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad6) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad6) {
         addToAmount("6");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad7) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad7) {
         addToAmount("7");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad8) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad8) {
         addToAmount("8");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad9) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad9) {
         addToAmount("9");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.asterisk) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.asterisk) {
         addToAmount("×");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpadMultiply) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpadMultiply) {
         addToAmount("×");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.slash) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.slash) {
         addToAmount("÷");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpadDivide) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpadDivide) {
         addToAmount("÷");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.add) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.add) {
         addToAmount("+");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpadAdd) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpadAdd) {
         addToAmount("+");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.minus) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.minus) {
         addToAmount("-");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpadSubtract) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpadSubtract) {
         addToAmount("-");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.period) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.period) {
         addToAmount(".");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
         addToAmount(".");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.backspace) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
         removeToAmount();
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.delete) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.delete) {
         removeToAmount();
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.enter) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
         if (widget.next != null) {
           widget.next!();
         }
@@ -205,8 +171,7 @@ class _SelectAmountState extends State<SelectAmount> {
   addToAmount(String input) {
     bottomSheetControllerGlobal.snapToExtent(0);
     String amountClone = amount;
-    if (input == "." &&
-        !decimalCheck(operationsWithSpaces(amountClone + "."))) {
+    if (input == "." && !decimalCheck(operationsWithSpaces(amountClone + "."))) {
     } else if (amount.length == 0 && !includesOperations(input, false)) {
       if (input == "0") {
       } else if (input == ".") {
@@ -218,28 +183,20 @@ class _SelectAmountState extends State<SelectAmount> {
           amount += input;
         });
       }
-    } else if (amount.length != 0 &&
-            (!includesOperations(amount.substring(amount.length - 1), true) &&
-                includesOperations(input, true)) ||
+    } else if (amount.length != 0 && (!includesOperations(amount.substring(amount.length - 1), true) && includesOperations(input, true)) ||
         !includesOperations(input, true)) {
       setState(() {
         amount += input;
       });
-    } else if (amount.length != 0 &&
-        includesOperations(amount.substring(amount.length - 1), false) &&
-        input == ".") {
+    } else if (amount.length != 0 && includesOperations(amount.substring(amount.length - 1), false) && input == ".") {
       setState(() {
         amount += "0" + input;
       });
-    } else if (amount.length != 0 &&
-        amount.substring(amount.length - 1) == "." &&
-        includesOperations(input, false)) {
+    } else if (amount.length != 0 && amount.substring(amount.length - 1) == "." && includesOperations(input, false)) {
       setState(() {
         amount = amount.substring(0, amount.length - 1) + input;
       });
-    } else if (amount.length != 0 &&
-        includesOperations(amount.substring(amount.length - 1), false) &&
-        includesOperations(input, false)) {
+    } else if (amount.length != 0 && includesOperations(amount.substring(amount.length - 1), false) && includesOperations(input, false)) {
       //replace last input operation with a new one
       setState(() {
         amount = amount.substring(0, amount.length - 1) + input;
@@ -288,13 +245,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   bool includesOperations(String input, bool includeDecimal) {
-    List<String> operations = [
-      "÷",
-      "×",
-      "-",
-      "+",
-      (includeDecimal ? "." : "+")
-    ];
+    List<String> operations = ["÷", "×", "-", "+", (includeDecimal ? "." : "+")];
     for (String operation in operations) {
       if (input.contains(operation)) {
         // print(operation);
@@ -316,11 +267,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   String operationsWithSpaces(String input) {
-    return input
-        .replaceAll("÷", " ÷ ")
-        .replaceAll("×", " × ")
-        .replaceAll("-", " - ")
-        .replaceAll("+", " + ");
+    return input.replaceAll("÷", " ÷ ").replaceAll("×", " × ").replaceAll("-", " - ").replaceAll("+", " + ");
   }
 
   double calculateResult(String input) {
@@ -346,8 +293,7 @@ class _SelectAmountState extends State<SelectAmount> {
   bool canChange() {
     if (includesOperations(amount, false)) {
       return true;
-    } else if (amount.contains(".") &&
-        amount.split(".")[1].length >= numberDecimals) {
+    } else if (amount.contains(".") && amount.split(".")[1].length >= numberDecimals) {
       return false;
     }
     return true;
@@ -363,24 +309,17 @@ class _SelectAmountState extends State<SelectAmount> {
                 ? calculateResult(amount).toString()
                 : amount
             : includesOperations(amount, false)
-                ? convertToMoney(calculateResult(amount), showCurrency: false)
+                ? convertToMoney(Provider.of<AllWallets>(context), calculateResult(amount), showCurrency: false)
                 : convertToMoney(
-                        double.tryParse(
-                                amount.substring(amount.length - 1) == "." ||
-                                        (amount.length > numberDecimals &&
-                                            amount.substring(amount.length -
-                                                    numberDecimals) ==
-                                                ".0")
-                                    ? amount.substring(0, amount.length - 1)
-                                    : amount) ??
+                        Provider.of<AllWallets>(context),
+                        double.tryParse(amount.substring(amount.length - 1) == "." ||
+                                    (amount.length > numberDecimals && amount.substring(amount.length - numberDecimals) == ".0")
+                                ? amount.substring(0, amount.length - 1)
+                                : amount) ??
                             0,
                         showCurrency: false) +
                     (amount.substring(amount.length - 1) == "." ? "." : "") +
-                    (amount.length > numberDecimals &&
-                            amount.substring(amount.length - numberDecimals) ==
-                                ".0"
-                        ? ".0"
-                        : "");
+                    (amount.length > numberDecimals && amount.substring(amount.length - numberDecimals) == ".0" ? ".0" : "");
     return Column(
       children: [
         Center(
@@ -399,12 +338,9 @@ class _SelectAmountState extends State<SelectAmount> {
                         key: ValueKey(amount),
                         widthFactor: 0.5,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 3.0, left: 8, top: 5),
+                          padding: const EdgeInsets.only(bottom: 3.0, left: 8, top: 5),
                           child: TextFont(
-                            text: (includesOperations(amount, false)
-                                ? operationsWithSpaces(amount)
-                                : ""),
+                            text: (includesOperations(amount, false) ? operationsWithSpaces(amount) : ""),
                             textAlign: TextAlign.left,
                             fontSize: 18,
                             maxLines: 5,
@@ -439,10 +375,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                     autoSizeText: true,
                                     maxLines: 1,
                                     minFontSize: 16,
-                                    walletPkForCurrency: walletPkForCurrency ??
-                                        appStateSettings["selectedWallet"],
-                                    onlyShowCurrencyIcon:
-                                        widget.onlyShowCurrencyIcon,
+                                    walletPkForCurrency: walletPkForCurrency ?? appStateSettings["selectedWallet"],
+                                    onlyShowCurrencyIcon: widget.onlyShowCurrencyIcon,
                                     text: amountConverted,
                                     // text: amount,
                                     textAlign: TextAlign.right,
@@ -452,132 +386,84 @@ class _SelectAmountState extends State<SelectAmount> {
                                 ),
                               ),
                             ),
-                            widget.allWallets == null ||
-                                    widget.allWallets!.length <= 1 ||
-                                    appStateSettings["cachedWalletCurrencies"]
-                                            .keys
-                                            .length <=
-                                        1
+                            widget.allWallets == null || widget.allWallets!.length <= 1 || Provider.of<AllWallets>(context).list.length <= 1
                                 ? SizedBox.shrink()
                                 : MediaQuery(
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 3.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 3.0),
                                       child: AnimatedSize(
                                         duration: Duration(milliseconds: 600),
                                         curve: Curves.easeInOutCubicEmphasized,
                                         child: AnimatedSwitcher(
                                           duration: Duration(milliseconds: 200),
-                                          child:
-                                              selectedWallet?.walletPk ==
-                                                      appStateSettings[
-                                                          "selectedWallet"]
-                                                  ? Container(
-                                                      key: ValueKey(1),
-                                                    )
-                                                  : Tappable(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .secondaryContainer,
-                                                      borderRadius: 13,
-                                                      onTap: () {
-                                                        TransactionWallet?
-                                                            walletBefore =
-                                                            selectedWallet;
-                                                        // get the index of the primary wallet
-                                                        int index = 0;
-                                                        for (TransactionWallet wallet
-                                                            in widget
-                                                                    .allWallets ??
-                                                                []) {
-                                                          if (wallet.walletPk ==
-                                                              appStateSettings[
-                                                                  "selectedWallet"]) {
-                                                            break;
-                                                          }
-                                                          index++;
-                                                        }
+                                          child: selectedWallet?.walletPk == appStateSettings["selectedWallet"]
+                                              ? Container(
+                                                  key: ValueKey(1),
+                                                )
+                                              : Tappable(
+                                                  color: Theme.of(context).colorScheme.secondaryContainer,
+                                                  borderRadius: 13,
+                                                  onTap: () {
+                                                    TransactionWallet? walletBefore = selectedWallet;
+                                                    // get the index of the primary wallet
+                                                    int index = 0;
+                                                    for (TransactionWallet wallet in widget.allWallets ?? []) {
+                                                      if (wallet.walletPk == appStateSettings["selectedWallet"]) {
+                                                        break;
+                                                      }
+                                                      index++;
+                                                    }
 
-                                                        if (widget
-                                                                .setSelectedWallet !=
-                                                            null)
-                                                          widget.setSelectedWallet!(
-                                                              widget.allWallets![
-                                                                  index]);
-                                                        setState(() {
-                                                          selectedWallet =
-                                                              widget.allWallets![
-                                                                  index];
-                                                          walletPkForCurrency =
-                                                              widget
-                                                                  .allWallets![
-                                                                      index]
-                                                                  .walletPk;
-                                                          numberDecimals = selectedWallet
-                                                                  ?.decimals ??
-                                                              appStateSettings[
-                                                                  "selectedWalletDecimals"];
-                                                          print((walletBefore ==
-                                                                  null
-                                                              ? 1
-                                                              : (amountRatioToPrimaryCurrencyGivenPk(
-                                                                      walletBefore
-                                                                          .walletPk) ??
-                                                                  1)));
-                                                          try {
-                                                            amount = (double.parse(
-                                                                        amount) *
-                                                                    (walletBefore ==
-                                                                            null
-                                                                        ? 1
-                                                                        : (amountRatioToPrimaryCurrencyGivenPk(walletBefore.walletPk) ??
-                                                                            1)))
-                                                                .toStringAsFixed(
-                                                                    numberDecimals);
-                                                          } catch (e) {}
-                                                          amount =
-                                                              removeTrailingZeroes(
-                                                                  amount);
-                                                          addToAmount("");
-                                                        });
-                                                      },
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 8,
-                                                                vertical: 7),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .currency_exchange_rounded,
-                                                              size: 16,
-                                                            ),
-                                                            SizedBox(height: 2),
-                                                            TextFont(
-                                                              text: appStateSettings[
-                                                                      "cachedWalletCurrencies"][appStateSettings[
-                                                                          "selectedWallet"]
-                                                                      .toString()]
-                                                                  .toUpperCase(),
-                                                              fontSize: 11,
-                                                            ),
-                                                          ],
+                                                    if (widget.setSelectedWallet != null) widget.setSelectedWallet!(widget.allWallets![index]);
+                                                    setState(() {
+                                                      selectedWallet = widget.allWallets![index];
+                                                      walletPkForCurrency = widget.allWallets![index].walletPk;
+                                                      numberDecimals = selectedWallet?.decimals ??
+                                                          Provider.of<AllWallets>(context)
+                                                              .indexedByPk[appStateSettings["selectedWallet"]]
+                                                              ?.decimals ??
+                                                          2;
+                                                      try {
+                                                        amount = (double.parse(amount) *
+                                                                (walletBefore == null
+                                                                    ? 1
+                                                                    : (amountRatioToPrimaryCurrencyGivenPk(
+                                                                            Provider.of<AllWallets>(context, listen: false), walletBefore.walletPk) ??
+                                                                        1)))
+                                                            .toStringAsFixed(numberDecimals);
+                                                      } catch (e) {}
+                                                      amount = removeTrailingZeroes(amount);
+                                                      addToAmount("");
+                                                    });
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.currency_exchange_rounded,
+                                                          size: 16,
                                                         ),
-                                                      ),
+                                                        SizedBox(height: 2),
+                                                        TextFont(
+                                                          text: Provider.of<AllWallets>(context)
+                                                                  .indexedByPk[appStateSettings["selectedWallet"]]
+                                                                  ?.currency
+                                                                  .toString()
+                                                                  .toUpperCase() ??
+                                                              "",
+                                                          fontSize: 11,
+                                                        ),
+                                                      ],
                                                     ),
+                                                  ),
+                                                ),
                                         ),
                                       ),
                                     ),
-                                    data: MediaQuery.of(context)
-                                        .copyWith(textScaleFactor: 1.0),
+                                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                                   ),
                           ],
                         ),
@@ -586,17 +472,11 @@ class _SelectAmountState extends State<SelectAmount> {
                   ],
                 ),
               ),
-              widget.allWallets == null ||
-                      widget.allWallets!.length <= 1 ||
-                      appStateSettings["cachedWalletCurrencies"].keys.length <=
-                          1
+              widget.allWallets == null || widget.allWallets!.length <= 1 || Provider.of<AllWallets>(context).list.length <= 1
                   ? SizedBox.shrink()
                   : SizedBox(
                       height: 40,
-                      child: appStateSettings["cachedWalletCurrencies"]
-                                  .keys
-                                  .length <=
-                              1
+                      child: Provider.of<AllWallets>(context).list.length <= 1
                           ? null
                           : ListView(
                               reverse: true,
@@ -606,8 +486,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                 AddButton(
                                   onTap: () {},
                                   width: 40,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 1),
+                                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                                   openPage: AddWalletPage(title: "Add Wallet"),
                                   borderRadius: 8,
                                 ),
@@ -615,62 +494,40 @@ class _SelectAmountState extends State<SelectAmount> {
                                   widget.allWallets!.length,
                                   (int index) {
                                     return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5),
+                                      padding: const EdgeInsets.symmetric(horizontal: 5),
                                       child: ChoiceChip(
                                         side: BorderSide(
                                           color: dynamicPastel(
                                             context,
                                             lightenPastel(
-                                              HexColor(widget
-                                                  .allWallets![index].colour),
+                                              HexColor(widget.allWallets![index].colour),
                                               amount: 0.3,
                                             ),
                                             amount: 0.4,
                                           ),
                                         ),
                                         label: TextFont(
-                                          text: widget.allWallets![index]
-                                                      .name ==
-                                                  widget.allWallets![index]
-                                                      .currency
-                                                      .toString()
-                                                      .toUpperCase()
-                                              ? widget
-                                                  .allWallets![index].currency
-                                                  .toString()
-                                                  .toUpperCase()
+                                          text: widget.allWallets![index].name == widget.allWallets![index].currency.toString().toUpperCase()
+                                              ? widget.allWallets![index].currency.toString().toUpperCase()
                                               : widget.allWallets![index].name +
                                                   " (" +
-                                                  widget.allWallets![index]
-                                                      .currency
-                                                      .toString()
-                                                      .toUpperCase() +
+                                                  widget.allWallets![index].currency.toString().toUpperCase() +
                                                   ")",
                                           fontSize: 15,
                                         ),
-                                        selected: selectedWallet ==
-                                            widget.allWallets![index],
+                                        selected: selectedWallet == widget.allWallets![index],
                                         onSelected: (bool selected) {
-                                          if (widget.setSelectedWallet != null)
-                                            widget.setSelectedWallet!(
-                                                widget.allWallets![index]);
+                                          if (widget.setSelectedWallet != null) widget.setSelectedWallet!(widget.allWallets![index]);
                                           setState(() {
-                                            selectedWallet =
-                                                widget.allWallets![index];
-                                            walletPkForCurrency = widget
-                                                .allWallets![index].walletPk;
-                                            numberDecimals = selectedWallet
-                                                    ?.decimals ??
-                                                appStateSettings[
-                                                    "selectedWalletDecimals"];
+                                            selectedWallet = widget.allWallets![index];
+                                            walletPkForCurrency = widget.allWallets![index].walletPk;
+                                            numberDecimals = selectedWallet?.decimals ??
+                                                Provider.of<AllWallets>(context).indexedByPk[appStateSettings["selectedWallet"]]?.decimals ??
+                                                2;
                                             try {
-                                              amount = double.parse(amount)
-                                                  .toStringAsFixed(
-                                                      numberDecimals);
+                                              amount = double.parse(amount).toStringAsFixed(numberDecimals);
                                             } catch (e) {}
-                                            amount =
-                                                removeTrailingZeroes(amount);
+                                            amount = removeTrailingZeroes(amount);
                                             addToAmount("");
                                           });
                                         },
@@ -887,26 +744,20 @@ class CalculatorButton extends StatelessWidget {
           ignoring: disabled,
           child: Material(
             color: appStateSettings["materialYou"]
-                ? Theme.of(context)
-                    .colorScheme
-                    .secondaryContainer
-                    .withOpacity(0.9)
+                ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.9)
                 : getColor(context, "lightDarkAccentHeavy"),
             borderRadius: BorderRadius.only(
               topRight: topRight ? Radius.circular(15) : Radius.circular(0),
               topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
               bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
-              bottomRight:
-                  bottomRight ? Radius.circular(15) : Radius.circular(0),
+              bottomRight: bottomRight ? Radius.circular(15) : Radius.circular(0),
             ),
             child: InkWell(
               borderRadius: BorderRadius.only(
                 topRight: topRight ? Radius.circular(15) : Radius.circular(0),
                 topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
-                bottomLeft:
-                    bottomLeft ? Radius.circular(15) : Radius.circular(0),
-                bottomRight:
-                    bottomRight ? Radius.circular(15) : Radius.circular(0),
+                bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
+                bottomRight: bottomRight ? Radius.circular(15) : Radius.circular(0),
               ),
               onLongPress: onLongPress,
               onTap: editAmount,
@@ -957,84 +808,57 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
     super.initState();
     amount = widget.amountPassed;
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
-      if (event.runtimeType == KeyDownEvent &&
-              event.logicalKey.keyLabel == "Go Back" ||
-          event.logicalKey == LogicalKeyboardKey.escape) {
+      if (event.runtimeType == KeyDownEvent && event.logicalKey.keyLabel == "Go Back" || event.logicalKey == LogicalKeyboardKey.escape) {
         Navigator.pop(context);
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit0) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit0) {
         addToAmount("0");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit1) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit1) {
         addToAmount("1");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit2) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit2) {
         addToAmount("2");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit3) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit3) {
         addToAmount("3");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit4) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit4) {
         addToAmount("4");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit5) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit5) {
         addToAmount("5");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit6) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit6) {
         addToAmount("6");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit7) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit7) {
         addToAmount("7");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit8) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit8) {
         addToAmount("8");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.digit9) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.digit9) {
         addToAmount("9");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad0) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad0) {
         addToAmount("0");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad1) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad1) {
         addToAmount("1");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad2) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad2) {
         addToAmount("2");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad3) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad3) {
         addToAmount("3");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad4) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad4) {
         addToAmount("4");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad5) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad5) {
         addToAmount("5");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad6) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad6) {
         addToAmount("6");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad7) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad7) {
         addToAmount("7");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad8) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad8) {
         addToAmount("8");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpad9) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpad9) {
         addToAmount("9");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.period) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.period) {
         addToAmount(".");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
         addToAmount(".");
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.backspace) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.backspace) {
         removeToAmount();
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.delete) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.delete) {
         removeToAmount();
-      } else if (event.runtimeType == KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.enter) {
+      } else if (event.runtimeType == KeyDownEvent && event.logicalKey == LogicalKeyboardKey.enter) {
         if (widget.next != null) {
           widget.next!();
         }

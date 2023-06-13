@@ -5,6 +5,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class BarGraph extends StatefulWidget {
   BarGraph({
@@ -160,7 +161,8 @@ class BarGraphState extends State<BarGraph> {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextFont(
                         textAlign: TextAlign.right,
-                        text: getWordedNumber(value),
+                        text: getWordedNumber(
+                            Provider.of<AllWallets>(context), value),
                         textColor: dynamicPastel(context, widget.color,
                                 amount: 0.5, inverse: true)
                             .withOpacity(0.3),

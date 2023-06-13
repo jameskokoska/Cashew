@@ -12,8 +12,6 @@ Map<String, dynamic> defaultPreferences() {
     "devicesHaveBeenSynced": 1,
     "theme": "system",
     "selectedWallet": 0,
-    "selectedWalletCurrency": "usd",
-    "selectedWalletDecimals": 2,
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "accentSystemColor": true,
@@ -57,10 +55,6 @@ Map<String, dynamic> defaultPreferences() {
     "currentUserEmail": "",
     "usersNicknames": {},
     "requireAuth": false,
-    // cachedWalletCurrencies:
-    // Note: walletPk is a string
-    // {"walletPk": "currency", "231435":"usd",...}
-    "cachedWalletCurrencies": {},
     "cachedCurrencyExchange": {},
     "lineGraphReferenceBudgetPk": null,
     "showPastSpendingTrajectory": false,

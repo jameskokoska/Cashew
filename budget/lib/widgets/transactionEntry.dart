@@ -19,6 +19,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 
@@ -215,6 +216,7 @@ class TransactionEntry extends StatelessWidget {
                       child: Row(
                         children: [
                           CategoryIcon(
+                            category: category,
                             categoryPk: transaction.categoryFk,
                             size: 27,
                             sizePadding: 20,
@@ -737,12 +739,16 @@ class TransactionEntry extends StatelessWidget {
                                   CountNumber(
                                     count: (transaction.amount.abs()) *
                                         (amountRatioToPrimaryCurrencyGivenPk(
+                                                Provider.of<AllWallets>(
+                                                    context),
                                                 transaction.walletFk) ??
                                             1),
                                     duration: Duration(milliseconds: 2000),
                                     dynamicDecimals: true,
                                     initialCount: (transaction.amount.abs()) *
                                         (amountRatioToPrimaryCurrencyGivenPk(
+                                                Provider.of<AllWallets>(
+                                                    context),
                                                 transaction.walletFk) ??
                                             1),
                                     textBuilder: (number) {
@@ -764,11 +770,15 @@ class TransactionEntry extends StatelessWidget {
                                           ),
                                           TextFont(
                                             text: convertToMoney(
+                                              Provider.of<AllWallets>(context),
                                               number,
                                               showCurrency: false,
                                               finalNumber: (transaction.amount
                                                       .abs()) *
                                                   (amountRatioToPrimaryCurrencyGivenPk(
+                                                          Provider.of<
+                                                                  AllWallets>(
+                                                              context),
                                                           transaction
                                                               .walletFk) ??
                                                       1),
@@ -798,6 +808,7 @@ class TransactionEntry extends StatelessWidget {
                                       padding: const EdgeInsets.only(top: 1),
                                       child: TextFont(
                                         text: convertToMoney(
+                                          Provider.of<AllWallets>(context),
                                           transaction.amount.abs(),
                                           showCurrency: false,
                                           decimals: 2,

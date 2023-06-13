@@ -11,6 +11,7 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/categoryLimits.dart';
@@ -26,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:provider/provider.dart';
 
 class AddBudgetPage extends StatefulWidget {
   AddBudgetPage({
@@ -1300,9 +1302,12 @@ class _BudgetDetailsState extends State<BudgetDetails> {
             children: [
               IntrinsicWidth(
                 child: TappableTextEntry(
-                  title: convertToMoney(selectedAmount ?? 0),
-                  placeholder: convertToMoney(0),
-                  showPlaceHolderWhenTextEquals: convertToMoney(0),
+                  title: convertToMoney(
+                      Provider.of<AllWallets>(context), selectedAmount ?? 0),
+                  placeholder:
+                      convertToMoney(Provider.of<AllWallets>(context), 0),
+                  showPlaceHolderWhenTextEquals:
+                      convertToMoney(Provider.of<AllWallets>(context), 0),
                   onTap: () {
                     selectAmount(context);
                   },

@@ -17,10 +17,13 @@ import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/walletEntry.dart';
+import 'package:budget/widgets/selectChips.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/struct/reorderable_list.dart';
+import 'package:provider/provider.dart';
 
 class EditWalletsPage extends StatefulWidget {
   EditWalletsPage({
@@ -155,7 +158,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                             builder: (context, snapshot) {
                               return TextFont(
                                 textAlign: TextAlign.left,
-                                text: convertToMoney(snapshot.data ?? 0 * -1)
+                                text: convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        snapshot.data ?? 0 * -1)
                                     .toString(),
                                 fontSize: 15,
                               );
@@ -285,16 +290,10 @@ void deleteWalletPopup(context, TransactionWallet wallet,
         ),
       );
       if (isNumber(result)) {
-        await database.moveWalletTransactons(
+        await database.moveWalletTransactons(Provider.of<AllWallets>(context),
             wallet.walletPk, int.parse(result.toString()));
         if (appStateSettings["selectedWallet"] == wallet.walletPk) {
-          updateSettings("selectedWallet", 0,
-              updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          TransactionWallet defaultWallet = await database.getWalletInstance(0);
-          updateSettings("selectedWalletCurrency", defaultWallet.currency,
-              updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          updateSettings("selectedWalletDecimals", defaultWallet.decimals,
-              updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          setPrimaryWallet(0);
         }
         database.deleteWallet(wallet.walletPk, wallet.order);
         Navigator.pop(context);
@@ -308,13 +307,7 @@ void deleteWalletPopup(context, TransactionWallet wallet,
       await database.deleteWalletsTransactions(wallet.walletPk);
       // If we delete the selected wallet, set it back to the default
       if (appStateSettings["selectedWallet"] == wallet.walletPk) {
-        updateSettings("selectedWallet", 0,
-            updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-        TransactionWallet defaultWallet = await database.getWalletInstance(0);
-        updateSettings("selectedWalletCurrency", defaultWallet.currency,
-            updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-        updateSettings("selectedWalletDecimals", defaultWallet.decimals,
-            updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+        setPrimaryWallet(0);
       }
       database.deleteWallet(wallet.walletPk, wallet.order);
       Navigator.pop(context);

@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
-Horizontal progress bar for spending goals visualization in budgets page
-Add transaction page uses 2 columns on larger displays
-Spending target always shown on budget spending line graphs
-If missing mandatory information, bottom button guides user to fill in that information
+    Horizontal progress bar for spending goals visualization in budgets page
+    Add transaction page uses 2 columns on larger displays
+    Spending target always shown on budget spending line graphs
+    If missing mandatory information, bottom button guides user to fill in that information
     Add category button at bottom of category limits list in budget page
     If custom budget range out of date, its height is smaller since less details are shown
     Incognito keyboard debug option

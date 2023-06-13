@@ -71,12 +71,6 @@ Future<bool> initializeSettings() async {
     appStateSettings["accentColor"] = toHexString(accentColor);
   }
 
-  if (appStateSettings["cachedWalletCurrencies"] == null ||
-      appStateSettings["cachedWalletCurrencies"].keys.length <= 0) {
-    print("wallet cache is empty, need to add in values");
-    await updateCachedWalletCurrencies();
-  }
-
   String? retrievedClientID = await sharedPreferences.getString("clientID");
   if (retrievedClientID == null) {
     String systemID = await getDeviceInfo();

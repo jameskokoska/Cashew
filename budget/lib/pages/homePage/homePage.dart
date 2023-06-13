@@ -40,6 +40,7 @@ import 'package:budget/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({

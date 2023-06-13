@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
@@ -110,6 +111,7 @@ Widget getTransactionsSlivers(
                     if (transaction.transaction.paid)
                       totalSpentForDay += transaction.transaction.amount *
                           (amountRatioToPrimaryCurrencyGivenPk(
+                                  Provider.of<AllWallets>(context),
                                   transaction.transaction.walletFk) ??
                               0);
                   });
@@ -127,7 +129,9 @@ Widget getTransactionsSlivers(
                             color: dateDividerColor,
                             date: date,
                             info: transactionList.length > 1
-                                ? convertToMoney(totalSpentForDay)
+                                ? convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    totalSpentForDay)
                                 : "",
                           ),
                         );
@@ -184,7 +188,9 @@ Widget getTransactionsSlivers(
                                 color: dateDividerColor,
                                 date: date,
                                 info: transactionList.length > 1
-                                    ? convertToMoney(totalSpentForDay)
+                                    ? convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        totalSpentForDay)
                                     : "",
                               );
                           }
@@ -266,7 +272,9 @@ Widget getTransactionsSlivers(
                                   key: ValueKey(date),
                                   date: date,
                                   info: transactionList.length > 1
-                                      ? convertToMoney(totalSpentForDay)
+                                      ? convertToMoney(
+                                          Provider.of<AllWallets>(context),
+                                          totalSpentForDay)
                                       : "")
                               : SizedBox.shrink()
                           : AnimatedSize(
@@ -282,7 +290,10 @@ Widget getTransactionsSlivers(
                                           key: ValueKey(date),
                                           date: date,
                                           info: transactionList.length > 1
-                                              ? convertToMoney(totalSpentForDay)
+                                              ? convertToMoney(
+                                                  Provider.of<AllWallets>(
+                                                      context),
+                                                  totalSpentForDay)
                                               : ""),
                                     )
                                   : Container(

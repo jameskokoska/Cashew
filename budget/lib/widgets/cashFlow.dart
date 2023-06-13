@@ -25,6 +25,7 @@ import 'dart:math';
 import 'package:flutter/rendering.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
@@ -37,26 +38,33 @@ class CashFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WatchAllWallets(
-      childFunction: (wallets) => StreamBuilder<double?>(
-        stream: database.watchTotalSpentInTimeRangeFromCategories(
-            startDate, endDate, [], true, wallets, null, null,
-            allCashFlow: true),
-        builder: (context, snapshot) {
-          if (snapshot.data != null && snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
-              child: TextFont(
-                text: "Total cash flow: " + convertToMoney(snapshot.data!),
-                fontSize: 13,
-                textAlign: TextAlign.center,
-                textColor: getColor(context, "textLight"),
-              ),
-            );
-          }
-          return SizedBox.shrink();
-        },
+    return StreamBuilder<double?>(
+      stream: database.watchTotalSpentInTimeRangeFromCategories(
+        Provider.of<AllWallets>(context),
+        startDate,
+        endDate,
+        [],
+        true,
+        null,
+        null,
+        allCashFlow: true,
       ),
+      builder: (context, snapshot) {
+        if (snapshot.data != null && snapshot.hasData) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+            child: TextFont(
+              text: "Total cash flow: " +
+                  convertToMoney(
+                      Provider.of<AllWallets>(context), snapshot.data!),
+              fontSize: 13,
+              textAlign: TextAlign.center,
+              textColor: getColor(context, "textLight"),
+            ),
+          );
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 }

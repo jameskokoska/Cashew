@@ -1,11 +1,14 @@
 import 'dart:math';
 
+import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:provider/provider.dart';
 
 class FadeIn extends StatefulWidget {
   FadeIn({Key? key, required this.child}) : super(key: key);
@@ -249,23 +252,31 @@ class CountNumber extends StatefulWidget {
 }
 
 class _CountNumberState extends State<CountNumber> {
-  late int finalDecimalPlaces =
-      ((widget.decimals ?? appStateSettings["selectedWalletDecimals"]) > 2
-          ? widget.count.toString().split('.')[1].length <
-                  (widget.decimals ??
-                      appStateSettings["selectedWalletDecimals"])
-              ? widget.count.toString().split('.')[1].length
-              : (widget.decimals ?? appStateSettings["selectedWalletDecimals"])
-          : (widget.decimals ?? appStateSettings["selectedWalletDecimals"]));
+  int finalDecimalPlaces = 2;
   double previousAmount = 0;
-  late int decimals = finalDecimalPlaces;
+  int decimals = 2;
   bool lazyFirstRender = true;
   @override
   void initState() {
     super.initState();
-    previousAmount = widget.initialCount;
-    decimals = finalDecimalPlaces;
-    lazyFirstRender = widget.lazyFirstRender;
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        int currentSelectedDecimals =
+            Provider.of<AllWallets>(context, listen: false)
+                    .indexedByPk[appStateSettings["selectedWallet"]]
+                    ?.decimals ??
+                2;
+        finalDecimalPlaces = ((widget.decimals ?? currentSelectedDecimals) > 2
+            ? widget.count.toString().split('.')[1].length <
+                    (widget.decimals ?? currentSelectedDecimals)
+                ? widget.count.toString().split('.')[1].length
+                : (widget.decimals ?? currentSelectedDecimals)
+            : (widget.decimals ?? currentSelectedDecimals));
+        previousAmount = widget.initialCount;
+        decimals = finalDecimalPlaces;
+        lazyFirstRender = widget.lazyFirstRender;
+      });
+    });
   }
 
   @override
@@ -274,16 +285,16 @@ class _CountNumberState extends State<CountNumber> {
       if (widget.count % 1 == 0) {
         decimals = 0;
       } else {
-        decimals =
-            ((widget.decimals ?? appStateSettings["selectedWalletDecimals"]) > 2
-                ? widget.count.toString().split('.')[1].length <
-                        (widget.decimals ??
-                            appStateSettings["selectedWalletDecimals"])
-                    ? widget.count.toString().split('.')[1].length
-                    : (widget.decimals ??
-                        appStateSettings["selectedWalletDecimals"])
-                : (widget.decimals ??
-                    appStateSettings["selectedWalletDecimals"]));
+        int currentSelectedDecimals = Provider.of<AllWallets>(context)
+                .indexedByPk[appStateSettings["selectedWallet"]]
+                ?.decimals ??
+            2;
+        decimals = ((widget.decimals ?? currentSelectedDecimals) > 2
+            ? widget.count.toString().split('.')[1].length <
+                    (widget.decimals ?? currentSelectedDecimals)
+                ? widget.count.toString().split('.')[1].length
+                : (widget.decimals ?? currentSelectedDecimals)
+            : (widget.decimals ?? currentSelectedDecimals));
       }
     }
 

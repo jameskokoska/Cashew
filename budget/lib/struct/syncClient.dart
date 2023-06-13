@@ -414,23 +414,10 @@ Future<bool> syncData() async {
 
   try {
     print("UPDATED WALLET CURRENCY");
-    for (TransactionWallet wallet in await database.getAllWallets()) {
-      final Map<dynamic, dynamic> cachedWalletCurrencies =
-          appStateSettings["cachedWalletCurrencies"] ?? {};
-      cachedWalletCurrencies[wallet.walletPk.toString()] =
-          wallet.currency ?? "";
-      updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
-          pagesNeedingRefresh: [], updateGlobalState: false);
-    }
-    TransactionWallet selectedWallet =
-        await database.getWalletInstance(appStateSettings["selectedWallet"]);
-    updateSettings("selectedWalletCurrency", selectedWallet.currency,
-        updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-    updateSettings("selectedWalletDecimals", selectedWallet.decimals,
-        updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+    await database.getWalletInstance(appStateSettings["selectedWallet"]);
   } catch (e) {
     print("Selected wallet not found: " + e.toString());
-    await setPrimaryWallet((await database.getAllWallets())[0]);
+    await setPrimaryWallet((await database.getAllWallets())[0].walletPk);
   }
 
   updateSettings("lastSynced", syncStarted.toString(),

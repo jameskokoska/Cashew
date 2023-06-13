@@ -23,6 +23,7 @@ import 'package:budget/widgets/editRowEntry.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/struct/reorderable_list.dart';
+import 'package:provider/provider.dart';
 
 class EditBudgetPage extends StatefulWidget {
   EditBudgetPage({
@@ -182,7 +183,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                               Row(
                                 children: [
                                   TextFont(
-                                    text: convertToMoney(budget.amount),
+                                    text: convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        budget.amount),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
                                   ),

@@ -11,6 +11,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/colors.dart';
+import 'package:provider/provider.dart';
 
 class WalletEntry extends StatelessWidget {
   const WalletEntry({super.key, required this.wallet, required this.selected});
@@ -31,7 +32,7 @@ class WalletEntry extends StatelessWidget {
         button: (openContainer) {
           return Tappable(
             color: getColor(context, "lightDarkAccentHeavyLight"),
-            borderRadius: 15,
+            borderRadius: 14,
             child: AnimatedContainer(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -94,6 +95,7 @@ class WalletEntry extends StatelessWidget {
                                     walletPkForCurrency: wallet.walletPk,
                                     textAlign: TextAlign.left,
                                     text: convertToMoney(
+                                      Provider.of<AllWallets>(context),
                                       number,
                                       showCurrency: false,
                                       finalNumber: snapshot.data ?? 0 * -1,
@@ -136,7 +138,7 @@ class WalletEntry extends StatelessWidget {
               if (selected) {
                 openContainer();
               } else {
-                setPrimaryWallet(wallet);
+                setPrimaryWallet(wallet.walletPk);
               }
             },
             onLongPress: () {
@@ -150,23 +152,8 @@ class WalletEntry extends StatelessWidget {
   }
 }
 
-Future<bool> setPrimaryWallet(TransactionWallet wallet) async {
-  await updateSettings("selectedWallet", wallet.walletPk,
+Future<bool> setPrimaryWallet(int walletPk) async {
+  await updateSettings("selectedWallet", walletPk,
       pagesNeedingRefresh: [0, 1, 2]);
-  TransactionWallet defaultWallet =
-      await database.getWalletInstance(wallet.walletPk);
-  updateSettings("selectedWalletCurrency", defaultWallet.currency,
-      updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-  updateSettings("selectedWalletDecimals", defaultWallet.decimals,
-      updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
   return true;
-}
-
-Future<bool> checkPrimaryWallet() async {
-  TransactionWallet primaryWallet =
-      await database.getWalletInstance(appStateSettings["selectedWallet"]);
-  if (primaryWallet.currency == appStateSettings["selectedWalletCurrency"]) {
-    return true;
-  }
-  return false;
 }

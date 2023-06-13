@@ -26,6 +26,7 @@ import 'package:budget/colors.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class BudgetPage extends StatelessWidget {
   const BudgetPage({
@@ -118,55 +119,50 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               child: Transform.translate(
                 offset: Offset(0, 8),
-                child: WatchAllWallets(
-                  noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
-                  childFunction: (wallets) => StreamBuilder<double?>(
-                    stream: database.watchTotalSpentByCurrentUserOnly(
+                child: StreamBuilder<double?>(
+                  stream: database.watchTotalSpentByCurrentUserOnly(
+                      Provider.of<AllWallets>(context),
                       budgetRange.start,
                       budgetRange.end,
-                      widget.budget.budgetPk,
-                      wallets,
-                    ),
-                    builder: (context, snapshotTotalSpentByCurrentUserOnly) {
-                      return StreamBuilder<List<CategoryWithTotal>>(
-                        stream: database
-                            .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                          budgetRange.start,
-                          budgetRange.end,
-                          widget.budget.categoryFks ?? [],
-                          widget.budget.allCategoryFks,
-                          widget.budget.budgetTransactionFilters,
-                          widget.budget.memberTransactionFilters,
-                          wallets,
-                          member: selectedMember,
-                          onlyShowTransactionsBelongingToBudget:
-                              widget.budget.sharedKey != null ||
-                                      widget.budget.addedTransactionsOnly ==
-                                          true
-                                  ? widget.budget.budgetPk
-                                  : null,
-                          budget: widget.budget,
-                        ),
-                        builder: (context, snapshot) {
-                          double totalSpent = 0;
-                          if (snapshot.hasData)
-                            snapshot.data!.forEach((category) {
-                              totalSpent = totalSpent + category.total.abs();
-                              totalSpent = totalSpent.abs();
-                            });
-                          if (snapshot.hasData) {
-                            return TotalSpent(
-                              budget: widget.budget,
-                              budgetColorScheme: budgetColorScheme,
-                              totalSpent: totalSpent,
-                            );
-                          } else {
-                            return SizedBox.shrink();
-                          }
-                        },
-                      );
-                    },
-                  ),
+                      widget.budget.budgetPk),
+                  builder: (context, snapshotTotalSpentByCurrentUserOnly) {
+                    return StreamBuilder<List<CategoryWithTotal>>(
+                      stream: database
+                          .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                        Provider.of<AllWallets>(context),
+                        budgetRange.start,
+                        budgetRange.end,
+                        widget.budget.categoryFks ?? [],
+                        widget.budget.allCategoryFks,
+                        widget.budget.budgetTransactionFilters,
+                        widget.budget.memberTransactionFilters,
+                        member: selectedMember,
+                        onlyShowTransactionsBelongingToBudget:
+                            widget.budget.sharedKey != null ||
+                                    widget.budget.addedTransactionsOnly == true
+                                ? widget.budget.budgetPk
+                                : null,
+                        budget: widget.budget,
+                      ),
+                      builder: (context, snapshot) {
+                        double totalSpent = 0;
+                        if (snapshot.hasData)
+                          snapshot.data!.forEach((category) {
+                            totalSpent = totalSpent + category.total.abs();
+                            totalSpent = totalSpent.abs();
+                          });
+                        if (snapshot.hasData) {
+                          return TotalSpent(
+                            budget: widget.budget,
+                            budgetColorScheme: budgetColorScheme,
+                            totalSpent: totalSpent,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    );
+                  },
                 ),
               ),
             ),
@@ -234,214 +230,205 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             dragDownToDismiss: true,
             dragDownToDissmissBackground: budgetColorScheme.secondaryContainer,
             slivers: [
-              WatchAllWallets(
-                noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
-                childFunction: (wallets) => StreamBuilder<double?>(
-                  stream: database.watchTotalSpentByCurrentUserOnly(
-                    budgetRange.start,
-                    budgetRange.end,
-                    widget.budget.budgetPk,
-                    wallets,
-                  ),
-                  builder: (context, snapshotTotalSpentByCurrentUserOnly) {
-                    return StreamBuilder<List<CategoryWithTotal>>(
-                      stream: database
-                          .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                        budgetRange.start,
-                        budgetRange.end,
-                        widget.budget.categoryFks ?? [],
-                        widget.budget.allCategoryFks,
-                        widget.budget.budgetTransactionFilters,
-                        widget.budget.memberTransactionFilters,
-                        wallets,
-                        member: selectedMember,
-                        onlyShowTransactionsBelongingToBudget:
-                            widget.budget.sharedKey != null ||
-                                    widget.budget.addedTransactionsOnly == true
-                                ? widget.budget.budgetPk
-                                : null,
-                        budget: widget.budget,
-                      ),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          double totalSpent = 0;
-                          List<Widget> categoryEntries = [];
-                          snapshot.data!.forEach((category) {
-                            totalSpent = totalSpent + category.total.abs();
-                            totalSpent = totalSpent.abs();
-                          });
-                          snapshot.data!.asMap().forEach((index, category) {
-                            categoryEntries.add(CategoryEntry(
-                              onLongPress: () {
-                                enterCategoryLimitPopup(
-                                  context,
-                                  category.category,
-                                  category.categoryBudgetLimit,
-                                  widget.budget.budgetPk,
-                                  (p0) => null,
-                                );
-                              },
-                              categoryBudgetLimit: category.categoryBudgetLimit,
-                              budgetColorScheme: budgetColorScheme,
-                              category: category.category,
-                              totalSpent: totalSpent,
-                              transactionCount: category.transactionCount,
-                              categorySpent: category.total.abs(),
-                              onTap: () {
-                                if (selectedCategoryPk ==
-                                    category.category.categoryPk) {
-                                  setState(() {
-                                    selectedCategoryPk = -1;
-                                    selectedCategory = null;
-                                  });
-                                  _pieChartDisplayStateKey.currentState!
-                                      .setTouchedIndex(-1);
-                                } else {
-                                  setState(() {
-                                    selectedCategoryPk =
-                                        category.category.categoryPk;
-                                    selectedCategory = category.category;
-                                  });
-                                  _pieChartDisplayStateKey.currentState!
-                                      .setTouchedIndex(index);
-                                }
-                              },
-                              selected: selectedCategoryPk ==
-                                  category.category.categoryPk,
-                              allSelected: selectedCategoryPk == -1,
-                            ));
-                          });
-                          return SliverToBoxAdapter(
-                            child: Column(children: [
-                              Transform.translate(
-                                offset: Offset(0, -10),
-                                child: WidgetSize(
-                                  onChange: (size) {
-                                    budgetHeaderHeight = size.height - 20;
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      top: 20,
-                                      bottom: 22,
-                                      left: 22,
-                                      right: 22,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.vertical(
-                                          bottom: Radius.circular(10)),
-                                      color:
-                                          budgetColorScheme.secondaryContainer,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                getHorizontalPaddingConstrained(
-                                                    context),
-                                          ),
-                                          child: BudgetTimeline(
-                                            dateForRange: dateForRange,
-                                            budget: widget.budget,
-                                            large: true,
-                                            percent: widget.budget.amount == 0
-                                                ? 0
-                                                : totalSpent /
-                                                    widget.budget.amount *
-                                                    100,
-                                            yourPercent: totalSpent == 0
-                                                ? 0
-                                                : snapshotTotalSpentByCurrentUserOnly
-                                                            .data! ==
-                                                        null
-                                                    ? 0
-                                                    : (snapshotTotalSpentByCurrentUserOnly
-                                                                .data! /
-                                                            totalSpent *
-                                                            100)
-                                                        .abs(),
-                                            todayPercent: widget.isPastBudget ==
-                                                    true
-                                                ? -1
-                                                : getPercentBetweenDates(
-                                                    budgetRange, dateForRange),
-                                          ),
-                                        ),
-                                        widget.isPastBudget == true
-                                            ? SizedBox.shrink()
-                                            : DaySpending(
-                                                budget: widget.budget,
-                                                amount: (widget.budget.amount -
-                                                        totalSpent) /
-                                                    daysBetween(dateForRange,
-                                                        budgetRange.end),
-                                                large: true,
-                                                budgetRange: budgetRange,
-                                                padding: const EdgeInsets.only(
-                                                    top: 15, bottom: 0),
-                                              ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              BudgetSpenderSummary(
-                                budget: widget.budget,
-                                budgetRange: budgetRange,
-                                budgetColorScheme: budgetColorScheme,
-                                setSelectedMember: (member) {
-                                  setState(() {
-                                    selectedMember = member;
-                                    selectedCategory = null;
-                                    selectedCategoryPk = -1;
-                                  });
-                                  _pieChartDisplayStateKey.currentState!
-                                      .setTouchedIndex(-1);
-                                },
-                                wallets: wallets,
-                              ),
-                              if (snapshot.data!.length > 0)
-                                SizedBox(height: 30),
-                              if (snapshot.data!.length > 0)
-                                Container(
-                                  decoration: BoxDecoration(
-                                      boxShadow: boxShadowCheck(
-                                        boxShadowGeneral(context),
-                                      ),
-                                      borderRadius: BorderRadius.circular(200)),
-                                  child: PieChartWrapper(
-                                    pieChartDisplayStateKey:
-                                        _pieChartDisplayStateKey,
-                                    data: snapshot.data ?? [],
-                                    totalSpent: totalSpent,
-                                    setSelectedCategory:
-                                        (categoryPk, category) {
-                                      setState(() {
-                                        selectedCategoryPk = categoryPk;
-                                        selectedCategory = category;
-                                      });
-                                    },
-                                    isPastBudget: widget.isPastBudget ?? false,
-                                    middleColor: appStateSettings["materialYou"]
-                                        ? dynamicPastel(
-                                            context, budgetColorScheme.primary,
-                                            amount: 0.92)
-                                        : null,
-                                  ),
-                                ),
-                              if (snapshot.data!.length > 0)
-                                SizedBox(height: 35),
-                              ...categoryEntries,
-                              if (snapshot.data!.length > 0)
-                                SizedBox(height: 15),
-                            ]),
-                          );
-                        }
-                        return SliverToBoxAdapter(child: Container());
-                      },
-                    );
-                  },
+              StreamBuilder<double?>(
+                stream: database.watchTotalSpentByCurrentUserOnly(
+                  Provider.of<AllWallets>(context),
+                  budgetRange.start,
+                  budgetRange.end,
+                  widget.budget.budgetPk,
                 ),
+                builder: (context, snapshotTotalSpentByCurrentUserOnly) {
+                  return StreamBuilder<List<CategoryWithTotal>>(
+                    stream: database
+                        .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                      Provider.of<AllWallets>(context),
+                      budgetRange.start,
+                      budgetRange.end,
+                      widget.budget.categoryFks ?? [],
+                      widget.budget.allCategoryFks,
+                      widget.budget.budgetTransactionFilters,
+                      widget.budget.memberTransactionFilters,
+                      member: selectedMember,
+                      onlyShowTransactionsBelongingToBudget:
+                          widget.budget.sharedKey != null ||
+                                  widget.budget.addedTransactionsOnly == true
+                              ? widget.budget.budgetPk
+                              : null,
+                      budget: widget.budget,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        double totalSpent = 0;
+                        List<Widget> categoryEntries = [];
+                        snapshot.data!.forEach((category) {
+                          totalSpent = totalSpent + category.total.abs();
+                          totalSpent = totalSpent.abs();
+                        });
+                        snapshot.data!.asMap().forEach((index, category) {
+                          categoryEntries.add(CategoryEntry(
+                            onLongPress: () {
+                              enterCategoryLimitPopup(
+                                context,
+                                category.category,
+                                category.categoryBudgetLimit,
+                                widget.budget.budgetPk,
+                                (p0) => null,
+                              );
+                            },
+                            categoryBudgetLimit: category.categoryBudgetLimit,
+                            budgetColorScheme: budgetColorScheme,
+                            category: category.category,
+                            totalSpent: totalSpent,
+                            transactionCount: category.transactionCount,
+                            categorySpent: category.total.abs(),
+                            onTap: () {
+                              if (selectedCategoryPk ==
+                                  category.category.categoryPk) {
+                                setState(() {
+                                  selectedCategoryPk = -1;
+                                  selectedCategory = null;
+                                });
+                                _pieChartDisplayStateKey.currentState!
+                                    .setTouchedIndex(-1);
+                              } else {
+                                setState(() {
+                                  selectedCategoryPk =
+                                      category.category.categoryPk;
+                                  selectedCategory = category.category;
+                                });
+                                _pieChartDisplayStateKey.currentState!
+                                    .setTouchedIndex(index);
+                              }
+                            },
+                            selected: selectedCategoryPk ==
+                                category.category.categoryPk,
+                            allSelected: selectedCategoryPk == -1,
+                          ));
+                        });
+                        return SliverToBoxAdapter(
+                          child: Column(children: [
+                            Transform.translate(
+                              offset: Offset(0, -10),
+                              child: WidgetSize(
+                                onChange: (size) {
+                                  budgetHeaderHeight = size.height - 20;
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                    top: 20,
+                                    bottom: 22,
+                                    left: 22,
+                                    right: 22,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.vertical(
+                                        bottom: Radius.circular(10)),
+                                    color: budgetColorScheme.secondaryContainer,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              getHorizontalPaddingConstrained(
+                                                  context),
+                                        ),
+                                        child: BudgetTimeline(
+                                          dateForRange: dateForRange,
+                                          budget: widget.budget,
+                                          large: true,
+                                          percent: widget.budget.amount == 0
+                                              ? 0
+                                              : totalSpent /
+                                                  widget.budget.amount *
+                                                  100,
+                                          yourPercent: totalSpent == 0
+                                              ? 0
+                                              : snapshotTotalSpentByCurrentUserOnly
+                                                          .data! ==
+                                                      null
+                                                  ? 0
+                                                  : (snapshotTotalSpentByCurrentUserOnly
+                                                              .data! /
+                                                          totalSpent *
+                                                          100)
+                                                      .abs(),
+                                          todayPercent: widget.isPastBudget ==
+                                                  true
+                                              ? -1
+                                              : getPercentBetweenDates(
+                                                  budgetRange, dateForRange),
+                                        ),
+                                      ),
+                                      widget.isPastBudget == true
+                                          ? SizedBox.shrink()
+                                          : DaySpending(
+                                              budget: widget.budget,
+                                              amount: (widget.budget.amount -
+                                                      totalSpent) /
+                                                  daysBetween(dateForRange,
+                                                      budgetRange.end),
+                                              large: true,
+                                              budgetRange: budgetRange,
+                                              padding: const EdgeInsets.only(
+                                                  top: 15, bottom: 0),
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            BudgetSpenderSummary(
+                              budget: widget.budget,
+                              budgetRange: budgetRange,
+                              budgetColorScheme: budgetColorScheme,
+                              setSelectedMember: (member) {
+                                setState(() {
+                                  selectedMember = member;
+                                  selectedCategory = null;
+                                  selectedCategoryPk = -1;
+                                });
+                                _pieChartDisplayStateKey.currentState!
+                                    .setTouchedIndex(-1);
+                              },
+                            ),
+                            if (snapshot.data!.length > 0) SizedBox(height: 30),
+                            if (snapshot.data!.length > 0)
+                              Container(
+                                decoration: BoxDecoration(
+                                    boxShadow: boxShadowCheck(
+                                      boxShadowGeneral(context),
+                                    ),
+                                    borderRadius: BorderRadius.circular(200)),
+                                child: PieChartWrapper(
+                                  pieChartDisplayStateKey:
+                                      _pieChartDisplayStateKey,
+                                  data: snapshot.data ?? [],
+                                  totalSpent: totalSpent,
+                                  setSelectedCategory: (categoryPk, category) {
+                                    setState(() {
+                                      selectedCategoryPk = categoryPk;
+                                      selectedCategory = category;
+                                    });
+                                  },
+                                  isPastBudget: widget.isPastBudget ?? false,
+                                  middleColor: appStateSettings["materialYou"]
+                                      ? dynamicPastel(
+                                          context, budgetColorScheme.primary,
+                                          amount: 0.92)
+                                      : null,
+                                ),
+                              ),
+                            if (snapshot.data!.length > 0) SizedBox(height: 35),
+                            ...categoryEntries,
+                            if (snapshot.data!.length > 0) SizedBox(height: 15),
+                          ]),
+                        );
+                      }
+                      return SliverToBoxAdapter(child: Container());
+                    },
+                  );
+                },
               ),
               SliverToBoxAdapter(
                 child: AnimatedSize(
@@ -525,71 +512,69 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 categoryTintColor: budgetColorScheme.primary,
               ),
               SliverToBoxAdapter(
-                child: WatchAllWallets(
-                  noDataWidget: SliverToBoxAdapter(child: SizedBox.shrink()),
-                  childFunction: (wallets) => StreamBuilder<double?>(
-                    stream: database.watchTotalSpentByCurrentUserOnly(
-                      budgetRange.start,
-                      budgetRange.end,
-                      widget.budget.budgetPk,
-                      wallets,
-                    ),
-                    builder: (context, snapshotTotalSpentByCurrentUserOnly) {
-                      return StreamBuilder<List<CategoryWithTotal>>(
-                        stream: database
-                            .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                          budgetRange.start,
-                          budgetRange.end,
-                          widget.budget.categoryFks ?? [],
-                          widget.budget.allCategoryFks,
-                          widget.budget.budgetTransactionFilters,
-                          widget.budget.memberTransactionFilters,
-                          wallets,
-                          member: selectedMember,
-                          onlyShowTransactionsBelongingToBudget:
-                              widget.budget.sharedKey != null ||
-                                      widget.budget.addedTransactionsOnly ==
-                                          true
-                                  ? widget.budget.budgetPk
-                                  : null,
-                          budget: widget.budget,
-                        ),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            double totalSpent = 0;
-                            int totalTransactions = 0;
-                            snapshot.data!.forEach((category) {
-                              totalSpent = totalSpent + category.total.abs();
-                              totalSpent = totalSpent.abs();
-                              totalTransactions =
-                                  totalTransactions + category.transactionCount;
-                            });
-                            if (totalSpent == 0 && totalTransactions == 0)
-                              return SizedBox.shrink();
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 10,
-                                right: 10,
-                                top: 10,
-                                bottom: 8,
-                              ),
-                              child: TextFont(
-                                text: "Total cash flow: " +
-                                    convertToMoney(totalSpent) +
-                                    "\n" +
-                                    totalTransactions.toString() +
-                                    " transactions",
-                                fontSize: 13,
-                                textAlign: TextAlign.center,
-                                textColor: getColor(context, "textLight"),
-                              ),
-                            );
-                          }
-                          return SizedBox.shrink();
-                        },
-                      );
-                    },
+                child: StreamBuilder<double?>(
+                  stream: database.watchTotalSpentByCurrentUserOnly(
+                    Provider.of<AllWallets>(context),
+                    budgetRange.start,
+                    budgetRange.end,
+                    widget.budget.budgetPk,
                   ),
+                  builder: (context, snapshotTotalSpentByCurrentUserOnly) {
+                    return StreamBuilder<List<CategoryWithTotal>>(
+                      stream: database
+                          .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                        Provider.of<AllWallets>(context),
+                        budgetRange.start,
+                        budgetRange.end,
+                        widget.budget.categoryFks ?? [],
+                        widget.budget.allCategoryFks,
+                        widget.budget.budgetTransactionFilters,
+                        widget.budget.memberTransactionFilters,
+                        member: selectedMember,
+                        onlyShowTransactionsBelongingToBudget:
+                            widget.budget.sharedKey != null ||
+                                    widget.budget.addedTransactionsOnly == true
+                                ? widget.budget.budgetPk
+                                : null,
+                        budget: widget.budget,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          double totalSpent = 0;
+                          int totalTransactions = 0;
+                          snapshot.data!.forEach((category) {
+                            totalSpent = totalSpent + category.total.abs();
+                            totalSpent = totalSpent.abs();
+                            totalTransactions =
+                                totalTransactions + category.transactionCount;
+                          });
+                          if (totalSpent == 0 && totalTransactions == 0)
+                            return SizedBox.shrink();
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              top: 10,
+                              bottom: 8,
+                            ),
+                            child: TextFont(
+                              text: "Total cash flow: " +
+                                  convertToMoney(
+                                      Provider.of<AllWallets>(context),
+                                      totalSpent) +
+                                  "\n" +
+                                  totalTransactions.toString() +
+                                  " transactions",
+                              fontSize: 13,
+                              textAlign: TextAlign.center,
+                              textColor: getColor(context, "textLight"),
+                            ),
+                          );
+                        }
+                        return SizedBox.shrink();
+                      },
+                    );
+                  },
                 ),
               ),
               SliverToBoxAdapter(
@@ -665,30 +650,6 @@ class _WidgetSizeState extends State<WidgetSize> {
 
     oldSize = newSize;
     widget.onChange(newSize);
-  }
-}
-
-class WatchAllWallets extends StatelessWidget {
-  const WatchAllWallets(
-      {required Widget Function(List<TransactionWallet>) this.childFunction,
-      Widget this.noDataWidget = const SizedBox.shrink(),
-      super.key});
-
-  final Widget Function(List<TransactionWallet>) childFunction;
-  final Widget noDataWidget;
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<List<TransactionWallet>>(
-      stream: database.watchAllWallets(),
-      builder: (context, snapshotWallets) {
-        if (snapshotWallets.hasData)
-          return childFunction(snapshotWallets.data!);
-        else
-          return childFunction([]);
-        // return noDataWidget;
-      },
-    );
   }
 }
 
@@ -852,6 +813,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                     indexDay.day == transaction.dateCreated.day) {
                   totalForDay += (transaction.amount *
                           (amountRatioToPrimaryCurrencyGivenPk(
+                                  Provider.of<AllWallets>(context),
                                   transaction.walletFk) ??
                               0))
                       .abs();
@@ -970,7 +932,8 @@ class _TotalSpentState extends State<TotalSpent> {
                             initialCount: (0),
                             textBuilder: (number) {
                               return TextFont(
-                                text: convertToMoney(number,
+                                text: convertToMoney(
+                                    Provider.of<AllWallets>(context), number,
                                     finalNumber: showTotalSpent
                                         ? widget.totalSpent
                                         : widget.budget.amount -
@@ -989,7 +952,9 @@ class _TotalSpentState extends State<TotalSpent> {
                           child: TextFont(
                             text:
                                 (showTotalSpent ? " spent of " : " left of ") +
-                                    convertToMoney(widget.budget.amount),
+                                    convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        widget.budget.amount),
                             fontSize: 16,
                             textAlign: TextAlign.left,
                             textColor:
@@ -1016,7 +981,8 @@ class _TotalSpentState extends State<TotalSpent> {
                         initialCount: (0),
                         textBuilder: (number) {
                           return TextFont(
-                            text: convertToMoney(number,
+                            text: convertToMoney(
+                                Provider.of<AllWallets>(context), number,
                                 finalNumber: showTotalSpent
                                     ? widget.totalSpent
                                     : -1 *
@@ -1036,7 +1002,8 @@ class _TotalSpentState extends State<TotalSpent> {
                       child: TextFont(
                         text:
                             (showTotalSpent ? " spent of " : " overspent of ") +
-                                convertToMoney(widget.budget.amount),
+                                convertToMoney(Provider.of<AllWallets>(context),
+                                    widget.budget.amount),
                         fontSize: 16,
                         textAlign: TextAlign.left,
                         textColor:

@@ -1,9 +1,11 @@
 import 'package:budget/colors.dart';
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:provider/provider.dart';
 
 class TextFont extends StatelessWidget {
   final String text;
@@ -97,9 +99,9 @@ class TextFont extends StatelessWidget {
     }
 
     if (walletPkForCurrency != null) {
-      final Map<dynamic, dynamic> cachedWalletCurrencies =
-          appStateSettings["cachedWalletCurrencies"];
-      final currency = cachedWalletCurrencies[walletPkForCurrency.toString()];
+      String? currency = Provider.of<AllWallets>(context)
+          .indexedByPk[walletPkForCurrency]
+          ?.currency;
       if (currency == null || currenciesJSON[currency] == null)
         return textWidget(text);
       return textWidget(currenciesJSON[currency]["Symbol"] +

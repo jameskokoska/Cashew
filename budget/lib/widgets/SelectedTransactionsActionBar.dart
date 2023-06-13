@@ -22,6 +22,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SelectedTransactionsActionBar extends StatelessWidget {
   const SelectedTransactionsActionBar({Key? key, required this.pageID})
@@ -101,42 +102,43 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   globalSelectedID.notifyListeners();
                                 },
                               ),
-                              WatchAllWallets(
-                                childFunction: (wallets) =>
-                                    StreamBuilder<double?>(
-                                  stream: database.watchTotalSpentGivenList(
-                                      listOfIDs, wallets),
-                                  builder: (context, snapshot) {
-                                    return CountNumber(
-                                      count:
-                                          snapshot.hasData ? snapshot.data! : 0,
-                                      duration: Duration(milliseconds: 250),
-                                      dynamicDecimals: true,
-                                      initialCount: (0),
-                                      textBuilder: (number) {
-                                        return Flexible(
-                                          child: TextFont(
-                                            text: convertToMoney(number,
-                                                    finalNumber:
-                                                        snapshot.hasData
-                                                            ? snapshot.data!
-                                                            : 0) +
-                                                " (" +
-                                                listOfIDs.length.toString() +
-                                                " selected)",
-                                            fontSize: getWidthNavigationSidebar(
-                                                        context) <=
-                                                    0
-                                                ? 17.5
-                                                : 19,
-                                            textAlign: TextAlign.left,
-                                            maxLines: 2,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
+                              StreamBuilder<double?>(
+                                stream: database.watchTotalSpentGivenList(
+                                  Provider.of<AllWallets>(context),
+                                  listOfIDs,
                                 ),
+                                builder: (context, snapshot) {
+                                  return CountNumber(
+                                    count:
+                                        snapshot.hasData ? snapshot.data! : 0,
+                                    duration: Duration(milliseconds: 250),
+                                    dynamicDecimals: true,
+                                    initialCount: (0),
+                                    textBuilder: (number) {
+                                      return Flexible(
+                                        child: TextFont(
+                                          text: convertToMoney(
+                                                  Provider.of<AllWallets>(
+                                                      context),
+                                                  number,
+                                                  finalNumber: snapshot.hasData
+                                                      ? snapshot.data!
+                                                      : 0) +
+                                              " (" +
+                                              listOfIDs.length.toString() +
+                                              " selected)",
+                                          fontSize: getWidthNavigationSidebar(
+                                                      context) <=
+                                                  0
+                                              ? 17.5
+                                              : 19,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -302,7 +304,8 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
             TappableTextEntry(
               title: selectedOperation,
               placeholder: "+/-",
-              showPlaceHolderWhenTextEquals: convertToMoney(0),
+              showPlaceHolderWhenTextEquals:
+                  convertToMoney(Provider.of<AllWallets>(context), 0),
               onTap: () {
                 if (selectedOperation == "-") {
                   setState(() {
@@ -320,9 +323,11 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 3),
             ),
             TappableTextEntry(
-              title: convertToMoney(selectedAmount ?? 0),
-              placeholder: convertToMoney(0),
-              showPlaceHolderWhenTextEquals: convertToMoney(0),
+              title: convertToMoney(
+                  Provider.of<AllWallets>(context), selectedAmount ?? 0),
+              placeholder: convertToMoney(Provider.of<AllWallets>(context), 0),
+              showPlaceHolderWhenTextEquals:
+                  convertToMoney(Provider.of<AllWallets>(context), 0),
               onTap: () {
                 selectAmount(context);
               },
@@ -421,7 +426,9 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                         title: "Apply Edits?",
                         description: (selectedAmount != null
                                 ? selectedOperation +
-                                    convertToMoney(selectedAmount ?? 0) +
+                                    convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        selectedAmount ?? 0) +
                                     " to selected transactions."
                                 : "") +
                             (selectedAmount != null && selectedCategory != null

@@ -17,6 +17,8 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:budget/widgets/selectChips.dart';
 
 class TransactionsSearchPage extends StatefulWidget {
   const TransactionsSearchPage({Key? key}) : super(key: key);
@@ -521,11 +523,13 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextFont(
-                text: convertToMoney(_currentRangeValues.start),
+                text: convertToMoney(Provider.of<AllWallets>(context),
+                    _currentRangeValues.start),
                 fontSize: 15,
               ),
               TextFont(
-                text: convertToMoney(_currentRangeValues.end),
+                text: convertToMoney(
+                    Provider.of<AllWallets>(context), _currentRangeValues.end),
                 fontSize: 15,
               )
             ],

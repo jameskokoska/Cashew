@@ -1,12 +1,15 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:provider/provider.dart';
 
 class _LineChart extends StatefulWidget {
   _LineChart({
@@ -211,7 +214,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                 padding: const EdgeInsets.only(right: 8.0),
                 child: TextFont(
                   textAlign: TextAlign.right,
-                  text: getWordedNumber(value),
+                  text: getWordedNumber(
+                      Provider.of<AllWallets>(context, listen: false), value),
                   textColor: dynamicPastel(context, widget.color,
                           amount: 0.5, inverse: true)
                       .withOpacity(0.3),
@@ -320,7 +324,9 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                       ),
                     ) +
                     "\n" +
-                    convertToMoney(lineBarSpot.y),
+                    convertToMoney(
+                        Provider.of<AllWallets>(context, listen: false),
+                        lineBarSpot.y),
                 const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

@@ -14,6 +14,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
+import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
 
@@ -80,7 +81,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         stream: database.watchAllSubscriptions(),
                         builder: (context, snapshot) {
                           double total = getTotalSubscriptions(
-                              selectedType, snapshot.data);
+                              Provider.of<AllWallets>(context),
+                              selectedType,
+                              snapshot.data);
                           return CountNumber(
                             count: total.abs(),
                             duration: Duration(milliseconds: 700),
@@ -90,6 +93,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                               return TextFont(
                                 textAlign: TextAlign.center,
                                 text: convertToMoney(
+                                  Provider.of<AllWallets>(context),
                                   number,
                                   finalNumber: total.abs(),
                                 ),

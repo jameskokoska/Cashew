@@ -74,6 +74,7 @@ dependencies:
   device_info_plus: ^8.1.0
   flutter_lazy_indexed_stack: ^0.0.4
   app_settings: ^4.2.0
+  provider: ^6.0.5
   # feature_discovery: ^0.14.1
   
 # flutter pub run flutter_launcher_icons:main

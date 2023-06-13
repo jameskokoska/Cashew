@@ -111,12 +111,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Future addWallet() async {
     print("Added wallet");
     await database.createOrUpdateWallet(await createTransactionWallet());
-    if (appStateSettings["selectedWallet"] == widget.wallet?.walletPk) {
-      updateSettings("selectedWalletDecimals", selectedDecimals,
-          updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-      updateSettings("selectedWalletCurrency", selectedCurrency,
-          updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-    }
     Navigator.pop(context);
   }
 

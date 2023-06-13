@@ -40,13 +40,16 @@ extension CapExtension on String {
 }
 
 String convertToMoney(
+  AllWallets allWallets,
   double amount, {
   String? currencyKey,
   bool showCurrency = true,
   double? finalNumber,
   int? decimals,
 }) {
-  int numberDecimals = decimals ?? appStateSettings["selectedWalletDecimals"];
+  int numberDecimals = decimals ??
+      allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.decimals ??
+      2;
   numberDecimals = numberDecimals > 2 && amount.toString().split('.').length > 1
       ? amount.toString().split('.')[1].length < numberDecimals
           ? amount.toString().split('.')[1].length
@@ -62,7 +65,9 @@ String convertToMoney(
   NumberFormat currency = new NumberFormat.currency(
     decimalDigits: numberDecimals,
     locale: Platform.localeName,
-    symbol: (showCurrency ? getCurrencyString(currencyKey: currencyKey) : ''),
+    symbol: (showCurrency
+        ? getCurrencyString(allWallets, currencyKey: currencyKey)
+        : ''),
   );
   String formatOutput = currency.format(amount);
 
@@ -90,12 +95,16 @@ String convertToMoney(
 }
 
 // assume selected wallets currency
-String getCurrencyString({String? currencyKey}) {
+String getCurrencyString(AllWallets allWallets, {String? currencyKey}) {
+  String? selectedWalletCurrency =
+      allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.currency;
   return currencyKey != null &&
           currenciesJSON[currencyKey] != null &&
           currenciesJSON[currencyKey]["Symbol"] != null
       ? currenciesJSON[currencyKey]["Symbol"]
-      : currenciesJSON[appStateSettings["selectedWalletCurrency"]]["Symbol"];
+      : selectedWalletCurrency == null
+          ? ""
+          : currenciesJSON[selectedWalletCurrency]["Symbol"];
 }
 
 getMonth(int currentMonth) {
@@ -427,13 +436,17 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           budget.startDate.day));
 }
 
-String getWordedNumber(double value) {
+String getWordedNumber(AllWallets allWallets, double value) {
   if (value >= 1000) {
-    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
+    return getCurrencyString(allWallets) +
+        (value / 1000).toStringAsFixed(1) +
+        "K";
   } else if (value <= -1000) {
-    return getCurrencyString() + (value / 1000).toStringAsFixed(1) + "K";
+    return getCurrencyString(allWallets) +
+        (value / 1000).toStringAsFixed(1) +
+        "K";
   } else {
-    return getCurrencyString() + value.toInt().toString();
+    return getCurrencyString(allWallets) + value.toInt().toString();
   }
 }
 
@@ -503,15 +516,16 @@ IconData getTransactionTypeIcon(TransactionSpecialType? selectedType) {
   return Icons.event_repeat_rounded;
 }
 
-getTotalSubscriptions(
-    SelectedSubscriptionsType type, List<Transaction>? subscriptions) {
+getTotalSubscriptions(AllWallets allWallets, SelectedSubscriptionsType type,
+    List<Transaction>? subscriptions) {
   double total = 0;
   DateTime today = DateTime.now();
   if (subscriptions != null) {
     for (Transaction subscription in subscriptions) {
       subscription = subscription.copyWith(
           amount: subscription.amount *
-              (amountRatioToPrimaryCurrencyGivenPk(subscription.walletFk) ??
+              (amountRatioToPrimaryCurrencyGivenPk(
+                      allWallets, subscription.walletFk) ??
                   0));
       if (subscription.periodLength == 0) {
         continue;
@@ -712,28 +726,28 @@ Future<bool> getExchangeRates() async {
   return true;
 }
 
-double? amountRatioToPrimaryCurrencyGivenPk(int walletPk) {
+double? amountRatioToPrimaryCurrencyGivenPk(
+    AllWallets allWallets, int walletPk) {
   return amountRatioToPrimaryCurrency(
-      appStateSettings["cachedWalletCurrencies"][walletPk.toString()]);
+      allWallets, allWallets.indexedByPk[walletPk]?.currency);
 }
 
-double? amountRatioToPrimaryCurrency(String? walletCurrency) {
+double? amountRatioToPrimaryCurrency(
+    AllWallets allWallets, String? walletCurrency) {
   if (walletCurrency == null) {
     return 0;
   }
   if (appStateSettings["cachedCurrencyExchange"][walletCurrency] == null) {
     return 0;
   }
-  if (appStateSettings["cachedWalletCurrencies"]
-          [appStateSettings["selectedWallet"].toString()] ==
+  if (allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.currency ==
       walletCurrency) {
     return 1;
   }
-  double exchangeRateFromUSDToTarget =
-      appStateSettings["cachedCurrencyExchange"][
-              appStateSettings["cachedWalletCurrencies"]
-                  [appStateSettings["selectedWallet"].toString()]]
-          .toDouble();
+  double exchangeRateFromUSDToTarget = appStateSettings[
+              "cachedCurrencyExchange"]
+          [allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.currency]
+      .toDouble();
   double exchangeRateFromCurrentToUSD =
       1 / appStateSettings["cachedCurrencyExchange"][walletCurrency].toDouble();
   return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;

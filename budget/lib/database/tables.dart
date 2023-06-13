@@ -354,6 +354,12 @@ class TransactionWithCategory {
   TransactionWithCategory({required this.category, required this.transaction});
 }
 
+class AllWallets {
+  final List<TransactionWallet> list;
+  final Map<int, TransactionWallet> indexedByPk;
+  AllWallets({required this.list, required this.indexedByPk});
+}
+
 class CategoryWithTotal {
   final TransactionCategory category;
   final CategoryBudgetLimit? categoryBudgetLimit;
@@ -1105,6 +1111,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Stream<AllWallets> watchAllWalletsIndexed() {
+    return (select(wallets)..orderBy([(w) => OrderingTerm.asc(w.order)]))
+        .watch()
+        .map((wallets) {
+      Map<int, TransactionWallet> indexedByPk = {
+        for (TransactionWallet wallet in wallets) wallet.walletPk: wallet,
+      };
+      return AllWallets(list: wallets, indexedByPk: indexedByPk);
+    });
+  }
+
   Stream<List<TransactionWallet>> watchAllWallets(
       {String? searchFor, int? limit, int? offset}) {
     return (select(wallets)
@@ -1327,13 +1344,6 @@ class FinanceDatabase extends _$FinanceDatabase {
   //create or update a new wallet
   Future<int> createOrUpdateWallet(TransactionWallet wallet,
       {DateTime? customDateTimeModified}) {
-    //when the first wallet is created this will most likely be null, as we initialize the database before settings
-    final Map<dynamic, dynamic> cachedWalletCurrencies =
-        appStateSettings["cachedWalletCurrencies"] ?? {};
-    cachedWalletCurrencies[wallet.walletPk.toString()] = wallet.currency ?? "";
-    print(cachedWalletCurrencies);
-    updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
-        pagesNeedingRefresh: [], updateGlobalState: false);
     return into(wallets).insert(
         wallet.copyWith(
             dateTimeModified: Value(customDateTimeModified ?? DateTime.now())),
@@ -2561,18 +2571,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (walletPk == 0) {
       throw "Can't delete default wallet";
     }
-    final Map<dynamic, dynamic> cachedWalletCurrencies =
-        appStateSettings["cachedWalletCurrencies"] ?? {};
-    cachedWalletCurrencies.remove(walletPk.toString());
-    print(cachedWalletCurrencies);
-    updateSettings("cachedWalletCurrencies", cachedWalletCurrencies,
-        pagesNeedingRefresh: [], updateGlobalState: false);
     await database.shiftWallets(-1, order);
     await createDeleteLog(DeleteLogType.TransactionWallet, walletPk);
     return (delete(wallets)..where((w) => w.walletPk.equals(walletPk))).go();
   }
 
-  Future<bool> moveWalletTransactons(int walletPk, int toWalletPk) async {
+  Future<bool> moveWalletTransactons(
+      AllWallets allWallets, int walletPk, int toWalletPk) async {
     List<Transaction> transactionsForMove = await (select(transactions)
           ..where((tbl) {
             return tbl.walletFk.equals(walletPk);
@@ -2582,10 +2587,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     for (Transaction transaction in transactionsForMove) {
       allTransactionsToUpdate.add(transaction.copyWith(
         amount: (amountRatioFromToCurrency(
-                    appStateSettings["cachedWalletCurrencies"]
-                        [walletPk.toString()],
-                    appStateSettings["cachedWalletCurrencies"]
-                        [toWalletPk.toString()]) ??
+                    allWallets.indexedByPk[walletPk]?.currency ?? "usd",
+                    allWallets.indexedByPk[toWalletPk]?.currency ?? "usd") ??
                 1) *
             transaction.amount,
         dateTimeModified: Value(DateTime.now()),
@@ -2670,9 +2673,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalSpentGivenList(
-      List<int> transactionPks, List<TransactionWallet> wallets) {
+      AllWallets allWallets, List<int> transactionPks) {
     List<Stream<double?>> mergedStreams = [];
-    for (TransactionWallet wallet in wallets) {
+    for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       JoinedSelectStatement<$TransactionsTable, Transaction> query;
 
@@ -2685,7 +2688,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
           .watchSingle());
     }
 
@@ -2694,11 +2697,11 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // get total amount spent in each day
   Stream<double?> watchTotalSpentInTimeRangeFromCategories(
+      AllWallets allWallets,
       DateTime start,
       DateTime end,
       List<int>? categoryFks,
       bool allCategories,
-      List<TransactionWallet> wallets,
       List<BudgetTransactionFilters>? budgetTransactionFilters,
       List<String>? memberTransactionFilters,
       {bool allCashFlow = false,
@@ -2707,7 +2710,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     List<Stream<double?>> mergedStreams = [];
-    for (TransactionWallet wallet in wallets) {
+    for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       final date = transactions.dateCreated.date;
 
@@ -2750,7 +2753,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);
@@ -2794,16 +2797,16 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalSpentByCurrentUserOnly(
+    AllWallets allWallets,
     DateTime start,
     DateTime end,
     int budgetPk,
-    List<TransactionWallet> wallets,
   ) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
 
     List<Stream<double?>> mergedStreams = [];
-    for (TransactionWallet wallet in wallets) {
+    for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       JoinedSelectStatement<$TransactionsTable, Transaction> query =
           (selectOnly(transactions)
@@ -2821,7 +2824,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
           .watchSingleOrNull());
     }
 
@@ -2829,18 +2832,18 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalSpentByUser(
+      AllWallets allWallets,
       DateTime start,
       DateTime end,
       List<int> categoryFks,
       bool allCategories,
       String userEmail,
       int onlyShowTransactionsBelongingToBudget,
-      List<TransactionWallet> wallets,
       {bool allTime = false}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     List<Stream<double?>> mergedStreams = [];
-    for (TransactionWallet wallet in wallets) {
+    for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       JoinedSelectStatement<$TransactionsTable, Transaction> query;
 
@@ -2860,7 +2863,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
           .watchSingleOrNull());
     }
     return totalDoubleStream(mergedStreams);
@@ -2953,13 +2956,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   // print(snapshot.data![0].rawData.data["c" + (snapshot.data![0].rawData.data.length).toString()]);
   Stream<List<CategoryWithTotal>>
       watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+    AllWallets allWallets,
     DateTime start,
     DateTime end,
     List<int> categoryFks,
     bool allCategories,
     List<BudgetTransactionFilters>? budgetTransactionFilters,
-    List<String>? memberTransactionFilters,
-    List<TransactionWallet> wallets, {
+    List<String>? memberTransactionFilters, {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
@@ -2971,7 +2974,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime endDate = DateTime(end.year, end.month, end.day);
     List<Stream<List<CategoryWithTotal>>> mergedStreams = [];
 
-    for (TransactionWallet wallet in wallets) {
+    for (TransactionWallet wallet in allWallets.list) {
       if (walletPk != null && wallet.walletPk != walletPk) continue;
       final totalAmt = transactions.amount.sum();
       final totalCount = transactions.transactionPk.count();
@@ -3012,7 +3015,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             row.readTableOrNull(categoryBudgetLimits);
 
         final double? total = (row.read(totalAmt) ?? 0) *
-            (amountRatioToPrimaryCurrency(wallet.currency) ?? 0);
+            (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0);
         final int? transactionCount = row.read(totalCount);
         return CategoryWithTotal(
             category: category,
@@ -3079,9 +3082,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfUpcomingOverdue(
-      bool isOverdue, List<TransactionWallet> wallets) {
+    AllWallets allWallets,
+    bool isOverdue,
+  ) {
     List<Stream<double?>> mergedStreams = [];
-    for (TransactionWallet wallet in wallets) {
+    for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
@@ -3101,7 +3106,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(wallet.currency) ?? 0))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);

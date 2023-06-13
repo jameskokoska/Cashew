@@ -8,6 +8,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
+import 'package:provider/provider.dart';
 import '../colors.dart';
 
 class CategoryEntry extends StatelessWidget {
@@ -64,7 +65,8 @@ class CategoryEntry extends StatelessWidget {
                 autoSizeText: true,
                 minFontSize: 8,
                 maxLines: 1,
-                text: convertToMoney(categorySpent),
+                text: convertToMoney(
+                    Provider.of<AllWallets>(context), categorySpent),
                 fontSize: 13,
                 textColor: getColor(context, "textLight"),
               ),
@@ -134,7 +136,9 @@ class CategoryEntry extends StatelessWidget {
                                   ),
                             TextFont(
                               fontWeight: FontWeight.bold,
-                              text: convertToMoney(categorySpent.abs()),
+                              text: convertToMoney(
+                                  Provider.of<AllWallets>(context),
+                                  categorySpent.abs()),
                               fontSize: 20,
                               textColor: categoryBudgetLimit != null &&
                                       categorySpent >
@@ -153,6 +157,7 @@ class CategoryEntry extends StatelessWidget {
                                     child: TextFont(
                                       text: " / " +
                                           convertToMoney(
+                                              Provider.of<AllWallets>(context),
                                               categoryBudgetLimit!.amount),
                                       fontSize: 14,
                                       textColor: categoryBudgetLimit != null &&

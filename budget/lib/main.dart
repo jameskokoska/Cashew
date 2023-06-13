@@ -4,6 +4,7 @@ import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/util/initializeBiometrics.dart';
 import 'package:budget/widgets/util/watchForDayChange.dart';
+import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:local_auth/local_auth.dart';
 import 'package:animations/animations.dart';
@@ -48,6 +49,8 @@ flutter upgrade
 flutter build appbundle --release
 
 firebase deploy
+
+"dart.lineLength": 150,
 */
 
 void main() async {
@@ -76,8 +79,7 @@ void main() async {
   database = await constructDb('db');
   notificationPayload = await initializeNotifications();
   entireAppLoaded = false;
-  currenciesJSON = await json.decode(
-      await rootBundle.loadString('assets/static/generated/currencies.json'));
+  currenciesJSON = await json.decode(await rootBundle.loadString('assets/static/generated/currencies.json'));
   await initializeDatabase();
   await initializeSettings();
   runApp(RestartApp(child: InitializeApp(key: appStateKey)));
@@ -113,24 +115,8 @@ List<double> randomDouble = [
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;
 
-Future<bool> updateCachedWalletCurrencies() async {
-  List<TransactionWallet> wallets = await database.getAllWallets();
-  for (TransactionWallet wallet in wallets) {
-    if (wallet.currency == null)
-      await database.createOrUpdateWallet(
-        wallet.copyWith(currency: Value("usd")),
-      );
-    else
-      await database.createOrUpdateWallet(
-        wallet,
-      );
-  }
-  return true;
-}
-
 GlobalKey<_InitializeAppState> appStateKey = GlobalKey();
-GlobalKey<PageNavigationFrameworkState> pageNavigationFrameworkKey =
-    GlobalKey();
+GlobalKey<PageNavigationFrameworkState> pageNavigationFrameworkKey = GlobalKey();
 
 class InitializeApp extends StatefulWidget {
   InitializeApp({Key? key}) : super(key: key);
@@ -172,29 +158,17 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
           brightness: Brightness.light,
-          background: appStateSettings["materialYou"]
-              ? lightenPastel(
-                  getSettingConstants(appStateSettings)["accentColor"],
-                  amount: 0.91)
-              : Colors.white,
+          background:
+              appStateSettings["materialYou"] ? lightenPastel(getSettingConstants(appStateSettings)["accentColor"], amount: 0.91) : Colors.white,
         ),
         useMaterial3: true,
         applyElevationOverlayColor: false,
         typography: Typography.material2014(),
-        canvasColor: appStateSettings["materialYou"]
-            ? lightenPastel(
-                getSettingConstants(appStateSettings)["accentColor"],
-                amount: 0.91)
-            : Colors.white,
-        appBarTheme:
-            AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+        canvasColor:
+            appStateSettings["materialYou"] ? lightenPastel(getSettingConstants(appStateSettings)["accentColor"], amount: 0.91) : Colors.white,
+        appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
         splashColor: appStateSettings["materialYou"]
-            ? darkenPastel(
-                    lightenPastel(
-                        getSettingConstants(appStateSettings)["accentColor"],
-                        amount: 0.8),
-                    amount: 0.2)
-                .withOpacity(0.5)
+            ? darkenPastel(lightenPastel(getSettingConstants(appStateSettings)["accentColor"], amount: 0.8), amount: 0.2).withOpacity(0.5)
             : null,
         extensions: <ThemeExtension<dynamic>>[appColorsLight],
       ),
@@ -203,26 +177,16 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
           brightness: Brightness.dark,
-          background: appStateSettings["materialYou"]
-              ? darkenPastel(
-                  getSettingConstants(appStateSettings)["accentColor"],
-                  amount: 0.92)
-              : Colors.black,
+          background:
+              appStateSettings["materialYou"] ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"], amount: 0.92) : Colors.black,
         ),
         useMaterial3: true,
         typography: Typography.material2014(),
-        canvasColor: appStateSettings["materialYou"]
-            ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
-                amount: 0.92)
-            : Colors.black,
+        canvasColor:
+            appStateSettings["materialYou"] ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"], amount: 0.92) : Colors.black,
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
         splashColor: appStateSettings["materialYou"]
-            ? darkenPastel(
-                    lightenPastel(
-                        getSettingConstants(appStateSettings)["accentColor"],
-                        amount: 0.86),
-                    amount: 0.1)
-                .withOpacity(0.2)
+            ? darkenPastel(lightenPastel(getSettingConstants(appStateSettings)["accentColor"], amount: 0.86), amount: 0.1).withOpacity(0.2)
             : null,
         extensions: <ThemeExtension<dynamic>>[appColorsDark],
       ),
@@ -235,12 +199,8 @@ class App extends StatelessWidget {
             switchInCurve: Curves.easeInOutCubic,
             switchOutCurve: Curves.easeInOutCubic,
             transitionBuilder: (Widget child, Animation<double> animation) {
-              final inAnimation =
-                  Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0))
-                      .animate(animation);
-              final outAnimation =
-                  Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                      .animate(animation);
+              final inAnimation = Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0)).animate(animation);
+              final outAnimation = Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0)).animate(animation);
 
               if (child.key == ValueKey("Onboarding")) {
                 return ClipRect(
@@ -262,24 +222,26 @@ class App extends StatelessWidget {
       builder: (context, child) {
         return InitializeBiometrics(
           child: WatchForDayChange(
-            child: Stack(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: getWidthNavigationSidebar(context)),
-                    Expanded(
-                      child: child!,
-                    ),
-                  ],
-                ),
-                NavigationSidebar(
-                  key: sidebarStateKey,
-                ),
-                // The persistent global Widget stack (stays on navigation change)
-                GlobalSnackbar(key: snackbarKey),
-                GlobalLoadingProgress(key: loadingProgressKey),
-                GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
-              ],
+            child: WatchAllWallets(
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(width: getWidthNavigationSidebar(context)),
+                      Expanded(
+                        child: child!,
+                      ),
+                    ],
+                  ),
+                  NavigationSidebar(
+                    key: sidebarStateKey,
+                  ),
+                  // The persistent global Widget stack (stays on navigation change)
+                  GlobalSnackbar(key: snackbarKey),
+                  GlobalLoadingProgress(key: loadingProgressKey),
+                  GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
+                ],
+              ),
             ),
           ),
         );

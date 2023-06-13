@@ -19,6 +19,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UpcomingTransactions extends StatelessWidget {
   const UpcomingTransactions({
@@ -57,40 +58,41 @@ class UpcomingTransactions extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     SizedBox(height: 6),
-                    WatchAllWallets(
-                      childFunction: (wallets) => StreamBuilder<double?>(
-                        stream: database.watchTotalOfUpcomingOverdue(
-                            overdueTransactions, wallets),
-                        builder: (context, snapshot) {
-                          return CountNumber(
-                            count: snapshot.hasData == false ||
-                                    snapshot.data == null
-                                ? 0
-                                : (snapshot.data ?? 0).abs(),
-                            duration: Duration(milliseconds: 1500),
-                            dynamicDecimals: true,
-                            initialCount: (0),
-                            textBuilder: (number) {
-                              return TextFont(
-                                text: convertToMoney(number,
-                                    finalNumber: snapshot.hasData == false ||
-                                            snapshot.data == null
-                                        ? 0
-                                        : (snapshot.data ?? 0).abs()),
-                                textColor: overdueTransactions
-                                    ? getColor(context, "unPaidOverdue")
-                                    : getColor(context, "unPaidUpcoming"),
-                                fontWeight: FontWeight.bold,
-                                autoSizeText: true,
-                                fontSize: 24,
-                                maxFontSize: 24,
-                                minFontSize: 10,
-                                maxLines: 1,
-                              );
-                            },
-                          );
-                        },
+                    StreamBuilder<double?>(
+                      stream: database.watchTotalOfUpcomingOverdue(
+                        Provider.of<AllWallets>(context),
+                        overdueTransactions,
                       ),
+                      builder: (context, snapshot) {
+                        return CountNumber(
+                          count:
+                              snapshot.hasData == false || snapshot.data == null
+                                  ? 0
+                                  : (snapshot.data ?? 0).abs(),
+                          duration: Duration(milliseconds: 1500),
+                          dynamicDecimals: true,
+                          initialCount: (0),
+                          textBuilder: (number) {
+                            return TextFont(
+                              text: convertToMoney(
+                                  Provider.of<AllWallets>(context), number,
+                                  finalNumber: snapshot.hasData == false ||
+                                          snapshot.data == null
+                                      ? 0
+                                      : (snapshot.data ?? 0).abs()),
+                              textColor: overdueTransactions
+                                  ? getColor(context, "unPaidOverdue")
+                                  : getColor(context, "unPaidUpcoming"),
+                              fontWeight: FontWeight.bold,
+                              autoSizeText: true,
+                              fontSize: 24,
+                              maxFontSize: 24,
+                              minFontSize: 10,
+                              maxLines: 1,
+                            );
+                          },
+                        );
+                      },
                     ),
                     SizedBox(height: 5),
                     StreamBuilder<List<int?>>(

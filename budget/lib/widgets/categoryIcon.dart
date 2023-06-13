@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 class CategoryIcon extends StatelessWidget {
   CategoryIcon({
     Key? key,
-    required this.categoryPk,
+    this.categoryPk,
     required this.size,
     this.onTap,
     this.label = false,
@@ -28,7 +28,7 @@ class CategoryIcon extends StatelessWidget {
     this.tintEnabled = true,
   }) : super(key: key);
 
-  final int categoryPk;
+  final int? categoryPk;
   final double size;
   final VoidCallback? onTap;
   final bool label;
@@ -173,12 +173,15 @@ class CategoryIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     if (category != null) {
       return categoryIconWidget(context, category);
+    } else if (categoryPk != null) {
+      return StreamBuilder<TransactionCategory>(
+        stream: database.getCategory(categoryPk!).$1,
+        builder: (context, snapshot) {
+          return categoryIconWidget(context, snapshot.data);
+        },
+      );
+    } else {
+      return SizedBox.shrink();
     }
-    return StreamBuilder<TransactionCategory>(
-      stream: database.getCategory(categoryPk).$1,
-      builder: (context, snapshot) {
-        return categoryIconWidget(context, snapshot.data);
-      },
-    );
   }
 }
