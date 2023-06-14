@@ -71,7 +71,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
         ignoring: appStateSettings["hasOnboarded"] == false,
         child: AnimatedOpacity(
           duration: Duration(milliseconds: 500),
-          opacity: appStateSettings["hasOnboarded"] == false ? 0.5 : 1,
+          opacity: appStateSettings["hasOnboarded"] == false ? 0.3 : 1,
           child: SingleChildScrollView(
             child: IntrinsicHeight(
               child: ConstrainedBox(
@@ -399,7 +399,7 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
     return Column(
       children: [
         NavigationSidebarButton(
-          icon: Icons.data_object_rounded,
+          icon: Icons.edit_document,
           label: "Edit Data",
           isSelected: false,
           onTap: () {

@@ -21,6 +21,8 @@ import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -127,6 +129,12 @@ class HomePageState extends State<HomePage>
                 child: ListView(
                   controller: _scrollController,
                   children: [
+                    Tappable(
+                      child: Container(height: 50, width: 50),
+                      onTap: () {
+                        openBottomSheet(context, RatingPopup());
+                      },
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,

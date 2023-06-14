@@ -2937,13 +2937,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         : (allTime == true || (startDate == null && endDate == null)
             ? Constant(true)
             : startDate == null && endDate != null
-                ? transactions.dateCreated.isSmallerOrEqualValue(endDate)
+                ? isOnDay(transactions.dateCreated, endDate) |
+                    transactions.dateCreated.isSmallerOrEqualValue(endDate)
                 : startDate != null && endDate == null
-                    ? transactions.dateCreated.isBiggerOrEqualValue(startDate)
+                    ? isOnDay(transactions.dateCreated, startDate) |
+                        transactions.dateCreated.isBiggerOrEqualValue(startDate)
                     : isOnDay(transactions.dateCreated, endDate!) |
                         isOnDay(transactions.dateCreated, startDate!) |
                         transactions.dateCreated
-                            .isBetweenValues(startDate!, endDate!)));
+                            .isBetweenValues(startDate, endDate)));
   }
 
   Expression<bool> onlyShowIfCertainBudget(

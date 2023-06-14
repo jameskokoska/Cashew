@@ -11,9 +11,10 @@ import 'dart:async';
 import 'package:provider/provider.dart';
 
 class FadeIn extends StatefulWidget {
-  FadeIn({Key? key, required this.child}) : super(key: key);
+  FadeIn({Key? key, required this.child, this.duration}) : super(key: key);
 
   final Widget child;
+  final Duration? duration;
 
   @override
   _FadeInState createState() => _FadeInState();
@@ -41,7 +42,7 @@ class _FadeInState extends State<FadeIn> {
     }
     return AnimatedOpacity(
       opacity: widgetOpacity,
-      duration: Duration(milliseconds: 500),
+      duration: widget.duration ?? Duration(milliseconds: 500),
       child: widget.child,
     );
   }

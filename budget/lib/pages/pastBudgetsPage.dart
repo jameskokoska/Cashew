@@ -556,7 +556,9 @@ class PastBudgetContainer extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               TextFont(
-                                text: getWordedDateShortMore(budgetRange.start),
+                                text: (isPastBudgetButCurrentPeriod == true)
+                                    ? "Current Period"
+                                    : getWordedDateShortMore(budgetRange.start),
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),

@@ -34,7 +34,7 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
   <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#000000">
 
-  <title>Budget</title>
+  <title>Cashew</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
@@ -93,26 +93,41 @@
         width: 100%;
       }
 
-      #loading .loading-spinner {
-        opacity: .66;
-        transition: opacity .4s;
+      #loading .loading-spinner, #loading .loading-icon {
+        transition: opacity 0.5s;
       }
 
       #loading.main_done .loading-spinner {
-        opacity: 1;
+        opacity: 0;
       }
 
-      #loading.init_done .loading-spinner {
-        animation: .33s ease-in-out 0s 1 forwards zoom;
+      #loading.init_done .loading-spinner, #loading.init_done .loading-icon {
+        /* animation: .33s ease-in-out 0s 1 forwards zoom; */
         opacity: 0;
       }
 
       .loading-spinner {
-        width: 50px;
-        height: 50px;
-        border-radius: 16px;
-        border: #1c3e6f solid 5px;
-        animation: spin ease 700ms infinite forwards;
+        margin: 40px 10px;
+        display: inline-block;
+        width: 45px;
+        height: 45px;
+        border: 4px solid rgba(255,255,255,.3);
+        border-radius: 50%;
+        border-top-color: #e3e7ff;
+        animation: spin 1s linear infinite;
+        opacity: .66;
+      }
+
+      .column{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .loading-icon{
+        margin: 40px 10px;
+        width: min(30vh, 30vw);
+        height: min(30vh, 30vw);
       }
 
       @keyframes spin {
@@ -120,21 +135,14 @@
           transform: rotate(0deg);
         }
         100% {
-          transform: rotate(90deg);
-        }
-      }
-
-      @keyframes zoom {
-        from {
-          transform: scale(1)
-        }
-
-        to {
-          transform: scale(20)
+          transform: rotate(360deg);
         }
       }
     </style>
-    <div class="loading-spinner"></div>
+    <div class="column">
+      <img src="./icons/Icon.png" class="loading-icon"/>
+      <div class="loading-spinner"></div>
+    </div>
   </div>
   <script>
     window.addEventListener('load', function(ev) {

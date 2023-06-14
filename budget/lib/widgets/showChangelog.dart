@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Started rating popup
+    Updated web icons and loading animation
+    First budget history entry says current period
+    When category selected, goal line not always in view
     Fixed transfer wallets
     Refactored the way currencies are handled
     Fixed some transactions not displayed if they occured at the end day of a time period

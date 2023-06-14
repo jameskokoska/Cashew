@@ -49,8 +49,6 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
   int currentIndex = 0;
 
   final PageController controller = PageController();
-  FocusNode _focusNode = FocusNode();
-  late FocusAttachment _focusAttachment;
 
   double? selectedAmount;
   int selectedPeriodLength = 1;
@@ -87,6 +85,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           pagesNeedingRefresh: [], updateGlobalState: true);
     }
   }
+
+  FocusNode _focusNode = FocusNode();
+  late FocusAttachment _focusAttachment;
 
   @override
   void initState() {
