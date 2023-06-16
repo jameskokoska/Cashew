@@ -20,6 +20,7 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/widgets/countNumber.dart';
 
 class UpcomingTransactions extends StatelessWidget {
   const UpcomingTransactions({

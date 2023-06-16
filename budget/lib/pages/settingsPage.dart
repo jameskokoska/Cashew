@@ -17,6 +17,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/pageFramework.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
@@ -68,16 +69,27 @@ class SettingsPageState extends State<SettingsPage>
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
-        // SettingsContainerOpenPage(
-        //   openPage: ColorsPage(),
-        //   title: "Colors",
-        //   icon: Icons.color_lens,
-        // ),
-        widget.hasMorePages
-            ? SettingsContainerOpenPage(
-                openPage: AboutPage(),
-                title: "About Cashew",
-                icon: Icons.info_outline_rounded,
+        SettingsContainerOpenPage(
+          openPage: AboutPage(),
+          title: "About Cashew",
+          icon: Icons.info_outline_rounded,
+        ),
+        kIsWeb
+            ? SettingsContainer(
+                title: "Cashew is Open Source",
+                icon: Icons.code_rounded,
+                onTap: () {
+                  openUrl("https://github.com/jameskokoska/Cashew");
+                },
+              )
+            : SizedBox.shrink(),
+        kIsWeb
+            ? SettingsContainer(
+                title: "Share Feedback",
+                icon: Icons.rate_review_rounded,
+                onTap: () {
+                  openBottomSheet(context, RatingPopup());
+                },
               )
             : SizedBox.shrink(),
         widget.hasMorePages ? MorePages() : SizedBox.shrink(),
@@ -102,7 +114,7 @@ class SettingsPageState extends State<SettingsPage>
               ),
             );
           },
-          title: "Select Accent Color",
+          title: "Accent Color",
           icon: Icons.color_lens_rounded,
         ),
         SettingsContainerSwitch(
@@ -132,7 +144,6 @@ class SettingsPageState extends State<SettingsPage>
         SettingsHeader(title: "Preferences"),
         SettingsContainerSwitch(
           title: "Battery Saver",
-          description: "Optimize the UI and increase performance",
           onSwitched: (value) {
             updateSettings("batterySaver", value,
                 updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
@@ -185,6 +196,36 @@ class MorePages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: SettingsContainer(
+                  onTap: () {
+                    openUrl("https://github.com/jameskokoska/Cashew");
+                  },
+                  title: "Open Source",
+                  icon: Icons.code_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              kIsWeb
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: SettingsContainer(
+                        onTap: () {
+                          openBottomSheet(context, RatingPopup());
+                        },
+                        title: "Feedback",
+                        icon: Icons.rate_review_rounded,
+                        isOutlined: true,
+                      ),
+                    ),
+            ],
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(

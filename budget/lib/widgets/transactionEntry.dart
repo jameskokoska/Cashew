@@ -22,6 +22,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/countNumber.dart';
 
 ValueNotifier<Map<String, List<int>>> globalSelectedID =
     ValueNotifier<Map<String, List<int>>>({});
@@ -299,7 +300,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(

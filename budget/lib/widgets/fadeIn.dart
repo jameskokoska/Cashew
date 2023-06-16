@@ -20,19 +20,29 @@ class FadeIn extends StatefulWidget {
   _FadeInState createState() => _FadeInState();
 }
 
-class _FadeInState extends State<FadeIn> {
-  double widgetOpacity = 0;
+class _FadeInState extends State<FadeIn> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: widget.duration ?? Duration(milliseconds: 500),
+      vsync: this,
+    );
+
     if (!appStateSettings["batterySaver"]) {
-      Future.delayed(Duration(milliseconds: 0), () {
-        setState(() {
-          widgetOpacity = 1;
-        });
-      });
+      _controller.forward();
     }
+
+    _opacityAnimation = Tween<double>(begin: 0, end: 1).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -40,10 +50,151 @@ class _FadeInState extends State<FadeIn> {
     if (appStateSettings["batterySaver"]) {
       return widget.child;
     }
-    return AnimatedOpacity(
-      opacity: widgetOpacity,
-      duration: widget.duration ?? Duration(milliseconds: 500),
+    return AnimatedBuilder(
+      animation: _opacityAnimation,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _opacityAnimation.value,
+          child: child,
+        );
+      },
       child: widget.child,
+    );
+  }
+}
+
+class ScaleIn extends StatefulWidget {
+  ScaleIn({
+    Key? key,
+    required this.child,
+    this.duration,
+    this.curve = const ElasticOutCurve(0.5),
+    this.delay = Duration.zero,
+  }) : super(key: key);
+
+  final Widget child;
+  final Duration? duration;
+  final Curve curve;
+  final Duration delay;
+
+  @override
+  _ScaleInState createState() => _ScaleInState();
+}
+
+class _ScaleInState extends State<ScaleIn> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: widget.duration ?? Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: widget.curve),
+    );
+
+    if (!appStateSettings["batterySaver"]) {
+      Future.delayed(widget.delay, () {
+        if (mounted) {
+          // Check if the widget is still mounted
+          _controller.forward();
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (appStateSettings["batterySaver"]) {
+      return widget.child;
+    }
+    return AnimatedBuilder(
+      animation: _scaleAnimation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _scaleAnimation.value,
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
+class ScalingWidget extends StatefulWidget {
+  final String keyToWatch;
+  final Widget child;
+
+  ScalingWidget({required this.keyToWatch, required this.child});
+
+  @override
+  _ScalingWidgetState createState() => _ScalingWidgetState();
+}
+
+class _ScalingWidgetState extends State<ScalingWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  bool _isAnimating = false;
+  String _currentKey = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.8).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeIn,
+      ),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant ScalingWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.keyToWatch != _currentKey && !_isAnimating) {
+      _currentKey = widget.keyToWatch;
+      _isAnimating = true;
+      _controller.forward().then((value) {
+        _controller.reverse().then((value) {
+          _isAnimating = false;
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _scaleAnimation,
+      builder: (BuildContext context, Widget? child) {
+        return Transform.scale(
+          scale: _isAnimating ? _scaleAnimation.value : 1.0,
+          child: widget.child,
+        );
+      },
     );
   }
 }
@@ -141,193 +292,6 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
         child: widget.child,
       ),
     );
-  }
-}
-
-class CountUp extends StatefulWidget {
-  const CountUp({
-    Key? key,
-    required this.count,
-    this.fontSize = 16,
-    this.prefix = "",
-    this.suffix = "",
-    this.fontWeight = FontWeight.normal,
-    this.textAlign = TextAlign.left,
-    this.textColor,
-    this.maxLines = null,
-    this.duration = const Duration(milliseconds: 3000),
-    this.decimals = 2,
-    this.curve = Curves.easeOutExpo,
-    this.walletPkForCurrency,
-  }) : super(key: key);
-
-  final double count;
-  final double fontSize;
-  final String prefix;
-  final String suffix;
-  final FontWeight fontWeight;
-  final Color? textColor;
-  final TextAlign textAlign;
-  final int? maxLines;
-  final Duration duration;
-  final int decimals;
-  final Curve curve;
-  final int? walletPkForCurrency;
-
-  @override
-  State<CountUp> createState() => _CountUpState();
-}
-
-class _CountUpState extends State<CountUp> {
-  @override
-  Widget build(BuildContext context) {
-    if (appStateSettings["batterySaver"]) {
-      return TextFont(
-        text: widget.prefix +
-            (widget.count).toStringAsFixed(widget.decimals) +
-            widget.suffix,
-        fontSize: widget.fontSize,
-        fontWeight: widget.fontWeight,
-        textAlign: widget.textAlign,
-        textColor: widget.textColor,
-        maxLines: widget.maxLines,
-        walletPkForCurrency: widget.walletPkForCurrency,
-      );
-    }
-    return TweenAnimationBuilder<int>(
-      tween: IntTween(
-          begin: 0, end: (widget.count * pow(10, widget.decimals)).toInt()),
-      duration: widget.duration,
-      curve: widget.curve,
-      builder: (BuildContext context, int animatedCount, Widget? child) {
-        String countString = animatedCount.toString();
-        return TextFont(
-          text: widget.prefix +
-              (countString.length >= widget.decimals + 1
-                  ? countString.substring(
-                      0, countString.length - widget.decimals)
-                  : "0") +
-              (widget.decimals > 0 ? "." : "") +
-              (countString.length >= widget.decimals
-                  ? countString.substring(countString.length - widget.decimals)
-                  : countString.substring(countString.length - 1)) +
-              widget.suffix,
-          fontSize: widget.fontSize,
-          fontWeight: widget.fontWeight,
-          textAlign: widget.textAlign,
-          textColor: widget.textColor,
-          maxLines: widget.maxLines,
-          walletPkForCurrency: widget.walletPkForCurrency,
-        );
-      },
-    );
-  }
-}
-
-class CountNumber extends StatefulWidget {
-  const CountNumber({
-    Key? key,
-    required this.count,
-    required this.textBuilder,
-    this.fontSize = 16,
-    this.duration = const Duration(milliseconds: 3000),
-    this.curve = Curves.easeOutQuint,
-    this.initialCount = 0,
-    this.decimals,
-    this.dynamicDecimals = false,
-    this.lazyFirstRender = true,
-  }) : super(key: key);
-
-  final double count;
-  final Function(double) textBuilder;
-  final double fontSize;
-  final Duration duration;
-  final Curve curve;
-  final double initialCount;
-  final int? decimals;
-  final bool dynamicDecimals;
-  final bool lazyFirstRender;
-
-  @override
-  State<CountNumber> createState() => _CountNumberState();
-}
-
-class _CountNumberState extends State<CountNumber> {
-  int finalDecimalPlaces = 2;
-  double previousAmount = 0;
-  int decimals = 2;
-  bool lazyFirstRender = true;
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        int currentSelectedDecimals =
-            Provider.of<AllWallets>(context, listen: false)
-                    .indexedByPk[appStateSettings["selectedWallet"]]
-                    ?.decimals ??
-                2;
-        finalDecimalPlaces = ((widget.decimals ?? currentSelectedDecimals) > 2
-            ? widget.count.toString().split('.')[1].length <
-                    (widget.decimals ?? currentSelectedDecimals)
-                ? widget.count.toString().split('.')[1].length
-                : (widget.decimals ?? currentSelectedDecimals)
-            : (widget.decimals ?? currentSelectedDecimals));
-        previousAmount = widget.initialCount;
-        decimals = finalDecimalPlaces;
-        lazyFirstRender = widget.lazyFirstRender;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.dynamicDecimals) {
-      if (widget.count % 1 == 0) {
-        decimals = 0;
-      } else {
-        int currentSelectedDecimals = Provider.of<AllWallets>(context)
-                .indexedByPk[appStateSettings["selectedWallet"]]
-                ?.decimals ??
-            2;
-        decimals = ((widget.decimals ?? currentSelectedDecimals) > 2
-            ? widget.count.toString().split('.')[1].length <
-                    (widget.decimals ?? currentSelectedDecimals)
-                ? widget.count.toString().split('.')[1].length
-                : (widget.decimals ?? currentSelectedDecimals)
-            : (widget.decimals ?? currentSelectedDecimals));
-      }
-    }
-
-    if (appStateSettings["batterySaver"]) {
-      return widget.textBuilder(
-        double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)),
-      );
-    }
-
-    if (lazyFirstRender && widget.initialCount == widget.count) {
-      lazyFirstRender = false;
-      return widget.textBuilder(
-        widget.initialCount,
-      );
-    }
-
-    Widget builtWidget = TweenAnimationBuilder<int>(
-      tween: IntTween(
-        begin: (previousAmount * pow(10, decimals)).toInt(),
-        end: (widget.count * pow(10, decimals)).toInt(),
-      ),
-      duration: widget.duration,
-      curve: widget.curve,
-      builder: (BuildContext context, int animatedCount, Widget? child) {
-        return widget.textBuilder(
-          animatedCount / pow(10, decimals).toDouble(),
-        );
-      },
-    );
-
-    previousAmount = widget.count;
-    return builtWidget;
   }
 }
 

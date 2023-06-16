@@ -30,49 +30,68 @@ class AboutPage extends StatelessWidget {
       listWidgets: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
-          child: Column(
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            runAlignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 10,
+            runSpacing: 10,
             children: [
-              Tappable(
-                borderRadius: 15,
-                onLongPress: () {
-                  pushRoute(
-                    context,
-                    DebugPage(),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 5, right: 10, bottom: 5, left: 10),
-                  child: TextFont(
-                    text: "Cashew",
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
+              Image(
+                image: AssetImage("assets/icon/icon.png"),
+                width: 70,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Tappable(
+                    borderRadius: 15,
+                    onLongPress: () {
+                      pushRoute(
+                        context,
+                        DebugPage(),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 10),
+                      child: TextFont(
+                        text: "Cashew",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        textAlign: TextAlign.center,
+                        maxLines: 5,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Tappable(
-                onTap: () {
-                  showChangelog(context, forceShow: true);
-                },
-                child: TextFont(
-                  text: "v" +
-                      version +
-                      "+" +
-                      buildNumber +
-                      ", db-v" +
-                      schemaVersionGlobal.toString(),
-                  fontSize: 14,
-                  textAlign: TextAlign.center,
-                  maxLines: 5,
-                ),
-              ),
-              SizedBox(height: 5),
+                  Tappable(
+                    borderRadius: 10,
+                    onTap: () {
+                      showChangelog(context, forceShow: true);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10),
+                      child: TextFont(
+                        text: "v" +
+                            version +
+                            "+" +
+                            buildNumber +
+                            ", db-v" +
+                            schemaVersionGlobal.toString(),
+                        fontSize: 14,
+                        textAlign: TextAlign.center,
+                        maxLines: 5,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
           child: Tappable(

@@ -25,6 +25,7 @@ class Button extends StatefulWidget {
     this.borderRadius = 20,
     this.changeScale = true,
     this.expandedLayout = false,
+    this.disabled = false,
   }) : super(key: key);
   final String label;
   final double? width;
@@ -40,6 +41,7 @@ class Button extends StatefulWidget {
   final double borderRadius;
   final bool changeScale;
   final bool expandedLayout;
+  final bool disabled;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -85,13 +87,15 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
         curve: Curves.easeOutCubic,
         scale: widget.changeScale ? (isTapped ? 0.95 : 1) : 1,
         child: Tappable(
-          color: widget.color != null
-              ? widget.color!.withOpacity(0.8)
-              : appStateSettings["materialYou"]
-                  ? dynamicPastel(
-                      context, Theme.of(context).colorScheme.primary,
-                      amount: 0.3)
-                  : Theme.of(context).colorScheme.secondaryContainer,
+          color: widget.disabled
+              ? Colors.grey
+              : widget.color != null
+                  ? widget.color!.withOpacity(0.8)
+                  : appStateSettings["materialYou"]
+                      ? dynamicPastel(
+                          context, Theme.of(context).colorScheme.primary,
+                          amount: 0.3)
+                      : Theme.of(context).colorScheme.secondaryContainer,
           onHighlightChanged: (value) {
             setState(() {
               isTapped = value;
@@ -99,7 +103,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
           },
           onTap: () {
             _shrink();
-            widget.onTap();
+            if (widget.disabled == false) widget.onTap();
           },
           borderRadius: widget.borderRadius,
           child: Container(

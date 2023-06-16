@@ -98,6 +98,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         padding: false,
         child: Column(
           children: [
+            SizedBox(height: 700),
             Container(
               height: 100,
               child: SelectCategory(

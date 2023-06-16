@@ -27,6 +27,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/widgets/countNumber.dart';
 
 class BudgetPage extends StatelessWidget {
   const BudgetPage({
@@ -857,11 +858,13 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                               : widget.budgetColorScheme.tertiary)
                           .withOpacity((index) / snapshot.data!.length)
               ],
-              horizontalLineAt: widget.budget.amount *
-                  ((DateTime.now().millisecondsSinceEpoch -
-                          widget.budgetRange.start.millisecondsSinceEpoch) /
-                      (widget.budgetRange.end.millisecondsSinceEpoch -
-                          widget.budgetRange.start.millisecondsSinceEpoch)),
+              horizontalLineAt: widget.isPastBudget == true
+                  ? widget.budget.amount
+                  : widget.budget.amount *
+                      ((DateTime.now().millisecondsSinceEpoch -
+                              widget.budgetRange.start.millisecondsSinceEpoch) /
+                          (widget.budgetRange.end.millisecondsSinceEpoch -
+                              widget.budgetRange.start.millisecondsSinceEpoch)),
             ),
           );
         }

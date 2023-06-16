@@ -43,6 +43,8 @@ Map<String, dynamic> defaultPreferences() {
     "hasSignedInOnce": false,
     "lastBackup": DateTime.now().subtract(Duration(days: 1)).toString(),
     "lastLoginVersion": "",
+    "numLogins": 0,
+    "submittedFeedback": false,
     "notifications": true,
     "notificationHour": 20,
     "notificationMinute": 0,

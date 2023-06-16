@@ -4,6 +4,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/services.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 
@@ -46,7 +47,7 @@ Future openBottomSheet(
           ? dynamicPastel(
               context, Theme.of(context).colorScheme.secondaryContainer,
               amount: 0.3)
-          : getColor(context, "lightDarkAccent")!, builder: (context) {
+          : getColor(context, "lightDarkAccent"), builder: (context) {
     return SlidingSheetDialog(
       maxWidth: getWidthBottomSheet(context),
       scrollSpec: ScrollSpec(
@@ -59,25 +60,12 @@ Future openBottomSheet(
       elevation: 0,
       isBackdropInteractable: true,
       dismissOnBackdropTap: true,
-      snapSpec: SnapSpec(
-        snap: snap,
-        snappings: getIsFullScreen(context)
-            ? [
-                0.95,
-              ]
-            : [
-                0.6,
-                1 -
-                    MediaQuery.of(context).padding.top /
-                        MediaQuery.of(context).size.height
-              ],
-        positioning: SnapPositioning.relativeToAvailableSpace,
-      ),
-      color: appStateSettings["materialYou"]
-          ? dynamicPastel(
-              context, Theme.of(context).colorScheme.secondaryContainer,
-              amount: 0.3)
-          : getColor(context, "lightDarkAccent"),
+      cornerRadiusOnFullscreen: 0,
+      avoidStatusBar: true,
+      extendBody: true,
+      headerBuilder: (context, state) {
+        return SizedBox(height: 10);
+      },
       // headerBuilder: (context, _) {
       //   if (handle) {
       //     return Padding(
@@ -87,10 +75,7 @@ Future openBottomSheet(
       //         height: 5,
       //         decoration: BoxDecoration(
       //           borderRadius: BorderRadius.circular(100),
-      //           color: Theme.of(context)
-      //               .colorScheme
-      //               .lightDarkAccent
-      //               .withOpacity(0.5),
+      //           color: Colors.red,
       //         ),
       //       ),
       //     );
@@ -98,6 +83,29 @@ Future openBottomSheet(
       //     return SizedBox();
       //   }
       // },
+      snapSpec: SnapSpec(
+        snap: snap,
+        snappings: getIsFullScreen(context)
+            ? [
+                0.95,
+              ]
+            : [0.6, 1],
+        positioning: SnapPositioning.relativeToAvailableSpace,
+      ),
+      listener: (SheetState state) {
+        if (state.maxExtent == 1 &&
+            state.isExpanded &&
+            state.isAtTop &&
+            state.currentScrollOffset == 0 &&
+            state.progress == 1) {
+          HapticFeedback.heavyImpact();
+        }
+      },
+      color: appStateSettings["materialYou"]
+          ? dynamicPastel(
+              context, Theme.of(context).colorScheme.secondaryContainer,
+              amount: 0.3)
+          : getColor(context, "lightDarkAccent"),
       cornerRadius: 20,
       duration: Duration(milliseconds: 300),
       builder: (context, state) {

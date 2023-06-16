@@ -6,6 +6,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';

@@ -9,6 +9,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed past budget, budget page line graph horizontal line 
+    Added share feedback button
+    Added open source link
+    Finished rating popup
+    Improved FadeIn, ScaleIn widgets
+    Improved bottom sheet when extended
+    When bottom sheet full screen, little vibration
     Started rating popup
     Updated web icons and loading animation
     First budget history entry says current period

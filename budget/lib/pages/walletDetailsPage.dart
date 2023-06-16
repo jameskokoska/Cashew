@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/widgets/countNumber.dart';
 
 class WatchedWalletDetailsPage extends StatelessWidget {
   const WatchedWalletDetailsPage({required this.walletPk, super.key});

@@ -28,14 +28,11 @@ class PopupFramework extends StatelessWidget {
         Column(
           children: [
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-                color: appStateSettings["materialYou"]
-                    ? dynamicPastel(context,
-                        Theme.of(context).colorScheme.secondaryContainer,
-                        amount: 0.3)
-                    : getColor(context, "lightDarkAccent"),
-              ),
+              color: appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amount: 0.3)
+                  : getColor(context, "lightDarkAccent"),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

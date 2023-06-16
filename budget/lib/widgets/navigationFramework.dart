@@ -24,6 +24,8 @@ import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
@@ -134,6 +136,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           createSyncBackup(changeMadeSync: true);
         }
       });
+      if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
+          appStateSettings["submittedFeedback"] != true) {
+        openBottomSheet(context, RatingPopup());
+      }
     });
 
     pages = [

@@ -17,6 +17,7 @@ import 'package:budget/main.dart';
 import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/countNumber.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   const SubscriptionsPage({Key? key}) : super(key: key);

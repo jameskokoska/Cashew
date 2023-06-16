@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/widgets/countNumber.dart';
 
 class WalletEntry extends StatelessWidget {
   const WalletEntry({super.key, required this.wallet, required this.selected});

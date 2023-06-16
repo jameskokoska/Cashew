@@ -7,6 +7,17 @@ import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
 
 OAuthCredential? _credential;
 
+Future<FirebaseFirestore?> firebaseGetDBInstanceAnonymous() async {
+  try {
+    await FirebaseAuth.instance.signInAnonymously();
+    return FirebaseFirestore.instance;
+  } catch (e) {
+    print("There was an error with firebase login");
+    print(e.toString());
+    return null;
+  }
+}
+
 // returns null if authentication unsuccessful
 Future<FirebaseFirestore?> firebaseGetDBInstance() async {
   if (_credential != null) {

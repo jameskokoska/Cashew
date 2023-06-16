@@ -71,6 +71,11 @@ Future<bool> initializeSettings() async {
     appStateSettings["accentColor"] = toHexString(accentColor);
   }
 
+  if (appStateSettings["hasOnboarded"] == true) {
+    updateSettings("numLogins", appStateSettings["numLogins"] + 1,
+        updateGlobalState: false, pagesNeedingRefresh: []);
+  }
+
   String? retrievedClientID = await sharedPreferences.getString("clientID");
   if (retrievedClientID == null) {
     String systemID = await getDeviceInfo();

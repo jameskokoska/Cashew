@@ -129,12 +129,6 @@ class HomePageState extends State<HomePage>
                 child: ListView(
                   controller: _scrollController,
                   children: [
-                    Tappable(
-                      child: Container(height: 50, width: 50),
-                      onTap: () {
-                        openBottomSheet(context, RatingPopup());
-                      },
-                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
