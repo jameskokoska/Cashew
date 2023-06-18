@@ -7,6 +7,7 @@ import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -107,23 +108,28 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                     Padding(
                       padding: const EdgeInsets.only(
                           bottom: 13, left: 13, right: 13),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                              child: IncomeTransactionsSummary(
-                            incomeTransactions: false,
-                            walletPk: walletPk,
-                          )),
-                          SizedBox(width: 13),
-                          Expanded(
-                            child: IncomeTransactionsSummary(
-                              incomeTransactions: true,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                getHorizontalPaddingConstrained(context)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                                child: IncomeTransactionsSummary(
+                              incomeTransactions: false,
                               walletPk: walletPk,
+                            )),
+                            SizedBox(width: 13),
+                            Expanded(
+                              child: IncomeTransactionsSummary(
+                                incomeTransactions: true,
+                                walletPk: walletPk,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     WalletCategoryPieChart(

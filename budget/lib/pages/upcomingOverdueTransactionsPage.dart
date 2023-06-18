@@ -5,6 +5,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/pageFramework.dart';
@@ -45,6 +46,9 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 20),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: enableDoubleColumn(context)
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.start,
                     children: [
                       StreamBuilder<double?>(
                         stream: database.watchTotalOfUpcomingOverdue(

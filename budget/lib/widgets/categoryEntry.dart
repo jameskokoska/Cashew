@@ -25,7 +25,7 @@ class CategoryEntry extends StatelessWidget {
     this.categoryBudgetLimit,
     this.isTiled = false,
     this.onLongPress,
-    this.extraText = " of budget",
+    this.extraText = " of spending",
     this.showIncomeExpenseIcons = false,
     this.isAbsoluteSpendingLimit = false,
     this.budgetLimit = 0,
@@ -80,7 +80,7 @@ class CategoryEntry extends StatelessWidget {
       );
     } else {
       double percentSpent = categoryBudgetLimit == null
-          ? 0
+          ? categorySpent / totalSpent
           : isAbsoluteSpendingLimit
               ? ((categorySpent / categoryBudgetLimit!.amount).abs() > 1
                   ? 1
@@ -93,8 +93,7 @@ class CategoryEntry extends StatelessWidget {
                   : (categorySpent /
                           (categoryBudgetLimit!.amount / 100 * budgetLimit))
                       .abs());
-      double amountSpent =
-          categoryBudgetLimit == null ? 0 : categorySpent.abs();
+      double amountSpent = categorySpent.abs();
       double spendingLimit = categoryBudgetLimit == null
           ? 0
           : isAbsoluteSpendingLimit

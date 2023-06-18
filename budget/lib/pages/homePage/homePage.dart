@@ -134,7 +134,7 @@ class HomePageState extends State<HomePage>
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         enableDoubleColumn(context)
-                            ? SizedBox(height: 48)
+                            ? SizedBox(height: 78)
                             : Padding(
                                 padding:
                                     const EdgeInsets.only(top: 12, right: 4),

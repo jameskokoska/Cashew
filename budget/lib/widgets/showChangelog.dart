@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed category spent amounts in budget page
+    Web upcoming/overdue transactions centered subtitle
+    Web wallet summary layout width constrained
     Added percentage budget limits
     Fixed notification times
     Fixed past budget, budget page line graph horizontal line 
