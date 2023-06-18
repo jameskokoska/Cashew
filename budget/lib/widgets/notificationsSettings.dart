@@ -527,9 +527,6 @@ Future<bool> initializeNotificationsPlatform() async {
   }
   try {
     if (Platform.isAndroid) await checkNotificationsPermissionAndroid();
-    tz.initializeTimeZones();
-    DateTime dateTime = DateTime.now();
-    tz.setLocalLocation(tz.getLocation(dateTime.timeZoneName));
   } catch (e) {
     print("Error setting up notifications: " + e.toString());
     return false;

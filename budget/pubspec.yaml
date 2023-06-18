@@ -76,6 +76,7 @@ dependencies:
   app_settings: ^4.2.0
   provider: ^6.0.5
   in_app_review: ^2.0.6
+  flutter_native_timezone: ^2.0.0
   # feature_discovery: ^0.14.1
   
 # flutter pub run flutter_launcher_icons:main

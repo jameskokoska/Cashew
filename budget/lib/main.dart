@@ -37,6 +37,9 @@ import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/scheduler.dart' show SchedulerBinding, timeDilation;
 // import 'package:feature_discovery/feature_discovery.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
@@ -84,6 +87,9 @@ void main() async {
       await rootBundle.loadString('assets/static/generated/currencies.json'));
   await initializeDatabase();
   await initializeSettings();
+  tz.initializeTimeZones();
+  final String? locationName = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
   runApp(RestartApp(child: InitializeApp(key: appStateKey)));
 }
 

@@ -75,6 +75,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           order: order,
           walletFk: 0,
           reoccurrence: mapRecurrence(selectedRecurrence),
+          isAbsoluteSpendingLimit: false,
         ),
       );
     }

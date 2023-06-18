@@ -27,6 +27,8 @@ class CategoryEntry extends StatelessWidget {
     this.onLongPress,
     this.extraText = " of budget",
     this.showIncomeExpenseIcons = false,
+    this.isAbsoluteSpendingLimit = false,
+    this.budgetLimit = 0,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -42,6 +44,8 @@ class CategoryEntry extends StatelessWidget {
   final Function? onLongPress;
   final String extraText;
   final bool showIncomeExpenseIcons;
+  final bool isAbsoluteSpendingLimit;
+  final double budgetLimit;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +79,33 @@ class CategoryEntry extends StatelessWidget {
         ),
       );
     } else {
+      double percentSpent = categoryBudgetLimit == null
+          ? 0
+          : isAbsoluteSpendingLimit
+              ? ((categorySpent / categoryBudgetLimit!.amount).abs() > 1
+                  ? 1
+                  : (categorySpent / categoryBudgetLimit!.amount).abs())
+              : ((categorySpent /
+                              (categoryBudgetLimit!.amount / 100 * budgetLimit))
+                          .abs() >
+                      1
+                  ? 1
+                  : (categorySpent /
+                          (categoryBudgetLimit!.amount / 100 * budgetLimit))
+                      .abs());
+      double amountSpent =
+          categoryBudgetLimit == null ? 0 : categorySpent.abs();
+      double spendingLimit = categoryBudgetLimit == null
+          ? 0
+          : isAbsoluteSpendingLimit
+              ? categoryBudgetLimit!.amount
+              : categoryBudgetLimit!.amount / 100 * budgetLimit;
+      bool isOverspent = categoryBudgetLimit == null
+          ? false
+          : isAbsoluteSpendingLimit
+              ? categorySpent > (categoryBudgetLimit?.amount ?? 0)
+              : categorySpent >
+                  (categoryBudgetLimit!.amount / 100 * budgetLimit);
       component = Padding(
         padding: EdgeInsets.symmetric(
           horizontal: getHorizontalPaddingConstrained(context),
@@ -88,7 +119,7 @@ class CategoryEntry extends StatelessWidget {
             // ),
             CategoryIconPercent(
               category: category,
-              percent: (categorySpent / totalSpent * 100).abs(),
+              percent: percentSpent * 100,
               progressBackgroundColor: selected
                   ? getColor(context, "white")
                   : getColor(context, "lightDarkAccentHeavy"),
@@ -138,11 +169,9 @@ class CategoryEntry extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               text: convertToMoney(
                                   Provider.of<AllWallets>(context),
-                                  categorySpent.abs()),
+                                  amountSpent),
                               fontSize: 20,
-                              textColor: categoryBudgetLimit != null &&
-                                      categorySpent >
-                                          (categoryBudgetLimit?.amount ?? 0)
+                              textColor: isOverspent
                                   ? getColor(context, "expenseAmount")
                                   : showIncomeExpenseIcons && categorySpent != 0
                                       ? categorySpent > 0
@@ -158,13 +187,9 @@ class CategoryEntry extends StatelessWidget {
                                       text: " / " +
                                           convertToMoney(
                                               Provider.of<AllWallets>(context),
-                                              categoryBudgetLimit!.amount),
+                                              spendingLimit),
                                       fontSize: 14,
-                                      textColor: categoryBudgetLimit != null &&
-                                              categorySpent >
-                                                  (categoryBudgetLimit
-                                                          ?.amount ??
-                                                      0)
+                                      textColor: isOverspent
                                           ? getColor(context, "expenseAmount")
                                           : getColor(context, "black")
                                               .withOpacity(0.3),
@@ -213,16 +238,7 @@ class CategoryEntry extends StatelessWidget {
                                               height: 5,
                                             ),
                                           ),
-                                          widthFactor: (categorySpent /
-                                                          categoryBudgetLimit!
-                                                              .amount)
-                                                      .abs() >
-                                                  1
-                                              ? 1
-                                              : (categorySpent /
-                                                      categoryBudgetLimit!
-                                                          .amount)
-                                                  .abs(),
+                                          widthFactor: percentSpent,
                                         ),
                                       ],
                                     ),

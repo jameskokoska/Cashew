@@ -10,6 +10,7 @@ import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,14 @@ class CategoryLimits extends StatefulWidget {
     required this.budgetLimit,
     required this.selectedCategories,
     required this.showAddCategoryButton,
+    required this.isAbsoluteSpendingLimit,
     super.key,
   });
   final int budgetPk;
   final List<int> selectedCategories;
   final double budgetLimit;
   final bool showAddCategoryButton;
+  final bool isAbsoluteSpendingLimit;
 
   @override
   State<CategoryLimits> createState() => _CategoryLimitsState();
@@ -66,12 +69,16 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                       return TextFont(
                         fontSize: 15,
                         textColor: getColor(context, "textLight"),
-                        text: convertToMoney(
-                                Provider.of<AllWallets>(context), number,
-                                finalNumber: snapshot.data ?? 0) +
-                            " / " +
-                            convertToMoney(Provider.of<AllWallets>(context),
-                                widget.budgetLimit),
+                        text: widget.isAbsoluteSpendingLimit
+                            ? (convertToMoney(
+                                    Provider.of<AllWallets>(context), number,
+                                    finalNumber: snapshot.data ?? 0) +
+                                " / " +
+                                convertToMoney(Provider.of<AllWallets>(context),
+                                    widget.budgetLimit))
+                            : (convertToPercent(number, snapshot.data ?? 0) +
+                                " / " +
+                                "100%"),
                       );
                     },
                   );
@@ -101,6 +108,8 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                                     budgetLimit: widget.budgetLimit,
                                     categoryLimit: snapshot.data,
                                     budgetPk: widget.budgetPk,
+                                    isAbsoluteSpendingLimit:
+                                        widget.isAbsoluteSpendingLimit,
                                   );
                                 },
                               )
@@ -125,6 +134,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                             width: null,
                           ),
                         ),
+                  SizedBox(height: 5),
                 ],
               ),
             );
@@ -142,6 +152,7 @@ class CategoryLimitEntry extends StatefulWidget {
     required this.budgetLimit,
     required this.categoryLimit,
     required this.budgetPk,
+    required this.isAbsoluteSpendingLimit,
     super.key,
   });
 
@@ -149,6 +160,7 @@ class CategoryLimitEntry extends StatefulWidget {
   final double budgetLimit;
   final CategoryBudgetLimit? categoryLimit;
   final int budgetPk;
+  final bool isAbsoluteSpendingLimit;
 
   @override
   State<CategoryLimitEntry> createState() => _CategoryLimitEntryState();
@@ -187,6 +199,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
           widget.categoryLimit,
           widget.budgetPk,
           setAmount,
+          widget.isAbsoluteSpendingLimit,
         );
       },
       child: Padding(
@@ -198,9 +211,11 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
               children: [
                 CategoryIconPercent(
                   category: widget.category,
-                  percent: widget.budgetLimit == 0
-                      ? 0
-                      : (selectedAmount / widget.budgetLimit) * 100,
+                  percent: widget.isAbsoluteSpendingLimit
+                      ? (widget.budgetLimit == 0
+                          ? 0
+                          : (selectedAmount / widget.budgetLimit) * 100)
+                      : selectedAmount,
                   progressBackgroundColor:
                       getColor(context, "lightDarkAccentHeavy"),
                   size: 28,
@@ -220,12 +235,17 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                       height: 1,
                     ),
                     TextFont(
-                      text: (widget.budgetLimit == 0
-                              ? "0"
-                              : ((selectedAmount / widget.budgetLimit) * 100)
-                                  .toInt()
-                                  .toString()) +
-                          "% of budget",
+                      text: widget.isAbsoluteSpendingLimit
+                          ? (widget.budgetLimit == 0
+                                  ? "0"
+                                  : ((selectedAmount / widget.budgetLimit) *
+                                          100)
+                                      .toInt()
+                                      .toString()) +
+                              "% of budget"
+                          : (convertToMoney(Provider.of<AllWallets>(context),
+                                  widget.budgetLimit * selectedAmount / 100) +
+                              " of budget"),
                       fontSize: 14,
                       textColor: getColor(context, "textLight"),
                     ),
@@ -234,8 +254,10 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
               ],
             ),
             TappableTextEntry(
-              title: convertToMoney(
-                  Provider.of<AllWallets>(context), selectedAmount),
+              title: widget.isAbsoluteSpendingLimit
+                  ? convertToMoney(
+                      Provider.of<AllWallets>(context), selectedAmount)
+                  : convertToPercent(selectedAmount),
               placeholder: convertToMoney(Provider.of<AllWallets>(context), 0),
               showPlaceHolderWhenTextEquals:
                   convertToMoney(Provider.of<AllWallets>(context), 0),
@@ -246,6 +268,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                   widget.categoryLimit,
                   widget.budgetPk,
                   setAmount,
+                  widget.isAbsoluteSpendingLimit,
                 );
               },
               fontSize: 23,
@@ -266,6 +289,7 @@ void enterCategoryLimitPopup(
   CategoryBudgetLimit? categoryLimit,
   int budgetPk,
   Function(double) setSelectedAmount,
+  bool isAbsoluteSpendingLimit,
 ) async {
   double amount = categoryLimit != null ? categoryLimit.amount : 0;
   await openBottomSheet(
@@ -280,19 +304,36 @@ void enterCategoryLimitPopup(
         margin: EdgeInsets.zero,
       ),
       underTitleSpace: false,
-      child: SelectAmount(
-        amountPassed: amount.toString(),
-        allowZero: true,
-        setSelectedAmount: (selectedAmountPassed, _) async {
-          selectedAmountPassed = selectedAmountPassed.abs();
-          amount = selectedAmountPassed;
-        },
-        next: () async {
-          Navigator.pop(context);
-        },
-        nextLabel: "Set Limit",
-        onlyShowCurrencyIcon: true,
-      ),
+      child: isAbsoluteSpendingLimit == false
+          ? SelectAmountValue(
+              setSelectedAmount: (selectedAmountPassed, _) async {
+                if (selectedAmountPassed > 1000) {
+                  selectedAmountPassed = 1000;
+                }
+                selectedAmountPassed = selectedAmountPassed.abs();
+                amount = selectedAmountPassed;
+              },
+              amountPassed: removeLastCharacter(convertToPercent(amount)),
+              next: () async {
+                Navigator.pop(context);
+              },
+              nextLabel: "Set Limit",
+              allowZero: true,
+              suffix: "%",
+            )
+          : SelectAmount(
+              amountPassed: amount.toString(),
+              allowZero: true,
+              setSelectedAmount: (selectedAmountPassed, _) async {
+                selectedAmountPassed = selectedAmountPassed.abs();
+                amount = selectedAmountPassed;
+              },
+              next: () async {
+                Navigator.pop(context);
+              },
+              nextLabel: "Set Limit",
+              onlyShowCurrencyIcon: true,
+            ),
     ),
   );
   setSelectedAmount(amount);

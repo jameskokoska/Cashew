@@ -19,6 +19,7 @@ import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -107,6 +108,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   List<String> allMembersOfAllBudgets = [];
   List<String>? selectedMemberTransactionFilters;
   FocusNode _titleFocusNode = FocusNode();
+  bool selectedIsAbsoluteSpendingLimit = false;
 
   // BudgetsCompanion budget = BudgetsCompanion();
 
@@ -310,6 +312,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : currentInstance?.sharedKey != null
               ? null
               : selectedMemberTransactionFilters,
+      isAbsoluteSpendingLimit: selectedIsAbsoluteSpendingLimit,
     );
   }
 
@@ -346,6 +349,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           widget.budget!.budgetTransactionFilters ?? null;
       selectedMemberTransactionFilters =
           widget.budget!.memberTransactionFilters ?? null;
+      selectedIsAbsoluteSpendingLimit =
+          widget.budget?.isAbsoluteSpendingLimit ?? false;
 
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {
@@ -864,11 +869,28 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             ),
             SliverToBoxAdapter(child: SizedBox(height: 8)),
             CategoryLimits(
+              isAbsoluteSpendingLimit: selectedIsAbsoluteSpendingLimit,
               selectedCategories: selectedCategories ?? [],
               budgetPk:
                   widget.budget == null ? setBudgetPk : widget.budget!.budgetPk,
               budgetLimit: selectedAmount ?? 0,
               showAddCategoryButton: selectedAllCategories,
+            ),
+            SliverToBoxAdapter(
+              child: SettingsContainerSwitch(
+                onSwitched: (value) {
+                  setState(() {
+                    selectedIsAbsoluteSpendingLimit =
+                        !selectedIsAbsoluteSpendingLimit;
+                  });
+                  determineBottomButton();
+                },
+                initialValue: selectedIsAbsoluteSpendingLimit,
+                syncWithInitialValue: true,
+                title: "Absolute Spending Limits",
+                description: "Absolute spending limits instead of a percentage",
+                icon: Icons.numbers_rounded,
+              ),
             ),
           ],
           listWidgets: [

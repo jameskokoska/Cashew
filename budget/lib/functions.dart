@@ -39,6 +39,41 @@ extension CapExtension on String {
       .join(" ");
 }
 
+String convertToPercent(double amount, [double? finalNumber]) {
+  int numberDecimals = finalNumber == null
+      ? getDecimalPlaces(amount) > 2
+          ? 2
+          : getDecimalPlaces(amount)
+      : getDecimalPlaces(finalNumber) > 2
+          ? 2
+          : getDecimalPlaces(finalNumber);
+
+  String roundedAmount = amount.toStringAsFixed(numberDecimals);
+
+  return roundedAmount + "%";
+}
+
+int getDecimalPlaces(double number) {
+  final decimalString = number.toString();
+  final decimalIndex = decimalString.indexOf('.');
+
+  if (decimalIndex == -1) {
+    return 0;
+  } else {
+    final decimalPlaces = decimalString.length - decimalIndex - 1;
+    final trailingZeros =
+        decimalString.substring(decimalIndex + 1).replaceAll('0', '');
+    return trailingZeros.isEmpty ? 0 : decimalPlaces;
+  }
+}
+
+String removeLastCharacter(String text) {
+  if (text.isEmpty) {
+    return text;
+  }
+  return text.substring(0, text.length - 1);
+}
+
 String convertToMoney(
   AllWallets allWallets,
   double amount, {

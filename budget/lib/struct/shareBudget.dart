@@ -354,6 +354,7 @@ Future<int> downloadTransactionsFromBudgets(
         ],
         budgetTransactionFilters: null,
         memberTransactionFilters: null,
+        isAbsoluteSpendingLimit: false,
       ),
     );
 

@@ -2370,6 +2370,19 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>(
               $BudgetsTable.$convertersharedAllMembersEvern);
+  static const VerificationMeta _isAbsoluteSpendingLimitMeta =
+      const VerificationMeta('isAbsoluteSpendingLimit');
+  @override
+  late final GeneratedColumn<bool> isAbsoluteSpendingLimit =
+      GeneratedColumn<bool>('is_absolute_spending_limit', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("is_absolute_spending_limit" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         budgetPk,
@@ -2394,7 +2407,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         sharedOwnerMember,
         sharedDateUpdated,
         sharedMembers,
-        sharedAllMembersEver
+        sharedAllMembersEver,
+        isAbsoluteSpendingLimit
       ];
   @override
   String get aliasedName => _alias ?? 'budgets';
@@ -2507,6 +2521,13 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     context.handle(_sharedMembersMeta, const VerificationResult.success());
     context.handle(
         _sharedAllMembersEverMeta, const VerificationResult.success());
+    if (data.containsKey('is_absolute_spending_limit')) {
+      context.handle(
+          _isAbsoluteSpendingLimitMeta,
+          isAbsoluteSpendingLimit.isAcceptableOrUnknown(
+              data['is_absolute_spending_limit']!,
+              _isAbsoluteSpendingLimitMeta));
+    }
     return context;
   }
 
@@ -2572,6 +2593,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       sharedAllMembersEver: $BudgetsTable.$convertersharedAllMembersEvern
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
               data['${effectivePrefix}shared_all_members_ever'])),
+      isAbsoluteSpendingLimit: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}is_absolute_spending_limit'])!,
     );
   }
 
@@ -2641,6 +2665,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final DateTime? sharedDateUpdated;
   final List<String>? sharedMembers;
   final List<String>? sharedAllMembersEver;
+  final bool isAbsoluteSpendingLimit;
   const Budget(
       {required this.budgetPk,
       required this.name,
@@ -2664,7 +2689,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       this.sharedOwnerMember,
       this.sharedDateUpdated,
       this.sharedMembers,
-      this.sharedAllMembersEver});
+      this.sharedAllMembersEver,
+      required this.isAbsoluteSpendingLimit});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2724,6 +2750,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       map['shared_all_members_ever'] =
           Variable<String>(converter.toSql(sharedAllMembersEver));
     }
+    map['is_absolute_spending_limit'] = Variable<bool>(isAbsoluteSpendingLimit);
     return map;
   }
 
@@ -2773,6 +2800,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       sharedAllMembersEver: sharedAllMembersEver == null && nullToAbsent
           ? const Value.absent()
           : Value(sharedAllMembersEver),
+      isAbsoluteSpendingLimit: Value(isAbsoluteSpendingLimit),
     );
   }
 
@@ -2812,6 +2840,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       sharedMembers: serializer.fromJson<List<String>?>(json['sharedMembers']),
       sharedAllMembersEver:
           serializer.fromJson<List<String>?>(json['sharedAllMembersEver']),
+      isAbsoluteSpendingLimit:
+          serializer.fromJson<bool>(json['isAbsoluteSpendingLimit']),
     );
   }
   @override
@@ -2846,6 +2876,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       'sharedMembers': serializer.toJson<List<String>?>(sharedMembers),
       'sharedAllMembersEver':
           serializer.toJson<List<String>?>(sharedAllMembersEver),
+      'isAbsoluteSpendingLimit':
+          serializer.toJson<bool>(isAbsoluteSpendingLimit),
     };
   }
 
@@ -2873,7 +2905,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           Value<SharedOwnerMember?> sharedOwnerMember = const Value.absent(),
           Value<DateTime?> sharedDateUpdated = const Value.absent(),
           Value<List<String>?> sharedMembers = const Value.absent(),
-          Value<List<String>?> sharedAllMembersEver = const Value.absent()}) =>
+          Value<List<String>?> sharedAllMembersEver = const Value.absent(),
+          bool? isAbsoluteSpendingLimit}) =>
       Budget(
         budgetPk: budgetPk ?? this.budgetPk,
         name: name ?? this.name,
@@ -2913,6 +2946,8 @@ class Budget extends DataClass implements Insertable<Budget> {
         sharedAllMembersEver: sharedAllMembersEver.present
             ? sharedAllMembersEver.value
             : this.sharedAllMembersEver,
+        isAbsoluteSpendingLimit:
+            isAbsoluteSpendingLimit ?? this.isAbsoluteSpendingLimit,
       );
   @override
   String toString() {
@@ -2939,7 +2974,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('sharedOwnerMember: $sharedOwnerMember, ')
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedMembers: $sharedMembers, ')
-          ..write('sharedAllMembersEver: $sharedAllMembersEver')
+          ..write('sharedAllMembersEver: $sharedAllMembersEver, ')
+          ..write('isAbsoluteSpendingLimit: $isAbsoluteSpendingLimit')
           ..write(')'))
         .toString();
   }
@@ -2968,7 +3004,8 @@ class Budget extends DataClass implements Insertable<Budget> {
         sharedOwnerMember,
         sharedDateUpdated,
         sharedMembers,
-        sharedAllMembersEver
+        sharedAllMembersEver,
+        isAbsoluteSpendingLimit
       ]);
   @override
   bool operator ==(Object other) =>
@@ -2996,7 +3033,8 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.sharedOwnerMember == this.sharedOwnerMember &&
           other.sharedDateUpdated == this.sharedDateUpdated &&
           other.sharedMembers == this.sharedMembers &&
-          other.sharedAllMembersEver == this.sharedAllMembersEver);
+          other.sharedAllMembersEver == this.sharedAllMembersEver &&
+          other.isAbsoluteSpendingLimit == this.isAbsoluteSpendingLimit);
 }
 
 class BudgetsCompanion extends UpdateCompanion<Budget> {
@@ -3023,6 +3061,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<DateTime?> sharedDateUpdated;
   final Value<List<String>?> sharedMembers;
   final Value<List<String>?> sharedAllMembersEver;
+  final Value<bool> isAbsoluteSpendingLimit;
   const BudgetsCompanion({
     this.budgetPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -3047,6 +3086,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.sharedDateUpdated = const Value.absent(),
     this.sharedMembers = const Value.absent(),
     this.sharedAllMembersEver = const Value.absent(),
+    this.isAbsoluteSpendingLimit = const Value.absent(),
   });
   BudgetsCompanion.insert({
     this.budgetPk = const Value.absent(),
@@ -3072,6 +3112,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.sharedDateUpdated = const Value.absent(),
     this.sharedMembers = const Value.absent(),
     this.sharedAllMembersEver = const Value.absent(),
+    this.isAbsoluteSpendingLimit = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         startDate = Value(startDate),
@@ -3104,6 +3145,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<DateTime>? sharedDateUpdated,
     Expression<String>? sharedMembers,
     Expression<String>? sharedAllMembersEver,
+    Expression<bool>? isAbsoluteSpendingLimit,
   }) {
     return RawValuesInsertable({
       if (budgetPk != null) 'budget_pk': budgetPk,
@@ -3133,6 +3175,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (sharedMembers != null) 'shared_members': sharedMembers,
       if (sharedAllMembersEver != null)
         'shared_all_members_ever': sharedAllMembersEver,
+      if (isAbsoluteSpendingLimit != null)
+        'is_absolute_spending_limit': isAbsoluteSpendingLimit,
     });
   }
 
@@ -3159,7 +3203,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<SharedOwnerMember?>? sharedOwnerMember,
       Value<DateTime?>? sharedDateUpdated,
       Value<List<String>?>? sharedMembers,
-      Value<List<String>?>? sharedAllMembersEver}) {
+      Value<List<String>?>? sharedAllMembersEver,
+      Value<bool>? isAbsoluteSpendingLimit}) {
     return BudgetsCompanion(
       budgetPk: budgetPk ?? this.budgetPk,
       name: name ?? this.name,
@@ -3187,6 +3232,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       sharedDateUpdated: sharedDateUpdated ?? this.sharedDateUpdated,
       sharedMembers: sharedMembers ?? this.sharedMembers,
       sharedAllMembersEver: sharedAllMembersEver ?? this.sharedAllMembersEver,
+      isAbsoluteSpendingLimit:
+          isAbsoluteSpendingLimit ?? this.isAbsoluteSpendingLimit,
     );
   }
 
@@ -3276,6 +3323,10 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['shared_all_members_ever'] =
           Variable<String>(converter.toSql(sharedAllMembersEver.value));
     }
+    if (isAbsoluteSpendingLimit.present) {
+      map['is_absolute_spending_limit'] =
+          Variable<bool>(isAbsoluteSpendingLimit.value);
+    }
     return map;
   }
 
@@ -3304,7 +3355,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('sharedOwnerMember: $sharedOwnerMember, ')
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedMembers: $sharedMembers, ')
-          ..write('sharedAllMembersEver: $sharedAllMembersEver')
+          ..write('sharedAllMembersEver: $sharedAllMembersEver, ')
+          ..write('isAbsoluteSpendingLimit: $isAbsoluteSpendingLimit')
           ..write(')'))
         .toString();
   }

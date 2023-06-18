@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Added percentage budget limits
+    Fixed notification times
     Fixed past budget, budget page line graph horizontal line 
     Added share feedback button
     Added open source link

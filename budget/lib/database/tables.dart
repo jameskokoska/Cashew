@@ -19,7 +19,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 34;
+int schemaVersionGlobal = 35;
 
 // Generate database code
 // dart run build_runner build
@@ -315,6 +315,8 @@ class Budgets extends Table {
       text().map(const StringListInColumnConverter()).nullable()();
   TextColumn get sharedAllMembersEver =>
       text().map(const StringListInColumnConverter()).nullable()();
+  BoolColumn get isAbsoluteSpendingLimit =>
+      boolean().withDefault(const Constant(false))();
 }
 // Server entry
 
@@ -552,6 +554,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           }
           if (from <= 33) {
             await migrator.addColumn(wallets, wallets.decimals);
+          }
+          if (from <= 34) {
+            await migrator.addColumn(budgets, budgets.isAbsoluteSpendingLimit);
           }
         },
       );

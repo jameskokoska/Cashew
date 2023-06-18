@@ -274,8 +274,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 category.categoryBudgetLimit,
                                 widget.budget.budgetPk,
                                 (p0) => null,
+                                widget.budget.isAbsoluteSpendingLimit,
                               );
                             },
+                            isAbsoluteSpendingLimit:
+                                widget.budget.isAbsoluteSpendingLimit,
+                            budgetLimit: widget.budget.amount,
                             categoryBudgetLimit: category.categoryBudgetLimit,
                             budgetColorScheme: budgetColorScheme,
                             category: category.category,
