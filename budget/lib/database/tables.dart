@@ -2921,8 +2921,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowBasedOnWalletFks(
-      $TransactionsTable tbl, List<int> walletFks) {
-    return (walletFks.length >= 1
+      $TransactionsTable tbl, List<int>? walletFks) {
+    return (walletFks != null && walletFks.length >= 1
         ? tbl.walletFk.isIn(walletFks)
         : Constant(true));
   }
@@ -3195,78 +3195,36 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
+    List<int>? walletPks,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     if (allCategories) {
       return (select(transactions)
             ..where((tbl) {
-              final dateCreated = tbl.dateCreated;
               if (isPaidOnly) {
-                if (isIncome == true) {
-                  return onlyShowIfFollowsFilters(tbl,
-                          budgetTransactionFilters: budgetTransactionFilters,
-                          memberTransactionFilters: memberTransactionFilters) &
-                      onlyShowBasedOnTimeRange(
-                          transactions, startDate, endDate, budget) &
-                      tbl.paid.equals(true) &
-                      tbl.income.equals(true) &
-                      onlyShowIfMember(tbl, member) &
-                      onlyShowIfCertainBudget(
-                          tbl, onlyShowTransactionsBelongingToBudget);
-                } else if (isIncome == false) {
-                  return onlyShowIfFollowsFilters(tbl,
-                          budgetTransactionFilters: budgetTransactionFilters,
-                          memberTransactionFilters: memberTransactionFilters) &
-                      onlyShowBasedOnTimeRange(
-                          transactions, startDate, endDate, budget) &
-                      tbl.paid.equals(true) &
-                      tbl.income.equals(false) &
-                      onlyShowIfMember(tbl, member) &
-                      onlyShowIfCertainBudget(
-                          tbl, onlyShowTransactionsBelongingToBudget);
-                } else {
-                  return onlyShowIfFollowsFilters(tbl,
-                          budgetTransactionFilters: budgetTransactionFilters,
-                          memberTransactionFilters: memberTransactionFilters) &
-                      onlyShowBasedOnTimeRange(
-                          transactions, startDate, endDate, budget) &
-                      tbl.paid.equals(true) &
-                      onlyShowIfMember(tbl, member) &
-                      onlyShowIfCertainBudget(
-                          tbl, onlyShowTransactionsBelongingToBudget);
-                }
+                return tbl.paid.equals(true) &
+                    onlyShowIfFollowsFilters(tbl,
+                        budgetTransactionFilters: budgetTransactionFilters,
+                        memberTransactionFilters: memberTransactionFilters) &
+                    onlyShowBasedOnTimeRange(
+                        transactions, startDate, endDate, budget) &
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget) &
+                    onlyShowBasedOnWalletFks(tbl, walletPks) &
+                    onlyShowBasedOnIncome(tbl, isIncome);
               } else {
-                if (isIncome == true) {
-                  return onlyShowIfFollowsFilters(tbl,
-                          budgetTransactionFilters: budgetTransactionFilters,
-                          memberTransactionFilters: memberTransactionFilters) &
-                      onlyShowBasedOnTimeRange(
-                          transactions, startDate, endDate, budget) &
-                      tbl.income.equals(true) &
-                      onlyShowIfMember(tbl, member) &
-                      onlyShowIfCertainBudget(
-                          tbl, onlyShowTransactionsBelongingToBudget);
-                } else if (isIncome == false) {
-                  return onlyShowIfFollowsFilters(tbl,
-                          budgetTransactionFilters: budgetTransactionFilters,
-                          memberTransactionFilters: memberTransactionFilters) &
-                      onlyShowBasedOnTimeRange(
-                          transactions, startDate, endDate, budget) &
-                      tbl.income.equals(false) &
-                      onlyShowIfMember(tbl, member) &
-                      onlyShowIfCertainBudget(
-                          tbl, onlyShowTransactionsBelongingToBudget);
-                } else {
-                  return onlyShowIfFollowsFilters(tbl,
-                          budgetTransactionFilters: budgetTransactionFilters,
-                          memberTransactionFilters: memberTransactionFilters) &
-                      onlyShowBasedOnTimeRange(
-                          transactions, startDate, endDate, budget) &
-                      onlyShowIfMember(tbl, member) &
-                      onlyShowIfCertainBudget(
-                          tbl, onlyShowTransactionsBelongingToBudget);
-                }
+                return onlyShowIfFollowsFilters(tbl,
+                        budgetTransactionFilters: budgetTransactionFilters,
+                        memberTransactionFilters: memberTransactionFilters) &
+                    onlyShowBasedOnTimeRange(
+                        transactions, startDate, endDate, budget) &
+                    onlyShowIfMember(tbl, member) &
+                    onlyShowIfCertainBudget(
+                        tbl, onlyShowTransactionsBelongingToBudget) &
+                    onlyShowBasedOnWalletFks(tbl, walletPks) &
+                    onlyShowBasedOnIncome(tbl, isIncome);
               }
             })
             ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))

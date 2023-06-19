@@ -284,7 +284,7 @@ Future<T?> openPopupCustom<T extends Object?>(
                       context, Theme.of(context).colorScheme.secondaryContainer,
                       amount: 0.5)
                   : getColor(context, "lightDarkAccent"),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(20),
               boxShadow: boxShadowGeneral(context),
             ),
             child: Column(

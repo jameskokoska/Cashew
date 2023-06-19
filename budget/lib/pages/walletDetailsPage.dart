@@ -3,10 +3,12 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/budgetPage.dart';
+import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -16,6 +18,7 @@ import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
@@ -132,11 +135,16 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                         ),
                       ),
                     ),
+                    WalletDetailsLineGraph(
+                      walletPks: widget.wallet == null
+                          ? []
+                          : [widget.wallet!.walletPk],
+                    ),
                     WalletCategoryPieChart(
                       wallet: widget.wallet,
                       walletColorScheme: walletColorScheme,
                       onSelectedCategory: (int categoryPk) {
-                        pageState.currentState?.scrollToTop(duration: 5000);
+                        // pageState.currentState?.scrollTo(500);
                         setState(() {
                           selectedCategoryPk = categoryPk;
                         });
@@ -412,6 +420,67 @@ class IncomeTransactionsSummary extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class WalletDetailsLineGraph extends StatefulWidget {
+  const WalletDetailsLineGraph({super.key, required this.walletPks});
+  final List<int>? walletPks;
+
+  @override
+  State<WalletDetailsLineGraph> createState() => _WalletDetailsLineGraphState();
+}
+
+class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
+  int numberMonthsToLoad = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 13),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 13),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: appStateSettings["materialYou"]
+              ? dynamicPastel(
+                  context, Theme.of(context).colorScheme.secondaryContainer,
+                  amount: 0.5)
+              : getColor(context, "lightDarkAccentHeavyLight"),
+          boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: IconButton(
+                icon: Icon(
+                  Icons.history_rounded,
+                  size: 22,
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                ),
+                onPressed: () {
+                  setState(() {
+                    numberMonthsToLoad++;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 9, right: 9, bottom: 12, top: 18),
+              child: PastSpendingGraph(
+                isIncome: null,
+                walletPks: widget.walletPks,
+                monthsToLoad: numberMonthsToLoad,
+                extraLeftPaddingIfSmall:
+                    10, //we want this because the corner has the load more dates button
+              ),
+            ),
+          ],
         ),
       ),
     );

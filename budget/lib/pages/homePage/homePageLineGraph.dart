@@ -44,78 +44,12 @@ class HomePageLineGraph extends StatelessWidget {
                   boxShadow: boxShadowCheck(boxShadowGeneral(context)),
                 ),
                 child: appStateSettings["lineGraphReferenceBudgetPk"] == null
-                    ? StreamBuilder<List<Transaction>>(
-                        stream:
-                            database.getTransactionsInTimeRangeFromCategories(
-                                DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month - 1,
-                                  DateTime.now().day,
-                                ),
-                                DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day,
-                                ),
-                                [],
-                                true,
-                                true,
-                                selectedSlidingSelector == 2
-                                    ? false
-                                    : selectedSlidingSelector == 3
-                                        ? true
-                                        : null,
-                                null,
-                                null),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            bool cumulative =
-                                appStateSettings["showCumulativeSpending"];
-                            double cumulativeTotal = 0;
-                            List<Pair> points = [];
-                            for (DateTime indexDay = DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month - 1,
-                              DateTime.now().day,
-                            );
-                                indexDay.compareTo(DateTime.now()) < 0;
-                                indexDay = DateTime(indexDay.year,
-                                    indexDay.month, indexDay.day + 1)) {
-                              //can be optimized...
-                              double totalForDay = 0;
-                              for (Transaction transaction in snapshot.data!) {
-                                if (indexDay.year ==
-                                        transaction.dateCreated.year &&
-                                    indexDay.month ==
-                                        transaction.dateCreated.month &&
-                                    indexDay.day ==
-                                        transaction.dateCreated.day) {
-                                  if (transaction.income) {
-                                    totalForDay += transaction.amount.abs() *
-                                        (amountRatioToPrimaryCurrencyGivenPk(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                transaction.walletFk) ??
-                                            0);
-                                  } else {
-                                    totalForDay -= transaction.amount.abs() *
-                                        (amountRatioToPrimaryCurrencyGivenPk(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                transaction.walletFk) ??
-                                            0);
-                                  }
-                                }
-                              }
-                              cumulativeTotal += totalForDay;
-                              points.add(Pair(points.length.toDouble(),
-                                  cumulative ? cumulativeTotal : totalForDay));
-                            }
-                            return LineChartWrapper(
-                                points: [points], isCurved: true);
-                          }
-                          return SizedBox.shrink();
-                        },
+                    ? PastSpendingGraph(
+                        isIncome: selectedSlidingSelector == 2
+                            ? false
+                            : selectedSlidingSelector == 3
+                                ? true
+                                : null,
                       )
                     : StreamBuilder<Budget>(
                         stream: database.getBudget(
@@ -153,5 +87,90 @@ class HomePageLineGraph extends StatelessWidget {
               ),
             ),
           );
+  }
+}
+
+class PastSpendingGraph extends StatelessWidget {
+  const PastSpendingGraph({
+    super.key,
+    required this.isIncome,
+    this.monthsToLoad = 1,
+    this.walletPks,
+    this.extraLeftPaddingIfSmall = 0,
+  });
+  final bool? isIncome;
+  final int monthsToLoad;
+  final List<int>? walletPks;
+  final double extraLeftPaddingIfSmall;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Transaction>>(
+      stream: database.getTransactionsInTimeRangeFromCategories(
+        DateTime(
+          DateTime.now().year,
+          DateTime.now().month - monthsToLoad,
+          DateTime.now().day,
+        ),
+        DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ),
+        [],
+        true,
+        true,
+        isIncome,
+        null,
+        null,
+        walletPks: walletPks,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          bool cumulative = appStateSettings["showCumulativeSpending"];
+          double cumulativeTotal = 0;
+          List<Pair> points = [];
+          for (DateTime indexDay = DateTime(
+            DateTime.now().year,
+            DateTime.now().month - monthsToLoad,
+            DateTime.now().day,
+          );
+              indexDay.compareTo(DateTime.now()) < 0;
+              indexDay =
+                  DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
+            //can be optimized...
+            double totalForDay = 0;
+            for (Transaction transaction in snapshot.data!) {
+              if (indexDay.year == transaction.dateCreated.year &&
+                  indexDay.month == transaction.dateCreated.month &&
+                  indexDay.day == transaction.dateCreated.day) {
+                if (transaction.income) {
+                  totalForDay += transaction.amount.abs() *
+                      (amountRatioToPrimaryCurrencyGivenPk(
+                              Provider.of<AllWallets>(context),
+                              transaction.walletFk) ??
+                          0);
+                } else {
+                  totalForDay -= transaction.amount.abs() *
+                      (amountRatioToPrimaryCurrencyGivenPk(
+                              Provider.of<AllWallets>(context),
+                              transaction.walletFk) ??
+                          0);
+                }
+              }
+            }
+            cumulativeTotal += totalForDay;
+            points.add(Pair(points.length.toDouble(),
+                cumulative ? cumulativeTotal : totalForDay));
+          }
+          return LineChartWrapper(
+            points: [points],
+            isCurved: true,
+            extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
+          );
+        }
+        return SizedBox.shrink();
+      },
+    );
   }
 }

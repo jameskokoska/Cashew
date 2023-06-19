@@ -22,6 +22,7 @@ class _LineChart extends StatefulWidget {
     this.verticalLineAt,
     this.horizontalLineAt,
     required this.enableTouch,
+    this.extraLeftPaddingIfSmall = 0,
     this.colors = const [],
     Key? key,
   }) : super(key: key);
@@ -36,6 +37,7 @@ class _LineChart extends StatefulWidget {
   final double? verticalLineAt;
   final double? horizontalLineAt;
   final bool enableTouch;
+  final double extraLeftPaddingIfSmall;
 
   @override
   State<_LineChart> createState() => _LineChartState();
@@ -228,10 +230,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                     : widget.minPair.y <= -1000
                         ? 45
                         : widget.minPair.y <= -100
-                            ? 40
+                            ? 40 + widget.extraLeftPaddingIfSmall / 2
                             : (widget.maxPair.y >= 100
                                     ? (widget.maxPair.y >= 1000 ? 37 : 33)
-                                    : 25) +
+                                    : 25 + widget.extraLeftPaddingIfSmall) +
                                 extraHorizontalPadding) +
                 10,
             // This interval needs more work
@@ -467,6 +469,7 @@ class LineChartWrapper extends StatelessWidget {
     this.enableTouch = true,
     this.colors = const [],
     this.keepHorizontalLineInView = false,
+    this.extraLeftPaddingIfSmall = 0,
     Key? key,
   }) : super(key: key);
 
@@ -479,6 +482,7 @@ class LineChartWrapper extends StatelessWidget {
   final bool enableTouch;
   final List<Color> colors;
   final bool keepHorizontalLineInView;
+  final double extraLeftPaddingIfSmall;
 
   List<List<Pair>> filterPointsList(List<List<Pair>> pointsList) {
     List<List<Pair>> pointsOut = [];
@@ -592,6 +596,7 @@ class LineChartWrapper extends StatelessWidget {
           horizontalLineAt: horizontalLineAt,
           enableTouch: enableTouch,
           colors: colors,
+          extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
         ),
       ),
     );

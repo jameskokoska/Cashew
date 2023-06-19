@@ -201,16 +201,18 @@ class MorePages extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: SettingsContainer(
-                  onTap: () {
-                    openUrl("https://github.com/jameskokoska/Cashew");
-                  },
-                  title: "Open Source",
-                  icon: Icons.code_rounded,
-                  isOutlined: true,
-                ),
-              ),
+              kIsWeb
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: SettingsContainer(
+                        onTap: () {
+                          openUrl("https://github.com/jameskokoska/Cashew");
+                        },
+                        title: "Open Source",
+                        icon: Icons.code_rounded,
+                        isOutlined: true,
+                      ),
+                    ),
               kIsWeb
                   ? SizedBox.shrink()
                   : Expanded(

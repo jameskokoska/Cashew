@@ -132,7 +132,7 @@ class _RoundedCircularProgressPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
     final overagePaint = Paint()
       ..color = overageColor
-      ..strokeWidth = valueStrokeWidth
+      ..strokeWidth = valueStrokeWidth + 1
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
     final overagePaintShadow = Paint()
@@ -141,7 +141,6 @@ class _RoundedCircularProgressPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2);
-    ;
 
     final startAngleRadians = startAngle;
     final rect = Rect.fromCircle(center: center, radius: radius);

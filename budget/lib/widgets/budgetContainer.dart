@@ -261,6 +261,7 @@ class BudgetContainer extends StatelessWidget {
                                           amount: 0.7,
                                           inverse: true),
                                       size: 38,
+                                      iconPadding: 18,
                                     ),
                             ),
                           ),

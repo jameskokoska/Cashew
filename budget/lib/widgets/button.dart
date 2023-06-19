@@ -149,6 +149,7 @@ class ButtonIcon extends StatelessWidget {
     this.color,
     this.iconColor,
     this.padding,
+    this.iconPadding = 20,
   }) : super(key: key);
   final VoidCallback onTap;
   final IconData icon;
@@ -156,6 +157,7 @@ class ButtonIcon extends StatelessWidget {
   final Color? color;
   final Color? iconColor;
   final EdgeInsets? padding;
+  final double iconPadding;
   @override
   Widget build(BuildContext context) {
     return Tappable(
@@ -168,7 +170,7 @@ class ButtonIcon extends StatelessWidget {
           color: iconColor == null
               ? Theme.of(context).colorScheme.onSecondaryContainer
               : iconColor,
-          size: size - 20,
+          size: size - iconPadding,
         ),
       ),
       color: color == null

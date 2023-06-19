@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -12,8 +13,12 @@ import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -58,9 +63,11 @@ GlobalKey<PageFrameworkState> budgetHistoryKey = GlobalKey();
 
 class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   Stream<List<double?>>? mergedStreamsBudgetTotal;
+  Stream<List<double?>>? mergedStreamsCategoriesTotal;
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 8;
   int? touchedBudgetIndex = null;
+  List<int>? selectedCategoryFks = [];
 
   initState() {
     Future.delayed(Duration.zero, () async {
@@ -78,6 +85,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   void loadLines(amountLoaded) async {
     dateTimeRanges = [];
     List<Stream<double?>> watchedBudgetTotals = [];
+    List<Stream<double?>> watchedCategoryTotals = [];
     for (int index = 0; index < amountLoaded; index++) {
       DateTime datePast = DateTime(
         DateTime.now().year -
@@ -116,10 +124,29 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 : null,
         budget: widget.budget,
       ));
+      for (int categoryFk in selectedCategoryFks ?? []) {
+        watchedCategoryTotals
+            .add(database.watchTotalSpentInTimeRangeFromCategories(
+          Provider.of<AllWallets>(context, listen: false),
+          budgetRange.start,
+          budgetRange.end,
+          [categoryFk],
+          false,
+          widget.budget.budgetTransactionFilters,
+          widget.budget.memberTransactionFilters,
+          onlyShowTransactionsBelongingToBudget:
+              widget.budget.sharedKey != null ||
+                      widget.budget.addedTransactionsOnly == true
+                  ? widget.budget.budgetPk
+                  : null,
+          budget: widget.budget,
+        ));
+      }
     }
 
     setState(() {
       mergedStreamsBudgetTotal = StreamZip(watchedBudgetTotals);
+      mergedStreamsCategoriesTotal = StreamZip(watchedCategoryTotals);
     });
     // mergedStreams.listen(
     //   (event) {
@@ -172,6 +199,36 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       ),
       actions: [
         IconButton(
+          tooltip: "Select Categories",
+          onPressed: () {
+            // TODO this should only be the categories that apply to this budget, not all of them
+            openPopupCustom(
+              context,
+              child: SelectCategory(
+                labelIcon: false,
+                addButton: false,
+                nextLabel: "Select",
+                next: () {
+                  Navigator.pop(context);
+                },
+                selectedCategories: selectedCategoryFks,
+                setSelectedCategories: (List<int> selectedCategoryFks) {
+                  setState(() {
+                    this.selectedCategoryFks = selectedCategoryFks;
+                  });
+                  loadLines(amountLoaded);
+                },
+                scaleWhenSelected: true,
+              ),
+              title: "Select Categories",
+            );
+          },
+          icon: Icon(
+            Icons.category_outlined,
+            color: budgetColorScheme.onSecondaryContainer,
+          ),
+        ),
+        IconButton(
           tooltip: "Edit budget",
           onPressed: () {
             pushRoute(
@@ -203,55 +260,118 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             children: [
               Container(
                 color: backgroundColor,
-                child: StreamBuilder<List<double?>>(
-                  stream: mergedStreamsBudgetTotal,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      double maxY = 100;
-                      List<FlSpot> spots = [];
-                      List<FlSpot> initialSpots = [];
+                child: StreamBuilder<Map<int, TransactionCategory>>(
+                    stream: database.watchAllCategoriesMapped(),
+                    builder: (context, snapshotCategoriesMapped) {
+                      if (snapshotCategoriesMapped.hasData) {
+                        return StreamBuilder<List<double?>>(
+                          stream: mergedStreamsBudgetTotal,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              double maxY = 100;
+                              List<FlSpot> spots = [];
+                              List<FlSpot> initialSpots = [];
 
-                      for (int i = snapshot.data!.length - 1; i >= 0; i--) {
-                        if ((snapshot.data![i] ?? 0).abs() > maxY)
-                          maxY = (snapshot.data![i] ?? 0).abs();
-                        spots.add(FlSpot(
-                          snapshot.data!.length - 1 - i.toDouble(),
-                          (snapshot.data![i] ?? 0).abs() == 0
-                              ? 0.001
-                              : (snapshot.data![i] ?? 0).abs(),
-                        ));
-                        initialSpots.add(
-                          FlSpot(
-                            snapshot.data!.length - 1 - i.toDouble(),
-                            0.000000000001,
-                          ),
+                              for (int i = snapshot.data!.length - 1;
+                                  i >= 0;
+                                  i--) {
+                                if ((snapshot.data![i] ?? 0).abs() > maxY)
+                                  maxY = (snapshot.data![i] ?? 0).abs();
+                                spots.add(FlSpot(
+                                  snapshot.data!.length - 1 - i.toDouble(),
+                                  (snapshot.data![i] ?? 0).abs() == 0
+                                      ? 0.001
+                                      : (snapshot.data![i] ?? 0).abs(),
+                                ));
+                                initialSpots.add(
+                                  FlSpot(
+                                    snapshot.data!.length - 1 - i.toDouble(),
+                                    0.000000000001,
+                                  ),
+                                );
+                              }
+                              return StreamBuilder<List<double?>>(
+                                  stream: mergedStreamsCategoriesTotal,
+                                  builder: (context, snapshot2) {
+                                    Map<int, List<FlSpot>> categorySpentPoints =
+                                        {};
+                                    if (snapshot2.hasData &&
+                                        (selectedCategoryFks ?? []).length >
+                                            0) {
+                                      // separate each into a map of their own
+                                      int i = snapshot2.data!.length - 1;
+                                      for (int day = 0;
+                                          day <
+                                              snapshot2.data!.length /
+                                                  (selectedCategoryFks ?? [])
+                                                      .length;
+                                          day++) {
+                                        for (int categoryFk
+                                            in (selectedCategoryFks ?? [])
+                                                .reversed) {
+                                          if (categorySpentPoints[categoryFk] ==
+                                              null)
+                                            categorySpentPoints[categoryFk] =
+                                                [];
+                                          if (i < snapshot2.data!.length &&
+                                              i >= 0)
+                                            categorySpentPoints[categoryFk]!
+                                                .add(
+                                              FlSpot(
+                                                (snapshot2.data!.length -
+                                                        day.toDouble() -
+                                                        snapshot2.data!.length)
+                                                    .abs(),
+                                                (snapshot2.data![i] ?? 0)
+                                                            .abs() ==
+                                                        0
+                                                    ? 0.001
+                                                    : (snapshot2.data![i] ?? 0)
+                                                        .abs(),
+                                              ),
+                                            );
+                                          i--;
+                                        }
+                                      }
+                                    }
+                                    // print(categorySpentPoints);
+
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 7),
+                                      child: BudgetHistoryLineGraph(
+                                        onTouchedIndex: (index) {
+                                          // debounce to avoid duplicate key on AnimatedSwitcher
+                                          onTouchedBudgetIndex(index);
+                                        },
+                                        color: dynamicPastel(
+                                            context, budgetColorScheme.primary,
+                                            amountLight: 0.4, amountDark: 0.2),
+                                        dateRanges: dateTimeRanges,
+                                        maxY: widget.budget.amount +
+                                                    0.0000000000001 >
+                                                maxY
+                                            ? widget.budget.amount +
+                                                0.0000000000001
+                                            : maxY,
+                                        spots: spots,
+                                        initialSpots: initialSpots,
+                                        horizontalLineAt: widget.budget.amount,
+                                        budget: widget.budget,
+                                        extraCategorySpots: categorySpentPoints,
+                                        categoriesMapped:
+                                            snapshotCategoriesMapped.data!,
+                                      ),
+                                    );
+                                  });
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
                         );
                       }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 7),
-                        child: BudgetHistoryLineGraph(
-                          onTouchedIndex: (index) {
-                            // debounce to avoid duplicate key on AnimatedSwitcher
-                            onTouchedBudgetIndex(index);
-                          },
-                          color: dynamicPastel(
-                              context, budgetColorScheme.primary,
-                              amountLight: 0.4, amountDark: 0.2),
-                          dateRanges: dateTimeRanges,
-                          maxY: widget.budget.amount + 0.0000000000001 > maxY
-                              ? widget.budget.amount + 0.0000000000001
-                              : maxY,
-                          spots: spots,
-                          initialSpots: initialSpots,
-                          horizontalLineAt: widget.budget.amount,
-                          budget: widget.budget,
-                        ),
-                      );
-                    } else {
                       return SizedBox.shrink();
-                    }
-                  },
-                ),
+                    }),
               ),
               Transform.translate(
                 offset: Offset(0, -1),

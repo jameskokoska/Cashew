@@ -472,9 +472,17 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
 }
 
 String getWordedNumber(AllWallets allWallets, double value) {
-  if (value >= 1000) {
+  if (value >= 100000) {
+    return getCurrencyString(allWallets) +
+        (value / 1000).toStringAsFixed(0) +
+        "K";
+  } else if (value >= 1000) {
     return getCurrencyString(allWallets) +
         (value / 1000).toStringAsFixed(1) +
+        "K";
+  } else if (value <= -100000) {
+    return getCurrencyString(allWallets) +
+        (value / 1000).toStringAsFixed(0) +
         "K";
   } else if (value <= -1000) {
     return getCurrencyString(allWallets) +

@@ -74,6 +74,10 @@ Future<bool> runAllCloudFunctions(context) async {
   loadingIndeterminateKey.currentState!.setVisibility(true);
   try {
     await syncData();
+    if (appStateSettings["emailScanningPullToRefresh"] ||
+        entireAppLoaded == false) {
+      await parseEmailsInBackground(context, forceParse: true);
+    }
     await syncPendingQueueOnServer(); //sync before download
     await getCloudBudgets();
     await createBackupInBackground(context);
@@ -123,11 +127,14 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     // Functions to run after entire UI loaded
     Future.delayed(Duration.zero, () async {
       await showChangelog(context);
+      if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
+          appStateSettings["submittedFeedback"] != true) {
+        openBottomSheet(context, RatingPopup());
+      }
       runNotificationPayLoads(context);
       await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
-      await parseEmailsInBackground(context);
       await runAllCloudFunctions(context);
       database.deleteWanderingTransactions();
       entireAppLoaded = true;
@@ -136,10 +143,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           createSyncBackup(changeMadeSync: true);
         }
       });
-      if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
-          appStateSettings["submittedFeedback"] != true) {
-        openBottomSheet(context, RatingPopup());
-      }
     });
 
     pages = [

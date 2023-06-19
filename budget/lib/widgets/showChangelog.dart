@@ -9,6 +9,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Can select categories and compare category spending on budget history page
+    Pull to refresh for email parsing option
+    Refactored ask for notification time
+    Circular progress UI size tweaks
+    Ask for rating is no longer delayed
     Fixed category spent amounts in budget page
     Web upcoming/overdue transactions centered subtitle
     Web wallet summary layout width constrained

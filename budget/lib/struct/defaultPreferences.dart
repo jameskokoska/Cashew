@@ -65,6 +65,7 @@ Map<String, dynamic> defaultPreferences() {
     "animationSpeed": 1.0,
     "sharedBudgets": false,
     "emailScanning": false,
+    "emailScanningPullToRefresh": false,
     "legacyTransactionAmountColors": false,
     "massEditSelectedTransactions": false,
     "searchFilters": false,

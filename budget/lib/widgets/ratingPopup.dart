@@ -71,7 +71,7 @@ class _RatingPopupState extends State<RatingPopup> {
                               : 60,
                           color:
                               selectedStars != null && i <= (selectedStars ?? 0)
-                                  ? Colors.yellow
+                                  ? getColor(context, "starYellow")
                                   : Theme.of(context)
                                       .colorScheme
                                       .secondaryContainer

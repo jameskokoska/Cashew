@@ -19,6 +19,8 @@ class BudgetHistoryLineGraph extends StatefulWidget {
     required this.initialSpots,
     required this.horizontalLineAt,
     required this.maxY,
+    required this.extraCategorySpots,
+    required this.categoriesMapped,
     this.onTouchedIndex,
   });
 
@@ -30,6 +32,8 @@ class BudgetHistoryLineGraph extends StatefulWidget {
   final double? horizontalLineAt;
   final double maxY;
   final Function(int?)? onTouchedIndex;
+  final Map<int, List<FlSpot>> extraCategorySpots;
+  final Map<int, TransactionCategory> categoriesMapped;
 
   @override
   State<BudgetHistoryLineGraph> createState() => _BudgetHistoryLineGraphState();
@@ -52,6 +56,31 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
   @override
   Widget build(BuildContext context) {
     final lineBarsData = [
+      for (int categoryPk in widget.extraCategorySpots.keys)
+        LineChartBarData(
+          isStrokeCapRound: true,
+          spots: widget.extraCategorySpots[categoryPk],
+          isCurved: true,
+          curveSmoothness: 0.35,
+          preventCurveOverShooting: true,
+          barWidth: 3,
+          dotData: FlDotData(
+            show: true,
+            getDotPainter: (spot, percent, barData, index) {
+              return FlDotCirclePainter(
+                radius: 4,
+                color: lightenPastel(
+                        HexColor(widget.categoriesMapped[categoryPk]!.colour),
+                        amount: 0.3)
+                    .withOpacity(0.8),
+                strokeWidth: 0,
+              );
+            },
+          ),
+          color: lightenPastel(
+              HexColor(widget.categoriesMapped[categoryPk]!.colour),
+              amount: 0.3),
+        ),
       LineChartBarData(
         isStrokeCapRound: true,
         spots: loaded ? widget.spots : widget.initialSpots,
@@ -109,8 +138,6 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
         color: Colors.transparent,
       ),
     ];
-
-    final tooltipsOnBar = lineBarsData[0];
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.3 >
@@ -202,6 +229,14 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                   interval: getIsFullScreen(context) ? 1 : null,
                   showTitles: true,
                   getTitlesWidget: (value, _) {
+                    DateTime startDate = widget.dateRanges[0].start;
+                    if (widget.spots.length - 1 - value.toInt() <
+                            widget.dateRanges.length &&
+                        widget.spots.length - 1 - value.toInt() >= 0) {
+                      startDate = widget
+                          .dateRanges[widget.spots.length - 1 - value.toInt()]
+                          .start;
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: TextFont(
@@ -209,20 +244,11 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                         fontSize: 13,
                         text: widget.budget.reoccurrence ==
                                 BudgetReoccurence.monthly
-                            ? DateFormat('MMM').format(widget
-                                .dateRanges[
-                                    widget.spots.length - 1 - value.toInt()]
-                                .start)
+                            ? DateFormat('MMM').format(startDate)
                             : widget.budget.reoccurrence ==
                                     BudgetReoccurence.yearly
-                                ? DateFormat('yyyy').format(widget
-                                    .dateRanges[
-                                        widget.spots.length - 1 - value.toInt()]
-                                    .start)
-                                : DateFormat('MMM\nd').format(widget
-                                    .dateRanges[
-                                        widget.spots.length - 1 - value.toInt()]
-                                    .start),
+                                ? DateFormat('yyyy').format(startDate)
+                                : DateFormat('MMM\nd').format(startDate),
                         textColor: dynamicPastel(context, widget.color,
                                 amount: 0.8, inverse: true)
                             .withOpacity(0.5),

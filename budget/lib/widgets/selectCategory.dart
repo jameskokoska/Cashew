@@ -25,6 +25,9 @@ class SelectCategory extends StatefulWidget {
     this.horizontalList = false,
     this.popRoute = true,
     this.showSelectedAllCategoriesIfNoneSelected = false,
+    this.labelIcon = true,
+    this.addButton = true,
+    this.scaleWhenSelected = false,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<int>)? setSelectedCategories;
@@ -36,6 +39,9 @@ class SelectCategory extends StatefulWidget {
   final bool horizontalList;
   final bool popRoute;
   final bool showSelectedAllCategoriesIfNoneSelected;
+  final bool labelIcon;
+  final bool addButton;
+  final bool scaleWhenSelected;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -106,49 +112,60 @@ class _SelectCategoryState extends State<SelectCategory> {
               List<Widget> children = [];
               int index = 0;
               for (TransactionCategory category in snapshot.data!) {
-                children.add(Padding(
-                  padding: EdgeInsets.only(
-                      left: index == 0
-                          ? 12 -
-                              (widget.showSelectedAllCategoriesIfNoneSelected
-                                  ? 4
-                                  : 0)
-                          : 0,
-                      right: index == snapshot.data!.length - 1 ? 12 - 4 : 0),
-                  child: CategoryIcon(
-                    categoryPk: category.categoryPk,
-                    size: 42,
-                    sizePadding: 28,
-                    label: true,
-                    onTap: () {
-                      if (widget.setSelectedCategory != null) {
-                        widget.setSelectedCategory!(category);
-                        setState(() {
-                          selectedCategories = [];
-                          selectedCategories.add(category.categoryPk);
-                        });
-                        Future.delayed(Duration(milliseconds: 70), () {
-                          if (widget.popRoute) Navigator.pop(context);
-                          if (widget.next != null) {
-                            widget.next!();
-                          }
-                        });
-                      } else if (widget.setSelectedCategories != null) {
-                        // print(selectedCategories);
-                        if (selectedCategories.contains(category.categoryPk)) {
+                children.add(AnimatedScale(
+                  key: ValueKey(category.categoryPk),
+                  duration: Duration(milliseconds: 1500),
+                  curve: Curves.elasticOut,
+                  scale: widget.scaleWhenSelected == true &&
+                          selectedCategories.contains(category.categoryPk) ==
+                              false
+                      ? 0.86
+                      : 1,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: index == 0
+                            ? 12 -
+                                (widget.showSelectedAllCategoriesIfNoneSelected
+                                    ? 4
+                                    : 0)
+                            : 0,
+                        right: index == snapshot.data!.length - 1 ? 12 - 4 : 0),
+                    child: CategoryIcon(
+                      categoryPk: category.categoryPk,
+                      size: 42,
+                      sizePadding: 28,
+                      label: widget.labelIcon,
+                      onTap: () {
+                        if (widget.setSelectedCategory != null) {
+                          widget.setSelectedCategory!(category);
                           setState(() {
-                            selectedCategories.remove(category.categoryPk);
-                          });
-                          widget.setSelectedCategories!(selectedCategories);
-                        } else {
-                          setState(() {
+                            selectedCategories = [];
                             selectedCategories.add(category.categoryPk);
                           });
-                          widget.setSelectedCategories!(selectedCategories);
+                          Future.delayed(Duration(milliseconds: 70), () {
+                            if (widget.popRoute) Navigator.pop(context);
+                            if (widget.next != null) {
+                              widget.next!();
+                            }
+                          });
+                        } else if (widget.setSelectedCategories != null) {
+                          // print(selectedCategories);
+                          if (selectedCategories
+                              .contains(category.categoryPk)) {
+                            setState(() {
+                              selectedCategories.remove(category.categoryPk);
+                            });
+                            widget.setSelectedCategories!(selectedCategories);
+                          } else {
+                            setState(() {
+                              selectedCategories.add(category.categoryPk);
+                            });
+                            widget.setSelectedCategories!(selectedCategories);
+                          }
                         }
-                      }
-                    },
-                    outline: selectedCategories.contains(category.categoryPk),
+                      },
+                      outline: selectedCategories.contains(category.categoryPk),
+                    ),
                   ),
                 ));
                 index++;
@@ -233,22 +250,24 @@ class _SelectCategoryState extends State<SelectCategory> {
                         )
                       : SizedBox.shrink(),
                   ...children,
-                  Padding(
-                    key: ValueKey(2),
-                    padding: const EdgeInsets.only(
-                      bottom: 21,
-                      top: 8,
-                      right: 20,
-                    ),
-                    child: AddButton(
-                      onTap: () {},
-                      padding: EdgeInsets.zero,
-                      openPage: AddCategoryPage(
-                        title: "Add Category",
-                      ),
-                      width: 70,
-                    ),
-                  ),
+                  widget.addButton == false
+                      ? SizedBox.shrink()
+                      : Padding(
+                          key: ValueKey(2),
+                          padding: const EdgeInsets.only(
+                            bottom: 21,
+                            top: 8,
+                            right: 20,
+                          ),
+                          child: AddButton(
+                            onTap: () {},
+                            padding: EdgeInsets.zero,
+                            openPage: AddCategoryPage(
+                              title: "Add Category",
+                            ),
+                            width: 70,
+                          ),
+                        ),
                 ],
               );
             }
@@ -282,52 +301,62 @@ class _SelectCategoryState extends State<SelectCategory> {
                           .map(
                             (index, category) => MapEntry(
                               index,
-                              CategoryIcon(
-                                canEditByLongPress: false,
+                              AnimatedScale(
                                 key: ValueKey(category.categoryPk),
-                                categoryPk: category.categoryPk,
-                                size: size,
-                                sizePadding: 24,
-                                margin: EdgeInsets.zero,
-                                label: true,
-                                onTap: () {
-                                  if (widget.setSelectedCategory != null) {
-                                    widget.setSelectedCategory!(category);
-                                    setState(() {
-                                      selectedCategories = [];
-                                      selectedCategories
-                                          .add(category.categoryPk);
-                                    });
-                                    Future.delayed(Duration(milliseconds: 70),
-                                        () {
-                                      if (widget.popRoute)
-                                        Navigator.pop(context);
-                                      if (widget.next != null) {
-                                        widget.next!();
-                                      }
-                                    });
-                                  } else if (widget.setSelectedCategories !=
-                                      null) {
-                                    if (selectedCategories
-                                        .contains(category.categoryPk)) {
+                                duration: Duration(milliseconds: 1500),
+                                curve: Curves.elasticOut,
+                                scale: widget.scaleWhenSelected == true &&
+                                        selectedCategories.contains(
+                                                category.categoryPk) ==
+                                            false
+                                    ? 0.86
+                                    : 1,
+                                child: CategoryIcon(
+                                  canEditByLongPress: false,
+                                  categoryPk: category.categoryPk,
+                                  size: size,
+                                  sizePadding: 24,
+                                  margin: EdgeInsets.zero,
+                                  label: widget.labelIcon,
+                                  onTap: () {
+                                    if (widget.setSelectedCategory != null) {
+                                      widget.setSelectedCategory!(category);
                                       setState(() {
-                                        selectedCategories
-                                            .remove(category.categoryPk);
-                                      });
-                                      widget.setSelectedCategories!(
-                                          selectedCategories);
-                                    } else {
-                                      setState(() {
+                                        selectedCategories = [];
                                         selectedCategories
                                             .add(category.categoryPk);
                                       });
-                                      widget.setSelectedCategories!(
-                                          selectedCategories);
+                                      Future.delayed(Duration(milliseconds: 70),
+                                          () {
+                                        if (widget.popRoute)
+                                          Navigator.pop(context);
+                                        if (widget.next != null) {
+                                          widget.next!();
+                                        }
+                                      });
+                                    } else if (widget.setSelectedCategories !=
+                                        null) {
+                                      if (selectedCategories
+                                          .contains(category.categoryPk)) {
+                                        setState(() {
+                                          selectedCategories
+                                              .remove(category.categoryPk);
+                                        });
+                                        widget.setSelectedCategories!(
+                                            selectedCategories);
+                                      } else {
+                                        setState(() {
+                                          selectedCategories
+                                              .add(category.categoryPk);
+                                        });
+                                        widget.setSelectedCategories!(
+                                            selectedCategories);
+                                      }
                                     }
-                                  }
-                                },
-                                outline: selectedCategories
-                                    .contains(category.categoryPk),
+                                  },
+                                  outline: selectedCategories
+                                      .contains(category.categoryPk),
+                                ),
                               ),
                             ),
                           )
@@ -335,23 +364,26 @@ class _SelectCategoryState extends State<SelectCategory> {
                           .toList(),
                     ],
                     footer: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7.5, right: 7.5),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: AddButton(
-                                onTap: () {},
-                                openPage: AddCategoryPage(
-                                  title: "Add Category",
-                                ),
+                      widget.addButton == false
+                          ? SizedBox.shrink()
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 7.5, right: 7.5),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: AddButton(
+                                      onTap: () {},
+                                      openPage: AddCategoryPage(
+                                        title: "Add Category",
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                ],
                               ),
                             ),
-                            SizedBox(height: 15),
-                          ],
-                        ),
-                      ),
                     ],
                     onReorder: (_intPrevious, _intNew) async {
                       TransactionCategory oldCategory =

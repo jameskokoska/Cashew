@@ -197,9 +197,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   : IconButton(
                       tooltip: "Past budgets",
                       onPressed: () {
-                        pushRoute(context,
-                            PastBudgetsPage(budgetPk: widget.budget.budgetPk),
-                            fancyRoute: true);
+                        pushRoute(
+                          context,
+                          PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                          fancyRoute: true,
+                        );
                       },
                       icon: Icon(
                         Icons.history_rounded,

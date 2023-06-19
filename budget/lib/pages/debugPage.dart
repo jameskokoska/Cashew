@@ -108,6 +108,16 @@ class DebugPage extends StatelessWidget {
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {
+            updateSettings("emailScanningPullToRefresh", value,
+                pagesNeedingRefresh: [], updateGlobalState: false);
+          },
+          title: "Email Scanning Pull to Refresh",
+          description: "May increase API usage",
+          initialValue: appStateSettings["emailScanningPullToRefresh"],
+          icon: Icons.mark_email_unread_rounded,
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
             updateSettings("sharedBudgets", value,
                 pagesNeedingRefresh: [0, 1, 2, 3]);
           },
