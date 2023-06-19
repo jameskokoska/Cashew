@@ -28,6 +28,7 @@ class SelectCategory extends StatefulWidget {
     this.labelIcon = true,
     this.addButton = true,
     this.scaleWhenSelected = false,
+    this.categoryFks,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<int>)? setSelectedCategories;
@@ -42,6 +43,7 @@ class SelectCategory extends StatefulWidget {
   final bool labelIcon;
   final bool addButton;
   final bool scaleWhenSelected;
+  final List<int>? categoryFks;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -112,6 +114,11 @@ class _SelectCategoryState extends State<SelectCategory> {
               List<Widget> children = [];
               int index = 0;
               for (TransactionCategory category in snapshot.data!) {
+                if (widget.categoryFks != null &&
+                    !widget.categoryFks!.contains(category.categoryPk)) {
+                  continue;
+                }
+
                 children.add(AnimatedScale(
                   key: ValueKey(category.categoryPk),
                   duration: Duration(milliseconds: 1500),
@@ -277,6 +284,61 @@ class _SelectCategoryState extends State<SelectCategory> {
             // print(size);
             // print(snapshot.data);
             // print(size);
+            List<Widget> categoryIcons = [];
+            for (TransactionCategory category in snapshot.data!) {
+              if (widget.categoryFks != null &&
+                  !widget.categoryFks!.contains(category.categoryPk)) {
+                continue;
+              }
+              categoryIcons.add(
+                AnimatedScale(
+                  key: ValueKey(category.categoryPk),
+                  duration: Duration(milliseconds: 1500),
+                  curve: Curves.elasticOut,
+                  scale: widget.scaleWhenSelected == true &&
+                          selectedCategories.contains(category.categoryPk) ==
+                              false
+                      ? 0.86
+                      : 1,
+                  child: CategoryIcon(
+                    canEditByLongPress: false,
+                    categoryPk: category.categoryPk,
+                    size: size,
+                    sizePadding: 24,
+                    margin: EdgeInsets.zero,
+                    label: widget.labelIcon,
+                    onTap: () {
+                      if (widget.setSelectedCategory != null) {
+                        widget.setSelectedCategory!(category);
+                        setState(() {
+                          selectedCategories = [];
+                          selectedCategories.add(category.categoryPk);
+                        });
+                        Future.delayed(Duration(milliseconds: 70), () {
+                          if (widget.popRoute) Navigator.pop(context);
+                          if (widget.next != null) {
+                            widget.next!();
+                          }
+                        });
+                      } else if (widget.setSelectedCategories != null) {
+                        if (selectedCategories.contains(category.categoryPk)) {
+                          setState(() {
+                            selectedCategories.remove(category.categoryPk);
+                          });
+                          widget.setSelectedCategories!(selectedCategories);
+                        } else {
+                          setState(() {
+                            selectedCategories.add(category.categoryPk);
+                          });
+                          widget.setSelectedCategories!(selectedCategories);
+                        }
+                      }
+                    },
+                    outline: selectedCategories.contains(category.categoryPk),
+                  ),
+                ),
+              );
+            }
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
               child: Column(
@@ -295,74 +357,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                         : ((getWidthBottomSheet(context)) ~/ size ~/ 2.1)
                             .toInt(),
                     shrinkWrap: true,
-                    children: [
-                      ...snapshot.data!
-                          .asMap()
-                          .map(
-                            (index, category) => MapEntry(
-                              index,
-                              AnimatedScale(
-                                key: ValueKey(category.categoryPk),
-                                duration: Duration(milliseconds: 1500),
-                                curve: Curves.elasticOut,
-                                scale: widget.scaleWhenSelected == true &&
-                                        selectedCategories.contains(
-                                                category.categoryPk) ==
-                                            false
-                                    ? 0.86
-                                    : 1,
-                                child: CategoryIcon(
-                                  canEditByLongPress: false,
-                                  categoryPk: category.categoryPk,
-                                  size: size,
-                                  sizePadding: 24,
-                                  margin: EdgeInsets.zero,
-                                  label: widget.labelIcon,
-                                  onTap: () {
-                                    if (widget.setSelectedCategory != null) {
-                                      widget.setSelectedCategory!(category);
-                                      setState(() {
-                                        selectedCategories = [];
-                                        selectedCategories
-                                            .add(category.categoryPk);
-                                      });
-                                      Future.delayed(Duration(milliseconds: 70),
-                                          () {
-                                        if (widget.popRoute)
-                                          Navigator.pop(context);
-                                        if (widget.next != null) {
-                                          widget.next!();
-                                        }
-                                      });
-                                    } else if (widget.setSelectedCategories !=
-                                        null) {
-                                      if (selectedCategories
-                                          .contains(category.categoryPk)) {
-                                        setState(() {
-                                          selectedCategories
-                                              .remove(category.categoryPk);
-                                        });
-                                        widget.setSelectedCategories!(
-                                            selectedCategories);
-                                      } else {
-                                        setState(() {
-                                          selectedCategories
-                                              .add(category.categoryPk);
-                                        });
-                                        widget.setSelectedCategories!(
-                                            selectedCategories);
-                                      }
-                                    }
-                                  },
-                                  outline: selectedCategories
-                                      .contains(category.categoryPk),
-                                ),
-                              ),
-                            ),
-                          )
-                          .values
-                          .toList(),
-                    ],
+                    children: categoryIcons,
                     footer: [
                       widget.addButton == false
                           ? SizedBox.shrink()

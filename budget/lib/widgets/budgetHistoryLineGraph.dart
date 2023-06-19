@@ -56,31 +56,6 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
   @override
   Widget build(BuildContext context) {
     final lineBarsData = [
-      for (int categoryPk in widget.extraCategorySpots.keys)
-        LineChartBarData(
-          isStrokeCapRound: true,
-          spots: widget.extraCategorySpots[categoryPk],
-          isCurved: true,
-          curveSmoothness: 0.35,
-          preventCurveOverShooting: true,
-          barWidth: 3,
-          dotData: FlDotData(
-            show: true,
-            getDotPainter: (spot, percent, barData, index) {
-              return FlDotCirclePainter(
-                radius: 4,
-                color: lightenPastel(
-                        HexColor(widget.categoriesMapped[categoryPk]!.colour),
-                        amount: 0.3)
-                    .withOpacity(0.8),
-                strokeWidth: 0,
-              );
-            },
-          ),
-          color: lightenPastel(
-              HexColor(widget.categoriesMapped[categoryPk]!.colour),
-              amount: 0.3),
-        ),
       LineChartBarData(
         isStrokeCapRound: true,
         spots: loaded ? widget.spots : widget.initialSpots,
@@ -137,6 +112,32 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
         dotData: FlDotData(show: false),
         color: Colors.transparent,
       ),
+      for (int categoryPk in widget.extraCategorySpots.keys)
+        LineChartBarData(
+          isStrokeCapRound: true,
+          spots: widget.extraCategorySpots[categoryPk],
+          isCurved: true,
+          curveSmoothness: 0.35,
+          preventCurveOverShooting: true,
+          barWidth: 3,
+          dotData: FlDotData(
+            show: true,
+            getDotPainter: (spot, percent, barData, index) {
+              return FlDotCirclePainter(
+                radius: 3,
+                color: lightenPastel(
+                        HexColor(widget.categoriesMapped[categoryPk]!.colour),
+                        amount: 0.3)
+                    .withOpacity(0.6),
+                strokeWidth: 0,
+              );
+            },
+          ),
+          color: lightenPastel(
+                  HexColor(widget.categoriesMapped[categoryPk]!.colour),
+                  amount: 0.3)
+              .withOpacity(0.8),
+        ),
     ];
 
     return Container(
@@ -179,7 +180,9 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
               return spotIndexes.map((index) {
                 return TouchedSpotIndicatorData(
                   FlLine(
-                    color: widget.color.withOpacity(0.9),
+                    color: widget.extraCategorySpots.keys.length <= 0
+                        ? widget.color
+                        : barData.color,
                     strokeWidth: 2,
                     dashArray: [2, 2],
                   ),
@@ -188,33 +191,48 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                     getDotPainter: (spot, percent, barData, index) =>
                         FlDotCirclePainter(
                       radius: 3,
-                      color: widget.color.withOpacity(0.9),
+                      color: widget.extraCategorySpots.keys.length <= 0
+                          ? widget.color.withOpacity(0.9)
+                          : barData.color,
                       strokeWidth: 2,
-                      strokeColor: widget.color.withOpacity(0.9),
+                      strokeColor: widget.extraCategorySpots.keys.length <= 0
+                          ? widget.color.withOpacity(0.9)
+                          : barData.color,
                     ),
                   ),
                 );
               }).toList();
             },
             touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor: widget.color.withOpacity(0.7),
+              tooltipBgColor: widget.extraCategorySpots.keys.length <= 0
+                  ? widget.color.withOpacity(0.7)
+                  : dynamicPastel(
+                      context,
+                      getColor(context, "white"),
+                      inverse: true,
+                      amountLight: 0.2,
+                      amountDark: 0,
+                    ).withOpacity(0.8),
               tooltipRoundedRadius: 8,
               fitInsideVertically: true,
               fitInsideHorizontally: true,
-              tooltipPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              tooltipPadding:
+                  EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 6),
               getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
-                return lineBarsSpot.map((lineBarSpot) {
-                  // only show touch data for primary colored lines
-                  if (lineBarSpot.bar.color !=
-                      lightenPastel(widget.color, amount: 0.3)) {
+                return lineBarsSpot.map((LineBarSpot lineBarSpot) {
+                  // hide touch data for the overage line
+                  if (lineBarSpot.bar.color == Colors.transparent) {
                     return null;
                   }
                   return LineTooltipItem(
                     convertToMoney(
                         Provider.of<AllWallets>(context, listen: false),
                         lineBarSpot.y),
-                    const TextStyle(
-                      color: Colors.white,
+                    TextStyle(
+                      color: lineBarSpot.bar.color ==
+                              lightenPastel(widget.color, amount: 0.3)
+                          ? Colors.white.withOpacity(0.9)
+                          : lineBarSpot.bar.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),

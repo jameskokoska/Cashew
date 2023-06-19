@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Can only select the categories that are selected for that budget
+    Tooltip with colors when selecting categories to view in past budgets page
+    MaxY follows that of the selected categories
     Can select categories and compare category spending on budget history page
     Pull to refresh for email parsing option
     Refactored ask for notification time
