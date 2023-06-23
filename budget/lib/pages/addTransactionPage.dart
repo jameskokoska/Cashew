@@ -11,6 +11,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/timeDigits.dart';
 import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -30,6 +31,7 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:budget/widgets/util/showTimePicker.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -77,6 +79,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   List<String> selectedTags = [];
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  TimeOfDay selectedTime = TimeOfDay.now();
   int selectedPeriodLength = 1;
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "month";
@@ -131,6 +134,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   void setSelectedDate(DateTime dateTime) {
     setState(() {
       selectedDate = dateTime;
+    });
+  }
+
+  void setSelectedTime(TimeOfDay time) {
+    setState(() {
+      selectedTime = time;
     });
   }
 
@@ -328,8 +337,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     return true;
   }
 
-  Future<Transaction> createTransaction(
-      {bool removeShared = false, bool addInNewTime = true}) async {
+  Future<Transaction> createTransaction({bool removeShared = false}) async {
     Transaction createdTransaction = Transaction(
       transactionPk: widget.transaction != null
           ? widget.transaction!.transactionPk
@@ -362,18 +370,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       createdAnotherFutureTransaction: widget.transaction != null
           ? widget.transaction!.createdAnotherFutureTransaction
           : null,
-      dateTimeCreated: addInNewTime == false && widget.transaction != null
-          ? widget.transaction!.dateTimeCreated
-          : DateTime(
-              selectedDate.year,
-              selectedDate.month,
-              selectedDate.day,
-              DateTime.now().hour,
-              DateTime.now().minute,
-              DateTime.now().second,
-              DateTime.now().millisecond,
-              DateTime.now().microsecond,
-            ),
+      dateTimeCreated: DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        selectedTime.hour,
+        selectedTime.minute,
+        widget.transaction?.dateTimeCreated?.second ?? DateTime.now().second,
+        widget.transaction?.dateTimeCreated?.millisecond ??
+            DateTime.now().millisecond,
+        widget.transaction?.dateTimeCreated?.microsecond ??
+            DateTime.now().microsecond,
+      ),
       sharedKey: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedKey
           : null,
@@ -422,6 +430,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
+      selectedTime = TimeOfDay(
+        hour: widget.transaction!.dateTimeCreated?.hour ?? 0,
+        minute: widget.transaction!.dateTimeCreated?.minute ?? 0,
+      );
       selectedWalletPk = widget.transaction!.walletFk;
       selectedAmount = widget.transaction!.amount.abs();
       selectedType = widget.transaction!.type;
@@ -734,7 +746,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           discardChangesPopup(
             context,
             previousObject: widget.transaction,
-            currentObject: await createTransaction(addInNewTime: false),
+            currentObject: await createTransaction(),
           );
         } else {
           return true;
@@ -759,7 +771,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               discardChangesPopup(
                 context,
                 previousObject: widget.transaction,
-                currentObject: await createTransaction(addInNewTime: false),
+                currentObject: await createTransaction(),
               );
             } else {
               Navigator.pop(context);
@@ -770,7 +782,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               discardChangesPopup(
                 context,
                 previousObject: widget.transaction,
-                currentObject: await createTransaction(addInNewTime: false),
+                currentObject: await createTransaction(),
               );
             } else {
               Navigator.pop(context);
@@ -792,8 +804,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         },
                         onCancelLabel: "Cancel",
                         onSubmit: () {
-                          database.deleteTransaction(
-                              widget.transaction!.transactionPk);
                           openSnackbar(
                             SnackbarMessage(
                               title: "Deleted transaction",
@@ -801,6 +811,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             ),
                           );
                           Navigator.pop(context);
+                          database.deleteTransaction(
+                              widget.transaction!.transactionPk);
                           Navigator.pop(context);
                         },
                         onSubmitLabel: "Delete",
@@ -1226,6 +1238,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               },
                               selectedDate: selectedDate,
                               setSelectedDate: setSelectedDate,
+                              setSelectedTime: setSelectedTime,
+                              selectedTime: selectedTime,
                             ),
                           ),
                         ),
@@ -1483,24 +1497,29 @@ class SelectedWalletButton extends StatelessWidget {
 }
 
 class DateButton extends StatelessWidget {
-  const DateButton(
-      {Key? key,
-      required this.onTap,
-      required this.selectedDate,
-      required this.setSelectedDate})
-      : super(key: key);
+  const DateButton({
+    Key? key,
+    required this.onTap,
+    required this.selectedDate,
+    required this.selectedTime,
+    required this.setSelectedDate,
+    required this.setSelectedTime,
+  }) : super(key: key);
   final VoidCallback onTap;
   final DateTime selectedDate;
   final Function(DateTime) setSelectedDate;
+  final Function(TimeOfDay) setSelectedTime;
+  final TimeOfDay selectedTime;
   @override
   Widget build(BuildContext context) {
     String wordedDate = getWordedDateShortMore(selectedDate);
+    String wordedDateShort = getWordedDateShort(selectedDate);
 
     return Tappable(
       onTap: onTap,
       borderRadius: 10,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        padding: const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 4),
         child: Row(
           children: [
             ButtonIcon(
@@ -1513,31 +1532,40 @@ class DateButton extends StatelessWidget {
               child: TextFont(
                 text: wordedDate,
                 fontWeight: FontWeight.bold,
-                fontSize: 26,
+                fontSize: 23,
+                minFontSize: 15,
+                maxLines: 1,
+                autoSizeText: true,
+                overflowReplacement: TextFont(
+                  text: wordedDateShort,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 23,
+                  minFontSize: 15,
+                  maxLines: 1,
+                  autoSizeText: true,
+                ),
               ),
             ),
-            wordedDate == "Today"
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Tappable(
-                      borderRadius: 10,
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10),
-                        child: TextFont(
-                          text: "Yesterday?",
-                          fontSize: 15,
-                          textColor: getColor(context, "textLight"),
-                        ),
-                      ),
-                      onTap: () {
-                        setSelectedDate(DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day - 1));
-                      },
-                    ),
-                  )
-                : SizedBox(),
+            SizedBox(width: 10),
+            Tappable(
+              onTap: () async {
+                TimeOfDay? newTime = await showCustomTimePicker(
+                  context,
+                  selectedTime,
+                );
+                setSelectedTime(newTime ?? selectedTime);
+              },
+              borderRadius: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: TimeDigits(
+                  timeOfDay: TimeOfDay(
+                    hour: selectedTime.hour,
+                    minute: selectedTime.minute,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

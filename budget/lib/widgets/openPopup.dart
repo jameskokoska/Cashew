@@ -299,6 +299,8 @@ Future<T?> openPopupCustom<T extends Object?>(
                           text: title,
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
+                          maxLines: 5,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                 child,

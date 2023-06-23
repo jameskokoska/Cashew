@@ -107,10 +107,6 @@ class _RatingPopupState extends State<RatingPopup> {
             label: "Submit",
             onTap: () async {
               shareFeedback(selectedStars, _feedbackController.text);
-              if ((selectedStars ?? 0) >= 4 &&
-                  await inAppReview.isAvailable()) {
-                inAppReview.requestReview();
-              }
               updateSettings("submittedFeedback", true,
                   pagesNeedingRefresh: [], updateGlobalState: false);
               Navigator.pop(context);
@@ -125,6 +121,20 @@ class _RatingPopupState extends State<RatingPopup> {
 
 Future<bool> shareFeedback(selectedStars, feedbackText) async {
   loadingIndeterminateKey.currentState!.setVisibility(true);
+  try {
+    if ((selectedStars ?? 0) >= 4 && await inAppReview.isAvailable()) {
+      inAppReview.requestReview();
+    }
+  } catch (e) {
+    loadingIndeterminateKey.currentState!.setVisibility(false);
+    print("Error leaving review on store");
+    openSnackbar(SnackbarMessage(
+        title: "Error Sharing Feedback",
+        description: "Please try again later",
+        icon: Icons.warning_amber_rounded,
+        timeout: Duration(milliseconds: 2500)));
+    return false;
+  }
   try {
     FirebaseFirestore? db = await firebaseGetDBInstanceAnonymous();
     if (db == null) {

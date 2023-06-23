@@ -70,5 +70,8 @@ Map<String, dynamic> defaultPreferences() {
     "massEditSelectedTransactions": false,
     "searchFilters": false,
     "incognitoKeyboard": false,
+    // the key is the budgetPk (in String!)
+    // Should be of type Map<String,List<int>>
+    "watchedCategoriesOnBudget": {},
   };
 }

@@ -933,7 +933,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
     // print(widget.budget.sharedAllMembersEver);
     for (String member in members) {
       watchedSpenderTotals.add(database.watchTotalSpentByUser(
-        Provider.of<AllWallets>(context),
+        Provider.of<AllWallets>(context, listen: false),
         widget.budgetRange.start,
         widget.budgetRange.end,
         widget.budget.categoryFks ?? [],

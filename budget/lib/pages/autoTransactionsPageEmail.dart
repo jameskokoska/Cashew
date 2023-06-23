@@ -308,7 +308,8 @@ Future<void> parseEmailsInBackground(context,
           paid: true,
           skipPaid: false,
           methodAdded: MethodAdded.email,
-          dateTimeCreated: DateTime.now(),
+          dateTimeCreated:
+              DateTime(messageDate.year, messageDate.month, messageDate.day),
         );
         transactionsToAdd.add(transactionToAdd);
         openSnackbar(

@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Fixed member spending not showing up because of Provider
+    Can select time of day for a transaction
+    Leave feedback doesn't wait to connect to store (closes immediately)
+    Watched categories in budget history are saved
     Can only select the categories that are selected for that budget
     Tooltip with colors when selecting categories to view in past budgets page
     MaxY follows that of the selected categories

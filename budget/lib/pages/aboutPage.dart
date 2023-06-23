@@ -39,7 +39,7 @@ class AboutPage extends StatelessWidget {
             children: [
               Image(
                 image: AssetImage("assets/icon/icon.png"),
-                width: 70,
+                height: 70,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

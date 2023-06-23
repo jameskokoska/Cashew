@@ -468,17 +468,21 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
             centerTitle: enableDoubleColumn(context) ? true : false,
             titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
             title: animationControllerShift == null
-                ? titleWidget ??
-                    TextFont(
-                      text: title,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      textColor:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
-                      textAlign: enableDoubleColumn(context)
-                          ? TextAlign.center
-                          : TextAlign.left,
-                    )
+                ? MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: titleWidget ??
+                        TextFont(
+                          text: title,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          textColor: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          textAlign: enableDoubleColumn(context)
+                              ? TextAlign.center
+                              : TextAlign.left,
+                        ),
+                  )
                 : customTitleBuilder == null
                     ? Transform.translate(
                         offset: enableDoubleColumn(context)
@@ -488,20 +492,24 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                                 backButtonEnabled ? 40 * percent : 0,
                                 -(subtitleSize ?? 0) * (1 - percent),
                               ),
-                        child: titleWidget ??
-                            TextFont(
-                              text: title,
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                              textColor: textColor == null
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer
-                                  : textColor,
-                              textAlign: enableDoubleColumn(context)
-                                  ? TextAlign.center
-                                  : TextAlign.left,
-                            ),
+                        child: MediaQuery(
+                          data: MediaQuery.of(context)
+                              .copyWith(textScaleFactor: 1.0),
+                          child: titleWidget ??
+                              TextFont(
+                                text: title,
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                textColor: textColor == null
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer
+                                    : textColor,
+                                textAlign: enableDoubleColumn(context)
+                                    ? TextAlign.center
+                                    : TextAlign.left,
+                              ),
+                        ),
                       )
                     : customTitleBuilder!(animationControllerShift!),
             background: Stack(
