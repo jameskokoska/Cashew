@@ -343,7 +343,9 @@ class _SelectAmountState extends State<SelectAmount> {
       Parser p = new Parser();
       Expression exp = p.parse(changedInput);
       result = exp.evaluate(EvaluationType.REAL, cm);
-    } catch (e) {}
+    } catch (e) {
+      print("Error calculating result");
+    }
     return result;
   }
 
@@ -549,7 +551,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .symmetric(
+                                                                    .symmetric(
                                                                 horizontal: 8,
                                                                 vertical: 7),
                                                         child: Column(

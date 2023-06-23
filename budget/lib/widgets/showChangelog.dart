@@ -9,6 +9,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    Date and time merged into one variable
+    Fixed feedback colors
+    Added ghost transactions when loading
+    New no results and nothing found images
+    No results in budget page follows tint color
     Fixed member spending not showing up because of Provider
     Can select time of day for a transaction
     Leave feedback doesn't wait to connect to store (closes immediately)

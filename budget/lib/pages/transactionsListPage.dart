@@ -23,6 +23,7 @@ import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
+import 'dart:math';
 
 Widget getTransactionsSlivers(
   DateTime? startDay,
@@ -47,7 +48,11 @@ Widget getTransactionsSlivers(
   bool useHorizontalPaddingConstrained = true,
   int? limit,
   bool showNoResults = true,
+  ColorScheme? colorScheme,
+  bool noSearchResultsVariation = false,
+  String noResultsMessage = "No transactions within time range.",
 }) {
+  Random random = new Random();
   return StreamBuilder<List<DateTime?>>(
     stream: database.getUniqueDates(
       start: startDay,
@@ -69,10 +74,22 @@ Widget getTransactionsSlivers(
         if (snapshot.data!.length <= 0 && showNoResults == true) {
           if (slivers) {
             return SliverToBoxAdapter(
-                child:
-                    NoResults(message: "No transactions within time range."));
+              child: NoResults(
+                message: noResultsMessage,
+                tintColor: colorScheme != null
+                    ? colorScheme.primary.withOpacity(0.6)
+                    : null,
+                noSearchResultsVariation: noSearchResultsVariation,
+              ),
+            );
           } else {
-            return NoResults(message: "No transactions within time range.");
+            return NoResults(
+              message: noResultsMessage,
+              tintColor: colorScheme != null
+                  ? colorScheme.primary.withOpacity(0.6)
+                  : null,
+              noSearchResultsVariation: noSearchResultsVariation,
+            );
           }
         }
         List<Widget> transactionsWidgets = [];
@@ -84,6 +101,9 @@ Widget getTransactionsSlivers(
               previousDate.year == date.year) {
             continue;
           }
+          // return SliverToBoxAdapter(
+          //   child: GhostTransactions(i: random.nextInt(100)),
+          // );
           previousDate = date;
           transactionsWidgets.add(
             StreamBuilder<List<TransactionWithCategory>>(
@@ -308,9 +328,11 @@ Widget getTransactionsSlivers(
                   }
                 }
                 if (slivers == false) {
-                  return SizedBox.shrink();
+                  return GhostTransactions(i: random.nextInt(100));
                 }
-                return SliverToBoxAdapter(child: SizedBox());
+                return SliverToBoxAdapter(
+                  child: GhostTransactions(i: random.nextInt(100)),
+                );
               },
             ),
           );
@@ -540,14 +562,14 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                         ),
                                       ),
                                       // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                                      SliverToBoxAdapter(
-                                        child: Container(
-                                          height: 90,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .background,
-                                        ),
-                                      ),
+                                      // SliverToBoxAdapter(
+                                      //   child: Container(
+                                      //     height: 90,
+                                      //     color: Theme.of(context)
+                                      //         .colorScheme
+                                      //         .background,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),

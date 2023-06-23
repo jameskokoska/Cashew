@@ -26,6 +26,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -77,8 +78,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   String selectedTypeDisplay = "Default";
   TransactionSpecialType? selectedType = null;
   List<String> selectedTags = [];
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
   int selectedPeriodLength = 1;
   String selectedRecurrence = "Monthly";
@@ -140,6 +140,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   void setSelectedTime(TimeOfDay time) {
     setState(() {
       selectedTime = time;
+      selectedDate =
+          selectedDate.copyWith(hour: time.hour, minute: time.minute);
     });
   }
 
@@ -291,6 +293,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   void setSelectedIncome(bool value) {
+    if (selectedBudgetPk != null) {
+      setSelectedBudgetPk(null);
+      showIncomeCannotBeAddedToBudgetWarning();
+    }
     setState(() {
       selectedIncome = value;
     });
@@ -304,17 +310,23 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
   }
 
+  void showIncomeCannotBeAddedToBudgetWarning() {
+    openSnackbar(
+      SnackbarMessage(
+        icon: Icons.sticky_note_2_rounded,
+        title: "Note",
+        description: "Income cannot be added to a specefic budget",
+        timeout: Duration(milliseconds: 5000),
+      ),
+    );
+  }
+
   Future<bool> addTransaction() async {
     print("Added transaction");
-    if (selectedIncome == true && selectedBudgetPk != null) {
-      openSnackbar(
-        SnackbarMessage(
-          icon: Icons.sticky_note_2_rounded,
-          title: "Note",
-          description: "Income can't be added to a specefic budget",
-          timeout: Duration(milliseconds: 5000),
-        ),
-      );
+
+    if (selectedBudgetPk != null) {
+      setSelectedBudgetPk(null);
+      showIncomeCannotBeAddedToBudgetWarning();
     }
 
     if (selectedTitle != null &&
@@ -370,18 +382,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       createdAnotherFutureTransaction: widget.transaction != null
           ? widget.transaction!.createdAnotherFutureTransaction
           : null,
-      dateTimeCreated: DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        selectedTime.hour,
-        selectedTime.minute,
-        widget.transaction?.dateTimeCreated?.second ?? DateTime.now().second,
-        widget.transaction?.dateTimeCreated?.millisecond ??
-            DateTime.now().millisecond,
-        widget.transaction?.dateTimeCreated?.microsecond ??
-            DateTime.now().microsecond,
-      ),
       sharedKey: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedKey
           : null,
@@ -431,8 +431,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
       selectedTime = TimeOfDay(
-        hour: widget.transaction!.dateTimeCreated?.hour ?? 0,
-        minute: widget.transaction!.dateTimeCreated?.minute ?? 0,
+        hour: widget.transaction!.dateCreated.hour,
+        minute: widget.transaction!.dateCreated.minute,
       );
       selectedWalletPk = widget.transaction!.walletFk;
       selectedAmount = widget.transaction!.amount.abs();
@@ -745,7 +745,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         if (widget.transaction != null) {
           discardChangesPopup(
             context,
-            previousObject: widget.transaction,
+            previousObject:
+                widget.transaction!.copyWith(dateTimeCreated: Value(null)),
             currentObject: await createTransaction(),
           );
         } else {
@@ -770,7 +771,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.transaction,
+                previousObject:
+                    widget.transaction!.copyWith(dateTimeCreated: Value(null)),
                 currentObject: await createTransaction(),
               );
             } else {
@@ -781,7 +783,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.transaction,
+                previousObject:
+                    widget.transaction!.copyWith(dateTimeCreated: Value(null)),
                 currentObject: await createTransaction(),
               );
             } else {
@@ -1329,55 +1332,64 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           stream: database.watchAllAddableBudgets(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData)
-                              return selectedIncome == true ||
-                                      snapshot.data!.length <= 0
-                                  ? SizedBox.shrink()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: SelectChips(
-                                        wrapped: enableDoubleColumn(context),
-                                        extraWidget: AddButton(
-                                          onTap: () {},
-                                          width: 40,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 1),
-                                          openPage: AddBudgetPage(
-                                            title: "Add Budget",
-                                            isAddedOnlyBudget: true,
-                                          ),
-                                          borderRadius: 8,
-                                        ),
-                                        items: [null, ...snapshot.data!],
-                                        getLabel: (item) {
-                                          return item?.name ?? "No Budget";
-                                        },
-                                        onSelected: (item) {
-                                          setSelectedBudgetPk(
-                                            item,
-                                            isSharedBudget:
-                                                item?.sharedKey != null,
-                                          );
-                                        },
-                                        getSelected: (item) {
-                                          return selectedBudgetPk ==
-                                              item?.budgetPk;
-                                        },
-                                        getCustomBorderColor: (item) {
-                                          return dynamicPastel(
-                                            context,
-                                            lightenPastel(
-                                              HexColor(
-                                                item?.colour,
-                                                defaultColor:
-                                                    Colors.transparent,
+                              return AnimatedSize(
+                                duration: Duration(milliseconds: 1000),
+                                curve: Curves.easeInOutCubicEmphasized,
+                                child: AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 300),
+                                  child: selectedIncome == true ||
+                                          snapshot.data!.length <= 0
+                                      ? Container(key: ValueKey(1))
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: SelectChips(
+                                            wrapped:
+                                                enableDoubleColumn(context),
+                                            extraWidget: AddButton(
+                                              onTap: () {},
+                                              width: 40,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 5, vertical: 1),
+                                              openPage: AddBudgetPage(
+                                                title: "Add Budget",
+                                                isAddedOnlyBudget: true,
                                               ),
-                                              amount: 0.3,
+                                              borderRadius: 8,
                                             ),
-                                            amount: 0.4,
-                                          );
-                                        },
-                                      ),
-                                    );
+                                            items: [null, ...snapshot.data!],
+                                            getLabel: (item) {
+                                              return item?.name ?? "No Budget";
+                                            },
+                                            onSelected: (item) {
+                                              setSelectedBudgetPk(
+                                                item,
+                                                isSharedBudget:
+                                                    item?.sharedKey != null,
+                                              );
+                                            },
+                                            getSelected: (item) {
+                                              return selectedBudgetPk ==
+                                                  item?.budgetPk;
+                                            },
+                                            getCustomBorderColor: (item) {
+                                              return dynamicPastel(
+                                                context,
+                                                lightenPastel(
+                                                  HexColor(
+                                                    item?.colour,
+                                                    defaultColor: getColor(
+                                                        context, "black"),
+                                                  ),
+                                                  amount: 0.3,
+                                                ),
+                                                amount: 0.4,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                ),
+                              );
                             else
                               return SizedBox.shrink();
                           },

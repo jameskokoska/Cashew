@@ -100,11 +100,6 @@ class TransactionEntry extends StatelessWidget {
           paid: false,
           transactionPk: DateTime.now().millisecondsSinceEpoch,
           dateCreated: newDate,
-          dateTimeCreated: Value(DateTime(
-            newDate.year,
-            newDate.month,
-            newDate.day,
-          )),
           createdAnotherFutureTransaction: Value(false),
         );
         await database.createOrUpdateTransaction(newTransaction);
@@ -630,14 +625,9 @@ class TransactionEntry extends StatelessWidget {
                                                 Transaction transactionNew =
                                                     transaction.copyWith(
                                                   skipPaid: true,
-                                                  dateCreated: DateTime(
-                                                      DateTime.now().year,
-                                                      DateTime.now().month,
-                                                      DateTime.now().day),
+                                                  dateCreated: DateTime.now(),
                                                   createdAnotherFutureTransaction:
                                                       Value(true),
-                                                  dateTimeCreated:
-                                                      Value(DateTime.now()),
                                                 );
                                                 await database
                                                     .createOrUpdateTransaction(
@@ -674,14 +664,9 @@ class TransactionEntry extends StatelessWidget {
                                                     transaction.copyWith(
                                                   amount: amount,
                                                   paid: !transaction.paid,
-                                                  dateCreated: DateTime(
-                                                      DateTime.now().year,
-                                                      DateTime.now().month,
-                                                      DateTime.now().day),
+                                                  dateCreated: DateTime.now(),
                                                   createdAnotherFutureTransaction:
                                                       Value(true),
-                                                  dateTimeCreated:
-                                                      Value(DateTime.now()),
                                                 );
                                                 await database
                                                     .createOrUpdateTransaction(

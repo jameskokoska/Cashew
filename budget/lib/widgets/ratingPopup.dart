@@ -69,13 +69,20 @@ class _RatingPopupState extends State<RatingPopup> {
                           size: getWidthBottomSheet(context) - 100 < 60 * 5
                               ? (getWidthBottomSheet(context) - 100) / 5
                               : 60,
-                          color:
-                              selectedStars != null && i <= (selectedStars ?? 0)
-                                  ? getColor(context, "starYellow")
-                                  : Theme.of(context)
+                          color: selectedStars != null &&
+                                  i <= (selectedStars ?? 0)
+                              ? appStateSettings["materialYou"]
+                                  ? Theme.of(context)
                                       .colorScheme
-                                      .secondaryContainer
-                                      .withOpacity(0.5),
+                                      .primary
+                                      .withOpacity(0.7)
+                                  : getColor(context, "starYellow")
+                              : appStateSettings["materialYou"]
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .secondary
+                                      .withOpacity(0.2)
+                                  : getColor(context, "lightDarkAccentHeavy"),
                         ),
                       ),
                     ),

@@ -417,6 +417,7 @@ Future<void> loadBackup(
           //     text: 'Database');
         }
 
+        await database.close();
         Navigator.of(context).pop();
 
         await updateSettings("databaseJustImported", true,
