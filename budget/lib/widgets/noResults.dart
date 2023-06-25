@@ -10,10 +10,12 @@ class NoResults extends StatelessWidget {
     required this.message,
     this.tintColor,
     this.padding,
+    this.noSearchResultsVariation = false,
   }) : super(key: key);
   final String message;
   final Color? tintColor;
   final EdgeInsets? padding;
+  final bool noSearchResultsVariation;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +45,8 @@ class NoResults extends StatelessWidget {
                           ? Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(0.6)
-                          : tintColor!.withOpacity(0.6),
+                              .withOpacity(0.7)
+                          : tintColor!.withOpacity(0.7),
                   BlendMode.srcATop,
                 ),
                 child: ColorFiltered(
@@ -52,7 +54,9 @@ class NoResults extends StatelessWidget {
                   child: Opacity(
                     opacity: 1,
                     child: Image(
-                      image: AssetImage("assets/images/empty-filter.png"),
+                      image: noSearchResultsVariation
+                          ? AssetImage("assets/images/no-search-filter.png")
+                          : AssetImage("assets/images/empty-filter.png"),
                     ),
                   ),
                 ),

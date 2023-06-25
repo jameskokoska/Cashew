@@ -413,13 +413,8 @@ Future<int> downloadTransactionsFromBudgets(
             note: transactionDecoded["note"],
             categoryFk: selectedCategory.categoryPk,
             walletFk: 0,
-            dateCreated: DateTime(
-              transactionDecoded["dateTimeCreated"].toDate().year,
-              transactionDecoded["dateTimeCreated"].toDate().month,
-              transactionDecoded["dateTimeCreated"].toDate().day,
-            ),
+            dateCreated: transactionDecoded["dateTimeCreated"].toDate(),
             dateTimeModified: null,
-            dateTimeCreated: transactionDecoded["dateTimeCreated"].toDate(),
             income: transactionDecoded["income"],
             paid: true,
             skipPaid: false,
@@ -504,7 +499,7 @@ Future<bool> setOnServer(
     "name": transaction.name,
     "amount": transaction.amount,
     "note": transaction.note,
-    "dateTimeCreated": transaction.dateTimeCreated,
+    "dateTimeCreated": transaction.dateCreated,
     "dateUpdated": DateTime.now(),
     "income": transaction.income,
     "ownerEmail": transaction.transactionOwnerEmail, //ownerEmail is the payer
@@ -558,7 +553,7 @@ Future<bool> addOnServer(
     "name": transaction.name,
     "amount": transaction.amount,
     "note": transaction.note,
-    "dateTimeCreated": transaction.dateTimeCreated,
+    "dateTimeCreated": transaction.dateCreated,
     "dateUpdated": DateTime.now(),
     "income": transaction.income,
     "ownerEmail": transaction.transactionOwnerEmail, //ownerEmail is the payer

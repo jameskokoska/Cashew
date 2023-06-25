@@ -88,7 +88,9 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
         scale: widget.changeScale ? (isTapped ? 0.95 : 1) : 1,
         child: Tappable(
           color: widget.disabled
-              ? Colors.grey
+              ? appStateSettings["materialYou"]
+                  ? Colors.grey
+                  : getColor(context, "lightDarkAccentHeavy")
               : widget.color != null
                   ? widget.color!.withOpacity(0.8)
                   : appStateSettings["materialYou"]

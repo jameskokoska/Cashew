@@ -65,7 +65,7 @@ void runNotificationPayLoads(context) {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            UpcomingOverdueTransactions(overdueTransactions: true),
+            UpcomingOverdueTransactions(overdueTransactions: false),
       ),
     );
   }

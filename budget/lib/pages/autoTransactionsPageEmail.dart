@@ -301,14 +301,12 @@ Future<void> parseEmailsInBackground(context,
           note: "",
           categoryFk: categoryId,
           walletFk: appStateSettings["selectedWallet"],
-          dateCreated:
-              DateTime(messageDate.year, messageDate.month, messageDate.day),
+          dateCreated: messageDate,
           dateTimeModified: null,
           income: selectedCategory.income,
           paid: true,
           skipPaid: false,
           methodAdded: MethodAdded.email,
-          dateTimeCreated: DateTime.now(),
         );
         transactionsToAdd.add(transactionToAdd);
         openSnackbar(

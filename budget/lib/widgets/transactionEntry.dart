@@ -300,7 +300,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .only(
+                                                                            .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(
@@ -624,14 +624,11 @@ class TransactionEntry extends StatelessWidget {
                                                 Navigator.pop(context);
                                                 Transaction transactionNew =
                                                     transaction.copyWith(
-                                                        skipPaid: true,
-                                                        dateCreated: DateTime(
-                                                            DateTime.now().year,
-                                                            DateTime.now()
-                                                                .month,
-                                                            DateTime.now().day),
-                                                        createdAnotherFutureTransaction:
-                                                            Value(true));
+                                                  skipPaid: true,
+                                                  dateCreated: DateTime.now(),
+                                                  createdAnotherFutureTransaction:
+                                                      Value(true),
+                                                );
                                                 await database
                                                     .createOrUpdateTransaction(
                                                         transactionNew);
@@ -665,15 +662,12 @@ class TransactionEntry extends StatelessWidget {
                                                 }
                                                 Transaction transactionNew =
                                                     transaction.copyWith(
-                                                        amount: amount,
-                                                        paid: !transaction.paid,
-                                                        dateCreated: DateTime(
-                                                            DateTime.now().year,
-                                                            DateTime.now()
-                                                                .month,
-                                                            DateTime.now().day),
-                                                        createdAnotherFutureTransaction:
-                                                            Value(true));
+                                                  amount: amount,
+                                                  paid: !transaction.paid,
+                                                  dateCreated: DateTime.now(),
+                                                  createdAnotherFutureTransaction:
+                                                      Value(true),
+                                                );
                                                 await database
                                                     .createOrUpdateTransaction(
                                                         transactionNew);

@@ -421,8 +421,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             await migrator.addColumn(transactions, transactions.sharedKey);
             await migrator.addColumn(scannerTemplates, scannerTemplates.ignore);
             // await migrator.addColumn(categories, categories.sharedKey);
-            await migrator.addColumn(
-                transactions, transactions.dateTimeCreated);
+            // await migrator.addColumn(
+            //     transactions, transactions.dateTimeCreated);
           }
           if (from <= 15) {
             // await migrator.addColumn(categories, categories.sharedOwnerMember);
@@ -558,6 +558,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 34) {
             await migrator.addColumn(budgets, budgets.isAbsoluteSpendingLimit);
           }
+          // if (from <= 35) {
+          //   await migrator.alterTable(TableMigration(transactions));
+          // }
         },
       );
 
@@ -567,6 +570,31 @@ class FinanceDatabase extends _$FinanceDatabase {
         await delete(table).go();
       }
     });
+  }
+
+  Future<bool> updateDateCreatedColumn() async {
+    List<Transaction> transactionsList = await (select(transactions)).get();
+
+    await batch((batch) {
+      for (Transaction transaction in transactionsList) {
+        batch.update(
+          transactions,
+          TransactionsCompanion(
+            dateCreated: Value(
+              DateTime(
+                transaction.dateCreated.year,
+                transaction.dateCreated.month,
+                transaction.dateCreated.day,
+                transaction.dateTimeCreated?.hour ?? 0,
+                transaction.dateTimeCreated?.minute ?? 0,
+              ),
+            ),
+          ),
+          where: (t) => t.transactionPk.equals(transaction.transactionPk),
+        );
+      }
+    });
+    return true;
   }
 
   // get all filtered transactions from earliest to oldest date created, paginated

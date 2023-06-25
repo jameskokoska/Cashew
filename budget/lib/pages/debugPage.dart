@@ -32,6 +32,13 @@ class DebugPage extends StatelessWidget {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
+        SettingsContainer(
+          title: "Update Date Created Column",
+          onTap: () async {
+            await database.updateDateCreatedColumn();
+            openSnackbar(SnackbarMessage(title: "Done"));
+          },
+        ),
         SettingsContainerSwitch(
           title: "Use Cumulative Spending",
           description: "For spending line graphs",

@@ -11,6 +11,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/timeDigits.dart';
 import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -25,11 +26,13 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:budget/widgets/util/showTimePicker.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -75,8 +78,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   String selectedTypeDisplay = "Default";
   TransactionSpecialType? selectedType = null;
   List<String> selectedTags = [];
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
   int selectedPeriodLength = 1;
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "month";
@@ -131,6 +134,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   void setSelectedDate(DateTime dateTime) {
     setState(() {
       selectedDate = dateTime;
+    });
+  }
+
+  void setSelectedTime(TimeOfDay time) {
+    setState(() {
+      selectedTime = time;
+      selectedDate =
+          selectedDate.copyWith(hour: time.hour, minute: time.minute);
     });
   }
 
@@ -282,6 +293,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   void setSelectedIncome(bool value) {
+    if (selectedBudgetPk != null) {
+      setSelectedBudgetPk(null);
+      showIncomeCannotBeAddedToBudgetWarning();
+    }
     setState(() {
       selectedIncome = value;
     });
@@ -295,17 +310,23 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
   }
 
+  void showIncomeCannotBeAddedToBudgetWarning() {
+    openSnackbar(
+      SnackbarMessage(
+        icon: Icons.sticky_note_2_rounded,
+        title: "Note",
+        description: "Income cannot be added to a specefic budget",
+        timeout: Duration(milliseconds: 5000),
+      ),
+    );
+  }
+
   Future<bool> addTransaction() async {
     print("Added transaction");
-    if (selectedIncome == true && selectedBudgetPk != null) {
-      openSnackbar(
-        SnackbarMessage(
-          icon: Icons.sticky_note_2_rounded,
-          title: "Note",
-          description: "Income can't be added to a specefic budget",
-          timeout: Duration(milliseconds: 5000),
-        ),
-      );
+
+    if (selectedBudgetPk != null) {
+      setSelectedBudgetPk(null);
+      showIncomeCannotBeAddedToBudgetWarning();
     }
 
     if (selectedTitle != null &&
@@ -328,8 +349,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     return true;
   }
 
-  Future<Transaction> createTransaction(
-      {bool removeShared = false, bool addInNewTime = true}) async {
+  Future<Transaction> createTransaction({bool removeShared = false}) async {
     Transaction createdTransaction = Transaction(
       transactionPk: widget.transaction != null
           ? widget.transaction!.transactionPk
@@ -362,18 +382,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       createdAnotherFutureTransaction: widget.transaction != null
           ? widget.transaction!.createdAnotherFutureTransaction
           : null,
-      dateTimeCreated: addInNewTime == false && widget.transaction != null
-          ? widget.transaction!.dateTimeCreated
-          : DateTime(
-              selectedDate.year,
-              selectedDate.month,
-              selectedDate.day,
-              DateTime.now().hour,
-              DateTime.now().minute,
-              DateTime.now().second,
-              DateTime.now().millisecond,
-              DateTime.now().microsecond,
-            ),
       sharedKey: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedKey
           : null,
@@ -422,6 +430,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
+      selectedTime = TimeOfDay(
+        hour: widget.transaction!.dateCreated.hour,
+        minute: widget.transaction!.dateCreated.minute,
+      );
       selectedWalletPk = widget.transaction!.walletFk;
       selectedAmount = widget.transaction!.amount.abs();
       selectedType = widget.transaction!.type;
@@ -733,8 +745,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         if (widget.transaction != null) {
           discardChangesPopup(
             context,
-            previousObject: widget.transaction,
-            currentObject: await createTransaction(addInNewTime: false),
+            previousObject:
+                widget.transaction!.copyWith(dateTimeCreated: Value(null)),
+            currentObject: await createTransaction(),
           );
         } else {
           return true;
@@ -758,8 +771,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.transaction,
-                currentObject: await createTransaction(addInNewTime: false),
+                previousObject:
+                    widget.transaction!.copyWith(dateTimeCreated: Value(null)),
+                currentObject: await createTransaction(),
               );
             } else {
               Navigator.pop(context);
@@ -769,8 +783,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.transaction,
-                currentObject: await createTransaction(addInNewTime: false),
+                previousObject:
+                    widget.transaction!.copyWith(dateTimeCreated: Value(null)),
+                currentObject: await createTransaction(),
               );
             } else {
               Navigator.pop(context);
@@ -792,8 +807,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         },
                         onCancelLabel: "Cancel",
                         onSubmit: () {
-                          database.deleteTransaction(
-                              widget.transaction!.transactionPk);
                           openSnackbar(
                             SnackbarMessage(
                               title: "Deleted transaction",
@@ -801,6 +814,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             ),
                           );
                           Navigator.pop(context);
+                          database.deleteTransaction(
+                              widget.transaction!.transactionPk);
                           Navigator.pop(context);
                         },
                         onSubmitLabel: "Delete",
@@ -1226,6 +1241,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               },
                               selectedDate: selectedDate,
                               setSelectedDate: setSelectedDate,
+                              setSelectedTime: setSelectedTime,
+                              selectedTime: selectedTime,
                             ),
                           ),
                         ),
@@ -1315,55 +1332,64 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           stream: database.watchAllAddableBudgets(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData)
-                              return selectedIncome == true ||
-                                      snapshot.data!.length <= 0
-                                  ? SizedBox.shrink()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: SelectChips(
-                                        wrapped: enableDoubleColumn(context),
-                                        extraWidget: AddButton(
-                                          onTap: () {},
-                                          width: 40,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 1),
-                                          openPage: AddBudgetPage(
-                                            title: "Add Budget",
-                                            isAddedOnlyBudget: true,
-                                          ),
-                                          borderRadius: 8,
-                                        ),
-                                        items: [null, ...snapshot.data!],
-                                        getLabel: (item) {
-                                          return item?.name ?? "No Budget";
-                                        },
-                                        onSelected: (item) {
-                                          setSelectedBudgetPk(
-                                            item,
-                                            isSharedBudget:
-                                                item?.sharedKey != null,
-                                          );
-                                        },
-                                        getSelected: (item) {
-                                          return selectedBudgetPk ==
-                                              item?.budgetPk;
-                                        },
-                                        getCustomBorderColor: (item) {
-                                          return dynamicPastel(
-                                            context,
-                                            lightenPastel(
-                                              HexColor(
-                                                item?.colour,
-                                                defaultColor:
-                                                    Colors.transparent,
+                              return AnimatedSize(
+                                duration: Duration(milliseconds: 1000),
+                                curve: Curves.easeInOutCubicEmphasized,
+                                child: AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 300),
+                                  child: selectedIncome == true ||
+                                          snapshot.data!.length <= 0
+                                      ? Container(key: ValueKey(1))
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: SelectChips(
+                                            wrapped:
+                                                enableDoubleColumn(context),
+                                            extraWidget: AddButton(
+                                              onTap: () {},
+                                              width: 40,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 5, vertical: 1),
+                                              openPage: AddBudgetPage(
+                                                title: "Add Budget",
+                                                isAddedOnlyBudget: true,
                                               ),
-                                              amount: 0.3,
+                                              borderRadius: 8,
                                             ),
-                                            amount: 0.4,
-                                          );
-                                        },
-                                      ),
-                                    );
+                                            items: [null, ...snapshot.data!],
+                                            getLabel: (item) {
+                                              return item?.name ?? "No Budget";
+                                            },
+                                            onSelected: (item) {
+                                              setSelectedBudgetPk(
+                                                item,
+                                                isSharedBudget:
+                                                    item?.sharedKey != null,
+                                              );
+                                            },
+                                            getSelected: (item) {
+                                              return selectedBudgetPk ==
+                                                  item?.budgetPk;
+                                            },
+                                            getCustomBorderColor: (item) {
+                                              return dynamicPastel(
+                                                context,
+                                                lightenPastel(
+                                                  HexColor(
+                                                    item?.colour,
+                                                    defaultColor: getColor(
+                                                        context, "black"),
+                                                  ),
+                                                  amount: 0.3,
+                                                ),
+                                                amount: 0.4,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                ),
+                              );
                             else
                               return SizedBox.shrink();
                           },
@@ -1483,24 +1509,29 @@ class SelectedWalletButton extends StatelessWidget {
 }
 
 class DateButton extends StatelessWidget {
-  const DateButton(
-      {Key? key,
-      required this.onTap,
-      required this.selectedDate,
-      required this.setSelectedDate})
-      : super(key: key);
+  const DateButton({
+    Key? key,
+    required this.onTap,
+    required this.selectedDate,
+    required this.selectedTime,
+    required this.setSelectedDate,
+    required this.setSelectedTime,
+  }) : super(key: key);
   final VoidCallback onTap;
   final DateTime selectedDate;
   final Function(DateTime) setSelectedDate;
+  final Function(TimeOfDay) setSelectedTime;
+  final TimeOfDay selectedTime;
   @override
   Widget build(BuildContext context) {
     String wordedDate = getWordedDateShortMore(selectedDate);
+    String wordedDateShort = getWordedDateShort(selectedDate);
 
     return Tappable(
       onTap: onTap,
       borderRadius: 10,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        padding: const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 4),
         child: Row(
           children: [
             ButtonIcon(
@@ -1513,31 +1544,40 @@ class DateButton extends StatelessWidget {
               child: TextFont(
                 text: wordedDate,
                 fontWeight: FontWeight.bold,
-                fontSize: 26,
+                fontSize: 23,
+                minFontSize: 15,
+                maxLines: 1,
+                autoSizeText: true,
+                overflowReplacement: TextFont(
+                  text: wordedDateShort,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 23,
+                  minFontSize: 15,
+                  maxLines: 1,
+                  autoSizeText: true,
+                ),
               ),
             ),
-            wordedDate == "Today"
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Tappable(
-                      borderRadius: 10,
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10),
-                        child: TextFont(
-                          text: "Yesterday?",
-                          fontSize: 15,
-                          textColor: getColor(context, "textLight"),
-                        ),
-                      ),
-                      onTap: () {
-                        setSelectedDate(DateTime(DateTime.now().year,
-                            DateTime.now().month, DateTime.now().day - 1));
-                      },
-                    ),
-                  )
-                : SizedBox(),
+            SizedBox(width: 10),
+            Tappable(
+              onTap: () async {
+                TimeOfDay? newTime = await showCustomTimePicker(
+                  context,
+                  selectedTime,
+                );
+                setSelectedTime(newTime ?? selectedTime);
+              },
+              borderRadius: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: TimeDigits(
+                  timeOfDay: TimeOfDay(
+                    hour: selectedTime.hour,
+                    minute: selectedTime.minute,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

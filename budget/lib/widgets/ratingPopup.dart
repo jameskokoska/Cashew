@@ -69,13 +69,20 @@ class _RatingPopupState extends State<RatingPopup> {
                           size: getWidthBottomSheet(context) - 100 < 60 * 5
                               ? (getWidthBottomSheet(context) - 100) / 5
                               : 60,
-                          color:
-                              selectedStars != null && i <= (selectedStars ?? 0)
-                                  ? getColor(context, "starYellow")
-                                  : Theme.of(context)
+                          color: selectedStars != null &&
+                                  i <= (selectedStars ?? 0)
+                              ? appStateSettings["materialYou"]
+                                  ? Theme.of(context)
                                       .colorScheme
-                                      .secondaryContainer
-                                      .withOpacity(0.5),
+                                      .primary
+                                      .withOpacity(0.7)
+                                  : getColor(context, "starYellow")
+                              : appStateSettings["materialYou"]
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .secondary
+                                      .withOpacity(0.2)
+                                  : getColor(context, "lightDarkAccentHeavy"),
                         ),
                       ),
                     ),
@@ -107,10 +114,6 @@ class _RatingPopupState extends State<RatingPopup> {
             label: "Submit",
             onTap: () async {
               shareFeedback(selectedStars, _feedbackController.text);
-              if ((selectedStars ?? 0) >= 4 &&
-                  await inAppReview.isAvailable()) {
-                inAppReview.requestReview();
-              }
               updateSettings("submittedFeedback", true,
                   pagesNeedingRefresh: [], updateGlobalState: false);
               Navigator.pop(context);
@@ -125,6 +128,20 @@ class _RatingPopupState extends State<RatingPopup> {
 
 Future<bool> shareFeedback(selectedStars, feedbackText) async {
   loadingIndeterminateKey.currentState!.setVisibility(true);
+  try {
+    if ((selectedStars ?? 0) >= 4 && await inAppReview.isAvailable()) {
+      inAppReview.requestReview();
+    }
+  } catch (e) {
+    loadingIndeterminateKey.currentState!.setVisibility(false);
+    print("Error leaving review on store");
+    openSnackbar(SnackbarMessage(
+        title: "Error Sharing Feedback",
+        description: "Please try again later",
+        icon: Icons.warning_amber_rounded,
+        timeout: Duration(milliseconds: 2500)));
+    return false;
+  }
   try {
     FirebaseFirestore? db = await firebaseGetDBInstanceAnonymous();
     if (db == null) {

@@ -58,6 +58,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       onSelected: onSelected,
       listID: "TransactionsSearch",
       simpleListRender: true,
+      noResultsMessage: "No transactions found.",
+      noSearchResultsVariation: true,
     );
     _animationControllerSearch = AnimationController(vsync: this, value: 1);
   }
@@ -74,6 +76,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         listID: "TransactionsSearch",
         income: income,
         simpleListRender: true,
+        noResultsMessage: "No transactions found.",
+        noSearchResultsVariation: true,
       );
     });
   }
@@ -247,7 +251,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         lightenPastel(
                           HexColor(
                             item?.colour,
-                            defaultColor: Colors.transparent,
+                            defaultColor: getColor(context, "black"),
                           ),
                           amount: 0.3,
                         ),
@@ -448,7 +452,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       alternateTheme: true),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(height: 11),
+                  child: SizedBox(height: 7),
                 ),
                 transactionWidgets,
                 SliverToBoxAdapter(

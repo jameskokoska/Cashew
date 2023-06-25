@@ -574,11 +574,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     }
 
     DateTime dateCreated;
-    DateTime dateTimeCreated;
     try {
       dateCreated =
           DateTime.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
-      dateTimeCreated = dateCreated;
       dateCreated =
           DateTime(dateCreated.year, dateCreated.month, dateCreated.day);
     } catch (e) {
@@ -589,7 +587,6 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       try {
         dateCreated =
             format.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
-        dateTimeCreated = dateCreated;
         dateCreated =
             DateTime(dateCreated.year, dateCreated.month, dateCreated.day);
       } catch (e) {
@@ -612,7 +609,6 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         income: income,
         paid: true,
         skipPaid: false,
-        dateTimeCreated: dateTimeCreated,
         methodAdded: MethodAdded.csv,
       ),
     );

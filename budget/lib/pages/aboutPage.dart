@@ -39,7 +39,7 @@ class AboutPage extends StatelessWidget {
             children: [
               Image(
                 image: AssetImage("assets/icon/icon.png"),
-                width: 70,
+                height: 70,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,7 +253,7 @@ class AboutPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
           child: Button(
-            label: "View Licenses",
+            label: "View Licenses and Legalese",
             onTap: () {
               showLicensePage(
                   context: context,

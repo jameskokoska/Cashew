@@ -49,23 +49,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     Future.delayed(Duration(milliseconds: 0), () {
       setState(() {
         loaded = true;
       });
     });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeMetrics() {
-    // print(widget.spots);
   }
 
   @override
@@ -77,7 +65,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         child: LineChart(
           data,
           swapAnimationDuration: const Duration(milliseconds: 2000),
-          swapAnimationCurve: Curves.easeInOutCubicEmphasized,
+          swapAnimationCurve: Curves.fastLinearToSlowEaseIn,
+          chartRendererKey: ValueKey(1),
         ),
       ),
     );

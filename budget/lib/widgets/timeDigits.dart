@@ -57,9 +57,12 @@ class TimeDigits extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-          child: TextFont(
-            text: timeOfDay.hour < 12 ? "AM" : "PM",
-            fontSize: 18,
+          child: Transform.scale(
+            scale: 0.8,
+            child: TextFont(
+              text: timeOfDay.hour < 12 ? "AM" : "PM",
+              fontSize: 18,
+            ),
           ),
         )
       ],

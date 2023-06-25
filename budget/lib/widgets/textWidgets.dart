@@ -20,6 +20,7 @@ class TextFont extends StatelessWidget {
   final double? minFontSize;
   final double? maxFontSize;
   final TextOverflow? overflow;
+  final Widget? overflowReplacement;
   final bool? softWrap;
   final int? walletPkForCurrency;
   // Only show the currency icon and not the currency code afterwards
@@ -42,6 +43,7 @@ class TextFont extends StatelessWidget {
     this.softWrap,
     this.walletPkForCurrency,
     this.onlyShowCurrencyIcon = false,
+    this.overflowReplacement,
   }) : super(key: key);
 
   @override
@@ -81,11 +83,14 @@ class TextFont extends StatelessWidget {
                 textPassed,
                 maxLines: maxLines,
                 textAlign: textAlign,
-                overflow: overflow ?? TextOverflow.ellipsis,
+                overflow: overflowReplacement != null
+                    ? null
+                    : overflow ?? TextOverflow.ellipsis,
                 style: textStyle,
                 minFontSize: minFontSize ?? fontSize - 10,
                 maxFontSize: maxFontSize ?? fontSize + 10,
                 softWrap: softWrap,
+                overflowReplacement: overflowReplacement,
               )
             : Text(
                 textPassed,

@@ -517,6 +517,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 dateDividerColor: pageBackgroundColor,
                 transactionBackgroundColor: pageBackgroundColor,
                 categoryTintColor: budgetColorScheme.primary,
+                colorScheme: budgetColorScheme,
               ),
               SliverToBoxAdapter(
                 child: StreamBuilder<double?>(
