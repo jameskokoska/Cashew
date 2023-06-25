@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>267621253497-m3f9493iuv3vidtl19vaoao67vr1jlmi.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.267621253497-m3f9493iuv3vidtl19vaoao67vr1jlmi</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>267621253497-0h976snjlf34gs8m75bh8nik8gcvr2mk.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBts7THLrbIh-xReN70k5AsknAMwBNhrD0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>267621253497</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.budget.tracker-app</string>
+	<key>PROJECT_ID</key>
+	<string>budget-app-flutter</string>
+	<key>STORAGE_BUCKET</key>
+	<string>budget-app-flutter.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:267621253497:ios:da1f15821fc75624842fa8</string>
+</dict>
+</plist>

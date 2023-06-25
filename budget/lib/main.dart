@@ -40,6 +40,8 @@ import 'package:flutter/scheduler.dart' show SchedulerBinding, timeDilation;
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 // Transaction transaction = widget.transaction.copyWith(skipPaid: false);
 
@@ -59,26 +61,9 @@ firebase deploy
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    try {
-      await Firebase.initializeApp(
-        options: FirebaseOptions(
-          apiKey: "AIzaSyBGiaRl72d4k3Ki0dh8ra-gU4v2z04CgIw",
-          authDomain: "budget-app-flutter.firebaseapp.com",
-          projectId: "budget-app-flutter",
-          storageBucket: "budget-app-flutter.appspot.com",
-          messagingSenderId: "267621253497",
-          appId: "1:267621253497:web:12558fe9abebf7fa842fa8",
-        ),
-      );
-    } catch (e) {
-      print("Error initializing Firebase");
-      print(e.toString());
-      Firebase.app();
-    }
-  } else {
-    await Firebase.initializeApp();
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   sharedPreferences = await SharedPreferences.getInstance();
   database = await constructDb('db');
   notificationPayload = await initializeNotifications();

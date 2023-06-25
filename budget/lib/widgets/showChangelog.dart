@@ -8,7 +8,16 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
+  String version = packageInfoGlobal.version;
+  String buildNumber = packageInfoGlobal.buildNumber;
+  int versionInt = parseVersionInt(version);
+  int lastLoginVersionInt =
+      parseVersionInt(appStateSettings["lastLoginVersion"]);
   String changelog = """
+    < 3.2.1
+    Fixed horizontal line in added budgets only when time period over
+    Only show new changes in changelog based on version
+    < 3.2.0
     Can only select the categories that are selected for that budget
     Tooltip with colors when selecting categories to view in past budgets page
     MaxY follows that of the selected categories
@@ -547,9 +556,6 @@ Future<void> showChangelog(context, {forceShow = false}) async {
     Home page transactions list shows upcoming transactions (3 days before)
     Fixed adding wallet unreferenced widget for animation
     Started currency picker for wallet
-    
-    Past changes:
-
     Extra white space removed when adding transaction titles from email
     Emails are marked as read when parsed
     Escape key pops current navigation route
@@ -575,20 +581,32 @@ Future<void> showChangelog(context, {forceShow = false}) async {
 
     All past changes will go here, to prevent clutter.
 end""";
-
-  String version = packageInfoGlobal.version;
-  String buildNumber = packageInfoGlobal.buildNumber;
-  if (forceShow ||
-      appStateSettings["lastLoginVersion"] != version + buildNumber) {
+  if (forceShow || appStateSettings["lastLoginVersion"] != version) {
     List<Widget> changelogPoints = [];
+    int versionBookmark = versionInt;
     for (String string in changelog.split("\n")) {
       string = string.replaceFirst("    ", ""); // remove the indent
-      if (forceShow == false && string == "Past changes:") {
-        // Show the past changes if forceShow
-        break;
-      } else if (string == "Past changes:") {
-        changelogPoints.add(SizedBox(height: 10));
+      if (string.startsWith("< ")) {
+        versionBookmark = parseVersionInt(string.replaceAll("< ", ""));
+        if (forceShow == false && lastLoginVersionInt > versionBookmark) {
+          continue;
+        }
+        changelogPoints.add(Padding(
+          padding: const EdgeInsets.only(bottom: 5, top: 3),
+          child: TextFont(
+            text: string.replaceAll("< ", ""),
+            fontSize: 25,
+            maxLines: 5,
+            fontWeight: FontWeight.bold,
+          ),
+        ));
+        continue;
       }
+
+      if (forceShow == false && lastLoginVersionInt > versionBookmark) {
+        continue;
+      }
+
       if (string.trim() == "") {
         // this is an empty line
         changelogPoints.add(SizedBox(
@@ -605,6 +623,9 @@ end""";
         ));
       }
     }
+    changelogPoints.add(
+      SizedBox(height: 20),
+    );
     changelogPoints.add(
       Padding(
         padding: const EdgeInsets.only(top: 5),
@@ -635,6 +656,21 @@ end""";
       showScrollbar: true,
     );
 
-    updateSettings("lastLoginVersion", version + buildNumber);
+    updateSettings(
+      "lastLoginVersion",
+      version,
+      pagesNeedingRefresh: [],
+      updateGlobalState: false,
+    );
   }
+}
+
+int parseVersionInt(String versionString) {
+  try {
+    int parsedVersion = int.parse(versionString.replaceAll(".", ""));
+    return parsedVersion;
+  } catch (e) {
+    print("Error parsing version number, defaulting to version 0.");
+  }
+  return 0;
 }

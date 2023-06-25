@@ -864,7 +864,10 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                               : widget.budgetColorScheme.tertiary)
                           .withOpacity((index) / snapshot.data!.length)
               ],
-              horizontalLineAt: widget.isPastBudget == true
+              horizontalLineAt: widget.isPastBudget == true ||
+                      (widget.budget.addedTransactionsOnly &&
+                          widget.budget.endDate.millisecondsSinceEpoch <
+                              DateTime.now().millisecondsSinceEpoch)
                   ? widget.budget.amount
                   : widget.budget.amount *
                       ((DateTime.now().millisecondsSinceEpoch -
