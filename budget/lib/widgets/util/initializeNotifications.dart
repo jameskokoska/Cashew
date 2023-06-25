@@ -7,8 +7,12 @@ import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:universal_io/io.dart';
 
 Future<String?> initializeNotifications() async {
+  if (Platform.isIOS) {
+    return "";
+  }
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('notification_icon_android2');
   final InitializationSettings initializationSettings = InitializationSettings(
