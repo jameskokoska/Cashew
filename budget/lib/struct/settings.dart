@@ -1,38 +1,15 @@
 import 'dart:convert';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/struct/keyboardIntents.dart';
-import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/util/initializeBiometrics.dart';
-import 'package:budget/widgets/util/watchForDayChange.dart';
-import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/scheduler.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:animations/animations.dart';
-import 'package:budget/database/tables.dart';
-import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultPreferences.dart';
-import 'package:budget/struct/notificationsGlobal.dart';
-import 'package:budget/widgets/breathingAnimation.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/globalLoadingProgress.dart';
-import 'package:budget/widgets/util/scrollBehaviorOverride.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/restartApp.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:budget/colors.dart';
-import 'dart:math';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:universal_io/io.dart';
 
 Map<String, dynamic> appStateSettings = {};
 
@@ -66,7 +43,8 @@ Future<bool> initializeSettings() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();
 
   // Do some actions based on loaded settings
-  if (appStateSettings["accentSystemColor"] == true) {
+  if (Platform.isIOS == false &&
+      appStateSettings["accentSystemColor"] == true) {
     await SystemTheme.accentColor.load();
     Color accentColor = SystemTheme.accentColor.accent;
     appStateSettings["accentColor"] = toHexString(accentColor);
