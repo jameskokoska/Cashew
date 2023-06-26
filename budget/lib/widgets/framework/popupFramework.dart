@@ -3,7 +3,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import '../colors.dart';
+import '../../../colors.dart';
 
 class PopupFramework extends StatelessWidget {
   PopupFramework({
@@ -13,6 +13,7 @@ class PopupFramework extends StatelessWidget {
     this.subtitle,
     this.padding = true,
     this.underTitleSpace = true,
+    this.showCloseButton = false,
     this.icon,
   }) : super(key: key);
   final Widget child;
@@ -20,6 +21,7 @@ class PopupFramework extends StatelessWidget {
   final String? subtitle;
   final bool padding;
   final bool underTitleSpace;
+  final bool showCloseButton;
   final Widget? icon;
   @override
   Widget build(BuildContext context) {
@@ -90,7 +92,7 @@ class PopupFramework extends StatelessWidget {
             ),
           ],
         ),
-        getIsFullScreen(context)
+        getIsFullScreen(context) || showCloseButton
             ? Align(
                 alignment: Alignment.topRight,
                 child: IconButton(

@@ -14,8 +14,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectColor.dart';
@@ -27,6 +26,8 @@ import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 
 //To get SHA1 Key run
 // ./gradlew signingReport

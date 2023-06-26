@@ -6,7 +6,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
@@ -32,13 +32,6 @@ class DebugPage extends StatelessWidget {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
-        SettingsContainer(
-          title: "Update Date Created Column",
-          onTap: () async {
-            await database.updateDateCreatedColumn();
-            openSnackbar(SnackbarMessage(title: "Done"));
-          },
-        ),
         SettingsContainerSwitch(
           title: "Use Cumulative Spending",
           description: "For spending line graphs",
@@ -135,6 +128,20 @@ class DebugPage extends StatelessWidget {
           icon: Icons.share_rounded,
         ),
         SettingsContainerSwitch(
+          title: "iOS Navigation on Android",
+          description: "Enables swipe to go back",
+          onSwitched: (value) {
+            updateSettings("iOSNavigation", value,
+                pagesNeedingRefresh: [], updateGlobalState: true);
+            // if (value == true) {
+            //   updateSettings("removeZeroTransactionEntries", false,
+            //       pagesNeedingRefresh: [0], updateGlobalState: false);
+            // }
+          },
+          initialValue: appStateSettings["iOSNavigation"],
+          icon: Icons.swipe_rounded,
+        ),
+        SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("legacyTransactionAmountColors", value,
                 pagesNeedingRefresh: [0, 1, 2, 3]);
@@ -165,7 +172,7 @@ class DebugPage extends StatelessWidget {
           title: "Search Filters",
           description: "Filters for search. Work in progress",
           initialValue: appStateSettings["searchFilters"],
-          icon: Icons.color_lens,
+          icon: Icons.filter_rounded,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 13, right: 13),
@@ -184,7 +191,7 @@ class DebugPage extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Button(
-            label: "Create random",
+            label: "Create random transactions",
             onTap: () async {
               List<TransactionCategory> categories =
                   await database.getAllCategories();

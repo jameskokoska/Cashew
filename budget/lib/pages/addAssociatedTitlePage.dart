@@ -4,7 +4,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
@@ -164,7 +164,6 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                 },
                 color: Colors.transparent,
                 child: CategoryIcon(
-                  categoryPk: selectedCategory?.categoryPk ?? 0,
                   category: selectedCategory,
                   size: 40,
                   onTap: () {

@@ -12,7 +12,7 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/monthSelector.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';

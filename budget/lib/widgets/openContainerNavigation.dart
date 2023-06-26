@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
@@ -22,7 +24,9 @@ class OpenContainerNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appStateSettings["batterySaver"]) {
+    if (appStateSettings["batterySaver"] ||
+        appStateSettings["iOSNavigation"] ||
+        getPlatform() == PlatformOS.isIOS) {
       Widget child = button(() {
         pushRoute(
           context,

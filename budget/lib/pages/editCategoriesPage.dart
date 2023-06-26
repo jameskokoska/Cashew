@@ -16,13 +16,13 @@ import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
-import 'package:budget/struct/reorderable_list.dart';
+import 'package:budget/modified/reorderable_list.dart';
 
 class EditCategoriesPage extends StatefulWidget {
   EditCategoriesPage({
@@ -69,7 +69,8 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         navbar: false,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
-            padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "Add Category",
               openPage: AddCategoryPage(

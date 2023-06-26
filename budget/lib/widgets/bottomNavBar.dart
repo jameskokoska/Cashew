@@ -71,53 +71,63 @@ class BottomNavBarState extends State<BottomNavBar> {
                 ],
               ),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: NavigationBarTheme(
-                data: NavigationBarThemeData(
-                  backgroundColor: appStateSettings["materialYou"]
-                      ? null
-                      : getColor(context, "lightDarkAccent"),
-                  surfaceTintColor: appStateSettings["materialYou"]
-                      ? null
-                      : getColor(context, "lightDarkAccent"),
-                  indicatorColor: appStateSettings["materialYou"]
-                      ? dynamicPastel(
-                          context, Theme.of(context).colorScheme.primary,
-                          amount: 0.6)
-                      : null,
-                  labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-                  height: 50,
-                ),
-                child: NavigationBar(
-                  animationDuration: Duration(milliseconds: 1000),
-                  destinations: [
-                    NavigationDestination(
-                      icon: Icon(Icons.home_rounded),
-                      label: "Home",
+            child: Transform.translate(
+              offset: Offset(0, -MediaQuery.of(context).padding.bottom),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: NavigationBarTheme(
+                  data: NavigationBarThemeData(
+                    backgroundColor: appStateSettings["materialYou"]
+                        ? null
+                        : getColor(context, "lightDarkAccent"),
+                    surfaceTintColor: appStateSettings["materialYou"]
+                        ? null
+                        : getColor(context, "lightDarkAccent"),
+                    indicatorColor: appStateSettings["materialYou"]
+                        ? dynamicPastel(
+                            context, Theme.of(context).colorScheme.primary,
+                            amount: 0.6)
+                        : null,
+                    labelBehavior:
+                        NavigationDestinationLabelBehavior.alwaysHide,
+                    height: 50,
+                  ),
+                  child: Transform.translate(
+                    offset: Offset(0, MediaQuery.of(context).padding.bottom),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: NavigationBar(
+                        animationDuration: Duration(milliseconds: 1000),
+                        destinations: [
+                          NavigationDestination(
+                            icon: Icon(Icons.home_rounded),
+                            label: "Home",
+                          ),
+                          NavigationDestination(
+                            icon: Icon(Icons.payments_rounded),
+                            label: "Transactions",
+                          ),
+                          NavigationDestination(
+                            icon: Icon(MoreIcons.chart_pie, size: 20),
+                            label: "Budgets",
+                          ),
+                          NavigationDestination(
+                            icon: Icon(Icons.more_horiz_rounded),
+                            label: "More",
+                          ),
+                        ],
+                        selectedIndex: selectedIndex,
+                        onDestinationSelected: onItemTapped,
+                      ),
                     ),
-                    NavigationDestination(
-                      icon: Icon(Icons.payments_rounded),
-                      label: "Transactions",
-                    ),
-                    NavigationDestination(
-                      icon: Icon(MoreIcons.chart_pie, size: 20),
-                      label: "Budgets",
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.more_horiz_rounded),
-                      label: "More",
-                    ),
-                  ],
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: onItemTapped,
+                  ),
                 ),
               ),
             ),
           ),
           AbsorbPointer(
             child: Container(
-              height: 10 + bottomPaddingSafeArea,
+              height: MediaQuery.of(context).viewPadding.bottom > 10 ? 0 : 10,
             ),
           ),
         ],

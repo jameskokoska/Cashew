@@ -266,14 +266,23 @@ class PageFrameworkState extends State<PageFramework>
                           delegate: SliverChildListDelegate([
                             ...widget.listWidgets!,
                             widget.navbar
-                                ? SizedBox(height: 87 + bottomPaddingSafeArea)
-                                : SizedBox(height: bottomPaddingSafeArea),
+                                ? SizedBox(
+                                    height: 87 +
+                                        MediaQuery.of(context)
+                                            .viewPadding
+                                            .bottom)
+                                : SizedBox(
+                                    height: MediaQuery.of(context)
+                                        .viewPadding
+                                        .bottom),
                           ]),
                         ),
                       )
                     : SliverToBoxAdapter(
                         child: widget.navbar
-                            ? SizedBox(height: 87 + bottomPaddingSafeArea)
+                            ? SizedBox(
+                                height: 87 +
+                                    MediaQuery.of(context).viewPadding.bottom)
                             : SizedBox.shrink(),
                       ),
               ],

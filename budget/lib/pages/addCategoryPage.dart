@@ -7,13 +7,13 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
@@ -697,7 +697,7 @@ class AddButton extends StatelessWidget {
               width: 1.5,
               color: appStateSettings["materialYou"]
                   ? Theme.of(context).colorScheme.secondaryContainer
-                  : getColor(context, "lightDarkAccentHeavy")!,
+                  : getColor(context, "lightDarkAccentHeavy"),
             ),
             borderRadius: BorderRadius.circular(borderRadius),
           ),
@@ -709,7 +709,7 @@ class AddButton extends StatelessWidget {
               fontWeight: FontWeight.bold,
               textColor: appStateSettings["materialYou"]
                   ? Theme.of(context).colorScheme.secondaryContainer
-                  : getColor(context, "lightDarkAccentHeavy")!,
+                  : getColor(context, "lightDarkAccentHeavy"),
             ),
           ),
         ),

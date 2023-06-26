@@ -19,7 +19,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 35;
+int schemaVersionGlobal = 36;
 
 // Generate database code
 // dart run build_runner build
@@ -39,6 +39,8 @@ enum TransactionSpecialType {
   upcoming,
   subscription,
   repetitive,
+  credit, //lent, withdraw, owed
+  debt, //borrowed, deposit, owe
 }
 
 enum SharedOwnerMember {
@@ -182,8 +184,8 @@ class Transactions extends Table {
   //     text().map(const IntListInColumnConverter()).nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
-  DateTimeColumn get dateTimeCreated =>
-      dateTime().withDefault(Constant(DateTime.now())).nullable()();
+  // DateTimeColumn get dateTimeCreated =>
+  //     dateTime().withDefault(Constant(DateTime.now())).nullable()();
   DateTimeColumn get dateTimeModified =>
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
@@ -558,9 +560,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 34) {
             await migrator.addColumn(budgets, budgets.isAbsoluteSpendingLimit);
           }
-          // if (from <= 35) {
-          //   await migrator.alterTable(TableMigration(transactions));
-          // }
+          if (from <= 35) {
+            await migrator.alterTable(TableMigration(transactions));
+          }
         },
       );
 
@@ -572,30 +574,30 @@ class FinanceDatabase extends _$FinanceDatabase {
     });
   }
 
-  Future<bool> updateDateCreatedColumn() async {
-    List<Transaction> transactionsList = await (select(transactions)).get();
+  // Future<bool> updateDateCreatedColumn() async {
+  //   List<Transaction> transactionsList = await (select(transactions)).get();
 
-    await batch((batch) {
-      for (Transaction transaction in transactionsList) {
-        batch.update(
-          transactions,
-          TransactionsCompanion(
-            dateCreated: Value(
-              DateTime(
-                transaction.dateCreated.year,
-                transaction.dateCreated.month,
-                transaction.dateCreated.day,
-                transaction.dateTimeCreated?.hour ?? 0,
-                transaction.dateTimeCreated?.minute ?? 0,
-              ),
-            ),
-          ),
-          where: (t) => t.transactionPk.equals(transaction.transactionPk),
-        );
-      }
-    });
-    return true;
-  }
+  //   await batch((batch) {
+  //     for (Transaction transaction in transactionsList) {
+  //       batch.update(
+  //         transactions,
+  //         TransactionsCompanion(
+  //           dateCreated: Value(
+  //             DateTime(
+  //               transaction.dateCreated.year,
+  //               transaction.dateCreated.month,
+  //               transaction.dateCreated.day,
+  //               transaction.dateTimeCreated?.hour ?? 0,
+  //               transaction.dateTimeCreated?.minute ?? 0,
+  //             ),
+  //           ),
+  //         ),
+  //         where: (t) => t.transactionPk.equals(transaction.transactionPk),
+  //       );
+  //     }
+  //   });
+  //   return true;
+  // }
 
   // get all filtered transactions from earliest to oldest date created, paginated
   // Stream<List<Transaction>> watchAllTransactionsFiltered(
@@ -3176,6 +3178,44 @@ class FinanceDatabase extends _$FinanceDatabase {
               transactions.type
                   .equals(TransactionSpecialType.repetitive.index) |
               transactions.type.equals(TransactionSpecialType.upcoming.index)));
+    return query.map((row) => row.read(totalCount)).watch();
+  }
+
+  Stream<double?> watchTotalOfCreditDebt(
+    AllWallets allWallets,
+    bool isCredit,
+  ) {
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
+      final totalAmt = transactions.amount.sum();
+      final query = selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(transactions.income.equals(false) &
+            transactions.skipPaid.equals(false) &
+            transactions.paid.equals(false) &
+            transactions.walletFk.equals(wallet.walletPk) &
+            (isCredit
+                ? transactions.type.equals(TransactionSpecialType.credit.index)
+                : transactions.type.equals(TransactionSpecialType.debt.index)));
+      mergedStreams.add(query
+          .map((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0))
+          .watchSingle());
+    }
+    return totalDoubleStream(mergedStreams);
+  }
+
+  Stream<List<int?>> watchCountOfCreditDebt(bool isCredit) {
+    final totalCount = transactions.transactionPk.count();
+
+    final query = selectOnly(transactions)
+      ..addColumns([totalCount])
+      ..where(transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
+          (isCredit
+              ? transactions.type.equals(TransactionSpecialType.credit.index)
+              : transactions.type.equals(TransactionSpecialType.debt.index)));
     return query.map((row) => row.read(totalCount)).watch();
   }
 

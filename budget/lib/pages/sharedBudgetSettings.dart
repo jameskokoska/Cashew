@@ -10,7 +10,6 @@ import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +18,8 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 
 class SharedBudgetSettings extends StatefulWidget {
   SharedBudgetSettings({

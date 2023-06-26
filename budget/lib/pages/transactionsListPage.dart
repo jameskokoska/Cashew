@@ -13,7 +13,7 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/monthSelector.dart';
 import 'package:budget/widgets/cashFlow.dart';
 import 'package:budget/widgets/ghostTransactions.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';

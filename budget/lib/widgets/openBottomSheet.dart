@@ -48,6 +48,8 @@ Future openBottomSheet(
               context, Theme.of(context).colorScheme.secondaryContainer,
               amount: 0.3)
           : getColor(context, "lightDarkAccent"), builder: (context) {
+    double deviceAspectRatio =
+        MediaQuery.of(context).size.height / MediaQuery.of(context).size.width;
     return SlidingSheetDialog(
       maxWidth: getWidthBottomSheet(context),
       scrollSpec: ScrollSpec(
@@ -85,11 +87,9 @@ Future openBottomSheet(
       // },
       snapSpec: SnapSpec(
         snap: snap,
-        snappings: getIsFullScreen(context)
-            ? [
-                0.95,
-              ]
-            : [0.6, 1],
+        snappings: getIsFullScreen(context) == false && deviceAspectRatio > 2
+            ? [0.6, 1]
+            : [0.95, 1],
         positioning: SnapPositioning.relativeToAvailableSpace,
       ),
       listener: (SheetState state) {

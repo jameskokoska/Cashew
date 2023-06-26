@@ -7,7 +7,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -306,6 +306,7 @@ class AboutPage extends StatelessWidget {
                         database.deleteEverything(),
                         sharedPreferences.clear()
                       ]);
+                      await database.close();
                       Navigator.pop(context);
                       restartApp(context);
                     },

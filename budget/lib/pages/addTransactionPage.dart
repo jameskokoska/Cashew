@@ -16,8 +16,6 @@ import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
@@ -33,6 +31,8 @@ import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -43,10 +43,14 @@ dynamic transactionTypeDisplayToEnum = {
   "Upcoming": TransactionSpecialType.upcoming,
   "Subscription": TransactionSpecialType.subscription,
   "Repetitive": TransactionSpecialType.repetitive,
+  "Debt": TransactionSpecialType.debt,
+  "Credit": TransactionSpecialType.credit,
   null: "Default",
   TransactionSpecialType.upcoming: "Upcoming",
   TransactionSpecialType.subscription: "Subscription",
   TransactionSpecialType.repetitive: "Repetitive",
+  TransactionSpecialType.debt: "Debt",
+  TransactionSpecialType.credit: "Credit",
 };
 
 class AddTransactionPage extends StatefulWidget {
@@ -199,6 +203,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedType = transactionTypeDisplayToEnum[type];
       selectedTypeDisplay = type;
     });
+    if (selectedType == TransactionSpecialType.credit ||
+        selectedType == TransactionSpecialType.debt) {
+      selectedIncome = false;
+      setSelectedBudgetPk(null);
+    }
     return;
   }
 
@@ -327,6 +336,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     if (selectedBudgetPk != null) {
       setSelectedBudgetPk(null);
       showIncomeCannotBeAddedToBudgetWarning();
+    }
+
+    if (selectedType == TransactionSpecialType.credit ||
+        selectedType == TransactionSpecialType.debt) {
+      selectedIncome = false;
+      setSelectedBudgetPk(null);
     }
 
     if (selectedTitle != null &&
@@ -745,8 +760,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         if (widget.transaction != null) {
           discardChangesPopup(
             context,
-            previousObject:
-                widget.transaction!.copyWith(dateTimeCreated: Value(null)),
+            previousObject: widget.transaction!,
             currentObject: await createTransaction(),
           );
         } else {
@@ -771,8 +785,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject:
-                    widget.transaction!.copyWith(dateTimeCreated: Value(null)),
+                previousObject: widget.transaction!,
                 currentObject: await createTransaction(),
               );
             } else {
@@ -783,8 +796,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject:
-                    widget.transaction!.copyWith(dateTimeCreated: Value(null)),
+                previousObject: widget.transaction!,
                 currentObject: await createTransaction(),
               );
             } else {
@@ -925,59 +937,73 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               color: categoryColor,
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 45,
-                    child: Material(
-                      color: Colors.black.withOpacity(0.2),
-                      child: Theme(
-                        data: ThemeData().copyWith(
-                          splashColor: Theme.of(context).splashColor,
-                        ),
-                        child: TabBar(
-                          splashFactory: Theme.of(context).splashFactory,
-                          controller: _incomeTabController,
-                          onTap: (value) {
-                            if (value == 1)
-                              setSelectedIncome(true);
-                            else
-                              setSelectedIncome(false);
-                          },
-                          dividerColor: Colors.transparent,
-                          indicatorColor: Colors.transparent,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          indicator: BoxDecoration(
-                            color: categoryColor,
-                          ),
-                          labelColor: getColor(context, "black"),
-                          unselectedLabelColor: Colors.white.withOpacity(0.3),
-                          tabs: [
-                            Tab(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(
-                                  'Expense',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'Avenir',
+                  AnimatedSize(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeOutCubic,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 400),
+                      child: selectedType == TransactionSpecialType.credit ||
+                              selectedType == TransactionSpecialType.debt
+                          ? Container()
+                          : SizedBox(
+                              height: 45,
+                              child: Material(
+                                color: Colors.black.withOpacity(0.2),
+                                child: Theme(
+                                  data: ThemeData().copyWith(
+                                    splashColor: Theme.of(context).splashColor,
+                                  ),
+                                  child: TabBar(
+                                    splashFactory:
+                                        Theme.of(context).splashFactory,
+                                    controller: _incomeTabController,
+                                    onTap: (value) {
+                                      if (value == 1)
+                                        setSelectedIncome(true);
+                                      else
+                                        setSelectedIncome(false);
+                                    },
+                                    dividerColor: Colors.transparent,
+                                    indicatorColor: Colors.transparent,
+                                    indicatorSize: TabBarIndicatorSize.tab,
+                                    indicator: BoxDecoration(
+                                      color: categoryColor,
+                                    ),
+                                    labelColor: getColor(context, "black"),
+                                    unselectedLabelColor:
+                                        Colors.white.withOpacity(0.3),
+                                    tabs: [
+                                      Tab(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Text(
+                                            'Expense',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'Avenir',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Tab(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Text(
+                                            'Income',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'Avenir',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                            Tab(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(
-                                  'Income',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'Avenir',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ),
                   Row(
@@ -1249,23 +1275,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         SizedBox(height: 10),
                         SelectChips(
                           wrapped: enableDoubleColumn(context),
-                          items: [
-                            transactionTypeDisplayToEnum[null],
-                            transactionTypeDisplayToEnum[
-                                TransactionSpecialType.upcoming],
-                            transactionTypeDisplayToEnum[
-                                TransactionSpecialType.subscription],
-                            transactionTypeDisplayToEnum[
-                                TransactionSpecialType.repetitive]
-                          ],
+                          items: [null, ...TransactionSpecialType.values],
                           getLabel: (item) {
-                            return item;
+                            return transactionTypeDisplayToEnum[item] ?? "";
                           },
                           onSelected: (item) {
-                            setSelectedType(item);
+                            setSelectedType(transactionTypeDisplayToEnum[item]);
                           },
                           getSelected: (item) {
-                            return selectedTypeDisplay == item;
+                            return transactionTypeDisplayToEnum[
+                                    selectedTypeDisplay] ==
+                                item;
                           },
                         ),
                         AnimatedSize(
@@ -1277,53 +1297,59 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         TransactionSpecialType.repetitive ||
                                     selectedType ==
                                         TransactionSpecialType.subscription
-                                ? Wrap(
-                                    key: ValueKey(1),
-                                    alignment: WrapAlignment.center,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: [
-                                      TextFont(
-                                        text: "Repeat every",
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          TappableTextEntry(
-                                            title:
-                                                selectedPeriodLength.toString(),
-                                            placeholder: "0",
-                                            showPlaceHolderWhenTextEquals: "0",
-                                            onTap: () {
-                                              selectPeriodLength(context);
-                                            },
-                                            fontSize: 23,
-                                            fontWeight: FontWeight.bold,
-                                            internalPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 4, horizontal: 4),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 3),
-                                          ),
-                                          TappableTextEntry(
-                                            title: selectedRecurrenceDisplay,
-                                            placeholder: "",
-                                            onTap: () {
-                                              selectRecurrence(context);
-                                            },
-                                            fontSize: 23,
-                                            fontWeight: FontWeight.bold,
-                                            internalPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 4, horizontal: 4),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 3),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Wrap(
+                                      key: ValueKey(1),
+                                      alignment: WrapAlignment.center,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        TextFont(
+                                          text: "Repeat every",
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TappableTextEntry(
+                                              title: selectedPeriodLength
+                                                  .toString(),
+                                              placeholder: "0",
+                                              showPlaceHolderWhenTextEquals:
+                                                  "0",
+                                              onTap: () {
+                                                selectPeriodLength(context);
+                                              },
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                              internalPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 4,
+                                                      horizontal: 4),
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 3),
+                                            ),
+                                            TappableTextEntry(
+                                              title: selectedRecurrenceDisplay,
+                                              placeholder: "",
+                                              onTap: () {
+                                                selectRecurrence(context);
+                                              },
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                              internalPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 4,
+                                                      horizontal: 4),
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 3),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   )
                                 : Container(),
                           ),
@@ -1338,11 +1364,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 child: AnimatedSwitcher(
                                   duration: Duration(milliseconds: 300),
                                   child: selectedIncome == true ||
+                                          selectedType ==
+                                              TransactionSpecialType.credit ||
+                                          selectedType ==
+                                              TransactionSpecialType.debt ||
                                           snapshot.data!.length <= 0
                                       ? Container(key: ValueKey(1))
                                       : Padding(
                                           padding:
-                                              const EdgeInsets.only(top: 10),
+                                              const EdgeInsets.only(top: 5),
                                           child: SelectChips(
                                             wrapped:
                                                 enableDoubleColumn(context),
@@ -1402,7 +1432,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             child: selectedBudgetPk != null &&
                                     selectedBudgetIsShared == true
                                 ? Padding(
-                                    padding: const EdgeInsets.only(top: 10),
+                                    padding: const EdgeInsets.only(top: 5),
                                     child: SelectChips(
                                         wrapped: enableDoubleColumn(context),
                                         items:

@@ -20,6 +20,7 @@ class Button extends StatefulWidget {
     this.textColor,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
     this.hasBottomExtraSafeArea = false,
+    this.expandToFillBottomExtraSafeArea = false,
     this.icon,
     this.iconColor,
     this.borderRadius = 20,
@@ -36,6 +37,7 @@ class Button extends StatefulWidget {
   final Color? textColor;
   final EdgeInsets padding;
   final bool hasBottomExtraSafeArea;
+  final bool expandToFillBottomExtraSafeArea;
   final IconData? icon;
   final Color? iconColor;
   final double borderRadius;
@@ -79,13 +81,17 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
     );
     return Padding(
       padding: EdgeInsets.only(
-          bottom: widget.hasBottomExtraSafeArea == true
-              ? bottomPaddingSafeArea
+          bottom: widget.hasBottomExtraSafeArea == true &&
+                  widget.expandToFillBottomExtraSafeArea == false
+              ? MediaQuery.of(context).viewPadding.bottom
               : 0),
       child: AnimatedScale(
         duration: Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
         scale: widget.changeScale ? (isTapped ? 0.95 : 1) : 1,
+        alignment: widget.expandToFillBottomExtraSafeArea
+            ? Alignment.bottomCenter
+            : Alignment.center,
         child: Tappable(
           color: widget.disabled
               ? appStateSettings["materialYou"]
@@ -108,31 +114,38 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             if (widget.disabled == false) widget.onTap();
           },
           borderRadius: widget.borderRadius,
-          child: Container(
-            width: widget.width,
-            // height: widget.height,
-            padding: widget.padding,
-            child: Center(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  widget.icon != null
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 6),
-                          child: Icon(
-                            widget.icon,
-                            size: 21,
-                            color: widget.iconColor == null
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer
-                                : widget.iconColor,
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                  widget.expandedLayout ? Expanded(child: text) : text,
-                ],
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: widget.expandToFillBottomExtraSafeArea
+                  ? MediaQuery.of(context).viewPadding.bottom
+                  : 0,
+            ),
+            child: Container(
+              width: widget.width,
+              // height: widget.height,
+              padding: widget.padding,
+              child: Center(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    widget.icon != null
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: Icon(
+                              widget.icon,
+                              size: 21,
+                              color: widget.iconColor == null
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer
+                                  : widget.iconColor,
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    widget.expandedLayout ? Expanded(child: text) : text,
+                  ],
+                ),
               ),
             ),
           ),

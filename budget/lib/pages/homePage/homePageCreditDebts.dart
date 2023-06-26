@@ -1,28 +1,20 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/subscriptionsPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
-import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
-import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePageUpcomingTransactions extends StatelessWidget {
-  const HomePageUpcomingTransactions({super.key});
+class HomePageCreditDebts extends StatelessWidget {
+  const HomePageCreditDebts({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return !appStateSettings["showOverdueUpcoming"] &&
+    return !appStateSettings["showCreditDebt"] &&
             enableDoubleColumn(context) == false
         ? SizedBox.shrink()
         : KeepAliveClientMixin(
@@ -34,29 +26,27 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TransactionsAmountBox(
-                      openPage: UpcomingOverdueTransactions(
-                          overdueTransactions: false),
-                      label: "Upcoming",
-                      amountStream: database.watchTotalOfUpcomingOverdue(
+                      label: "Credit",
+                      amountStream: database.watchTotalOfCreditDebt(
                         Provider.of<AllWallets>(context),
-                        false,
+                        true,
                       ),
-                      textColor: getColor(context, "unPaidUpcoming"),
-                      transactionsAmountStream: database.watchCountOfUpcoming(),
+                      textColor: getColor(context, "incomeAmount"),
+                      transactionsAmountStream:
+                          database.watchCountOfCreditDebt(true),
                     ),
                   ),
                   SizedBox(width: 13),
                   Expanded(
                     child: TransactionsAmountBox(
-                      openPage: UpcomingOverdueTransactions(
-                          overdueTransactions: true),
-                      label: "Overdue",
-                      amountStream: database.watchTotalOfUpcomingOverdue(
+                      label: "Debt",
+                      amountStream: database.watchTotalOfCreditDebt(
                         Provider.of<AllWallets>(context),
-                        true,
+                        false,
                       ),
-                      textColor: getColor(context, "unPaidOverdue"),
-                      transactionsAmountStream: database.watchCountOfOverdue(),
+                      textColor: getColor(context, "expenseAmount"),
+                      transactionsAmountStream:
+                          database.watchCountOfCreditDebt(false),
                     ),
                   ),
                 ],

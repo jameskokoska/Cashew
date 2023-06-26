@@ -239,10 +239,10 @@ class BudgetContainer extends StatelessWidget {
                                   : ButtonIcon(
                                       onTap: () {
                                         pushRoute(
-                                            context,
-                                            PastBudgetsPage(
-                                                budgetPk: budget.budgetPk),
-                                            fancyRoute: true);
+                                          context,
+                                          PastBudgetsPage(
+                                              budgetPk: budget.budgetPk),
+                                        );
                                       },
                                       icon: Icons.history_rounded,
                                       color: dynamicPastel(

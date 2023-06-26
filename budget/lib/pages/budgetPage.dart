@@ -17,7 +17,7 @@ import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
@@ -174,7 +174,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
               fab: Padding(
-                padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom),
                 child: FAB(
                   tooltip: "Add Transaction",
                   openPage: AddTransactionPage(
@@ -200,7 +201,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         pushRoute(
                           context,
                           PastBudgetsPage(budgetPk: widget.budget.budgetPk),
-                          fancyRoute: true,
                         );
                       },
                       icon: Icon(

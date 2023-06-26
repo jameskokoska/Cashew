@@ -11,7 +11,7 @@ import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -300,7 +300,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(
@@ -534,10 +534,10 @@ class TransactionEntry extends StatelessWidget {
                                             child: TextFont(
                                               text: transaction.income
                                                   ? (transaction.paid
-                                                      ? "Desposited"
+                                                      ? "Deposited"
                                                       : transaction.skipPaid
                                                           ? "Skipped"
-                                                          : "Desposit?")
+                                                          : "Deposit?")
                                                   : (transaction.paid
                                                       ? "Paid"
                                                       : transaction.skipPaid
@@ -610,10 +610,10 @@ class TransactionEntry extends StatelessWidget {
                                               context,
                                               icon: Icons.payments_rounded,
                                               title: transaction.income
-                                                  ? "Desposit?"
+                                                  ? "Deposit?"
                                                   : "Pay?",
                                               description: transaction.income
-                                                  ? "Desposit this amount?"
+                                                  ? "Deposit this amount?"
                                                   : "Add payment on this transaction?",
                                               onCancelLabel: "Cancel",
                                               onCancel: () {
@@ -638,7 +638,7 @@ class TransactionEntry extends StatelessWidget {
                                                     context);
                                               },
                                               onSubmitLabel: transaction.income
-                                                  ? "Desposit"
+                                                  ? "Deposit"
                                                   : "Pay",
                                               onSubmit: () async {
                                                 Navigator.pop(context);

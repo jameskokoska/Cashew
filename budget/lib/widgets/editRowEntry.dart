@@ -9,7 +9,7 @@ import 'package:flutter/material.dart'
         SliverReorderableList,
         ReorderableDragStartListener,
         ReorderableDelayedDragStartListener;
-import 'package:budget/struct/reorderable_list.dart';
+import 'package:budget/modified/reorderable_list.dart';
 
 class EditRowEntry extends StatelessWidget {
   const EditRowEntry(

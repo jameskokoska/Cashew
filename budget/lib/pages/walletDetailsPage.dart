@@ -13,11 +13,12 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -120,15 +121,34 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                                child: IncomeTransactionsSummary(
-                              incomeTransactions: false,
-                              walletPk: walletPk,
-                            )),
+                              child: TransactionsAmountBox(
+                                label: "Income",
+                                amountStream: database.watchTotalOfWallet(
+                                  walletPk,
+                                  isIncome: true,
+                                ),
+                                textColor: getColor(context, "incomeAmount"),
+                                transactionsAmountStream: database
+                                    .watchTotalCountOfTransactionsInWallet(
+                                  walletPk,
+                                  isIncome: true,
+                                ),
+                              ),
+                            ),
                             SizedBox(width: 13),
                             Expanded(
-                              child: IncomeTransactionsSummary(
-                                incomeTransactions: true,
-                                walletPk: walletPk,
+                              child: TransactionsAmountBox(
+                                label: "Expense",
+                                amountStream: database.watchTotalOfWallet(
+                                  walletPk,
+                                  isIncome: false,
+                                ),
+                                textColor: getColor(context, "expenseAmount"),
+                                transactionsAmountStream: database
+                                    .watchTotalCountOfTransactionsInWallet(
+                                  walletPk,
+                                  isIncome: false,
+                                ),
                               ),
                             ),
                           ],
@@ -323,105 +343,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
         }
         return SizedBox.shrink();
       },
-    );
-  }
-}
-
-class IncomeTransactionsSummary extends StatelessWidget {
-  const IncomeTransactionsSummary({
-    Key? key,
-    this.incomeTransactions = true,
-    required this.walletPk,
-  }) : super(key: key);
-
-  final bool incomeTransactions;
-  final int? walletPk;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          boxShadow: appStateSettings["materialYou"] == false
-              ? boxShadowCheck(boxShadowGeneral(context))
-              : []),
-      child: Tappable(
-        borderRadius: 15,
-        color: appStateSettings["materialYou"]
-            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5)
-            : getColor(context, "lightDarkAccentHeavyLight"),
-        onTap: () {},
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFont(
-                  text: incomeTransactions ? "Income" : "Expense",
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(height: 6),
-                StreamBuilder<double?>(
-                  stream: database.watchTotalOfWallet(walletPk,
-                      isIncome: incomeTransactions),
-                  builder: (context, snapshot) {
-                    return CountNumber(
-                      count: snapshot.hasData == false || snapshot.data == null
-                          ? 0
-                          : (snapshot.data ?? 0).abs(),
-                      duration: Duration(milliseconds: 1000),
-                      dynamicDecimals: true,
-                      initialCount: (0),
-                      textBuilder: (number) {
-                        return TextFont(
-                          text: convertToMoney(
-                            Provider.of<AllWallets>(context),
-                            number,
-                            finalNumber: snapshot.hasData == false ||
-                                    snapshot.data == null
-                                ? 0
-                                : (snapshot.data ?? 0).abs(),
-                          ),
-                          textColor: incomeTransactions
-                              ? getColor(context, "incomeAmount")
-                              : getColor(context, "expenseAmount"),
-                          fontWeight: FontWeight.bold,
-                          autoSizeText: true,
-                          fontSize: 21,
-                          maxFontSize: 21,
-                          minFontSize: 10,
-                          maxLines: 1,
-                        );
-                      },
-                    );
-                  },
-                ),
-                SizedBox(height: 5),
-                StreamBuilder<List<int?>>(
-                  stream: database.watchTotalCountOfTransactionsInWallet(
-                    walletPk,
-                    isIncome: incomeTransactions,
-                  ),
-                  builder: (context, snapshot) {
-                    return TextFont(
-                      text:
-                          snapshot.hasData == false || snapshot.data![0] == null
-                              ? "/"
-                              : snapshot.data![0].toString() +
-                                  pluralString(
-                                      snapshot.data![0] == 1, " transaction"),
-                      fontSize: 13,
-                      textColor: getColor(context, "textLight"),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -36,7 +36,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/scheduler.dart' show SchedulerBinding, timeDilation;
-// import 'package:feature_discovery/feature_discovery.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -75,7 +75,13 @@ void main() async {
   tz.initializeTimeZones();
   final String? locationName = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
-  runApp(RestartApp(child: InitializeApp(key: appStateKey)));
+  runApp(
+    DevicePreview(
+      enabled: false,
+      builder: (context) =>
+          RestartApp(child: InitializeApp(key: appStateKey)), // Wrap your app
+    ),
+  );
 }
 
 late Map<String, dynamic> currenciesJSON;
@@ -140,7 +146,9 @@ class App extends StatelessWidget {
     return
         // FeatureDiscovery(
         //   child:
+
         MaterialApp(
+      locale: DevicePreview.locale(context),
       shortcuts: shortcuts,
       actions: keyboardIntents,
       themeAnimationDuration: Duration(milliseconds: 700),
@@ -148,6 +156,10 @@ class App extends StatelessWidget {
       title: 'Cashew',
       navigatorKey: navigatorKey,
       theme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
         fontFamily: appStateSettings["font"],
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
@@ -179,6 +191,13 @@ class App extends StatelessWidget {
         extensions: <ThemeExtension<dynamic>>[appColorsLight],
       ),
       darkTheme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(builders: {
+          // the page route animation is set in pushRoute() - functions.dart
+          TargetPlatform.android: appStateSettings["iOSNavigation"]
+              ? CupertinoPageTransitionsBuilder()
+              : ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
         fontFamily: appStateSettings["font"],
         colorScheme: ColorScheme.fromSeed(
           seedColor: getSettingConstants(appStateSettings)["accentColor"],
@@ -196,49 +215,49 @@ class App extends StatelessWidget {
                 amount: 0.92)
             : Colors.black,
         appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
-        splashColor: appStateSettings["materialYou"]
-            ? darkenPastel(
-                    lightenPastel(
-                        getSettingConstants(appStateSettings)["accentColor"],
-                        amount: 0.86),
-                    amount: 0.1)
-                .withOpacity(0.2)
-            : null,
+        splashColor: getPlatform() == PlatformOS.isIOS
+            ? Colors.transparent
+            : appStateSettings["materialYou"]
+                ? darkenPastel(
+                        lightenPastel(
+                            getSettingConstants(
+                                appStateSettings)["accentColor"],
+                            amount: 0.86),
+                        amount: 0.1)
+                    .withOpacity(0.2)
+                : null,
         extensions: <ThemeExtension<dynamic>>[appColorsDark],
       ),
       scrollBehavior: ScrollBehaviorOverride(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
-      home: SafeArea(
-        top: false,
-        child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 1200),
-            switchInCurve: Curves.easeInOutCubic,
-            switchOutCurve: Curves.easeInOutCubic,
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              final inAnimation =
-                  Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0))
-                      .animate(animation);
-              final outAnimation =
-                  Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                      .animate(animation);
+      home: AnimatedSwitcher(
+          duration: Duration(milliseconds: 1200),
+          switchInCurve: Curves.easeInOutCubic,
+          switchOutCurve: Curves.easeInOutCubic,
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            final inAnimation =
+                Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation);
+            final outAnimation =
+                Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                    .animate(animation);
 
-              if (child.key == ValueKey("Onboarding")) {
-                return ClipRect(
-                  child: SlideTransition(
-                    position: inAnimation,
-                    child: child,
-                  ),
-                );
-              } else {
-                return ClipRect(
-                  child: SlideTransition(position: outAnimation, child: child),
-                );
-              }
-            },
-            child: appStateSettings["hasOnboarded"] != true
-                ? OnBoardingPage(key: ValueKey("Onboarding"))
-                : PageNavigationFramework(key: pageNavigationFrameworkKey)),
-      ),
+            if (child.key == ValueKey("Onboarding")) {
+              return ClipRect(
+                child: SlideTransition(
+                  position: inAnimation,
+                  child: child,
+                ),
+              );
+            } else {
+              return ClipRect(
+                child: SlideTransition(position: outAnimation, child: child),
+              );
+            }
+          },
+          child: appStateSettings["hasOnboarded"] != true
+              ? OnBoardingPage(key: ValueKey("Onboarding"))
+              : PageNavigationFramework(key: pageNavigationFrameworkKey)),
       builder: (context, child) {
         Widget mainWidget = InitializeBiometrics(
           child: WatchForDayChange(

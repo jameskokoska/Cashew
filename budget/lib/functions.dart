@@ -13,7 +13,7 @@ import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:universal_html/src/html.dart'
-    hide Navigator, Platform, Clipboard;
+    hide Navigator, Platform, Clipboard, Animation;
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import './colors.dart';
@@ -23,10 +23,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:universal_io/io.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:budget/struct/settings.dart';
-
-// Add bottom padding for web Safari browsers
-// double bottomPaddingSafeArea = getOSInsideWeb() == "iOS" ? 20 : 0;
-double bottomPaddingSafeArea = 0;
 
 extension CapExtension on String {
   String get capitalizeFirst =>
@@ -683,27 +679,46 @@ String filterEmailTitle(string) {
   return title;
 }
 
-// When we use fancyRoute, the bottom sheet causes screen to go black
-// we will use this sparingly - but keep in mind the normal material page route causes a lag spike for animation / screen loading
-pushRoute(context, page, {bool fancyRoute = false}) {
-  if (appStateSettings["batterySaver"] || !fancyRoute) {
+class CustomMaterialPageRoute extends MaterialPageRoute {
+  @protected
+  bool get hasScopedWillPopCallback {
+    return false;
+  }
+
+  CustomMaterialPageRoute({
+    required WidgetBuilder builder,
+    RouteSettings? settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) : super(
+          builder: builder,
+          settings: settings,
+          maintainState: maintainState,
+          fullscreenDialog: fullscreenDialog,
+        );
+}
+
+pushRoute(context, page) {
+  if (appStateSettings["batterySaver"] ||
+      appStateSettings["iOSNavigation"] ||
+      getPlatform() == PlatformOS.isIOS) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => page),
+      CustomMaterialPageRoute(builder: (context) => page),
     );
   } else {
     Navigator.push(
       context,
       PageRouteBuilder(
         opaque: false,
-        transitionDuration: Duration(milliseconds: 400),
-        reverseTransitionDuration: Duration(milliseconds: 400),
+        transitionDuration: Duration(milliseconds: 300),
+        reverseTransitionDuration: Duration(milliseconds: 125),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return SharedAxisTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            transitionType: SharedAxisTransitionType.vertical,
-            child: child,
+          final tween = Tween(begin: Offset(0, 0.05), end: Offset.zero)
+              .chain(CurveTween(curve: Curves.easeOut));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: FadeTransition(opacity: animation, child: child),
           );
         },
         pageBuilder: (context, animation, secondaryAnimation) {
@@ -919,4 +934,21 @@ void copyToClipboard(String text) async {
       timeout: Duration(milliseconds: 2500),
     ),
   );
+}
+
+enum PlatformOS {
+  isIOS,
+  isAndroid,
+  web,
+}
+
+PlatformOS? getPlatform() {
+  if (kIsWeb) {
+    return PlatformOS.web;
+  } else if (Platform.isIOS) {
+    return PlatformOS.isIOS;
+  } else if (Platform.isAndroid) {
+    PlatformOS.isAndroid;
+  }
+  return null;
 }

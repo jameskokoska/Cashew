@@ -347,6 +347,12 @@ class _SelectCategoryState extends State<SelectCategory> {
                     dragWidgetBuilder: (index, child) {
                       return Opacity(opacity: 0.5, child: child);
                     },
+                    placeholderBuilder: (dropIndex, dropInddex, dragWidget) {
+                      return Opacity(
+                        opacity: 0.2,
+                        child: dragWidget,
+                      );
+                    },
                     childAspectRatio: 0.96,
                     padding: EdgeInsets.only(top: 5),
                     controller: _scrollController,
@@ -365,17 +371,21 @@ class _SelectCategoryState extends State<SelectCategory> {
                               padding:
                                   const EdgeInsets.only(left: 7.5, right: 7.5),
                               child: Column(
-                                mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Expanded(
-                                    child: AddButton(
-                                      onTap: () {},
-                                      openPage: AddCategoryPage(
-                                        title: "Add Category",
-                                      ),
-                                    ),
+                                  LayoutBuilder(
+                                    builder:
+                                        (context, BoxConstraints constraints) {
+                                      print(constraints);
+                                      return AddButton(
+                                        onTap: () {},
+                                        height: constraints.maxWidth,
+                                        width: constraints.maxWidth,
+                                        openPage: AddCategoryPage(
+                                          title: "Add Category",
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  SizedBox(height: 15),
                                 ],
                               ),
                             ),
@@ -391,6 +401,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                         await database.moveCategory(
                             oldCategory.categoryPk, _intNew, oldCategory.order);
                       }
+                      return true;
                     },
                     onDragStart: (_) {
                       database.fixOrderCategories();

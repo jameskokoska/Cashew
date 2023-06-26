@@ -1,5 +1,5 @@
 import 'package:budget/widgets/notificationsSettings.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';

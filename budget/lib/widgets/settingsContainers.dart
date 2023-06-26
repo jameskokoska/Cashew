@@ -151,11 +151,13 @@ class SettingsContainerOpenPage extends StatelessWidget {
             //   ),
             // );
           },
-          afterWidget: Icon(
-            Icons.chevron_right_rounded,
-            size: isOutlined == true ? 20 : 30,
-            color: colorScheme.secondary,
-          ),
+          afterWidget: isOutlined ?? false
+              ? SizedBox.shrink()
+              : Icon(
+                  Icons.chevron_right_rounded,
+                  size: isOutlined == true ? 20 : 30,
+                  color: colorScheme.secondary,
+                ),
           isOutlined: isOutlined,
         );
       },

@@ -17,12 +17,12 @@ import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePageUpcomingTransactions extends StatelessWidget {
-  const HomePageUpcomingTransactions({super.key});
+class HomePageAllSpendingSummary extends StatelessWidget {
+  const HomePageAllSpendingSummary({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return !appStateSettings["showOverdueUpcoming"] &&
+    return !appStateSettings["showAllSpendingSummary"] &&
             enableDoubleColumn(context) == false
         ? SizedBox.shrink()
         : KeepAliveClientMixin(
@@ -34,29 +34,33 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TransactionsAmountBox(
-                      openPage: UpcomingOverdueTransactions(
-                          overdueTransactions: false),
-                      label: "Upcoming",
-                      amountStream: database.watchTotalOfUpcomingOverdue(
-                        Provider.of<AllWallets>(context),
-                        false,
+                      label: "Income",
+                      amountStream: database.watchTotalOfWallet(
+                        null,
+                        isIncome: true,
                       ),
-                      textColor: getColor(context, "unPaidUpcoming"),
-                      transactionsAmountStream: database.watchCountOfUpcoming(),
+                      textColor: getColor(context, "incomeAmount"),
+                      transactionsAmountStream:
+                          database.watchTotalCountOfTransactionsInWallet(
+                        null,
+                        isIncome: true,
+                      ),
                     ),
                   ),
                   SizedBox(width: 13),
                   Expanded(
                     child: TransactionsAmountBox(
-                      openPage: UpcomingOverdueTransactions(
-                          overdueTransactions: true),
-                      label: "Overdue",
-                      amountStream: database.watchTotalOfUpcomingOverdue(
-                        Provider.of<AllWallets>(context),
-                        true,
+                      label: "Expense",
+                      amountStream: database.watchTotalOfWallet(
+                        null,
+                        isIncome: false,
                       ),
-                      textColor: getColor(context, "unPaidOverdue"),
-                      transactionsAmountStream: database.watchCountOfOverdue(),
+                      textColor: getColor(context, "expenseAmount"),
+                      transactionsAmountStream:
+                          database.watchTotalCountOfTransactionsInWallet(
+                        null,
+                        isIncome: false,
+                      ),
                     ),
                   ),
                 ],

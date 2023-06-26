@@ -1,33 +1,26 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/budgetPage.dart';
-import 'package:budget/pages/subscriptionsPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
-import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/keepAliveClientMixin.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 
-class UpcomingTransactions extends StatelessWidget {
-  const UpcomingTransactions({
-    Key? key,
-    bool this.overdueTransactions = false,
-  }) : super(key: key);
-  final overdueTransactions;
+class TransactionsAmountBox extends StatelessWidget {
+  const TransactionsAmountBox(
+      {this.openPage,
+      required this.label,
+      required this.amountStream,
+      required this.textColor,
+      required this.transactionsAmountStream,
+      super.key});
+  final Widget? openPage;
+  final String label;
+  final Stream<double?> amountStream;
+  final Color textColor;
+  final Stream<List<int?>> transactionsAmountStream;
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +29,13 @@ class UpcomingTransactions extends StatelessWidget {
           BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
       child: OpenContainerNavigation(
         closedColor: getColor(context, "lightDarkAccentHeavyLight"),
-        openPage: UpcomingOverdueTransactions(
-            overdueTransactions: overdueTransactions),
+        openPage: openPage ?? SizedBox.shrink(),
         borderRadius: 15,
         button: (openContainer) {
           return Tappable(
             color: getColor(context, "lightDarkAccentHeavyLight"),
             onTap: () {
-              openContainer();
+              if (openPage != null) openContainer();
             },
             child: Container(
               child: Padding(
@@ -54,16 +46,13 @@ class UpcomingTransactions extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFont(
-                      text: overdueTransactions ? "Overdue" : "Upcoming",
+                      text: label,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                     SizedBox(height: 6),
                     StreamBuilder<double?>(
-                      stream: database.watchTotalOfUpcomingOverdue(
-                        Provider.of<AllWallets>(context),
-                        overdueTransactions,
-                      ),
+                      stream: amountStream,
                       builder: (context, snapshot) {
                         return CountNumber(
                           count:
@@ -81,13 +70,11 @@ class UpcomingTransactions extends StatelessWidget {
                                           snapshot.data == null
                                       ? 0
                                       : (snapshot.data ?? 0).abs()),
-                              textColor: overdueTransactions
-                                  ? getColor(context, "unPaidOverdue")
-                                  : getColor(context, "unPaidUpcoming"),
+                              textColor: textColor,
                               fontWeight: FontWeight.bold,
                               autoSizeText: true,
-                              fontSize: 24,
-                              maxFontSize: 24,
+                              fontSize: 21,
+                              maxFontSize: 21,
                               minFontSize: 10,
                               maxLines: 1,
                             );
@@ -95,11 +82,9 @@ class UpcomingTransactions extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: 6),
                     StreamBuilder<List<int?>>(
-                      stream: overdueTransactions
-                          ? database.watchCountOfOverdue()
-                          : database.watchCountOfUpcoming(),
+                      stream: transactionsAmountStream,
                       builder: (context, snapshot) {
                         return TextFont(
                           text: snapshot.hasData == false ||

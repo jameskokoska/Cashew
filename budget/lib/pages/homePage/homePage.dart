@@ -1,7 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
@@ -9,33 +8,16 @@ import 'package:budget/pages/homePage/homeUpcomingTransactionSlivers.dart';
 import 'package:budget/pages/homePage/homePageUsername.dart';
 import 'package:budget/pages/homePage/homePageBudgets.dart';
 import 'package:budget/pages/homePage/homePageUpcomingTransactions.dart';
-import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/homePage/homePageAllSpendingSummary.dart';
 import 'package:budget/pages/editHomePage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/settingsPage.dart';
-import 'package:budget/pages/subscriptionsPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
-import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/pages/homePage/homePageCreditDebts.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/animatedCircularProgress.dart';
-import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
-import 'package:budget/widgets/budgetContainer.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/upcomingTransactions.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openContainerNavigation.dart';
-import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +97,8 @@ class HomePageState extends State<HomePage>
       "wallets": HomePageWalletSwitcher(),
       "budgets": HomePageBudgets(),
       "overdueUpcoming": HomePageUpcomingTransactions(),
+      "allSpendingSummary": HomePageAllSpendingSummary(),
+      "creditDebts": HomePageCreditDebts(),
       "spendingGraph":
           HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector),
     };
@@ -173,7 +157,9 @@ class HomePageState extends State<HomePage>
                       // Subtract one (1) here because of the thickness of the wiper above
                       height: 179 -
                           1 +
-                          MediaQuery.of(context).padding.top -
+                          (MediaQuery.of(context).padding.top > 30
+                              ? 30
+                              : MediaQuery.of(context).padding.top) -
                           48 -
                           12,
                       alignment: Alignment.bottomLeft,
@@ -233,9 +219,15 @@ class HomePageState extends State<HomePage>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              // enableDoubleColumn(context) == false
+                              //     ? SizedBox.shrink()
+                              //     : HomePageAllSpendingSummary(),
                               enableDoubleColumn(context) == false
                                   ? SizedBox.shrink()
                                   : HomePageUpcomingTransactions(),
+                              enableDoubleColumn(context) == false
+                                  ? SizedBox.shrink()
+                                  : HomePageCreditDebts(),
                               enableDoubleColumn(context) == false
                                   ? SizedBox.shrink()
                                   : HomePageLineGraph(

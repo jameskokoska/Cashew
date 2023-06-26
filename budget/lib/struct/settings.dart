@@ -47,7 +47,8 @@ Future<bool> initializeSettings() async {
       userSettings = json.decode(storedSettings);
       //we need to load any defaults to migrate if on an older version backup restores
       //Set to defaults if a new setting is added, but no entry saved
-      Map<String, dynamic> userPreferencesDefault = defaultPreferences();
+      Map<String, dynamic> userPreferencesDefault =
+          await getDefaultPreferences();
       userPreferencesDefault.forEach((key, value) {
         if (userSettings[key] == null) {
           userSettings[key] = userPreferencesDefault[key];
@@ -94,13 +95,13 @@ Future<bool> initializeSettings() async {
 
   generateColors();
 
+  Map<String, dynamic> defaultPreferences = await getDefaultPreferences();
   List<String> keyOrder = List<String>.from(
       appStateSettings["homePageOrder"].map((element) => element.toString()));
   List<String> defaultPrefPageOrder = List<String>.from(
-      defaultPreferences()["homePageOrder"]
-          .map((element) => element.toString()));
+      defaultPreferences["homePageOrder"].map((element) => element.toString()));
   for (String key in keyOrder) {
-    if (!defaultPreferences()["homePageOrder"].contains(key)) {
+    if (!defaultPreferences["homePageOrder"].contains(key)) {
       appStateSettings["homePageOrder"] = defaultPrefPageOrder;
       print("Fixed homepage ordering");
       break;
@@ -159,7 +160,7 @@ Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
 }
 
 Future<Map<String, dynamic>> getUserSettings() async {
-  Map<String, dynamic> userPreferencesDefault = defaultPreferences();
+  Map<String, dynamic> userPreferencesDefault = await getDefaultPreferences();
 
   String? userSettings = sharedPreferences.getString('userSettings');
   try {

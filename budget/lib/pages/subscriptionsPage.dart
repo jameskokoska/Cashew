@@ -9,7 +9,7 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/pageFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +54,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             listID: "Subscriptions",
             floatingActionButton: AnimateFABDelayed(
               fab: Padding(
-                padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom),
                 child: FAB(
                   tooltip: "Add Subscription",
                   openPage: AddTransactionPage(

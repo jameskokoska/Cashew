@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -52,7 +54,7 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
       curve: Curves.easeInOutCubic,
       transform: Matrix4.translationValues(
         0.0,
-        isKeyboardOpen ? 100 : 0.0,
+        isKeyboardOpen && !(getPlatform() == PlatformOS.isIOS) ? 100 : 0.0,
         0.0,
       ),
       child: Column(
@@ -91,12 +93,11 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
                 label: widget.label,
                 disabled: widget.disabled,
                 onTap: widget.onTap,
+                hasBottomExtraSafeArea: true,
+                expandToFillBottomExtraSafeArea: true,
               ),
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).viewInsets.bottom,
-          )
         ],
       ),
     );

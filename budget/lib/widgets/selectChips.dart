@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -15,8 +16,7 @@ import 'package:budget/widgets/util/initializeNotifications.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
@@ -28,6 +28,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class SelectChips extends StatefulWidget {
   const SelectChips({
@@ -55,6 +58,35 @@ class SelectChips extends StatefulWidget {
 }
 
 class _SelectChipsState extends State<SelectChips> {
+  double heightOfScroll = 0;
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ScrollOffsetController scrollOffsetController =
+      ScrollOffsetController();
+
+  @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 0), () {
+      int? scrollToIndex = null;
+      int currentIndex = 0;
+      for (dynamic item in widget.items) {
+        if (widget.getSelected(item)) {
+          scrollToIndex = currentIndex;
+          break;
+        }
+        currentIndex++;
+      }
+      if (scrollToIndex != null && scrollToIndex != 0) {
+        itemScrollController.scrollTo(
+          index: scrollToIndex,
+          duration: Duration(milliseconds: 1000),
+          curve: Curves.easeInOutCubicEmphasized,
+          alignment: 0.06,
+        );
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
@@ -72,6 +104,7 @@ class _SelectChipsState extends State<SelectChips> {
               },
               color: Colors.transparent,
               child: ChoiceChip(
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 selectedColor: appStateSettings["materialYou"]
                     ? null
                     : getColor(context, "lightDarkAccentHeavy"),
@@ -98,18 +131,53 @@ class _SelectChipsState extends State<SelectChips> {
     ];
     if (widget.wrapped)
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18),
-        child: Wrap(
-          runSpacing: 10,
-          children: children,
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          child: Wrap(
+            runSpacing: 10,
+            children: children,
+          ),
         ),
       );
-    return SizedBox(
-      height: 40,
-      child: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 18),
-        scrollDirection: Axis.horizontal,
-        children: children,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Stack(
+        children: [
+          children.length > 0
+              ? Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Opacity(
+                    opacity: 0,
+                    child: WidgetSize(
+                      onChange: (Size size) {
+                        setState(() {
+                          heightOfScroll = size.height;
+                        });
+                      },
+                      child: children[0],
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              height: heightOfScroll,
+              child: ScrollablePositionedList.builder(
+                itemCount: children.length,
+                itemBuilder: (context, index) => children[index],
+                itemScrollController: itemScrollController,
+                scrollOffsetController: scrollOffsetController,
+                padding: EdgeInsets.symmetric(horizontal: 18),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

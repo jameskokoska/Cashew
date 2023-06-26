@@ -3,17 +3,33 @@ import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/popupFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
-  String version = packageInfoGlobal.version;
+  String version = "3.2.2";
   String buildNumber = packageInfoGlobal.buildNumber;
   int versionInt = parseVersionInt(version);
   int lastLoginVersionInt =
       parseVersionInt(appStateSettings["lastLoginVersion"]);
   String changelog = """
+    < 3.3.0
+    Debts and credits work in progress - use if you lend money or someone owes you money
+    Fixed onWillPopScope and back swipe for iOS
+    iOS navigation debug flag
+    Splash color disabled on iOS
+    Page transitions use new fade in from bottom animation
+    Select chips follows height of ChoiceChip
+    Select chips scroll to the selected chip
+    < 3.2.2
+    Officially removed DateTimeCreated - merged into dateCreated
+    Removed right arrow on outlines settings containers
+    Ask for transaction title disabled by default for devices with older Android version (since keyboard height changes do not update the UI)
+    Bottom sheet snaps to 0.6 only if tall display
+    Safe areas improvements
+    Select category, add category button follows ratio of 1:1
+    Reordering grid view waits until async finishes before updating UI
     < 3.2.1
     Fixed horizontal line in added budgets only when time period over
     Only show new changes in changelog based on version
@@ -597,7 +613,7 @@ end""";
       string = string.replaceFirst("    ", ""); // remove the indent
       if (string.startsWith("< ")) {
         versionBookmark = parseVersionInt(string.replaceAll("< ", ""));
-        if (forceShow == false && lastLoginVersionInt > versionBookmark) {
+        if (forceShow == false && versionBookmark <= lastLoginVersionInt) {
           continue;
         }
         changelogPoints.add(Padding(
@@ -612,7 +628,7 @@ end""";
         continue;
       }
 
-      if (forceShow == false && lastLoginVersionInt > versionBookmark) {
+      if (forceShow == false && versionBookmark <= lastLoginVersionInt) {
         continue;
       }
 
@@ -633,37 +649,43 @@ end""";
       }
     }
     changelogPoints.add(
-      SizedBox(height: 20),
-    );
-    changelogPoints.add(
-      Padding(
-        padding: const EdgeInsets.only(top: 5),
-        child: Button(
-          label: "Close",
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      SizedBox(height: 10),
     );
 
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Changelog",
-        subtitle: "v" +
-            version +
-            "+" +
-            buildNumber +
-            ", db-v" +
-            schemaVersionGlobal.toString(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: changelogPoints,
+    if (forceShow)
+      changelogPoints.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Button(
+            label: "Close",
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      showScrollbar: true,
-    );
+      );
+
+    //Don't show changelog on first login
+    if (appStateSettings["numLogins"] > 1) {
+      openBottomSheet(
+        context,
+        PopupFramework(
+          title: "Changelog",
+          subtitle: "v" +
+              version +
+              "+" +
+              buildNumber +
+              ", db-v" +
+              schemaVersionGlobal.toString(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: changelogPoints,
+          ),
+          showCloseButton: true,
+        ),
+        showScrollbar: true,
+      );
+    }
 
     updateSettings(
       "lastLoginVersion",

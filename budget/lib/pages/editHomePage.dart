@@ -3,13 +3,11 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultPreferences.dart';
-import 'package:budget/struct/reorderable_list.dart';
+import 'package:budget/modified/reorderable_list.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/pageFramework.dart';
-import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectItems.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -17,6 +15,8 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 
 class EditHomePageItem {
   final IconData icon;
@@ -142,6 +142,24 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: appStateSettings["showOverdueUpcoming"],
             onSwitched: (value) {
               updateSettings("showOverdueUpcoming", value,
+                  pagesNeedingRefresh: [0], updateGlobalState: false);
+            },
+          ),
+          "creditDebts": EditHomePageItem(
+            icon: Icons.sync_alt,
+            name: "Credit and Debts",
+            isEnabled: appStateSettings["showCreditDebt"],
+            onSwitched: (value) {
+              updateSettings("showCreditDebt", value,
+                  pagesNeedingRefresh: [0], updateGlobalState: false);
+            },
+          ),
+          "allSpendingSummary": EditHomePageItem(
+            icon: Icons.line_weight_rounded,
+            name: "All Spending Income and Expenses",
+            isEnabled: appStateSettings["showAllSpendingSummary"],
+            onSwitched: (value) {
+              updateSettings("showAllSpendingSummary", value,
                   pagesNeedingRefresh: [0], updateGlobalState: false);
             },
           ),

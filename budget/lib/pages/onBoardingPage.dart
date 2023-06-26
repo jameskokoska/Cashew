@@ -10,7 +10,6 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -22,6 +21,8 @@ import 'package:budget/main.dart';
 import 'package:flutter/services.dart';
 import '../functions.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({Key? key, this.popNavigationWhenDone = false})
@@ -412,7 +413,8 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.only(bottom: bottomPaddingSafeArea),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewPadding.bottom),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 18,

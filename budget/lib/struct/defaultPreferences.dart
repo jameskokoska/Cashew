@@ -1,9 +1,22 @@
 import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
+import 'package:universal_io/io.dart';
 
 // default settings, defaultSettings, initial settings
-Map<String, dynamic> defaultPreferences() {
+Future<Map<String, dynamic>> getDefaultPreferences() async {
+  int androidVersion = 11;
+  if (getPlatform() == PlatformOS.isAndroid) {
+    androidVersion = 0;
+    AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
+    String androidVersionString = androidInfo.version.release;
+    try {
+      androidVersion = int.parse(androidVersionString);
+    } catch (e) {}
+  }
   return {
     "databaseJustImported": false,
     "backupLimit": 20,
@@ -16,20 +29,24 @@ Map<String, dynamic> defaultPreferences() {
     "accentColor": toHexString(Color(0xFF1B447A)),
     "accentSystemColor": true,
     "showWalletSwitcher": true,
-    "showOverdueUpcoming": true,
     "showPinnedBudgets": true,
+    "showAllSpendingSummary": false,
+    "showOverdueUpcoming": false,
+    "showCreditDebt": false,
     "showSpendingGraph": true,
     "homePageOrder": [
       "wallets",
       "budgets",
+      "allSpendingSummary",
       "overdueUpcoming",
+      "creditDebts",
       "spendingGraph",
     ],
     "showTotalSpentForBudget": false,
     "roundedGraphLines": true,
     "showCumulativeSpending": true,
     "removeZeroTransactionEntries": true,
-    "askForTransactionTitle": true,
+    "askForTransactionTitle": androidVersion > 10,
     // "batterySaver": kIsWeb,
     "batterySaver": false,
     "username": "",
@@ -73,5 +90,6 @@ Map<String, dynamic> defaultPreferences() {
     // the key is the budgetPk (in String!)
     // Should be of type Map<String,List<int>>
     "watchedCategoriesOnBudget": {},
+    "iOSNavigation": false,
   };
 }

@@ -38,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
+// import 'package:feature_discovery/feature_discovery.dart';
 
 class PageNavigationFramework extends StatefulWidget {
   const PageNavigationFramework({Key? key}) : super(key: key);
@@ -228,8 +229,12 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
             child: Padding(
               padding: EdgeInsets.only(
                 bottom: getWidthNavigationSidebar(context) <= 0
-                    ? 75
-                    : 15 + bottomPaddingSafeArea,
+                    ? 75 +
+                        MediaQuery.of(context).viewPadding.bottom -
+                        (MediaQuery.of(context).viewPadding.bottom > 10
+                            ? 10
+                            : 0)
+                    : 15 + MediaQuery.of(context).viewPadding.bottom,
                 right: 15,
               ),
               child: Stack(
