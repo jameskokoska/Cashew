@@ -62,28 +62,36 @@ class _SelectChipsState extends State<SelectChips> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
       ScrollOffsetController();
+  bool isDoneAnimation = false;
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 0), () {
-      int? scrollToIndex = null;
-      int currentIndex = 0;
-      for (dynamic item in widget.items) {
-        if (widget.getSelected(item)) {
-          scrollToIndex = currentIndex;
-          break;
+    if (widget.wrapped == false) {
+      Future.delayed(Duration(milliseconds: 0), () {
+        int? scrollToIndex = null;
+        int currentIndex = 0;
+        for (dynamic item in widget.items) {
+          if (widget.getSelected(item)) {
+            scrollToIndex = currentIndex;
+            break;
+          }
+          currentIndex++;
         }
-        currentIndex++;
-      }
-      if (scrollToIndex != null && scrollToIndex != 0) {
-        itemScrollController.scrollTo(
-          index: scrollToIndex,
-          duration: Duration(milliseconds: 1000),
-          curve: Curves.easeInOutCubicEmphasized,
-          alignment: 0.06,
-        );
-      }
-    });
+        if (scrollToIndex != null && scrollToIndex != 0) {
+          itemScrollController.scrollTo(
+            index: scrollToIndex,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubicEmphasized,
+            alignment: 0.06,
+          );
+        }
+      });
+      Future.delayed(Duration(milliseconds: 1000), () {
+        setState(() {
+          isDoneAnimation = true;
+        });
+      });
+    }
     super.initState();
   }
 
@@ -174,6 +182,8 @@ class _SelectChipsState extends State<SelectChips> {
                 padding: EdgeInsets.symmetric(horizontal: 18),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
+                // physics:
+                //     isDoneAnimation ? ScrollPhysics() : BouncingScrollPhysics(),
               ),
             ),
           ),

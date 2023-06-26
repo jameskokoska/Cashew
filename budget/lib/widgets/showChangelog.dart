@@ -14,6 +14,9 @@ Future<void> showChangelog(context, {forceShow = false}) async {
   int lastLoginVersionInt =
       parseVersionInt(appStateSettings["lastLoginVersion"]);
   String changelog = """
+    < 3.3.1
+    Fixed select chips scroll to selected when small index on non-scrollable list
+    Changelog hidden on first launch
     < 3.3.0
     Debts and credits work in progress - use if you lend money or someone owes you money
     Fixed onWillPopScope and back swipe for iOS
