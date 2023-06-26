@@ -342,7 +342,10 @@ class BudgetContainer extends StatelessWidget {
       ),
       child: OpenContainerNavigation(
         borderRadius: 20,
-        closedColor: getColor(context, "lightDarkAccentHeavyLight"),
+        closedColor: appStateSettings["materialYou"]
+            ? dynamicPastel(context, budgetColorScheme.secondaryContainer,
+                amountDark: 0.4, amountLight: 0.7)
+            : getColor(context, "lightDarkAccentHeavyLight"),
         button: (openContainer) {
           return Tappable(
             onTap: () {
@@ -361,7 +364,10 @@ class BudgetContainer extends StatelessWidget {
                 : null,
             borderRadius: 20,
             child: widget,
-            color: getColor(context, "lightDarkAccentHeavyLight"),
+            color: appStateSettings["materialYou"]
+                ? dynamicPastel(context, budgetColorScheme.secondaryContainer,
+                    amountDark: 0.4, amountLight: 0.7)
+                : getColor(context, "lightDarkAccentHeavyLight"),
           );
         },
         openPage: BudgetPage(
@@ -1174,7 +1180,7 @@ class MemberSpendingPercent extends StatelessWidget {
           fontSize: isLarge ? 23 : 21,
           textColor: dynamicPastel(
             context,
-            Theme.of(context).colorScheme.primary,
+            color,
             amount: 0.4,
             amountLight: 0.7,
             inverse: true,

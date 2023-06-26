@@ -146,8 +146,8 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "creditDebts": EditHomePageItem(
-            icon: Icons.sync_alt,
-            name: "Credit and Debts",
+            icon: Icons.sync_alt_rounded,
+            name: "Lent and Borrowed",
             isEnabled: appStateSettings["showCreditDebt"],
             onSwitched: (value) {
               updateSettings("showCreditDebt", value,

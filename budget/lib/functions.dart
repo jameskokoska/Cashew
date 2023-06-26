@@ -551,6 +551,10 @@ IconData getTransactionTypeIcon(TransactionSpecialType? selectedType) {
     return Icons.event_repeat_rounded;
   } else if (selectedType == TransactionSpecialType.repetitive) {
     return Icons.repeat_rounded;
+  } else if (selectedType == TransactionSpecialType.debt) {
+    return Icons.unarchive_rounded;
+  } else if (selectedType == TransactionSpecialType.credit) {
+    return Icons.archive_rounded;
   }
   return Icons.event_repeat_rounded;
 }

@@ -300,7 +300,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .only(
+                                                                            .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(
@@ -532,17 +532,31 @@ class TransactionEntry extends StatelessWidget {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(10))),
                                             child: TextFont(
-                                              text: transaction.income
-                                                  ? (transaction.paid
-                                                      ? "Deposited"
-                                                      : transaction.skipPaid
-                                                          ? "Skipped"
-                                                          : "Deposit?")
-                                                  : (transaction.paid
-                                                      ? "Paid"
-                                                      : transaction.skipPaid
-                                                          ? "Skipped"
-                                                          : "Pay?"),
+                                              text: transaction.type ==
+                                                      TransactionSpecialType
+                                                          .credit
+                                                  ? transaction.paid
+                                                      ? "Recieved"
+                                                      : "Recieve?"
+                                                  : transaction.type ==
+                                                          TransactionSpecialType
+                                                              .debt
+                                                      ? transaction.paid
+                                                          ? "Paid"
+                                                          : "Pay?"
+                                                      : transaction.income
+                                                          ? (transaction.paid
+                                                              ? "Deposited"
+                                                              : transaction
+                                                                      .skipPaid
+                                                                  ? "Skipped"
+                                                                  : "Deposit?")
+                                                          : (transaction.paid
+                                                              ? "Paid"
+                                                              : transaction
+                                                                      .skipPaid
+                                                                  ? "Skipped"
+                                                                  : "Pay?"),
                                               fontSize: 14,
                                               textColor: textColorLight,
                                             ),
@@ -608,18 +622,39 @@ class TransactionEntry extends StatelessWidget {
                                           } else {
                                             openPopup(
                                               context,
-                                              icon: Icons.payments_rounded,
-                                              title: transaction.income
-                                                  ? "Deposit?"
-                                                  : "Pay?",
-                                              description: transaction.income
-                                                  ? "Deposit this amount?"
-                                                  : "Add payment on this transaction?",
+                                              icon: Icons.check_circle_rounded,
+                                              title: transaction.type ==
+                                                      TransactionSpecialType
+                                                          .credit
+                                                  ? "Recieve?"
+                                                  : transaction.type ==
+                                                          TransactionSpecialType
+                                                              .debt
+                                                      ? "Pay?"
+                                                      : transaction.income
+                                                          ? "Deposit?"
+                                                          : "Pay?",
+                                              description: transaction.type ==
+                                                      TransactionSpecialType
+                                                          .credit
+                                                  ? "Have you recieved the lent amount?"
+                                                  : transaction.type ==
+                                                          TransactionSpecialType
+                                                              .debt
+                                                      ? "Have you paid your debt?"
+                                                      : transaction.income
+                                                          ? "Deposit this amount?"
+                                                          : "Add payment on this transaction?",
                                               onCancelLabel: "Cancel",
                                               onCancel: () {
                                                 Navigator.pop(context);
                                               },
-                                              onExtraLabel: "Skip",
+                                              onExtraLabel: [
+                                                TransactionSpecialType.credit,
+                                                TransactionSpecialType.debt
+                                              ].contains(transaction.type)
+                                                  ? null
+                                                  : "Skip",
                                               onExtra: () async {
                                                 Navigator.pop(context);
                                                 Transaction transactionNew =

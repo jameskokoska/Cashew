@@ -75,7 +75,10 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       text: widget.label,
       fontSize: widget.fontSize,
       textColor: widget.textColor ??
-          Theme.of(context).colorScheme.onSecondaryContainer,
+          (appStateSettings["materialYou"]
+              ? dynamicPastel(context, Theme.of(context).colorScheme.onPrimary,
+                  amount: 0.3)
+              : Theme.of(context).colorScheme.onSecondaryContainer),
       maxLines: 5,
       textAlign: TextAlign.center,
     );

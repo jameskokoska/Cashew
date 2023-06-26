@@ -115,7 +115,7 @@ Future<T?> openPopup<T extends Object?>(
                         Theme.of(context).colorScheme.secondaryContainer,
                         amount: 0.5)
                     : getColor(context, "lightDarkAccent"),
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(25),
                 boxShadow: boxShadowGeneral(context),
               ),
               child: SingleChildScrollView(
@@ -172,7 +172,10 @@ Future<T?> openPopup<T extends Object?>(
                                           child: Button(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .secondaryContainer,
+                                                .tertiaryContainer,
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .onTertiaryContainer,
                                             label: onCancelLabel,
                                             onTap: onCancel ?? () {},
                                           ),
@@ -189,6 +192,9 @@ Future<T?> openPopup<T extends Object?>(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .secondaryContainer,
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer,
                                             label: onExtraLabel,
                                             onTap: onExtra ?? () {},
                                           ),
@@ -203,7 +209,10 @@ Future<T?> openPopup<T extends Object?>(
                                           child: Button(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .tertiaryContainer,
+                                                .secondaryContainer,
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer,
                                             label: onSubmitLabel,
                                             onTap: onSubmit ?? () {},
                                           ),
@@ -219,7 +228,10 @@ Future<T?> openPopup<T extends Object?>(
                                             expandedLayout: true,
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .secondaryContainer,
+                                                .tertiaryContainer,
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .onTertiaryContainer,
                                             label: onExtraLabel2,
                                             onTap: onExtra2 ?? () {},
                                           ),

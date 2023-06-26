@@ -139,6 +139,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                                             ? 0.2
                                             : 0.7)
                                     : null,
+                                textColor: selectedType !=
+                                        SelectedSubscriptionsType.monthly
+                                    ? getColor(context, "black")
+                                        .withOpacity(0.5)
+                                    : getColor(context, "black"),
                                 label: "Monthly",
                                 onTap: () => setState(() {
                                   selectedType =
@@ -169,6 +174,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                                             ? 0.2
                                             : 0.7)
                                     : null,
+                                textColor: selectedType !=
+                                        SelectedSubscriptionsType.yearly
+                                    ? getColor(context, "black")
+                                        .withOpacity(0.5)
+                                    : getColor(context, "black"),
                                 label: "Yearly",
                                 onTap: () => setState(() {
                                   selectedType =
@@ -199,6 +209,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                                             ? 0.2
                                             : 0.7)
                                     : null,
+                                textColor: selectedType !=
+                                        SelectedSubscriptionsType.total
+                                    ? getColor(context, "black")
+                                        .withOpacity(0.5)
+                                    : getColor(context, "black"),
                                 label: "Total",
                                 onTap: () => setState(() {
                                   selectedType =

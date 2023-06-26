@@ -26,7 +26,7 @@ class HomePageCreditDebts extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TransactionsAmountBox(
-                      label: "Credit",
+                      label: "Lent",
                       amountStream: database.watchTotalOfCreditDebt(
                         Provider.of<AllWallets>(context),
                         true,
@@ -39,7 +39,7 @@ class HomePageCreditDebts extends StatelessWidget {
                   SizedBox(width: 13),
                   Expanded(
                     child: TransactionsAmountBox(
-                      label: "Debt",
+                      label: "Borrowed",
                       amountStream: database.watchTotalOfCreditDebt(
                         Provider.of<AllWallets>(context),
                         false,

@@ -450,6 +450,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         );
                       },
                       color: Theme.of(context).colorScheme.secondaryContainer,
+                      textColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                   ),
             SizedBox(height: 23),

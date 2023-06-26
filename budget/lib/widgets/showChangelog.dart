@@ -8,12 +8,14 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
-  String version = "3.2.2";
-  String buildNumber = packageInfoGlobal.buildNumber;
-  int versionInt = parseVersionInt(version);
-  int lastLoginVersionInt =
-      parseVersionInt(appStateSettings["lastLoginVersion"]);
   String changelog = """
+    < 3.3.2
+    Fixed button label colors
+    Budget container background follows theme of budget
+    Fixed adding shared transactions would tink it was income
+    Placeholder when percent is 0 for category spending goals
+    Debts and credit renamed to Lent and Borrowed
+    Upcoming and overdue transaction page total centered
     < 3.3.1
     Fixed select chips scroll to selected when small index on non-scrollable list
     Changelog hidden on first launch
@@ -609,6 +611,13 @@ Future<void> showChangelog(context, {forceShow = false}) async {
 
     All past changes will go here, to prevent clutter.
 end""";
+
+  String version = packageInfoGlobal.version;
+  String buildNumber = packageInfoGlobal.buildNumber;
+  int versionInt = parseVersionInt(version);
+  int lastLoginVersionInt =
+      parseVersionInt(appStateSettings["lastLoginVersion"]);
+
   if (forceShow || appStateSettings["lastLoginVersion"] != version) {
     List<Widget> changelogPoints = [];
     int versionBookmark = versionInt;

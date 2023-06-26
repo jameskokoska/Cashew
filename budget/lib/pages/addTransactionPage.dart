@@ -43,14 +43,14 @@ dynamic transactionTypeDisplayToEnum = {
   "Upcoming": TransactionSpecialType.upcoming,
   "Subscription": TransactionSpecialType.subscription,
   "Repetitive": TransactionSpecialType.repetitive,
-  "Debt": TransactionSpecialType.debt,
-  "Credit": TransactionSpecialType.credit,
+  "Borrowed": TransactionSpecialType.debt,
+  "Lent": TransactionSpecialType.credit,
   null: "Default",
   TransactionSpecialType.upcoming: "Upcoming",
   TransactionSpecialType.subscription: "Subscription",
   TransactionSpecialType.repetitive: "Repetitive",
-  TransactionSpecialType.debt: "Debt",
-  TransactionSpecialType.credit: "Credit",
+  TransactionSpecialType.debt: "Lent",
+  TransactionSpecialType.credit: "Borrowed",
 };
 
 class AddTransactionPage extends StatefulWidget {
@@ -333,13 +333,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   Future<bool> addTransaction() async {
     print("Added transaction");
 
-    if (selectedBudgetPk != null) {
+    if (selectedIncome == true && selectedBudgetPk != null) {
       setSelectedBudgetPk(null);
       showIncomeCannotBeAddedToBudgetWarning();
     }
 
-    if (selectedType == TransactionSpecialType.credit ||
-        selectedType == TransactionSpecialType.debt) {
+    if (selectedType == TransactionSpecialType.credit) {
+      selectedIncome = true;
+      setSelectedBudgetPk(null);
+    } else if (selectedType == TransactionSpecialType.debt) {
       selectedIncome = false;
       setSelectedBudgetPk(null);
     }

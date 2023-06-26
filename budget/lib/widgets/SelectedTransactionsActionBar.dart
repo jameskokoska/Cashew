@@ -530,6 +530,8 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                       );
                     },
                     color: Theme.of(context).colorScheme.tertiaryContainer,
+                    textColor:
+                        Theme.of(context).colorScheme.onTertiaryContainer,
                   )
           ],
         )

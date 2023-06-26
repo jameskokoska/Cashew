@@ -3190,8 +3190,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where(transactions.income.equals(false) &
-            transactions.skipPaid.equals(false) &
+        ..where(transactions.skipPaid.equals(false) &
             transactions.paid.equals(false) &
             transactions.walletFk.equals(wallet.walletPk) &
             (isCredit

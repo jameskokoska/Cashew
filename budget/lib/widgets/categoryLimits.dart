@@ -259,9 +259,12 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                   ? convertToMoney(
                       Provider.of<AllWallets>(context), selectedAmount)
                   : convertToPercent(selectedAmount),
-              placeholder: convertToMoney(Provider.of<AllWallets>(context), 0),
-              showPlaceHolderWhenTextEquals:
-                  convertToMoney(Provider.of<AllWallets>(context), 0),
+              placeholder: widget.isAbsoluteSpendingLimit
+                  ? convertToMoney(Provider.of<AllWallets>(context), 0)
+                  : convertToPercent(0),
+              showPlaceHolderWhenTextEquals: widget.isAbsoluteSpendingLimit
+                  ? convertToMoney(Provider.of<AllWallets>(context), 0)
+                  : convertToPercent(0),
               onTap: () {
                 enterCategoryLimitPopup(
                   context,
