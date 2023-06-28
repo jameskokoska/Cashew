@@ -66,7 +66,6 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: widget.title,
-        navbar: false,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
@@ -234,7 +233,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
             },
           ),
           SliverToBoxAdapter(
-            child: SizedBox(height: 85),
+            child: SizedBox(height: 75),
           ),
         ],
       ),

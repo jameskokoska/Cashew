@@ -43,7 +43,7 @@ Future<bool> initializeSettings() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();
 
   // Do some actions based on loaded settings
-  if (Platform.isIOS == false &&
+  if (getPlatform() != PlatformOS.isIOS &&
       appStateSettings["accentSystemColor"] == true) {
     await SystemTheme.accentColor.load();
     Color accentColor = SystemTheme.accentColor.accent;

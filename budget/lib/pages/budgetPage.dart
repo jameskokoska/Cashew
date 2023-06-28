@@ -229,7 +229,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             appBarBackgroundColor: budgetColorScheme.secondaryContainer,
             appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
             textColor: getColor(context, "black"),
-            navbar: false,
             dragDownToDismiss: true,
             dragDownToDissmissBackground: budgetColorScheme.secondaryContainer,
             slivers: [
@@ -322,7 +321,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.only(
-                                    top: 20,
+                                    top: 10,
                                     bottom: 22,
                                     left: 22,
                                     right: 22,
@@ -334,6 +333,16 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   ),
                                   child: Column(
                                     children: [
+                                      Transform.scale(
+                                        alignment: Alignment.bottomCenter,
+                                        scale: 1500,
+                                        child: Container(
+                                          height: 10,
+                                          width: 100,
+                                          color: budgetColorScheme
+                                              .secondaryContainer,
+                                        ),
+                                      ),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
                                           horizontal:

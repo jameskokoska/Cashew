@@ -33,19 +33,19 @@ class LowKeyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tappable(
       color: appStateSettings["materialYou"]
-          ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5)
+          ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
           : getColor(context, "lightDarkAccent"),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: TextFont(
           text: text,
           textAlign: TextAlign.center,
-          fontSize: 16,
+          fontSize: 14,
           textColor: getColor(context, "textLight"),
         ),
       ),
       onTap: onTap,
-      borderRadius: 10,
+      borderRadius: 13,
     );
   }
 }

@@ -23,7 +23,6 @@ class AboutPage extends StatelessWidget {
     return PageFramework(
       dragDownToDismiss: true,
       title: "About",
-      navbar: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
@@ -95,7 +94,9 @@ class AboutPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
           child: Tappable(
-            onTap: () {},
+            onTap: () {
+              openUrl('mailto:dapperappdeveloper@gmail.com');
+            },
             color: getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(

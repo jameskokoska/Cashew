@@ -17,6 +17,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     required this.onSwitched,
     this.verticalPadding,
     this.syncWithInitialValue = true,
+    this.onLongPress,
     Key? key,
   }) : super(key: key);
 
@@ -28,6 +29,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final Function(bool) onSwitched;
   final double? verticalPadding;
   final bool syncWithInitialValue;
+  final VoidCallback? onLongPress;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -79,6 +81,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       duration: Duration(milliseconds: 300),
       opacity: waiting ? 0.5 : 1,
       child: SettingsContainer(
+        onLongPress: widget.onLongPress,
         onTap: () => {toggleSwitch()},
         title: widget.title,
         description: description,
@@ -215,6 +218,7 @@ class SettingsContainerOutlined extends StatelessWidget {
     this.icon,
     this.afterWidget,
     this.onTap,
+    this.onLongPress,
     this.verticalPadding,
     this.iconSize,
     this.isExpanded = true,
@@ -225,6 +229,7 @@ class SettingsContainerOutlined extends StatelessWidget {
   final IconData? icon;
   final Widget? afterWidget;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final double? verticalPadding;
   final double? iconSize;
   final bool isExpanded;
@@ -265,6 +270,7 @@ class SettingsContainerOutlined extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
       child: Tappable(
+        onLongPress: onLongPress,
         color: Colors.transparent,
         onTap: onTap,
         borderRadius: 10,
@@ -328,6 +334,7 @@ class SettingsContainer extends StatelessWidget {
     this.icon,
     this.afterWidget,
     this.onTap,
+    this.onLongPress,
     this.verticalPadding,
     this.iconSize,
     this.isOutlined,
@@ -338,6 +345,7 @@ class SettingsContainer extends StatelessWidget {
   final IconData? icon;
   final Widget? afterWidget;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final double? verticalPadding;
   final double? iconSize;
   final bool? isOutlined;
@@ -352,6 +360,7 @@ class SettingsContainer extends StatelessWidget {
             icon: icon,
             iconSize: iconSize,
             onTap: onTap,
+            onLongPress: onLongPress,
             verticalPadding: verticalPadding,
           )
         : Padding(
@@ -359,6 +368,7 @@ class SettingsContainer extends StatelessWidget {
             child: Tappable(
               color: Colors.transparent,
               onTap: onTap,
+              onLongPress: onLongPress,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,

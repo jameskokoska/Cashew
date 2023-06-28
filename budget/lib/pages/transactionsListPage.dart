@@ -523,8 +523,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                   100 / 2;
                               monthSelectorStateKey.currentState?.scrollTo(
                                   middle + (pageOffset - 1) * 100 + 100);
-                              transactionsListPageStateKey.currentState!
-                                  .scrollToTop();
+                              // transactionsListPageStateKey.currentState!
+                              //     .scrollToTop();
                             },
                             itemBuilder: (BuildContext context, int index) {
                               final int pageOffset =
@@ -561,15 +561,17 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                           ),
                                         ),
                                       ),
+
                                       // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-                                      // SliverToBoxAdapter(
-                                      //   child: Container(
-                                      //     height: 90,
-                                      //     color: Theme.of(context)
-                                      //         .colorScheme
-                                      //         .background,
-                                      //   ),
-                                      // ),
+                                      SliverToBoxAdapter(
+                                        child: SizedBox(
+                                          height: 90 +
+                                              MediaQuery.of(context)
+                                                      .padding
+                                                      .bottom /
+                                                  4,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

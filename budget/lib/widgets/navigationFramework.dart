@@ -33,6 +33,7 @@ import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/util/upcomingTransactionsFunctions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -132,6 +133,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           appStateSettings["submittedFeedback"] != true) {
         openBottomSheet(context, RatingPopup());
       }
+      await markSubscriptionsAsPaid();
       runNotificationPayLoads(context);
       await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);

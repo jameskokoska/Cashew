@@ -188,6 +188,10 @@ getWeekDay(int currentWeekDay) {
   return weekDays[currentWeekDay];
 }
 
+getWordedTime(DateTime dateTime) {
+  return DateFormat.jm().format(dateTime);
+}
+
 checkYesterdayTodayTomorrow(DateTime date) {
   DateTime now = DateTime.now();
   if (date.day == now.day && date.month == now.month && date.year == now.year) {
@@ -552,9 +556,9 @@ IconData getTransactionTypeIcon(TransactionSpecialType? selectedType) {
   } else if (selectedType == TransactionSpecialType.repetitive) {
     return Icons.repeat_rounded;
   } else if (selectedType == TransactionSpecialType.debt) {
-    return Icons.unarchive_rounded;
-  } else if (selectedType == TransactionSpecialType.credit) {
     return Icons.archive_rounded;
+  } else if (selectedType == TransactionSpecialType.credit) {
+    return Icons.unarchive_rounded;
   }
   return Icons.event_repeat_rounded;
 }

@@ -60,14 +60,13 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                   tooltip: "Add Subscription",
                   openPage: AddTransactionPage(
                     title: "Add Transaction",
-                    subscription: true,
+                    selectedType: TransactionSpecialType.subscription,
                   ),
                 ),
               ),
             ),
             dragDownToDismiss: true,
             title: "Subscriptions",
-            navbar: false,
             appBarBackgroundColor:
                 Theme.of(context).colorScheme.secondaryContainer,
             appBarBackgroundColorStart: Theme.of(context).canvasColor,
@@ -80,7 +79,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       StreamBuilder<List<Transaction>>(
-                        stream: database.watchAllSubscriptions(),
+                        stream: database.getAllSubscriptions().$1,
                         builder: (context, snapshot) {
                           double total = getTotalSubscriptions(
                               Provider.of<AllWallets>(context),
@@ -238,7 +237,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 child: SizedBox(height: 45),
               ),
               StreamBuilder<List<Transaction>>(
-                stream: database.watchAllSubscriptions(),
+                stream: database.getAllSubscriptions().$1,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0) {
@@ -281,11 +280,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                   }
                 },
               ),
-              // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-              SliverToBoxAdapter(
-                child:
-                    Container(height: 70, color: Theme.of(context).canvasColor),
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: 55)),
             ],
           ),
           SelectedTransactionsActionBar(

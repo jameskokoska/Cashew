@@ -127,22 +127,23 @@ class _CountNumberState extends State<CountNumber> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      setState(() {
-        int currentSelectedDecimals =
-            Provider.of<AllWallets>(context, listen: false)
-                    .indexedByPk[appStateSettings["selectedWallet"]]
-                    ?.decimals ??
-                2;
-        finalDecimalPlaces = ((widget.decimals ?? currentSelectedDecimals) > 2
-            ? widget.count.toString().split('.')[1].length <
-                    (widget.decimals ?? currentSelectedDecimals)
-                ? widget.count.toString().split('.')[1].length
-                : (widget.decimals ?? currentSelectedDecimals)
-            : (widget.decimals ?? currentSelectedDecimals));
-        previousAmount = widget.initialCount;
-        decimals = finalDecimalPlaces;
-        lazyFirstRender = widget.lazyFirstRender;
-      });
+      if (mounted)
+        setState(() {
+          int currentSelectedDecimals =
+              Provider.of<AllWallets>(context, listen: false)
+                      .indexedByPk[appStateSettings["selectedWallet"]]
+                      ?.decimals ??
+                  2;
+          finalDecimalPlaces = ((widget.decimals ?? currentSelectedDecimals) > 2
+              ? widget.count.toString().split('.')[1].length <
+                      (widget.decimals ?? currentSelectedDecimals)
+                  ? widget.count.toString().split('.')[1].length
+                  : (widget.decimals ?? currentSelectedDecimals)
+              : (widget.decimals ?? currentSelectedDecimals));
+          previousAmount = widget.initialCount;
+          decimals = finalDecimalPlaces;
+          lazyFirstRender = widget.lazyFirstRender;
+        });
     });
   }
 

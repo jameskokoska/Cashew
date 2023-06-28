@@ -58,7 +58,6 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
     return PageFramework(
       dragDownToDismiss: true,
       title: "Auto Transactions",
-      navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       actions: [

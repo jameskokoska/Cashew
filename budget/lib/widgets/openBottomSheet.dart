@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
@@ -97,7 +99,11 @@ Future openBottomSheet(
             state.isExpanded &&
             state.isAtTop &&
             state.currentScrollOffset == 0 &&
-            state.progress == 1) {
+            state.progress == 1 &&
+            ScrollConfiguration.of(context)
+                    .getScrollPhysics(context)
+                    .toString() !=
+                "BouncingScrollPhysics") {
           HapticFeedback.heavyImpact();
         }
       },

@@ -15,6 +15,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/upcomingTransactionsFunctions.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -75,53 +76,6 @@ class TransactionEntry extends StatelessWidget {
 
   final double fabSize = 50;
 
-  createNewSubscriptionTransaction(context, Transaction transaction) async {
-    if (transaction.createdAnotherFutureTransaction == false) {
-      if (transaction.type == TransactionSpecialType.subscription ||
-          transaction.type == TransactionSpecialType.repetitive) {
-        int yearOffset = 0;
-        int monthOffset = 0;
-        int dayOffset = 0;
-        if (transaction.reoccurrence == BudgetReoccurence.yearly) {
-          yearOffset = transaction.periodLength ?? 0;
-        } else if (transaction.reoccurrence == BudgetReoccurence.monthly) {
-          monthOffset = transaction.periodLength ?? 0;
-        } else if (transaction.reoccurrence == BudgetReoccurence.weekly) {
-          dayOffset = (transaction.periodLength ?? 0) * 7;
-        } else if (transaction.reoccurrence == BudgetReoccurence.daily) {
-          dayOffset = transaction.periodLength ?? 0;
-        }
-        DateTime newDate = DateTime(
-          transaction.dateCreated.year + yearOffset,
-          transaction.dateCreated.month + monthOffset,
-          transaction.dateCreated.day + dayOffset,
-        );
-        Transaction newTransaction = transaction.copyWith(
-          paid: false,
-          transactionPk: DateTime.now().millisecondsSinceEpoch,
-          dateCreated: newDate,
-          createdAnotherFutureTransaction: Value(false),
-        );
-        await database.createOrUpdateTransaction(newTransaction);
-
-        openSnackbar(
-          SnackbarMessage(
-            title: "Created New Subscription",
-            description: "On " + getWordedDateShort(newDate),
-            icon: Icons.event_repeat_rounded,
-            onTap: () {
-              pushRoute(
-                context,
-                AddTransactionPage(
-                    title: "Edit Transaction", transaction: newTransaction),
-              );
-            },
-          ),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (globalSelectedID.value[listID ?? "0"] == null) {
@@ -135,16 +89,28 @@ class TransactionEntry extends StatelessWidget {
     //         .contains(transaction.transactionPk);
     //   });
 
-    Color textColor = transaction.paid
-        ? transaction.income == true
-            ? getColor(context, "incomeAmount")
-            : getColor(context, "expenseAmount")
-        : transaction.skipPaid
-            ? getColor(context, "textLight")
-            : transaction.dateCreated.millisecondsSinceEpoch <=
-                    DateTime.now().millisecondsSinceEpoch
+    Color textColor = (transaction.type == TransactionSpecialType.credit ||
+                transaction.type == TransactionSpecialType.debt) &&
+            transaction.paid
+        ? transaction.type == TransactionSpecialType.credit
+            ? getColor(context, "unPaidUpcoming")
+            : transaction.type == TransactionSpecialType.debt
                 ? getColor(context, "unPaidOverdue")
-                : getColor(context, "unPaidUpcoming");
+                : getColor(context, "textLight")
+        : (transaction.type == TransactionSpecialType.credit ||
+                    transaction.type == TransactionSpecialType.debt) &&
+                transaction.paid == false
+            ? getColor(context, "textLight")
+            : transaction.paid
+                ? transaction.income == true
+                    ? getColor(context, "incomeAmount")
+                    : getColor(context, "expenseAmount")
+                : transaction.skipPaid
+                    ? getColor(context, "textLight")
+                    : transaction.dateCreated.millisecondsSinceEpoch <=
+                            DateTime.now().millisecondsSinceEpoch
+                        ? getColor(context, "unPaidOverdue")
+                        : getColor(context, "unPaidUpcoming");
     Color iconColor = dynamicPastel(
         context, Theme.of(context).colorScheme.primary,
         amount: 0.3);
@@ -233,7 +199,7 @@ class TransactionEntry extends StatelessWidget {
                           ),
                           transaction.type != null
                               ? Padding(
-                                  padding: EdgeInsets.only(right: 5),
+                                  padding: EdgeInsets.only(right: 3),
                                   child: Icon(
                                     getTransactionTypeIcon(transaction.type),
                                     color: iconColor,
@@ -300,7 +266,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(
@@ -527,8 +493,14 @@ class TransactionEntry extends StatelessWidget {
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 6, horizontal: 7),
                                             decoration: BoxDecoration(
-                                                color: getColor(
-                                                    context, "lightDarkAccent"),
+                                                color: appStateSettings[
+                                                        "materialYou"]
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                        .withOpacity(0.1)
+                                                    : getColor(context,
+                                                        "lightDarkAccent"),
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(10))),
                                             child: TextFont(
@@ -536,14 +508,14 @@ class TransactionEntry extends StatelessWidget {
                                                       TransactionSpecialType
                                                           .credit
                                                   ? transaction.paid
-                                                      ? "Recieved"
-                                                      : "Recieve?"
+                                                      ? "Collect?"
+                                                      : "Collected"
                                                   : transaction.type ==
                                                           TransactionSpecialType
                                                               .debt
                                                       ? transaction.paid
-                                                          ? "Paid"
-                                                          : "Pay?"
+                                                          ? "Settle?"
+                                                          : "Settled"
                                                       : transaction.income
                                                           ? (transaction.paid
                                                               ? "Deposited"
@@ -563,155 +535,33 @@ class TransactionEntry extends StatelessWidget {
                                           ),
                                         ),
                                         onTap: () {
-                                          if (transaction.paid == true) {
-                                            openPopup(context,
-                                                icon: Icons.unpublished_rounded,
-                                                title: "Remove Payment?",
-                                                description:
-                                                    "Remove the payment on this transaction?",
-                                                onCancelLabel: "Cancel",
-                                                onCancel: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                onSubmitLabel: "Remove",
-                                                onSubmit: () async {
-                                                  Navigator.pop(context);
-                                                  await database
-                                                      .deleteTransaction(
-                                                          transaction
-                                                              .transactionPk);
-                                                  Transaction transactionNew =
-                                                      transaction.copyWith(
-                                                    paid: false,
-                                                    sharedKey: Value(null),
-                                                    transactionOriginalOwnerEmail:
-                                                        Value(null),
-                                                    sharedDateUpdated:
-                                                        Value(null),
-                                                    sharedStatus: Value(null),
-                                                  );
-                                                  await database
-                                                      .createOrUpdateTransaction(
-                                                          transactionNew);
-                                                  setUpcomingNotifications(
-                                                      context);
-                                                });
+                                          if (transaction.paid == false &&
+                                              (transaction.type ==
+                                                      TransactionSpecialType
+                                                          .credit ||
+                                                  transaction.type ==
+                                                      TransactionSpecialType
+                                                          .debt)) {
+                                            openUnpayDebtCreditPopup(
+                                                context, transaction);
+                                          } else if (transaction.paid == true &&
+                                              (transaction.type ==
+                                                      TransactionSpecialType
+                                                          .credit ||
+                                                  transaction.type ==
+                                                      TransactionSpecialType
+                                                          .debt)) {
+                                            openPayDebtCreditPopup(
+                                                context, transaction);
+                                          } else if (transaction.paid == true) {
+                                            openUnpayPopup(
+                                                context, transaction);
                                           } else if (transaction.skipPaid ==
                                               true) {
-                                            openPopup(context,
-                                                icon: Icons.unpublished_rounded,
-                                                title: "Remove Skip?",
-                                                description:
-                                                    "Remove the skipped payment on this transaction?",
-                                                onCancelLabel: "Cancel",
-                                                onCancel: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                onSubmitLabel: "Remove",
-                                                onSubmit: () async {
-                                                  Navigator.pop(context);
-                                                  Transaction transactionNew =
-                                                      transaction.copyWith(
-                                                          skipPaid: false);
-                                                  await database
-                                                      .createOrUpdateTransaction(
-                                                          transactionNew);
-                                                  setUpcomingNotifications(
-                                                      context);
-                                                });
+                                            openRemoveSkipPopup(
+                                                context, transaction);
                                           } else {
-                                            openPopup(
-                                              context,
-                                              icon: Icons.check_circle_rounded,
-                                              title: transaction.type ==
-                                                      TransactionSpecialType
-                                                          .credit
-                                                  ? "Recieve?"
-                                                  : transaction.type ==
-                                                          TransactionSpecialType
-                                                              .debt
-                                                      ? "Pay?"
-                                                      : transaction.income
-                                                          ? "Deposit?"
-                                                          : "Pay?",
-                                              description: transaction.type ==
-                                                      TransactionSpecialType
-                                                          .credit
-                                                  ? "Have you recieved the lent amount?"
-                                                  : transaction.type ==
-                                                          TransactionSpecialType
-                                                              .debt
-                                                      ? "Have you paid your debt?"
-                                                      : transaction.income
-                                                          ? "Deposit this amount?"
-                                                          : "Add payment on this transaction?",
-                                              onCancelLabel: "Cancel",
-                                              onCancel: () {
-                                                Navigator.pop(context);
-                                              },
-                                              onExtraLabel: [
-                                                TransactionSpecialType.credit,
-                                                TransactionSpecialType.debt
-                                              ].contains(transaction.type)
-                                                  ? null
-                                                  : "Skip",
-                                              onExtra: () async {
-                                                Navigator.pop(context);
-                                                Transaction transactionNew =
-                                                    transaction.copyWith(
-                                                  skipPaid: true,
-                                                  dateCreated: DateTime.now(),
-                                                  createdAnotherFutureTransaction:
-                                                      Value(true),
-                                                );
-                                                await database
-                                                    .createOrUpdateTransaction(
-                                                        transactionNew);
-                                                await createNewSubscriptionTransaction(
-                                                    context, transaction);
-                                                setUpcomingNotifications(
-                                                    context);
-                                              },
-                                              onSubmitLabel: transaction.income
-                                                  ? "Deposit"
-                                                  : "Pay",
-                                              onSubmit: () async {
-                                                Navigator.pop(context);
-                                                double amount =
-                                                    transaction.amount;
-                                                if (transaction.amount == 0) {
-                                                  amount =
-                                                      await openBottomSheet(
-                                                    context,
-                                                    PopupFramework(
-                                                      title: "Enter Amount",
-                                                      underTitleSpace: false,
-                                                      child: SelectAmount(
-                                                        setSelectedAmount:
-                                                            (_, __) {},
-                                                        nextLabel: "Set Amount",
-                                                        popWithAmount: true,
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                                Transaction transactionNew =
-                                                    transaction.copyWith(
-                                                  amount: amount,
-                                                  paid: !transaction.paid,
-                                                  dateCreated: DateTime.now(),
-                                                  createdAnotherFutureTransaction:
-                                                      Value(true),
-                                                );
-                                                await database
-                                                    .createOrUpdateTransaction(
-                                                        transactionNew);
-                                                await createNewSubscriptionTransaction(
-                                                    context, transaction);
-                                                setUpcomingNotifications(
-                                                    context);
-                                              },
-                                            );
+                                            openPayPopup(context, transaction);
                                           }
                                         },
                                       ),
@@ -786,16 +636,33 @@ class TransactionEntry extends StatelessWidget {
                                         children: [
                                           Transform.translate(
                                             offset: Offset(3, 0),
-                                            child: AnimatedRotation(
+                                            child: AnimatedSize(
+                                              curve: Curves
+                                                  .easeInOutCubicEmphasized,
                                               duration:
-                                                  Duration(milliseconds: 2000),
-                                              curve: ElasticOutCurve(0.5),
-                                              turns:
-                                                  transaction.income ? 0.5 : 0,
-                                              child: Icon(
-                                                Icons.arrow_drop_down_rounded,
-                                                color: textColor,
-                                              ),
+                                                  Duration(milliseconds: 1000),
+                                              child: (transaction.type ==
+                                                              TransactionSpecialType
+                                                                  .credit ||
+                                                          transaction.type ==
+                                                              TransactionSpecialType
+                                                                  .debt) &&
+                                                      transaction.paid == false
+                                                  ? Container(width: 5)
+                                                  : AnimatedRotation(
+                                                      duration: Duration(
+                                                          milliseconds: 2000),
+                                                      curve:
+                                                          ElasticOutCurve(0.5),
+                                                      turns: transaction.income
+                                                          ? 0.5
+                                                          : 0,
+                                                      child: Icon(
+                                                        Icons
+                                                            .arrow_drop_down_rounded,
+                                                        color: textColor,
+                                                      ),
+                                                    ),
                                             ),
                                           ),
                                           TextFont(

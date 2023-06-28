@@ -5,6 +5,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
@@ -15,15 +16,16 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 
-class UpcomingOverdueTransactions extends StatelessWidget {
-  const UpcomingOverdueTransactions(
-      {required this.overdueTransactions, super.key});
-  final bool overdueTransactions;
+class CreditDebtTransactions extends StatelessWidget {
+  const CreditDebtTransactions({required this.isCredit, super.key});
+  final bool isCredit;
 
   @override
   Widget build(BuildContext context) {
-    String pageId = overdueTransactions ? "Overdue" : "Upcoming";
+    String pageId = isCredit ? "Credit" : "Debt";
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -37,9 +39,23 @@ class UpcomingOverdueTransactions extends StatelessWidget {
       child: Stack(
         children: [
           PageFramework(
+            floatingActionButton: AnimateFABDelayed(
+              fab: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                child: FAB(
+                  tooltip: isCredit ? "Add Credit" : "Add Debt",
+                  openPage: AddTransactionPage(
+                    title: "Add Transaction",
+                    selectedType: isCredit
+                        ? TransactionSpecialType.credit
+                        : TransactionSpecialType.debt,
+                  ),
+                ),
+              ),
+            ),
             listID: pageId,
-            navbar: false,
-            title: overdueTransactions ? "Overdue" : "Upcoming",
+            title: isCredit ? "Lent" : "Borrowed",
             dragDownToDismiss: true,
             slivers: [
               SliverToBoxAdapter(
@@ -49,9 +65,9 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                   children: [
                     SizedBox(height: 20),
                     StreamBuilder<double?>(
-                      stream: database.watchTotalOfUpcomingOverdue(
+                      stream: database.watchTotalOfCreditDebt(
                         Provider.of<AllWallets>(context),
-                        overdueTransactions,
+                        isCredit,
                       ),
                       builder: (context, snapshot) {
                         return CountNumber(
@@ -71,9 +87,9 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                                       ? 0
                                       : (snapshot.data ?? 0).abs()),
                               fontSize: 30,
-                              textColor: overdueTransactions
-                                  ? getColor(context, "unPaidOverdue")
-                                  : getColor(context, "unPaidUpcoming"),
+                              textColor: isCredit
+                                  ? getColor(context, "unPaidUpcoming")
+                                  : getColor(context, "unPaidOverdue"),
                               fontWeight: FontWeight.bold,
                             );
                           },
@@ -82,9 +98,7 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     StreamBuilder<List<int?>>(
-                      stream: overdueTransactions
-                          ? database.watchCountOfOverdue()
-                          : database.watchCountOfUpcoming(),
+                      stream: database.watchCountOfCreditDebt(isCredit),
                       builder: (context, snapshot) {
                         return TextFont(
                           text: snapshot.hasData == false ||
@@ -106,9 +120,8 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                 child: SizedBox(height: 20),
               ),
               StreamBuilder<List<Transaction>>(
-                stream: overdueTransactions
-                    ? database.watchAllOverdueTransactions()
-                    : database.watchAllUpcomingTransactions(),
+                stream:
+                    database.watchAllCreditDebtTransactions(isCredit, false),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0) {
@@ -116,35 +129,39 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                         child: Center(
                           child: NoResults(
                             message: "No " +
-                                (overdueTransactions ? "overdue" : "upcoming") +
+                                (isCredit ? "credit" : "debt") +
                                 " transactions.",
                           ),
                         ),
                       );
                     }
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          Transaction transaction = snapshot.data![index];
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              UpcomingTransactionDateHeader(
-                                  transaction: transaction),
-                              TransactionEntry(
-                                openPage: AddTransactionPage(
-                                  title: "Edit Transaction",
-                                  transaction: transaction,
-                                ),
-                                transaction: transaction,
-                                listID: pageId,
-                              ),
-                              SizedBox(height: 12),
-                            ],
-                          );
-                        },
-                        childCount: snapshot.data?.length,
-                      ),
+
+                    return SliverImplicitlyAnimatedList<Transaction>(
+                      items: snapshot.data!,
+                      areItemsTheSame: (a, b) =>
+                          a.transactionPk == b.transactionPk,
+                      insertDuration: Duration(milliseconds: 500),
+                      removeDuration: Duration(milliseconds: 500),
+                      updateDuration: Duration(milliseconds: 500),
+                      itemBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Transaction item,
+                          int index) {
+                        return SizeFadeTransition(
+                          sizeFraction: 0.7,
+                          curve: Curves.easeInOut,
+                          animation: animation,
+                          child: TransactionEntry(
+                            openPage: AddTransactionPage(
+                              title: "Edit Transaction",
+                              transaction: item,
+                            ),
+                            transaction: item,
+                            listID: pageId,
+                            key: ValueKey(item.transactionPk),
+                          ),
+                        );
+                      },
                     );
                   } else {
                     return SliverToBoxAdapter();

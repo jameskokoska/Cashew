@@ -292,7 +292,6 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       subtitleAlignment: Alignment.bottomLeft,
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
       textColor: getColor(context, "black"),
-      navbar: false,
       dragDownToDismiss: true,
       dragDownToDissmissBackground: Theme.of(context).canvasColor,
       slivers: [

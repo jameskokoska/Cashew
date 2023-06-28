@@ -30,7 +30,7 @@ generateColors() {
       "lightDarkAccentHeavyLight": appStateSettings["materialYou"]
           ? (appStateSettings["batterySaver"]
               ? lightenPastel(HexColor(appStateSettings["accentColor"]),
-                  amount: 0.5)
+                  amount: 0.8)
               : lightenPastel(HexColor(appStateSettings["accentColor"]),
                   amount: 0.92))
           : (appStateSettings["batterySaver"]

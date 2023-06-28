@@ -15,7 +15,6 @@ class PageFramework extends StatefulWidget {
     this.titleWidget,
     this.slivers = const [],
     this.listWidgets,
-    this.navbar = true,
     this.appBarBackgroundColor,
     this.appBarBackgroundColorStart,
     this.backButton = true,
@@ -48,7 +47,6 @@ class PageFramework extends StatefulWidget {
   final Widget? titleWidget;
   final List<Widget> slivers;
   final List<Widget>? listWidgets;
-  final bool navbar;
   final Color? appBarBackgroundColor;
   final bool backButton;
   final Color? appBarBackgroundColorStart;
@@ -265,25 +263,15 @@ class PageFrameworkState extends State<PageFramework>
                         sliver: SliverList(
                           delegate: SliverChildListDelegate([
                             ...widget.listWidgets!,
-                            widget.navbar
-                                ? SizedBox(
-                                    height: 87 +
-                                        MediaQuery.of(context)
-                                            .viewPadding
-                                            .bottom)
-                                : SizedBox(
-                                    height: MediaQuery.of(context)
-                                        .viewPadding
-                                        .bottom),
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).padding.bottom + 15),
                           ]),
                         ),
                       )
                     : SliverToBoxAdapter(
-                        child: widget.navbar
-                            ? SizedBox(
-                                height: 87 +
-                                    MediaQuery.of(context).viewPadding.bottom)
-                            : SizedBox.shrink(),
+                        child: SizedBox(
+                            height: MediaQuery.of(context).padding.bottom + 15),
                       ),
               ],
             ),

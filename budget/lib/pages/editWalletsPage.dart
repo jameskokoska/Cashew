@@ -67,7 +67,6 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: widget.title,
-        navbar: false,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(

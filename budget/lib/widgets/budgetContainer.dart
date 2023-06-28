@@ -336,16 +336,25 @@ class BudgetContainer extends StatelessWidget {
           defaultColor: Theme.of(context).colorScheme.primary),
       brightness: determineBrightnessTheme(context),
     );
+    Color backgroundColor = appStateSettings["materialYou"]
+        ? budget.colour == null
+            ? dynamicPastel(context, HexColor(appStateSettings["accentColor"]),
+                amountDark: 0.8,
+                amountLight: appStateSettings["batterySaver"] ? 0.8 : 0.92)
+            : dynamicPastel(
+                context,
+                budgetColorScheme.secondaryContainer,
+                amountDark: 0.6,
+                amountLight: 0.75,
+              )
+        : getColor(context, "lightDarkAccentHeavyLight");
     return Container(
       decoration: BoxDecoration(
         boxShadow: boxShadowCheck(boxShadowGeneral(context)),
       ),
       child: OpenContainerNavigation(
         borderRadius: 20,
-        closedColor: appStateSettings["materialYou"]
-            ? dynamicPastel(context, budgetColorScheme.secondaryContainer,
-                amountDark: 0.4, amountLight: 0.7)
-            : getColor(context, "lightDarkAccentHeavyLight"),
+        closedColor: backgroundColor,
         button: (openContainer) {
           return Tappable(
             onTap: () {
@@ -364,10 +373,7 @@ class BudgetContainer extends StatelessWidget {
                 : null,
             borderRadius: 20,
             child: widget,
-            color: appStateSettings["materialYou"]
-                ? dynamicPastel(context, budgetColorScheme.secondaryContainer,
-                    amountDark: 0.4, amountLight: 0.7)
-                : getColor(context, "lightDarkAccentHeavyLight"),
+            color: backgroundColor,
           );
         },
         openPage: BudgetPage(

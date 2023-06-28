@@ -64,13 +64,6 @@ enum MethodAdded { email, shared, csv }
 
 enum SharedStatus { waiting, shared, error }
 
-enum SearchFilters {
-  income,
-  expense,
-  paid,
-  unpaid,
-}
-
 class IntListInColumnConverter extends TypeConverter<List<int>, String> {
   const IntListInColumnConverter();
   @override
@@ -195,6 +188,9 @@ class Transactions extends Table {
   BoolColumn get upcomingTransactionNotification =>
       boolean().withDefault(const Constant(true)).nullable()();
   IntColumn get type => intEnum<TransactionSpecialType>().nullable()();
+  // For credit and debts, paid will be true initially, then false when it is received/paid
+  // this is the opposite of what is expected - but taht's because we only want it to count for the totals
+  // until it is recieved/paid off resulting in a net of 0
   BoolColumn get paid => boolean().withDefault(const Constant(false))();
   // If user sets to paid and then un pays it will not create a new transaction
   BoolColumn get createdAnotherFutureTransaction =>
@@ -930,8 +926,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  Stream<List<Transaction>> watchAllSubscriptions(
-      {int? limit, DateTime? startDate, DateTime? endDate}) {
+  (Stream<List<Transaction>>, Future<List<Transaction>>) getAllSubscriptions() {
     final query = select(transactions)
       ..where(
         (transaction) =>
@@ -940,7 +935,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 .equals(TransactionSpecialType.subscription.index) &
             transactions.skipPaid.equals(false),
       );
-    return query.watch();
+    return (query.watch(), query.get());
   }
 
   Stream<List<Transaction>> watchAllUpcomingTransactions(
@@ -2816,7 +2811,12 @@ class FinanceDatabase extends _$FinanceDatabase {
                 false
             ? tbl.sharedReferenceBudgetPk.isNull() | tbl.sharedKey.isNotNull()
             : Constant(true);
-    return memberIncluded & includeShared & includeAdded;
+    // Don't show debt/credit in budgets
+    Expression<bool> hideDebtCredit = budgetTransactionFilters == null
+        ? Constant(true)
+        : tbl.type.isNotValue(TransactionSpecialType.credit.index) &
+            tbl.type.isNotValue(TransactionSpecialType.debt.index);
+    return memberIncluded & includeShared & includeAdded & hideDebtCredit;
     // ? (tbl.sharedReferenceBudgetPk.isNull())
     //             : (sharedTransactionsShow ==
     //                     SharedTransactionsShow.onlyIfNotShared)
@@ -3190,8 +3190,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where(transactions.skipPaid.equals(false) &
-            transactions.paid.equals(false) &
+        ..where(transactions.paid.equals(true) &
             transactions.walletFk.equals(wallet.walletPk) &
             (isCredit
                 ? transactions.type.equals(TransactionSpecialType.credit.index)
@@ -3210,12 +3209,24 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
-      ..where(transactions.skipPaid.equals(false) &
-          transactions.paid.equals(false) &
+      ..where(transactions.paid.equals(true) &
           (isCredit
               ? transactions.type.equals(TransactionSpecialType.credit.index)
               : transactions.type.equals(TransactionSpecialType.debt.index)));
     return query.map((row) => row.read(totalCount)).watch();
+  }
+
+  Stream<List<Transaction>> watchAllCreditDebtTransactions(
+      bool isCredit, bool? isSettled) {
+    final query = select(transactions)
+      ..orderBy([
+        (b) => OrderingTerm.desc(b.paid),
+        (b) => OrderingTerm.asc(b.dateCreated),
+      ])
+      ..where((transaction) => (isCredit
+          ? transactions.type.equals(TransactionSpecialType.credit.index)
+          : transactions.type.equals(TransactionSpecialType.debt.index)));
+    return query.watch();
   }
 
   Stream<List<int?>> watchTotalCountOfTransactionsInWalletInCategory(

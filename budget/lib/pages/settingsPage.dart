@@ -21,6 +21,8 @@ import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/widgets/util/initializeBiometrics.dart';
+import 'package:budget/widgets/util/initializeNotifications.dart';
+import 'package:budget/widgets/util/upcomingTransactionsFunctions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
@@ -65,7 +67,6 @@ class SettingsPageState extends State<SettingsPage>
       key: pageState,
       title: "More Actions",
       backButton: false,
-      navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
@@ -116,10 +117,12 @@ class SettingsPageState extends State<SettingsPage>
             );
           },
           title: "Accent Color",
+          description: "Select a color theme for the interface",
           icon: Icons.color_lens_rounded,
         ),
         SettingsContainerSwitch(
           title: "Material You",
+          description: "Use a colorful expressive interface",
           onSwitched: (value) {
             updateSettings("materialYou", value, updateGlobalState: true);
           },
@@ -145,6 +148,8 @@ class SettingsPageState extends State<SettingsPage>
         SettingsHeader(title: "Preferences"),
         SettingsContainerSwitch(
           title: "Battery Saver",
+          description:
+              "Optimize the UI to increase performance and save battery",
           onSwitched: (value) {
             updateSettings("batterySaver", value,
                 updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
@@ -155,6 +160,7 @@ class SettingsPageState extends State<SettingsPage>
         biometricsAvailable
             ? SettingsContainerSwitch(
                 title: "Require Biometrics",
+                description: "Lock the application with biometrics",
                 onSwitched: (value) async {
                   bool result = await checkBiometrics(
                     checkAlways: true,
@@ -170,7 +176,7 @@ class SettingsPageState extends State<SettingsPage>
               )
             : SizedBox.shrink(),
 
-        SettingsHeader(title: "Automations"),
+        SettingsHeader(title: "Automation"),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
         //   title: "Auto Transactions",
@@ -185,6 +191,22 @@ class SettingsPageState extends State<SettingsPage>
                 icon: Icons.mark_email_unread_rounded,
               )
             : SizedBox.shrink(),
+
+        SettingsContainerSwitch(
+          title: "Pay Subscriptions",
+          description:
+              "Automatically mark a subscription as paid after the due date.",
+          onSwitched: (value) async {
+            if (true) {
+              await markSubscriptionsAsPaid();
+              await setUpcomingNotifications(context);
+            }
+            updateSettings("automaticallyPaySubscriptions", value,
+                updateGlobalState: false);
+          },
+          initialValue: appStateSettings["automaticallyPaySubscriptions"],
+          icon: getTransactionTypeIcon(TransactionSpecialType.subscription),
+        ),
       ],
     );
   }

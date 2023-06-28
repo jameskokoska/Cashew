@@ -277,7 +277,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
           title: widget.title,
-          navbar: false,
           onBackButton: () async {
             if (widget.wallet != null) {
               discardChangesPopup(
@@ -437,7 +436,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 ),
               ]),
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 90)),
+            SliverToBoxAdapter(child: SizedBox(height: 65)),
             // SliverToBoxAdapter(
             //   child: KeyboardHeightAreaAnimated(),
             // ),

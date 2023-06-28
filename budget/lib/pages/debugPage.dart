@@ -28,7 +28,6 @@ class DebugPage extends StatelessWidget {
       subtitleAlignment: Alignment.bottomLeft,
       subtitleAnimationSpeed: 10,
       subtitleSize: 10,
-      navbar: true,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
@@ -128,8 +127,8 @@ class DebugPage extends StatelessWidget {
           icon: Icons.share_rounded,
         ),
         SettingsContainerSwitch(
-          title: "iOS Navigation on Android",
-          description: "Enables swipe to go back",
+          title: "Emulate iOS",
+          description: "Enables iOS like navigation and scroll behaviour",
           onSwitched: (value) {
             updateSettings("iOSNavigation", value,
                 pagesNeedingRefresh: [], updateGlobalState: true);
@@ -139,7 +138,7 @@ class DebugPage extends StatelessWidget {
             // }
           },
           initialValue: appStateSettings["iOSNavigation"],
-          icon: Icons.swipe_rounded,
+          icon: Icons.apple_rounded,
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {

@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
@@ -31,9 +32,10 @@ class HomePageCreditDebts extends StatelessWidget {
                         Provider.of<AllWallets>(context),
                         true,
                       ),
-                      textColor: getColor(context, "incomeAmount"),
+                      textColor: getColor(context, "unPaidUpcoming"),
                       transactionsAmountStream:
                           database.watchCountOfCreditDebt(true),
+                      openPage: CreditDebtTransactions(isCredit: true),
                     ),
                   ),
                   SizedBox(width: 13),
@@ -44,9 +46,10 @@ class HomePageCreditDebts extends StatelessWidget {
                         Provider.of<AllWallets>(context),
                         false,
                       ),
-                      textColor: getColor(context, "expenseAmount"),
+                      textColor: getColor(context, "unPaidOverdue"),
                       transactionsAmountStream:
                           database.watchCountOfCreditDebt(false),
+                      openPage: CreditDebtTransactions(isCredit: false),
                     ),
                   ),
                 ],

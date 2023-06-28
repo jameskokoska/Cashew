@@ -51,7 +51,6 @@ class AccountsPageState extends State<AccountsPage> {
       horizontalPadding: getHorizontalPaddingConstrained(context),
       expandedHeight: 65,
       dragDownToDismiss: true,
-      navbar: false,
       title: "Account and Backup",
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart:

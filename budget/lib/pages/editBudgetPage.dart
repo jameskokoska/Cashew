@@ -67,7 +67,6 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: widget.title,
-        navbar: false,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
@@ -351,7 +350,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
             },
           ),
           SliverToBoxAdapter(
-            child: SizedBox(height: 85),
+            child: SizedBox(height: 75),
           ),
         ],
       ),

@@ -100,7 +100,6 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
             ],
             dragDownToDismiss: true,
             title: widget.wallet == null ? "All Spending" : widget.wallet!.name,
-            navbar: false,
             appBarBackgroundColor:
                 Theme.of(context).colorScheme.secondaryContainer,
             appBarBackgroundColorStart: Theme.of(context).canvasColor,
@@ -197,9 +196,6 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                         ),
                       )),
                     ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: 25),
-              ),
             ],
           ),
           SelectedTransactionsActionBar(
@@ -271,7 +267,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                 category: category.category,
                 totalSpent: totalSpent,
                 transactionCount: category.transactionCount,
-                categorySpent: category.total,
+                categorySpent: category.total.abs(),
                 onTap: () {
                   if (selectedCategoryPk == category.category.categoryPk) {
                     setState(() {

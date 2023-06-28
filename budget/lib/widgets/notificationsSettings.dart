@@ -6,6 +6,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -113,9 +114,6 @@ class _UpcomingTransactionsNotificationsSettingsState
     extends State<UpcomingTransactionsNotificationsSettings> {
   bool notificationsEnabled =
       appStateSettings["notificationsUpcomingTransactions"];
-  TimeOfDay timeOfDay = TimeOfDay(
-      hour: appStateSettings["notificationHourUpcomingTransactions"],
-      minute: appStateSettings["notificationMinuteUpcomingTransactions"]);
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +126,7 @@ class _UpcomingTransactionsNotificationsSettingsState
                 updateGlobalState: false);
             if (value == true) {
               await initializeNotificationsPlatform();
-              await scheduleUpcomingTransactionsNotification(
-                  context, timeOfDay);
+              await scheduleUpcomingTransactionsNotification(context);
             } else {
               await cancelUpcomingTransactionsNotification();
             }
@@ -140,45 +137,6 @@ class _UpcomingTransactionsNotificationsSettingsState
           },
           initialValue: appStateSettings["notificationsUpcomingTransactions"],
           icon: Icons.calendar_month_rounded,
-        ),
-        AnimatedSize(
-          duration: Duration(milliseconds: 800),
-          curve: Curves.easeInOutCubicEmphasized,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: notificationsEnabled
-                ? SettingsContainer(
-                    key: ValueKey(1),
-                    title: "Alert Time",
-                    icon: Icons.timer,
-                    onTap: () async {
-                      TimeOfDay? newTime =
-                          await showCustomTimePicker(context, timeOfDay);
-                      if (newTime != null) {
-                        await initializeNotificationsPlatform();
-                        await scheduleUpcomingTransactionsNotification(
-                            context, timeOfDay);
-                        setState(() {
-                          timeOfDay = newTime;
-                        });
-                        updateSettings(
-                          "notificationHourUpcomingTransactions",
-                          timeOfDay.hour,
-                          pagesNeedingRefresh: [],
-                          updateGlobalState: false,
-                        );
-                        updateSettings(
-                          "notificationMinuteUpcomingTransactions",
-                          timeOfDay.minute,
-                          pagesNeedingRefresh: [],
-                          updateGlobalState: false,
-                        );
-                      }
-                    },
-                    afterWidget: TimeDigits(timeOfDay: timeOfDay),
-                  )
-                : Container(),
-          ),
         ),
         IgnorePointer(
           ignoring: !notificationsEnabled,
@@ -203,8 +161,21 @@ class _UpcomingTransactionsNotificationsSettingsState
                         children: [
                           for (Transaction transaction in snapshot.data!)
                             SettingsContainerSwitch(
+                              onLongPress: () {
+                                pushRoute(
+                                  context,
+                                  AddTransactionPage(
+                                    title: "Edit Transaction",
+                                    transaction: transaction,
+                                  ),
+                                );
+                              },
                               icon: getTransactionTypeIcon(transaction.type),
                               title: transaction.name,
+                              description: getWordedDateShortMore(
+                                      transaction.dateCreated) +
+                                  ", " +
+                                  getWordedTime(transaction.dateCreated),
                               onSwitched: (value) async {
                                 await database.createOrUpdateTransaction(
                                     transaction.copyWith(
@@ -212,7 +183,7 @@ class _UpcomingTransactionsNotificationsSettingsState
                                             Value(value)));
                                 await initializeNotificationsPlatform();
                                 await scheduleUpcomingTransactionsNotification(
-                                    context, timeOfDay);
+                                    context);
                                 return;
                               },
                               syncWithInitialValue: false,
@@ -319,8 +290,7 @@ Future<bool> cancelDailyNotification() async {
   return true;
 }
 
-Future<bool> scheduleUpcomingTransactionsNotification(
-    context, TimeOfDay timeOfDay) async {
+Future<bool> scheduleUpcomingTransactionsNotification(context) async {
   await cancelUpcomingTransactionsNotification();
 
   AndroidNotificationDetails androidNotificationDetails =
@@ -348,9 +318,10 @@ Future<bool> scheduleUpcomingTransactionsNotification(
     if (upcomingTransaction.dateCreated.year == DateTime.now().year &&
         upcomingTransaction.dateCreated.month == DateTime.now().month &&
         upcomingTransaction.dateCreated.day == DateTime.now().day &&
-        (timeOfDay.hour < DateTime.now().hour ||
-            (timeOfDay.hour == DateTime.now().hour &&
-                timeOfDay.minute <= DateTime.now().minute))) {
+        (upcomingTransaction.dateCreated.hour < DateTime.now().hour ||
+            (upcomingTransaction.dateCreated.hour == DateTime.now().hour &&
+                upcomingTransaction.dateCreated.minute <=
+                    DateTime.now().minute))) {
       continue;
     }
     String chosenMessage = upcomingTransaction.name;
@@ -359,8 +330,8 @@ Future<bool> scheduleUpcomingTransactionsNotification(
       upcomingTransaction.dateCreated.year,
       upcomingTransaction.dateCreated.month,
       upcomingTransaction.dateCreated.day,
-      timeOfDay.hour,
-      timeOfDay.minute,
+      upcomingTransaction.dateCreated.hour,
+      upcomingTransaction.dateCreated.minute,
     );
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);

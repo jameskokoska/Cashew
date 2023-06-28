@@ -9,6 +9,20 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.3.3
+    Started search filters - they can be selected properly
+    Added descriptions to settings
+    Colorful NoResults when Material You disabled
+    Disabled scroll to top when swiping through months on transactions page
+    Disabled vibration when full screen bottom sheet on bouncing scroll physics
+    Added bottom padding to each page w.r.t. safe area
+    Added add transaction FAB to search page
+    Added setting to mark subscriptions as paid automatically
+    iOS scroll physics when swiping page down to dismiss budget page shows proper color
+    Lent and borrowed transactions pages complete
+    Upcoming transactions notifications follow the time of the transaction
+    Fixed category icon percentages on wallet details page
+    Fixed income warning when adding to specific budget
     < 3.3.2
     Fixed button label colors
     Budget container background follows theme of budget

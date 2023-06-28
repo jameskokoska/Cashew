@@ -64,7 +64,6 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: widget.title,
-        navbar: false,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(

@@ -86,7 +86,7 @@ class PopupFramework extends StatelessWidget {
                         : EdgeInsets.zero,
                     child: child,
                   ),
-                  Container(height: 10),
+                  Container(height: 10 + MediaQuery.of(context).padding.bottom),
                 ],
               ),
             ),

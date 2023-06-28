@@ -409,7 +409,6 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
               PageFramework(
                 dragDownToDismiss: true,
                 title: widget.title,
-                navbar: false,
                 onBackButton: () async {
                   if (widget.scannerTemplate != null) {
                     discardChangesPopup(

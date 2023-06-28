@@ -91,11 +91,7 @@ Future<void> setUpcomingNotifications(context) async {
   if (kIsWeb) return;
   bool upcomingTransactionsNotificationsEnabled =
       appStateSettings["notificationsUpcomingTransactions"];
-  TimeOfDay upcomingTransactionsTimeOfDay = TimeOfDay(
-      hour: appStateSettings["notificationHourUpcomingTransactions"],
-      minute: appStateSettings["notificationMinuteUpcomingTransactions"]);
   if (upcomingTransactionsNotificationsEnabled) {
-    await scheduleUpcomingTransactionsNotification(
-        context, upcomingTransactionsTimeOfDay);
+    await scheduleUpcomingTransactionsNotification(context);
   }
 }

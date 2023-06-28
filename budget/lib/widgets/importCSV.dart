@@ -458,6 +458,7 @@ class _ImportCSVState extends State<ImportCSV> {
             await _chooseBackupFile();
           },
           title: "Import CSV File",
+          description: "Import an external CSV data source",
           icon: Icons.file_open_rounded,
         ),
       ],

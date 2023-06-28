@@ -238,7 +238,6 @@ class _EditHomePageState extends State<EditHomePage> {
       horizontalPadding: getHorizontalPaddingConstrained(context),
       dragDownToDismiss: true,
       dragDownToDismissEnabled: dragDownToDismissEnabled,
-      navbar: false,
       title: "Edit Home",
       slivers: [
         SliverReorderableList(

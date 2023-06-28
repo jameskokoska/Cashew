@@ -37,30 +37,37 @@ class NoResults extends StatelessWidget {
                           ? 400
                           : MediaQuery.of(context).size.height * 0.4
                       : 270),
-              child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  !appStateSettings["materialYou"]
-                      ? getColor(context, "black").withOpacity(0.1)
-                      : tintColor == null
-                          ? Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.7)
-                          : tintColor!.withOpacity(0.7),
-                  BlendMode.srcATop,
-                ),
-                child: ColorFiltered(
-                  colorFilter: greyScale,
-                  child: Opacity(
-                    opacity: 1,
-                    child: Image(
+              child: appStateSettings["materialYou"]
+                  ? ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        !appStateSettings["materialYou"]
+                            ? getColor(context, "black").withOpacity(0.1)
+                            : tintColor == null
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.7)
+                                : tintColor!.withOpacity(0.7),
+                        BlendMode.srcATop,
+                      ),
+                      child: ColorFiltered(
+                        colorFilter: greyScale,
+                        child: Opacity(
+                          opacity: 1,
+                          child: Image(
+                            image: noSearchResultsVariation
+                                ? AssetImage(
+                                    "assets/images/no-search-filter.png")
+                                : AssetImage("assets/images/empty-filter.png"),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Image(
                       image: noSearchResultsVariation
-                          ? AssetImage("assets/images/no-search-filter.png")
-                          : AssetImage("assets/images/empty-filter.png"),
+                          ? AssetImage("assets/images/no-search.png")
+                          : AssetImage("assets/images/empty.png"),
                     ),
-                  ),
-                ),
-              ),
             ),
             SizedBox(height: 30),
             TextFont(

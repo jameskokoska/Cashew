@@ -221,7 +221,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
           title: widget.title,
-          navbar: false,
           onBackButton: () async {
             if (widget.category != null) {
               discardChangesPopup(context,

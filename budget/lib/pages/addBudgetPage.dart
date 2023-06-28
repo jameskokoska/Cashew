@@ -450,7 +450,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
           title: widget.title,
-          navbar: false,
           onBackButton: () async {
             if (widget.budget != null) {
               discardChangesPopupIfBudgetPassed();

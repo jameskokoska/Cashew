@@ -49,8 +49,8 @@ dynamic transactionTypeDisplayToEnum = {
   TransactionSpecialType.upcoming: "Upcoming",
   TransactionSpecialType.subscription: "Subscription",
   TransactionSpecialType.repetitive: "Repetitive",
-  TransactionSpecialType.debt: "Lent",
-  TransactionSpecialType.credit: "Borrowed",
+  TransactionSpecialType.debt: "Borrowed",
+  TransactionSpecialType.credit: "Lent",
 };
 
 class AddTransactionPage extends StatefulWidget {
@@ -58,15 +58,15 @@ class AddTransactionPage extends StatefulWidget {
     Key? key,
     required this.title,
     this.transaction,
-    this.subscription,
     this.selectedBudget,
+    this.selectedType,
   }) : super(key: key);
   final String title;
 
   //When a transaction is passed in, we are editing that transaction
   final Transaction? transaction;
-  final bool? subscription;
   final Budget? selectedBudget;
+  final TransactionSpecialType? selectedType;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -203,9 +203,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedType = transactionTypeDisplayToEnum[type];
       selectedTypeDisplay = type;
     });
-    if (selectedType == TransactionSpecialType.credit ||
-        selectedType == TransactionSpecialType.debt) {
+    if (selectedType == TransactionSpecialType.credit) {
       selectedIncome = false;
+      setSelectedBudgetPk(null);
+    } else if (selectedType == TransactionSpecialType.debt) {
+      selectedIncome = true;
       setSelectedBudgetPk(null);
     }
     return;
@@ -302,7 +304,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   void setSelectedIncome(bool value) {
-    if (selectedBudgetPk != null) {
+    if (selectedBudgetPk != null && value == true) {
       setSelectedBudgetPk(null);
       showIncomeCannotBeAddedToBudgetWarning();
     }
@@ -339,10 +341,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
 
     if (selectedType == TransactionSpecialType.credit) {
-      selectedIncome = true;
+      selectedIncome = false;
       setSelectedBudgetPk(null);
     } else if (selectedType == TransactionSpecialType.debt) {
-      selectedIncome = false;
+      selectedIncome = true;
       setSelectedBudgetPk(null);
     }
 
@@ -427,6 +429,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       createdTransaction = createdTransaction.copyWith(paid: true);
     }
 
+    if ((createdTransaction.type == TransactionSpecialType.credit ||
+            createdTransaction.type == TransactionSpecialType.debt) &&
+        (widget.transaction == null)) {
+      createdTransaction = createdTransaction.copyWith(paid: true);
+    }
+
     return createdTransaction;
   }
 
@@ -482,9 +490,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         updateInitial();
       });
     } else {
-      if (widget.subscription != null) {
-        selectedTypeDisplay = "Subscription";
-        selectedType = TransactionSpecialType.subscription;
+      if (widget.selectedType != null) {
+        selectedType = widget.selectedType;
+        selectedTypeDisplay = transactionTypeDisplayToEnum[selectedType];
       }
 
       _titleInputController = new TextEditingController();
@@ -782,7 +790,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           resizeToAvoidBottomInset: true,
           title: widget.title,
           dragDownToDismiss: true,
-          navbar: false,
           onBackButton: () async {
             if (widget.transaction != null) {
               discardChangesPopup(
@@ -1285,9 +1292,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             setSelectedType(transactionTypeDisplayToEnum[item]);
                           },
                           getSelected: (item) {
-                            return transactionTypeDisplayToEnum[
-                                    selectedTypeDisplay] ==
-                                item;
+                            return selectedType == item;
                           },
                         ),
                         AnimatedSize(
