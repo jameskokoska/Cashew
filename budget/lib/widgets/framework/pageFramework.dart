@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:budget/functions.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -41,6 +44,7 @@ class PageFramework extends StatefulWidget {
     this.backgroundColor,
     this.resizeToAvoidBottomInset = false,
     this.overlay,
+    this.scrollToTopButton = false,
   }) : super(key: key);
 
   final String title;
@@ -73,6 +77,7 @@ class PageFramework extends StatefulWidget {
   final Color? backgroundColor;
   final bool resizeToAvoidBottomInset;
   final Widget? overlay;
+  final bool scrollToTopButton;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -85,6 +90,11 @@ class PageFrameworkState extends State<PageFramework>
   late AnimationController _animationControllerOpacity;
   late AnimationController _animationController0at50;
   late AnimationController _animationControllerDragY;
+  late AnimationController _scrollToTopAnimationController =
+      AnimationController(
+    vsync: this,
+    duration: Duration(milliseconds: 500),
+  );
   // late AnimationController _animationControllerDragX;
 
   void scrollToTop({duration = 1200}) {
@@ -156,6 +166,13 @@ class PageFrameworkState extends State<PageFramework>
       _animationController0at50.value =
           1 - (_scrollController.offset / (widget.expandedHeight - 65)) * 1.75;
     }
+    if (_scrollController.offset > 400 &&
+        _scrollToTopAnimationController.value == 0) {
+      _scrollToTopAnimationController.forward();
+    } else if (_scrollController.offset < 400 &&
+        _scrollToTopAnimationController.value == 1) {
+      _scrollToTopAnimationController.reverse();
+    }
   }
 
   @override
@@ -165,6 +182,7 @@ class PageFrameworkState extends State<PageFramework>
     _animationController0at50.dispose();
     _animationControllerDragY.dispose();
     // _animationControllerDragX.dispose();
+    _scrollToTopAnimationController.dispose();
 
     _scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -331,7 +349,56 @@ class PageFrameworkState extends State<PageFramework>
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15, right: 15),
-              child: widget.floatingActionButton ?? Container(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  widget.scrollToTopButton
+                      ? AnimatedBuilder(
+                          animation: _scrollToTopAnimationController,
+                          builder: (_, child) {
+                            return IgnorePointer(
+                              ignoring:
+                                  _scrollToTopAnimationController.value <= 0.1,
+                              child: Transform.translate(
+                                offset: Offset(
+                                  0,
+                                  10 *
+                                      (1 -
+                                          CurvedAnimation(
+                                                  parent:
+                                                      _scrollToTopAnimationController,
+                                                  curve: Curves.easeInOut)
+                                              .value),
+                                ),
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: FadeTransition(
+                            opacity: CurvedAnimation(
+                                parent: _scrollToTopAnimationController,
+                                curve: Curves.easeInOut),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 7, bottom: 1),
+                              child: Transform.rotate(
+                                angle: pi / 2,
+                                child: ButtonIcon(
+                                  icon: Icons.chevron_left_rounded,
+                                  onTap: () {
+                                    scrollToTop();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  widget.floatingActionButton ?? Container(),
+                ],
+              ),
             ),
           ),
         ],

@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -34,55 +37,22 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     with TickerProviderStateMixin {
   void refreshState() {
     setState(() {});
-    searchTransaction("");
   }
 
-  DateTime selectedStartDate = DateTime(
-      DateTime.now().year, DateTime.now().month - 6, DateTime.now().day);
-  DateTime selectedEndDate = DateTime.now();
-
-  late Widget transactionWidgets;
   late AnimationController _animationControllerSearch;
-  late List<int> selectedTransactionIDs = [];
-  bool? selectedIncome;
-  String selectedSearch = "";
-
-  onSelected(Transaction transaction, bool selected) {
-    // print(transaction.transactionPk.toString() + " selected!");
-    // print(globalSelectedID["Transactions"]);
-  }
+  final _debouncer = Debouncer(milliseconds: 500);
+  SearchFilters searchFilters = SearchFilters(
+    dateTimeRange: DateTimeRange(
+      start: DateTime(
+          DateTime.now().year, DateTime.now().month - 6, DateTime.now().day),
+      end: DateTime.now(),
+    ),
+  );
 
   @override
   void initState() {
     super.initState();
-    transactionWidgets = getTransactionsSlivers(
-      selectedStartDate,
-      selectedEndDate,
-      onSelected: onSelected,
-      listID: "TransactionsSearch",
-      simpleListRender: true,
-      noResultsMessage: "No transactions found.",
-      noSearchResultsVariation: true,
-    );
     _animationControllerSearch = AnimationController(vsync: this, value: 1);
-  }
-
-  searchTransaction(String? search, {bool? income}) {
-    setState(() {
-      selectedSearch = search ?? "";
-      selectedIncome = income;
-      transactionWidgets = getTransactionsSlivers(
-        selectedStartDate,
-        selectedEndDate,
-        search: search,
-        onSelected: onSelected,
-        listID: "TransactionsSearch",
-        income: income,
-        simpleListRender: true,
-        noResultsMessage: "No transactions found.",
-        noSearchResultsVariation: true,
-      );
-    });
   }
 
   _scrollListener(position) {
@@ -93,19 +63,24 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
   }
 
   Future<void> selectFilters(BuildContext context) async {
-    List<Budget> allSharedBudgets = [];
-    List<Budget> allAddedTransactionBudgets = [];
-    allSharedBudgets = await database.getAllBudgets(sharedBudgetsOnly: true);
-    allAddedTransactionBudgets =
-        await database.getAllBudgetsAddedTransactionsOnly();
-    openBottomSheet(
+    await openBottomSheet(
       context,
       PopupFramework(
         title: "Filters",
         padding: false,
-        child: TransactionFiltersSelection(),
+        child: TransactionFiltersSelection(
+          setSearchFilters: setSearchFilters,
+          searchFilters: searchFilters,
+        ),
       ),
     );
+    Future.delayed(Duration(milliseconds: 250), () {
+      setState(() {});
+    });
+  }
+
+  void setSearchFilters(SearchFilters searchFilters) {
+    this.searchFilters = searchFilters;
   }
 
   Future<void> selectDateRange(BuildContext context) async {
@@ -113,10 +88,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       context: context,
       firstDate: DateTime(DateTime.now().year - 10),
       lastDate: DateTime(DateTime.now().year + 2),
-      initialDateRange: DateTimeRange(
-        start: selectedStartDate,
-        end: selectedEndDate,
-      ),
+      initialDateRange: searchFilters.dateTimeRange,
       builder: (BuildContext context, Widget? child) {
         if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
         return Theme(
@@ -140,11 +112,10 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       },
       initialEntryMode: DatePickerEntryMode.input,
     );
-    setState(() {
-      selectedStartDate = picked!.start;
-      selectedEndDate = picked.end;
-    });
-    searchTransaction("", income: selectedIncome);
+    if (picked != null)
+      setState(() {
+        searchFilters.dateTimeRange = picked;
+      });
   }
 
   @override
@@ -170,6 +141,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               }
             },
             child: PageFramework(
+              scrollToTopButton: true,
               listID: "TransactionsSearch",
               dragDownToDismiss: true,
               onScroll: _scrollListener,
@@ -205,10 +177,18 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                             labelText: "Search...",
                             icon: Icons.search_rounded,
                             onSubmitted: (value) {
-                              searchTransaction(value, income: selectedIncome);
+                              setState(() {
+                                searchFilters.searchQuery = value;
+                              });
                             },
-                            onChanged: (value) => searchTransaction(value,
-                                income: selectedIncome),
+                            onChanged: (value) {
+                              _debouncer.run(() {
+                                if (searchFilters.searchQuery != value)
+                                  setState(() {
+                                    searchFilters.searchQuery = value;
+                                  });
+                              });
+                            },
                             padding: EdgeInsets.all(0),
                             autoFocus: true,
                           ),
@@ -221,14 +201,29 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                           icon: Icons.calendar_month_rounded,
                         ),
                         SizedBox(width: 7),
-                        appStateSettings["searchFilters"] == true
-                            ? ButtonIcon(
-                                onTap: () {
-                                  selectFilters(context);
-                                },
-                                icon: Icons.filter_alt_rounded,
-                              )
-                            : SizedBox.shrink(),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 500),
+                          child: ButtonIcon(
+                            key: ValueKey(searchFilters.isClear(
+                                ignoreDateTimeRange: true)),
+                            color:
+                                searchFilters.isClear(ignoreDateTimeRange: true)
+                                    ? null
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer,
+                            iconColor:
+                                searchFilters.isClear(ignoreDateTimeRange: true)
+                                    ? null
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onTertiaryContainer,
+                            onTap: () {
+                              selectFilters(context);
+                            },
+                            icon: Icons.filter_alt_rounded,
+                          ),
+                        ),
                         SizedBox(width: 20),
                       ],
                     ),
@@ -255,7 +250,15 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 // SliverToBoxAdapter(
                 //   child: SizedBox(height: 7),
                 // ),
-                transactionWidgets,
+                getTransactionsSlivers(
+                  null,
+                  null,
+                  listID: "TransactionsSearch",
+                  simpleListRender: true,
+                  noResultsMessage: "No transactions found.",
+                  noSearchResultsVariation: true,
+                  searchFilters: searchFilters,
+                ),
                 SliverToBoxAdapter(
                   child: GestureDetector(
                     onTap: () {
@@ -274,10 +277,14 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         textColor: getColor(context, "textLight"),
                         text: "Showing transactions from" +
                             "\n" +
-                            getWordedDateShortMore(selectedStartDate,
+                            getWordedDateShortMore(
+                                searchFilters.dateTimeRange?.start ??
+                                    DateTime.now(),
                                 includeYear: true) +
                             " - " +
-                            getWordedDateShortMore(selectedEndDate,
+                            getWordedDateShortMore(
+                                searchFilters.dateTimeRange?.end ??
+                                    DateTime.now(),
                                 includeYear: true),
                       ),
                     ),
@@ -296,14 +303,22 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
 }
 
 class AmountRangeSlider extends StatefulWidget {
-  const AmountRangeSlider({super.key});
-
+  const AmountRangeSlider({
+    required this.rangeLimit,
+    required this.onChange,
+    required this.initialRange,
+    super.key,
+  });
+  final RangeValues rangeLimit;
+  final RangeValues? initialRange;
+  final Function(RangeValues) onChange;
   @override
   State<AmountRangeSlider> createState() => _AmountSlideRangerState();
 }
 
 class _AmountSlideRangerState extends State<AmountRangeSlider> {
-  RangeValues _currentRangeValues = const RangeValues(0, 100);
+  late RangeValues _currentRangeValues = widget.initialRange ??
+      RangeValues(widget.rangeLimit.start, widget.rangeLimit.end);
 
   @override
   Widget build(BuildContext context) {
@@ -315,15 +330,10 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
             alignment: Alignment.topCenter,
             child: RangeSlider(
               values: _currentRangeValues,
-              max: 100,
-              min: 0,
-              labels: RangeLabels(
-                convertToMoney(Provider.of<AllWallets>(context),
-                    _currentRangeValues.start),
-                convertToMoney(
-                    Provider.of<AllWallets>(context), _currentRangeValues.end),
-              ),
+              max: widget.rangeLimit.end,
+              min: widget.rangeLimit.start,
               onChanged: (RangeValues values) {
+                widget.onChange(values);
                 setState(() {
                   _currentRangeValues = values;
                 });
@@ -340,12 +350,12 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
                   TextFont(
                     text: convertToMoney(Provider.of<AllWallets>(context),
                         _currentRangeValues.start),
-                    fontSize: 15,
+                    fontSize: 14,
                   ),
                   TextFont(
                     text: convertToMoney(Provider.of<AllWallets>(context),
                         _currentRangeValues.end),
-                    fontSize: 15,
+                    fontSize: 14,
                   )
                 ],
               ),
@@ -358,38 +368,85 @@ class _AmountSlideRangerState extends State<AmountRangeSlider> {
 }
 
 class SearchFilters {
-  SearchFilters(
-    this.isIncome,
-    this.isExpense,
-    this.isPaid,
-    this.isNotPaid,
-    this.transactionTypes,
-    this.budgetTransactionFilters,
-    this.walletPks,
-    this.categoryPks,
-    this.budgetPks,
-    this.reoccurence,
-    this.sharedOwnerMember,
-    this.methodAdded,
-  );
-
-  bool isIncome;
-  bool isExpense;
-  bool isPaid;
-  bool isNotPaid;
-
-  List<TransactionSpecialType> transactionTypes;
+  SearchFilters({
+    this.walletPks = const [],
+    this.categoryPks = const [],
+    this.budgetPks = const [],
+    this.expenseIncome = const [],
+    this.paidStatus = const [],
+    this.transactionTypes = const [],
+    this.budgetTransactionFilters = const [],
+    // this.reoccurence = const [],
+    this.methodAdded = const [],
+    this.amountRange,
+    this.dateTimeRange,
+    this.searchQuery,
+  }) {
+    walletPks = [];
+    categoryPks = [];
+    budgetPks = [];
+    expenseIncome = [];
+    paidStatus = [];
+    transactionTypes = [];
+    budgetTransactionFilters = [];
+    // reoccurence = [];
+    methodAdded = [];
+  }
+  //if the value is empty, it means all/ignore
+  // think of it, if the tag is added it will be considered in the search
+  List<int> walletPks;
+  List<int> categoryPks;
+  List<int?> budgetPks;
+  List<ExpenseIncome> expenseIncome;
+  List<PaidStatus> paidStatus;
+  List<TransactionSpecialType?> transactionTypes;
   List<BudgetTransactionFilters> budgetTransactionFilters;
-  List<int>? walletPks;
-  List<int>? categoryPks;
-  List<int>? budgetPks;
-  List<BudgetReoccurence> reoccurence;
-  List<SharedOwnerMember> sharedOwnerMember;
+  // List<BudgetReoccurence> reoccurence;
   List<MethodAdded> methodAdded;
+  RangeValues? amountRange;
+  DateTimeRange? dateTimeRange;
+  String? searchQuery;
+
+  clearSearchFilters() {
+    walletPks = [];
+    categoryPks = [];
+    budgetPks = [];
+    expenseIncome = [];
+    paidStatus = [];
+    transactionTypes = [];
+    budgetTransactionFilters = [];
+    // reoccurence = [];
+    methodAdded = [];
+    amountRange = null;
+    dateTimeRange = null;
+    searchQuery = null;
+  }
+
+  bool isClear({bool? ignoreDateTimeRange}) {
+    if (walletPks.isEmpty &&
+        categoryPks.isEmpty &&
+        budgetPks.isEmpty &&
+        expenseIncome.isEmpty &&
+        paidStatus.isEmpty &&
+        transactionTypes.isEmpty &&
+        budgetTransactionFilters.isEmpty &&
+        // reoccurence == [] &&
+        methodAdded.isEmpty &&
+        amountRange == null &&
+        (ignoreDateTimeRange == true || dateTimeRange == null) &&
+        searchQuery == null)
+      return true;
+    else
+      return false;
+  }
 }
 
 class TransactionFiltersSelection extends StatefulWidget {
-  const TransactionFiltersSelection({super.key});
+  const TransactionFiltersSelection(
+      {required this.searchFilters, required this.setSearchFilters, super.key});
+
+  final SearchFilters searchFilters;
+  final Function(SearchFilters searchFilters) setSearchFilters;
 
   @override
   State<TransactionFiltersSelection> createState() =>
@@ -398,20 +455,21 @@ class TransactionFiltersSelection extends StatefulWidget {
 
 class _TransactionFiltersSelectionState
     extends State<TransactionFiltersSelection> {
-  SearchFilters selectedFilters = SearchFilters(
-    false,
-    false,
-    false,
-    false,
-    [],
-    [],
-    null,
-    null,
-    null,
-    [],
-    [],
-    [],
-  );
+  late SearchFilters selectedFilters = widget.searchFilters;
+
+  void setSearchFilters() {
+    widget.setSearchFilters(selectedFilters);
+    setState(() {});
+  }
+
+  void clearSearchFilters() {
+    // Don't change the DateTime selected, as its handles separately
+    DateTimeRange? dateTimeRange = selectedFilters.dateTimeRange;
+    selectedFilters.clearSearchFilters();
+    selectedFilters.dateTimeRange = dateTimeRange;
+    widget.setSearchFilters(selectedFilters);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -423,37 +481,67 @@ class _TransactionFiltersSelectionState
             horizontalList: true,
             showSelectedAllCategoriesIfNoneSelected: true,
             addButton: false,
+            selectedCategories: selectedFilters.categoryPks,
             setSelectedCategories: (List<int>? categories) {
-              selectedFilters.categoryPks = categories;
-              setState(() {});
+              selectedFilters.categoryPks = categories ?? [];
+              setSearchFilters();
             },
           ),
         ),
-        AmountRangeSlider(),
+        StreamBuilder<RangeValues>(
+          stream: database.getHighestLowestAmount(
+            SearchFilters(
+              dateTimeRange: selectedFilters.dateTimeRange,
+            ),
+          ),
+          builder: ((context, snapshot) {
+            if (snapshot.hasData) {
+              RangeValues rangeLimit = RangeValues(
+                  (snapshot.data?.start ?? 0) - 0.00000001,
+                  (snapshot.data?.end ?? 0) + 0.00000001);
+              if ((selectedFilters.amountRange?.start ?? 0) <
+                      rangeLimit.start ||
+                  (selectedFilters.amountRange?.end ?? 0) > rangeLimit.end) {
+                selectedFilters.amountRange = rangeLimit;
+              }
+              return AmountRangeSlider(
+                rangeLimit: rangeLimit,
+                initialRange: selectedFilters.amountRange,
+                onChange: (RangeValues rangeValue) {
+                  if (rangeLimit == rangeValue)
+                    selectedFilters.amountRange = null;
+                  else
+                    selectedFilters.amountRange = rangeValue;
+                },
+              );
+            }
+            return SizedBox.shrink();
+          }),
+        ),
+        SizedBox(height: 10),
         SelectChips(
-          items: ["income", "expense"],
+          items: ExpenseIncome.values,
           getLabel: (item) {
-            return item == "income"
-                ? "Income"
-                : item == "expense"
-                    ? "Expense"
+            return item == ExpenseIncome.expense
+                ? "Expense"
+                : item == ExpenseIncome.income
+                    ? "Income"
                     : "";
           },
           onSelected: (item) {
-            if (item == "income")
-              selectedFilters.isIncome = !selectedFilters.isIncome;
-            if (item == "expense")
-              selectedFilters.isExpense = !selectedFilters.isExpense;
-            setState(() {});
+            if (selectedFilters.expenseIncome.contains(item)) {
+              selectedFilters.expenseIncome.remove(item);
+            } else {
+              selectedFilters.expenseIncome.add(item);
+            }
+            setSearchFilters();
           },
           getSelected: (item) {
-            if (item == "income") return selectedFilters.isIncome;
-            if (item == "expense") return selectedFilters.isExpense;
-            return false;
+            return selectedFilters.expenseIncome.contains(item);
           },
         ),
         SelectChips(
-          items: TransactionSpecialType.values,
+          items: [null, ...TransactionSpecialType.values],
           getLabel: (item) {
             return transactionTypeDisplayToEnum[item] ?? "";
           },
@@ -463,32 +551,33 @@ class _TransactionFiltersSelectionState
             } else {
               selectedFilters.transactionTypes.add(item);
             }
-            setState(() {});
+            setSearchFilters();
           },
           getSelected: (item) {
             return selectedFilters.transactionTypes.contains(item);
           },
         ),
         SelectChips(
-          items: ["paid", "notPaid"],
+          items: PaidStatus.values,
           getLabel: (item) {
-            return item == "paid"
+            return item == PaidStatus.paid
                 ? "Paid"
-                : item == "notPaid"
+                : item == PaidStatus.notPaid
                     ? "Not Paid"
-                    : "";
+                    : item == PaidStatus.skipped
+                        ? "Skipped"
+                        : "";
           },
           onSelected: (item) {
-            if (item == "paid")
-              selectedFilters.isPaid = !selectedFilters.isPaid;
-            if (item == "notPaid")
-              selectedFilters.isNotPaid = !selectedFilters.isNotPaid;
-            setState(() {});
+            if (selectedFilters.paidStatus.contains(item)) {
+              selectedFilters.paidStatus.remove(item);
+            } else {
+              selectedFilters.paidStatus.add(item);
+            }
+            setSearchFilters();
           },
           getSelected: (item) {
-            if (item == "paid") return selectedFilters.isPaid;
-            if (item == "notPaid") return selectedFilters.isNotPaid;
-            return false;
+            return selectedFilters.paidStatus.contains(item);
           },
         ),
         SelectChips(
@@ -511,7 +600,7 @@ class _TransactionFiltersSelectionState
             } else {
               selectedFilters.budgetTransactionFilters.add(item);
             }
-            setState(() {});
+            setSearchFilters();
           },
           getSelected: (item) {
             return selectedFilters.budgetTransactionFilters.contains(item);
@@ -522,34 +611,20 @@ class _TransactionFiltersSelectionState
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SelectChips(
-                items: [null, ...snapshot.data!],
+                items: snapshot.data!,
                 getLabel: (item) {
-                  if (item == null) return "All Wallets";
                   return item?.name ?? "No Wallet";
                 },
                 onSelected: (item) {
-                  if (selectedFilters.walletPks == null) {
-                    selectedFilters.walletPks = [];
-                  }
-                  if (item == null) {
-                    selectedFilters.walletPks = null;
-                  } else if (selectedFilters.walletPks!
-                      .contains(item.walletPk)) {
-                    selectedFilters.walletPks!.remove(item.walletPk);
+                  if (selectedFilters.walletPks.contains(item.walletPk)) {
+                    selectedFilters.walletPks.remove(item.walletPk);
                   } else {
-                    selectedFilters.walletPks!.add(item.walletPk);
+                    selectedFilters.walletPks.add(item.walletPk);
                   }
-                  setState(() {});
+                  setSearchFilters();
                 },
                 getSelected: (item) {
-                  if (selectedFilters.walletPks == null)
-                    return true;
-                  else if (item == null && selectedFilters.walletPks == null)
-                    return true;
-                  else if (item == null)
-                    return false;
-                  else
-                    return selectedFilters.walletPks!.contains(item.walletPk);
+                  return selectedFilters.walletPks.contains(item.walletPk);
                 },
                 getCustomBorderColor: (item) {
                   return dynamicPastel(
@@ -557,7 +632,7 @@ class _TransactionFiltersSelectionState
                     lightenPastel(
                       HexColor(
                         item?.colour,
-                        defaultColor: Colors.transparent,
+                        defaultColor: Theme.of(context).colorScheme.primary,
                       ),
                       amount: 0.3,
                     ),
@@ -577,40 +652,28 @@ class _TransactionFiltersSelectionState
               return SelectChips(
                 items: [null, ...snapshot.data!],
                 getLabel: (item) {
-                  if (item == null) return "All Budgets";
+                  if (item == null) return "No Budget";
                   return item?.name ?? "No Budget";
                 },
                 onSelected: (item) {
-                  if (selectedFilters.budgetPks == null) {
-                    selectedFilters.budgetPks = [];
-                  }
-                  if (item == null) {
-                    selectedFilters.budgetPks = null;
-                  } else if (selectedFilters.budgetPks!
-                      .contains(item.budgetPk)) {
-                    selectedFilters.budgetPks!.remove(item.budgetPk);
+                  if (selectedFilters.budgetPks.contains(item?.budgetPk)) {
+                    selectedFilters.budgetPks.remove(item?.budgetPk);
                   } else {
-                    selectedFilters.budgetPks!.add(item.budgetPk);
+                    selectedFilters.budgetPks.add(item?.budgetPk);
                   }
-                  setState(() {});
+                  setSearchFilters();
                 },
                 getSelected: (item) {
-                  if (selectedFilters.budgetPks == null)
-                    return true;
-                  else if (item == null && selectedFilters.budgetPks == null)
-                    return true;
-                  else if (item == null)
-                    return false;
-                  else
-                    return selectedFilters.budgetPks!.contains(item.budgetPk);
+                  return selectedFilters.budgetPks.contains(item?.budgetPk);
                 },
                 getCustomBorderColor: (item) {
+                  if (item == null) return null;
                   return dynamicPastel(
                     context,
                     lightenPastel(
                       HexColor(
                         item?.colour,
-                        defaultColor: Colors.transparent,
+                        defaultColor: Theme.of(context).colorScheme.primary,
                       ),
                       amount: 0.3,
                     ),
@@ -624,11 +687,7 @@ class _TransactionFiltersSelectionState
           },
         ),
         // SelectChips(
-        //   items: [
-        //     MethodAdded.csv,
-        //     MethodAdded.shared,
-        //     MethodAdded.email,
-        //   ],
+        //   items: MethodAdded.values,
         //   getLabel: (item) {
         //     return item == MethodAdded.csv
         //         ? "CSV"
@@ -638,41 +697,45 @@ class _TransactionFiltersSelectionState
         //                 ? "Email"
         //                 : "";
         //   },
-        //   onSelected: (item) {},
+        //   onSelected: (item) {
+        //     if (selectedFilters.methodAdded.contains(item)) {
+        //       selectedFilters.methodAdded.remove(item);
+        //     } else {
+        //       selectedFilters.methodAdded.add(item);
+        //     }
+        //     setSearchFilters();
+        //   },
         //   getSelected: (item) {
-        //     return false;
+        //     return selectedFilters.methodAdded.contains(item);
         //   },
         // ),
-        appStateSettings["sharedBudgets"]
-            ? SelectChips(
-                items: SharedOwnerMember.values,
-                getLabel: (item) {
-                  return item == SharedOwnerMember.owner
-                      ? "Owner"
-                      : item == SharedOwnerMember.member
-                          ? "Member"
-                          : "";
-                },
-                onSelected: (item) {
-                  if (selectedFilters.sharedOwnerMember.contains(item)) {
-                    selectedFilters.sharedOwnerMember.remove(item);
-                  } else {
-                    selectedFilters.sharedOwnerMember.add(item);
-                  }
-                  setState(() {});
-                },
-                getSelected: (item) {
-                  return selectedFilters.sharedOwnerMember.contains(item);
-                },
-              )
-            : SizedBox.shrink(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Button(
-            label: "Apply Filters",
-            onTap: () {
-              Navigator.pop(context);
-            },
+          child: Row(
+            children: [
+              Flexible(
+                child: Button(
+                  expandedLayout: true,
+                  label: "Reset",
+                  onTap: () {
+                    clearSearchFilters();
+                  },
+                  color: Theme.of(context).colorScheme.tertiaryContainer,
+                  textColor: Theme.of(context).colorScheme.onTertiaryContainer,
+                ),
+              ),
+              SizedBox(width: 10),
+              SizedBox(width: 10),
+              Flexible(
+                child: Button(
+                  expandedLayout: true,
+                  label: "Apply",
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
           ),
         )
       ],

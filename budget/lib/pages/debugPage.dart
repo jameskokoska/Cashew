@@ -163,16 +163,6 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["incognitoKeyboard"],
           icon: Icons.keyboard_rounded,
         ),
-        SettingsContainerSwitch(
-          onSwitched: (value) async {
-            updateSettings("searchFilters", value,
-                pagesNeedingRefresh: [0, 1, 2, 3]);
-          },
-          title: "Search Filters",
-          description: "Filters for search. Work in progress",
-          initialValue: appStateSettings["searchFilters"],
-          icon: Icons.filter_rounded,
-        ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 13, right: 13),
           child: TextFont(text: "Animation Scale"),

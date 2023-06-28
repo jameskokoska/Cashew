@@ -51,6 +51,7 @@ Widget getTransactionsSlivers(
   ColorScheme? colorScheme,
   bool noSearchResultsVariation = false,
   String noResultsMessage = "No transactions within time range.",
+  SearchFilters? searchFilters,
 }) {
   Random random = new Random();
   return StreamBuilder<List<DateTime?>>(
@@ -68,6 +69,7 @@ Widget getTransactionsSlivers(
           onlyShowTransactionsBelongingToBudget,
       budget: budget,
       limit: limit,
+      searchFilters: searchFilters,
     ),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
@@ -118,6 +120,7 @@ Widget getTransactionsSlivers(
                 member: member,
                 onlyShowTransactionsBelongingToBudget:
                     onlyShowTransactionsBelongingToBudget,
+                searchFilters: searchFilters,
               ),
               builder: (context, snapshot) {
                 if (snapshot.data != null && snapshot.hasData) {

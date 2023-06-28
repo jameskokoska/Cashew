@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.0
+    Transaction filters on search page completed and working
+    Scroll to top of page button on search page
     < 3.3.3
     Started search filters - they can be selected properly
     Added descriptions to settings

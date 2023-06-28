@@ -4,6 +4,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -17,6 +18,8 @@ import 'package:async/async.dart';
 import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
+
+import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
 int schemaVersionGlobal = 36;
@@ -46,6 +49,17 @@ enum TransactionSpecialType {
 enum SharedOwnerMember {
   owner,
   member,
+}
+
+enum ExpenseIncome {
+  income,
+  expense,
+}
+
+enum PaidStatus {
+  paid,
+  notPaid,
+  skipped,
 }
 
 enum BudgetTransactionFilters {
@@ -630,67 +644,32 @@ class FinanceDatabase extends _$FinanceDatabase {
     required List<String>? memberTransactionFilters,
     String? member,
     int? onlyShowTransactionsBelongingToBudget,
+    SearchFilters? searchFilters,
   }) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
-    if (categoryFks.length > 0) {
-      query = (select(transactions)
-            ..where((tbl) {
-              final dateCreated = tbl.dateCreated;
-              return onlyShowIfFollowsFilters(tbl,
-                      budgetTransactionFilters: budgetTransactionFilters,
-                      memberTransactionFilters: memberTransactionFilters) &
-                  isOnDay(dateCreated, date) &
-                  onlyShowBasedOnCategoryFks(tbl, categoryFks) &
-                  onlyShowBasedOnWalletFks(tbl, walletFks) &
-                  onlyShowBasedOnIncome(tbl, income) &
-                  onlyShowIfMember(tbl, member) &
-                  onlyShowIfCertainBudget(
-                      tbl, onlyShowTransactionsBelongingToBudget);
-            })
-          // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
-          )
-          .join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ]);
-    } else if (search == "") {
-      query = (select(transactions)
-            ..where((tbl) {
-              final dateCreated = tbl.dateCreated;
-              return onlyShowIfFollowsFilters(tbl,
-                      budgetTransactionFilters: budgetTransactionFilters,
-                      memberTransactionFilters: memberTransactionFilters) &
-                  isOnDay(dateCreated, date) &
-                  onlyShowBasedOnIncome(tbl, income) &
-                  onlyShowIfMember(tbl, member) &
-                  onlyShowIfCertainBudget(
-                      tbl, onlyShowTransactionsBelongingToBudget);
-            })
-          // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
-          )
-          .join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ]);
-    } else {
-      query = ((select(transactions)
-            ..where((tbl) {
-              final dateCreated = tbl.dateCreated;
-              return onlyShowIfFollowsFilters(tbl,
-                      budgetTransactionFilters: budgetTransactionFilters,
-                      memberTransactionFilters: memberTransactionFilters) &
-                  isOnDay(dateCreated, date) &
-                  onlyShowBasedOnIncome(tbl, income) &
-                  onlyShowIfMember(tbl, member) &
-                  onlyShowIfCertainBudget(
-                      tbl, onlyShowTransactionsBelongingToBudget);
-            })
-          // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
-          )
-          .join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ]))
+    query = (select(transactions)
+          ..where((tbl) {
+            final dateCreated = tbl.dateCreated;
+            return onlyShowIfFollowsSearchFilters(tbl, searchFilters) &
+                onlyShowIfFollowsFilters(tbl,
+                    budgetTransactionFilters: budgetTransactionFilters,
+                    memberTransactionFilters: memberTransactionFilters) &
+                isOnDay(dateCreated, date) &
+                onlyShowBasedOnCategoryFks(tbl, categoryFks) &
+                onlyShowBasedOnWalletFks(tbl, walletFks) &
+                onlyShowBasedOnIncome(tbl, income) &
+                onlyShowIfMember(tbl, member) &
+                onlyShowIfCertainBudget(
+                    tbl, onlyShowTransactionsBelongingToBudget);
+          })
+        // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
+        )
+        .join([
+      innerJoin(
+          categories, categories.categoryPk.equalsExp(transactions.categoryFk))
+    ]);
+    if (search != "") {
+      query = query
         ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
             transactions.name.lower().like("%" + search.toLowerCase() + "%") |
             transactions.note.lower().like("%" + search.toLowerCase() + "%"));
@@ -711,6 +690,17 @@ class FinanceDatabase extends _$FinanceDatabase {
             .subtract(Duration(microseconds: 1)));
   }
 
+  Stream<RangeValues> getHighestLowestAmount(SearchFilters searchFilters) {
+    final max = transactions.amount.max();
+    final min = transactions.amount.min();
+    final query = selectOnly(transactions)
+      ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters))
+      ..addColumns([max, min]);
+    return query
+        .map((row) => RangeValues(row.read(min) ?? 0, row.read(max) ?? 0))
+        .watchSingle();
+  }
+
   Stream<List<DateTime?>> getUniqueDates({
     required DateTime? start,
     required DateTime? end,
@@ -725,6 +715,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     int? onlyShowTransactionsBelongingToBudget,
     Budget? budget,
     int? limit,
+    SearchFilters? searchFilters,
   }) {
     DateTime? startDate =
         start == null ? null : DateTime(start.year, start.month, start.day);
@@ -741,6 +732,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           : [OrderingTerm.desc(transactions.dateCreated)])
       ..where((categories.name.lower().like("%" + search.toLowerCase() + "%") |
               transactions.name.like("%" + search + "%")) &
+          onlyShowIfFollowsSearchFilters(transactions, searchFilters) &
           onlyShowIfFollowsFilters(transactions,
               budgetTransactionFilters: budgetTransactionFilters,
               memberTransactionFilters: memberTransactionFilters) &
@@ -2789,6 +2781,115 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
+  Expression<bool> onlyShowIfFollowsSearchFilters(
+      $TransactionsTable tbl, SearchFilters? searchFilters) {
+    if (searchFilters == null) return Constant(true);
+
+    Expression<bool> isInWalletPks =
+        onlyShowBasedOnWalletFks(tbl, searchFilters.walletPks);
+    Expression<bool> isInCategoryPks =
+        onlyShowBasedOnCategoryFks(tbl, searchFilters.categoryPks);
+    Expression<bool> isInBudgetPks =
+        onlyShowBasedOnBudgetFks(tbl, searchFilters.budgetPks);
+
+    Expression<bool> isIncome = searchFilters.expenseIncome.length <= 0
+        ? Constant(true)
+        : searchFilters.expenseIncome.contains(ExpenseIncome.income)
+            ? tbl.income.equals(true)
+            : Constant(false);
+    Expression<bool> isExpense = searchFilters.expenseIncome.length <= 0
+        ? Constant(true)
+        : searchFilters.expenseIncome.contains(ExpenseIncome.expense)
+            ? tbl.income.equals(false)
+            : Constant(false);
+
+    Expression<bool> isPaid = searchFilters.paidStatus.length <= 0
+        ? Constant(true)
+        : searchFilters.paidStatus.contains(PaidStatus.paid)
+            ? tbl.paid.equals(true) &
+                tbl.type.isNotNull() &
+                tbl.type.isNotInValues([
+                  TransactionSpecialType.debt,
+                  TransactionSpecialType.credit
+                ])
+            : Constant(false);
+    Expression<bool> isNotPaid = searchFilters.paidStatus.length <= 0
+        ? Constant(true)
+        : searchFilters.paidStatus.contains(PaidStatus.notPaid)
+            ? tbl.paid.equals(false) &
+                tbl.type.isNotNull() &
+                tbl.type.isNotInValues([
+                  TransactionSpecialType.debt,
+                  TransactionSpecialType.credit
+                ])
+            : Constant(false);
+    Expression<bool> isSkippedPaid = searchFilters.paidStatus.length <= 0
+        ? Constant(true)
+        : searchFilters.paidStatus.contains(PaidStatus.skipped)
+            ? tbl.skipPaid.equals(true) & tbl.type.isNotNull()
+            : Constant(false);
+
+    Expression<bool> isTransactionType =
+        searchFilters.transactionTypes.length > 0
+            ? tbl.type.isInValues(searchFilters.transactionTypes)
+            : Constant(true);
+
+    Expression<bool> includeShared =
+        searchFilters.budgetTransactionFilters.length <= 0
+            ? Constant(true)
+            : searchFilters.budgetTransactionFilters.contains(
+                        BudgetTransactionFilters.sharedToOtherBudget) ==
+                    true
+                ? tbl.sharedKey.isNotNull()
+                : Constant(false);
+    Expression<bool> includeAdded = searchFilters
+                .budgetTransactionFilters.length <=
+            0
+        ? Constant(true)
+        : searchFilters.budgetTransactionFilters
+                    .contains(BudgetTransactionFilters.addedToOtherBudget) ==
+                true
+            ? tbl.sharedReferenceBudgetPk.isNotNull() & tbl.sharedKey.isNull()
+            : Constant(false);
+
+    Expression<bool> isMethodAdded =
+        onlyShowBasedOnMethodAdded(tbl, searchFilters.methodAdded);
+
+    Expression<bool> isInAmountRange = searchFilters.amountRange != null
+        ? tbl.amount.isBetweenValues(searchFilters.amountRange?.start ?? 0,
+            searchFilters.amountRange?.end ?? 0)
+        : Constant(true);
+
+    Expression<bool> isInDateTimeRange = onlyShowBasedOnTimeRange(
+        transactions,
+        searchFilters.dateTimeRange?.start,
+        searchFilters.dateTimeRange?.end,
+        null);
+
+    String searchQuery = searchFilters.searchQuery ?? "";
+    Expression<bool> isInQuery = searchQuery == ""
+        ? Constant(true)
+        : (categories.name.lower().like("%" + searchQuery.toLowerCase() + "%") |
+            transactions.name
+                .lower()
+                .like("%" + searchQuery.toLowerCase() + "%") |
+            transactions.note
+                .lower()
+                .like("%" + searchQuery.toLowerCase() + "%"));
+
+    return isInWalletPks &
+        isInCategoryPks &
+        isInBudgetPks &
+        isInQuery &
+        (isIncome | isExpense) &
+        (isPaid | isNotPaid | isSkippedPaid) &
+        isInDateTimeRange &
+        isTransactionType &
+        (includeShared | includeAdded) &
+        isInAmountRange &
+        isMethodAdded;
+  }
+
   Expression<bool> onlyShowIfFollowsFilters($TransactionsTable tbl,
       {List<BudgetTransactionFilters>? budgetTransactionFilters,
       List<String>? memberTransactionFilters}) {
@@ -2944,17 +3045,38 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowBasedOnCategoryFks(
-      $TransactionsTable tbl, List<int> categoryFks) {
-    return (categoryFks.length >= 1
+      $TransactionsTable tbl, List<int>? categoryFks) {
+    return (categoryFks != null && categoryFks.length > 0
         ? tbl.categoryFk.isIn(categoryFks)
         : Constant(true));
   }
 
   Expression<bool> onlyShowBasedOnWalletFks(
       $TransactionsTable tbl, List<int>? walletFks) {
-    return (walletFks != null && walletFks.length >= 1
+    return (walletFks != null && walletFks.length > 0
         ? tbl.walletFk.isIn(walletFks)
         : Constant(true));
+  }
+
+  Expression<bool> onlyShowBasedOnMethodAdded(
+      $TransactionsTable tbl, List<MethodAdded>? methodAdded) {
+    return (methodAdded != null && methodAdded.length > 0
+        ? tbl.methodAdded.isInValues(methodAdded)
+        : Constant(true));
+  }
+
+  Expression<bool> onlyShowBasedOnBudgetFks(
+      $TransactionsTable tbl, List<int?>? budgetFks) {
+    return budgetFks != null && budgetFks.contains(null) && budgetFks.length > 1
+        ? tbl.sharedReferenceBudgetPk
+                .isIn(budgetFks.map((value) => value ?? 0).toList()) |
+            tbl.sharedReferenceBudgetPk.isNull()
+        : (budgetFks ?? []).contains(null)
+            ? tbl.sharedReferenceBudgetPk.isNull()
+            : (budgetFks != null && budgetFks.length > 0
+                ? tbl.sharedReferenceBudgetPk
+                    .isIn(budgetFks.map((value) => value ?? 0).toList())
+                : Constant(true));
   }
 
   // Start date is in the past

@@ -83,7 +83,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "emailScanningPullToRefresh": false,
     "legacyTransactionAmountColors": false,
     "massEditSelectedTransactions": false,
-    "searchFilters": false,
     "incognitoKeyboard": false,
     // the key is the budgetPk (in String!)
     // Should be of type Map<String,List<int>>
