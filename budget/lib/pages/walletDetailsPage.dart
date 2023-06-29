@@ -372,11 +372,7 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
         margin: EdgeInsets.symmetric(horizontal: 13),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15)),
-          color: appStateSettings["materialYou"]
-              ? dynamicPastel(
-                  context, Theme.of(context).colorScheme.secondaryContainer,
-                  amount: 0.5)
-              : getColor(context, "lightDarkAccentHeavyLight"),
+          color: getColor(context, "lightDarkAccentHeavyLight"),
           boxShadow: boxShadowCheck(boxShadowGeneral(context)),
         ),
         child: Stack(

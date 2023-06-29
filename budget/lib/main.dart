@@ -3,7 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/util/initializeBiometrics.dart';
+import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/widgets/util/watchForDayChange.dart';
 import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:drift/drift.dart' hide Column;
@@ -20,9 +20,9 @@ import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
-import 'package:budget/widgets/util/scrollBehaviorOverride.dart';
+import 'package:budget/struct/scrollBehaviorOverride.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/util/initializeNotifications.dart';
+import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:flutter/foundation.dart';
@@ -42,22 +42,6 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
-// Transaction transaction = widget.transaction.copyWith(skipPaid: false);
-
-/*
-adb tcpip 5555
-adb connect 192.168.0.22
-
-flutter channel master
-flutter upgrade
-
-flutter build appbundle --release
-
-firebase deploy
-
-"dart.lineLength": 150,
-*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

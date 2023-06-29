@@ -3,7 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/util/initializeNotifications.dart';
+import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';

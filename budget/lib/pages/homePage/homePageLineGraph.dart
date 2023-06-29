@@ -12,6 +12,7 @@ import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 
 class HomePageLineGraph extends StatelessWidget {
   const HomePageLineGraph({super.key, required this.selectedSlidingSelector});

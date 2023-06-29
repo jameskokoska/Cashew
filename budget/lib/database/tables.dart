@@ -18,6 +18,7 @@ import 'package:async/async.dart';
 import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
+import 'package:budget/struct/currencyFunctions.dart';
 
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';

@@ -24,6 +24,7 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
 import 'dart:math';
+import 'package:budget/struct/currencyFunctions.dart';
 
 Widget getTransactionsSlivers(
   DateTime? startDay,

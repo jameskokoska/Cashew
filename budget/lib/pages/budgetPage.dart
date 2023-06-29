@@ -28,6 +28,7 @@ import 'package:async/async.dart' show StreamZip;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 
 class BudgetPage extends StatelessWidget {
   const BudgetPage({

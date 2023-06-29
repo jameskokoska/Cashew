@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 
 class SelectAmount extends StatefulWidget {
   SelectAmount({

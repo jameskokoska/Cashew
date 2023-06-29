@@ -7,7 +7,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/util/initializeNotifications.dart';
+import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -15,7 +15,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/util/upcomingTransactionsFunctions.dart';
+import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,6 +24,7 @@ import 'package:provider/provider.dart';
 import '../colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 
 ValueNotifier<Map<String, List<int>>> globalSelectedID =
     ValueNotifier<Map<String, List<int>>>({});

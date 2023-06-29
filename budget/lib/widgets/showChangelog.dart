@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.2
+    Rearranged files
+    Fixed colors on wallet summary spending graph
     < 3.4.1
     Color tweaks for select chips
     Expense and Income pages open up to search page with selected filters

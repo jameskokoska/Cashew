@@ -12,7 +12,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/timeDigits.dart';
-import 'package:budget/widgets/util/initializeNotifications.dart';
+import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -33,6 +33,7 @@ import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 
 //TODO
 //only show the tags that correspond to selected category
