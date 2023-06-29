@@ -551,7 +551,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal: 8,
                                                                 vertical: 7),
                                                         child: Column(
@@ -618,6 +618,14 @@ class _SelectAmountState extends State<SelectAmount> {
                                       horizontal: 5, vertical: 1),
                                   openPage: AddWalletPage(title: "Add Wallet"),
                                   borderRadius: 8,
+                                  backgroundColor: dynamicPastel(
+                                    context,
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer
+                                        .withOpacity(0.4),
+                                    amount: 0.5,
+                                  ),
                                 ),
                                 ...List<Widget>.generate(
                                   widget.allWallets!.length,
@@ -630,13 +638,22 @@ class _SelectAmountState extends State<SelectAmount> {
                                           color: dynamicPastel(
                                             context,
                                             lightenPastel(
-                                              HexColor(widget
-                                                  .allWallets![index].colour),
+                                              HexColor(
+                                                widget
+                                                    .allWallets![index].colour,
+                                                defaultColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
                                               amount: 0.3,
                                             ),
                                             amount: 0.4,
                                           ),
                                         ),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer
+                                            .withOpacity(0.3),
                                         label: TextFont(
                                           text: widget.allWallets![index]
                                                       .name ==

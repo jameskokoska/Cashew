@@ -27,7 +27,10 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 class TransactionsSearchPage extends StatefulWidget {
-  const TransactionsSearchPage({Key? key}) : super(key: key);
+  const TransactionsSearchPage({this.initialFilters, Key? key})
+      : super(key: key);
+
+  final SearchFilters? initialFilters;
 
   @override
   State<TransactionsSearchPage> createState() => TransactionsSearchPageState();
@@ -41,16 +44,21 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
 
   late AnimationController _animationControllerSearch;
   final _debouncer = Debouncer(milliseconds: 500);
-  SearchFilters searchFilters = SearchFilters(
-    dateTimeRange: DateTimeRange(
-      start: DateTime(
-          DateTime.now().year, DateTime.now().month - 6, DateTime.now().day),
-      end: DateTime.now(),
-    ),
-  );
+
+  late SearchFilters searchFilters;
 
   @override
   void initState() {
+    DateTimeRange initialDateTimeRange = DateTimeRange(
+      start: DateTime(
+          DateTime.now().year, DateTime.now().month - 6, DateTime.now().day),
+      end: DateTime.now(),
+    );
+    searchFilters = widget.initialFilters != null
+        ? widget.initialFilters!
+        : SearchFilters();
+
+    searchFilters.dateTimeRange = initialDateTimeRange;
     super.initState();
     _animationControllerSearch = AnimationController(vsync: this, value: 1);
   }
@@ -376,21 +384,24 @@ class SearchFilters {
     this.paidStatus = const [],
     this.transactionTypes = const [],
     this.budgetTransactionFilters = const [],
-    // this.reoccurence = const [],
+    // this.reoccurence,
     this.methodAdded = const [],
     this.amountRange,
     this.dateTimeRange,
     this.searchQuery,
   }) {
-    walletPks = [];
-    categoryPks = [];
-    budgetPks = [];
-    expenseIncome = [];
-    paidStatus = [];
-    transactionTypes = [];
-    budgetTransactionFilters = [];
+    walletPks = this.walletPks.isEmpty ? [] : this.walletPks;
+    categoryPks = this.categoryPks.isEmpty ? [] : this.categoryPks;
+    budgetPks = this.budgetPks.isEmpty ? [] : this.budgetPks;
+    expenseIncome = this.expenseIncome.isEmpty ? [] : this.expenseIncome;
+    paidStatus = this.paidStatus.isEmpty ? [] : this.paidStatus;
+    transactionTypes =
+        this.transactionTypes.isEmpty ? [] : this.transactionTypes;
+    budgetTransactionFilters = this.budgetTransactionFilters.isEmpty
+        ? []
+        : this.budgetTransactionFilters;
     // reoccurence = [];
-    methodAdded = [];
+    methodAdded = this.methodAdded.isEmpty ? [] : this.methodAdded;
   }
   //if the value is empty, it means all/ignore
   // think of it, if the tag is added it will be considered in the search
@@ -520,6 +531,7 @@ class _TransactionFiltersSelectionState
         ),
         SizedBox(height: 10),
         SelectChips(
+          darkerBackground: true,
           items: ExpenseIncome.values,
           getLabel: (item) {
             return item == ExpenseIncome.expense
@@ -541,6 +553,7 @@ class _TransactionFiltersSelectionState
           },
         ),
         SelectChips(
+          darkerBackground: true,
           items: [null, ...TransactionSpecialType.values],
           getLabel: (item) {
             return transactionTypeDisplayToEnum[item] ?? "";
@@ -558,6 +571,7 @@ class _TransactionFiltersSelectionState
           },
         ),
         SelectChips(
+          darkerBackground: true,
           items: PaidStatus.values,
           getLabel: (item) {
             return item == PaidStatus.paid
@@ -581,6 +595,7 @@ class _TransactionFiltersSelectionState
           },
         ),
         SelectChips(
+          darkerBackground: true,
           items: [
             BudgetTransactionFilters.addedToOtherBudget,
             ...(appStateSettings["sharedBudgets"]
@@ -611,6 +626,7 @@ class _TransactionFiltersSelectionState
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SelectChips(
+                darkerBackground: true,
                 items: snapshot.data!,
                 getLabel: (item) {
                   return item?.name ?? "No Wallet";
@@ -650,6 +666,7 @@ class _TransactionFiltersSelectionState
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SelectChips(
+                darkerBackground: true,
                 items: [null, ...snapshot.data!],
                 getLabel: (item) {
                   if (item == null) return "No Budget";

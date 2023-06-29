@@ -43,6 +43,7 @@ class SelectChips extends StatefulWidget {
     this.extraWidget,
     this.onLongPress,
     this.wrapped = false,
+    this.darkerBackground = false,
   });
   final List<dynamic> items;
   final bool Function(dynamic) getSelected;
@@ -52,6 +53,7 @@ class SelectChips extends StatefulWidget {
   final Widget? extraWidget;
   final Function(dynamic)? onLongPress;
   final bool wrapped;
+  final bool darkerBackground;
 
   @override
   State<SelectChips> createState() => _SelectChipsState();
@@ -112,6 +114,12 @@ class _SelectChipsState extends State<SelectChips> {
               },
               color: Colors.transparent,
               child: ChoiceChip(
+                backgroundColor: widget.darkerBackground
+                    ? Theme.of(context)
+                        .colorScheme
+                        .secondaryContainer
+                        .withOpacity(0.3)
+                    : null,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 selectedColor: appStateSettings["materialYou"]
                     ? null

@@ -6,6 +6,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
+import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -45,6 +46,11 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                         null,
                         isIncome: true,
                       ),
+                      openPage: TransactionsSearchPage(
+                        initialFilters: SearchFilters(
+                          expenseIncome: [ExpenseIncome.income],
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(width: 13),
@@ -60,6 +66,11 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                           database.watchTotalCountOfTransactionsInWallet(
                         null,
                         isIncome: false,
+                      ),
+                      openPage: TransactionsSearchPage(
+                        initialFilters: SearchFilters(
+                          expenseIncome: [ExpenseIncome.expense],
+                        ),
                       ),
                     ),
                   ),

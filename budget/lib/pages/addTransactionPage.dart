@@ -1415,8 +1415,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                                 lightenPastel(
                                                   HexColor(
                                                     item?.colour,
-                                                    defaultColor: getColor(
-                                                        context, "black"),
+                                                    defaultColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
                                                   ),
                                                   amount: 0.3,
                                                 ),

@@ -677,6 +677,7 @@ class AddButton extends StatelessWidget {
     this.height = 52,
     this.openPage,
     this.borderRadius = 15,
+    this.backgroundColor,
   }) : super(key: key);
 
   final VoidCallback onTap;
@@ -685,12 +686,13 @@ class AddButton extends StatelessWidget {
   final double? height;
   final double borderRadius;
   final Widget? openPage;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     Widget getButton(onTap) {
       return Tappable(
-        color: Theme.of(context).canvasColor,
+        color: backgroundColor ?? Theme.of(context).canvasColor,
         borderRadius: borderRadius,
         child: Container(
           decoration: BoxDecoration(

@@ -132,6 +132,11 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   walletPk,
                                   isIncome: true,
                                 ),
+                                openPage: TransactionsSearchPage(
+                                  initialFilters: SearchFilters(
+                                    expenseIncome: [ExpenseIncome.income],
+                                  ),
+                                ),
                               ),
                             ),
                             SizedBox(width: 13),
@@ -147,6 +152,11 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                     .watchTotalCountOfTransactionsInWallet(
                                   walletPk,
                                   isIncome: false,
+                                ),
+                                openPage: TransactionsSearchPage(
+                                  initialFilters: SearchFilters(
+                                    expenseIncome: [ExpenseIncome.expense],
+                                  ),
                                 ),
                               ),
                             ),
