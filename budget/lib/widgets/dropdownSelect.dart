@@ -24,11 +24,31 @@ class DropdownSelect extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DropdownSelect> createState() => _DropdownSelectState();
+  State<DropdownSelect> createState() => DropdownSelectState();
 }
 
-class _DropdownSelectState extends State<DropdownSelect> {
+class DropdownSelectState extends State<DropdownSelect> {
   String? currentValue;
+
+  late GlobalKey? _dropdownButtonKey = GlobalKey();
+
+  void openDropdown() {
+    GestureDetector? detector;
+    void searchForGestureDetector(BuildContext? element) {
+      element?.visitChildElements((element) {
+        if (element.widget is GestureDetector) {
+          detector = element.widget as GestureDetector?;
+        } else {
+          searchForGestureDetector(element);
+        }
+      });
+    }
+
+    searchForGestureDetector(_dropdownButtonKey?.currentContext);
+    assert(detector != null);
+
+    detector?.onTap?.call();
+  }
 
   @override
   void initState() {
@@ -56,6 +76,7 @@ class _DropdownSelectState extends State<DropdownSelect> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButton<String>(
+        key: _dropdownButtonKey,
         underline: Container(),
         style: TextStyle(color: getColor(context, "black"), fontSize: 15),
         dropdownColor: widget.backgroundColor == null

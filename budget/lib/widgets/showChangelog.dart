@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.3
+    Select categories to watch is now bottom sheet
+    Can open down down container by tapping the entire settings block
     < 3.4.2
     Rearranged files
     Fixed colors on wallet summary spending graph

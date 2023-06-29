@@ -210,57 +210,63 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         IconButton(
           tooltip: "Watch Categories",
           onPressed: () {
-            openPopupCustom(
+            openBottomSheet(
               context,
-              child: Column(
-                children: [
-                  SelectCategory(
-                    labelIcon: false,
-                    addButton: false,
-                    selectedCategories: selectedCategoryFks,
-                    setSelectedCategories: (List<int> selectedCategoryFks) {
-                      setState(() {
-                        this.selectedCategoryFks = selectedCategoryFks;
-                        updateSetting(selectedCategoryFks);
-                      });
-                      loadLines(amountLoaded);
-                    },
-                    scaleWhenSelected: true,
-                    categoryFks: widget.budget.allCategoryFks
-                        ? null
-                        : widget.budget.categoryFks,
-                  ),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: [
-                      IntrinsicWidth(
-                        child: Button(
-                          label: "Clear",
-                          onTap: () {
-                            setState(() {
-                              selectedCategoryFks = [];
-                              updateSetting([]);
-                            });
-                            Navigator.pop(context);
-                          },
-                          color:
-                              Theme.of(context).colorScheme.tertiaryContainer,
+              PopupFramework(
+                title: "Select Categories to Watch",
+                child: Column(
+                  children: [
+                    SelectCategory(
+                      labelIcon: false,
+                      addButton: false,
+                      selectedCategories: selectedCategoryFks,
+                      setSelectedCategories: (List<int> selectedCategoryFks) {
+                        setState(() {
+                          this.selectedCategoryFks = selectedCategoryFks;
+                          updateSetting(selectedCategoryFks);
+                        });
+                        loadLines(amountLoaded);
+                      },
+                      scaleWhenSelected: true,
+                      categoryFks: widget.budget.allCategoryFks
+                          ? null
+                          : widget.budget.categoryFks,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Button(
+                            expandedLayout: true,
+                            label: "Clear",
+                            onTap: () {
+                              setState(() {
+                                selectedCategoryFks = [];
+                                updateSetting([]);
+                              });
+                              Navigator.pop(context);
+                            },
+                            color:
+                                Theme.of(context).colorScheme.tertiaryContainer,
+                            textColor: Theme.of(context)
+                                .colorScheme
+                                .onTertiaryContainer,
+                          ),
                         ),
-                      ),
-                      IntrinsicWidth(
-                        child: Button(
-                          label: "Done",
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
+                        SizedBox(width: 13),
+                        Expanded(
+                          child: Button(
+                            expandedLayout: true,
+                            label: "Done",
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              title: "Select Categories to Watch",
             );
           },
           icon: Icon(

@@ -169,7 +169,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   }
 }
 
-class SettingsContainerDropdown extends StatelessWidget {
+class SettingsContainerDropdown extends StatefulWidget {
   const SettingsContainerDropdown({
     Key? key,
     required this.title,
@@ -190,19 +190,33 @@ class SettingsContainerDropdown extends StatelessWidget {
   final double? verticalPadding;
 
   @override
+  State<SettingsContainerDropdown> createState() =>
+      _SettingsContainerDropdownState();
+}
+
+class _SettingsContainerDropdownState extends State<SettingsContainerDropdown> {
+  late GlobalKey<DropdownSelectState>? _dropdownKey = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
     return SettingsContainer(
-      verticalPadding: verticalPadding,
-      title: title,
-      description: description,
-      icon: icon,
+      verticalPadding: widget.verticalPadding,
+      title: widget.title,
+      description: widget.description,
+      icon: widget.icon,
+      onTap: () {
+        _dropdownKey!.currentState!.openDropdown();
+      },
       afterWidget: Padding(
         padding: const EdgeInsets.only(left: 10),
         child: DropdownSelect(
+          key: _dropdownKey,
           compact: true,
-          initial: items.contains(initial) == false ? items[0] : initial,
-          items: items,
-          onChanged: onChanged,
+          initial: widget.items.contains(widget.initial) == false
+              ? widget.items[0]
+              : widget.initial,
+          items: widget.items,
+          onChanged: widget.onChanged,
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         ),
       ),

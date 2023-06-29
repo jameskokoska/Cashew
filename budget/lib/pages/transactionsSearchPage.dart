@@ -741,8 +741,7 @@ class _TransactionFiltersSelectionState
                   textColor: Theme.of(context).colorScheme.onTertiaryContainer,
                 ),
               ),
-              SizedBox(width: 10),
-              SizedBox(width: 10),
+              SizedBox(width: 13),
               Flexible(
                 child: Button(
                   expandedLayout: true,
