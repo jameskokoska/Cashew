@@ -688,7 +688,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return dateColumn.isBetweenValues(
         DateTime(date.year, date.month, date.day),
         DateTime(date.year, date.month, date.day + 1)
-            .subtract(Duration(microseconds: 1)));
+            .subtract(Duration(milliseconds: 1)));
   }
 
   Stream<RangeValues> getHighestLowestAmount(SearchFilters searchFilters) {

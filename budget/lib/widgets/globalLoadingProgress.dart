@@ -56,39 +56,45 @@ class GlobalLoadingIndeterminate extends StatefulWidget {
 class GlobalLoadingIndeterminateState
     extends State<GlobalLoadingIndeterminate> {
   bool visible = false;
-  void setVisibility(bool visiblePassed) {
+  double opacity = 0;
+  void setVisibility(bool visible, {double? opacity}) {
     setState(() {
-      visible = visiblePassed;
+      this.visible = visible;
+      this.opacity = visible == false ? 1 : opacity ?? 1;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: getWidthNavigationSidebar(context) <= 0
-          ? Alignment.bottomLeft
-          : Alignment.topCenter,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        height: !visible ? 0 : 3,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(5),
-            topRight: Radius.circular(5),
+    return Opacity(
+      opacity: opacity,
+      child: Align(
+        alignment: getWidthNavigationSidebar(context) <= 0
+            ? Alignment.bottomLeft
+            : Alignment.topCenter,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          height: !visible ? 0 : 3,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(5),
+              topRight: Radius.circular(5),
+            ),
           ),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(5),
-            topRight: Radius.circular(5),
-          ),
-          child: LinearProgressIndicator(
-            color: dynamicPastel(context, Theme.of(context).colorScheme.primary,
-                amount: 0.5),
-            backgroundColor: getColor(context, "white"),
-            minHeight: 3,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(5),
+              topRight: Radius.circular(5),
+            ),
+            child: LinearProgressIndicator(
+              color: dynamicPastel(
+                  context, Theme.of(context).colorScheme.primary,
+                  amount: 0.5),
+              backgroundColor: getColor(context, "white"),
+              minHeight: 3,
+            ),
           ),
         ),
       ),

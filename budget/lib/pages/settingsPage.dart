@@ -23,6 +23,7 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
@@ -259,7 +260,7 @@ class MorePages extends StatelessWidget {
               Expanded(
                 child: SettingsContainerOpenPage(
                   openPage: SubscriptionsPage(),
-                  title: "Subscriptions",
+                  title: "subscriptions".tr(),
                   icon: Icons.event_repeat_rounded,
                   isOutlined: true,
                 ),
@@ -269,7 +270,7 @@ class MorePages extends StatelessWidget {
                   : Expanded(
                       child: SettingsContainerOpenPage(
                         openPage: NotificationsPage(),
-                        title: "Notifications",
+                        title: "notifications".tr(),
                         icon: Icons.notifications_rounded,
                         isOutlined: true,
                       ),

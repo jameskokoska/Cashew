@@ -4,6 +4,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
@@ -101,19 +102,19 @@ class BottomNavBarState extends State<BottomNavBar> {
                         destinations: [
                           NavigationDestination(
                             icon: Icon(Icons.home_rounded),
-                            label: "Home",
+                            label: "home-page-title".tr(),
                           ),
                           NavigationDestination(
                             icon: Icon(Icons.payments_rounded),
-                            label: "Transactions",
+                            label: "transactions-page-title".tr(),
                           ),
                           NavigationDestination(
                             icon: Icon(MoreIcons.chart_pie, size: 20),
-                            label: "Budgets",
+                            label: "budgets-page-title".tr(),
                           ),
                           NavigationDestination(
                             icon: Icon(Icons.more_horiz_rounded),
-                            label: "More",
+                            label: "more-actions-page-title".tr(),
                           ),
                         ],
                         selectedIndex: selectedIndex,

@@ -131,7 +131,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     );
     if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = selectedDate.copyWith(
+          year: picked.year,
+          month: picked.month,
+          day: picked.day,
+        );
       });
     }
   }
@@ -1019,8 +1023,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   Row(
                     children: [
                       Tappable(
-                        onLongPress: () {
-                          pushRoute(
+                        onLongPress: () async {
+                          await pushRoute(
                             context,
                             AddCategoryPage(
                               title: selectedCategory == null
@@ -1029,6 +1033,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               category: selectedCategory,
                             ),
                           );
+                          if (selectedCategory != null) {
+                            TransactionCategory category = await database
+                                .getCategory(selectedCategory!.categoryPk)
+                                .$2;
+                            setSelectedCategory(category);
+                          }
                         },
                         onTap: () {
                           openBottomSheet(
@@ -1737,6 +1747,18 @@ class _SelectTitleState extends State<SelectTitle> {
     input = widget.selectedTitle;
   }
 
+  void selectTitle() {
+    widget.setSelectedCategory(selectedCategory!);
+    if (foundFromCategory == false)
+      widget.setSelectedTitle(selectedAssociatedTitle!.title);
+    else
+      widget.setSelectedTitle("");
+    Navigator.pop(context);
+    if (widget.next != null) {
+      widget.next!();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1844,16 +1866,7 @@ class _SelectTitleState extends State<SelectTitle> {
                               borderRadius: 15,
                               color: Colors.transparent,
                               onTap: () {
-                                widget.setSelectedCategory(selectedCategory!);
-                                if (foundFromCategory == false)
-                                  widget.setSelectedTitle(
-                                      selectedAssociatedTitle!.title);
-                                else
-                                  widget.setSelectedTitle("");
-                                Navigator.pop(context);
-                                if (widget.next != null) {
-                                  widget.next!();
-                                }
+                                selectTitle();
                               },
                               child: Row(
                                 children: [
@@ -1862,6 +1875,9 @@ class _SelectTitleState extends State<SelectTitle> {
                                     size: 40,
                                     category: selectedCategory,
                                     margin: EdgeInsets.zero,
+                                    onTap: () {
+                                      selectTitle();
+                                    },
                                   ),
                                   SizedBox(width: 10),
                                   Column(

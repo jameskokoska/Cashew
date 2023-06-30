@@ -12,6 +12,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +67,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
               ),
             ),
             dragDownToDismiss: true,
-            title: "Subscriptions",
+            title: "subscriptions".tr(),
             appBarBackgroundColor:
                 Theme.of(context).colorScheme.secondaryContainer,
             appBarBackgroundColorStart: Theme.of(context).canvasColor,

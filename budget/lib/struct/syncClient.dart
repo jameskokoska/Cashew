@@ -109,7 +109,8 @@ Future<bool> createSyncBackup(
   }
 
   print("Creating sync backup");
-  if (changeMadeSync) loadingIndeterminateKey.currentState!.setVisibility(true);
+  if (changeMadeSync)
+    loadingIndeterminateKey.currentState!.setVisibility(true, opacity: 0.4);
   if (syncTimeoutTimer?.isActive == true) {
     // openSnackbar(SnackbarMessage(title: "Please wait..."));
     if (changeMadeSync)

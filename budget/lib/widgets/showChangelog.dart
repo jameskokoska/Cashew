@@ -9,6 +9,17 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.4
+    Sync after every change progress bar has opacity to be less distracting
+    Selected transactions action bar has similar shadow to page titles
+    Note only shows while hovering on web
+    Fixed web import backup
+    If editing category, selecting an icon won't force change the title of the category
+    Category gets updated properly if changed on Add Transaction page
+    Fixed date setting reset the selected time to midnight
+    Started translations
+    Recommended title selecting category now selects the title
+    Fixed double transactions at midnight on web
     < 3.4.3
     Select categories to watch is now bottom sheet
     Can open down down container by tapping the entire settings block

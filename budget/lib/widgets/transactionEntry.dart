@@ -8,6 +8,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/struct/initializeNotifications.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -598,7 +599,10 @@ class TransactionEntry extends StatelessWidget {
                                       color: getColor(context, "black"),
                                       fontFamily: 'Avenir'),
                                   triggerMode: TooltipTriggerMode.tap,
-                                  showDuration: Duration(milliseconds: 10000),
+                                  showDuration:
+                                      getWidthNavigationSidebar(context) <= 0
+                                          ? Duration(milliseconds: 10000)
+                                          : Duration(milliseconds: 100),
                                   message: transaction.note,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(

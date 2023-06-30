@@ -179,6 +179,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           selectedTitle = widget.category!.name;
           selectedImage = widget.category!.iconName;
           selectedIncome = widget.category!.income;
+          userAttemptedToChangeTitle = true;
         });
         _titleController.text = selectedTitle ?? "";
       }

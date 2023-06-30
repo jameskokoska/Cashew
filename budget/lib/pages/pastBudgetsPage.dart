@@ -22,6 +22,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -195,7 +196,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     return PageFramework(
       backgroundColor: backgroundColor,
       key: budgetHistoryKey,
-      title: "Budget History",
+      title: "budget-history-title".tr(),
       subtitle: Padding(
         padding: EdgeInsets.only(
             left: enableDoubleColumn(context) ? 0 : 20, bottom: 6),
@@ -217,7 +218,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 child: Column(
                   children: [
                     SelectCategory(
-                      labelIcon: false,
+                      labelIcon: true,
                       addButton: false,
                       selectedCategories: selectedCategoryFks,
                       setSelectedCategories: (List<int> selectedCategoryFks) {
@@ -227,7 +228,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                         });
                         loadLines(amountLoaded);
                       },
-                      scaleWhenSelected: true,
+                      scaleWhenSelected: false,
                       categoryFks: widget.budget.allCategoryFks
                           ? null
                           : widget.budget.categoryFks,
@@ -819,7 +820,7 @@ class PastBudgetContainer extends StatelessWidget {
                             children: [
                               TextFont(
                                 text: (isPastBudgetButCurrentPeriod == true)
-                                    ? "Current Period"
+                                    ? "current-budget-period".tr()
                                     : getWordedDateShortMore(budgetRange.start),
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

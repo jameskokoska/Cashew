@@ -1,6 +1,7 @@
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/statusBox.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
 
@@ -54,7 +55,7 @@ class _NotificationsPageState extends State<NotificationsPage>
   Widget build(BuildContext context) {
     return PageFramework(
       dragDownToDismiss: true,
-      title: "Notifications",
+      title: "notifications".tr(),
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
@@ -62,9 +63,8 @@ class _NotificationsPageState extends State<NotificationsPage>
           duration: Duration(milliseconds: 100),
           child: notificationsEnabled == false
               ? StatusBox(
-                  title: "Notifications Disabled",
-                  description:
-                      "Tap here to enable notifications in the phone's settings page",
+                  title: "notifications-disabled".tr(),
+                  description: "notifications-disabled-description".tr(),
                   icon: Icons.warning_rounded,
                   color: Theme.of(context).colorScheme.error,
                   onTap: () {

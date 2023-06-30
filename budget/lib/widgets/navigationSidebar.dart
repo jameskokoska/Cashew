@@ -8,6 +8,7 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -129,7 +130,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           SizedBox(height: 60),
                           NavigationSidebarButton(
                             icon: Icons.home_rounded,
-                            label: "Home",
+                            label: "home-page-title".tr(),
                             isSelected: selectedIndex == 0,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -138,7 +139,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           ),
                           NavigationSidebarButton(
                             icon: Icons.payments_rounded,
-                            label: "Transactions",
+                            label: "transactions-page-title".tr(),
                             isSelected: selectedIndex == 1,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -148,7 +149,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           NavigationSidebarButton(
                             icon: MoreIcons.chart_pie,
                             iconSize: 15,
-                            label: "Budgets",
+                            label: "budgets-page-title".tr(),
                             isSelected: selectedIndex == 2,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -157,7 +158,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           ),
                           NavigationSidebarButton(
                             icon: Icons.event_repeat_rounded,
-                            label: "Subscriptions",
+                            label: "subscriptions",
                             isSelected: selectedIndex == 5,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -168,7 +169,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               ? SizedBox.shrink()
                               : NavigationSidebarButton(
                                   icon: Icons.notifications_rounded,
-                                  label: "Notifications",
+                                  label: "notifications".tr(),
                                   isSelected: selectedIndex == 6,
                                   onTap: () {
                                     pageNavigationFrameworkKey.currentState!

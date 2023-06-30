@@ -5,6 +5,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/widgets/util/watchForDayChange.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
@@ -45,7 +46,7 @@ Future<bool> initializeDatabase() async {
     await database.createOrUpdateWallet(
       TransactionWallet(
         walletPk: 0,
-        name: "Wallet",
+        name: "default-wallet-name".tr(),
         dateCreated: DateTime.now(),
         order: 0,
         currency: getDevicesDefaultCurrencyCode(),

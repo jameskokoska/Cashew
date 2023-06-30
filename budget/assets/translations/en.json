@@ -1,0 +1,21 @@
+{
+  "default-wallet-name": "Wallet",
+  "default-budget-name": "Budget",
+  "current-budget-period": "Current Period",
+  "budget-history-title": "Budget History",
+  "home-page-title": "Home",
+  "transactions-page-title": "Transactions",
+  "budgets-page-title": "Budgets",
+  "more-actions-page-title": "More Actions",
+  "subscriptions": "Subscriptions",
+  "notifications": "Notifications",
+  "edit-wallets": "Edit Wallets",
+  "wallets": "Wallets",
+  "add-transaction-title": "Add Transaction",
+  "view-more": "View More",
+  "view-all-transactions": "View All Transactions",
+  "expense": "Expense",
+  "income": "Income",
+  "notifications-disabled": "Notifications Disabled",
+  "notifications-disabled-description": "Tap here to enable notifications in the phone's settings page"
+}

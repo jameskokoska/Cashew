@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/tappable.dart';
+import 'package:budget/struct/randomConstants.dart';
+import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/widgets/util/watchForDayChange.dart';
 import 'package:budget/widgets/watchAllWallets.dart';
@@ -42,12 +43,17 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+// Requires hot reload when changed
+bool enableDevicePreview = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await EasyLocalization.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
   database = await constructDb('db');
   notificationPayload = await initializeNotifications();
@@ -61,40 +67,24 @@ void main() async {
   tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
   runApp(
     DevicePreview(
-      enabled: false,
-      builder: (context) =>
-          RestartApp(child: InitializeApp(key: appStateKey)), // Wrap your app
+      enabled: enableDevicePreview,
+      builder: (context) => EasyLocalization(
+        useOnlyLangCode: true,
+        supportedLocales: [
+          for (String key in languagesDictionary.keys) Locale(key)
+        ],
+        path: 'assets/translations',
+        fallbackLocale: Locale(languagesDictionary.keys.toList()[0]),
+        child: RestartApp(
+          child: InitializeApp(key: appStateKey),
+        ),
+      ),
     ),
   );
 }
 
 late Map<String, dynamic> currenciesJSON;
 bool biometricsAvailable = false;
-Random random = new Random();
-List<int> randomInt = [
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100),
-  random.nextInt(100)
-];
-List<double> randomDouble = [
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble(),
-  random.nextDouble()
-];
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;
 
@@ -127,12 +117,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // FeatureDiscovery(
-        //   child:
+    // FeatureDiscovery(
+    //   child:
 
-        MaterialApp(
-      locale: DevicePreview.locale(context),
+    return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale:
+          enableDevicePreview ? DevicePreview.locale(context) : context.locale,
       shortcuts: shortcuts,
       actions: keyboardIntents,
       themeAnimationDuration: Duration(milliseconds: 700),

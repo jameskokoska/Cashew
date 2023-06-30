@@ -38,6 +38,7 @@ import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
+import 'package:budget/struct/randomConstants.dart';
 
 Future<bool> checkConnection() async {
   late bool isConnected;
@@ -417,7 +418,8 @@ Future<void> loadBackup(
           //     text: 'Database');
         }
 
-        await database.close();
+        // if this is added, it doesn't restore the database properly on web
+        // await database.close();
         Navigator.of(context).pop();
 
         await updateSettings("databaseJustImported", true,

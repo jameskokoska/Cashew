@@ -62,20 +62,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                       bottomRight: Radius.circular(
                           getWidthNavigationSidebar(context) > 0 ? 20 : 10),
                     ),
-                    boxShadow: boxShadowCheck(
-                      [
-                        BoxShadow(
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? getColor(context, "shadowColorLight")
-                                      .withOpacity(0.3)
-                                  : Colors.black.withOpacity(0.5),
-                          blurRadius: 20,
-                          offset: Offset(0, 4),
-                          spreadRadius: 9,
-                        ),
-                      ],
-                    ),
+                    boxShadow: boxShadowCheck(boxShadowSharp(context)),
                     color: Theme.of(context).colorScheme.secondaryContainer,
                   ),
                   child: Padding(

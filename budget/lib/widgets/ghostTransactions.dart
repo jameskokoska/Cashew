@@ -29,6 +29,7 @@ import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
+import 'package:budget/struct/randomConstants.dart';
 
 class GhostTransactionsList extends StatelessWidget {
   const GhostTransactionsList({

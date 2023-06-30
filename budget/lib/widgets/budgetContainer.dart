@@ -20,6 +20,7 @@ import 'package:sa3_liquid/sa3_liquid.dart';
 import '../colors.dart';
 import '../functions.dart';
 import 'package:async/async.dart' show StreamZip;
+import 'package:budget/struct/randomConstants.dart';
 
 class BudgetContainer extends StatelessWidget {
   BudgetContainer({

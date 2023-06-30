@@ -16,6 +16,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:flutter/services.dart';
@@ -64,7 +65,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       await database.createOrUpdateBudget(
         Budget(
           budgetPk: DateTime.now().millisecondsSinceEpoch,
-          name: "Budget",
+          name: "default-budget-name".tr(),
           amount: selectedAmount ?? 0,
           startDate: selectedStartDate,
           endDate: selectedEndDate ?? DateTime.now(),

@@ -24,6 +24,7 @@ import 'package:universal_io/io.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/struct/randomConstants.dart';
 
 extension CapExtension on String {
   String get capitalizeFirst =>
@@ -624,6 +625,17 @@ List<BoxShadow> boxShadowGeneral(context) {
   ];
 }
 
+List<BoxShadow> boxShadowSharp(context) {
+  return [
+    BoxShadow(
+      color: getColor(context, "shadowColorLight").withAlpha(30),
+      blurRadius: 2,
+      offset: Offset(0, 0),
+      spreadRadius: 2,
+    ),
+  ];
+}
+
 List<BoxShadow>? boxShadowCheck(list) {
   if (appStateSettings["batterySaver"]) return null;
   return list;
@@ -694,16 +706,16 @@ class CustomMaterialPageRoute extends MaterialPageRoute {
         );
 }
 
-pushRoute(context, page) {
+Future<dynamic> pushRoute(context, page) async {
   if (appStateSettings["batterySaver"] ||
       appStateSettings["iOSNavigation"] ||
       getPlatform() == PlatformOS.isIOS) {
-    Navigator.push(
+    return await Navigator.push(
       context,
       CustomMaterialPageRoute(builder: (context) => page),
     );
   } else {
-    Navigator.push(
+    return await Navigator.push(
       context,
       PageRouteBuilder(
         opaque: false,

@@ -20,6 +20,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/struct/randomConstants.dart';
 
 class SharedBudgetSettings extends StatefulWidget {
   SharedBudgetSettings({
