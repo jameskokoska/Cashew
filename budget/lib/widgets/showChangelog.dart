@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.5
+    Fixed color of total spent text when hovering over past budget line graph with watched category
     < 3.4.4
     Sync after every change progress bar has opacity to be less distracting
     Selected transactions action bar has similar shadow to page titles

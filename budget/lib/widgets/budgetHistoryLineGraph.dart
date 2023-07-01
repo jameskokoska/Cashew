@@ -231,7 +231,9 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                     TextStyle(
                       color: lineBarSpot.bar.color ==
                               lightenPastel(widget.color, amount: 0.3)
-                          ? Colors.white.withOpacity(0.9)
+                          ? widget.extraCategorySpots.keys.length <= 0
+                              ? Colors.white.withOpacity(0.9)
+                              : getColor(context, "black").withOpacity(0.7)
                           : lineBarSpot.bar.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
