@@ -241,110 +241,141 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<CategoryWithTotal>>(
-      stream: database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-        Provider.of<AllWallets>(context),
-        DateTime.now(),
-        DateTime.now(),
-        [],
-        true,
-        null, null,
-        allTime: true,
-        walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,
-        // member: selectedMember,
-        // onlyShowTransactionsBelongingToBudget:
-        //     widget.budget.sharedKey != null ||
-        //             widget.budget.addedTransactionsOnly == true
-        //         ? widget.budget.budgetPk
-        //         : null,
-        // budget: widget.budget,
-        income: null,
+    return StreamBuilder<double?>(
+      stream: database.watchTotalOfWallet(
+        widget.wallet?.walletPk,
+        isIncome: true,
       ),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          double totalSpent = 0;
-          List<Widget> categoryEntries = [];
-          snapshot.data!.forEach((category) {
-            totalSpent = totalSpent + category.total.abs();
-          });
-          snapshot.data!.asMap().forEach((index, category) {
-            categoryEntries.add(
-              CategoryEntry(
-                extraText:
-                    widget.wallet == null ? " of spending" : " of wallet",
-                isTiled: tiledCategoryEntries,
-                budgetColorScheme: widget.walletColorScheme,
-                category: category.category,
-                totalSpent: totalSpent,
-                transactionCount: category.transactionCount,
-                categorySpent: category.total.abs(),
-                onTap: () {
-                  if (selectedCategoryPk == category.category.categoryPk) {
-                    setState(() {
-                      selectedCategoryPk = -1;
-                      selectedCategory = null;
-                    });
-                    _pieChartDisplayStateKey.currentState!.setTouchedIndex(-1);
-                    widget.onSelectedCategory(-1);
-                  } else {
-                    setState(() {
-                      selectedCategoryPk = category.category.categoryPk;
-                      selectedCategory = category.category;
-                    });
-                    _pieChartDisplayStateKey.currentState!
-                        .setTouchedIndex(index);
-                    widget.onSelectedCategory(category.category.categoryPk);
-                  }
-                },
-                selected: selectedCategoryPk == category.category.categoryPk,
-                allSelected: selectedCategoryPk == -1,
-                showIncomeExpenseIcons: true,
-              ),
-            );
-          });
-          return Column(
-            children: [
-              SizedBox(height: 30),
-              PieChartWrapper(
-                isPastBudget: true,
-                pieChartDisplayStateKey: _pieChartDisplayStateKey,
-                data: snapshot.data!,
-                totalSpent: totalSpent,
-                setSelectedCategory: (categoryPk, category) {
-                  setState(() {
-                    selectedCategoryPk = categoryPk;
-                    selectedCategory = category;
-                    widget.onSelectedCategory(categoryPk);
-                  });
-                },
-              ),
-              SizedBox(height: 35),
-              // IconButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       tiledCategoryEntries = !tiledCategoryEntries;
-              //     });
-              //   },
-              //   icon: Icon(
-              //     tiledCategoryEntries
-              //         ? Icons.grid_view_rounded
-              //         : Icons.list_rounded,
-              //   ),
-              // ),
-              // tiledCategoryEntries
-              //     ? Padding(
-              //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //         child: Wrap(
-              //           children: [...categoryEntries],
-              //         ),
-              //       )
-              //     : SizedBox.shrink(),
-              // Wrap(
-              //   children: [...categoryEntries],
-              // ),
-              ...categoryEntries,
-              SizedBox(height: 15),
-            ],
+      builder: (context, totalIncomeSnapshot) {
+        if (totalIncomeSnapshot.hasData) {
+          return StreamBuilder<double?>(
+            stream: database.watchTotalOfWallet(
+              widget.wallet?.walletPk,
+              isIncome: false,
+            ),
+            builder: (context, totalExpenseSnapshot) {
+              if (totalExpenseSnapshot.hasData) {
+                return StreamBuilder<List<CategoryWithTotal>>(
+                  stream: database
+                      .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                    Provider.of<AllWallets>(context),
+                    DateTime.now(),
+                    DateTime.now(),
+                    [],
+                    true,
+                    null, null,
+                    allTime: true,
+                    walletPk:
+                        widget.wallet == null ? null : widget.wallet!.walletPk,
+                    // member: selectedMember,
+                    // onlyShowTransactionsBelongingToBudget:
+                    //     widget.budget.sharedKey != null ||
+                    //             widget.budget.addedTransactionsOnly == true
+                    //         ? widget.budget.budgetPk
+                    //         : null,
+                    // budget: widget.budget,
+                    income: null,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      double totalSpent =
+                          (totalIncomeSnapshot.data ?? 0).abs() +
+                              (totalExpenseSnapshot.data ?? 0).abs();
+                      List<Widget> categoryEntries = [];
+                      snapshot.data!.asMap().forEach((index, category) {
+                        categoryEntries.add(
+                          CategoryEntry(
+                            extraText: category.total > 0
+                                ? " of income"
+                                : " of expenses",
+                            isTiled: tiledCategoryEntries,
+                            budgetColorScheme: widget.walletColorScheme,
+                            category: category.category,
+                            totalSpent: category.total > 0
+                                ? (totalIncomeSnapshot.data ?? 0)
+                                : (totalExpenseSnapshot.data ?? 0),
+                            transactionCount: category.transactionCount,
+                            categorySpent: category.total,
+                            onTap: () {
+                              if (selectedCategoryPk ==
+                                  category.category.categoryPk) {
+                                setState(() {
+                                  selectedCategoryPk = -1;
+                                  selectedCategory = null;
+                                });
+                                _pieChartDisplayStateKey.currentState!
+                                    .setTouchedIndex(-1);
+                                widget.onSelectedCategory(-1);
+                              } else {
+                                setState(() {
+                                  selectedCategoryPk =
+                                      category.category.categoryPk;
+                                  selectedCategory = category.category;
+                                });
+                                _pieChartDisplayStateKey.currentState!
+                                    .setTouchedIndex(index);
+                                widget.onSelectedCategory(
+                                    category.category.categoryPk);
+                              }
+                            },
+                            selected: selectedCategoryPk ==
+                                category.category.categoryPk,
+                            allSelected: selectedCategoryPk == -1,
+                            showIncomeExpenseIcons: true,
+                          ),
+                        );
+                      });
+                      return Column(
+                        children: [
+                          SizedBox(height: 30),
+                          PieChartWrapper(
+                            isPastBudget: true,
+                            pieChartDisplayStateKey: _pieChartDisplayStateKey,
+                            data: snapshot.data!,
+                            totalSpent: totalSpent,
+                            setSelectedCategory: (categoryPk, category) {
+                              setState(() {
+                                selectedCategoryPk = categoryPk;
+                                selectedCategory = category;
+                                widget.onSelectedCategory(categoryPk);
+                              });
+                            },
+                          ),
+                          SizedBox(height: 35),
+                          // IconButton(
+                          //   onPressed: () {
+                          //     setState(() {
+                          //       tiledCategoryEntries = !tiledCategoryEntries;
+                          //     });
+                          //   },
+                          //   icon: Icon(
+                          //     tiledCategoryEntries
+                          //         ? Icons.grid_view_rounded
+                          //         : Icons.list_rounded,
+                          //   ),
+                          // ),
+                          // tiledCategoryEntries
+                          //     ? Padding(
+                          //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          //         child: Wrap(
+                          //           children: [...categoryEntries],
+                          //         ),
+                          //       )
+                          //     : SizedBox.shrink(),
+                          // Wrap(
+                          //   children: [...categoryEntries],
+                          // ),
+                          ...categoryEntries,
+                          SizedBox(height: 15),
+                        ],
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
+                );
+              }
+              return SizedBox.shrink();
+            },
           );
         }
         return SizedBox.shrink();

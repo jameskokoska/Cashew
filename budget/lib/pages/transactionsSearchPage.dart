@@ -212,20 +212,28 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         AnimatedSwitcher(
                           duration: Duration(milliseconds: 500),
                           child: ButtonIcon(
-                            key: ValueKey(searchFilters.isClear(
-                                ignoreDateTimeRange: true)),
-                            color:
-                                searchFilters.isClear(ignoreDateTimeRange: true)
-                                    ? null
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .tertiaryContainer,
-                            iconColor:
-                                searchFilters.isClear(ignoreDateTimeRange: true)
-                                    ? null
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .onTertiaryContainer,
+                            key: ValueKey(
+                              searchFilters.isClear(
+                                ignoreDateTimeRange: true,
+                                ignoreSearchQuery: true,
+                              ),
+                            ),
+                            color: searchFilters.isClear(
+                              ignoreDateTimeRange: true,
+                              ignoreSearchQuery: true,
+                            )
+                                ? null
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
+                            iconColor: searchFilters.isClear(
+                              ignoreDateTimeRange: true,
+                              ignoreSearchQuery: true,
+                            )
+                                ? null
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .onTertiaryContainer,
                             onTap: () {
                               selectFilters(context);
                             },
@@ -433,7 +441,7 @@ class SearchFilters {
     searchQuery = null;
   }
 
-  bool isClear({bool? ignoreDateTimeRange}) {
+  bool isClear({bool? ignoreDateTimeRange, bool? ignoreSearchQuery}) {
     if (walletPks.isEmpty &&
         categoryPks.isEmpty &&
         budgetPks.isEmpty &&
@@ -445,7 +453,7 @@ class SearchFilters {
         methodAdded.isEmpty &&
         amountRange == null &&
         (ignoreDateTimeRange == true || dateTimeRange == null) &&
-        searchQuery == null)
+        (ignoreSearchQuery == true || searchQuery == null))
       return true;
     else
       return false;

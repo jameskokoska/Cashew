@@ -145,17 +145,7 @@ class _SelectChipsState extends State<SelectChips> {
       ).toList(),
       widget.extraWidget ?? SizedBox.shrink()
     ];
-    if (widget.wrapped)
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18),
-          child: Wrap(
-            runSpacing: 10,
-            children: children,
-          ),
-        ),
-      );
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Stack(
@@ -180,21 +170,32 @@ class _SelectChipsState extends State<SelectChips> {
               : SizedBox.shrink(),
           Align(
             alignment: Alignment.centerLeft,
-            child: SizedBox(
-              height: heightOfScroll,
-              child: ScrollablePositionedList.builder(
-                itemCount: children.length,
-                itemBuilder: (context, index) => children[index],
-                itemScrollController: itemScrollController,
-                scrollOffsetController: scrollOffsetController,
-                padding: EdgeInsets.symmetric(horizontal: 18),
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                // physics:
-                //     isDoneAnimation ? ScrollPhysics() : BouncingScrollPhysics(),
-              ),
-            ),
-          ),
+            child: widget.wrapped
+                ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18),
+                    child: Wrap(
+                      runSpacing: 10,
+                      children: [
+                        for (Widget child in children)
+                          SizedBox(height: heightOfScroll, child: child)
+                      ],
+                    ),
+                  )
+                : SizedBox(
+                    height: heightOfScroll,
+                    child: ScrollablePositionedList.builder(
+                      itemCount: children.length,
+                      itemBuilder: (context, index) => children[index],
+                      itemScrollController: itemScrollController,
+                      scrollOffsetController: scrollOffsetController,
+                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      // physics:
+                      //     isDoneAnimation ? ScrollPhysics() : BouncingScrollPhysics(),
+                    ),
+                  ),
+          )
         ],
       ),
     );

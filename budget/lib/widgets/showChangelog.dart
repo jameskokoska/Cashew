@@ -9,6 +9,17 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.7
+    Notes input when title is asked when using a large screen
+    When focus is false, Notes input updates with any links inputted
+    Changed height of wrapped choice chips
+    Fixed budget pie chart icon different size on settings page
+    Loading indeterminate progress same width as sidebar when full screen
+    < 3.4.6
+    Fixed past budgets if the day of the month was towards the end
+    Fixed filter button shows applied if searching in search bar
+    Fixed income/expense in wallet summary page
+    Fixed silent Google sign-in on web
     < 3.4.5
     Fixed color of total spent text when hovering over past budget line graph with watched category
     < 3.4.4

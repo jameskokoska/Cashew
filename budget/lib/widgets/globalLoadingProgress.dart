@@ -68,32 +68,37 @@ class GlobalLoadingIndeterminateState
   Widget build(BuildContext context) {
     return Opacity(
       opacity: opacity,
-      child: Align(
-        alignment: getWidthNavigationSidebar(context) <= 0
-            ? Alignment.bottomLeft
-            : Alignment.topCenter,
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          height: !visible ? 0 : 3,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(5),
-              topRight: Radius.circular(5),
+      child: SizedBox(
+        width: getWidthNavigationSidebar(context) <= 0
+            ? null
+            : getWidthNavigationSidebar(context),
+        child: Align(
+          alignment: getWidthNavigationSidebar(context) <= 0
+              ? Alignment.bottomLeft
+              : Alignment.topCenter,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: !visible ? 0 : 3,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
             ),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(5),
-              topRight: Radius.circular(5),
-            ),
-            child: LinearProgressIndicator(
-              color: dynamicPastel(
-                  context, Theme.of(context).colorScheme.primary,
-                  amount: 0.5),
-              backgroundColor: getColor(context, "white"),
-              minHeight: 3,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
+              child: LinearProgressIndicator(
+                color: dynamicPastel(
+                    context, Theme.of(context).colorScheme.primary,
+                    amount: 0.5),
+                backgroundColor: getColor(context, "white"),
+                minHeight: 3,
+              ),
             ),
           ),
         ),

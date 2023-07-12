@@ -111,6 +111,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
     this.description,
     this.icon,
     this.iconSize,
+    this.iconScale,
     this.isOutlined,
   }) : super(key: key);
 
@@ -119,6 +120,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   final String? description;
   final IconData? icon;
   final double? iconSize;
+  final double? iconScale;
   final bool? isOutlined;
 
   @override
@@ -133,6 +135,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
           description: description,
           icon: icon,
           iconSize: iconSize,
+          iconScale: iconScale,
           onTap: () {
             openContainer();
             // Navigator.push(
@@ -235,6 +238,7 @@ class SettingsContainerOutlined extends StatelessWidget {
     this.onLongPress,
     this.verticalPadding,
     this.iconSize,
+    this.iconScale,
     this.isExpanded = true,
   }) : super(key: key);
 
@@ -246,6 +250,7 @@ class SettingsContainerOutlined extends StatelessWidget {
   final VoidCallback? onLongPress;
   final double? verticalPadding;
   final double? iconSize;
+  final double? iconScale;
   final bool isExpanded;
 
   @override
@@ -317,10 +322,13 @@ class SettingsContainerOutlined extends StatelessWidget {
                           right: 8 +
                               defaultIconSize -
                               (iconSize ?? defaultIconSize)),
-                      child: Icon(
-                        icon,
-                        size: iconSize ?? defaultIconSize,
-                        color: Theme.of(context).colorScheme.secondary,
+                      child: Transform.scale(
+                        scale: iconScale ?? 1,
+                        child: Icon(
+                          icon,
+                          size: iconSize ?? defaultIconSize,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                     ),
               isExpanded
@@ -351,6 +359,7 @@ class SettingsContainer extends StatelessWidget {
     this.onLongPress,
     this.verticalPadding,
     this.iconSize,
+    this.iconScale,
     this.isOutlined,
   }) : super(key: key);
 
@@ -362,6 +371,7 @@ class SettingsContainer extends StatelessWidget {
   final VoidCallback? onLongPress;
   final double? verticalPadding;
   final double? iconSize;
+  final double? iconScale;
   final bool? isOutlined;
 
   @override
@@ -373,6 +383,7 @@ class SettingsContainer extends StatelessWidget {
             description: description,
             icon: icon,
             iconSize: iconSize,
+            iconScale: iconScale,
             onTap: onTap,
             onLongPress: onLongPress,
             verticalPadding: verticalPadding,
@@ -402,12 +413,15 @@ class SettingsContainer extends StatelessWidget {
                                 ? SizedBox.shrink()
                                 : Padding(
                                     padding: const EdgeInsets.only(right: 16),
-                                    child: Icon(
-                                      icon,
-                                      size: iconSize ?? 30,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                    child: Transform.scale(
+                                      scale: iconScale ?? 1,
+                                      child: Icon(
+                                        icon,
+                                        size: iconSize ?? 30,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
                                     ),
                                   ),
                             Expanded(

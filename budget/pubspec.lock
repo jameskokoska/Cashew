@@ -673,10 +673,10 @@ packages:
     dependency: "direct main"
     description:
       name: googleapis
-      sha256: "0af31e6aba9c6a72ee9c6fd02cb10813ed16d34bbd392b500fb147d64558f95d"
+      sha256: d161bced63e5c35da5de97af8800ba860b71eb11e478de7a46b852ca2560d4ad
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.0"
+    version: "11.2.0"
   graphs:
     dependency: transitive
     description:

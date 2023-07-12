@@ -158,7 +158,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           ),
                           NavigationSidebarButton(
                             icon: Icons.event_repeat_rounded,
-                            label: "subscriptions",
+                            label: "subscriptions".tr(),
                             isSelected: selectedIndex == 5,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!

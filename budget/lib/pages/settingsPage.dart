@@ -296,7 +296,7 @@ class MorePages extends StatelessWidget {
                   openPage: EditBudgetPage(title: "Edit Budgets"),
                   title: "Budgets",
                   icon: MoreIcons.chart_pie,
-                  iconSize: 20,
+                  iconScale: 0.83,
                   isOutlined: true,
                 ),
               ),

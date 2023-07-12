@@ -349,11 +349,14 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           currentDateLoopStart.year,
           currentDateLoopStart.month + budget.periodLength,
           currentDateLoopStart.day);
+      // This fixes a bug where if the currentDate is the 31 of a month, February for example won't be considered since it doesn't have 30 days
+      currentDate = DateTime(currentDate.year, currentDate.month, 1);
     } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
       currentDateLoopEnd = DateTime(
           currentDateLoopStart.year + budget.periodLength,
           currentDateLoopStart.month,
           currentDateLoopStart.day);
+      currentDate = DateTime(currentDate.year, currentDate.month, 1);
     }
     // print("START");
     // print(currentDate);

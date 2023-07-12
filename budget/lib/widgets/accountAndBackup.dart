@@ -119,7 +119,7 @@ Future<bool> signInGoogle(
 
       final signIn.GoogleSignInAccount? account = silentSignIn == true
           ? kIsWeb
-              ? await googleSignIn?.signIn()
+              ? await googleSignIn?.signInSilently()
               // await googleSignIn?.signInSilently().then((value) async {
               //   return await googleSignIn?.signIn();
               // })
@@ -129,7 +129,7 @@ Future<bool> signInGoogle(
       if (account != null) {
         user = account;
         updateSettings("currentUserEmail", user?.email ?? "",
-            updateGlobalState: false);
+            updateGlobalState: kIsWeb ? true : false);
         accountsPageStateKey.currentState?.refreshState();
       } else {
         throw ("Login failed");

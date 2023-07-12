@@ -197,8 +197,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
   }
 
-  void setSelectedNoteController(String note) {
-    // setTextInput(_noteInputController, note);
+  void setSelectedNoteController(String note, {bool setInput = true}) {
+    if (setInput) setTextInput(_noteInputController, note);
     selectedNote = note;
     return;
   }
@@ -510,6 +510,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 ? PopupFramework(
                     child: SelectTitle(
                       selectedTitle: selectedTitle,
+                      setSelectedNote: setSelectedNoteController,
                       setSelectedTitle: setSelectedTitleController,
                       setSelectedTags: setSelectedTags,
                       selectedCategory: selectedCategory,
@@ -628,6 +629,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 PopupFramework(
                   child: SelectTitle(
                     setSelectedTitle: setSelectedTitle,
+                    setSelectedNote: setSelectedNoteController,
                     setSelectedCategory: setSelectedCategory,
                     setSelectedTags: setSelectedTags,
                     selectedTitle: selectedTitle,
@@ -654,23 +656,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             borderRadius: BorderRadius.circular(15),
             child: Column(
               children: [
-                Tappable(
-                  color: (appStateSettings["materialYou"]
-                      ? Theme.of(context).colorScheme.secondaryContainer
-                      : getColor(context, "canvasContainer")),
-                  onTap: () {
-                    openBottomSheet(
-                      context,
-                      PopupFramework(
-                        child: SelectNotes(
-                          setSelectedNote: setSelectedNoteController,
-                          selectedNote: selectedNote,
-                        ),
-                      ),
-                      snap: false,
-                    );
-                  },
-                  borderRadius: 15,
+                Focus(
                   child: TextInput(
                     borderRadius: BorderRadius.zero,
                     padding: EdgeInsets.zero,
@@ -681,9 +667,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     maxLines: null,
                     minLines: 3,
                     onChanged: (text) async {
-                      setSelectedNoteController(text);
+                      setSelectedNoteController(text, setInput: false);
                     },
                   ),
+                  onFocusChange: (hasFocus) {
+                    if (hasFocus == false) setState(() {});
+                  },
                 ),
                 AnimatedSize(
                   duration: Duration(milliseconds: 1000),
@@ -1635,87 +1624,11 @@ class DateButton extends StatelessWidget {
   }
 }
 
-class SelectNotes extends StatefulWidget {
-  SelectNotes({
-    Key? key,
-    required this.setSelectedNote,
-    this.selectedNote,
-    this.next,
-  }) : super(key: key);
-  final Function(String) setSelectedNote;
-  final String? selectedNote;
-  final VoidCallback? next;
-
-  @override
-  _SelectNotesState createState() => _SelectNotesState();
-}
-
-class _SelectNotesState extends State<SelectNotes> {
-  String? input = "";
-
-  @override
-  void initState() {
-    super.initState();
-    input = widget.selectedNote;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFont(
-                  text: "Enter Notes",
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-                Container(height: 14),
-                Container(
-                  width: getWidthBottomSheet(context) - 36,
-                  child: TextInput(
-                    // icon: Icons.title_rounded,
-                    initialValue: widget.selectedNote,
-                    autoFocus: true,
-                    onEditingComplete: () {
-                      //if selected a tag and a category is set, then go to enter amount
-                      //else enter amount
-                      widget.setSelectedNote(input ?? "");
-                      Navigator.pop(context);
-                      if (widget.next != null) {
-                        widget.next!();
-                      }
-                    },
-                    onChanged: (text) {
-                      input = text;
-                      widget.setSelectedNote(input!);
-                    },
-                    labelText: "Notes",
-                    padding: EdgeInsets.zero,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 5,
-                    minLines: 5,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
 class SelectTitle extends StatefulWidget {
   SelectTitle({
     Key? key,
     required this.setSelectedTitle,
+    required this.setSelectedNote,
     this.selectedCategory,
     required this.setSelectedCategory,
     this.selectedTitle,
@@ -1723,6 +1636,7 @@ class SelectTitle extends StatefulWidget {
     this.next,
   }) : super(key: key);
   final Function(String) setSelectedTitle;
+  final Function(String) setSelectedNote;
   final TransactionCategory? selectedCategory;
   final Function(TransactionCategory) setSelectedCategory;
   final Function(List<String>) setSelectedTags;
@@ -1903,7 +1817,30 @@ class _SelectTitleState extends State<SelectTitle> {
                             ),
                           ),
                   ),
-                )
+                ),
+                getWidthNavigationSidebar(context) > 0
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 13),
+                        child: Container(
+                          width: getWidthBottomSheet(context) - 36,
+                          child: Container(
+                            width: getWidthBottomSheet(context) - 36,
+                            child: TextInput(
+                              autoFocus: false,
+                              onChanged: (text) {
+                                widget.setSelectedNote(text);
+                              },
+                              labelText: "Notes",
+                              icon: Icons.sticky_note_2_rounded,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              minLines: 3,
+                              padding: EdgeInsets.zero,
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink()
               ],
             ),
           ],
