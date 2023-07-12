@@ -9,6 +9,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.8
+    Added more icons for categories
+    About page uses smaller icon
+    Error widget shows transparent container in production
+    Ghost loading transactions have max width
     < 3.4.7
     Notes input when title is asked when using a large screen
     When focus is false, Notes input updates with any links inputted

@@ -37,7 +37,7 @@ class AboutPage extends StatelessWidget {
             runSpacing: 10,
             children: [
               Image(
-                image: AssetImage("assets/icon/icon.png"),
+                image: AssetImage("assets/icon/icon-small.png"),
                 height: 70,
               ),
               Column(

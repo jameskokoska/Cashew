@@ -235,6 +235,11 @@ class App extends StatelessWidget {
               ? OnBoardingPage(key: ValueKey("Onboarding"))
               : PageNavigationFramework(key: pageNavigationFrameworkKey)),
       builder: (context, child) {
+        if (kDebugMode == false)
+          ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+            return Container(color: Colors.transparent);
+          };
+
         Widget mainWidget = InitializeBiometrics(
           child: WatchForDayChange(
             child: WatchAllWallets(

@@ -332,10 +332,16 @@ Widget getTransactionsSlivers(
                   }
                 }
                 if (slivers == false) {
-                  return GhostTransactions(i: random.nextInt(100));
+                  return GhostTransactions(
+                    i: random.nextInt(100),
+                    useHorizontalPaddingConstrained: true,
+                  );
                 }
                 return SliverToBoxAdapter(
-                  child: GhostTransactions(i: random.nextInt(100)),
+                  child: GhostTransactions(
+                    i: random.nextInt(100),
+                    useHorizontalPaddingConstrained: true,
+                  ),
                 );
               },
             ),

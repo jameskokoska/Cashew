@@ -1,4 +1,3 @@
-
 class IconForCategory {
   IconForCategory(
       {required this.icon, required this.tags, this.mostLikelyCategoryName});
@@ -503,7 +502,8 @@ List<IconForCategory> iconObjects = [
       "gourmet",
       "recipe",
       "dish",
-      "cuisine"
+      "cuisine",
+      "cooking",
     ],
     mostLikelyCategoryName: "Cooking",
   ),
@@ -2964,5 +2964,247 @@ List<IconForCategory> iconObjects = [
       "tuner"
     ],
     mostLikelyCategoryName: "Radio",
+  ),
+  IconForCategory(
+    icon: "feathers.png",
+    tags: [
+      "feathers",
+      "birds",
+      "wing",
+      "flight",
+      "nature",
+      "plumes",
+      "birds",
+      "feathered",
+      "birdwatching",
+      "ornithology"
+    ],
+    mostLikelyCategoryName: "Feathers",
+  ),
+  IconForCategory(
+    icon: "skincare.png",
+    tags: [
+      "skincare",
+      "beauty",
+      "cosmetics",
+      "skin",
+      "care",
+      "face",
+      "products",
+      "routine",
+      "health",
+      "wellness"
+    ],
+    mostLikelyCategoryName: "Skincare",
+  ),
+  IconForCategory(
+    icon: "toiletries.png",
+    tags: [
+      "toiletries",
+      "bathroom",
+      "essentials",
+      "hygiene",
+      "personal care",
+      "products",
+      "toothbrush",
+      "soap",
+      "shampoo",
+      "towels"
+    ],
+    mostLikelyCategoryName: "Toiletries",
+  ),
+  IconForCategory(
+    icon: "pet-bowl.png",
+    tags: [
+      "pet-bowl",
+      "pets",
+      "animals",
+      "food",
+      "feeding",
+      "cat",
+      "dog",
+      "water",
+      "dish",
+      "pet care"
+    ],
+    mostLikelyCategoryName: "Pets",
+  ),
+  IconForCategory(
+    icon: "location-pin.png",
+    tags: [
+      "location-pin",
+      "map",
+      "pin",
+      "location",
+      "marker",
+      "navigation",
+      "geolocation",
+      "address",
+      "place",
+      "direction"
+    ],
+    mostLikelyCategoryName: "Location",
+  ),
+  IconForCategory(
+    icon: "sticky-notes.png",
+    tags: [
+      "sticky-notes",
+      "notes",
+      "memos",
+      "reminders",
+      "paper",
+      "writing",
+      "office",
+      "organization",
+      "stickers",
+      "post-it"
+    ],
+    mostLikelyCategoryName: "Notes",
+  ),
+  IconForCategory(
+    icon: "bill.png",
+    tags: [
+      "bill",
+      "payment",
+      "invoice",
+      "expenses",
+      "cost",
+      "financial",
+      "transaction",
+      "due",
+      "balance",
+      "receipt"
+    ],
+    mostLikelyCategoryName: "Bills",
+  ),
+  IconForCategory(
+    icon: "coin.png",
+    tags: [
+      "coin",
+      "currency",
+      "money",
+      "payment",
+      "finance",
+      "cash",
+      "coinage",
+      "exchange",
+      "wealth",
+      "monetary"
+    ],
+    mostLikelyCategoryName: "Finance",
+  ),
+  IconForCategory(
+    icon: "rainbow.png",
+    tags: [
+      "rainbow",
+      "colorful",
+      "colors",
+      "spectrum",
+      "prism",
+      "light",
+      "vibrant",
+      "beauty",
+      "weather",
+      "nature"
+    ],
+    mostLikelyCategoryName: "Rainbow",
+  ),
+  IconForCategory(
+    icon: "rain.png",
+    tags: [
+      "rain",
+      "weather",
+      "wet",
+      "precipitation",
+      "water",
+      "storm",
+      "umbrella",
+      "clouds",
+      "droplets",
+      "downpour"
+    ],
+    mostLikelyCategoryName: "Rain",
+  ),
+  IconForCategory(
+    icon: "cloudy.png",
+    tags: [
+      "cloudy",
+      "clouds",
+      "weather",
+      "overcast",
+      "sky",
+      "grey",
+      "forecast",
+      "meteorology",
+      "climate",
+      "atmosphere"
+    ],
+    mostLikelyCategoryName: "Weather",
+  ),
+  IconForCategory(
+    icon: "tickets.png",
+    tags: [
+      "tickets",
+      "events",
+      "concerts",
+      "shows",
+      "entertainment",
+      "admission",
+      "passes",
+      "entry",
+      "experience",
+      "access"
+    ],
+    mostLikelyCategoryName: "Tickets",
+  ),
+  IconForCategory(
+    icon: "celebration.png",
+    tags: [
+      "celebration",
+      "party",
+      "festivity",
+      "event",
+      "joy",
+      "happiness",
+      "cheer",
+      "occasion",
+      "festive",
+      "merriment"
+    ],
+    mostLikelyCategoryName: "Celebration",
+  ),
+  IconForCategory(
+    icon: "package.png",
+    tags: [
+      "package",
+      "parcel",
+      "shipping",
+      "delivery",
+      "mail",
+      "box",
+      "package tracking",
+      "shipping service",
+      "logistics",
+      "shipment"
+    ],
+    mostLikelyCategoryName: "Shipping",
+  ),
+  IconForCategory(
+    icon: "cabin.png",
+    tags: [
+      "cabin",
+      "cottage",
+      "woodland",
+      "retreat",
+      "nature",
+      "rustic",
+      "cozy",
+      "mountains",
+      "forest",
+      "vacation",
+      "housing",
+      "lodging"
+    ],
+    mostLikelyCategoryName: "Cabin",
   ),
 ];
