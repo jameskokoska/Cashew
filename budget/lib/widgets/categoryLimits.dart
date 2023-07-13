@@ -12,6 +12,7 @@ import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                 category.categoryPk
             ];
             return SliverStickyLabelDivider(
-              info: "Category Spending Goals",
+              info: "category-spending-goals".tr(),
               extraInfoWidget: StreamBuilder<double?>(
                 stream:
                     database.watchTotalOfCategoryLimitsInBudgetWithCategories(
@@ -130,7 +131,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                             onTap: () {},
                             padding: EdgeInsets.zero,
                             openPage: AddCategoryPage(
-                              title: "Add Category",
+                              title: "add-category".tr(),
                             ),
                             width: null,
                           ),

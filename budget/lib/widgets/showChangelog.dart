@@ -5,10 +5,19 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.4.9
+    Generate translations files script
+    Added more translations and support for switching languages
+    About page only shown in more actions when sidebar hidden
+    Click time and date in corner to view calendar popup
+    All rating stars now animate when value changed
+    Rounded setting containers when sidebar enabled
+    Indeterminate loading bar uses 5 second timeout
     < 3.4.8
     Added more icons for categories
     About page uses smaller icon
@@ -737,7 +746,7 @@ end""";
       openBottomSheet(
         context,
         PopupFramework(
-          title: "Changelog",
+          title: "changelog".tr(),
           subtitle: "v" +
               version +
               "+" +

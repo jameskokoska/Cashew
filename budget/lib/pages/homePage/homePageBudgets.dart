@@ -10,6 +10,7 @@ import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class HomePageBudgets extends StatefulWidget {
@@ -40,7 +41,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                       width: null,
                       padding: const EdgeInsets.only(
                           left: 13, right: 13, bottom: 13),
-                      openPage: AddBudgetPage(title: "Add Budget"),
+                      openPage: AddBudgetPage(title: "add-budget".tr()),
                     );
             }
             // if (snapshot.data!.length == 1) {
@@ -70,7 +71,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                   height: null,
                   width: null,
                   padding: EdgeInsets.all(0),
-                  openPage: AddBudgetPage(title: "Add Budget"),
+                  openPage: AddBudgetPage(title: "add-budget".tr()),
                 ),
               ),
             ];
@@ -129,7 +130,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                             // onPageChanged: (index, reason) {
                             //   if (index == snapshot.data!.length) {
                             //     pushRoute(context,
-                            //         AddBudgetPage(title: "Add Budget"));
+                            //         AddBudgetPage(title: ""add-budget".tr()));
                             //   }
                             // },
                             enlargeFactor: 0.3,

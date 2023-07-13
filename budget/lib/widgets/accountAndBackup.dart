@@ -26,6 +26,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/walletEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -279,8 +280,8 @@ Future<void> createBackup(
     var media = new drive.Media(mediaStream, dbFileBytes.length);
 
     var driveFile = new drive.File();
-    final timestamp =
-        DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
+    final timestamp = DateFormat("yyyy-MM-dd-hhmmss", context.locale.toString())
+        .format(DateTime.now().toUtc());
     // -$timestamp
     driveFile.name =
         "db-v$schemaVersionGlobal-${getCurrentDeviceName()}.sqlite";
@@ -504,7 +505,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
     if (widget.navigationSidebarButton == true) {
       return user == null
           ? NavigationSidebarButton(
-              label: "Login",
+              label: "login".tr(),
               icon: MoreIcons.google,
               onTap: () async {
                 login();
@@ -526,7 +527,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
             onTap: () async {
               login();
             },
-            title: "Login",
+            title: "login".tr(),
             icon: MoreIcons.google,
           )
         : SettingsContainerOpenPage(
@@ -765,7 +766,7 @@ class _BackupManagementState extends State<BackupManagement> {
                               dropDownKey = UniqueKey();
                             });
                           },
-                          onCancelLabel: "Cancel",
+                          onCancelLabel: "cancel".tr(),
                         );
                       } else {
                         updateSettings("backupLimit", int.parse(value),
@@ -811,7 +812,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                     Navigator.pop(context, true);
                                   },
                                   onSubmitLabel: "Load",
-                                  onCancelLabel: "Cancel",
+                                  onCancelLabel: "cancel".tr(),
                                   onCancel: () {
                                     Navigator.pop(context);
                                   },
@@ -988,7 +989,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                                     onCancel: () {
                                                       Navigator.pop(context);
                                                     },
-                                                    onCancelLabel: "Cancel",
+                                                    onCancelLabel:
+                                                        "cancel".tr(),
                                                   );
                                                 },
                                                 icon: Icons.close_rounded),

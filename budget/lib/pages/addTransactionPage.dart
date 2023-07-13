@@ -24,7 +24,9 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:drift/drift.dart' show Value;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -99,36 +101,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   late TabController _incomeTabController =
       TabController(length: 2, vsync: this);
 
-  String? textAddTransaction = "Add Transaction";
+  String? textAddTransaction = "add-transaction".tr();
 
   Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(DateTime.now().year - 2),
-      lastDate: DateTime(DateTime.now().year + 2),
-      builder: (BuildContext context, Widget? child) {
-        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.primary,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.primary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.secondary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
-      },
-    );
+    final DateTime? picked = await showCustomDatePicker(context, selectedDate);
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = selectedDate.copyWith(
@@ -254,7 +230,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           next: () async {
             Navigator.pop(context);
           },
-          nextLabel: "Set Amount",
+          nextLabel: "set-amount".tr(),
         ),
       ),
     );
@@ -489,7 +465,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       // } else {
       //   selectedAmountCalculation = amountString;
       // }
-      textAddTransaction = "Save Changes";
+      textAddTransaction = "save-changes".tr();
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
@@ -542,7 +518,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   Widget afterSetTitle() {
     return PopupFramework(
-      title: "Select Category",
+      title: "select-category".tr(),
       child: Column(
         children: [
           SelectCategory(
@@ -553,7 +529,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               openBottomSheet(
                 context,
                 PopupFramework(
-                  title: "Enter Amount",
+                  title: "enter-amount".tr(),
                   underTitleSpace: false,
                   padding: false,
                   child: SelectAmount(
@@ -640,7 +616,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             borderRadius: 15,
             child: TextInput(
               padding: EdgeInsets.zero,
-              labelText: "Title",
+              labelText: "title-placeholder".tr(),
               icon: Icons.title_rounded,
               controller: _titleInputController,
               onChanged: (text) async {
@@ -660,7 +636,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   child: TextInput(
                     borderRadius: BorderRadius.zero,
                     padding: EdgeInsets.zero,
-                    labelText: "Notes",
+                    labelText: "notes-placeholder".tr(),
                     icon: Icons.sticky_note_2_rounded,
                     controller: _noteInputController,
                     keyboardType: TextInputType.multiline,
@@ -820,7 +796,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         onCancel: () {
                           Navigator.pop(context);
                         },
-                        onCancelLabel: "Cancel",
+                        onCancelLabel: "cancel".tr(),
                         onSubmit: () {
                           openSnackbar(
                             SnackbarMessage(
@@ -844,12 +820,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             alignment: Alignment.bottomCenter,
             child: selectedCategory == null
                 ? SaveBottomButton(
-                    label: "Select Category",
+                    label: "select-category".tr(),
                     onTap: () {
                       openBottomSheet(
                         context,
                         PopupFramework(
-                          title: "Select Category",
+                          title: "select-category".tr(),
                           child: SelectCategory(
                             selectedCategory: selectedCategory,
                             setSelectedCategory: setSelectedCategory,
@@ -859,7 +835,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 openBottomSheet(
                                   context,
                                   PopupFramework(
-                                    title: "Enter Amount",
+                                    title: "enter-amount".tr(),
                                     padding: false,
                                     underTitleSpace: false,
                                     child: SelectAmount(
@@ -892,12 +868,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   )
                 : selectedAmount == null
                     ? SaveBottomButton(
-                        label: "Enter Amount",
+                        label: "enter-amount".tr(),
                         onTap: () {
                           openBottomSheet(
                             context,
                             PopupFramework(
-                              title: "Enter Amount",
+                              title: "enter-amount".tr(),
                               padding: false,
                               underTitleSpace: false,
                               child: SelectAmount(
@@ -925,7 +901,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       )
                     : SaveBottomButton(
                         label: widget.transaction != null
-                            ? "Save Changes"
+                            ? "save-changes".tr()
                             : textAddTransaction ?? "",
                         onTap: () async {
                           bool result = await addTransaction();
@@ -981,7 +957,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           padding:
                                               const EdgeInsets.only(top: 5.0),
                                           child: Text(
-                                            'Expense',
+                                            "expense".tr(),
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontFamily: 'Avenir',
@@ -994,7 +970,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           padding:
                                               const EdgeInsets.only(top: 5.0),
                                           child: Text(
-                                            'Income',
+                                            "income".tr(),
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontFamily: 'Avenir',
@@ -1017,8 +993,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             context,
                             AddCategoryPage(
                               title: selectedCategory == null
-                                  ? "Add Category"
-                                  : "Edit Category",
+                                  ? "add-category".tr()
+                                  : "edit-category".tr(),
                               category: selectedCategory,
                             ),
                           );
@@ -1033,7 +1009,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           openBottomSheet(
                             context,
                             PopupFramework(
-                              title: "Select Category",
+                              title: "select-category".tr(),
                               child: SelectCategory(
                                 selectedCategory: selectedCategory,
                                 setSelectedCategory: setSelectedCategory,
@@ -1072,7 +1048,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               context,
                               PopupFramework(
                                 padding: false,
-                                title: "Enter Amount",
+                                title: "enter-amount".tr(),
                                 underTitleSpace: false,
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 10),
@@ -1097,7 +1073,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         openBottomSheet(
                                           context,
                                           PopupFramework(
-                                            title: "Select Category",
+                                            title: "select-category".tr(),
                                             child: SelectCategory(
                                               selectedCategory:
                                                   selectedCategory,
@@ -1117,7 +1093,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       }
                                     },
                                     nextLabel: selectedCategory == null
-                                        ? "Select Category"
+                                        ? "select-category".tr()
                                         : textAddTransaction,
                                   ),
                                 ),
@@ -1389,7 +1365,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 5, vertical: 1),
                                               openPage: AddBudgetPage(
-                                                title: "Add Budget",
+                                                title: "add-budget".tr(),
                                                 isAddedOnlyBudget: true,
                                               ),
                                               borderRadius: 8,
@@ -1686,7 +1662,7 @@ class _SelectTitleState extends State<SelectTitle> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFont(
-                  text: "Enter Title",
+                  text: "enter-title".tr(),
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1758,7 +1734,7 @@ class _SelectTitleState extends State<SelectTitle> {
                         });
                       }
                     },
-                    labelText: "Title",
+                    labelText: "title-placeholder".tr(),
                     padding: EdgeInsets.zero,
                   ),
                 ),
@@ -1830,7 +1806,7 @@ class _SelectTitleState extends State<SelectTitle> {
                               onChanged: (text) {
                                 widget.setSelectedNote(text);
                               },
-                              labelText: "Notes",
+                              labelText: "notes-placeholder".tr(),
                               icon: Icons.sticky_note_2_rounded,
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
@@ -1856,7 +1832,7 @@ class _SelectTitleState extends State<SelectTitle> {
         //       openBottomSheet(
         //         context,
         //         PopupFramework(
-        //           title: "Select Category",
+        //           title: "select-category".tr(),
         //           child: SelectCategory(
         //             setSelectedCategory: (TransactionCategory category) {
         //               widget.setSelectedCategory(category);
@@ -1873,7 +1849,7 @@ class _SelectTitleState extends State<SelectTitle> {
         Container(height: 20),
         widget.next != null
             ? Button(
-                label: "Select Category",
+                label: "select-category".tr(),
                 width: getWidthBottomSheet(context),
                 onTap: () {
                   Navigator.pop(context);

@@ -16,6 +16,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
@@ -69,15 +70,15 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
-              tooltip: "Add Title",
+              tooltip: "add-title".tr(),
               openPage: AddAssociatedTitlePage(
-                title: "Add Title",
+                title: "add-title".tr(),
               ),
               onTap: () {
                 openBottomSheet(
                   context,
                   AddAssociatedTitlePage(
-                    title: "Add Title",
+                    title: "add-title".tr(),
                   ),
                 );
               },
@@ -89,7 +90,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
-                labelText: "Search titles...",
+                labelText: "search-titles-placeholder".tr(),
                 icon: Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
@@ -107,8 +108,8 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
           ),
           SliverToBoxAdapter(
             child: SettingsContainerSwitch(
-              title: "Ask for Transaction Title",
-              description: "When adding a transaction",
+              title: "ask-for-transaction-title".tr(),
+              description: "ask-for-transaction-title-description".tr(),
               onSwitched: (value) {
                 updateSettings(
                   "askForTransactionTitle",
@@ -121,8 +122,8 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
           ),
           SliverToBoxAdapter(
             child: SettingsContainerSwitch(
-              title: "Automatically Add Titles",
-              description: "When a transaction is created",
+              title: "auto-add-titles".tr(),
+              description: "auto-add-titles-description".tr(),
               onSwitched: (value) {
                 updateSettings("autoAddAssociatedTitles", value,
                     pagesNeedingRefresh: [], updateGlobalState: false);
@@ -171,7 +172,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                               openBottomSheet(
                                 context,
                                 AddAssociatedTitlePage(
-                                  title: "Add Title",
+                                  title: "add-title".tr(),
                                   associatedTitle: associatedTitle,
                                 ),
                               );
@@ -218,7 +219,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                                 onCancel: () {
                                   Navigator.pop(context);
                                 },
-                                onCancelLabel: "Cancel",
+                                onCancelLabel: "cancel".tr(),
                                 onSubmit: () async {
                                   await database.deleteAssociatedTitle(
                                       associatedTitle.associatedTitlePk,

@@ -1,3 +1,5 @@
+String globalAppName = "Cashew";
+
 Map<String, String> languagesDictionary = {
   "en": "English",
   "fr": "Français",

@@ -7,6 +7,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CategoryIcon extends StatelessWidget {
@@ -106,7 +107,7 @@ class CategoryIcon extends StatelessWidget {
                         pushRoute(
                           context,
                           AddCategoryPage(
-                            title: "Edit Category",
+                            title: "edit-category".tr(),
                             category: category,
                           ),
                         );

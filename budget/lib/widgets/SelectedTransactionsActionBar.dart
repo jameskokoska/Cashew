@@ -19,6 +19,7 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -193,7 +194,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   onCancel: () {
                                     Navigator.pop(context);
                                   },
-                                  onCancelLabel: "Cancel",
+                                  onCancelLabel: "cancel".tr(),
                                   onSubmit: () async {
                                     await database
                                         .deleteTransactions(value[pageID]!);
@@ -263,7 +264,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
     openBottomSheet(
       context,
       PopupFramework(
-        title: "Enter Amount",
+        title: "enter-amount".tr(),
         underTitleSpace: false,
         child: SelectAmount(
           onlyShowCurrencyIcon: true,
@@ -272,7 +273,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
           next: () async {
             Navigator.pop(context);
           },
-          nextLabel: "Set Amount",
+          nextLabel: "set-amount".tr(),
         ),
       ),
     );
@@ -351,7 +352,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
               onTap: () => openBottomSheet(
                 context,
                 PopupFramework(
-                  title: "Select Category",
+                  title: "select-category".tr(),
                   child: SelectCategory(
                     setSelectedCategory: (category) {
                       setState(() {
@@ -386,7 +387,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Button(
-              label: "Cancel",
+              label: "cancel".tr(),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -432,7 +433,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                         onCancel: () {
                           Navigator.pop(context);
                         },
-                        onCancelLabel: "Cancel",
+                        onCancelLabel: "cancel".tr(),
                         onSubmit: () async {
                           if (selectedAmount != null) {
                             for (int transactionID in widget.transactionIDs) {

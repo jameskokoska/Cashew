@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -376,95 +377,99 @@ class SettingsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isOutlined == true
-        ? SettingsContainerOutlined(
-            title: title,
-            afterWidget: afterWidget,
-            description: description,
-            icon: icon,
-            iconSize: iconSize,
-            iconScale: iconScale,
-            onTap: onTap,
-            onLongPress: onLongPress,
-            verticalPadding: verticalPadding,
-          )
-        : Padding(
-            padding: EdgeInsets.symmetric(vertical: 0),
-            child: Tappable(
-              color: Colors.transparent,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(
+          getWidthNavigationSidebar(context) <= 0 ? 0 : 20),
+      child: isOutlined == true
+          ? SettingsContainerOutlined(
+              title: title,
+              afterWidget: afterWidget,
+              description: description,
+              icon: icon,
+              iconSize: iconSize,
+              iconScale: iconScale,
               onTap: onTap,
               onLongPress: onLongPress,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: verticalPadding ?? 11,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            icon == null
-                                ? SizedBox.shrink()
-                                : Padding(
-                                    padding: const EdgeInsets.only(right: 16),
-                                    child: Transform.scale(
-                                      scale: iconScale ?? 1,
-                                      child: Icon(
-                                        icon,
-                                        size: iconSize ?? 30,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+              verticalPadding: verticalPadding,
+            )
+          : Padding(
+              padding: EdgeInsets.symmetric(vertical: 0),
+              child: Tappable(
+                color: Colors.transparent,
+                onTap: onTap,
+                onLongPress: onLongPress,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: verticalPadding ?? 11,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              icon == null
+                                  ? SizedBox.shrink()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(right: 16),
+                                      child: Transform.scale(
+                                        scale: iconScale ?? 1,
+                                        child: Icon(
+                                          icon,
+                                          size: iconSize ?? 30,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                            Expanded(
-                              child: description == null
-                                  ? TextFont(
-                                      fixParagraphMargin: true,
-                                      text: title,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      maxLines: 5,
-                                    )
-                                  : Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextFont(
-                                          fixParagraphMargin: true,
-                                          text: title,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          maxLines: 5,
-                                        ),
-                                        Container(height: 3),
-                                        TextFont(
-                                          text: description!,
-                                          fontSize: 14,
-                                          maxLines: 5,
-                                        ),
-                                      ],
-                                    ),
-                            ),
-                          ],
+                              Expanded(
+                                child: description == null
+                                    ? TextFont(
+                                        fixParagraphMargin: true,
+                                        text: title,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        maxLines: 5,
+                                      )
+                                    : Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextFont(
+                                            fixParagraphMargin: true,
+                                            text: title,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            maxLines: 5,
+                                          ),
+                                          Container(height: 3),
+                                          TextFont(
+                                            text: description!,
+                                            fontSize: 14,
+                                            maxLines: 5,
+                                          ),
+                                        ],
+                                      ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    afterWidget ?? SizedBox()
-                  ],
+                      afterWidget ?? SizedBox()
+                    ],
+                  ),
                 ),
               ),
             ),
-          );
+    );
   }
 }
 

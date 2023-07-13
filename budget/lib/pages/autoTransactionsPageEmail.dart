@@ -20,6 +20,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:provider/provider.dart';
@@ -629,7 +630,7 @@ class ScannerTemplateEntry extends StatelessWidget {
                         onCancel: () {
                           Navigator.pop(context);
                         },
-                        onCancelLabel: "Cancel",
+                        onCancelLabel: "cancel".tr(),
                         onSubmit: () async {
                           await database.deleteScannerTemplate(
                               scannerTemplate.scannerTemplatePk);

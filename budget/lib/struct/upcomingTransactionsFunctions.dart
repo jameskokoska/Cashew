@@ -9,6 +9,7 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 
@@ -65,15 +66,15 @@ void openPayPopup(BuildContext context, Transaction transaction) {
   openPopup(
     context,
     icon: Icons.check_circle_rounded,
-    title: transaction.income ? "Deposit?" : "Pay?",
+    title: (transaction.income ? "deposit".tr() : "pay".tr()) + "?",
     description: transaction.income
-        ? "Deposit this amount?"
-        : "Add payment on this transaction?",
-    onCancelLabel: "Cancel",
+        ? "deposit-description".tr()
+        : "pay-description".tr(),
+    onCancelLabel: "cancel".tr().tr(),
     onCancel: () {
       Navigator.pop(context);
     },
-    onExtraLabel: "Skip",
+    onExtraLabel: "skip".tr(),
     onExtra: () async {
       Navigator.pop(context);
       Transaction transactionNew = transaction.copyWith(
@@ -85,7 +86,7 @@ void openPayPopup(BuildContext context, Transaction transaction) {
       await createNewSubscriptionTransaction(context, transaction);
       setUpcomingNotifications(context);
     },
-    onSubmitLabel: transaction.income ? "Deposit" : "Pay",
+    onSubmitLabel: transaction.income ? "deposit".tr() : "pay".tr(),
     onSubmit: () async {
       Navigator.pop(context);
       double amount = transaction.amount;
@@ -93,11 +94,11 @@ void openPayPopup(BuildContext context, Transaction transaction) {
         amount = await openBottomSheet(
           context,
           PopupFramework(
-            title: "Enter Amount",
+            title: "enter-amount".tr(),
             underTitleSpace: false,
             child: SelectAmount(
               setSelectedAmount: (_, __) {},
-              nextLabel: "Set Amount",
+              nextLabel: "set-amount".tr(),
               popWithAmount: true,
             ),
           ),
@@ -120,24 +121,25 @@ void openPayDebtCreditPopup(BuildContext context, Transaction transaction) {
   openPopup(
     context,
     icon: Icons.check_circle_rounded,
-    title: transaction.type == TransactionSpecialType.credit
-        ? "Collect?"
-        : transaction.type == TransactionSpecialType.debt
-            ? "Settled?"
-            : "",
+    title: (transaction.type == TransactionSpecialType.credit
+            ? "collect".tr()
+            : transaction.type == TransactionSpecialType.debt
+                ? "settled".tr()
+                : "") +
+        "?",
     description: transaction.type == TransactionSpecialType.credit
-        ? "Have you collected amount you lent?"
+        ? "collect-description".tr()
         : transaction.type == TransactionSpecialType.debt
-            ? "Have you paid and settled your debt?"
+            ? "settled-description".tr()
             : "",
-    onCancelLabel: "Cancel",
+    onCancelLabel: "cancel".tr(),
     onCancel: () {
       Navigator.pop(context);
     },
     onSubmitLabel: transaction.type == TransactionSpecialType.credit
-        ? "Collect"
+        ? "collect".tr()
         : transaction.type == TransactionSpecialType.debt
-            ? "Settle"
+            ? "settle".tr()
             : "",
     onSubmit: () async {
       Navigator.pop(context);
@@ -153,13 +155,13 @@ void openPayDebtCreditPopup(BuildContext context, Transaction transaction) {
 void openRemoveSkipPopup(BuildContext context, Transaction transaction) {
   openPopup(context,
       icon: Icons.unpublished_rounded,
-      title: "Remove Skip?",
-      description: "Remove the skipped payment on this transaction?",
-      onCancelLabel: "Cancel",
+      title: "remove-skip".tr() + "?",
+      description: "remove-skip-description".tr(),
+      onCancelLabel: "cancel".tr(),
       onCancel: () {
         Navigator.pop(context);
       },
-      onSubmitLabel: "Remove",
+      onSubmitLabel: "remove".tr(),
       onSubmit: () async {
         Navigator.pop(context);
         Transaction transactionNew = transaction.copyWith(skipPaid: false);
@@ -171,13 +173,13 @@ void openRemoveSkipPopup(BuildContext context, Transaction transaction) {
 void openUnpayPopup(BuildContext context, Transaction transaction) {
   openPopup(context,
       icon: Icons.unpublished_rounded,
-      title: "Remove Payment?",
-      description: "Remove the payment on this transaction?",
-      onCancelLabel: "Cancel",
+      title: "remove-payment".tr() + "?",
+      description: "remove-payment-description".tr(),
+      onCancelLabel: "cancel".tr(),
       onCancel: () {
         Navigator.pop(context);
       },
-      onSubmitLabel: "Remove",
+      onSubmitLabel: "remove".tr(),
       onSubmit: () async {
         Navigator.pop(context);
         await database.deleteTransaction(transaction.transactionPk);
@@ -196,13 +198,13 @@ void openUnpayPopup(BuildContext context, Transaction transaction) {
 void openUnpayDebtCreditPopup(BuildContext context, Transaction transaction) {
   openPopup(context,
       icon: Icons.unpublished_rounded,
-      title: "Remove Payment?",
-      description: "Remove the payment on this transaction?",
-      onCancelLabel: "Cancel",
+      title: "remove-payment".tr() + "?",
+      description: "remove-payment-description".tr(),
+      onCancelLabel: "cancel".tr(),
       onCancel: () {
         Navigator.pop(context);
       },
-      onSubmitLabel: "Remove",
+      onSubmitLabel: "remove".tr(),
       onSubmit: () async {
         Navigator.pop(context);
         Transaction transactionNew = transaction.copyWith(

@@ -21,6 +21,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/scheduler.dart';
@@ -178,9 +179,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewPadding.bottom),
                 child: FAB(
-                  tooltip: "Add Transaction",
+                  tooltip: "add-transaction".tr(),
                   openPage: AddTransactionPage(
-                    title: "Add Transaction",
+                    title: "add-transaction".tr(),
                     selectedBudget: widget.budget.sharedKey != null ||
                             widget.budget.addedTransactionsOnly == true
                         ? widget.budget
@@ -197,7 +198,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       widget.isPastBudgetButCurrentPeriod == true
                   ? SizedBox.shrink()
                   : IconButton(
-                      tooltip: "Past budgets",
+                      tooltip: "Past Budget Cycles",
                       onPressed: () {
                         pushRoute(
                           context,
@@ -210,12 +211,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       ),
                     ),
               IconButton(
-                tooltip: "Edit budget",
+                tooltip: "edit-budget".tr(),
                 onPressed: () {
                   pushRoute(
                     context,
                     AddBudgetPage(
-                      title: "Edit Budget",
+                      title: "edit-budget".tr(),
                       budget: widget.budget,
                     ),
                   );
@@ -576,7 +577,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               bottom: 8,
                             ),
                             child: TextFont(
-                              text: "Total cash flow: " +
+                              text: "total-cash-flow".tr() +
+                                  ": " +
                                   convertToMoney(
                                       Provider.of<AllWallets>(context),
                                       totalSpent) +
@@ -974,11 +976,11 @@ class _TotalSpentState extends State<TotalSpent> {
                         Container(
                           padding: const EdgeInsets.only(bottom: 3.8),
                           child: TextFont(
-                            text:
-                                (showTotalSpent ? " spent of " : " left of ") +
-                                    convertToMoney(
-                                        Provider.of<AllWallets>(context),
-                                        widget.budget.amount),
+                            text: (showTotalSpent
+                                    ? " " + "spent-amount-of".tr() + " "
+                                    : " " + "remaining-amount-of".tr() + " ") +
+                                convertToMoney(Provider.of<AllWallets>(context),
+                                    widget.budget.amount),
                             fontSize: 16,
                             textAlign: TextAlign.left,
                             textColor:
@@ -1024,10 +1026,11 @@ class _TotalSpentState extends State<TotalSpent> {
                     Container(
                       padding: const EdgeInsets.only(bottom: 3.8),
                       child: TextFont(
-                        text:
-                            (showTotalSpent ? " spent of " : " overspent of ") +
-                                convertToMoney(Provider.of<AllWallets>(context),
-                                    widget.budget.amount),
+                        text: (showTotalSpent
+                                ? " " + "spent-amount-of".tr() + " "
+                                : " " + "overspent-amount-of".tr() + " ") +
+                            convertToMoney(Provider.of<AllWallets>(context),
+                                widget.budget.amount),
                         fontSize: 16,
                         textAlign: TextAlign.left,
                         textColor:

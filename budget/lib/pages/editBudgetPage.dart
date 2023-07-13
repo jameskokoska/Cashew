@@ -20,6 +20,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/modified/reorderable_list.dart';
@@ -72,9 +73,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
-              tooltip: "Add Budget",
+              tooltip: "add-budget".tr(),
               openPage: AddBudgetPage(
-                title: "Add Budget",
+                title: "add-budget".tr(),
               ),
             ),
           ),
@@ -94,7 +95,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
-                labelText: "Search budgets...",
+                labelText: "search-budgets-placeholder".tr(),
                 icon: Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
@@ -168,7 +169,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                             deleteBudgetPopup(context, budget);
                           },
                           openPage: AddBudgetPage(
-                            title: "Edit Budget",
+                            title: "edit-budget".tr(),
                             budget: budget,
                           ),
                           content: Column(
@@ -367,7 +368,7 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
     onCancel: () {
       Navigator.pop(context, false);
     },
-    onCancelLabel: "Cancel",
+    onCancelLabel: "cancel".tr(),
     onSubmit: () async {
       Navigator.pop(context, true);
       int result = await database.deleteBudget(context, budget);
@@ -389,7 +390,7 @@ Future<dynamic> deleteAddedTransactionsOnlyBudgetPopup(context, Budget budget) {
     onCancel: () {
       Navigator.pop(context, false);
     },
-    onCancelLabel: "Cancel",
+    onCancelLabel: "cancel".tr(),
     onSubmit: () async {
       Navigator.pop(context, true);
     },
@@ -408,7 +409,7 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
       onCancel: () {
         Navigator.pop(context, false);
       },
-      onCancelLabel: "Cancel",
+      onCancelLabel: "cancel".tr(),
       onSubmit: () async {
         Navigator.pop(context, true);
       },
@@ -424,7 +425,7 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
       onCancel: () {
         Navigator.pop(context, false);
       },
-      onCancelLabel: "Cancel",
+      onCancelLabel: "cancel".tr(),
       onSubmit: () async {
         Navigator.pop(context, true);
       },

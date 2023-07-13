@@ -4,6 +4,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -35,7 +36,7 @@ import 'package:budget/widgets/textWidgets.dart';
 //       title: "hello",
 //       description: "test",
 //       onSubmitLabel: "submit",
-//       onCancelLabel: "cancel",
+//       onCancelLabel: "cancel".tr(),
 //     );
 //   },
 // ),
@@ -400,16 +401,16 @@ void discardChangesPopup(context,
   } else {
     await openPopup(
       context,
-      title: "Discard Changes?",
-      description: "Are you sure you want to discard your changes.",
+      title: "discard-changes".tr(),
+      description: "discard-changes-description".tr(),
       icon: Icons.warning_rounded,
-      onSubmitLabel: "Discard",
+      onSubmitLabel: "discard".tr(),
       onSubmit: () async {
         if (onDiscard != null) await onDiscard();
         Navigator.pop(context);
         Navigator.pop(context);
       },
-      onCancelLabel: "Cancel",
+      onCancelLabel: "cancel".tr(),
       onCancel: () {
         Navigator.pop(context);
       },

@@ -102,19 +102,19 @@ class BottomNavBarState extends State<BottomNavBar> {
                         destinations: [
                           NavigationDestination(
                             icon: Icon(Icons.home_rounded),
-                            label: "home-page-title".tr(),
+                            label: "home".tr(),
                           ),
                           NavigationDestination(
                             icon: Icon(Icons.payments_rounded),
-                            label: "transactions-page-title".tr(),
+                            label: "transactions".tr(),
                           ),
                           NavigationDestination(
                             icon: Icon(MoreIcons.chart_pie, size: 20),
-                            label: "budgets-page-title".tr(),
+                            label: "budgets".tr(),
                           ),
                           NavigationDestination(
                             icon: Icon(Icons.more_horiz_rounded),
-                            label: "more-actions-page-title".tr(),
+                            label: "more-actions".tr(),
                           ),
                         ],
                         selectedIndex: selectedIndex,

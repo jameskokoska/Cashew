@@ -19,6 +19,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:budget/widgets/selectChips.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
@@ -72,9 +73,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
-              tooltip: "Add Wallet",
+              tooltip: "add-wallet".tr(),
               openPage: AddWalletPage(
-                title: "Add Wallet",
+                title: "add-wallet".tr(),
               ),
             ),
           ),
@@ -84,7 +85,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
-                labelText: "Search wallets...",
+                labelText: "search-wallets-placeholder".tr(),
                 icon: Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
@@ -197,7 +198,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                         deleteWalletPopup(context, wallet);
                       },
                       openPage: AddWalletPage(
-                        title: "Edit Wallet",
+                        title: "edit-wallet".tr(),
                         wallet: wallet,
                       ),
                       key: ValueKey(index),
@@ -243,7 +244,7 @@ void deleteWalletPopup(context, TransactionWallet wallet,
     onCancel: () {
       Navigator.pop(context);
     },
-    onCancelLabel: "Cancel",
+    onCancelLabel: "cancel".tr(),
     onExtraLabel2: "Move Transactions To Another Wallet and Delete",
     onExtra2: () async {
       Navigator.pop(context);

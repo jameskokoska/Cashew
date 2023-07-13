@@ -12,6 +12,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
@@ -38,7 +39,7 @@ class UpcomingOverdueTransactions extends StatelessWidget {
         children: [
           PageFramework(
             listID: pageId,
-            title: overdueTransactions ? "Overdue" : "Upcoming",
+            title: overdueTransactions ? "overdue".tr() : "upcoming".tr(),
             dragDownToDismiss: true,
             slivers: [
               SliverToBoxAdapter(

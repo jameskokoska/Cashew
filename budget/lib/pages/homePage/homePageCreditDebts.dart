@@ -7,6 +7,7 @@ import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +28,7 @@ class HomePageCreditDebts extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TransactionsAmountBox(
-                      label: "Lent",
+                      label: "lent".tr(),
                       amountStream: database.watchTotalOfCreditDebt(
                         Provider.of<AllWallets>(context),
                         true,
@@ -41,7 +42,7 @@ class HomePageCreditDebts extends StatelessWidget {
                   SizedBox(width: 13),
                   Expanded(
                     child: TransactionsAmountBox(
-                      label: "Borrowed",
+                      label: "borrowed".tr(),
                       amountStream: database.watchTotalOfCreditDebt(
                         Provider.of<AllWallets>(context),
                         false,

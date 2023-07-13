@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -125,14 +126,19 @@ class BarGraphState extends State<BarGraph> {
                           fontSize: 13,
                           text: widget.budget.reoccurrence ==
                                   BudgetReoccurence.monthly
-                              ? DateFormat('MMM').format(
-                                  widget.dateRanges[value.toInt()].start)
+                              ? DateFormat('MMM', context.locale.toString())
+                                  .format(
+                                      widget.dateRanges[value.toInt()].start)
                               : widget.budget.reoccurrence ==
                                       BudgetReoccurence.yearly
-                                  ? DateFormat('yyyy').format(
-                                      widget.dateRanges[value.toInt()].start)
-                                  : DateFormat('MMM\nd').format(
-                                      widget.dateRanges[value.toInt()].start),
+                                  ? DateFormat(
+                                          'yyyy', context.locale.toString())
+                                      .format(widget
+                                          .dateRanges[value.toInt()].start)
+                                  : DateFormat(
+                                          'MMM\nd', context.locale.toString())
+                                      .format(widget
+                                          .dateRanges[value.toInt()].start),
                           textColor: dynamicPastel(context, widget.color,
                                   amount: 0.8, inverse: true)
                               .withOpacity(0.5),

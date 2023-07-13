@@ -13,6 +13,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
@@ -46,7 +47,7 @@ class CreditDebtTransactions extends StatelessWidget {
                 child: FAB(
                   tooltip: isCredit ? "Add Credit" : "Add Debt",
                   openPage: AddTransactionPage(
-                    title: "Add Transaction",
+                    title: "add-transaction".tr(),
                     selectedType: isCredit
                         ? TransactionSpecialType.credit
                         : TransactionSpecialType.debt,
@@ -55,7 +56,7 @@ class CreditDebtTransactions extends StatelessWidget {
               ),
             ),
             listID: pageId,
-            title: isCredit ? "Lent" : "Borrowed",
+            title: isCredit ? "lent".tr() : "borrowed".tr(),
             dragDownToDismiss: true,
             slivers: [
               SliverToBoxAdapter(

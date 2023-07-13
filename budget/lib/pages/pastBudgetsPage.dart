@@ -196,7 +196,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     return PageFramework(
       backgroundColor: backgroundColor,
       key: budgetHistoryKey,
-      title: "budget-history-title".tr(),
+      title: "budget-history".tr(),
       subtitle: Padding(
         padding: EdgeInsets.only(
             left: enableDoubleColumn(context) ? 0 : 20, bottom: 6),
@@ -209,12 +209,12 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       ),
       actions: [
         IconButton(
-          tooltip: "Watch Categories",
+          tooltip: "watch-categories".tr(),
           onPressed: () {
             openBottomSheet(
               context,
               PopupFramework(
-                title: "Select Categories to Watch",
+                title: "select-categories-to-watch".tr(),
                 child: Column(
                   children: [
                     SelectCategory(
@@ -238,7 +238,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                         Expanded(
                           child: Button(
                             expandedLayout: true,
-                            label: "Clear",
+                            label: "clear".tr(),
                             onTap: () {
                               setState(() {
                                 selectedCategoryFks = [];
@@ -257,7 +257,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                         Expanded(
                           child: Button(
                             expandedLayout: true,
-                            label: "Done",
+                            label: "done".tr(),
                             onTap: () {
                               Navigator.pop(context);
                             },
@@ -278,12 +278,12 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           ),
         ),
         IconButton(
-          tooltip: "Edit budget",
+          tooltip: "edit-budget".tr(),
           onPressed: () {
             pushRoute(
               context,
               AddBudgetPage(
-                title: "Edit Budget",
+                title: "edit-budget".tr(),
                 budget: widget.budget,
               ),
             );
@@ -885,8 +885,14 @@ class PastBudgetContainer extends StatelessWidget {
                                             child: TextFont(
                                               text: (appStateSettings[
                                                           "showTotalSpentForBudget"]
-                                                      ? " spent of "
-                                                      : " left of ") +
+                                                      ? " " +
+                                                          "spent-amount-of"
+                                                              .tr() +
+                                                          " "
+                                                      : " " +
+                                                          "remaining-amount-of"
+                                                              .tr() +
+                                                          " ") +
                                                   convertToMoney(
                                                       Provider.of<AllWallets>(
                                                           context),
@@ -937,8 +943,12 @@ class PastBudgetContainer extends StatelessWidget {
                                       child: TextFont(
                                         text: (appStateSettings[
                                                     "showTotalSpentForBudget"]
-                                                ? " spent of "
-                                                : " overspent of ") +
+                                                ? " " +
+                                                    "spent-amount-of".tr() +
+                                                    " "
+                                                : " " +
+                                                    "overspent-amount-of".tr() +
+                                                    " ") +
                                             convertToMoney(
                                                 Provider.of<AllWallets>(
                                                     context),
@@ -1028,7 +1038,7 @@ class PastBudgetContainer extends StatelessWidget {
               pushRoute(
                 context,
                 AddBudgetPage(
-                  title: "Edit Budget",
+                  title: "edit-budget".tr(),
                   budget: budget,
                 ),
               );

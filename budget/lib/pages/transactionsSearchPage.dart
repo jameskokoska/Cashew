@@ -19,6 +19,8 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +76,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     await openBottomSheet(
       context,
       PopupFramework(
-        title: "Filters",
+        title: "filters".tr(),
         padding: false,
         child: TransactionFiltersSelection(
           setSearchFilters: setSearchFilters,
@@ -92,32 +94,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
   }
 
   Future<void> selectDateRange(BuildContext context) async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(DateTime.now().year - 10),
-      lastDate: DateTime(DateTime.now().year + 2),
-      initialDateRange: searchFilters.dateTimeRange,
-      builder: (BuildContext context, Widget? child) {
-        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.primary,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.primary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.secondary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
-      },
+    final DateTimeRange? picked = await showCustomDateRangePicker(
+      context,
+      searchFilters.dateTimeRange,
       initialEntryMode: DatePickerEntryMode.input,
     );
     if (picked != null)
@@ -153,15 +132,15 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               listID: "TransactionsSearch",
               dragDownToDismiss: true,
               onScroll: _scrollListener,
-              title: "Search",
+              title: "search".tr(),
               floatingActionButton: AnimateFABDelayed(
                 fab: Padding(
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewPadding.bottom),
                   child: FAB(
-                    tooltip: "Add Transaction",
+                    tooltip: "add-transaction".tr(),
                     openPage: AddTransactionPage(
-                      title: "Add Transaction",
+                      title: "add-transaction".tr(),
                     ),
                   ),
                 ),
@@ -182,7 +161,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         SizedBox(width: 20),
                         Expanded(
                           child: TextInput(
-                            labelText: "Search...",
+                            labelText: "search-placeholder".tr(),
                             icon: Icons.search_rounded,
                             onSubmitted: (value) {
                               setState(() {
@@ -543,9 +522,9 @@ class _TransactionFiltersSelectionState
           items: ExpenseIncome.values,
           getLabel: (item) {
             return item == ExpenseIncome.expense
-                ? "Expense"
+                ? "expense".tr()
                 : item == ExpenseIncome.income
-                    ? "Income"
+                    ? "income".tr()
                     : "";
           },
           onSelected: (item) {
@@ -583,11 +562,11 @@ class _TransactionFiltersSelectionState
           items: PaidStatus.values,
           getLabel: (item) {
             return item == PaidStatus.paid
-                ? "Paid"
+                ? "paid".tr()
                 : item == PaidStatus.notPaid
-                    ? "Not Paid"
+                    ? "not-paid".tr()
                     : item == PaidStatus.skipped
-                        ? "Skipped"
+                        ? "skipped".tr()
                         : "";
           },
           onSelected: (item) {
@@ -741,7 +720,7 @@ class _TransactionFiltersSelectionState
               Flexible(
                 child: Button(
                   expandedLayout: true,
-                  label: "Reset",
+                  label: "reset".tr(),
                   onTap: () {
                     clearSearchFilters();
                   },
@@ -753,7 +732,7 @@ class _TransactionFiltersSelectionState
               Flexible(
                 child: Button(
                   expandedLayout: true,
-                  label: "Apply",
+                  label: "apply".tr(),
                   onTap: () {
                     Navigator.pop(context);
                   },

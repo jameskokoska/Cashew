@@ -8,6 +8,7 @@ import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
 
@@ -39,18 +40,18 @@ class BudgetsListPageState extends State<BudgetsListPage>
     return PageFramework(
       sharedBudgetRefresh: true,
       key: pageState,
-      title: "Budgets",
+      title: "budgets".tr(),
       backButton: false,
       horizontalPadding: enableDoubleColumn(context) == false
           ? getHorizontalPaddingConstrained(context)
           : 0,
       actions: [
         IconButton(
-          tooltip: "Edit budget",
+          tooltip: "edit-budgets".tr(),
           onPressed: () {
             pushRoute(
               context,
-              EditBudgetPage(title: "Edit Budgets"),
+              EditBudgetPage(title: "edit-budgets".tr()),
             );
           },
           icon: Icon(

@@ -23,7 +23,9 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -112,26 +114,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   // BudgetsCompanion budget = BudgetsCompanion();
 
-  Future<void> selectTitle() async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Name",
-        child: SelectText(
-          setSelectedText: setSelectedTitle,
-          labelText: "Name",
-          selectedText: selectedTitle,
-        ),
-      ),
-      snap: false,
-    );
-  }
-
   Future<void> selectColor(BuildContext context) async {
     openBottomSheet(
       context,
       PopupFramework(
-        title: "Select Color",
+        title: "select-color".tr(),
         child: SelectColor(
           selectedColor: selectedColor,
           setSelectedColor: setSelectedColor,
@@ -236,7 +223,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             onSubmit: () {
               Navigator.pop(context);
             },
-            onSubmitLabel: "OK",
+            onSubmitLabel: "ok".tr(),
           );
         });
         loadingIndeterminateKey.currentState!.setVisibility(false);
@@ -258,7 +245,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         onSubmit: () {
           Navigator.pop(context);
         },
-        onSubmitLabel: "OK",
+        onSubmitLabel: "ok".tr(),
         onCancelLabel: "Exit Without Saving",
       );
     } else {
@@ -507,7 +494,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   )
                 : selectedAmount == 0
                     ? SaveBottomButton(
-                        label: "Set Amount",
+                        label: "set-amount".tr(),
                         onTap: () async {
                           _budgetDetailsStateKey.currentState
                               ?.selectAmount(context);
@@ -516,8 +503,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       )
                     : SaveBottomButton(
                         label: widget.budget == null
-                            ? "Add Budget"
-                            : "Save Changes",
+                            ? "add-budget".tr()
+                            : "save-changes".tr(),
                         onTap: () async {
                           await addBudget();
                         },
@@ -533,7 +520,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput(
                     focusNode: _titleFocusNode,
-                    labelText: "Name",
+                    labelText: "name".tr(),
                     bubbly: false,
                     initialValue: selectedTitle,
                     onChanged: (text) {
@@ -585,7 +572,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               ],
             ),
             SliverStickyLabelDivider(
-              info: "Select Color",
+              info: "select-color".tr(),
               sliver: ColumnSliver(children: [
                 Container(
                   height: 65,
@@ -600,7 +587,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             widget.budget != null
                 ? SliverToBoxAdapter(child: SizedBox.shrink())
                 : SliverStickyLabelDivider(
-                    info: "Budget Type",
+                    info: "budget-type".tr(),
                     sliver: ColumnSliver(
                       children: [
                         AnimatedSize(
@@ -610,11 +597,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             child: TextFont(
                               text: selectedAddedTransactionsOnly == false &&
                                       selectedShared == false
-                                  ? "All transactions within the time period following the categories and filters selected will be added to this budget"
+                                  ? "budget-type-all-description".tr()
                                   : selectedShared == true &&
                                           selectedAddedTransactionsOnly == true
-                                      ? "Only transactions added to this budget will be shared with others users you share this budget to"
-                                      : "Only the transactions you explicitly add to this budget will be shown in this budget",
+                                      ? "budget-type-shared-description".tr()
+                                      : "budget-type-added-description".tr(),
                               textColor: getColor(context, "textLight"),
                               fontSize: 13,
                               maxLines: 3,
@@ -669,7 +656,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     ),
                   ),
             SliverStickyLabelDivider(
-              info: "Select Categories",
+              info: "select-categories".tr(),
               extraInfo: selectedCategoriesText + " Budget",
               visible:
                   !(selectedShared == true || selectedAddedTransactionsOnly) &&
@@ -704,7 +691,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               ),
             ),
             SliverStickyLabelDivider(
-              info: "Transaction Filters",
+              info: "transaction-filters".tr(),
               visible:
                   !(selectedShared == true || selectedAddedTransactionsOnly) &&
                       ((widget.budget != null &&
@@ -1127,7 +1114,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
     openBottomSheet(
       context,
       PopupFramework(
-        title: "Enter Amount",
+        title: "enter-amount".tr(),
         underTitleSpace: false,
         child: SelectAmount(
           onlyShowCurrencyIcon: true,
@@ -1142,7 +1129,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
           next: () async {
             Navigator.pop(context);
           },
-          nextLabel: "Set Amount",
+          nextLabel: "set-amount".tr(),
         ),
       ),
     );
@@ -1162,7 +1149,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
           next: () async {
             Navigator.pop(context);
           },
-          nextLabel: "Set Amount",
+          nextLabel: "set-amount".tr(),
         ),
       ),
     );
@@ -1224,11 +1211,9 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   }
 
   Future<void> selectDateRange(BuildContext context) async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(DateTime.now().year - 2),
-      lastDate: DateTime(DateTime.now().year + 2),
-      initialDateRange: DateTimeRange(
+    final DateTimeRange? picked = await showCustomDateRangePicker(
+      context,
+      DateTimeRange(
         start: selectedStartDate,
         end: selectedEndDate ??
             DateTime(
@@ -1237,27 +1222,6 @@ class _BudgetDetailsState extends State<BudgetDetails> {
               selectedStartDate.day + 7,
             ),
       ),
-      builder: (BuildContext context, Widget? child) {
-        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.primary,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.primary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.secondary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
-      },
     );
     if (picked != null) {
       setState(() {
@@ -1271,33 +1235,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   }
 
   Future<void> selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedStartDate,
-      firstDate: DateTime(DateTime.now().year - 2),
-      lastDate: DateTime(DateTime.now().year + 2),
-      builder: (BuildContext context, Widget? child) {
-        if (appStateSettings["materialYou"]) return child ?? SizedBox.shrink();
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.primary,
-                  colorScheme: ColorScheme.light(
-                      primary: Theme.of(context).colorScheme.primary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                )
-              : ThemeData.dark().copyWith(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.dark(
-                      primary: Theme.of(context).colorScheme.secondary),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
-      },
-    );
+    final DateTime? picked =
+        await showCustomDatePicker(context, selectedStartDate);
     setSelectedStartDate(picked);
   }
 

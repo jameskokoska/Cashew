@@ -13,6 +13,7 @@ import 'package:budget/widgets/selectItems.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -59,7 +60,7 @@ class _EditHomePageState extends State<EditHomePage> {
         editHomePageItems = {
           "wallets": EditHomePageItem(
             icon: Icons.account_balance_wallet_rounded,
-            name: "Wallets",
+            name: "wallets".tr(),
             isEnabled: appStateSettings["showWalletSwitcher"],
             onSwitched: (value) {
               updateSettings("showWalletSwitcher", value,
@@ -68,36 +69,39 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "budgets": EditHomePageItem(
             icon: MoreIcons.chart_pie,
-            name: "Budgets",
+            name: "budgets".tr(),
             isEnabled: appStateSettings["showPinnedBudgets"],
             onSwitched: (value) {
               updateSettings("showPinnedBudgets", value,
                   pagesNeedingRefresh: [0], updateGlobalState: false);
             },
             onTap: () async {
-              String defaultLabel = "Default (30 days)";
+              String defaultLabel = "default-line-graph".tr();
               List<Budget> allBudgets = await database.getAllBudgets();
               List<Budget> allPinnedBudgets =
                   await database.getAllPinnedBudgets().$2;
               openBottomSheet(
                 context,
                 PopupFramework(
-                  title: "Select Budgets",
+                  title: "select-budgets".tr(),
                   child: Column(
                     children: [
-                      SettingsContainerSwitch(
-                        title: "Total Spent",
-                        descriptionWithValue: (value) => value
-                            ? "Showing total spent"
-                            : "Showing remaining amount",
-                        onSwitched: (value) {
-                          updateSettings("showTotalSpentForBudget", value,
-                              pagesNeedingRefresh: [0, 2],
-                              updateGlobalState: false);
-                        },
-                        initialValue:
-                            appStateSettings["showTotalSpentForBudget"],
-                        icon: Icons.center_focus_weak_rounded,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: SettingsContainerSwitch(
+                          title: "total-spent".tr(),
+                          descriptionWithValue: (value) => value
+                              ? "total-spent-description-1".tr()
+                              : "total-spent-description-2".tr(),
+                          onSwitched: (value) {
+                            updateSettings("showTotalSpentForBudget", value,
+                                pagesNeedingRefresh: [0, 2],
+                                updateGlobalState: false);
+                          },
+                          initialValue:
+                              appStateSettings["showTotalSpentForBudget"],
+                          icon: Icons.center_focus_weak_rounded,
+                        ),
                       ),
                       SelectItems(
                         checkboxCustomIconSelected: Icons.push_pin_rounded,
@@ -138,7 +142,7 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "overdueUpcoming": EditHomePageItem(
             icon: Icons.upcoming_rounded,
-            name: "Overdue and Upcoming",
+            name: "overdue-and-upcoming".tr(),
             isEnabled: appStateSettings["showOverdueUpcoming"],
             onSwitched: (value) {
               updateSettings("showOverdueUpcoming", value,
@@ -147,7 +151,7 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "creditDebts": EditHomePageItem(
             icon: Icons.sync_alt_rounded,
-            name: "Lent and Borrowed",
+            name: "lent-and-borrowed".tr(),
             isEnabled: appStateSettings["showCreditDebt"],
             onSwitched: (value) {
               updateSettings("showCreditDebt", value,
@@ -156,7 +160,7 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "allSpendingSummary": EditHomePageItem(
             icon: Icons.line_weight_rounded,
-            name: "All Spending Income and Expenses",
+            name: "all-spending-income-and-expenses".tr(),
             isEnabled: appStateSettings["showAllSpendingSummary"],
             onSwitched: (value) {
               updateSettings("showAllSpendingSummary", value,
@@ -165,7 +169,7 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "spendingGraph": EditHomePageItem(
             icon: Icons.insights_rounded,
-            name: "Spending Graph",
+            name: "spending-graph".tr(),
             isEnabled: appStateSettings["showSpendingGraph"],
             onSwitched: (value) {
               updateSettings("showSpendingGraph", value,
@@ -173,12 +177,12 @@ class _EditHomePageState extends State<EditHomePage> {
             },
             extraWidgetsBelow: [],
             onTap: () async {
-              String defaultLabel = "Default (30 days)";
+              String defaultLabel = "default-line-graph".tr();
               List<Budget> allBudgets = await database.getAllBudgets();
               openBottomSheet(
                 context,
                 PopupFramework(
-                  title: "Select Budget",
+                  title: "select-budget".tr(),
                   child: RadioItems(
                     items: [
                       defaultLabel,
@@ -238,7 +242,7 @@ class _EditHomePageState extends State<EditHomePage> {
       horizontalPadding: getHorizontalPaddingConstrained(context),
       dragDownToDismiss: true,
       dragDownToDismissEnabled: dragDownToDismissEnabled,
-      title: "Edit Home",
+      title: "edit-home".tr(),
       slivers: [
         SliverReorderableList(
           onReorderStart: (index) {

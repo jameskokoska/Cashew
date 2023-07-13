@@ -16,6 +16,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
@@ -54,7 +55,8 @@ class CashFlow extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
             child: TextFont(
-              text: "Total cash flow: " +
+              text: "total-cash-flow".tr() +
+                  ": " +
                   convertToMoney(
                       Provider.of<AllWallets>(context), snapshot.data!),
               fontSize: 13,

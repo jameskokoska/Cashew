@@ -18,6 +18,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -510,27 +511,32 @@ class TransactionEntry extends StatelessWidget {
                                                       TransactionSpecialType
                                                           .credit
                                                   ? transaction.paid
-                                                      ? "Collect?"
-                                                      : "Collected"
+                                                      ? "collect".tr() + "?"
+                                                      : "collected".tr()
                                                   : transaction.type ==
                                                           TransactionSpecialType
                                                               .debt
                                                       ? transaction.paid
-                                                          ? "Settle?"
-                                                          : "Settled"
+                                                          ? "settle".tr() + "?"
+                                                          : "settled".tr()
                                                       : transaction.income
                                                           ? (transaction.paid
-                                                              ? "Deposited"
+                                                              ? "deposited".tr()
                                                               : transaction
                                                                       .skipPaid
-                                                                  ? "Skipped"
-                                                                  : "Deposit?")
+                                                                  ? "skipped"
+                                                                      .tr()
+                                                                  : "deposit"
+                                                                          .tr() +
+                                                                      "?")
                                                           : (transaction.paid
-                                                              ? "Paid"
+                                                              ? "paid".tr()
                                                               : transaction
                                                                       .skipPaid
-                                                                  ? "Skipped"
-                                                                  : "Pay?"),
+                                                                  ? "skipped"
+                                                                      .tr()
+                                                                  : "pay".tr() +
+                                                                      "?"),
                                               fontSize: 14,
                                               textColor: textColorLight,
                                             ),

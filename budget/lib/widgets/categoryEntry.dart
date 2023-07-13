@@ -6,6 +6,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class CategoryEntry extends StatelessWidget {
     this.categoryBudgetLimit,
     this.isTiled = false,
     this.onLongPress,
-    this.extraText = " of spending",
+    this.extraText,
     this.showIncomeExpenseIcons = false,
     this.isAbsoluteSpendingLimit = false,
     this.budgetLimit = 0,
@@ -42,7 +43,7 @@ class CategoryEntry extends StatelessWidget {
   final bool isTiled;
   final CategoryBudgetLimit? categoryBudgetLimit;
   final Function? onLongPress;
-  final String extraText;
+  final String? extraText;
   final bool showIncomeExpenseIcons;
   final bool isAbsoluteSpendingLimit;
   final double budgetLimit;
@@ -244,13 +245,16 @@ class CategoryEntry extends StatelessWidget {
                                   ),
                                 )
                               : TextFont(
-                                  text: (totalSpent == 0
-                                          ? "0"
-                                          : (categorySpent / totalSpent * 100)
-                                              .abs()
-                                              .toStringAsFixed(0)) +
-                                      "%" +
-                                      extraText,
+                                  text: (extraText ?? "percent-of-spending")
+                                      .toString()
+                                      .tr(namedArgs: {
+                                    "percent": (totalSpent == 0
+                                            ? "0"
+                                            : (categorySpent / totalSpent * 100)
+                                                .abs()
+                                                .toStringAsFixed(0)) +
+                                        "%"
+                                  }),
                                   fontSize: 14,
                                   textColor: selected
                                       ? getColor(context, "black")
@@ -303,7 +307,7 @@ class CategoryEntry extends StatelessWidget {
                       : () => pushRoute(
                             context,
                             AddCategoryPage(
-                              title: "Edit Category",
+                              title: "edit-category".tr(),
                               category: category,
                             ),
                           ),

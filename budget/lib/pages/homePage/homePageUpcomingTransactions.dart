@@ -14,6 +14,7 @@ import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:budget/widgets/walletEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                     child: TransactionsAmountBox(
                       openPage: UpcomingOverdueTransactions(
                           overdueTransactions: false),
-                      label: "Upcoming",
+                      label: "upcoming".tr(),
                       amountStream: database.watchTotalOfUpcomingOverdue(
                         Provider.of<AllWallets>(context),
                         false,
@@ -50,7 +51,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                     child: TransactionsAmountBox(
                       openPage: UpcomingOverdueTransactions(
                           overdueTransactions: true),
-                      label: "Overdue",
+                      label: "overdue".tr(),
                       amountStream: database.watchTotalOfUpcomingOverdue(
                         Provider.of<AllWallets>(context),
                         true,

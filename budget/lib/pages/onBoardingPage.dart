@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
@@ -189,7 +190,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text: "Track your spending habits with Cashew!",
+              text: "onboarding-title-1".tr(namedArgs: {"app": globalAppName}),
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
               fontSize: 25,
@@ -200,8 +201,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text:
-                  "Enter your daily transactions to gain powerful insights into your spending habits.",
+              text: "onboarding-info-1".tr(),
               textAlign: TextAlign.center,
               fontSize: 16,
               maxLines: 5,
@@ -226,7 +226,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text: "Set up a budget",
+              text: "onboarding-title-2".tr(),
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
               fontSize: 25,
@@ -270,8 +270,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text:
-                  "Choose an amount right for you.\nYou can always change it and add more budgets.",
+              text: "onboarding-info-2-1".tr() +
+                  "\n" +
+                  "onboarding-info-2-2".tr(),
               textAlign: TextAlign.center,
               fontSize: 16,
               maxLines: 5,
@@ -295,7 +296,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text: "Welcome to Cashew!",
+              text: "onboarding-title-3".tr(namedArgs: {"app": globalAppName}),
               fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
               fontSize: 25,
@@ -335,7 +336,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                     Navigator.pop(context, false);
                   },
                   onSubmitLabel: "Restore",
-                  onCancelLabel: "Cancel",
+                  onCancelLabel: "cancel".tr(),
                 );
               }
               if (result == true) {
@@ -345,16 +346,15 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
               }
               loadingIndeterminateKey.currentState?.setVisibility(false);
             },
-            title: "Sign In with Google",
+            title: "sign-in-with-google".tr(),
             icon: MoreIcons.google,
             isExpanded: false,
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text:
-                  "Keep your data backed up and synced across different platforms.",
+              text: "onboarding-info-3".tr(),
               textAlign: TextAlign.center,
               fontSize: 16,
               maxLines: 5,
@@ -365,7 +365,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
             onTap: () {
               nextNavigation();
             },
-            text: "Continue Without Sign In",
+            text: "continue-without-sign-in".tr(),
           ),
           // IntrinsicWidth(
           //   child: Button(

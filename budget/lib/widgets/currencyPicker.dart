@@ -7,6 +7,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CurrencyPicker extends StatefulWidget {
@@ -123,7 +124,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                       widget.onHasFocus!();
                   },
                   child: TextInput(
-                    labelText: "Search currencies...",
+                    labelText: "search-currencies-placeholder".tr(),
                     icon: Icons.search_rounded,
                     onChanged: (text) {
                       searchCurrencies(text);

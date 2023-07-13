@@ -8,6 +8,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -617,7 +618,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                   width: 40,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 1),
-                                  openPage: AddWalletPage(title: "Add Wallet"),
+                                  openPage:
+                                      AddWalletPage(title: "add-wallet".tr()),
                                   borderRadius: 8,
                                   backgroundColor: dynamicPastel(
                                     context,

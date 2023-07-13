@@ -7,6 +7,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
 import 'package:flutter/services.dart';
@@ -246,7 +247,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                                 child: Center(
                                   child: TextFont(
                                     textAlign: TextAlign.center,
-                                    text: "All",
+                                    text: "all".tr(),
                                     fontSize: 10,
                                     maxLines: 1,
                                   ),
@@ -270,7 +271,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                             onTap: () {},
                             padding: EdgeInsets.zero,
                             openPage: AddCategoryPage(
-                              title: "Add Category",
+                              title: "add-category".tr(),
                             ),
                             width: 70,
                           ),
@@ -381,7 +382,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                                         height: constraints.maxWidth,
                                         width: constraints.maxWidth,
                                         openPage: AddCategoryPage(
-                                          title: "Add Category",
+                                          title: "add-category".tr(),
                                         ),
                                       );
                                     },
@@ -475,7 +476,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                   //           onTap: () {},
                   //           padding: EdgeInsets.zero,
                   //           openPage: AddCategoryPage(
-                  //             title: "Add Category",
+                  //             title: "add-category".tr(),
                   //           ),
                   //           width: size + 20,
                   //           height: size + 20,

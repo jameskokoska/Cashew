@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
+import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -13,6 +14,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,8 +43,8 @@ class _RatingPopupState extends State<RatingPopup> {
   @override
   Widget build(BuildContext context) {
     return PopupFramework(
-      title: "Rate Cashew",
-      subtitle: "Share your feedback with the developer to help improve Cashew",
+      title: "rate-app".tr(namedArgs: {"app": globalAppName}),
+      subtitle: "rate-app-subtitle".tr(namedArgs: {"app": globalAppName}),
       child: Column(
         children: [
           Row(
@@ -66,7 +68,7 @@ class _RatingPopupState extends State<RatingPopup> {
                         duration: Duration(milliseconds: 300),
                         child: Icon(
                           Icons.star_rounded,
-                          key: ValueKey(i <= (selectedStars ?? 0)),
+                          key: ValueKey(i <= (selectedStars ?? -1)),
                           size: getWidthBottomSheet(context) - 100 < 60 * 5
                               ? (getWidthBottomSheet(context) - 100) / 5
                               : 60,
@@ -93,7 +95,7 @@ class _RatingPopupState extends State<RatingPopup> {
           ),
           SizedBox(height: 15),
           TextInput(
-            labelText: "Feedback",
+            labelText: "feedback".tr(),
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 3,
@@ -104,7 +106,7 @@ class _RatingPopupState extends State<RatingPopup> {
           Opacity(
             opacity: 0.4,
             child: TextFont(
-              text: "Only the stars, feedback and date will be shared.",
+              text: "rate-app-privacy".tr(),
               textAlign: TextAlign.center,
               fontSize: 12,
               maxLines: 5,
@@ -112,7 +114,7 @@ class _RatingPopupState extends State<RatingPopup> {
           ),
           SizedBox(height: 15),
           Button(
-            label: "Submit",
+            label: "submit".tr(),
             onTap: () async {
               shareFeedback(selectedStars, _feedbackController.text);
               updateSettings("submittedFeedback", true,

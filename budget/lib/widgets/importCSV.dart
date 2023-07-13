@@ -14,6 +14,7 @@ import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -368,16 +369,16 @@ class _ImportCSVState extends State<ImportCSV> {
           ),
         );
       } else {
-        throw "No file selected";
+        throw "no-file-selected".tr();
       }
     } catch (e) {
       Navigator.of(context).pop();
       openPopup(
         context,
-        title: "There was an error importing the CSV",
+        title: "csv-error".tr(),
         description: e.toString(),
         icon: Icons.error_rounded,
-        onSubmitLabel: "OK",
+        onSubmitLabel: "ok".tr(),
         onSubmit: () {
           Navigator.of(context).pop();
         },
@@ -414,11 +415,11 @@ class _ImportCSVState extends State<ImportCSV> {
           openPopup(
             context,
             icon: Icons.check_circle_outline_rounded,
-            title: "Done!",
+            title: "done".tr() + "!",
             description: "Successfully imported " +
                 fileContents.length.toString() +
                 " transactions.",
-            onSubmitLabel: "OK",
+            onSubmitLabel: "ok".tr(),
             onSubmit: () {
               Navigator.pop(context);
             },
@@ -457,8 +458,8 @@ class _ImportCSVState extends State<ImportCSV> {
           onTap: () async {
             await _chooseBackupFile();
           },
-          title: "Import CSV File",
-          description: "Import an external CSV data source",
+          title: "import-csv".tr(),
+          description: "import-csv-description".tr(),
           icon: Icons.file_open_rounded,
         ),
       ],
@@ -585,7 +586,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       // No custom date format entered
       if (dateFormat == "")
         throw "Failed to parse time! Details: " + e.toString();
-      DateFormat format = DateFormat(dateFormat.toString());
+      DateFormat format =
+          DateFormat(dateFormat.toString(), context.locale.toString());
       try {
         dateCreated =
             format.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
@@ -637,10 +639,10 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     } catch (e) {
       openPopup(
         context,
-        title: "There was an error importing the CSV",
+        title: "csv-error".tr(),
         description: e.toString(),
         icon: Icons.error_rounded,
-        onSubmitLabel: "OK",
+        onSubmitLabel: "ok".tr(),
         onSubmit: () {
           Navigator.of(context).pop();
           Navigator.of(context).pop();

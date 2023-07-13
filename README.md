@@ -75,6 +75,15 @@ This repository contains, bundled in, modified versions of the discontinued pack
 * https://pub.dev/packages/implicitly_animated_reorderable_list
 * https://pub.dev/packages/sliding_sheet
 
+## Translations
+The translations are available here: https://docs.google.com/spreadsheets/d/1QQqt28cmrby6JqxLm-oxUXCuM3alniLJ6IRhcPJDOtk/edit?usp=sharing.
+
+### To Update Translations
+1. Export Google Sheet as CSV
+2. Place CSV in `/budget/assets/translations` and rename to `translations.csv`
+3. Run `generate-translations.py`
+4. Restart the application
+
 ## Developer Notes
 
 ### Android Release

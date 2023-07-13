@@ -8,6 +8,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -32,24 +33,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
   String? selectedTitle;
   TransactionCategory? selectedCategory;
 
-  String? textAddTitle = "Add Title";
-
   late FocusNode _focusNode;
-
-  Future<void> selectTitle() async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Title",
-        child: SelectText(
-          setSelectedText: setSelectedTitle,
-          labelText: "Title",
-          selectedText: selectedTitle,
-        ),
-      ),
-      snap: false,
-    );
-  }
 
   void setSelectedTitle(String title) {
     selectedTitle = title.trim();
@@ -92,7 +76,6 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
     _focusNode = new FocusNode();
     if (widget.associatedTitle != null) {
       //We are editing a Title
-      textAddTitle = "Edit Title";
       //Fill in the information from the passed in Title
       setState(() {
         // selectedColor = HexColor(widget.Title!.colour);
@@ -153,7 +136,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   openBottomSheet(
                     context,
                     PopupFramework(
-                      title: "Select Category",
+                      title: "select-category".tr(),
                       child: SelectCategory(
                         selectedCategory: selectedCategory,
                         setSelectedCategory: setSelectedCategory,
@@ -170,7 +153,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                     openBottomSheet(
                       context,
                       PopupFramework(
-                        title: "Select Category",
+                        title: "select-category".tr(),
                         child: SelectCategory(
                           selectedCategory: selectedCategory,
                           setSelectedCategory: setSelectedCategory,
@@ -183,7 +166,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
               ),
               Expanded(
                 child: TextInput(
-                  labelText: "Title",
+                  labelText: "title-placeholder".tr(),
                   bubbly: false,
                   initialValue: selectedTitle,
                   onChanged: (text) {
@@ -204,8 +187,8 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
           canAddTitle ?? false
               ? Button(
                   label: widget.associatedTitle == null
-                      ? "Add Title"
-                      : "Save Changes",
+                      ? "add-title".tr()
+                      : "save-changes".tr(),
                   width: MediaQuery.of(context).size.width,
                   onTap: () async {
                     await addTitle();
@@ -213,8 +196,8 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                 )
               : Button(
                   label: widget.associatedTitle == null
-                      ? "Add Title"
-                      : "Save Changes",
+                      ? "add-title".tr()
+                      : "save-changes".tr(),
                   width: MediaQuery.of(context).size.width,
                   onTap: () {},
                   color: Colors.grey,

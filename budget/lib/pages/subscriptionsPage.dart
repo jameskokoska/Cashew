@@ -60,7 +60,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 child: FAB(
                   tooltip: "Add Subscription",
                   openPage: AddTransactionPage(
-                    title: "Add Transaction",
+                    title: "add-transaction".tr(),
                     selectedType: TransactionSpecialType.subscription,
                   ),
                 ),
@@ -110,11 +110,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         padding: EdgeInsets.only(top: 5),
                         child: TextFont(
                           text: selectedType == SelectedSubscriptionsType.yearly
-                              ? "Yearly subscriptions"
+                              ? "yearly-subscriptions".tr()
                               : selectedType ==
                                       SelectedSubscriptionsType.monthly
-                                  ? "Monthly subscriptions"
-                                  : "Total subscriptions",
+                                  ? "monthly-subscriptions".tr()
+                                  : "total-subscriptions".tr(),
                           fontSize: 16,
                         ),
                       ),
@@ -144,7 +144,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                                     ? getColor(context, "black")
                                         .withOpacity(0.5)
                                     : getColor(context, "black"),
-                                label: "Monthly",
+                                label: "monthly".tr(),
                                 onTap: () => setState(() {
                                   selectedType =
                                       SelectedSubscriptionsType.monthly;
@@ -179,7 +179,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                                     ? getColor(context, "black")
                                         .withOpacity(0.5)
                                     : getColor(context, "black"),
-                                label: "Yearly",
+                                label: "yearly".tr(),
                                 onTap: () => setState(() {
                                   selectedType =
                                       SelectedSubscriptionsType.yearly;
@@ -214,7 +214,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                                     ? getColor(context, "black")
                                         .withOpacity(0.5)
                                     : getColor(context, "black"),
-                                label: "Total",
+                                label: "total".tr(),
                                 onTap: () => setState(() {
                                   selectedType =
                                       SelectedSubscriptionsType.total;

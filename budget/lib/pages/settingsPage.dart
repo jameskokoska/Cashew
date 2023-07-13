@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/struct/languageMap.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
@@ -13,6 +14,7 @@ import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
@@ -66,29 +68,22 @@ class SettingsPageState extends State<SettingsPage>
   Widget build(BuildContext context) {
     return PageFramework(
       key: pageState,
-      title: "More Actions",
+      title: "more-actions".tr(),
       backButton: false,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
-        SettingsContainerOpenPage(
-          openPage: AboutPage(),
-          title: "About Cashew",
-          icon: Icons.info_outline_rounded,
-        ),
+        getWidthNavigationSidebar(context) > 0
+            ? SizedBox.shrink()
+            : SettingsContainerOpenPage(
+                openPage: AboutPage(),
+                title: "about-app".tr(namedArgs: {"app": globalAppName}),
+                icon: Icons.info_outline_rounded,
+              ),
         kIsWeb
             ? SettingsContainer(
-                title: "Cashew is Open Source",
-                icon: Icons.code_rounded,
-                onTap: () {
-                  openUrl("https://github.com/jameskokoska/Cashew");
-                },
-              )
-            : SizedBox.shrink(),
-        kIsWeb
-            ? SettingsContainer(
-                title: "Share Feedback",
+                title: "share-feedback".tr(),
                 icon: Icons.rate_review_rounded,
                 onTap: () {
                   openBottomSheet(context, RatingPopup());
@@ -96,13 +91,13 @@ class SettingsPageState extends State<SettingsPage>
               )
             : SizedBox.shrink(),
         widget.hasMorePages ? MorePages() : SizedBox.shrink(),
-        SettingsHeader(title: "Theme"),
+        SettingsHeader(title: "theme".tr()),
         SettingsContainer(
           onTap: () {
             openBottomSheet(
               context,
               PopupFramework(
-                title: "Select Color",
+                title: "select-color".tr(),
                 child: SelectColor(
                   includeThemeColor: false,
                   selectedColor: selectedColor,
@@ -117,13 +112,13 @@ class SettingsPageState extends State<SettingsPage>
               ),
             );
           },
-          title: "Accent Color",
-          description: "Select a color theme for the interface",
+          title: "accent-color".tr(),
+          description: "accent-color-description".tr(),
           icon: Icons.color_lens_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Material You",
-          description: "Use a colorful expressive interface",
+          title: "material-you".tr(),
+          description: "material-you-description".tr(),
           onSwitched: (value) {
             updateSettings("materialYou", value, updateGlobalState: true);
           },
@@ -131,7 +126,7 @@ class SettingsPageState extends State<SettingsPage>
           icon: Icons.brush_rounded,
         ),
         SettingsContainerDropdown(
-          title: "Theme Mode",
+          title: "theme-mode".tr(),
           icon: Icons.lightbulb_rounded,
           initial: appStateSettings["theme"].toString().capitalizeFirst,
           items: ["Light", "Dark", "System"],
@@ -146,11 +141,32 @@ class SettingsPageState extends State<SettingsPage>
           },
         ),
         EnterName(),
-        SettingsHeader(title: "Preferences"),
+        SettingsHeader(title: "preferences".tr()),
+        SettingsContainerDropdown(
+          title: "language".tr(),
+          icon: Icons.language_rounded,
+          initial: appStateSettings["locale"].toString(),
+          items: [
+            "System",
+            for (String key in languagesDictionary.keys) key,
+          ],
+          onChanged: (value) {
+            if (value == "System") {
+              context.resetLocale();
+            } else {
+              context.setLocale(Locale(value));
+            }
+            updateSettings(
+              "locale",
+              value,
+              pagesNeedingRefresh: [],
+              updateGlobalState: false,
+            );
+          },
+        ),
         SettingsContainerSwitch(
-          title: "Battery Saver",
-          description:
-              "Optimize the UI to increase performance and save battery",
+          title: "battery-saver".tr(),
+          description: "battery-saver-description".tr(),
           onSwitched: (value) {
             updateSettings("batterySaver", value,
                 updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
@@ -160,12 +176,12 @@ class SettingsPageState extends State<SettingsPage>
         ),
         biometricsAvailable
             ? SettingsContainerSwitch(
-                title: "Require Biometrics",
-                description: "Lock the application with biometrics",
+                title: "require-biometrics".tr(),
+                description: "require-biometrics-description".tr(),
                 onSwitched: (value) async {
                   bool result = await checkBiometrics(
                     checkAlways: true,
-                    message: "Please verify your identity.",
+                    message: "verify-identity".tr(),
                   );
                   if (result)
                     updateSettings("requireAuth", value,
@@ -177,7 +193,7 @@ class SettingsPageState extends State<SettingsPage>
               )
             : SizedBox.shrink(),
 
-        SettingsHeader(title: "Automation"),
+        SettingsHeader(title: "automation".tr()),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
         //   title: "Auto Transactions",
@@ -188,15 +204,14 @@ class SettingsPageState extends State<SettingsPage>
         appStateSettings["emailScanning"]
             ? SettingsContainerOpenPage(
                 openPage: AutoTransactionsPageEmail(),
-                title: "Auto Email Transactions",
+                title: "auto-email-transactions".tr(),
                 icon: Icons.mark_email_unread_rounded,
               )
             : SizedBox.shrink(),
 
         SettingsContainerSwitch(
-          title: "Pay Subscriptions",
-          description:
-              "Automatically mark a subscription as paid after the due date.",
+          title: "pay-subscriptions".tr(),
+          description: "pay-subscriptions-description".tr(),
           onSwitched: (value) async {
             if (true) {
               await markSubscriptionsAsPaid();
@@ -232,7 +247,7 @@ class MorePages extends StatelessWidget {
                         onTap: () {
                           openUrl("https://github.com/jameskokoska/Cashew");
                         },
-                        title: "Open Source",
+                        title: "open-source".tr(),
                         icon: Icons.code_rounded,
                         isOutlined: true,
                       ),
@@ -244,7 +259,7 @@ class MorePages extends StatelessWidget {
                         onTap: () {
                           openBottomSheet(context, RatingPopup());
                         },
-                        title: "Feedback",
+                        title: "feedback".tr(),
                         icon: Icons.rate_review_rounded,
                         isOutlined: true,
                       ),
@@ -285,16 +300,16 @@ class MorePages extends StatelessWidget {
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditWalletsPage(title: "Edit Wallets"),
-                  title: "Wallets",
+                  openPage: EditWalletsPage(title: "edit-wallets".tr()),
+                  title: "wallets".tr(),
                   icon: Icons.account_balance_wallet_rounded,
                   isOutlined: true,
                 ),
               ),
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditBudgetPage(title: "Edit Budgets"),
-                  title: "Budgets",
+                  openPage: EditBudgetPage(title: "edit-budgets".tr()),
+                  title: "budgets".tr(),
                   icon: MoreIcons.chart_pie,
                   iconScale: 0.83,
                   isOutlined: true,
@@ -310,16 +325,16 @@ class MorePages extends StatelessWidget {
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditCategoriesPage(title: "Edit Categories"),
-                  title: "Categories",
+                  openPage: EditCategoriesPage(title: "edit-categories".tr()),
+                  title: "categories".tr(),
                   icon: Icons.category_rounded,
                   isOutlined: true,
                 ),
               ),
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditAssociatedTitlesPage(title: "Edit Titles"),
-                  title: "Titles",
+                  openPage: EditAssociatedTitlesPage(title: "edit-titles".tr()),
+                  title: "titles".tr(),
                   icon: Icons.text_fields_rounded,
                   isOutlined: true,
                 ),
@@ -335,7 +350,7 @@ class MorePages extends StatelessWidget {
               Expanded(
                 child: SettingsContainerOpenPage(
                   openPage: WalletDetailsPage(wallet: null),
-                  title: "All Spending",
+                  title: "all-spending".tr(),
                   icon: Icons.line_weight_rounded,
                   isOutlined: true,
                 ),
@@ -357,7 +372,7 @@ class EnterName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsContainer(
-      title: "Username",
+      title: "username".tr(),
       icon: Icons.edit,
       onTap: () {
         enterNameBottomSheet(context);
@@ -370,17 +385,17 @@ Future enterNameBottomSheet(context) async {
   return await openBottomSheet(
     context,
     PopupFramework(
-      title: "Enter Name",
+      title: "enter-name".tr(),
       child: Column(
         children: [
           SelectText(
-            icon: Icons.title_rounded,
+            icon: Icons.person_rounded,
             setSelectedText: (_) {},
             nextWithInput: (text) {
               updateSettings("username", text.trim(), pagesNeedingRefresh: [0]);
             },
             selectedText: appStateSettings["username"],
-            placeholder: "Nickname",
+            placeholder: "nickname".tr(),
             autoFocus: false,
             requestLateAutoFocus: true,
           ),

@@ -19,6 +19,7 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
@@ -71,9 +72,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
-              tooltip: "Add Category",
+              tooltip: "add-category".tr(),
               openPage: AddCategoryPage(
-                title: "Add Category",
+                title: "add-category".tr(),
               ),
             ),
           ),
@@ -83,7 +84,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
-                labelText: "Search categories...",
+                labelText: "search-categories-placeholder".tr(),
                 icon: Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
@@ -163,7 +164,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                 ),
                                 TextFont(
                                   textAlign: TextAlign.left,
-                                  text: category.income ? "Income" : "Expense",
+                                  text: category.income
+                                      ? "income".tr()
+                                      : "expense".tr(),
                                   fontSize: 14,
                                   textColor: getColor(context, "black")
                                       .withOpacity(0.65),
@@ -206,7 +209,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         deleteCategoryPopup(context, category);
                       },
                       openPage: AddCategoryPage(
-                        title: "Edit Category",
+                        title: "edit-category".tr(),
                         category: category,
                       ),
                     );
@@ -330,7 +333,7 @@ void deleteCategoryPopup(context, TransactionCategory category,
     onCancel: () {
       Navigator.pop(context);
     },
-    onCancelLabel: "Cancel",
+    onCancelLabel: "cancel".tr(),
     onSubmit: () async {
       loadingIndeterminateKey.currentState!.setVisibility(true);
       await database.deleteCategory(category.categoryPk, category.order);

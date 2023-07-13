@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class SlidingSelectorIncomeExpense extends StatelessWidget {
@@ -67,7 +68,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 5.0),
                           child: Text(
-                            'All',
+                            "all".tr(),
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Avenir',
@@ -79,7 +80,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 5.0),
                           child: Text(
-                            'Expense',
+                            "expense".tr(),
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Avenir',
@@ -91,7 +92,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 5.0),
                           child: Text(
-                            'Income',
+                            "income".tr(),
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Avenir',

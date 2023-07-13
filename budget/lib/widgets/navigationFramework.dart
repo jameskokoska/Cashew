@@ -35,6 +35,7 @@ import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -74,16 +75,21 @@ GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 bool runningCloudFunctions = false;
 Future<bool> runAllCloudFunctions(context) async {
   runningCloudFunctions = true;
-  loadingIndeterminateKey.currentState!.setVisibility(true);
   try {
+    loadingIndeterminateKey.currentState!.setVisibility(true);
     await syncData();
     if (appStateSettings["emailScanningPullToRefresh"] ||
         entireAppLoaded == false) {
+      loadingIndeterminateKey.currentState!.setVisibility(true);
       await parseEmailsInBackground(context, forceParse: true);
     }
+    loadingIndeterminateKey.currentState!.setVisibility(true);
     await syncPendingQueueOnServer(); //sync before download
+    loadingIndeterminateKey.currentState!.setVisibility(true);
     await getCloudBudgets();
+    loadingIndeterminateKey.currentState!.setVisibility(true);
     await createBackupInBackground(context);
+    loadingIndeterminateKey.currentState!.setVisibility(true);
     await getExchangeRates();
   } catch (e) {
     print("Error running sync functions on load: " + e.toString());
@@ -161,10 +167,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       NotificationsPage(), //6
       WalletDetailsPage(wallet: null), //7
       AccountsPage(key: accountsPageStateKey), // 8
-      EditWalletsPage(title: "Edit Wallets"), //9
-      EditBudgetPage(title: "Edit Budgets"), //10
-      EditCategoriesPage(title: "Edit Categories"), //11
-      EditAssociatedTitlesPage(title: "Edit Titles"), //12
+      EditWalletsPage(title: "edit-wallets".tr()), //9
+      EditBudgetPage(title: "edit-budgets".tr()), //10
+      EditCategoriesPage(title: "edit-categories".tr()), //11
+      EditAssociatedTitlesPage(title: "edit-titles".tr()), //12
       AboutPage(), //13
     ];
 
@@ -282,17 +288,17 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   // ),
                   AnimateFAB(
                     fab: FAB(
-                      tooltip: "Add Transaction",
+                      tooltip: "add-transaction".tr(),
                       openPage: AddTransactionPage(
-                        title: "Add Transaction",
+                        title: "add-transaction".tr(),
                       ),
                     ),
                     condition: currentPage == 0 || currentPage == 1,
                   ),
                   AnimateFAB(
                     fab: FAB(
-                      tooltip: "Add Budget",
-                      openPage: AddBudgetPage(title: "Add Budget"),
+                      tooltip: "add-budget".tr(),
+                      openPage: AddBudgetPage(title: "add-budget".tr()),
                     ),
                     condition: currentPage == 2,
                   ),

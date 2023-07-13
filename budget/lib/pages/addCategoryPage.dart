@@ -21,6 +21,7 @@ import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -52,23 +53,6 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   TextEditingController _titleController = TextEditingController();
   bool userAttemptedToChangeTitle = false;
   FocusNode _titleFocusNode = FocusNode();
-
-  Future<void> selectTitle() async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Name",
-        child: SelectText(
-          setSelectedText: (name) {
-            setSelectedTitle(name, userAttemptedToChangeTitlePassed: true);
-          },
-          labelText: "Name",
-          selectedText: userAttemptedToChangeTitle ? selectedTitle : "",
-        ),
-      ),
-      snap: false,
-    );
-  }
 
   void setSelectedColor(Color? color) {
     setState(() {
@@ -270,8 +254,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   )
                 : SaveBottomButton(
                     label: widget.category == null
-                        ? "Add Category"
-                        : "Save Changes",
+                        ? "add-category".tr()
+                        : "save-changes".tr(),
                     onTap: () async {
                       await addCategory();
                     },
@@ -344,7 +328,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       padding: const EdgeInsets.only(right: 20, bottom: 40),
                       child: TextInput(
                         focusNode: _titleFocusNode,
-                        labelText: "Name",
+                        labelText: "name".tr(),
                         bubbly: false,
                         controller: _titleController,
                         onChanged: (text) {
@@ -395,7 +379,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                         openBottomSheet(
                           context,
                           PopupFramework(
-                            title: "Select Category",
+                            title: "select-category".tr(),
                             subtitle:
                                 "Category to transfer all transactions to",
                             child: SelectCategory(
@@ -413,7 +397,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                       Navigator.pop(context, true);
                                     },
                                     onSubmitLabel: "Merge",
-                                    onCancelLabel: "Cancel",
+                                    onCancelLabel: "cancel".tr(),
                                     onCancel: () {
                                       Navigator.pop(context);
                                     },
@@ -458,7 +442,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFont(
-                text: "Associated Titles",
+                text: "associated-titles".tr(),
                 textColor: getColor(context, "textLight"),
                 fontSize: 16,
               ),
@@ -467,8 +451,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFont(
-                text:
-                    "If a transaction title contains any of the phrases listed, it will be added to this category",
+                text: "associated-titles-description".tr(),
                 textColor: getColor(context, "textLight"),
                 fontSize: 13,
                 maxLines: 10,
@@ -490,7 +473,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       child: SelectText(
                         setSelectedText: (_) {},
                         labelText: "Set Title",
-                        placeholder: "Title",
+                        placeholder: "title-placeholder".tr(),
                         nextWithInput: (text) async {
                           int length =
                               await database.getAmountOfAssociatedTitles();
@@ -613,7 +596,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
                 },
                 labelText: "Set Title",
                 selectedText: title,
-                placeholder: "Title",
+                placeholder: "title-placeholder".tr(),
               ),
             ),
           );
@@ -645,7 +628,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
                     Navigator.pop(context);
                     widget.onDelete();
                   },
-                  onCancelLabel: "Cancel",
+                  onCancelLabel: "cancel".tr(),
                   onCancel: () {
                     Navigator.pop(context);
                   },
@@ -768,7 +751,7 @@ class IncomeTypeButton extends StatelessWidget {
             SizedBox(width: 15),
             Expanded(
               child: TextFont(
-                text: selectedIncome == false ? "Expense" : "Income",
+                text: selectedIncome == false ? "expense".tr() : "income".tr(),
                 fontWeight: FontWeight.bold,
                 fontSize: 26,
               ),

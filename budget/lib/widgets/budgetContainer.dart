@@ -13,6 +13,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -159,8 +160,14 @@ class BudgetContainer extends StatelessWidget {
                                               child: TextFont(
                                                 text: (appStateSettings[
                                                             "showTotalSpentForBudget"]
-                                                        ? " spent of "
-                                                        : " left of ") +
+                                                        ? " " +
+                                                            "spent-amount-of"
+                                                                .tr() +
+                                                            " "
+                                                        : " " +
+                                                            "remaining-amount-of"
+                                                                .tr() +
+                                                            " ") +
                                                     convertToMoney(
                                                         Provider.of<AllWallets>(
                                                             context),
@@ -215,8 +222,14 @@ class BudgetContainer extends StatelessWidget {
                                             child: TextFont(
                                               text: (appStateSettings[
                                                           "showTotalSpentForBudget"]
-                                                      ? " spent of "
-                                                      : " overspent of ") +
+                                                      ? " " +
+                                                          "spent-amount-of"
+                                                              .tr() +
+                                                          " "
+                                                      : " " +
+                                                          "overspent-amount-of"
+                                                              .tr() +
+                                                          " ") +
                                                   convertToMoney(
                                                       Provider.of<AllWallets>(
                                                           context),
@@ -366,7 +379,7 @@ class BudgetContainer extends StatelessWidget {
                     pushRoute(
                       context,
                       AddBudgetPage(
-                        title: "Edit Budget",
+                        title: "edit-budget".tr(),
                         budget: budget,
                       ),
                     );
@@ -422,24 +435,23 @@ class DaySpending extends StatelessWidget {
                     text: isOutOfRange
                         ? ""
                         : amount < 0
-                            ? "You should save " +
-                                convertToMoney(Provider.of<AllWallets>(context),
-                                    amount.abs()) +
-                                " for " +
-                                budgetRange.end
+                            ? "saving-tracking".tr(namedArgs: {
+                                'amount': convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    amount.abs()),
+                                'days': budgetRange.end
                                     .difference(DateTime.now())
                                     .inDays
-                                    .toString() +
-                                " more days."
-                            : "You can keep spending " +
-                                convertToMoney(
-                                    Provider.of<AllWallets>(context), amount) +
-                                " for " +
-                                budgetRange.end
+                                    .toString(),
+                              })
+                            : "spending-tracking".tr(namedArgs: {
+                                'amount': convertToMoney(
+                                    Provider.of<AllWallets>(context), amount),
+                                'days': budgetRange.end
                                     .difference(DateTime.now())
                                     .inDays
-                                    .toString() +
-                                " days.",
+                                    .toString(),
+                              }),
                     fontSize: large ? 15 : 13,
                     textAlign: TextAlign.center,
                   ),
@@ -867,7 +879,7 @@ class TodayIndicator extends StatelessWidget {
                       child: MediaQuery(
                         child: TextFont(
                           textAlign: TextAlign.center,
-                          text: "Today",
+                          text: "today".tr(),
                           fontSize: large ? 10 : 9,
                           textColor: getColor(context, "white"),
                         ),

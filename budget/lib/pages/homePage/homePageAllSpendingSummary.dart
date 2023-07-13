@@ -15,6 +15,7 @@ import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:budget/widgets/walletEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +36,7 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TransactionsAmountBox(
-                      label: "Income",
+                      label: "income".tr(),
                       amountStream: database.watchTotalOfWallet(
                         null,
                         isIncome: true,
@@ -56,7 +57,7 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                   SizedBox(width: 13),
                   Expanded(
                     child: TransactionsAmountBox(
-                      label: "Expense",
+                      label: "expense".tr(),
                       amountStream: database.watchTotalOfWallet(
                         null,
                         isIncome: false,

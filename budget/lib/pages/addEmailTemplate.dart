@@ -12,6 +12,7 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -124,21 +125,6 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
     return;
   }
 
-  Future<void> selectTitle() async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Name",
-        child: SelectText(
-          setSelectedText: setSelectedName,
-          labelText: "Name",
-          selectedText: selectedName,
-        ),
-      ),
-      snap: false,
-    );
-  }
-
   void setSelectedCategory(TransactionCategory category) {
     setState(() {
       selectedCategory = category;
@@ -190,7 +176,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           ),
           SizedBox(height: 10),
           Button(
-            label: "Done",
+            label: "done".tr(),
             onTap: () {
               determineBottomButton();
               setState(() {});
@@ -264,7 +250,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           ),
           SizedBox(height: 10),
           Button(
-            label: "Done",
+            label: "done".tr(),
             onTap: () {
               determineBottomButton();
               Navigator.pop(context);
@@ -339,7 +325,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           ),
           SizedBox(height: 10),
           Button(
-            label: "Done",
+            label: "done".tr(),
             onTap: () {
               determineBottomButton();
               next();
@@ -436,7 +422,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextInput(
-                      labelText: "Name",
+                      labelText: "name".tr(),
                       bubbly: false,
                       initialValue: selectedName,
                       onChanged: (text) {
@@ -656,7 +642,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                 child: SaveBottomButton(
                   label: widget.scannerTemplate == null
                       ? "Add Template"
-                      : "Save Changes",
+                      : "save-changes".tr(),
                   onTap: () {
                     addTemplate();
                   },

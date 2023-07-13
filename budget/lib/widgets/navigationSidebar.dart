@@ -6,6 +6,7 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -90,47 +91,82 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(height: 70),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TimerBuilder.periodic(
-                              Duration(seconds: 5),
-                              builder: (context) {
-                                DateTime now = DateTime.now();
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextFont(
-                                      textColor: getColor(context, "black"),
-                                      fontSize: 48,
-                                      fontWeight: FontWeight.bold,
-                                      text: DateFormat('h:mm').format(now),
+                          SizedBox(height: 40),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14),
+                                  child: Tappable(
+                                    borderRadius: 20,
+                                    onTap: () async {
+                                      await showCustomDatePicker(
+                                          navigatorKey.currentContext!,
+                                          DateTime.now());
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 30, bottom: 30),
+                                      child: TimerBuilder.periodic(
+                                        Duration(seconds: 5),
+                                        builder: (context) {
+                                          DateTime now = DateTime.now();
+                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextFont(
+                                                textColor:
+                                                    getColor(context, "black"),
+                                                fontSize: 48,
+                                                fontWeight: FontWeight.bold,
+                                                text: DateFormat(
+                                                        'h:mm',
+                                                        context.locale
+                                                            .toString())
+                                                    .format(now),
+                                              ),
+                                              TextFont(
+                                                textColor:
+                                                    getColor(context, "black")
+                                                        .withOpacity(0.5),
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                text: DateFormat(
+                                                        'EEEE',
+                                                        context.locale
+                                                            .toString())
+                                                    .format(now),
+                                              ),
+                                              SizedBox(height: 5),
+                                              TextFont(
+                                                textColor:
+                                                    getColor(context, "black")
+                                                        .withOpacity(0.5),
+                                                fontSize: 18,
+                                                text: DateFormat(
+                                                        'MMMM d, y',
+                                                        context.locale
+                                                            .toString())
+                                                    .format(now),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
                                     ),
-                                    TextFont(
-                                      textColor: getColor(context, "black")
-                                          .withOpacity(0.5),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      text: DateFormat('EEEE').format(now),
-                                    ),
-                                    SizedBox(height: 5),
-                                    TextFont(
-                                      textColor: getColor(context, "black")
-                                          .withOpacity(0.5),
-                                      fontSize: 18,
-                                      text: DateFormat('MMMM d, y').format(now),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 60),
+                          SizedBox(height: 30),
                           NavigationSidebarButton(
                             icon: Icons.home_rounded,
-                            label: "home-page-title".tr(),
+                            label: "home".tr(),
                             isSelected: selectedIndex == 0,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -139,7 +175,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           ),
                           NavigationSidebarButton(
                             icon: Icons.payments_rounded,
-                            label: "transactions-page-title".tr(),
+                            label: "transactions".tr(),
                             isSelected: selectedIndex == 1,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -149,7 +185,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           NavigationSidebarButton(
                             icon: MoreIcons.chart_pie,
                             iconSize: 15,
-                            label: "budgets-page-title".tr(),
+                            label: "budgets".tr(),
                             isSelected: selectedIndex == 2,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -178,7 +214,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 ),
                           NavigationSidebarButton(
                             icon: Icons.line_weight_rounded,
-                            label: "All Spending",
+                            label: "all-spending".tr(),
                             isSelected: selectedIndex == 7,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -206,7 +242,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           ),
                           NavigationSidebarButton(
                             icon: Icons.settings_rounded,
-                            label: "Settings",
+                            label: "settings".tr(),
                             isSelected: selectedIndex == 4,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -215,7 +251,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           ),
                           NavigationSidebarButton(
                             icon: Icons.info_outline_rounded,
-                            label: "About",
+                            label: "about".tr(),
                             isSelected: selectedIndex == 13,
                             onTap: () {
                               pageNavigationFrameworkKey.currentState!
@@ -337,6 +373,7 @@ class NavigationSidebarButton extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     this.trailing = const SizedBox.shrink(),
+    this.popRoutes = true,
   });
 
   final IconData icon;
@@ -345,6 +382,7 @@ class NavigationSidebarButton extends StatelessWidget {
   final bool isSelected;
   final Widget trailing;
   final Function() onTap;
+  final bool popRoutes;
 
   @override
   Widget build(BuildContext context) {
@@ -359,14 +397,17 @@ class NavigationSidebarButton extends StatelessWidget {
               ? Theme.of(context).colorScheme.secondaryContainer
               : null,
           onTap: () {
-            // pop all routes without animation
-            navigatorKey.currentState!.pushAndRemoveUntil(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) => SizedBox(),
-                  transitionDuration: Duration(seconds: 0),
-                ),
-                (route) => route.isFirst);
-            navigatorKey.currentState!.pop();
+            if (popRoutes) {
+              // pop all routes without animation
+              navigatorKey.currentState!.pushAndRemoveUntil(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        SizedBox(),
+                    transitionDuration: Duration(seconds: 0),
+                  ),
+                  (route) => route.isFirst);
+              navigatorKey.currentState!.pop();
+            }
             onTap();
           },
           child: Padding(
@@ -413,13 +454,14 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
       children: [
         NavigationSidebarButton(
           icon: Icons.edit_document,
-          label: "Edit Data",
+          label: "edit-data".tr(),
           isSelected: false,
           onTap: () {
             setState(() {
               showEditDataButtons = !showEditDataButtons;
             });
           },
+          popRoutes: false,
           trailing: AnimatedRotation(
             duration: Duration(milliseconds: 600),
             curve: Curves.easeInOutCubicEmphasized,
@@ -443,7 +485,7 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                       children: [
                         NavigationSidebarButton(
                           icon: Icons.account_balance_wallet_rounded,
-                          label: "Wallet Details",
+                          label: "wallet-details".tr(),
                           isSelected: widget.selectedIndex == 9,
                           onTap: () {
                             pageNavigationFrameworkKey.currentState!
@@ -452,7 +494,7 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         ),
                         NavigationSidebarButton(
                           icon: MoreIcons.chart_pie,
-                          label: "Budgets Details",
+                          label: "budgets-details".tr(),
                           isSelected: widget.selectedIndex == 10,
                           onTap: () {
                             pageNavigationFrameworkKey.currentState!
@@ -461,7 +503,7 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         ),
                         NavigationSidebarButton(
                           icon: Icons.category_rounded,
-                          label: "Categories Details",
+                          label: "categories-details".tr(),
                           isSelected: widget.selectedIndex == 11,
                           onTap: () {
                             pageNavigationFrameworkKey.currentState!
@@ -470,7 +512,7 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         ),
                         NavigationSidebarButton(
                           icon: Icons.text_fields_rounded,
-                          label: "Titles Details",
+                          label: "titles-details".tr(),
                           isSelected: widget.selectedIndex == 12,
                           onTap: () {
                             pageNavigationFrameworkKey.currentState!

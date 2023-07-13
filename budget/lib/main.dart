@@ -8,6 +8,7 @@ import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/widgets/util/watchForDayChange.dart';
 import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:intl/date_symbol_data_custom.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
@@ -73,7 +74,7 @@ void main() async {
         supportedLocales: [
           for (String key in languagesDictionary.keys) Locale(key)
         ],
-        path: 'assets/translations',
+        path: 'assets/translations/generated',
         fallbackLocale: Locale(languagesDictionary.keys.toList()[0]),
         child: RestartApp(
           child: InitializeApp(key: appStateKey),
@@ -235,10 +236,11 @@ class App extends StatelessWidget {
               ? OnBoardingPage(key: ValueKey("Onboarding"))
               : PageNavigationFramework(key: pageNavigationFrameworkKey)),
       builder: (context, child) {
-        if (kDebugMode == false)
+        if (kReleaseMode == false) {
           ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
             return Container(color: Colors.transparent);
           };
+        }
 
         Widget mainWidget = InitializeBiometrics(
           child: WatchForDayChange(
@@ -253,9 +255,7 @@ class App extends StatelessWidget {
                       ),
                     ],
                   ),
-                  NavigationSidebar(
-                    key: sidebarStateKey,
-                  ),
+                  NavigationSidebar(key: sidebarStateKey),
                   // The persistent global Widget stack (stays on navigation change)
                   GlobalSnackbar(key: snackbarKey),
                   GlobalLoadingProgress(key: loadingProgressKey),

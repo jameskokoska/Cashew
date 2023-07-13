@@ -15,6 +15,7 @@ import 'package:budget/widgets/cashFlow.dart';
 import 'package:budget/widgets/ghostTransactions.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
@@ -51,7 +52,7 @@ Widget getTransactionsSlivers(
   bool showNoResults = true,
   ColorScheme? colorScheme,
   bool noSearchResultsVariation = false,
-  String noResultsMessage = "No transactions within time range.",
+  String? noResultsMessage,
   SearchFilters? searchFilters,
 }) {
   Random random = new Random();
@@ -78,7 +79,8 @@ Widget getTransactionsSlivers(
           if (slivers) {
             return SliverToBoxAdapter(
               child: NoResults(
-                message: noResultsMessage,
+                message: noResultsMessage ??
+                    "no-transactions-within-time-range".tr() + ".",
                 tintColor: colorScheme != null
                     ? colorScheme.primary.withOpacity(0.6)
                     : null,
@@ -87,7 +89,8 @@ Widget getTransactionsSlivers(
             );
           } else {
             return NoResults(
-              message: noResultsMessage,
+              message: noResultsMessage ??
+                  "no-transactions-within-time-range".tr() + ".",
               tintColor: colorScheme != null
                   ? colorScheme.primary.withOpacity(0.6)
                   : null,
@@ -442,7 +445,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
   Widget build(BuildContext context) {
     Widget searchButton = IconButton(
       iconSize: getWidthNavigationSidebar(context) > 0 ? 30 : null,
-      tooltip: "Search transactions",
+      tooltip: "search-transactions".tr(),
       onPressed: () {
         pushRoute(context, TransactionsSearchPage());
       },
@@ -476,7 +479,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                         sliver: MultiSliver(
                           children: [
                             PageFrameworkSliverAppBar(
-                              title: "Transactions",
+                              title: "transactions".tr(),
                               actions: [
                                 searchButton,
                               ],

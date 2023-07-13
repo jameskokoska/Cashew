@@ -10,6 +10,7 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/restartApp.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:universal_html/src/html.dart'
@@ -127,84 +128,38 @@ String convertToMoney(
   return currency.format(amount);
 }
 
-getMonth(int currentMonth) {
-  var months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-  return months[currentMonth];
-}
-
-getMonthShort(int currentMonth) {
-  var months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-    'Jan',
-  ];
-  return months[currentMonth];
-}
-
-getWeekDay(int currentWeekDay) {
-  var weekDays = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
-  ];
-  return weekDays[currentWeekDay];
+getMonth(int monthIndex) {
+  DateTime dateTime = DateTime(DateTime.now().year, monthIndex + 1);
+  String monthName =
+      DateFormat('MMMM', navigatorKey.currentContext?.locale.toString())
+          .format(dateTime);
+  return monthName;
 }
 
 getWordedTime(DateTime dateTime) {
-  return DateFormat.jm().format(dateTime);
+  return DateFormat.jm(navigatorKey.currentContext?.locale.toString())
+      .format(dateTime);
 }
 
 checkYesterdayTodayTomorrow(DateTime date) {
   DateTime now = DateTime.now();
   if (date.day == now.day && date.month == now.month && date.year == now.year) {
-    return "Today";
+    return "today".tr();
   }
   DateTime tomorrow = DateTime(now.year, now.month, now.day + 1);
   if (date.day == tomorrow.day &&
       date.month == tomorrow.month &&
       date.year == tomorrow.year) {
-    return "Tomorrow";
+    return "tomorrow".tr();
   }
   DateTime yesterday = now.subtract(Duration(days: 1));
   if (date.day == yesterday.day &&
       date.month == yesterday.month &&
       date.year == yesterday.year) {
-    return "Yesterday";
+    return "yesterday".tr();
   }
 
   return false;
-}
-
-getWeekDayShort(currentWeekDay) {
-  var weekDays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
-  return weekDays[currentWeekDay];
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ Mar 15
@@ -219,15 +174,19 @@ getWordedDateShort(
     return checkYesterdayTodayTomorrow(date);
   }
   if (includeYear && newLineYear) {
-    return DateFormat('MMM d\nyyyy').format(date);
+    return DateFormat(
+            'MMM d\nyyyy', navigatorKey.currentContext?.locale.toString())
+        .format(date);
   } else if (includeYear) {
-    return DateFormat('MMM d, yyyy').format(date);
+    return DateFormat(
+            'MMM d, yyyy', navigatorKey.currentContext?.locale.toString())
+        .format(date);
   } else if (newLineDay) {
-    return DateFormat('MMM \nd').format(date);
+    return DateFormat('MMM \nd', navigatorKey.currentContext?.locale.toString())
+        .format(date);
   }
-  {
-    return DateFormat('MMM d').format(date);
-  }
+  return DateFormat('MMM d', navigatorKey.currentContext?.locale.toString())
+      .format(date);
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
@@ -236,18 +195,25 @@ getWordedDateShortMore(DateTime date,
   if (checkYesterdayTodayTomorrow(date) != false) {
     if (includeTimeIfToday) {
       return checkYesterdayTodayTomorrow(date) +
-          DateFormat(' - h:mm aaa').format(date);
+          DateFormat(
+                  ' - h:mm aaa', navigatorKey.currentContext?.locale.toString())
+              .format(date);
     } else {
       return checkYesterdayTodayTomorrow(date);
     }
   }
   if (includeYear) {
-    return DateFormat('MMMM d, yyyy').format(date);
+    return DateFormat(
+            'MMMM d, yyyy', navigatorKey.currentContext?.locale.toString())
+        .format(date);
   } else if (includeTime) {
-    return DateFormat('MMMM d, yyyy - h:mm aaa').format(date);
+    return DateFormat('MMMM d, yyyy - h:mm aaa',
+            navigatorKey.currentContext?.locale.toString())
+        .format(date);
   }
   {
-    return DateFormat('MMMM d').format(date);
+    return DateFormat('MMMM d', navigatorKey.currentContext?.locale.toString())
+        .format(date);
   }
 }
 
@@ -292,7 +258,9 @@ getWordedDate(DateTime date,
     return checkYesterdayTodayTomorrow(date) +
         (includeMonthDate
             ? ", " +
-                DateFormat.MMMMd('en_US').format(date).toString() +
+                DateFormat.MMMMd(navigatorKey.currentContext?.locale.toString())
+                    .format(date)
+                    .toString() +
                 extraYear
             : "");
   }
@@ -300,10 +268,15 @@ getWordedDate(DateTime date,
   if (includeMonthDate == false &&
       now.difference(date).inDays < 4 &&
       now.difference(date).inDays > 0) {
-    String weekday = DateFormat('EEEE').format(date);
+    String weekday =
+        DateFormat('EEEE', navigatorKey.currentContext?.locale.toString())
+            .format(date);
     return weekday + extraYear;
   }
-  return DateFormat.MMMMEEEEd('en_US').format(date).toString() + extraYear;
+  return DateFormat.MMMMEEEEd(navigatorKey.currentContext?.locale.toString())
+          .format(date)
+          .toString() +
+      extraYear;
 }
 
 setTextInput(inputController, value) {
@@ -350,13 +323,14 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           currentDateLoopStart.month + budget.periodLength,
           currentDateLoopStart.day);
       // This fixes a bug where if the currentDate is the 31 of a month, February for example won't be considered since it doesn't have 30 days
-      currentDate = DateTime(currentDate.year, currentDate.month, 1);
+      // TODO this still needs fixing...
+      // currentDate = DateTime(currentDate.year, currentDate.month, 1);
     } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
       currentDateLoopEnd = DateTime(
           currentDateLoopStart.year + budget.periodLength,
           currentDateLoopStart.month,
           currentDateLoopStart.day);
-      currentDate = DateTime(currentDate.year, currentDate.month, 1);
+      // currentDate = DateTime(currentDate.year, currentDate.month, 1,);
     }
     // print("START");
     // print(currentDate);
@@ -504,24 +478,27 @@ int daysBetween(DateTime from, DateTime to) {
 String getWelcomeMessage() {
   int h24 = DateTime.now().hour;
   List<String> greetings = [
-    "Hello,",
-    "Hi there,",
-    "Hi,",
-    "How are you,",
-    "What's up",
-    "Hello there",
-    "Hope all is well",
+    "greetings-general-1".tr(),
+    "greetings-general-2".tr(),
+    "greetings-general-3".tr(),
+    "greetings-general-4".tr(),
+    "greetings-general-5".tr(),
+    "greetings-general-6".tr(),
+    "greetings-general-7".tr(),
   ];
   List<String> greetingsMorning = [
-    "Good morning",
-    "Good day",
+    "greetings-morning-1".tr(),
+    "greetings-morning-2".tr(),
   ];
   List<String> greetingsAfternoon = [
-    "Good afternoon",
-    "Good day",
+    "greetings-afternoon-1".tr(),
+    "greetings-afternoon-2".tr(),
   ];
-  List<String> greetingsEvening = ["Good evening"];
-  List<String> greetingsLate = ["Good night", "Get some rest"];
+  List<String> greetingsEvening = ["greetings-evening-1".tr()];
+  List<String> greetingsLate = [
+    "greetings-late-1".tr(),
+    "greetings-late-2".tr()
+  ];
   if (randomInt[0] % 2 == 0) {
     if (h24 <= 12 && h24 >= 6)
       return greetingsMorning[randomInt[0] % (greetingsMorning.length)];

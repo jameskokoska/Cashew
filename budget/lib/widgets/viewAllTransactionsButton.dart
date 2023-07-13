@@ -3,6 +3,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
@@ -19,7 +20,7 @@ class ViewAllTransactionsButton extends StatelessWidget {
         else
           PageNavigationFramework.changePage(context, 1, switchNavbar: true);
       },
-      text: "View All Transactions",
+      text: "view-all-transactions".tr(),
     );
   }
 }

@@ -12,6 +12,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -369,7 +370,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                       onCancel: () {
                         Navigator.pop(context);
                       },
-                      onCancelLabel: "Cancel",
+                      onCancelLabel: "cancel".tr(),
                       onSubmit: () async {
                         Navigator.pop(context);
                         openLoadingPopup(context);
@@ -425,7 +426,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                      onCancelLabel: "Cancel",
+                      onCancelLabel: "cancel".tr(),
                       onSubmit: () {
                         database.deleteBudget(context, widget.budget);
                         // database.deleteBudgetTransactions(
@@ -569,7 +570,7 @@ class CategoryMemberContainer extends StatelessWidget {
                           Navigator.pop(context);
                           onDelete();
                         },
-                        onCancelLabel: "Cancel",
+                        onCancelLabel: "cancel".tr(),
                         onCancel: () {
                           Navigator.pop(context);
                         },

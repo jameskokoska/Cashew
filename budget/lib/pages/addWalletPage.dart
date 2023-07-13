@@ -17,6 +17,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/currencyPicker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -55,27 +56,12 @@ class _AddWalletPageState extends State<AddWalletPage> {
     openBottomSheet(
       context,
       PopupFramework(
-        title: "Select Color",
+        title: "select-color".tr(),
         child: SelectColor(
           selectedColor: selectedColor,
           setSelectedColor: setSelectedColor,
         ),
       ),
-    );
-  }
-
-  Future<void> selectTitle() async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "Enter Name",
-        child: SelectText(
-          setSelectedText: setSelectedTitle,
-          labelText: "Name",
-          selectedText: selectedTitle,
-        ),
-      ),
-      snap: false,
     );
   }
 
@@ -301,18 +287,17 @@ class _AddWalletPageState extends State<AddWalletPage> {
           },
           actions: [
             IconButton(
-              tooltip: "Info",
+              tooltip: "info".tr(),
               onPressed: () {
                 openPopup(
                   context,
-                  title: "Exchange Rate Notice",
-                  description:
-                      "The exchange rates displayed within this app are for informational purposes only and should not be used for investment decisions. These rates are estimates and may not reflect actual rates. By using this app, you acknowledge that you understand and accept these limitations and that you assume full responsibility for any decisions made based on the information provided within the app.",
+                  title: "exchange-rate-notice".tr(),
+                  description: "exchange-rate-notice-description".tr(),
                   icon: Icons.info,
                   onCancel: () {
                     Navigator.pop(context);
                   },
-                  onCancelLabel: "OK",
+                  onCancelLabel: "ok".tr(),
                 );
               },
               icon: Icon(Icons.info),
@@ -345,8 +330,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     disabled: false,
                   )
                 : SaveBottomButton(
-                    label:
-                        widget.wallet == null ? "Add Wallet" : "Save Changes",
+                    label: widget.wallet == null
+                        ? "add-wallet".tr()
+                        : "save-changes".tr(),
                     onTap: () async {
                       await addWallet();
                     },
@@ -359,7 +345,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextInput(
                   focusNode: _titleFocusNode,
-                  labelText: "Name",
+                  labelText: "name".tr(),
                   bubbly: false,
                   initialValue: selectedTitle,
                   onChanged: (text) {
@@ -389,7 +375,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
               child: SizedBox(height: 15),
             ),
             SliverStickyLabelDivider(
-              info: "Select Currency",
+              info: "select-currency".tr(),
               sliver: ColumnSliver(children: [
                 SizedBox(height: 10),
                 CurrencyPicker(
@@ -424,7 +410,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                     determineBottomButton();
                                     Navigator.pop(context);
                                   },
-                                  nextLabel: "Set Amount",
+                                  nextLabel: "set-amount".tr(),
                                 ),
                               ),
                             );

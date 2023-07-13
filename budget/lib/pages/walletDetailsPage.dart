@@ -19,6 +19,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -85,12 +86,12 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
             listID: listID,
             actions: [
               IconButton(
-                tooltip: "Edit wallet",
+                tooltip: "edit-wallet".tr(),
                 onPressed: () {
                   pushRoute(
                     context,
                     AddWalletPage(
-                      title: "Edit Wallet",
+                      title: "edit-wallet".tr(),
                       wallet: widget.wallet,
                     ),
                   );
@@ -99,7 +100,9 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
               ),
             ],
             dragDownToDismiss: true,
-            title: widget.wallet == null ? "All Spending" : widget.wallet!.name,
+            title: widget.wallet == null
+                ? "all-spending".tr()
+                : widget.wallet!.name,
             appBarBackgroundColor:
                 Theme.of(context).colorScheme.secondaryContainer,
             appBarBackgroundColorStart: Theme.of(context).canvasColor,
@@ -121,7 +124,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           children: [
                             Expanded(
                               child: TransactionsAmountBox(
-                                label: "Income",
+                                label: "income".tr(),
                                 amountStream: database.watchTotalOfWallet(
                                   walletPk,
                                   isIncome: true,
@@ -142,7 +145,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                             SizedBox(width: 13),
                             Expanded(
                               child: TransactionsAmountBox(
-                                label: "Expense",
+                                label: "expense".tr(),
                                 amountStream: database.watchTotalOfWallet(
                                   walletPk,
                                   isIncome: false,
@@ -286,8 +289,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                         categoryEntries.add(
                           CategoryEntry(
                             extraText: category.total > 0
-                                ? " of income"
-                                : " of expenses",
+                                ? "percent-of-income"
+                                : "percent-of-expense",
                             isTiled: tiledCategoryEntries,
                             budgetColorScheme: widget.walletColorScheme,
                             category: category.category,

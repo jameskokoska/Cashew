@@ -4,6 +4,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -264,11 +265,15 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                         fontSize: 13,
                         text: widget.budget.reoccurrence ==
                                 BudgetReoccurence.monthly
-                            ? DateFormat('MMM').format(startDate)
+                            ? DateFormat('MMM', context.locale.toString())
+                                .format(startDate)
                             : widget.budget.reoccurrence ==
                                     BudgetReoccurence.yearly
-                                ? DateFormat('yyyy').format(startDate)
-                                : DateFormat('MMM\nd').format(startDate),
+                                ? DateFormat('yyyy', context.locale.toString())
+                                    .format(startDate)
+                                : DateFormat(
+                                        'MMM\nd', context.locale.toString())
+                                    .format(startDate),
                         textColor: dynamicPastel(context, widget.color,
                                 amount: 0.8, inverse: true)
                             .withOpacity(0.5),

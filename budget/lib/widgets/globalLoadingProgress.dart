@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';
 
@@ -57,10 +58,18 @@ class GlobalLoadingIndeterminateState
     extends State<GlobalLoadingIndeterminate> {
   bool visible = false;
   double opacity = 0;
+  // Set the timeout for loading indicator
+  final _debouncer = Debouncer(milliseconds: 5000);
+
   void setVisibility(bool visible, {double? opacity}) {
     setState(() {
       this.visible = visible;
       this.opacity = visible == false ? 1 : opacity ?? 1;
+    });
+    _debouncer.run(() {
+      setState(() {
+        this.visible = false;
+      });
     });
   }
 

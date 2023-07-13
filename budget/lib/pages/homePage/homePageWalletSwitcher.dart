@@ -7,6 +7,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/walletEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class HomePageWalletSwitcher extends StatelessWidget {
@@ -58,7 +59,7 @@ class HomePageWalletSwitcher extends StatelessWidget {
                             child: AddButton(
                               onTap: () {},
                               openPage: AddWalletPage(
-                                title: "Add Wallet",
+                                title: "add-wallet".tr(),
                               ),
                             ),
                           ),

@@ -6,6 +6,7 @@ import 'package:budget/widgets/colorPicker.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -160,7 +161,7 @@ class _SelectColorState extends State<SelectColor> {
         children: [
           widget.useSystemColorPrompt == true
               ? SettingsContainerSwitch(
-                  title: "Use System Color",
+                  title: "use-system-color".tr(),
                   onSwitched: (value) async {
                     if (value == true) {
                       await SystemTheme.accentColor.load();
@@ -382,7 +383,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
   @override
   Widget build(BuildContext context) {
     Widget colorPickerPopup = PopupFramework(
-      title: "Custom Color",
+      title: "custom-color".tr(),
       child: Column(
         children: [
           Center(
@@ -406,7 +407,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
             height: 8,
           ),
           Button(
-            label: "Select",
+            label: "select".tr(),
             onTap: () {
               Navigator.pop(context);
               widget.onTap(selectedColor);
