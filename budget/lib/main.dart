@@ -15,7 +15,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/database/initializeDatabase.dart';
+import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/struct/defaultCategories.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
@@ -61,7 +61,6 @@ void main() async {
   entireAppLoaded = false;
   currenciesJSON = await json.decode(
       await rootBundle.loadString('assets/static/generated/currencies.json'));
-  await initializeDatabase();
   await initializeSettings();
   tz.initializeTimeZones();
   final String? locationName = await FlutterNativeTimezone.getLocalTimezone();

@@ -34,7 +34,7 @@ import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 //Initialize default values in database
-Future<bool> initializeDatabase() async {
+Future<bool> initializeDefaultDatabase() async {
   //Initialize default categories
   if ((await database.getAllCategories()).length <= 0) {
     for (TransactionCategory category in defaultCategories()) {

@@ -1,3 +1,4 @@
+import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
@@ -140,6 +141,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           appStateSettings["submittedFeedback"] != true) {
         openBottomSheet(context, RatingPopup());
       }
+      await initializeDefaultDatabase();
       await markSubscriptionsAsPaid();
       runNotificationPayLoads(context);
       await initializeNotificationsPlatform();

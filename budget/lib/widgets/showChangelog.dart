@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
-    < 3.4.9
+    < 3.5.0
+    Fixed default names for wallet and categories
     Generate translations files script
     Added more translations and support for switching languages
     About page only shown in more actions when sidebar hidden
