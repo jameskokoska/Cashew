@@ -29,6 +29,7 @@ import 'package:budget/widgets/walletEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/abusiveexperiencereport/v1.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -117,13 +118,15 @@ Future<bool> signInGoogle(
               ]
             : [])
       ]);
-
+      googleSignIn?.currentUser?.clearAuthCache();
       final signIn.GoogleSignInAccount? account = silentSignIn == true
           ? kIsWeb
               ? await googleSignIn?.signInSilently()
+              // Google Sign-in silent on web no longer gives access to the scopes
+              // https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk
               // await googleSignIn?.signInSilently().then((value) async {
-              //   return await googleSignIn?.signIn();
-              // })
+              //     return await googleSignIn?.signIn();
+              //   })
               : await googleSignIn?.signInSilently()
           : await googleSignIn?.signIn();
 
@@ -182,6 +185,12 @@ Future<bool> signOutGoogle() async {
   user = null;
   updateSettings("currentUserEmail", "");
   print("Signedout");
+  return true;
+}
+
+Future<bool> refreshGoogleSignIn() async {
+  await signOutGoogle();
+  await signInGoogle(silentSignIn: false);
   return true;
 }
 
@@ -280,8 +289,8 @@ Future<void> createBackup(
     var media = new drive.Media(mediaStream, dbFileBytes.length);
 
     var driveFile = new drive.File();
-    final timestamp = DateFormat("yyyy-MM-dd-hhmmss", context.locale.toString())
-        .format(DateTime.now().toUtc());
+    final timestamp =
+        DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
     // -$timestamp
     driveFile.name =
         "db-v$schemaVersionGlobal-${getCurrentDeviceName()}.sqlite";
@@ -312,9 +321,13 @@ Future<void> createBackup(
     if (silentBackup == false || silentBackup == null) {
       loadingIndeterminateKey.currentState!.setVisibility(false);
     }
-    openSnackbar(
-      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
-    );
+    if (e is DetailedApiRequestError && e.status == 401) {
+      await refreshGoogleSignIn();
+    } else {
+      openSnackbar(
+        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      );
+    }
   }
 }
 
@@ -503,23 +516,28 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
       loadingIndeterminateKey.currentState!.setVisibility(false);
     };
     if (widget.navigationSidebarButton == true) {
-      return user == null
-          ? NavigationSidebarButton(
-              label: "login".tr(),
-              icon: MoreIcons.google,
-              onTap: () async {
-                login();
-              },
-              isSelected: false,
-            )
-          : NavigationSidebarButton(
-              label: user!.displayName ?? "",
-              icon: Icons.person_rounded,
-              onTap: () async {
-                if (widget.onTap != null) widget.onTap!();
-              },
-              isSelected: widget.isButtonSelected,
-            );
+      return AnimatedSwitcher(
+        duration: Duration(milliseconds: 600),
+        child: user == null
+            ? NavigationSidebarButton(
+                key: ValueKey("login"),
+                label: "login".tr(),
+                icon: MoreIcons.google,
+                onTap: () async {
+                  login();
+                },
+                isSelected: false,
+              )
+            : NavigationSidebarButton(
+                key: ValueKey("user"),
+                label: user!.displayName ?? "",
+                icon: Icons.person_rounded,
+                onTap: () async {
+                  if (widget.onTap != null) widget.onTap!();
+                },
+                isSelected: widget.isButtonSelected,
+              ),
+      );
     }
     return user == null
         ? SettingsContainer(
@@ -539,14 +557,26 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
   }
 }
 
-Future<(drive.DriveApi driveApi, List<drive.File>?)> getDriveFiles() async {
-  final authHeaders = await user!.authHeaders;
-  final authenticateClient = GoogleAuthClient(authHeaders);
-  drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
+Future<(drive.DriveApi? driveApi, List<drive.File>?)> getDriveFiles() async {
+  try {
+    final authHeaders = await user!.authHeaders;
+    final authenticateClient = GoogleAuthClient(authHeaders);
+    drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
 
-  drive.FileList fileList = await driveApi.files
-      .list(spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
-  return (driveApi, fileList.files);
+    drive.FileList fileList = await driveApi.files.list(
+        spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+    return (driveApi, fileList.files);
+  } catch (e) {
+    if (e is DetailedApiRequestError && e.status == 401) {
+      await refreshGoogleSignIn();
+      return await getDriveFiles();
+    } else {
+      openSnackbar(
+        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      );
+    }
+  }
+  return (null, null);
 }
 
 class BackupManagement extends StatefulWidget {
@@ -576,18 +606,22 @@ class _BackupManagementState extends State<BackupManagement> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      (drive.DriveApi, List<drive.File>?) result = await getDriveFiles();
-      drive.DriveApi driveApi = result.$1;
+      (drive.DriveApi?, List<drive.File>?) result = await getDriveFiles();
+      drive.DriveApi? driveApi = result.$1;
       List<drive.File>? files = result.$2;
-      if (files == null) {
-        throw "No backups found.";
+      if (files == null || driveApi == null) {
+        setState(() {
+          filesState = [];
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          filesState = files;
+          driveApiState = driveApi;
+          isLoading = false;
+        });
+        bottomSheetControllerGlobal.snapToExtent(0);
       }
-      setState(() {
-        filesState = files;
-        driveApiState = driveApi;
-        isLoading = false;
-      });
-      bottomSheetControllerGlobal.snapToExtent(0);
     });
   }
 

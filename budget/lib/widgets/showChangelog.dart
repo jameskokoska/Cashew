@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
-    < 3.5.0
+    < 3.5.1
+    Fixed silent sign-in missing scopes for web, will ask user to re-sign-in if scopes are needed for backup, syncing etc
     Fixed default names for wallet and categories
     Generate translations files script
     Added more translations and support for switching languages

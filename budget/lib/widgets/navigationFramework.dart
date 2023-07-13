@@ -42,6 +42,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
+import 'package:googleapis/drive/v3.dart';
 // import 'package:feature_discovery/feature_discovery.dart';
 
 class PageNavigationFramework extends StatefulWidget {
@@ -74,7 +75,7 @@ GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
 GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
 bool runningCloudFunctions = false;
-Future<bool> runAllCloudFunctions(context) async {
+Future<bool> runAllCloudFunctions(context, {bool forceSignIn = false}) async {
   runningCloudFunctions = true;
   try {
     loadingIndeterminateKey.currentState!.setVisibility(true);
@@ -96,6 +97,14 @@ Future<bool> runAllCloudFunctions(context) async {
     print("Error running sync functions on load: " + e.toString());
     loadingIndeterminateKey.currentState!.setVisibility(false);
     runningCloudFunctions = false;
+    if (e is DetailedApiRequestError &&
+        e.status == 401 &&
+        forceSignIn == true) {
+      // Request had invalid authentication credentials. Try logging out and back in.
+      // This stems from silent sign-in not providing the credentials for GDrive API for e.g.
+      await refreshGoogleSignIn();
+      runAllCloudFunctions(context);
+    }
     return false;
   }
   loadingIndeterminateKey.currentState!.setVisibility(false);

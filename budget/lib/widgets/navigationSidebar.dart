@@ -278,7 +278,10 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                           key: ValueKey(
                                               appStateSettings["lastSynced"]),
                                           onTap: () {
-                                            runAllCloudFunctions(context);
+                                            runAllCloudFunctions(
+                                              context,
+                                              forceSignIn: true,
+                                            );
                                           },
                                           borderRadius: 15,
                                           child: Padding(

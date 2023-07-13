@@ -12,18 +12,9 @@ Future<DateTime?> showCustomDatePicker(
     initialEntryMode: initialEntryMode,
     firstDate: DateTime(DateTime.now().year - 10),
     lastDate: DateTime(DateTime.now().year + 2),
-    builder: (BuildContext context, Widget? child) {
+    builder: (BuildContext context2, Widget? child) {
       if (appStateSettings["materialYou"]) {
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light(
-                  useMaterial3: true,
-                )
-              : ThemeData.dark(
-                  useMaterial3: true,
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
+        return child ?? SizedBox.shrink();
       }
       return Theme(
         data: Theme.of(context).brightness == Brightness.light
@@ -63,16 +54,7 @@ Future<DateTimeRange?> showCustomDateRangePicker(
     initialDateRange: initialDateRange,
     builder: (BuildContext context, Widget? child) {
       if (appStateSettings["materialYou"]) {
-        return Theme(
-          data: Theme.of(context).brightness == Brightness.light
-              ? ThemeData.light(
-                  useMaterial3: true,
-                )
-              : ThemeData.dark(
-                  useMaterial3: true,
-                ),
-          child: child ?? SizedBox.shrink(),
-        );
+        return child ?? SizedBox.shrink();
       }
       return Theme(
         data: Theme.of(context).brightness == Brightness.light

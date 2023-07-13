@@ -3,12 +3,15 @@ import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -61,132 +64,159 @@ class AccountsPageState extends State<AccountsPage> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 35),
-                ClipOval(
-                  child: user == null || user!.photoUrl == null
-                      ? profileWidget
-                      : FadeInImage.memoryNetwork(
-                          fadeInDuration: Duration(milliseconds: 500),
-                          fadeOutDuration: Duration(milliseconds: 500),
-                          placeholder: kTransparentImage,
-                          image: user!.photoUrl.toString(),
-                          height: 95,
-                          width: 95,
-                          imageErrorBuilder: (BuildContext context,
-                              Object exception, StackTrace? stackTrace) {
-                            return profileWidget;
-                          },
-                        ),
-                ),
-                SizedBox(height: 10),
-                TextFont(
-                  text: (user?.displayName ?? "").toString(),
-                  textAlign: TextAlign.center,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(height: 2),
-                TextFont(
-                  text: (user?.email ?? "").toString(),
-                  textAlign: TextAlign.center,
-                  fontSize: 15,
-                ),
-                SizedBox(height: 15),
-                IntrinsicWidth(
-                  child: Button(
-                    label: "Logout",
-                    onTap: () async {
-                      final result = await signOutGoogle();
-                      if (result == true) {
-                        if (getWidthNavigationSidebar(context) <= 0) {
-                          Navigator.maybePop(context);
-                          settingsPageStateKey.currentState?.refreshState();
-                        } else {
-                          pageNavigationFrameworkKey.currentState!
-                              .changePage(0, switchNavbar: true);
-                        }
-                      }
-                    },
-                    padding: EdgeInsets.symmetric(horizontal: 17, vertical: 12),
-                    fontSize: 15,
-                  ),
-                ),
-                SizedBox(height: 25),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Row(
+            child: user == null
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: IgnorePointer(
-                          ignoring: currentlyExporting,
-                          child: AnimatedOpacity(
-                            opacity: currentlyExporting ? 0.4 : 1,
-                            duration: Duration(milliseconds: 200),
-                            child: OutlinedButtonStacked(
-                              text: "Export",
-                              iconData: Icons.upload_rounded,
-                              onTap: () async {
-                                setState(() {
-                                  currentlyExporting = true;
-                                });
-                                await createBackup(context,
-                                    deleteOldBackups: true);
-                                if (mounted)
-                                  setState(() {
-                                    currentlyExporting = false;
-                                  });
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 15),
-                      Expanded(
-                        child: OutlinedButtonStacked(
-                          text: "Import",
-                          iconData: Icons.download_rounded,
-                          onTap: () async {
-                            await chooseBackup(context);
-                          },
-                        ),
+                      SettingsContainerOutlined(
+                        title: "sign-in-with-google".tr(),
+                        icon: MoreIcons.google,
+                        isExpanded: false,
+                        onTap: () async {
+                          loadingIndeterminateKey.currentState
+                              ?.setVisibility(true);
+                          try {
+                            await signInGoogle(
+                              context: context,
+                              waitForCompletion: false,
+                              drivePermissions: true,
+                              next: () {},
+                            );
+                          } catch (e) {
+                            print("Error signing in: " + e.toString());
+                          }
+                        },
                       )
                     ],
-                  ),
-                ),
-                SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Row(
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: OutlinedButtonStacked(
-                          text: "Sync",
-                          iconData: Icons.cloud_sync_rounded,
+                      SizedBox(height: 35),
+                      ClipOval(
+                        child: user == null || user!.photoUrl == null
+                            ? profileWidget
+                            : FadeInImage.memoryNetwork(
+                                fadeInDuration: Duration(milliseconds: 500),
+                                fadeOutDuration: Duration(milliseconds: 500),
+                                placeholder: kTransparentImage,
+                                image: user!.photoUrl.toString(),
+                                height: 95,
+                                width: 95,
+                                imageErrorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return profileWidget;
+                                },
+                              ),
+                      ),
+                      SizedBox(height: 10),
+                      TextFont(
+                        text: (user?.displayName ?? "").toString(),
+                        textAlign: TextAlign.center,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizedBox(height: 2),
+                      TextFont(
+                        text: (user?.email ?? "").toString(),
+                        textAlign: TextAlign.center,
+                        fontSize: 15,
+                      ),
+                      SizedBox(height: 15),
+                      IntrinsicWidth(
+                        child: Button(
+                          label: "Logout",
                           onTap: () async {
-                            chooseBackup(context,
-                                isManaging: true, isClientSync: true);
+                            final result = await signOutGoogle();
+                            if (result == true) {
+                              if (getWidthNavigationSidebar(context) <= 0) {
+                                Navigator.maybePop(context);
+                                settingsPageStateKey.currentState
+                                    ?.refreshState();
+                              } else {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(0, switchNavbar: true);
+                              }
+                            }
                           },
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 17, vertical: 12),
+                          fontSize: 15,
                         ),
                       ),
-                      SizedBox(width: 18),
-                      Expanded(
-                        child: OutlinedButtonStacked(
-                          text: "Backups",
-                          iconData: Icons.folder_rounded,
-                          onTap: () async {
-                            await chooseBackup(context, isManaging: true);
-                          },
+                      SizedBox(height: 25),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: IgnorePointer(
+                                ignoring: currentlyExporting,
+                                child: AnimatedOpacity(
+                                  opacity: currentlyExporting ? 0.4 : 1,
+                                  duration: Duration(milliseconds: 200),
+                                  child: OutlinedButtonStacked(
+                                    text: "Export",
+                                    iconData: Icons.upload_rounded,
+                                    onTap: () async {
+                                      setState(() {
+                                        currentlyExporting = true;
+                                      });
+                                      await createBackup(context,
+                                          deleteOldBackups: true);
+                                      if (mounted)
+                                        setState(() {
+                                          currentlyExporting = false;
+                                        });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: OutlinedButtonStacked(
+                                text: "Import",
+                                iconData: Icons.download_rounded,
+                                onTap: () async {
+                                  await chooseBackup(context);
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
+                      SizedBox(height: 15),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButtonStacked(
+                                text: "Sync",
+                                iconData: Icons.cloud_sync_rounded,
+                                onTap: () async {
+                                  chooseBackup(context,
+                                      isManaging: true, isClientSync: true);
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 18),
+                            Expanded(
+                              child: OutlinedButtonStacked(
+                                text: "Backups",
+                                iconData: Icons.folder_rounded,
+                                onTap: () async {
+                                  await chooseBackup(context, isManaging: true);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 75),
                     ],
                   ),
-                ),
-                SizedBox(height: 75),
-              ],
-            ),
           ),
         ),
       ],
