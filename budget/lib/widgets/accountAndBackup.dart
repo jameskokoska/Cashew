@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
@@ -8,7 +7,6 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/accountsPage.dart';
-import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
@@ -25,12 +23,10 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/walletEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/abusiveexperiencereport/v1.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -118,16 +114,18 @@ Future<bool> signInGoogle(
               ]
             : [])
       ]);
-      googleSignIn?.currentUser?.clearAuthCache();
+      // googleSignIn?.currentUser?.clearAuthCache();
+
       final signIn.GoogleSignInAccount? account = silentSignIn == true
-          ? kIsWeb
-              ? await googleSignIn?.signInSilently()
-              // Google Sign-in silent on web no longer gives access to the scopes
-              // https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk
-              // await googleSignIn?.signInSilently().then((value) async {
-              //     return await googleSignIn?.signIn();
-              //   })
-              : await googleSignIn?.signInSilently()
+          ?
+          // kIsWeb
+          //     ? await googleSignIn?.signInSilently()
+          // Google Sign-in silent on web no longer gives access to the scopes
+          // https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk
+          // await googleSignIn?.signInSilently().then((value) async {
+          //     return await googleSignIn?.signIn();
+          //   })
+          await googleSignIn?.signInSilently()
           : await googleSignIn?.signIn();
 
       if (account != null) {
