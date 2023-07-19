@@ -328,7 +328,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       padding: const EdgeInsets.only(right: 20, bottom: 40),
                       child: TextInput(
                         focusNode: _titleFocusNode,
-                        labelText: "name".tr(),
+                        labelText: "name-placeholder".tr(),
                         bubbly: false,
                         controller: _titleController,
                         onChanged: (text) {

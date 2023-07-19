@@ -159,7 +159,7 @@
   "edit-home": "Редактировать дом",
   "overdue-and-upcoming": "Просрочен и предстоящий",
   "lent-and-borrowed": "Великий пост и заимствован",
-  "all-spending-income-and-expenses": "Все расходы доходов и расходов",
+  "income-and-expenses": "Доход и расходы",
   "spending-graph": "График расходов",
   "select-budget": "Выберите бюджет",
   "select-budgets": "Выберите бюджеты",
@@ -228,5 +228,7 @@
   "total": "Общий",
   "monthly-subscriptions": "Ежемесячные подписки",
   "yearly-subscriptions": "Ежегодные подписки",
-  "total-subscriptions": "Общие подписки"
+  "total-subscriptions": "Общие подписки",
+  "beginning": "начало",
+  "custom-line-graph": "Пользовательская дата начала"
 }

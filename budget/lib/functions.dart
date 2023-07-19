@@ -128,7 +128,7 @@ String convertToMoney(
   return currency.format(amount);
 }
 
-getMonth(int monthIndex) {
+String getMonth(int monthIndex) {
   DateTime dateTime = DateTime(DateTime.now().year, monthIndex + 1);
   String monthName =
       DateFormat('MMMM', navigatorKey.currentContext?.locale.toString())
@@ -136,7 +136,7 @@ getMonth(int monthIndex) {
   return monthName;
 }
 
-getWordedTime(DateTime dateTime) {
+String getWordedTime(DateTime dateTime) {
   return DateFormat.jm(navigatorKey.currentContext?.locale.toString())
       .format(dateTime);
 }
@@ -163,7 +163,7 @@ checkYesterdayTodayTomorrow(DateTime date) {
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ Mar 15
-getWordedDateShort(
+String getWordedDateShort(
   DateTime date, {
   includeYear = false,
   showTodayTomorrow = true,
@@ -190,7 +190,7 @@ getWordedDateShort(
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
-getWordedDateShortMore(DateTime date,
+String getWordedDateShortMore(DateTime date,
     {includeYear = false, includeTime = false, includeTimeIfToday = false}) {
   if (checkYesterdayTodayTomorrow(date) != false) {
     if (includeTimeIfToday) {

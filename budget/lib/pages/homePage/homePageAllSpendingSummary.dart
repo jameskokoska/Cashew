@@ -40,6 +40,11 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                       amountStream: database.watchTotalOfWallet(
                         null,
                         isIncome: true,
+                        startDate:
+                            appStateSettings["incomeExpenseStartDate"] == null
+                                ? null
+                                : DateTime.parse(
+                                    appStateSettings["incomeExpenseStartDate"]),
                       ),
                       textColor: getColor(context, "incomeAmount"),
                       transactionsAmountStream:
@@ -61,6 +66,11 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                       amountStream: database.watchTotalOfWallet(
                         null,
                         isIncome: false,
+                        startDate:
+                            appStateSettings["incomeExpenseStartDate"] == null
+                                ? null
+                                : DateTime.parse(
+                                    appStateSettings["incomeExpenseStartDate"]),
                       ),
                       textColor: getColor(context, "expenseAmount"),
                       transactionsAmountStream:

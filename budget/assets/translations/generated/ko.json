@@ -159,7 +159,7 @@
   "edit-home": "집을 편집하십시오",
   "overdue-and-upcoming": "기한과 다가오는",
   "lent-and-borrowed": "빌려주고 빌렸다",
-  "all-spending-income-and-expenses": "모든 지출 수입 및 비용",
+  "income-and-expenses": "소득과 비용",
   "spending-graph": "지출 그래프",
   "select-budget": "예산을 선택하십시오",
   "select-budgets": "예산을 선택하십시오",
@@ -228,5 +228,7 @@
   "total": "총",
   "monthly-subscriptions": "월간 구독",
   "yearly-subscriptions": "연간 구독",
-  "total-subscriptions": "총 가입"
+  "total-subscriptions": "총 가입",
+  "beginning": "시작",
+  "custom-line-graph": "맞춤 시작 날짜"
 }

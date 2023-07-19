@@ -159,7 +159,7 @@
   "edit-home": "Modifica casa",
   "overdue-and-upcoming": "In ritardo e imminente",
   "lent-and-borrowed": "Prestato e preso in prestito",
-  "all-spending-income-and-expenses": "Tutte le entrate e le spese di spesa",
+  "income-and-expenses": "Reddito e spese",
   "spending-graph": "Grafico di spesa",
   "select-budget": "Seleziona budget",
   "select-budgets": "Seleziona budget",
@@ -228,5 +228,7 @@
   "total": "Totale",
   "monthly-subscriptions": "Abbonamenti mensili",
   "yearly-subscriptions": "Abbonamenti annuali",
-  "total-subscriptions": "Abbonamenti totali"
+  "total-subscriptions": "Abbonamenti totali",
+  "beginning": "inizio",
+  "custom-line-graph": "Data di inizio personalizzata"
 }

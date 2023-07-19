@@ -235,7 +235,7 @@ class App extends StatelessWidget {
               ? OnBoardingPage(key: ValueKey("Onboarding"))
               : PageNavigationFramework(key: pageNavigationFrameworkKey)),
       builder: (context, child) {
-        if (kReleaseMode == false) {
+        if (kReleaseMode) {
           ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
             return Container(color: Colors.transparent);
           };

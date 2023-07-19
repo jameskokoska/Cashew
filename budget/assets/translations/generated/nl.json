@@ -159,7 +159,7 @@
   "edit-home": "Bewerk huis",
   "overdue-and-upcoming": "Achterstallig en aankomend",
   "lent-and-borrowed": "Lent en geleend",
-  "all-spending-income-and-expenses": "Alle uitgaven inkomsten en uitgaven",
+  "income-and-expenses": "Inkomsten en uitgaven",
   "spending-graph": "Uitgavengrafiek",
   "select-budget": "Selecteer budget",
   "select-budgets": "Selecteer budgetten",
@@ -228,5 +228,7 @@
   "total": "Totaal",
   "monthly-subscriptions": "Maandelijkse abonnementen",
   "yearly-subscriptions": "Jaarlijkse abonnementen",
-  "total-subscriptions": "Totale abonnementen"
+  "total-subscriptions": "Totale abonnementen",
+  "beginning": "begin",
+  "custom-line-graph": "Aangepaste startdatum"
 }

@@ -159,7 +159,7 @@
   "edit-home": "编辑家",
   "overdue-and-upcoming": "逾期和即将到来",
   "lent-and-borrowed": "借出并借了",
-  "all-spending-income-and-expenses": "所有支出收入和费用",
+  "income-and-expenses": "收入和费用",
   "spending-graph": "支出图",
   "select-budget": "选择预算",
   "select-budgets": "选择预算",
@@ -228,5 +228,7 @@
   "total": "全部的",
   "monthly-subscriptions": "每月订阅",
   "yearly-subscriptions": "年度订阅",
-  "total-subscriptions": "总订阅"
+  "total-subscriptions": "总订阅",
+  "beginning": "开始",
+  "custom-line-graph": "自定义开始日期"
 }

@@ -3211,17 +3211,21 @@ class FinanceDatabase extends _$FinanceDatabase {
     // });
   }
 
-  Stream<double?> watchTotalOfWallet(int? walletPk, {bool? isIncome = null}) {
+  Stream<double?> watchTotalOfWallet(int? walletPk,
+      {bool? isIncome = null, DateTime? startDate}) {
     final totalAmt = transactions.amount.sum();
     final query = selectOnly(transactions)
       ..addColumns([totalAmt])
-      ..where((isIncome == null
-              ? transactions.walletFk.isNotNull()
+      ..where((startDate == null
+              ? Constant(true)
+              : transactions.dateCreated.isBiggerThanValue(startDate)) &
+          (isIncome == null
+              ? Constant(true)
               : isIncome == true
                   ? transactions.income.equals(true)
                   : transactions.income.equals(false)) &
           (walletPk == null
-              ? transactions.walletFk.isNotNull()
+              ? Constant(true)
               : transactions.walletFk.equals(walletPk)) &
           transactions.paid.equals(true));
     return query.map((row) => row.read(totalAmt)).watchSingleOrNull();

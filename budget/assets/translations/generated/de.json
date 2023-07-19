@@ -159,7 +159,7 @@
   "edit-home": "Home bearbeiten",
   "overdue-and-upcoming": "Überfällig und bevorstehend",
   "lent-and-borrowed": "Geliehen und geliehen",
-  "all-spending-income-and-expenses": "Alle Ausgabenerträge und Ausgaben",
+  "income-and-expenses": "Einnahmen und Ausgaben",
   "spending-graph": "Ausgabendiagramm",
   "select-budget": "Budget auswählen",
   "select-budgets": "Budgets auswählen",
@@ -228,5 +228,7 @@
   "total": "Gesamt",
   "monthly-subscriptions": "Monatliche Abonnements",
   "yearly-subscriptions": "Jährliche Abonnements",
-  "total-subscriptions": "Gesamtabonnements"
+  "total-subscriptions": "Gesamtabonnements",
+  "beginning": "Anfang",
+  "custom-line-graph": "Benutzerdefinierte Startdatum"
 }

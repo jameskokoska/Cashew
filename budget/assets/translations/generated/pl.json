@@ -159,7 +159,7 @@
   "edit-home": "Edytuj dom",
   "overdue-and-upcoming": "Zbliżone i nadchodzące",
   "lent-and-borrowed": "Pożyczył i pożyczył",
-  "all-spending-income-and-expenses": "Wszystkie wydatki i wydatki",
+  "income-and-expenses": "Dochód i wydatki",
   "spending-graph": "Wykres wydatków",
   "select-budget": "Wybierz budżet",
   "select-budgets": "Wybierz budżety",
@@ -228,5 +228,7 @@
   "total": "Całkowity",
   "monthly-subscriptions": "Miesięczne subskrypcje",
   "yearly-subscriptions": "Roczne subskrypcje",
-  "total-subscriptions": "Całkowite subskrypcje"
+  "total-subscriptions": "Całkowite subskrypcje",
+  "beginning": "początek",
+  "custom-line-graph": "Niestandardowa data rozpoczęcia"
 }

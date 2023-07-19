@@ -159,7 +159,7 @@
   "edit-home": "แก้ไขบ้าน",
   "overdue-and-upcoming": "เกินกำหนดและกำลังจะมาถึง",
   "lent-and-borrowed": "เข้าพรรษาและยืม",
-  "all-spending-income-and-expenses": "รายได้และค่าใช้จ่ายทั้งหมด",
+  "income-and-expenses": "รายได้และค่าใช้จ่าย",
   "spending-graph": "กราฟการใช้จ่าย",
   "select-budget": "เลือกงบประมาณ",
   "select-budgets": "เลือกงบประมาณ",
@@ -228,5 +228,7 @@
   "total": "ทั้งหมด",
   "monthly-subscriptions": "การสมัครสมาชิกรายเดือน",
   "yearly-subscriptions": "การสมัครสมาชิกรายปี",
-  "total-subscriptions": "การสมัครสมาชิกทั้งหมด"
+  "total-subscriptions": "การสมัครสมาชิกทั้งหมด",
+  "beginning": "จุดเริ่มต้น",
+  "custom-line-graph": "วันที่เริ่มต้นที่กำหนดเอง"
 }

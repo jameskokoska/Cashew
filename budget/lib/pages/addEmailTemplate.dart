@@ -422,7 +422,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextInput(
-                      labelText: "name".tr(),
+                      labelText: "name-placeholder".tr(),
                       bubbly: false,
                       initialValue: selectedName,
                       onChanged: (text) {

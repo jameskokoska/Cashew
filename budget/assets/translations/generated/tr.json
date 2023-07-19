@@ -159,7 +159,7 @@
   "edit-home": "Evde Düzenle",
   "overdue-and-upcoming": "Gecikmiş ve yaklaşan",
   "lent-and-borrowed": "Ödünç ve ödünç alınmış",
-  "all-spending-income-and-expenses": "Tüm harcama gelirleri ve giderleri",
+  "income-and-expenses": "Gelir ve gider",
   "spending-graph": "Harcama grafiği",
   "select-budget": "Bütçeyi seçin",
   "select-budgets": "Bütçeleri Seçin",
@@ -228,5 +228,7 @@
   "total": "Toplam",
   "monthly-subscriptions": "Aylık Abonelikler",
   "yearly-subscriptions": "Yıllık Abonelikler",
-  "total-subscriptions": "Toplam Abonelikler"
+  "total-subscriptions": "Toplam Abonelikler",
+  "beginning": "başlangıç",
+  "custom-line-graph": "Özel Başlangıç ​​Tarihi"
 }

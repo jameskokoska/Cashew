@@ -159,7 +159,7 @@
   "edit-home": "تحرير المنزل",
   "overdue-and-upcoming": "تأخرت وقادمة",
   "lent-and-borrowed": "قترض واستعارة",
-  "all-spending-income-and-expenses": "جميع دخل الإنفاق والنفقات",
+  "income-and-expenses": "الإيرادات والمصروفات",
   "spending-graph": "إنفاق الرسم البياني",
   "select-budget": "حدد الميزانية",
   "select-budgets": "حدد الميزانيات",
@@ -228,5 +228,7 @@
   "total": "المجموع",
   "monthly-subscriptions": "الاشتراكات الشهرية",
   "yearly-subscriptions": "الاشتراكات السنوية",
-  "total-subscriptions": "إجمالي الاشتراكات"
+  "total-subscriptions": "إجمالي الاشتراكات",
+  "beginning": "بداية",
+  "custom-line-graph": "تاريخ البدء المخصص"
 }

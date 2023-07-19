@@ -159,7 +159,7 @@
   "edit-home": "Chỉnh sửa về nhà",
   "overdue-and-upcoming": "Quá hạn và sắp tới",
   "lent-and-borrowed": "Cho mượn và mượn",
-  "all-spending-income-and-expenses": "Tất cả thu nhập và chi phí chi tiêu",
+  "income-and-expenses": "Thu nhập và chi tiêu",
   "spending-graph": "Đồ thị chi tiêu",
   "select-budget": "Chọn ngân sách",
   "select-budgets": "Chọn ngân sách",
@@ -228,5 +228,7 @@
   "total": "Tổng cộng",
   "monthly-subscriptions": "Đăng ký hàng tháng",
   "yearly-subscriptions": "Đăng ký hàng năm",
-  "total-subscriptions": "Tổng số đăng ký"
+  "total-subscriptions": "Tổng số đăng ký",
+  "beginning": "bắt đầu",
+  "custom-line-graph": "Ngày bắt đầu tùy chỉnh"
 }

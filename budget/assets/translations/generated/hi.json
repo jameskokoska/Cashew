@@ -159,7 +159,7 @@
   "edit-home": "घर संपादित करें",
   "overdue-and-upcoming": "अतिदेय और आगामी",
   "lent-and-borrowed": "लेंट और उधार लिया हुआ",
-  "all-spending-income-and-expenses": "सभी आय और व्यय खर्च",
+  "income-and-expenses": "आय और व्यय",
   "spending-graph": "खर्च ग्राफ",
   "select-budget": "बजट का चयन करें",
   "select-budgets": "बजट का चयन करें",
@@ -228,5 +228,7 @@
   "total": "कुल",
   "monthly-subscriptions": "मासिक सदस्यता",
   "yearly-subscriptions": "वार्षिक सदस्यता",
-  "total-subscriptions": "कुल सदस्यताएँ"
+  "total-subscriptions": "कुल सदस्यताएँ",
+  "beginning": "शुरुआत",
+  "custom-line-graph": "कस्टम स्टार्ट डेट"
 }

@@ -159,7 +159,7 @@
   "edit-home": "Upravit domů",
   "overdue-and-upcoming": "Splatnosti a nadcházející",
   "lent-and-borrowed": "Půjčoval a půjčil si",
-  "all-spending-income-and-expenses": "Všechny výdajové příjmy a výdaje",
+  "income-and-expenses": "Příjmy a výdaje",
   "spending-graph": "Utrácení grafu",
   "select-budget": "Vyberte rozpočet",
   "select-budgets": "Vyberte rozpočty",
@@ -228,5 +228,7 @@
   "total": "Celkový",
   "monthly-subscriptions": "Měsíční předplatné",
   "yearly-subscriptions": "Roční předplatné",
-  "total-subscriptions": "Celkové předplatné"
+  "total-subscriptions": "Celkové předplatné",
+  "beginning": "začátek",
+  "custom-line-graph": "Vlastní datum zahájení"
 }

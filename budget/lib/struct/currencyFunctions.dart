@@ -40,8 +40,12 @@ Future<bool> getExchangeRates() async {
     print(e.toString());
   }
   // print(cachedCurrencyExchange);
-  updateSettings("cachedCurrencyExchange", cachedCurrencyExchange,
-      updateGlobalState: true);
+  updateSettings(
+    "cachedCurrencyExchange",
+    cachedCurrencyExchange,
+    updateGlobalState:
+        appStateSettings["cachedCurrencyExchange"].keys.length <= 0,
+  );
   return true;
 }
 

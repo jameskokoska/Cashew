@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/modified/reorderable_list.dart';
@@ -12,12 +13,15 @@ import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectItems.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/functions.dart';
 
 class EditHomePageItem {
   final IconData icon;
@@ -43,8 +47,6 @@ class EditHomePage extends StatefulWidget {
   @override
   State<EditHomePage> createState() => _EditHomePageState();
 }
-
-String _defaultLabel = "Default (30 days)";
 
 class _EditHomePageState extends State<EditHomePage> {
   bool dragDownToDismissEnabled = true;
@@ -160,11 +162,31 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "allSpendingSummary": EditHomePageItem(
             icon: Icons.line_weight_rounded,
-            name: "all-spending-income-and-expenses".tr(),
+            name: "income-and-expenses".tr(),
             isEnabled: appStateSettings["showAllSpendingSummary"],
             onSwitched: (value) {
               updateSettings("showAllSpendingSummary", value,
                   pagesNeedingRefresh: [0], updateGlobalState: false);
+            },
+            onTap: () async {
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  title: "Select Start Date",
+                  child: SelectStartDate(
+                    initialDateTime:
+                        appStateSettings["incomeExpenseStartDate"] == null
+                            ? null
+                            : DateTime.parse(
+                                appStateSettings["incomeExpenseStartDate"]),
+                    onSelected: (DateTime? dateTime) {
+                      updateSettings("incomeExpenseStartDate",
+                          dateTime == null ? null : dateTime.toString(),
+                          pagesNeedingRefresh: [0], updateGlobalState: false);
+                    },
+                  ),
+                ),
+              );
             },
           ),
           "spendingGraph": EditHomePageItem(
@@ -178,6 +200,7 @@ class _EditHomePageState extends State<EditHomePage> {
             extraWidgetsBelow: [],
             onTap: () async {
               String defaultLabel = "default-line-graph".tr();
+              String customLabel = "custom-line-graph".tr();
               List<Budget> allBudgets = await database.getAllBudgets();
               openBottomSheet(
                 context,
@@ -186,6 +209,7 @@ class _EditHomePageState extends State<EditHomePage> {
                   child: RadioItems(
                     items: [
                       defaultLabel,
+                      customLabel,
                       ...[
                         for (Budget budget in allBudgets)
                           budget.budgetPk.toString()
@@ -196,27 +220,58 @@ class _EditHomePageState extends State<EditHomePage> {
                         if (budget.budgetPk.toString() == budgetPk.toString()) {
                           return budget.name;
                         }
-                      return defaultLabel;
+                      if (budgetPk == customLabel)
+                        return ('${customLabel} (${getWordedDateShortMore(DateTime.parse(appStateSettings["lineGraphStartDate"]), includeYear: true)})');
+                      return budgetPk;
                     },
-                    initial:
-                        appStateSettings["lineGraphReferenceBudgetPk"] == null
-                            ? defaultLabel
+                    initial: appStateSettings["lineGraphDisplayType"] ==
+                            LineGraphDisplay.Default30Days.index
+                        ? defaultLabel
+                        : appStateSettings["lineGraphDisplayType"] ==
+                                LineGraphDisplay.CustomStartDate.index
+                            ? customLabel
                             : appStateSettings["lineGraphReferenceBudgetPk"]
                                 .toString(),
-                    onChanged: (value) {
+                    onChanged: (value) async {
                       if (value == defaultLabel) {
                         updateSettings(
-                          "lineGraphReferenceBudgetPk",
-                          null,
+                          "lineGraphDisplayType",
+                          LineGraphDisplay.Default30Days.index,
                           pagesNeedingRefresh: [0],
                           updateGlobalState: false,
                         );
-                        Navigator.pop(context);
-                        return;
+                      } else if (value == customLabel) {
+                        DateTime? picked = await showCustomDatePicker(
+                          context,
+                          DateTime.parse(
+                              appStateSettings["lineGraphStartDate"]),
+                        );
+                        if (picked?.isAfter(DateTime.now()) ?? false) {
+                          picked = DateTime.now();
+                        }
+                        updateSettings(
+                          "lineGraphStartDate",
+                          (picked ?? appStateSettings["lineGraphDisplayType"])
+                              .toString(),
+                          pagesNeedingRefresh: [],
+                          updateGlobalState: false,
+                        );
+                        updateSettings(
+                          "lineGraphDisplayType",
+                          LineGraphDisplay.CustomStartDate.index,
+                          pagesNeedingRefresh: [0],
+                          updateGlobalState: false,
+                        );
                       } else {
                         updateSettings(
                           "lineGraphReferenceBudgetPk",
                           int.parse(value),
+                          pagesNeedingRefresh: [],
+                          updateGlobalState: false,
+                        );
+                        updateSettings(
+                          "lineGraphDisplayType",
+                          LineGraphDisplay.Budget.index,
                           pagesNeedingRefresh: [0],
                           updateGlobalState: false,
                         );
@@ -329,6 +384,55 @@ class _EditHomePageState extends State<EditHomePage> {
             updateSettings("homePageOrder", keyOrder, pagesNeedingRefresh: [0]);
             return true;
           },
+        ),
+      ],
+    );
+  }
+}
+
+class SelectStartDate extends StatefulWidget {
+  const SelectStartDate(
+      {required this.initialDateTime, required this.onSelected, super.key});
+  final DateTime? initialDateTime;
+  final Function(DateTime?) onSelected;
+
+  @override
+  State<SelectStartDate> createState() => _SelectStartDateState();
+}
+
+class _SelectStartDateState extends State<SelectStartDate> {
+  late DateTime? selectedDate = widget.initialDateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () {
+            setState(() {
+              selectedDate = null;
+              widget.onSelected(null);
+            });
+          },
+          icon: Icon(Icons.undo_rounded),
+        ),
+        TappableTextEntry(
+          title: selectedDate == null
+              ? "All Time"
+              : getWordedDateShortMore(selectedDate!, includeYear: true),
+          placeholder: "",
+          onTap: () async {
+            final DateTime? picked = await showCustomDatePicker(
+                context, selectedDate ?? DateTime.now());
+            setState(() {
+              selectedDate = picked ?? selectedDate;
+            });
+            widget.onSelected(selectedDate);
+          },
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+          internalPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
         ),
       ],
     );

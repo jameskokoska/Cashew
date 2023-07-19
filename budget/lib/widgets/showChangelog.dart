@@ -9,7 +9,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
-  String changelog = """
+  String changelog = """  
+    < 3.5.2
+    Added start date option for spending graph home screen widget
+    Added start date for income and expense home screen widget
+    Fixed transparent error on release mode
+    Fixed placeholder translations
     < 3.5.1
     Fixed silent sign-in missing scopes for web, will ask user to re-sign-in if scopes are needed for backup, syncing etc
     Fixed default names for wallet and categories

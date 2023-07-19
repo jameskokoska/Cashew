@@ -520,7 +520,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput(
                     focusNode: _titleFocusNode,
-                    labelText: "name".tr(),
+                    labelText: "name-placeholder".tr(),
                     bubbly: false,
                     initialValue: selectedTitle,
                     onChanged: (text) {
@@ -1346,7 +1346,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 5.8),
                               child: TextFont(
-                                text: "beginning ",
+                                text: "beginning".tr() + " ",
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
                               ),

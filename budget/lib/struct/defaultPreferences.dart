@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -74,6 +75,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "requireAuth": false,
     "cachedCurrencyExchange": {},
     "lineGraphReferenceBudgetPk": null,
+    "lineGraphDisplayType": LineGraphDisplay.Default30Days.index,
+    "lineGraphStartDate": DateTime.now().toString(),
     "showPastSpendingTrajectory": false,
     "lastSynced": null,
     "font": "Avenir",
@@ -89,5 +92,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "watchedCategoriesOnBudget": {},
     "iOSNavigation": false,
     "locale": "System",
+    "incomeExpenseStartDate": null,
   };
 }

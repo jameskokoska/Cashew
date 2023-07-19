@@ -345,7 +345,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextInput(
                   focusNode: _titleFocusNode,
-                  labelText: "name".tr(),
+                  labelText: "name-placeholder".tr(),
                   bubbly: false,
                   initialValue: selectedTitle,
                   onChanged: (text) {

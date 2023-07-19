@@ -14,6 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 
+enum LineGraphDisplay {
+  Default30Days,
+  CustomStartDate,
+  Budget,
+}
+
 class HomePageLineGraph extends StatelessWidget {
   const HomePageLineGraph({super.key, required this.selectedSlidingSelector});
   final int selectedSlidingSelector;
@@ -34,7 +40,8 @@ class HomePageLineGraph extends StatelessWidget {
                   color: getColor(context, "lightDarkAccentHeavyLight"),
                   boxShadow: boxShadowCheck(boxShadowGeneral(context)),
                 ),
-                child: appStateSettings["lineGraphReferenceBudgetPk"] == null
+                child: appStateSettings["lineGraphDisplayType"] ==
+                        LineGraphDisplay.Default30Days.index
                     ? PastSpendingGraph(
                         isIncome: selectedSlidingSelector == 2
                             ? false
@@ -42,39 +49,51 @@ class HomePageLineGraph extends StatelessWidget {
                                 ? true
                                 : null,
                       )
-                    : StreamBuilder<Budget>(
-                        stream: database.getBudget(
-                            appStateSettings["lineGraphReferenceBudgetPk"]),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            Budget budget = snapshot.data!;
-                            ColorScheme budgetColorScheme =
-                                ColorScheme.fromSeed(
-                              seedColor: HexColor(budget.colour,
-                                  defaultColor:
-                                      Theme.of(context).colorScheme.primary),
-                              brightness: determineBrightnessTheme(context),
-                            );
-                            return Column(
-                              children: [
-                                BudgetLineGraph(
-                                  key: ValueKey(budget.budgetPk),
-                                  budget: budget,
-                                  budgetColorScheme: budgetColorScheme,
-                                  dateForRange: DateTime.now(),
-                                  budgetRange:
-                                      getBudgetDate(budget, DateTime.now()),
-                                  isPastBudget: false,
-                                  selectedCategory: null,
-                                  selectedCategoryPk: -1,
-                                  showPastSpending: false,
-                                ),
-                              ],
-                            );
-                          }
-                          return SizedBox.shrink();
-                        },
-                      ),
+                    : appStateSettings["lineGraphDisplayType"] ==
+                            LineGraphDisplay.CustomStartDate.index
+                        ? PastSpendingGraph(
+                            isIncome: selectedSlidingSelector == 2
+                                ? false
+                                : selectedSlidingSelector == 3
+                                    ? true
+                                    : null,
+                            customStartDate: DateTime.parse(
+                                appStateSettings["lineGraphStartDate"]),
+                          )
+                        : StreamBuilder<Budget>(
+                            stream: database.getBudget(
+                                appStateSettings["lineGraphReferenceBudgetPk"]),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                Budget budget = snapshot.data!;
+                                ColorScheme budgetColorScheme =
+                                    ColorScheme.fromSeed(
+                                  seedColor: HexColor(budget.colour,
+                                      defaultColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                  brightness: determineBrightnessTheme(context),
+                                );
+                                return Column(
+                                  children: [
+                                    BudgetLineGraph(
+                                      key: ValueKey(budget.budgetPk),
+                                      budget: budget,
+                                      budgetColorScheme: budgetColorScheme,
+                                      dateForRange: DateTime.now(),
+                                      budgetRange:
+                                          getBudgetDate(budget, DateTime.now()),
+                                      isPastBudget: false,
+                                      selectedCategory: null,
+                                      selectedCategoryPk: -1,
+                                      showPastSpending: false,
+                                    ),
+                                  ],
+                                );
+                              }
+                              return SizedBox.shrink();
+                            },
+                          ),
               ),
             ),
           );
@@ -86,23 +105,30 @@ class PastSpendingGraph extends StatelessWidget {
     super.key,
     required this.isIncome,
     this.monthsToLoad = 1,
+    this.customStartDate,
     this.walletPks,
     this.extraLeftPaddingIfSmall = 0,
   });
   final bool? isIncome;
   final int monthsToLoad;
+  final DateTime? customStartDate;
   final List<int>? walletPks;
   final double extraLeftPaddingIfSmall;
 
   @override
   Widget build(BuildContext context) {
+    DateTime? customStartDateChecked = customStartDate;
+    if (customStartDate?.isAfter(DateTime.now()) ?? false) {
+      customStartDateChecked = DateTime.now();
+    }
     return StreamBuilder<List<Transaction>>(
       stream: database.getTransactionsInTimeRangeFromCategories(
-        DateTime(
-          DateTime.now().year,
-          DateTime.now().month - monthsToLoad,
-          DateTime.now().day,
-        ),
+        customStartDateChecked ??
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month - monthsToLoad,
+              DateTime.now().day,
+            ),
         DateTime(
           DateTime.now().year,
           DateTime.now().month,
@@ -121,11 +147,12 @@ class PastSpendingGraph extends StatelessWidget {
           bool cumulative = appStateSettings["showCumulativeSpending"];
           double cumulativeTotal = 0;
           List<Pair> points = [];
-          for (DateTime indexDay = DateTime(
-            DateTime.now().year,
-            DateTime.now().month - monthsToLoad,
-            DateTime.now().day,
-          );
+          for (DateTime indexDay = customStartDateChecked ??
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - monthsToLoad,
+                    DateTime.now().day,
+                  );
               indexDay.compareTo(DateTime.now()) < 0;
               indexDay =
                   DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {

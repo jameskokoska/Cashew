@@ -159,7 +159,7 @@
   "edit-home": "Edit Home",
   "overdue-and-upcoming": "Overdue and Upcoming",
   "lent-and-borrowed": "Lent and Borrowed",
-  "all-spending-income-and-expenses": "All Spending Income and Expenses",
+  "income-and-expenses": "Income and Expenses",
   "spending-graph": "Spending Graph",
   "select-budget": "Select Budget",
   "select-budgets": "Select Budgets",
@@ -228,5 +228,7 @@
   "total": "Total",
   "monthly-subscriptions": "Monthly subscriptions",
   "yearly-subscriptions": "Yearly subscriptions",
-  "total-subscriptions": "Total subscriptions"
+  "total-subscriptions": "Total subscriptions",
+  "beginning": "beginning",
+  "custom-line-graph": "Custom Start Date"
 }

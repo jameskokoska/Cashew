@@ -159,7 +159,7 @@
   "edit-home": "家を編集します",
   "overdue-and-upcoming": "期限切れと今後",
   "lent-and-borrowed": "貸し出しと借りました",
-  "all-spending-income-and-expenses": "すべての支出収入と費用",
+  "income-and-expenses": "収入と費用",
   "spending-graph": "支出グラフ",
   "select-budget": "予算を選択します",
   "select-budgets": "予算を選択します",
@@ -228,5 +228,7 @@
   "total": "合計",
   "monthly-subscriptions": "毎月のサブスクリプション",
   "yearly-subscriptions": "毎年のサブスクリプション",
-  "total-subscriptions": "合計サブスクリプション"
+  "total-subscriptions": "合計サブスクリプション",
+  "beginning": "始まり",
+  "custom-line-graph": "カスタム開始日"
 }
