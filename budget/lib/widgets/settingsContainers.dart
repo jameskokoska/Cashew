@@ -1,5 +1,4 @@
 import 'package:budget/colors.dart';
-import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -182,6 +181,7 @@ class SettingsContainerDropdown extends StatefulWidget {
     required this.initial,
     required this.items,
     required this.onChanged,
+    this.getLabel,
     this.verticalPadding,
   }) : super(key: key);
 
@@ -191,6 +191,7 @@ class SettingsContainerDropdown extends StatefulWidget {
   final String initial;
   final List<String> items;
   final Function(String) onChanged;
+  final Function(String)? getLabel;
   final double? verticalPadding;
 
   @override
@@ -222,6 +223,7 @@ class _SettingsContainerDropdownState extends State<SettingsContainerDropdown> {
           items: widget.items,
           onChanged: widget.onChanged,
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          getLabel: widget.getLabel,
         ),
       ),
     );

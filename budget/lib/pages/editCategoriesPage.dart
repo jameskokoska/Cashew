@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -182,8 +180,14 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                       return TextFont(
                                         textAlign: TextAlign.left,
                                         text: snapshot.data![0].toString() +
-                                            pluralString(snapshot.data![0] == 1,
-                                                " transaction"),
+                                            " " +
+                                            (snapshot.data![0] == 1
+                                                ? "transaction"
+                                                    .tr()
+                                                    .toLowerCase()
+                                                : "transactions"
+                                                    .tr()
+                                                    .toLowerCase()),
                                         fontSize: 14,
                                         textColor: getColor(context, "black")
                                             .withOpacity(0.65),
@@ -311,6 +315,7 @@ class _RefreshButtonState extends State<RefreshButton>
             opacity: _isEnabled ? 1 : 0.3,
             duration: Duration(milliseconds: 500),
             child: IconButton(
+              padding: EdgeInsets.all(15),
               icon: Icon(Icons.refresh_rounded),
               color: Theme.of(context).colorScheme.secondary,
               onPressed: () => _onTap(),
@@ -345,6 +350,6 @@ void deleteCategoryPopup(context, TransactionCategory category,
       );
       if (afterDelete != null) afterDelete();
     },
-    onSubmitLabel: "Delete",
+    onSubmitLabel: "delete".tr(),
   );
 }

@@ -1,7 +1,3 @@
-import 'dart:developer';
-
-import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
@@ -10,7 +6,6 @@ import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -661,20 +656,22 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowBasedOnIncome(tbl, income) &
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(
-                    tbl, onlyShowTransactionsBelongingToBudget);
+                    tbl, onlyShowTransactionsBelongingToBudget) &
+                (categories.name
+                        .lower()
+                        .like("%" + search.toLowerCase() + "%") |
+                    transactions.name
+                        .lower()
+                        .like("%" + search.toLowerCase() + "%") |
+                    transactions.note
+                        .lower()
+                        .like("%" + search.toLowerCase() + "%"));
           })
-        // ..orderBy([(t) => OrderingTerm.asc(t.dateTimeCreated)])
-        )
+          ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]))
         .join([
       innerJoin(
           categories, categories.categoryPk.equalsExp(transactions.categoryFk))
     ]);
-    if (search != "") {
-      query = query
-        ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
-            transactions.name.lower().like("%" + search.toLowerCase() + "%") |
-            transactions.note.lower().like("%" + search.toLowerCase() + "%"));
-    }
 
     return query.watch().map((rows) => rows.map((row) {
           return TransactionWithCategory(
@@ -732,7 +729,10 @@ class FinanceDatabase extends _$FinanceDatabase {
           ? [OrderingTerm.asc(transactions.dateCreated)]
           : [OrderingTerm.desc(transactions.dateCreated)])
       ..where((categories.name.lower().like("%" + search.toLowerCase() + "%") |
-              transactions.name.like("%" + search + "%")) &
+              transactions.name.lower().like("%" + search.toLowerCase() + "%") |
+              transactions.note
+                  .lower()
+                  .like("%" + search.toLowerCase() + "%")) &
           onlyShowIfFollowsSearchFilters(transactions, searchFilters) &
           onlyShowIfFollowsFilters(transactions,
               budgetTransactionFilters: budgetTransactionFilters,

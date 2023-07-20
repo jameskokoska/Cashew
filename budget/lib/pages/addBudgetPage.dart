@@ -1,7 +1,5 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -457,6 +455,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           },
           actions: [
             IconButton(
+              padding: EdgeInsets.all(15),
               tooltip: "Pin to homepage",
               onPressed: () {
                 setSelectedPin();
@@ -483,7 +482,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
-                    label: "Set Title",
+                    label: "set-title".tr(),
                     onTap: () async {
                       FocusScope.of(context).unfocus();
                       Future.delayed(Duration(milliseconds: 100), () {
@@ -611,19 +610,19 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         SizedBox(height: 10),
                         SelectChips(
                           wrapped: true,
-                          items: [
+                          items: <String>[
                             "All Transactions",
                             "Added Only",
                             ...(appStateSettings["sharedBudgets"]
                                 ? ["Shared Group Budget"]
                                 : [])
                           ],
-                          getLabel: (item) {
+                          getLabel: (String item) {
                             if (item == "Shared Group Budget")
                               return item + " (Beta)";
                             return item;
                           },
-                          onSelected: (item) {
+                          onSelected: (String item) {
                             if (item == "All Transactions") {
                               setSelectedShared(false);
                               setAddedTransactionsOnly(false);
@@ -635,7 +634,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               setSelectedShared(true);
                             }
                           },
-                          getSelected: (item) {
+                          getSelected: (String item) {
                             if (selectedShared == true &&
                                 selectedAddedTransactionsOnly == true &&
                                 item == "Shared Group Budget") {
@@ -725,7 +724,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                           ]
                                         : []),
                                   ],
-                                  getLabel: (item) {
+                                  getLabel: (dynamic item) {
                                     if (item == "All") return "All";
                                     return item ==
                                             BudgetTransactionFilters
@@ -737,7 +736,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                             ? "Shared to Other Budgets"
                                             : "";
                                   },
-                                  onSelected: (item) {
+                                  onSelected: (dynamic item) {
                                     if (item == "All" &&
                                         selectedBudgetTransactionFilters ==
                                             null) {
@@ -766,7 +765,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                     setState(() {});
                                     determineBottomButton();
                                   },
-                                  getSelected: (item) {
+                                  getSelected: (dynamic item) {
                                     if (item == "All" &&
                                         selectedBudgetTransactionFilters ==
                                             null) return true;
@@ -795,10 +794,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                               "All",
                                               ...allMembersOfAllBudgets
                                             ],
-                                            getLabel: (item) {
+                                            getLabel: (String item) {
                                               return getMemberNickname(item);
                                             },
-                                            onSelected: (item) {
+                                            onSelected: (String item) {
                                               if (item == "All" &&
                                                   selectedMemberTransactionFilters ==
                                                       null) {
@@ -832,7 +831,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                               setState(() {});
                                               determineBottomButton();
                                             },
-                                            getSelected: (item) {
+                                            getSelected: (String item) {
                                               if (item == "All" &&
                                                   selectedMemberTransactionFilters ==
                                                       null) return true;
@@ -873,8 +872,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 },
                 initialValue: selectedIsAbsoluteSpendingLimit,
                 syncWithInitialValue: true,
-                title: "Absolute Spending Limits",
-                description: "Absolute spending limits instead of a percentage",
+                title: "absolute-spending-limits".tr(),
+                description: "absolute-spending-limits-description".tr(),
                 icon: Icons.numbers_rounded,
               ),
             ),

@@ -9,7 +9,6 @@ import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
-import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/monthSelector.dart';
 import 'package:budget/widgets/cashFlow.dart';
 import 'package:budget/widgets/ghostTransactions.dart';
@@ -443,15 +442,6 @@ class TransactionsListPageState extends State<TransactionsListPage>
 
   @override
   Widget build(BuildContext context) {
-    Widget searchButton = IconButton(
-      iconSize: getWidthNavigationSidebar(context) > 0 ? 30 : null,
-      tooltip: "search-transactions".tr(),
-      onPressed: () {
-        pushRoute(context, TransactionsSearchPage());
-      },
-      icon: Icon(Icons.search_rounded),
-    );
-
     return ValueListenableBuilder(
       valueListenable: cancelParentScroll,
       builder: (context, value, widget) {
@@ -481,7 +471,15 @@ class TransactionsListPageState extends State<TransactionsListPage>
                             PageFrameworkSliverAppBar(
                               title: "transactions".tr(),
                               actions: [
-                                searchButton,
+                                IconButton(
+                                  padding: EdgeInsets.all(15),
+                                  tooltip: "search-transactions".tr(),
+                                  onPressed: () {
+                                    pushRoute(
+                                        context, TransactionsSearchPage());
+                                  },
+                                  icon: Icon(Icons.search_rounded),
+                                ),
                               ],
                             ),
                             SliverToBoxAdapter(

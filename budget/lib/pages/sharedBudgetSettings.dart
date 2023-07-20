@@ -1,6 +1,5 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -19,7 +18,6 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/struct/randomConstants.dart';
 
@@ -389,7 +387,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                      onSubmitLabel: "Delete",
+                      onSubmitLabel: "delete".tr(),
                     );
                   },
                   color: Theme.of(context).colorScheme.error,
@@ -440,7 +438,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                         );
                         Navigator.pop(context);
                       },
-                      onSubmitLabel: "Delete",
+                      onSubmitLabel: "delete".tr(),
                     );
                   },
                   color: Theme.of(context).colorScheme.onErrorContainer,

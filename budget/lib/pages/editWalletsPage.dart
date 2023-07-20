@@ -1,8 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -14,7 +12,6 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/walletEntry.dart';
@@ -176,8 +173,10 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                                 return TextFont(
                                   textAlign: TextAlign.left,
                                   text: snapshot.data![0].toString() +
-                                      pluralString(snapshot.data![0] == 1,
-                                          " transaction"),
+                                      " " +
+                                      (snapshot.data![0] == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
                                   fontSize: 14,
                                   textColor: getColor(context, "black")
                                       .withOpacity(0.65),
@@ -261,21 +260,21 @@ void deleteWalletPopup(context, TransactionWallet wallet,
               return SelectChips(
                 wrapped: true,
                 items: walletsWithoutOneDeleted,
-                getLabel: (item) {
+                getLabel: (TransactionWallet item) {
                   return item.name;
                 },
-                onSelected: (item) {
+                onSelected: (TransactionWallet item) {
                   Navigator.pop(context, item.walletPk);
                 },
-                getSelected: (item) {
+                getSelected: (TransactionWallet item) {
                   return false;
                 },
-                getCustomBorderColor: (item) {
+                getCustomBorderColor: (TransactionWallet item) {
                   return dynamicPastel(
                     context,
                     lightenPastel(
                       HexColor(
-                        item?.colour,
+                        item.colour,
                         defaultColor: Colors.transparent,
                       ),
                       amount: 0.3,
@@ -319,6 +318,6 @@ void deleteWalletPopup(context, TransactionWallet wallet,
       );
       if (afterDelete != null) afterDelete();
     },
-    onSubmitLabel: "Delete",
+    onSubmitLabel: "delete".tr(),
   );
 }

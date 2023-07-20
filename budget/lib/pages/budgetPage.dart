@@ -1,6 +1,5 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
@@ -15,7 +14,6 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
@@ -198,7 +196,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       widget.isPastBudgetButCurrentPeriod == true
                   ? SizedBox.shrink()
                   : IconButton(
-                      tooltip: "Past Budget Cycles",
+                      padding: EdgeInsets.all(15),
+                      tooltip: "past-budget-cycles".tr(),
                       onPressed: () {
                         pushRoute(
                           context,
@@ -211,6 +210,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       ),
                     ),
               IconButton(
+                padding: EdgeInsets.all(15),
                 tooltip: "edit-budget".tr(),
                 onPressed: () {
                   pushRoute(
@@ -329,8 +329,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     right: 22,
                                   ),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.vertical(
-                                        bottom: Radius.circular(10)),
+                                    // borderRadius: BorderRadius.vertical(
+                                    //     bottom: Radius.circular(10)),
                                     color: budgetColorScheme.secondaryContainer,
                                   ),
                                   child: Column(
@@ -964,7 +964,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                         ? widget.totalSpent
                                         : widget.budget.amount -
                                             widget.totalSpent),
-                                fontSize: 25,
+                                fontSize: 22,
                                 textAlign: TextAlign.left,
                                 fontWeight: FontWeight.bold,
                                 textColor: widget
@@ -981,7 +981,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                     : " " + "remaining-amount-of".tr() + " ") +
                                 convertToMoney(Provider.of<AllWallets>(context),
                                     widget.budget.amount),
-                            fontSize: 16,
+                            fontSize: 15,
                             textAlign: TextAlign.left,
                             textColor:
                                 widget.budgetColorScheme.onSecondaryContainer,
@@ -1014,7 +1014,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                     : -1 *
                                         (widget.budget.amount -
                                             widget.totalSpent)),
-                            fontSize: 25,
+                            fontSize: 22,
                             textAlign: TextAlign.left,
                             fontWeight: FontWeight.bold,
                             textColor:
@@ -1031,7 +1031,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                 : " " + "overspent-amount-of".tr() + " ") +
                             convertToMoney(Provider.of<AllWallets>(context),
                                 widget.budget.amount),
-                        fontSize: 16,
+                        fontSize: 15,
                         textAlign: TextAlign.left,
                         textColor:
                             widget.budgetColorScheme.onSecondaryContainer,

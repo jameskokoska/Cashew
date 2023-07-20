@@ -52,14 +52,15 @@ class AccountsPageState extends State<AccountsPage> {
     );
     return PageFramework(
       horizontalPadding: getHorizontalPaddingConstrained(context),
-      expandedHeight: 65,
       dragDownToDismiss: true,
-      title: "Account and Backup",
+      expandedHeight: 56,
+      title: "account-and-backup".tr(),
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart:
           Theme.of(context).colorScheme.secondaryContainer,
       dragDownToDissmissBackground:
           Theme.of(context).colorScheme.secondaryContainer,
+      bottomPadding: false,
       slivers: [
         SliverFillRemaining(
           hasScrollBody: false,
@@ -156,7 +157,7 @@ class AccountsPageState extends State<AccountsPage> {
                                   opacity: currentlyExporting ? 0.4 : 1,
                                   duration: Duration(milliseconds: 200),
                                   child: OutlinedButtonStacked(
-                                    text: "Export",
+                                    text: "export".tr(),
                                     iconData: Icons.upload_rounded,
                                     onTap: () async {
                                       setState(() {
@@ -176,7 +177,7 @@ class AccountsPageState extends State<AccountsPage> {
                             SizedBox(width: 15),
                             Expanded(
                               child: OutlinedButtonStacked(
-                                text: "Import",
+                                text: "import".tr(),
                                 iconData: Icons.download_rounded,
                                 onTap: () async {
                                   await chooseBackup(context);
@@ -193,7 +194,7 @@ class AccountsPageState extends State<AccountsPage> {
                           children: [
                             Expanded(
                               child: OutlinedButtonStacked(
-                                text: "Sync",
+                                text: "sync".tr(),
                                 iconData: Icons.cloud_sync_rounded,
                                 onTap: () async {
                                   chooseBackup(context,
@@ -204,7 +205,7 @@ class AccountsPageState extends State<AccountsPage> {
                             SizedBox(width: 18),
                             Expanded(
                               child: OutlinedButtonStacked(
-                                text: "Backups",
+                                text: "backups".tr(),
                                 iconData: Icons.folder_rounded,
                                 onTap: () async {
                                   await chooseBackup(context, isManaging: true);

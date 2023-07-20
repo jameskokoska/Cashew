@@ -1,10 +1,8 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -287,6 +285,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           },
           actions: [
             IconButton(
+              padding: EdgeInsets.all(15),
               tooltip: "info".tr(),
               onPressed: () {
                 openPopup(
@@ -304,6 +303,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             ),
             widget.wallet != null && widget.wallet!.walletPk != 0
                 ? IconButton(
+                    padding: EdgeInsets.all(15),
                     tooltip: "Delete wallet",
                     onPressed: () {
                       deleteWalletPopup(context, widget.wallet!,
@@ -320,7 +320,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
-                    label: "Set Title",
+                    label: "set-title".tr(),
                     onTap: () async {
                       FocusScope.of(context).unfocus();
                       Future.delayed(Duration(milliseconds: 100), () {
@@ -394,7 +394,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             openBottomSheet(
                               context,
                               PopupFramework(
-                                title: "Decimal Precision",
+                                title: "decimal-precision".tr(),
                                 child: SelectAmountValue(
                                   amountPassed: selectedDecimals.toString(),
                                   setSelectedAmount: (amount, _) {

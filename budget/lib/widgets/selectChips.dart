@@ -1,38 +1,13 @@
-import 'package:budget/database/tables.dart';
-import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/budgetPage.dart';
-import 'package:budget/pages/sharedBudgetSettings.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/struct/initializeNotifications.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/radioItems.dart';
-import 'package:budget/widgets/selectAmount.dart';
-import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
-import 'package:provider/provider.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class SelectChips extends StatefulWidget {
+class SelectChips<T> extends StatefulWidget {
   const SelectChips({
     super.key,
     required this.items,
@@ -45,21 +20,21 @@ class SelectChips extends StatefulWidget {
     this.wrapped = false,
     this.darkerBackground = false,
   });
-  final List<dynamic> items;
-  final bool Function(dynamic) getSelected;
-  final Function(dynamic) onSelected;
-  final String Function(dynamic) getLabel;
-  final Color? Function(dynamic)? getCustomBorderColor;
+  final List<T> items;
+  final bool Function(T) getSelected;
+  final Function(T) onSelected;
+  final String Function(T) getLabel;
+  final Color? Function(T)? getCustomBorderColor;
   final Widget? extraWidget;
-  final Function(dynamic)? onLongPress;
+  final Function(T)? onLongPress;
   final bool wrapped;
   final bool darkerBackground;
 
   @override
-  State<SelectChips> createState() => _SelectChipsState();
+  State<SelectChips<T>> createState() => _SelectChipsState<T>();
 }
 
-class _SelectChipsState extends State<SelectChips> {
+class _SelectChipsState<T> extends State<SelectChips<T>> {
   double heightOfScroll = 0;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
@@ -72,7 +47,7 @@ class _SelectChipsState extends State<SelectChips> {
       Future.delayed(Duration(milliseconds: 0), () {
         int? scrollToIndex = null;
         int currentIndex = 0;
-        for (dynamic item in widget.items) {
+        for (T item in widget.items) {
           if (widget.getSelected(item)) {
             scrollToIndex = currentIndex;
             break;
@@ -103,7 +78,7 @@ class _SelectChipsState extends State<SelectChips> {
       ...List<Widget>.generate(
         widget.items.length,
         (int index) {
-          dynamic item = widget.items[index];
+          T item = widget.items[index];
           bool selected = widget.getSelected(item);
           String label = widget.getLabel(item);
           return Padding(

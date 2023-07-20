@@ -27,7 +27,7 @@ class PageFramework extends StatefulWidget {
     this.onBottomReached,
     this.pinned = true,
     this.subtitleAlignment = Alignment.bottomCenter,
-    this.customTitleBuilder,
+    // this.customTitleBuilder,
     this.onScroll,
     this.floatingActionButton,
     this.textColor,
@@ -45,6 +45,7 @@ class PageFramework extends StatefulWidget {
     this.resizeToAvoidBottomInset = false,
     this.overlay,
     this.scrollToTopButton = false,
+    this.bottomPadding = true,
   }) : super(key: key);
 
   final String title;
@@ -60,7 +61,7 @@ class PageFramework extends StatefulWidget {
   final VoidCallback? onBottomReached;
   final bool pinned;
   final Alignment subtitleAlignment;
-  final Function(AnimationController _animationController)? customTitleBuilder;
+  // final Function(AnimationController _animationController)? customTitleBuilder;
   final Function(double position)? onScroll;
   final Widget? floatingActionButton;
   final Color? textColor;
@@ -78,6 +79,7 @@ class PageFramework extends StatefulWidget {
   final bool resizeToAvoidBottomInset;
   final Widget? overlay;
   final bool scrollToTopButton;
+  final bool bottomPadding;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -115,7 +117,7 @@ class PageFrameworkState extends State<PageFramework>
   void initState() {
     super.initState();
     _animationControllerShift = AnimationController(
-        vsync: this, value: widget.expandedHeight - 65 == 0 ? 1 : 0);
+        vsync: this, value: widget.expandedHeight - 56 == 0 ? 1 : 0);
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
     _animationController0at50 = AnimationController(vsync: this, value: 1);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
@@ -150,21 +152,21 @@ class PageFrameworkState extends State<PageFramework>
       widget.onBottomReached!();
     }
     double percent;
-    if (widget.expandedHeight - 65 == 0) {
+    if (widget.expandedHeight - 56 == 0) {
       percent = 100;
     } else {
-      percent = _scrollController.offset / (widget.expandedHeight - 65);
+      percent = _scrollController.offset / (widget.expandedHeight - 56);
     }
     if (widget.backButton == true ||
         widget.subtitle != null && percent >= 0 && percent <= 1) {
       _animationControllerShift.value =
-          (_scrollController.offset / (widget.expandedHeight - 65));
+          (_scrollController.offset / (widget.expandedHeight - 56));
       _animationControllerOpacity.value =
-          0.5 + (_scrollController.offset / (widget.expandedHeight - 65) / 2);
+          0.5 + (_scrollController.offset / (widget.expandedHeight - 56) / 2);
     }
     if (widget.subtitle != null && percent <= 0.75 && percent >= 0) {
       _animationController0at50.value =
-          1 - (_scrollController.offset / (widget.expandedHeight - 65)) * 1.75;
+          1 - (_scrollController.offset / (widget.expandedHeight - 56)) * 1.75;
     }
     if (_scrollController.offset > 400 &&
         _scrollToTopAnimationController.value == 0) {
@@ -258,7 +260,7 @@ class PageFrameworkState extends State<PageFramework>
                   onBottomReached: widget.onBottomReached,
                   pinned: widget.pinned,
                   subtitleAlignment: widget.subtitleAlignment,
-                  customTitleBuilder: widget.customTitleBuilder,
+                  // customTitleBuilder: widget.customTitleBuilder,
                   animationControllerOpacity: _animationControllerOpacity,
                   animationControllerShift: _animationControllerShift,
                   animationController0at50: _animationController0at50,
@@ -281,15 +283,21 @@ class PageFrameworkState extends State<PageFramework>
                         sliver: SliverList(
                           delegate: SliverChildListDelegate([
                             ...widget.listWidgets!,
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).padding.bottom + 15),
+                            widget.bottomPadding
+                                ? SizedBox(
+                                    height:
+                                        MediaQuery.of(context).padding.bottom +
+                                            15)
+                                : SizedBox.shrink(),
                           ]),
                         ),
                       )
                     : SliverToBoxAdapter(
-                        child: SizedBox(
-                            height: MediaQuery.of(context).padding.bottom + 15),
+                        child: widget.bottomPadding
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).padding.bottom + 15)
+                            : SizedBox.shrink(),
                       ),
               ],
             ),
@@ -437,7 +445,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.onBottomReached,
     this.pinned = true,
     this.subtitleAlignment = Alignment.bottomCenter,
-    this.customTitleBuilder,
+    // this.customTitleBuilder,
     this.animationControllerOpacity,
     this.animationControllerShift,
     this.animationController0at50,
@@ -459,7 +467,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final VoidCallback? onBottomReached;
   final bool pinned;
   final Alignment subtitleAlignment;
-  final Function(AnimationController _animationController)? customTitleBuilder;
+  // final Function(AnimationController _animationController)? customTitleBuilder;
   final AnimationController? animationControllerOpacity;
   final AnimationController? animationControllerShift;
   final AnimationController? animationController0at50;
@@ -467,7 +475,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final Color? textColor;
   final VoidCallback? onBackButton;
   final double expandedHeight;
-  final double collapsedHeight = 65;
+  final double collapsedHeight = 56;
   final PreferredSizeWidget? bottom;
   @override
   Widget build(BuildContext context) {
@@ -483,21 +491,18 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       ),
       shadowColor: Theme.of(context).shadowColor.withAlpha(130),
       leading: backButtonEnabled == true && animationControllerOpacity != null
-          ? Container(
-              padding: EdgeInsets.only(top: 12.5),
-              child: FadeTransition(
-                opacity: animationControllerOpacity!,
-                child: IconButton(
-                  onPressed: () {
-                    if (onBackButton != null)
-                      onBackButton!();
-                    else
-                      Navigator.of(context).maybePop();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_rounded,
-                    color: getColor(context, "black"),
-                  ),
+          ? FadeTransition(
+              opacity: animationControllerOpacity!,
+              child: IconButton(
+                onPressed: () {
+                  if (onBackButton != null)
+                    onBackButton!();
+                  else
+                    Navigator.of(context).maybePop();
+                },
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: getColor(context, "black"),
                 ),
               ),
             )
@@ -510,8 +515,16 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       expandedHeight: expandedHeight,
       collapsedHeight: collapsedHeight,
       actions: [
-        for (Widget action in actions ?? [])
-          Padding(padding: EdgeInsets.only(top: 12.5, right: 5), child: action)
+        ...(actions ?? []).asMap().entries.map((action) {
+          int idx = action.key;
+          int length = (actions ?? []).length;
+          Widget widget = action.value;
+          double offsetX = (length - 1 - idx) * 7;
+          return Transform.translate(
+            offset: Offset(offsetX, 0),
+            child: widget,
+          );
+        })
       ],
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -522,106 +535,89 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     MediaQuery.of(context).padding.top) /
                 (expandedHeight - collapsedHeight);
         if (collapsedHeight == expandedHeight) percent = 1;
-        return ClipRRect(
-          borderRadius: BorderRadius.vertical(
-            bottom: getWidthNavigationSidebar(context) > 0
-                ? Radius.circular(0)
-                : Radius.circular(15),
-          ),
-          child: FlexibleSpaceBar(
-            centerTitle: enableDoubleColumn(context) ? true : false,
-            titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-            title: animationControllerShift == null
-                ? MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: titleWidget ??
-                        TextFont(
-                          text: title,
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          textColor: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          textAlign: enableDoubleColumn(context)
-                              ? TextAlign.center
-                              : TextAlign.left,
-                        ),
-                  )
-                : customTitleBuilder == null
-                    ? Transform.translate(
-                        offset: enableDoubleColumn(context)
-                            ? Offset(0, 0)
-                            //  Offset(0, -(1 - percent) * 40)
-                            : Offset(
-                                backButtonEnabled ? 40 * percent : 0,
-                                -(subtitleSize ?? 0) * (1 - percent),
-                              ),
-                        child: MediaQuery(
-                          data: MediaQuery.of(context)
-                              .copyWith(textScaleFactor: 1.0),
-                          child: titleWidget ??
-                              TextFont(
-                                text: title,
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                                textColor: textColor == null
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer
-                                    : textColor,
-                                textAlign: enableDoubleColumn(context)
-                                    ? TextAlign.center
-                                    : TextAlign.left,
-                              ),
-                        ),
-                      )
-                    : customTitleBuilder!(animationControllerShift!),
-            background: Stack(
-              children: [
-                Container(
-                  color: appBarBackgroundColorStart == null
-                      ? Theme.of(context).canvasColor
-                      : appBarBackgroundColorStart,
-                ),
-                subtitle != null &&
-                        animationControllerShift != null &&
-                        animationController0at50 != null
-                    ? AnimatedBuilder(
-                        animation: animationControllerShift!,
-                        builder: (_, child) {
-                          return Transform.translate(
-                            offset: Offset(
-                              0,
-                              -(subtitleSize ?? 0) *
-                                  (animationControllerShift!.value) *
-                                  subtitleAnimationSpeed,
-                            ),
-                            child: child,
-                          );
-                        },
-                        child: Align(
-                          alignment: enableDoubleColumn(context)
-                              ? Alignment.center
-                              : subtitleAlignment,
-                          child: FadeTransition(
-                            opacity: animationController0at50!,
-                            child: subtitle,
-                          ),
-                        ),
-                      )
-                    : SizedBox(),
-              ],
+        return FlexibleSpaceBar(
+          centerTitle: enableDoubleColumn(context) ? true : false,
+          titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+          title: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Transform.translate(
+              offset: enableDoubleColumn(context)
+                  ? Offset(0, 0)
+                  //  Offset(0, -(1 - percent) * 40)
+                  : Offset(
+                      backButtonEnabled ? 46 * percent : 10 * percent,
+                      -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
+                    ),
+              child: Transform.scale(
+                scale: percent * 0.15 + 1,
+                child: titleWidget ??
+                    TextFont(
+                      text: title,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      textColor: textColor == null
+                          ? Theme.of(context).colorScheme.onSecondaryContainer
+                          : textColor,
+                      textAlign: enableDoubleColumn(context)
+                          ? TextAlign.center
+                          : TextAlign.left,
+                    ),
+              ),
             ),
+          ),
+          background: Stack(
+            children: [
+              Container(
+                color: appBarBackgroundColorStart == null
+                    ? Theme.of(context).canvasColor
+                    : appBarBackgroundColorStart,
+              ),
+              Opacity(
+                opacity: percent,
+                child: Container(
+                  color: appBarBackgroundColor == null
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : appBarBackgroundColor,
+                ),
+              ),
+              subtitle != null &&
+                      animationControllerShift != null &&
+                      animationController0at50 != null
+                  ? AnimatedBuilder(
+                      animation: animationControllerShift!,
+                      builder: (_, child) {
+                        return Transform.translate(
+                          offset: Offset(
+                            0,
+                            -(subtitleSize ?? 0) *
+                                (animationControllerShift!.value) *
+                                subtitleAnimationSpeed,
+                          ),
+                          child: child,
+                        );
+                      },
+                      child: Align(
+                        alignment: enableDoubleColumn(context)
+                            ? Alignment.center
+                            : subtitleAlignment,
+                        child: FadeTransition(
+                          opacity: animationController0at50!,
+                          child: subtitle,
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+            ],
           ),
         );
       }),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: getWidthNavigationSidebar(context) > 0
-              ? Radius.circular(0)
-              : Radius.circular(15),
-        ),
-      ),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.vertical(
+      //     bottom: getWidthNavigationSidebar(context) > 0
+      //         ? Radius.circular(0)
+      //         : Radius.circular(15),
+      //   ),
+      // ),
     );
   }
 }

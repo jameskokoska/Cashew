@@ -1,7 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -16,7 +15,6 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
@@ -239,9 +237,14 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                           return TextFont(
                                             textAlign: TextAlign.left,
                                             text: snapshot.data!.toString() +
-                                                pluralString(
-                                                    snapshot.data! == 1,
-                                                    " transaction"),
+                                                " " +
+                                                (snapshot.data! == 1
+                                                    ? "transaction"
+                                                        .tr()
+                                                        .toLowerCase()
+                                                    : "transactions"
+                                                        .tr()
+                                                        .toLowerCase()),
                                             fontSize: 14,
                                             textColor:
                                                 getColor(context, "black")
@@ -250,7 +253,8 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                         } else {
                                           return TextFont(
                                             textAlign: TextAlign.left,
-                                            text: "/ transactions",
+                                            text:
+                                                "/" + " " + "transactions".tr(),
                                             fontSize: 14,
                                             textColor:
                                                 getColor(context, "black")
@@ -376,7 +380,7 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
       openSnackbar(SnackbarMessage(title: "Deleted budget"));
       if (afterDelete != null) afterDelete();
     },
-    onSubmitLabel: "Delete",
+    onSubmitLabel: "delete".tr(),
   );
 }
 
@@ -394,7 +398,7 @@ Future<dynamic> deleteAddedTransactionsOnlyBudgetPopup(context, Budget budget) {
     onSubmit: () async {
       Navigator.pop(context, true);
     },
-    onSubmitLabel: "Delete",
+    onSubmitLabel: "delete".tr(),
   );
 }
 
@@ -413,7 +417,7 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
       onSubmit: () async {
         Navigator.pop(context, true);
       },
-      onSubmitLabel: "Delete",
+      onSubmitLabel: "delete".tr(),
     );
   } else {
     return openPopup(
@@ -429,7 +433,7 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
       onSubmit: () async {
         Navigator.pop(context, true);
       },
-      onSubmitLabel: "Delete",
+      onSubmitLabel: "delete".tr(),
     );
   }
 }

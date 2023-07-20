@@ -1,6 +1,4 @@
-import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
@@ -16,18 +14,12 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
-import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/widgets/walletEntry.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/colors.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -122,17 +114,13 @@ class HomePageState extends State<HomePage>
                       children: [
                         enableDoubleColumn(context)
                             ? SizedBox(height: 78)
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 12, right: 4),
-                                child: IconButton(
-                                  padding: EdgeInsets.all(10),
-                                  onPressed: () {
-                                    pushRoute(context, EditHomePage());
-                                  },
-                                  icon: Icon(Icons.more_vert_rounded),
-                                ),
-                              )
+                            : IconButton(
+                                padding: EdgeInsets.all(15),
+                                onPressed: () {
+                                  pushRoute(context, EditHomePage());
+                                },
+                                icon: Icon(Icons.more_vert_rounded),
+                              ),
                         // PopupMenuButton<String>(
                         //   icon: Opacity(
                         //     opacity: 0.5,

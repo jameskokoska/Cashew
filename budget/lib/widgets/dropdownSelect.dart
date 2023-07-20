@@ -11,6 +11,7 @@ class DropdownSelect extends StatefulWidget {
   final bool
       checkInitialValue; //Check if the initial value not in list, default to using the first index
   final List<String> boldedValues;
+  final Function(String)? getLabel;
 
   const DropdownSelect({
     Key? key,
@@ -21,6 +22,7 @@ class DropdownSelect extends StatefulWidget {
     this.compact = false,
     this.checkInitialValue = false,
     this.boldedValues = const [],
+    this.getLabel,
   }) : super(key: key);
 
   @override
@@ -98,7 +100,7 @@ class DropdownSelectState extends State<DropdownSelect> {
           return DropdownMenuItem(
             alignment: Alignment.centerLeft,
             child: TextFont(
-              text: value,
+              text: widget.getLabel != null ? widget.getLabel!(value) : value,
               fontSize: widget.compact ? 14 : 18,
               fontWeight: widget.boldedValues.contains(value)
                   ? FontWeight.bold

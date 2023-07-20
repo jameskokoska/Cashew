@@ -11,13 +11,11 @@ import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/notificationsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -31,7 +29,6 @@ import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 //To get SHA1 Key run
@@ -139,6 +136,9 @@ class SettingsPageState extends State<SettingsPage>
               updateSettings("theme", "system");
             }
           },
+          getLabel: (item) {
+            return item.toLowerCase().tr();
+          },
         ),
         EnterName(),
         SettingsHeader(title: "preferences".tr()),
@@ -150,6 +150,12 @@ class SettingsPageState extends State<SettingsPage>
             "System",
             for (String key in languagesDictionary.keys) key,
           ],
+          getLabel: (String item) {
+            if (languagesDictionary[item] != null)
+              return languagesDictionary[item];
+            if (item == "System") return "system".tr();
+            return item;
+          },
           onChanged: (value) {
             if (value == "System") {
               context.resetLocale();

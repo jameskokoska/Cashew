@@ -5,18 +5,15 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/selectAmount.dart';
-import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 class CategoryLimits extends StatefulWidget {
@@ -244,10 +241,13 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                                           100)
                                       .toInt()
                                       .toString()) +
-                              "% of budget"
+                              "%" +
+                              " " +
+                              "of-budget".tr()
                           : (convertToMoney(Provider.of<AllWallets>(context),
                                   widget.budgetLimit * selectedAmount / 100) +
-                              " of budget"),
+                              " " +
+                              "of-budget".tr()),
                       fontSize: 14,
                       textColor: getColor(context, "textLight"),
                     ),
@@ -300,7 +300,7 @@ void enterCategoryLimitPopup(
   await openBottomSheet(
     context,
     PopupFramework(
-      title: "Enter Limit",
+      title: "enter-limit".tr(),
       subtitle: category.name,
       icon: CategoryIcon(
         categoryPk: category.categoryPk,
@@ -322,7 +322,7 @@ void enterCategoryLimitPopup(
               next: () async {
                 Navigator.pop(context);
               },
-              nextLabel: "Set Limit",
+              nextLabel: "set-limit".tr(),
               allowZero: true,
               suffix: "%",
             )
@@ -336,7 +336,7 @@ void enterCategoryLimitPopup(
               next: () async {
                 Navigator.pop(context);
               },
-              nextLabel: "Set Limit",
+              nextLabel: "set-limit".tr(),
               onlyShowCurrencyIcon: true,
             ),
     ),

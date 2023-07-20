@@ -2,11 +2,8 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/budgetPage.dart';
-import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -106,8 +103,9 @@ class CreditDebtTransactions extends StatelessWidget {
                                   snapshot.data![0] == null
                               ? "/"
                               : snapshot.data![0].toString() +
-                                  pluralString(
-                                      snapshot.data![0] == 1, " transaction"),
+                                  (snapshot.data![0] == 1
+                                      ? "transaction".tr().toLowerCase()
+                                      : "transactions".tr().toLowerCase()),
                           fontSize: 16,
                           textColor: getColor(context, "textLight"),
                         );

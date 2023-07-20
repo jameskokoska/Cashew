@@ -359,7 +359,7 @@ class _ImportCSVState extends State<ImportCSV> {
                   ),
                 ),
                 Button(
-                  label: "Import",
+                  label: "import".tr(),
                   onTap: () async {
                     _importEntries(assignedColumns, dateFormat, fileContents);
                   },

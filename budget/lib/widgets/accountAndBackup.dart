@@ -642,15 +642,15 @@ class _BackupManagementState extends State<BackupManagement> {
 
     return PopupFramework(
       title: widget.isClientSync
-          ? "Devices"
+          ? "devices".tr()
           : widget.isManaging
-              ? "Backups"
-              : "Restore a Backup",
+              ? "backups".tr()
+              : "restore-a-backup".tr(),
       subtitle: widget.isClientSync
-          ? "Manage the syncing of data between multiple devices. May incur extra data usage."
+          ? "manage-syncing-info".tr()
           : widget.isManaging
               ? null
-              : "This will overwrite all previous data",
+              : "overwrite-warning".tr(),
       child: Column(
         children: [
           widget.isClientSync && kIsWeb == false
@@ -658,7 +658,7 @@ class _BackupManagementState extends State<BackupManagement> {
                   children: [
                     Expanded(
                       child: AboutInfoBox(
-                        title: "Web App",
+                        title: "web-app".tr(),
                         link: "https://budget-track.web.app/",
                         color: appStateSettings["materialYou"]
                             ? Theme.of(context).colorScheme.secondaryContainer
@@ -686,8 +686,8 @@ class _BackupManagementState extends State<BackupManagement> {
                       });
                     },
                     initialValue: appStateSettings["autoBackups"],
-                    title: "Auto Backups",
-                    description: "Backup data when opened",
+                    title: "auto-backups".tr(),
+                    description: "auto-backups-description".tr(),
                     icon: Icons.backup_rounded,
                   ),
                 )
@@ -705,8 +705,8 @@ class _BackupManagementState extends State<BackupManagement> {
                     });
                   },
                   initialValue: appStateSettings["backupSync"],
-                  title: "Sync Data",
-                  description: "Sync data to other devices",
+                  title: "sync-data".tr(),
+                  description: "sync-data-description".tr(),
                   icon: Icons.cloud_sync_rounded,
                 )
               : SizedBox.shrink(),
@@ -726,11 +726,11 @@ class _BackupManagementState extends State<BackupManagement> {
                                     updateGlobalState: false);
                               },
                               initialValue: appStateSettings["syncEveryChange"],
-                              title: "Sync on Every Change",
+                              title: "sync-every-change".tr(),
                               descriptionWithValue: (value) {
                                 return value
-                                    ? "Syncing on every change"
-                                    : "Syncing on refresh/launch";
+                                    ? "sync-every-change-description1".tr()
+                                    : "sync-every-change-description2".tr();
                               },
                               icon: Icons.all_inbox_rounded,
                             )
@@ -759,8 +759,8 @@ class _BackupManagementState extends State<BackupManagement> {
                               },
                               initial: appStateSettings["autoBackupsFrequency"]
                                   .toString(),
-                              title: "Backup Frequency",
-                              description: "Number of days",
+                              title: "backup-frequency".tr(),
+                              description: "number-of-days".tr(),
                               icon: Icons.event_repeat_rounded,
                             ),
                           )
@@ -774,7 +774,7 @@ class _BackupManagementState extends State<BackupManagement> {
                   child: SettingsContainerDropdown(
                     key: dropDownKey,
                     verticalPadding: 0,
-                    title: "Backup Limit",
+                    title: "backup-limit".tr(),
                     icon: Icons.format_list_numbered_rtl_outlined,
                     initial: appStateSettings["backupLimit"].toString(),
                     items: ["10", "15", "20", "30"],
@@ -783,15 +783,14 @@ class _BackupManagementState extends State<BackupManagement> {
                         openPopup(
                           context,
                           icon: Icons.delete_rounded,
-                          title: "Change Limit?",
-                          description:
-                              "Changing the backup limit to a smaller number will remove any past backups that are currently stored, if they exceed the limit, everytime a backup is made.",
+                          title: "change-limit".tr(),
+                          description: "change-limit-warning".tr(),
                           onSubmit: () async {
                             updateSettings("backupLimit", int.parse(value),
                                 updateGlobalState: false);
                             Navigator.pop(context);
                           },
-                          onSubmitLabel: "Change",
+                          onSubmitLabel: "change".tr(),
                           onCancel: () {
                             Navigator.pop(context);
                             setState(() {
@@ -836,14 +835,13 @@ class _BackupManagementState extends State<BackupManagement> {
                               if (!widget.isManaging) {
                                 final result = await openPopup(
                                   context,
-                                  title: "Load Backup?",
-                                  description:
-                                      "This will replace all your current data!",
+                                  title: "load-backup".tr(),
+                                  description: "load-backup-warning".tr(),
                                   icon: Icons.warning_amber_rounded,
                                   onSubmit: () async {
                                     Navigator.pop(context, true);
                                   },
-                                  onSubmitLabel: "Load",
+                                  onSubmitLabel: "load".tr(),
                                   onCancelLabel: "cancel".tr(),
                                   onCancel: () {
                                     Navigator.pop(context);
@@ -970,7 +968,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   openPopup(
                                                     context,
                                                     icon: Icons.delete_rounded,
-                                                    title: "Delete backup?",
+                                                    title: "delete-backup".tr(),
                                                     description: "Backup " +
                                                         (file.value.name ??
                                                             "No name") +
@@ -993,7 +991,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                                       openSnackbar(
                                                         SnackbarMessage(
                                                             title:
-                                                                "Deleted Backup",
+                                                                "deleted-backup"
+                                                                    .tr(),
                                                             description: (file
                                                                     .value
                                                                     .name ??
@@ -1017,7 +1016,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                                           .currentState!
                                                           .setVisibility(false);
                                                     },
-                                                    onSubmitLabel: "Delete",
+                                                    onSubmitLabel:
+                                                        "delete".tr(),
                                                     onCancel: () {
                                                       Navigator.pop(context);
                                                     },

@@ -1,5 +1,4 @@
 import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
@@ -113,7 +112,7 @@ class BudgetContainer extends StatelessWidget {
                                   child: TextFont(
                                     text: budget.name,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 25,
+                                    fontSize: 24,
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
@@ -860,49 +859,37 @@ class TodayIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: FractionalOffset(percent / 100, 0),
-      child: Container(
-        width: 20,
-        height: large ? 45 : 39,
-        child: OverflowBox(
-          maxWidth: 500,
-          child: SizedBox(
-            child: Column(
-              children: [
-                SlideFadeTransition(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: getColor(context, "black")),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(top: 3, right: 5, left: 5, bottom: 3),
-                      child: MediaQuery(
-                        child: TextFont(
-                          textAlign: TextAlign.center,
-                          text: "today".tr(),
-                          fontSize: large ? 10 : 9,
-                          textColor: getColor(context, "white"),
-                        ),
-                        data: MediaQuery.of(context)
-                            .copyWith(textScaleFactor: 1.0),
-                      ),
-                    ),
+      child: SlideFadeTransition(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: getColor(context, "black")),
+              child: Padding(
+                padding: EdgeInsets.only(top: 3, right: 5, left: 5, bottom: 3),
+                child: MediaQuery(
+                  child: TextFont(
+                    textAlign: TextAlign.center,
+                    text: "today".tr(),
+                    fontSize: large ? 10 : 9,
+                    textColor: getColor(context, "white"),
                   ),
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                 ),
-                FadeIn(
-                  child: Container(
-                    width: 3,
-                    height: large ? 27 : 22,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(5)),
-                      color: getColor(context, "black").withOpacity(0.4),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            Container(
+              width: 3,
+              height: large ? 27 : 22,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
+                color: getColor(context, "black").withOpacity(0.4),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -1135,9 +1122,12 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                   if (snapshot.hasData) {
                                     return TextFont(
                                       text: snapshot.data!.length.toString() +
-                                          pluralString(
-                                              snapshot.data!.length == 1,
-                                              " transaction"),
+                                          " " +
+                                          (snapshot.data!.length == 1
+                                              ? "transaction".tr().toLowerCase()
+                                              : "transactions"
+                                                  .tr()
+                                                  .toLowerCase()),
                                       fontSize: 14,
                                       textColor:
                                           selectedMember == spender.member

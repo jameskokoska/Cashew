@@ -1,14 +1,10 @@
-import 'dart:developer';
-
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
@@ -25,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/selectChips.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 class TransactionsSearchPage extends StatefulWidget {
@@ -250,7 +245,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   null,
                   listID: "TransactionsSearch",
                   simpleListRender: true,
-                  noResultsMessage: "No transactions found.",
+                  noResultsMessage: "no-transactions-found".tr(),
                   noSearchResultsVariation: true,
                   searchFilters: searchFilters,
                 ),
@@ -270,7 +265,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         fontSize: 13,
                         textAlign: TextAlign.center,
                         textColor: getColor(context, "textLight"),
-                        text: "Showing transactions from" +
+                        text: "showing-transactions-from".tr() +
                             "\n" +
                             getWordedDateShortMore(
                                 searchFilters.dateTimeRange?.start ??
@@ -520,14 +515,14 @@ class _TransactionFiltersSelectionState
         SelectChips(
           darkerBackground: true,
           items: ExpenseIncome.values,
-          getLabel: (item) {
+          getLabel: (ExpenseIncome item) {
             return item == ExpenseIncome.expense
                 ? "expense".tr()
                 : item == ExpenseIncome.income
                     ? "income".tr()
                     : "";
           },
-          onSelected: (item) {
+          onSelected: (ExpenseIncome item) {
             if (selectedFilters.expenseIncome.contains(item)) {
               selectedFilters.expenseIncome.remove(item);
             } else {
@@ -535,17 +530,17 @@ class _TransactionFiltersSelectionState
             }
             setSearchFilters();
           },
-          getSelected: (item) {
+          getSelected: (ExpenseIncome item) {
             return selectedFilters.expenseIncome.contains(item);
           },
         ),
         SelectChips(
           darkerBackground: true,
           items: [null, ...TransactionSpecialType.values],
-          getLabel: (item) {
+          getLabel: (TransactionSpecialType? item) {
             return transactionTypeDisplayToEnum[item] ?? "";
           },
-          onSelected: (item) {
+          onSelected: (TransactionSpecialType? item) {
             if (selectedFilters.transactionTypes.contains(item)) {
               selectedFilters.transactionTypes.remove(item);
             } else {
@@ -553,14 +548,14 @@ class _TransactionFiltersSelectionState
             }
             setSearchFilters();
           },
-          getSelected: (item) {
+          getSelected: (TransactionSpecialType? item) {
             return selectedFilters.transactionTypes.contains(item);
           },
         ),
         SelectChips(
           darkerBackground: true,
           items: PaidStatus.values,
-          getLabel: (item) {
+          getLabel: (PaidStatus item) {
             return item == PaidStatus.paid
                 ? "paid".tr()
                 : item == PaidStatus.notPaid
@@ -569,7 +564,7 @@ class _TransactionFiltersSelectionState
                         ? "skipped".tr()
                         : "";
           },
-          onSelected: (item) {
+          onSelected: (PaidStatus item) {
             if (selectedFilters.paidStatus.contains(item)) {
               selectedFilters.paidStatus.remove(item);
             } else {
@@ -577,26 +572,26 @@ class _TransactionFiltersSelectionState
             }
             setSearchFilters();
           },
-          getSelected: (item) {
+          getSelected: (PaidStatus item) {
             return selectedFilters.paidStatus.contains(item);
           },
         ),
         SelectChips(
           darkerBackground: true,
-          items: [
+          items: <BudgetTransactionFilters>[
             BudgetTransactionFilters.addedToOtherBudget,
             ...(appStateSettings["sharedBudgets"]
                 ? [BudgetTransactionFilters.sharedToOtherBudget]
                 : []),
           ],
-          getLabel: (item) {
+          getLabel: (BudgetTransactionFilters item) {
             return item == BudgetTransactionFilters.addedToOtherBudget
                 ? "Added to Other Budgets"
                 : item == BudgetTransactionFilters.sharedToOtherBudget
                     ? "Shared to Other Budgets"
                     : "";
           },
-          onSelected: (item) {
+          onSelected: (BudgetTransactionFilters item) {
             if (selectedFilters.budgetTransactionFilters.contains(item)) {
               selectedFilters.budgetTransactionFilters.remove(item);
             } else {
@@ -604,7 +599,7 @@ class _TransactionFiltersSelectionState
             }
             setSearchFilters();
           },
-          getSelected: (item) {
+          getSelected: (BudgetTransactionFilters item) {
             return selectedFilters.budgetTransactionFilters.contains(item);
           },
         ),
@@ -615,10 +610,10 @@ class _TransactionFiltersSelectionState
               return SelectChips(
                 darkerBackground: true,
                 items: snapshot.data!,
-                getLabel: (item) {
-                  return item?.name ?? "No Wallet";
+                getLabel: (TransactionWallet item) {
+                  return item.name;
                 },
-                onSelected: (item) {
+                onSelected: (TransactionWallet item) {
                   if (selectedFilters.walletPks.contains(item.walletPk)) {
                     selectedFilters.walletPks.remove(item.walletPk);
                   } else {
@@ -626,15 +621,15 @@ class _TransactionFiltersSelectionState
                   }
                   setSearchFilters();
                 },
-                getSelected: (item) {
+                getSelected: (TransactionWallet item) {
                   return selectedFilters.walletPks.contains(item.walletPk);
                 },
-                getCustomBorderColor: (item) {
+                getCustomBorderColor: (TransactionWallet item) {
                   return dynamicPastel(
                     context,
                     lightenPastel(
                       HexColor(
-                        item?.colour,
+                        item.colour,
                         defaultColor: Theme.of(context).colorScheme.primary,
                       ),
                       amount: 0.3,
@@ -655,11 +650,11 @@ class _TransactionFiltersSelectionState
               return SelectChips(
                 darkerBackground: true,
                 items: [null, ...snapshot.data!],
-                getLabel: (item) {
+                getLabel: (Budget? item) {
                   if (item == null) return "No Budget";
-                  return item?.name ?? "No Budget";
+                  return item.name ?? "No Budget";
                 },
-                onSelected: (item) {
+                onSelected: (Budget? item) {
                   if (selectedFilters.budgetPks.contains(item?.budgetPk)) {
                     selectedFilters.budgetPks.remove(item?.budgetPk);
                   } else {
@@ -667,16 +662,16 @@ class _TransactionFiltersSelectionState
                   }
                   setSearchFilters();
                 },
-                getSelected: (item) {
+                getSelected: (Budget? item) {
                   return selectedFilters.budgetPks.contains(item?.budgetPk);
                 },
-                getCustomBorderColor: (item) {
+                getCustomBorderColor: (Budget? item) {
                   if (item == null) return null;
                   return dynamicPastel(
                     context,
                     lightenPastel(
                       HexColor(
-                        item?.colour,
+                        item.colour,
                         defaultColor: Theme.of(context).colorScheme.primary,
                       ),
                       amount: 0.3,

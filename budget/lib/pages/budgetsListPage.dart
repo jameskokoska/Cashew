@@ -47,6 +47,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
           : 0,
       actions: [
         IconButton(
+          padding: EdgeInsets.all(15),
           tooltip: "edit-budgets".tr(),
           onPressed: () {
             pushRoute(

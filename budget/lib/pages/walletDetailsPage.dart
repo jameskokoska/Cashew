@@ -86,6 +86,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
             listID: listID,
             actions: [
               IconButton(
+                padding: EdgeInsets.all(15),
                 tooltip: "edit-wallet".tr(),
                 onPressed: () {
                   pushRoute(

@@ -9,7 +9,22 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
-  String changelog = """  
+  String changelog = """
+    < 3.5.4
+    Added labels to language picker
+    Today indicator size fixes
+    Newest transaction for that day at top of list
+    Fixed header animations with respect to header max size
+    Wallet selector in add transaction page
+    Convert to primary currency button only shows if selected currency is different
+    Removed rounded corners on top app bar
+    Only show other currency in transaction entry if the currency is different, not just the wallet
+    Account and backup translations
+    Fixed bottom padding in accounts page
+    Fixed action buttons and back button sizes
+    Header size fixes
+    Header transitions smoothly to background color again
+    More translations
     < 3.5.2
     Added start date option for spending graph home screen widget
     Added start date for income and expense home screen widget

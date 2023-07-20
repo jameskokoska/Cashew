@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/budgetHistoryLineGraph.dart';
@@ -12,11 +10,9 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
-import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectCategory.dart';
@@ -209,6 +205,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       ),
       actions: [
         IconButton(
+          padding: EdgeInsets.all(15),
           tooltip: "watch-categories".tr(),
           onPressed: () {
             openBottomSheet(
@@ -278,6 +275,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           ),
         ),
         IconButton(
+          padding: EdgeInsets.all(15),
           tooltip: "edit-budget".tr(),
           onPressed: () {
             pushRoute(
@@ -715,7 +713,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: TextFont(
-                    text: "View More",
+                    text: "view-more".tr(),
                     textAlign: TextAlign.center,
                     fontSize: 16,
                     textColor: widget.budgetColorScheme.onSecondaryContainer,

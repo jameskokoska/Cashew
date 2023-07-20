@@ -14,7 +14,6 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/main.dart';
 import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
@@ -338,8 +337,12 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                         text: " • " +
                             daysDifference.abs().toString() +
                             " " +
-                            (daysDifference.abs() == 1 ? "day" : "days") +
-                            (daysDifference > 0 ? " overdue" : ""),
+                            (daysDifference.abs() == 1
+                                ? "day".tr()
+                                : "days".tr()) +
+                            (daysDifference > 0
+                                ? " " + "overdue".tr().toLowerCase()
+                                : ""),
                         fontWeight: small ? FontWeight.normal : FontWeight.bold,
                       )
                     : SizedBox(),

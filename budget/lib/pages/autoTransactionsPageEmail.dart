@@ -642,7 +642,7 @@ class ScannerTemplateEntry extends StatelessWidget {
                             ),
                           );
                         },
-                        onSubmitLabel: "Delete",
+                        onSubmitLabel: "delete".tr(),
                       );
                     },
                     icon: Icons.delete_rounded,

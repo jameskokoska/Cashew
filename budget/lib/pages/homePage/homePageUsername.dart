@@ -1,18 +1,6 @@
-import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/subscriptionsPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/keepAliveClientMixin.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
-import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/material.dart';
 
 class HomePageUsername extends StatelessWidget {
@@ -67,8 +55,8 @@ class HomePageUsername extends StatelessWidget {
             return Transform.scale(
               alignment: Alignment.bottomLeft,
               scale: animationControllerHeader.value < 0.5
-                  ? 0.25 + 0.5
-                  : (animationControllerHeader.value) * 0.5 + 0.5,
+                  ? 0.5 * 0.4 + 0.6
+                  : (animationControllerHeader.value) * 0.4 + 0.6,
               child: Tappable(
                 onTap: () {
                   enterNameBottomSheet(context);
@@ -86,7 +74,7 @@ class HomePageUsername extends StatelessWidget {
             child: TextFont(
               text: !showUsername ? "Home" : appStateSettings["username"] ?? "",
               fontWeight: FontWeight.bold,
-              fontSize: 39,
+              fontSize: 33,
               textColor: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
           ),

@@ -1,6 +1,5 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -227,6 +226,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
           actions: [
             widget.category != null
                 ? IconButton(
+                    padding: EdgeInsets.all(15),
                     tooltip: "Delete category",
                     onPressed: () {
                       deleteCategoryPopup(context, widgetCategory!,
@@ -243,7 +243,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
-                    label: "Set Title",
+                    label: "set-title".tr(),
                     onTap: () async {
                       FocusScope.of(context).unfocus();
                       Future.delayed(Duration(milliseconds: 100), () {
@@ -374,14 +374,14 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Button(
                       icon: Icons.merge_rounded,
-                      label: "Merge Category",
+                      label: "merge-category".tr(),
                       onTap: () async {
                         openBottomSheet(
                           context,
                           PopupFramework(
                             title: "select-category".tr(),
                             subtitle:
-                                "Category to transfer all transactions to",
+                                "category-to-transfer-all-transactions-to".tr(),
                             child: SelectCategory(
                               popRoute: true,
                               setSelectedCategory: (category) async {
@@ -389,14 +389,16 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                                     () async {
                                   final result = await openPopup(
                                     context,
-                                    title: "Merge into " + category.name + "?",
-                                    description:
-                                        "This will erase this category and all transactions",
+                                    title: "merge-into".tr() +
+                                        " " +
+                                        category.name +
+                                        "?",
+                                    description: "merge-into-description".tr(),
                                     icon: Icons.warning_amber_rounded,
                                     onSubmit: () async {
                                       Navigator.pop(context, true);
                                     },
-                                    onSubmitLabel: "Merge",
+                                    onSubmitLabel: "merge".tr(),
                                     onCancelLabel: "cancel".tr(),
                                     onCancel: () {
                                       Navigator.pop(context);
@@ -469,10 +471,10 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   openBottomSheet(
                     context,
                     PopupFramework(
-                      title: "Set Title",
+                      title: "set-title".tr(),
                       child: SelectText(
                         setSelectedText: (_) {},
-                        labelText: "Set Title",
+                        labelText: "set-title".tr(),
                         placeholder: "title-placeholder".tr(),
                         nextWithInput: (text) async {
                           int length =
@@ -588,13 +590,13 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
           openBottomSheet(
             context,
             PopupFramework(
-              title: "Set Title",
+              title: "set-title".tr(),
               child: SelectText(
                 setSelectedText: (text) {
                   title = text;
                   widget.setTitle(text);
                 },
-                labelText: "Set Title",
+                labelText: "set-title".tr(),
                 selectedText: title,
                 placeholder: "title-placeholder".tr(),
               ),
@@ -623,7 +625,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
                   title: "Delete Title?",
                   description: "Are you sure you want to delete this title?",
                   icon: Icons.delete_rounded,
-                  onSubmitLabel: "Delete",
+                  onSubmitLabel: "delete".tr(),
                   onSubmit: () {
                     Navigator.pop(context);
                     widget.onDelete();

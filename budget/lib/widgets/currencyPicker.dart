@@ -164,14 +164,14 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                         viewAll = true;
                       });
                     },
-                    text: "View All Currencies",
+                    text: "view-all-currencies".tr(),
                   ),
                 ),
           currencies.length <= 0
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: NoResults(
-                    message: "No currencies found.",
+                    message: "no-currencies-found".tr(),
                   ),
                 )
               : SizedBox.shrink(),

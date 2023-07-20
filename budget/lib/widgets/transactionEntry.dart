@@ -1,23 +1,13 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
-import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
-import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -119,6 +109,15 @@ class TransactionEntry extends StatelessWidget {
         amount: 0.3);
 
     Color textColorLight = getColor(context, "textLight");
+
+    bool showOtherCurrency =
+        transaction.walletFk != appStateSettings["selectedWallet"] &&
+            ((Provider.of<AllWallets>(context)
+                    .indexedByPk[transaction.walletFk]
+                    ?.currency) !=
+                Provider.of<AllWallets>(context)
+                    .indexedByPk[appStateSettings["selectedWallet"]]
+                    ?.currency);
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -269,7 +268,7 @@ class TransactionEntry extends StatelessWidget {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .only(
+                                                                            .only(
                                                                         left:
                                                                             3),
                                                                 child: TextFont(
@@ -692,11 +691,7 @@ class TransactionEntry extends StatelessWidget {
                                                       1),
                                             ),
                                             fontSize: 19 -
-                                                (transaction.walletFk !=
-                                                        appStateSettings[
-                                                            "selectedWallet"]
-                                                    ? 1
-                                                    : 0),
+                                                (showOtherCurrency ? 1 : 0),
                                             fontWeight: FontWeight.bold,
                                             textColor: textColor,
                                             walletPkForCurrency:
@@ -710,28 +705,31 @@ class TransactionEntry extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              transaction.walletFk !=
-                                      appStateSettings["selectedWallet"]
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(top: 1),
-                                      child: TextFont(
-                                        text: convertToMoney(
-                                          Provider.of<AllWallets>(context),
-                                          transaction.amount.abs(),
-                                          showCurrency: false,
-                                          decimals: 2,
-                                          // TODO this should match the decimal count of transaction.walletFk
+                              AnimatedSize(
+                                duration: Duration(milliseconds: 500),
+                                child: showOtherCurrency
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(top: 1),
+                                        child: TextFont(
+                                          text: convertToMoney(
+                                            Provider.of<AllWallets>(context),
+                                            transaction.amount.abs(),
+                                            showCurrency: false,
+                                            decimals: 2,
+                                            // TODO this should match the decimal count of transaction.walletFk
+                                          ),
+                                          fontSize: 12,
+                                          textColor: textColor.withOpacity(0.6),
+                                          walletPkForCurrency:
+                                              transaction.walletFk,
+                                          onlyShowCurrencyIcon:
+                                              transaction.walletFk ==
+                                                  appStateSettings[
+                                                      "selectedWallet"],
                                         ),
-                                        fontSize: 12,
-                                        textColor: textColor.withOpacity(0.6),
-                                        walletPkForCurrency:
-                                            transaction.walletFk,
-                                        onlyShowCurrencyIcon: transaction
-                                                .walletFk ==
-                                            appStateSettings["selectedWallet"],
-                                      ),
-                                    )
-                                  : SizedBox.shrink(),
+                                      )
+                                    : SizedBox.shrink(),
+                              ),
                             ],
                           ),
                         ],

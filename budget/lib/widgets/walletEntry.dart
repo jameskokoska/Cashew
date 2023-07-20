@@ -1,10 +1,8 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -118,8 +116,10 @@ class WalletEntry extends StatelessWidget {
                                 return TextFont(
                                   textAlign: TextAlign.left,
                                   text: snapshot.data![0].toString() +
-                                      pluralString(snapshot.data![0] == 1,
-                                          " transaction"),
+                                      " " +
+                                      (snapshot.data![0] == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
                                   fontSize: 14,
                                   textColor: getColor(context, "black")
                                       .withOpacity(0.65),

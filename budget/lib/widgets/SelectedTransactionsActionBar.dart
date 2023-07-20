@@ -1,16 +1,12 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -20,11 +16,9 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 class SelectedTransactionsActionBar extends StatelessWidget {
@@ -51,48 +45,36 @@ class SelectedTransactionsActionBar extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: kIsWeb
-                      ? EdgeInsets.symmetric(vertical: 10)
-                      : EdgeInsets.only(
-                          top: MediaQuery.of(context).padding.top + 5,
-                          bottom: 6),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(
-                          getWidthNavigationSidebar(context) > 0 ? 20 : 10),
-                      bottomRight: Radius.circular(
-                          getWidthNavigationSidebar(context) > 0 ? 20 : 10),
-                    ),
+                    // borderRadius: BorderRadius.only(
+                    //   bottomLeft: Radius.circular(
+                    //       getWidthNavigationSidebar(context) > 0 ? 20 : 10),
+                    //   bottomRight: Radius.circular(
+                    //       getWidthNavigationSidebar(context) > 0 ? 20 : 10),
+                    // ),
                     boxShadow: boxShadowCheck(boxShadowSharp(context)),
                     color: Theme.of(context).colorScheme.secondaryContainer,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Row(
-                            children: [
-                              IconButton(
-                                iconSize: getWidthNavigationSidebar(context) > 0
-                                    ? 23
-                                    : null,
-                                padding: getWidthNavigationSidebar(context) > 0
-                                    ? EdgeInsets.all(12)
-                                    : null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Row(
+                          children: [
+                            IconButton(
+                              padding: EdgeInsets.all(15),
+                              color: Theme.of(context).colorScheme.secondary,
+                              icon: Icon(
+                                Icons.arrow_back_rounded,
                                 color: Theme.of(context).colorScheme.secondary,
-                                icon: Icon(
-                                  Icons.arrow_back_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                onPressed: () {
-                                  globalSelectedID.value[pageID] = [];
-                                  globalSelectedID.notifyListeners();
-                                },
                               ),
-                              StreamBuilder<double?>(
+                              onPressed: () {
+                                globalSelectedID.value[pageID] = [];
+                                globalSelectedID.notifyListeners();
+                              },
+                            ),
+                            Expanded(
+                              child: StreamBuilder<double?>(
                                 stream: database.watchTotalSpentGivenList(
                                   Provider.of<AllWallets>(context),
                                   listOfIDs,
@@ -105,121 +87,118 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                     dynamicDecimals: true,
                                     initialCount: (0),
                                     textBuilder: (number) {
-                                      return Flexible(
-                                        child: TextFont(
-                                          text: convertToMoney(
-                                                  Provider.of<AllWallets>(
-                                                      context),
-                                                  number,
-                                                  finalNumber: snapshot.hasData
-                                                      ? snapshot.data!
-                                                      : 0) +
-                                              " (" +
-                                              listOfIDs.length.toString() +
-                                              " selected)",
-                                          fontSize: getWidthNavigationSidebar(
-                                                      context) <=
-                                                  0
-                                              ? 17.5
-                                              : 19,
-                                          textAlign: TextAlign.left,
-                                          maxLines: 2,
-                                        ),
+                                      return Wrap(
+                                        alignment: WrapAlignment.spaceBetween,
+                                        children: [
+                                          TextFont(
+                                            text: listOfIDs.length.toString() +
+                                                " " +
+                                                "selected",
+                                            fontSize: 17.5,
+                                            textAlign: TextAlign.left,
+                                            maxLines: 1,
+                                          ),
+                                          TextFont(
+                                            text: convertToMoney(
+                                                Provider.of<AllWallets>(
+                                                    context),
+                                                number,
+                                                finalNumber: snapshot.hasData
+                                                    ? snapshot.data!
+                                                    : 0),
+                                            fontSize: 17.5,
+                                            textAlign: TextAlign.left,
+                                            maxLines: 1,
+                                          ),
+                                        ],
                                       );
                                     },
                                   );
                                 },
                               ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            appStateSettings["massEditSelectedTransactions"] ==
-                                    false
-                                ? SizedBox.shrink()
-                                : IconButton(
-                                    iconSize:
-                                        getWidthNavigationSidebar(context) > 0
-                                            ? 23
-                                            : null,
-                                    padding:
-                                        getWidthNavigationSidebar(context) > 0
-                                            ? EdgeInsets.all(12)
-                                            : null,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
-                                    onPressed: () {
-                                      openPopupCustom(
-                                        context,
-                                        title: "Edit " +
-                                            (value)[pageID]!.length.toString() +
-                                            " Selected",
-                                        child: EditSelectedTransactions(
-                                          transactionIDs: value[pageID]!,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                            IconButton(
-                              iconSize: getWidthNavigationSidebar(context) > 0
-                                  ? 23
-                                  : null,
-                              padding: getWidthNavigationSidebar(context) > 0
-                                  ? EdgeInsets.all(12)
-                                  : null,
-                              color: Theme.of(context).colorScheme.secondary,
-                              icon: Icon(
-                                Icons.delete,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              onPressed: () {
-                                openPopup(
-                                  context,
-                                  title: "Delete selected transactions?",
-                                  description:
-                                      "Are you sure you want to delete " +
-                                          (value)[pageID]!.length.toString() +
-                                          pluralString(
-                                              (value)[pageID]!.length == 1,
-                                              " transaction") +
-                                          "?",
-                                  icon: Icons.delete_rounded,
-                                  onCancel: () {
-                                    Navigator.pop(context);
-                                  },
-                                  onCancelLabel: "cancel".tr(),
-                                  onSubmit: () async {
-                                    await database
-                                        .deleteTransactions(value[pageID]!);
-                                    openSnackbar(
-                                      SnackbarMessage(
-                                        title: "Deleted " +
-                                            value[pageID]!.length.toString() +
-                                            pluralString(
-                                                value[pageID]!.length == 1,
-                                                " transaction"),
-                                        icon: Icons.delete_rounded,
-                                      ),
-                                    );
-                                    globalSelectedID.value[pageID] = [];
-                                    globalSelectedID.notifyListeners();
-                                    Navigator.pop(context);
-                                  },
-                                  onSubmitLabel: "Delete",
-                                );
-                              },
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Row(
+                        children: [
+                          appStateSettings["massEditSelectedTransactions"] ==
+                                  false
+                              ? SizedBox.shrink()
+                              : IconButton(
+                                  padding: EdgeInsets.all(15),
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                  onPressed: () {
+                                    openPopupCustom(
+                                      context,
+                                      title: "Edit " +
+                                          (value)[pageID]!.length.toString() +
+                                          " Selected",
+                                      child: EditSelectedTransactions(
+                                        transactionIDs: value[pageID]!,
+                                      ),
+                                    );
+                                  },
+                                ),
+                          IconButton(
+                            padding: EdgeInsets.all(15),
+                            color: Theme.of(context).colorScheme.secondary,
+                            icon: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                            onPressed: () {
+                              openPopup(
+                                context,
+                                title: "Delete selected transactions?",
+                                description:
+                                    "Are you sure you want to delete " +
+                                        (value)[pageID]!.length.toString() +
+                                        " " +
+                                        ((value)[pageID]!.length == 1
+                                            ? "transaction".tr().toLowerCase()
+                                            : "transactions"
+                                                .tr()
+                                                .toLowerCase()) +
+                                        "?",
+                                icon: Icons.delete_rounded,
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                                onCancelLabel: "cancel".tr(),
+                                onSubmit: () async {
+                                  await database
+                                      .deleteTransactions(value[pageID]!);
+                                  openSnackbar(
+                                    SnackbarMessage(
+                                      title: "Deleted " +
+                                          value[pageID]!.length.toString() +
+                                          " " +
+                                          ((value)[pageID]!.length == 1
+                                              ? "transaction".tr().toLowerCase()
+                                              : "transactions"
+                                                  .tr()
+                                                  .toLowerCase()),
+                                      icon: Icons.delete_rounded,
+                                    ),
+                                  );
+                                  globalSelectedID.value[pageID] = [];
+                                  globalSelectedID.notifyListeners();
+                                  Navigator.pop(context);
+                                },
+                                onSubmitLabel: "delete".tr(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],

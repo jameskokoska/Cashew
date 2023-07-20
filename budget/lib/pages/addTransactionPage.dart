@@ -1,14 +1,13 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/timeDigits.dart';
@@ -25,7 +24,6 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
-import 'package:drift/drift.dart' show Value;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -785,6 +783,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           actions: [
             widget.transaction != null
                 ? IconButton(
+                    padding: EdgeInsets.all(15),
                     tooltip: "Delete transaction",
                     onPressed: () {
                       openPopup(
@@ -809,7 +808,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               widget.transaction!.transactionPk);
                           Navigator.pop(context);
                         },
-                        onSubmitLabel: "Delete",
+                        onSubmitLabel: "delete".tr(),
                       );
                     },
                     icon: Icon(Icons.delete_rounded),
@@ -1146,8 +1145,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 ),
                                 Provider.of<AllWallets>(context).list.length <=
                                             1 ||
-                                        appStateSettings["selectedWallet"] ==
-                                            selectedWalletPk
+                                        selectedWallet?.walletPk ==
+                                            appStateSettings[
+                                                "selectedWallet"] ||
+                                        ((Provider.of<AllWallets>(context)
+                                                .indexedByPk[
+                                                    selectedWallet?.walletPk]
+                                                ?.currency) ==
+                                            Provider.of<AllWallets>(context)
+                                                .indexedByPk[appStateSettings[
+                                                    "selectedWallet"]]
+                                                ?.currency)
                                     ? AnimatedSwitcher(
                                         duration: Duration(milliseconds: 350),
                                         child: Container(
@@ -1260,14 +1268,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         SizedBox(height: 10),
                         SelectChips(
                           wrapped: enableDoubleColumn(context),
-                          items: [null, ...TransactionSpecialType.values],
-                          getLabel: (item) {
+                          items: <TransactionSpecialType?>[
+                            null,
+                            ...TransactionSpecialType.values
+                          ],
+                          getLabel: (TransactionSpecialType? item) {
                             return transactionTypeDisplayToEnum[item] ?? "";
                           },
-                          onSelected: (item) {
+                          onSelected: (TransactionSpecialType? item) {
                             setSelectedType(transactionTypeDisplayToEnum[item]);
                           },
-                          getSelected: (item) {
+                          getSelected: (TransactionSpecialType? item) {
                             return selectedType == item;
                           },
                         ),
@@ -1337,6 +1348,52 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 : Container(),
                           ),
                         ),
+                        Provider.of<AllWallets>(context).list.length <= 1
+                            ? SizedBox.shrink()
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: SelectChips(
+                                  items: Provider.of<AllWallets>(context).list,
+                                  getSelected: (TransactionWallet wallet) {
+                                    return selectedWallet == wallet;
+                                  },
+                                  onSelected: (TransactionWallet wallet) {
+                                    setSelectedWalletPk(wallet);
+                                  },
+                                  getLabel: (TransactionWallet wallet) {
+                                    return wallet.name ==
+                                            wallet.currency
+                                                .toString()
+                                                .toUpperCase()
+                                        ? wallet.currency
+                                            .toString()
+                                            .toUpperCase()
+                                        : wallet.name +
+                                            " (" +
+                                            wallet.currency
+                                                .toString()
+                                                .toUpperCase() +
+                                            ")";
+                                  },
+                                  extraWidget: AddButton(
+                                    onTap: () {},
+                                    width: 40,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 1),
+                                    openPage:
+                                        AddWalletPage(title: "add-wallet".tr()),
+                                    borderRadius: 8,
+                                    backgroundColor: dynamicPastel(
+                                      context,
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer
+                                          .withOpacity(0.4),
+                                      amount: 0.5,
+                                    ),
+                                  ),
+                                ),
+                              ),
                         StreamBuilder<List<Budget>>(
                           stream: database.watchAllAddableBudgets(),
                           builder: (context, snapshot) {
@@ -1371,21 +1428,22 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                               borderRadius: 8,
                                             ),
                                             items: [null, ...snapshot.data!],
-                                            getLabel: (item) {
+                                            getLabel: (Budget? item) {
                                               return item?.name ?? "No Budget";
                                             },
-                                            onSelected: (item) {
+                                            onSelected: (Budget? item) {
                                               setSelectedBudgetPk(
                                                 item,
                                                 isSharedBudget:
                                                     item?.sharedKey != null,
                                               );
                                             },
-                                            getSelected: (item) {
+                                            getSelected: (Budget? item) {
                                               return selectedBudgetPk ==
                                                   item?.budgetPk;
                                             },
-                                            getCustomBorderColor: (item) {
+                                            getCustomBorderColor:
+                                                (Budget? item) {
                                               return dynamicPastel(
                                                 context,
                                                 lightenPastel(
@@ -1420,19 +1478,21 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     padding: const EdgeInsets.only(top: 5),
                                     child: SelectChips(
                                         wrapped: enableDoubleColumn(context),
-                                        items:
-                                            selectedBudget?.sharedMembers ?? [],
-                                        getLabel: (item) {
+                                        items: <String>[
+                                          ...(selectedBudget?.sharedMembers ??
+                                              [])
+                                        ],
+                                        getLabel: (String item) {
                                           return getMemberNickname(item);
                                         },
-                                        onSelected: (item) {
-                                          setSelectedPayer(item ?? "");
+                                        onSelected: (String item) {
+                                          setSelectedPayer(item);
                                         },
-                                        getSelected: (item) {
+                                        getSelected: (String item) {
                                           return selectedPayer == item;
                                         },
-                                        onLongPress: (item) {
-                                          memberPopup(context, item ?? "");
+                                        onLongPress: (String item) {
+                                          memberPopup(context, item);
                                         }),
                                   )
                                 : Container(
