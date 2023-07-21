@@ -166,6 +166,12 @@ Widget getTransactionsSlivers(
                           AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
                             child: TransactionEntry(
+                              transactionBefore: nullIfIndexOutOfRange(
+                                      transactionList, realIndex - 1)
+                                  ?.transaction,
+                              transactionAfter: nullIfIndexOutOfRange(
+                                      transactionList, realIndex + 1)
+                                  ?.transaction,
                               categoryTintColor: categoryTintColor,
                               useHorizontalPaddingConstrained:
                                   useHorizontalPaddingConstrained,
@@ -221,6 +227,12 @@ Widget getTransactionsSlivers(
                               );
                           }
                           return TransactionEntry(
+                            transactionBefore: nullIfIndexOutOfRange(
+                                    transactionList, realIndex - 1)
+                                ?.transaction,
+                            transactionAfter: nullIfIndexOutOfRange(
+                                    transactionList, realIndex + 1)
+                                ?.transaction,
                             categoryTintColor: categoryTintColor,
                             useHorizontalPaddingConstrained:
                                 useHorizontalPaddingConstrained,
@@ -264,6 +276,12 @@ Widget getTransactionsSlivers(
                           curve: Curves.easeInOut,
                           animation: animation,
                           child: TransactionEntry(
+                            transactionBefore: nullIfIndexOutOfRange(
+                                    transactionList, index - 1)
+                                ?.transaction,
+                            transactionAfter: nullIfIndexOutOfRange(
+                                    transactionList, index + 1)
+                                ?.transaction,
                             categoryTintColor: categoryTintColor,
                             useHorizontalPaddingConstrained:
                                 useHorizontalPaddingConstrained,

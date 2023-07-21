@@ -45,6 +45,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
             child: Column(
               children: [
                 Container(
+                  padding:
+                      EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                   decoration: BoxDecoration(
                     // borderRadius: BorderRadius.only(
                     //   bottomLeft: Radius.circular(

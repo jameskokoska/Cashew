@@ -1,4 +1,3 @@
-import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -9,22 +8,16 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/radioItems.dart';
-import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/settingsContainers.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/main.dart';
 import 'package:flutter/services.dart';
 import '../functions.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/database/initializeDefaultDatabase.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({Key? key, this.popNavigationWhenDone = false})
@@ -95,6 +88,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
 
   @override
   void initState() {
+    super.initState();
     _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
       if (event.logicalKey.keyLabel == "Go Back" ||
           event.logicalKey == LogicalKeyboardKey.escape) {
@@ -109,7 +103,13 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       return KeyEventResult.handled;
     });
     _focusNode.requestFocus();
-    super.initState();
+
+    Future.delayed(Duration.zero, () async {
+      // Functions to run after entire UI loaded - landing page
+      // Run here too, so user has a wallet when creating first budget
+      // We need to run this after the UI is loaded - after translations are loaded
+      await initializeDefaultDatabase();
+    });
   }
 
   @override

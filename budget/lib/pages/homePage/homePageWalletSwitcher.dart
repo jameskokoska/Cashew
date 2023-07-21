@@ -1,5 +1,4 @@
 import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -36,23 +35,24 @@ class HomePageWalletSwitcher extends StatelessWidget {
                       ),
                     Stack(
                       children: [
-                        SizedBox(
-                          width: 130,
-                          child: Visibility(
-                            maintainSize: true,
-                            maintainAnimation: true,
-                            maintainState: true,
-                            child: Opacity(
-                              opacity: 0,
-                              child: WalletEntry(
-                                selected: appStateSettings["selectedWallet"] ==
-                                    snapshot.data![snapshot.data!.length - 1],
-                                wallet:
-                                    snapshot.data![snapshot.data!.length - 1],
+                        snapshot.data!.length <= 0
+                            ? SizedBox.shrink()
+                            : SizedBox(
+                                width: 130,
+                                child: Visibility(
+                                  maintainSize: true,
+                                  maintainAnimation: true,
+                                  maintainState: true,
+                                  child: Opacity(
+                                    opacity: 0,
+                                    child: WalletEntry(
+                                      selected: false,
+                                      wallet: snapshot
+                                          .data![snapshot.data!.length - 1],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
                         Positioned.fill(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 6, right: 6),

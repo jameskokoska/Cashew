@@ -78,6 +78,9 @@ class _SelectAmountState extends State<SelectAmount> {
       print(e.toString());
     }
     amount = removeTrailingZeroes(amount);
+    if (amount == "0") {
+      amount = "";
+    }
     // if (amount.endsWith(".0")) {
     //   amount = widget.amountPassed.replaceAll(".0", "");
     // }

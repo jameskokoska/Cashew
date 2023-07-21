@@ -1,10 +1,6 @@
-import 'dart:convert';
-
-import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -13,13 +9,9 @@ import 'package:budget/widgets/restartApp.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:universal_html/src/html.dart'
-    hide Navigator, Platform, Clipboard, Animation;
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import './colors.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:universal_io/io.dart';
 import 'package:universal_html/html.dart' as html;
@@ -874,4 +866,12 @@ PlatformOS? getPlatform() {
     PlatformOS.isAndroid;
   }
   return null;
+}
+
+dynamic nullIfIndexOutOfRange(List list, index) {
+  if (list.length - 1 < index || index < 0) {
+    return null;
+  } else {
+    return list[index];
+  }
 }

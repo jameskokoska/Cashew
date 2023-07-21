@@ -56,6 +56,8 @@ class TransactionEntry extends StatelessWidget {
     this.containerColor,
     this.useHorizontalPaddingConstrained = true,
     this.categoryTintColor,
+    this.transactionBefore,
+    this.transactionAfter,
   }) : super(key: key);
 
   final Widget openPage;
@@ -66,6 +68,8 @@ class TransactionEntry extends StatelessWidget {
   final Color? containerColor;
   final bool useHorizontalPaddingConstrained;
   final Color? categoryTintColor;
+  final Transaction? transactionBefore;
+  final Transaction? transactionAfter;
 
   final double fabSize = 50;
 
@@ -137,9 +141,15 @@ class TransactionEntry extends StatelessWidget {
                   ? Theme.of(context).canvasColor
                   : containerColor,
               button: (openContainer) {
+                bool isTransactionBeforeSelected = transactionBefore != null &&
+                    globalSelectedID.value[listID ?? "0"]!
+                        .contains(transactionBefore?.transactionPk);
+                bool isTransactionAfterSelected = transactionAfter != null &&
+                    globalSelectedID.value[listID ?? "0"]!
+                        .contains(transactionAfter?.transactionPk);
+
                 return Padding(
-                  padding: const EdgeInsets.only(
-                      left: 13, right: 13, top: 1, bottom: 2),
+                  padding: const EdgeInsets.only(left: 13, right: 13),
                   child: Tappable(
                     color: Colors.transparent,
                     borderRadius: 15,
@@ -167,8 +177,12 @@ class TransactionEntry extends StatelessWidget {
                       padding: EdgeInsets.only(
                         left: selected ? 12 - 2 : 10 - 2,
                         right: selected ? 12 : 10,
-                        top: selected ? 6 : 4,
-                        bottom: selected ? 6 : 4,
+                        top: selected && isTransactionBeforeSelected == false
+                            ? 6
+                            : 4,
+                        bottom: selected && isTransactionAfterSelected == false
+                            ? 6
+                            : 4,
                       ),
                       decoration: BoxDecoration(
                         color: selected
@@ -180,7 +194,14 @@ class TransactionEntry extends StatelessWidget {
                                 : getColor(context, "lightDarkAccentHeavy")
                                     .withAlpha(200)
                             : Colors.transparent,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(
+                            isTransactionBeforeSelected ? 0 : 12,
+                          ),
+                          bottom: Radius.circular(
+                            isTransactionAfterSelected ? 0 : 12,
+                          ),
+                        ),
                       ),
                       child: Row(
                         children: [

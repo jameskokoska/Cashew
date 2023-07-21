@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.5.5
+    Fixed app bar top safe area
+    Corners mesh together on selected transactions when grouped together
+    Fixed landing page no wallet existed because database was not initialized - since it needs to be initialized after UI and translations are loaded
+    Amounts would start with "0" when performing calculations
+    Home page username formatting
+    Wallet selector undefined when app first loaded
     < 3.5.4
     Added labels to language picker
     Today indicator size fixes

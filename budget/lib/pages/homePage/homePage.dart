@@ -143,6 +143,7 @@ class HomePageState extends State<HomePage>
                     ),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(height: 1, color: Theme.of(context).canvasColor),
+
                     Container(
                       // Subtract one (1) here because of the thickness of the wiper above
                       height: 179 -
@@ -151,9 +152,10 @@ class HomePageState extends State<HomePage>
                               ? 30
                               : MediaQuery.of(context).padding.top) -
                           48 -
-                          12,
+                          10,
                       alignment: Alignment.bottomLeft,
-                      padding: EdgeInsets.only(left: 9, bottom: 22, right: 9),
+                      padding: EdgeInsets.only(left: 9, bottom: 17, right: 9),
+
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
