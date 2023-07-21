@@ -1,4 +1,3 @@
-import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';

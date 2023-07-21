@@ -1,9 +1,7 @@
 import 'dart:math';
 
 import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';

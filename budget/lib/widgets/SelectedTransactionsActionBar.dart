@@ -95,7 +95,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                           TextFont(
                                             text: listOfIDs.length.toString() +
                                                 " " +
-                                                "selected",
+                                                "selected".tr(),
                                             fontSize: 17.5,
                                             textAlign: TextAlign.left,
                                             maxLines: 1,
@@ -158,9 +158,10 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                             onPressed: () {
                               openPopup(
                                 context,
-                                title: "Delete selected transactions?",
+                                title: "delete-selected-transactions".tr(),
                                 description:
-                                    "Are you sure you want to delete " +
+                                    "delete-selected-transactions-description"
+                                            .tr() +
                                         (value)[pageID]!.length.toString() +
                                         " " +
                                         ((value)[pageID]!.length == 1
@@ -179,7 +180,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                       .deleteTransactions(value[pageID]!);
                                   openSnackbar(
                                     SnackbarMessage(
-                                      title: "Deleted " +
+                                      title: "deleted".tr() +
+                                          " " +
                                           value[pageID]!.length.toString() +
                                           " " +
                                           ((value)[pageID]!.length == 1

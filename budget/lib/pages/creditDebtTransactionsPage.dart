@@ -152,7 +152,7 @@ class CreditDebtTransactions extends StatelessWidget {
                           animation: animation,
                           child: TransactionEntry(
                             openPage: AddTransactionPage(
-                              title: "Edit Transaction",
+                              title: "edit-transaction".tr(),
                               transaction: item,
                             ),
                             transaction: item,

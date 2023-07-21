@@ -57,7 +57,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewPadding.bottom),
                 child: FAB(
-                  tooltip: "Add Subscription",
+                  tooltip: "add-subscription".tr(),
                   openPage: AddTransactionPage(
                     title: "add-transaction".tr(),
                     selectedType: TransactionSpecialType.subscription,
@@ -262,7 +262,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                               ),
                               TransactionEntry(
                                 openPage: AddTransactionPage(
-                                  title: "Edit Transaction",
+                                  title: "edit-transaction".tr(),
                                   transaction: transaction,
                                 ),
                                 transaction: transaction,
@@ -365,7 +365,15 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                             " " +
                             (transaction.periodLength == 1
                                 ? nameRecurrence[transaction.reoccurrence]
-                                : namesRecurrence[transaction.reoccurrence]),
+                                    .toString()
+                                    .toLowerCase()
+                                    .tr()
+                                    .toLowerCase()
+                                : namesRecurrence[transaction.reoccurrence]
+                                    .toString()
+                                    .toLowerCase()
+                                    .tr()
+                                    .toLowerCase()),
                         fontWeight: FontWeight.bold,
                         fontSize: small ? 14 : 18,
                         textColor: dynamicPastel(

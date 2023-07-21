@@ -1,5 +1,4 @@
 import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/budgetPage.dart';

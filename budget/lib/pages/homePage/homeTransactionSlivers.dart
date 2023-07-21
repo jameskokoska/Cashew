@@ -1,12 +1,4 @@
-import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
-import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/widgets/keepAliveClientMixin.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/walletEntry.dart';
+import 'package:budget/widgets/transactionEntries.dart';
 import 'package:flutter/material.dart';
 
 class HomeTransactionSlivers extends StatelessWidget {
@@ -24,7 +16,7 @@ class HomeTransactionSlivers extends StatelessWidget {
         duration: Duration(milliseconds: 300),
         child: SizedBox(
           key: ValueKey(selectedSlidingSelector),
-          child: getTransactionsSlivers(
+          child: TransactionEntries(
             showNoResults: false,
             DateTime(
               DateTime.now().year,

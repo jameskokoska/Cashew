@@ -94,7 +94,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String? selectedAmountCalculation;
   String? selectedTitle;
   bool selectedAllCategories = true;
-  String selectedCategoriesText = "All Categories";
+  String selectedCategoriesText = "all-categories";
   int selectedPeriodLength = 1;
   DateTime selectedStartDate =
       DateTime(DateTime.now().year, DateTime.now().month, 1);
@@ -154,7 +154,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         selectedAllCategories = true;
       });
       setState(() {
-        selectedCategoriesText = "All Categories";
+        selectedCategoriesText = "all-categories";
       });
     } else {
       setState(() {
@@ -163,13 +163,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       });
       if (categories.length == 1) {
         setState(() {
-          selectedCategoriesText =
-              categories.length.toString() + " " + "Category";
+          selectedCategoriesText = categories.length.toString() +
+              " " +
+              "category".tr().toLowerCase();
         });
       } else {
         setState(() {
-          selectedCategoriesText =
-              categories.length.toString() + " " + "Categories";
+          selectedCategoriesText = categories.length.toString() +
+              " " +
+              "categories".tr().toLowerCase();
         });
       }
     }
@@ -456,7 +458,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           actions: [
             IconButton(
               padding: EdgeInsets.all(15),
-              tooltip: "Pin to homepage",
+              tooltip: "pin-to-home".tr(),
               onPressed: () {
                 setSelectedPin();
               },
@@ -466,7 +468,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             ),
             widget.budget != null
                 ? IconButton(
-                    tooltip: "Delete budget",
+                    tooltip: "delete-budget".tr(),
                     onPressed: () {
                       deleteBudgetPopup(context, widget.budget!,
                           afterDelete: () {
@@ -491,7 +493,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     },
                     disabled: false,
                   )
-                : selectedAmount == 0
+                : selectedAmount == 0 || selectedAmount == null
                     ? SaveBottomButton(
                         label: "set-amount".tr(),
                         onTap: () async {
@@ -620,6 +622,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           getLabel: (String item) {
                             if (item == "Shared Group Budget")
                               return item + " (Beta)";
+                            else if (item == "All Transactions")
+                              return "all-transactions".tr();
+                            else if (item == "Added Only")
+                              return "added-only".tr();
                             return item;
                           },
                           onSelected: (String item) {
@@ -656,7 +662,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   ),
             SliverStickyLabelDivider(
               info: "select-categories".tr(),
-              extraInfo: selectedCategoriesText + " Budget",
+              extraInfo: selectedCategoriesText.tr() +
+                  " " +
+                  "budget".tr().toLowerCase(),
               visible:
                   !(selectedShared == true || selectedAddedTransactionsOnly) &&
                       ((widget.budget != null &&
@@ -725,15 +733,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                         : []),
                                   ],
                                   getLabel: (dynamic item) {
-                                    if (item == "All") return "All";
+                                    if (item == "All") return "all".tr();
                                     return item ==
                                             BudgetTransactionFilters
                                                 .addedToOtherBudget
-                                        ? "Added to Other Budgets"
+                                        ? "added-to-other-budgets".tr()
                                         : item ==
                                                 BudgetTransactionFilters
                                                     .sharedToOtherBudget
-                                            ? "Shared to Other Budgets"
+                                            ? "shared-to-other-budgets".tr()
                                             : "";
                                   },
                                   onSelected: (dynamic item) {
@@ -862,19 +870,23 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               showAddCategoryButton: selectedAllCategories,
             ),
             SliverToBoxAdapter(
-              child: SettingsContainerSwitch(
-                onSwitched: (value) {
-                  setState(() {
-                    selectedIsAbsoluteSpendingLimit =
-                        !selectedIsAbsoluteSpendingLimit;
-                  });
-                  determineBottomButton();
-                },
-                initialValue: selectedIsAbsoluteSpendingLimit,
-                syncWithInitialValue: true,
-                title: "absolute-spending-limits".tr(),
-                description: "absolute-spending-limits-description".tr(),
-                icon: Icons.numbers_rounded,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: getHorizontalPaddingConstrained(context)),
+                child: SettingsContainerSwitch(
+                  onSwitched: (value) {
+                    setState(() {
+                      selectedIsAbsoluteSpendingLimit =
+                          !selectedIsAbsoluteSpendingLimit;
+                    });
+                    determineBottomButton();
+                  },
+                  initialValue: selectedIsAbsoluteSpendingLimit,
+                  syncWithInitialValue: true,
+                  title: "absolute-spending-limits".tr(),
+                  description: "absolute-spending-limits-description".tr(),
+                  icon: Icons.numbers_rounded,
+                ),
               ),
             ),
           ],
@@ -1009,45 +1021,49 @@ class SliverStickyLabelDivider extends StatelessWidget {
       ignoring: !visible,
       sliver: SliverStickyHeader(
         sliver: sliver,
-        header: AnimatedSize(
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: visible && sliver != null
-                ? Container(
-                    key: ValueKey(1),
-                    color:
-                        color == null ? Theme.of(context).canvasColor : color,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextFont(
-                          text: info,
-                          fontSize: 15,
-                          textColor: getColor(context, "textLight"),
-                        ),
-                        extraInfo == null
-                            ? SizedBox.shrink()
-                            : Expanded(
-                                child: TextFont(
-                                  text: extraInfo ?? "",
-                                  fontSize: 15,
-                                  textColor: getColor(context, "textLight"),
-                                  textAlign: TextAlign.end,
+        header: Transform.translate(
+          offset: Offset(0, -1),
+          child: AnimatedSize(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: visible && sliver != null
+                  ? Container(
+                      key: ValueKey(1),
+                      color:
+                          color == null ? Theme.of(context).canvasColor : color,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextFont(
+                            text: info,
+                            fontSize: 15,
+                            textColor: getColor(context, "textLight"),
+                          ),
+                          extraInfo == null
+                              ? SizedBox.shrink()
+                              : Expanded(
+                                  child: TextFont(
+                                    text: extraInfo ?? "",
+                                    fontSize: 15,
+                                    textColor: getColor(context, "textLight"),
+                                    textAlign: TextAlign.end,
+                                  ),
                                 ),
-                              ),
-                        extraInfoWidget == null
-                            ? SizedBox.shrink()
-                            : extraInfoWidget!,
-                      ],
+                          extraInfoWidget == null
+                              ? SizedBox.shrink()
+                              : extraInfoWidget!,
+                        ],
+                      ),
+                    )
+                  : Container(
+                      key: ValueKey(2),
                     ),
-                  )
-                : Container(
-                    key: ValueKey(2),
-                  ),
+            ),
           ),
         ),
       ),
@@ -1183,10 +1199,13 @@ class _BudgetDetailsState extends State<BudgetDetails> {
     openBottomSheet(
       context,
       PopupFramework(
-        title: "Select Period",
+        title: "select-period".tr(),
         child: RadioItems(
           items: ["Custom", "Daily", "Weekly", "Monthly", "Yearly"],
           initial: selectedRecurrence,
+          displayFilter: (item) {
+            return item.toString().toLowerCase().tr();
+          },
           onChanged: (value) {
             if (value == "Custom") {
               selectedEndDate = null;
@@ -1301,7 +1320,11 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                             fontWeight: FontWeight.bold,
                           ),
                     TappableTextEntry(
-                      title: selectedRecurrenceDisplay,
+                      title: selectedRecurrenceDisplay
+                          .toString()
+                          .toLowerCase()
+                          .tr()
+                          .capitalizeFirst,
                       placeholder: "",
                       onTap: () {
                         selectRecurrence(context);
@@ -1391,7 +1414,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                                     : getWordedDateShort(selectedStartDate) +
                                         " - " +
                                         getWordedDateShort(selectedEndDate!),
-                                placeholder: "Select Custom Period",
+                                placeholder: "select-custom-period".tr(),
                                 onTap: () {},
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,

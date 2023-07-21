@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:system_theme/system_theme.dart';
-import 'package:universal_io/io.dart';
 
 Map<String, dynamic> appStateSettings = {};
 

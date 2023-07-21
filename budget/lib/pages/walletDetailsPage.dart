@@ -1,31 +1,23 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/categoryEntry.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
-import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:provider/provider.dart';
-import 'package:budget/widgets/countNumber.dart';
 
 class WatchedWalletDetailsPage extends StatelessWidget {
   const WatchedWalletDetailsPage({required this.walletPk, super.key});
@@ -186,7 +178,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                   ],
                 ),
               ),
-              getTransactionsSlivers(
+              TransactionEntries(
                 null,
                 null,
                 categoryFks: [selectedCategoryPk],

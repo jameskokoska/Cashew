@@ -148,11 +148,14 @@ class SettingsPageState extends State<SettingsPage>
           initial: appStateSettings["locale"].toString(),
           items: [
             "System",
-            for (String key in languagesDictionary.keys) key,
+            for (String languageCode in supportedLanguagesSet) languageCode,
           ],
           getLabel: (String item) {
-            if (languagesDictionary[item] != null)
-              return languagesDictionary[item];
+            if (languageNamesJSON[item] != null) {
+              return languageNamesJSON[item].toString().capitalizeFirstofEach;
+            }
+            // if (supportedLanguagesSet.contains(item))
+            //   return supportedLanguagesSet[item];
             if (item == "System") return "system".tr();
             return item;
           },

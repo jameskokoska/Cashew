@@ -225,8 +225,9 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                                   Navigator.pop(context);
                                   openSnackbar(
                                     SnackbarMessage(
-                                        title:
-                                            "Deleted " + associatedTitle.title,
+                                        title: "deleted".tr() +
+                                            " " +
+                                            associatedTitle.title,
                                         icon: Icons.delete),
                                   );
                                 },

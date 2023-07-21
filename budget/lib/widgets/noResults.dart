@@ -1,5 +1,4 @@
 import 'package:budget/colors.dart';
-import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';

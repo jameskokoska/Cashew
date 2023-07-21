@@ -10,6 +10,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.5.6
+    Fixed offset of sliver sticky header, pushed it up by 1 pixel
+    Fixed force set budget amount before adding when total null
+    Added visual breaks when full screen add transaction page
+    Option to select addable budget when selecting category when adding transaction for the first time
+    New languages supported
+    More translations
+    Cleaned up unused imports
     < 3.5.5
     Fixed app bar top safe area
     Corners mesh together on selected transactions when grouped together

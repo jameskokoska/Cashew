@@ -7,13 +7,11 @@ import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
-import 'package:budget/widgets/watchAllWallets.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:intl/intl.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 // returns 0 if no navigation sidebar should be shown
@@ -52,8 +50,6 @@ class NavigationSidebarState extends State<NavigationSidebar> {
 
   @override
   Widget build(BuildContext context) {
-    bool showUsername = appStateSettings["username"] != "";
-    bool showEmail = appStateSettings["currentUserEmail"] != "";
     double widthNavigationSidebar = getWidthNavigationSidebar(context);
     if (widthNavigationSidebar <= 0) {
       return SizedBox.shrink();
@@ -426,7 +422,7 @@ class NavigationSidebarButton extends StatelessWidget {
                 SizedBox(width: 15),
                 Expanded(
                   child: TextFont(
-                    text: label,
+                    text: label.capitalizeFirst,
                     fontSize: 16,
                   ),
                 ),

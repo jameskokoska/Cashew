@@ -19,6 +19,7 @@ class SelectChips<T> extends StatefulWidget {
     this.onLongPress,
     this.wrapped = false,
     this.darkerBackground = false,
+    this.extraHorizontalPadding,
   });
   final List<T> items;
   final bool Function(T) getSelected;
@@ -29,6 +30,7 @@ class SelectChips<T> extends StatefulWidget {
   final Function(T)? onLongPress;
   final bool wrapped;
   final bool darkerBackground;
+  final double? extraHorizontalPadding;
 
   @override
   State<SelectChips<T>> createState() => _SelectChipsState<T>();
@@ -147,7 +149,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
             alignment: Alignment.centerLeft,
             child: widget.wrapped
                 ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: (widget.extraHorizontalPadding ?? 0) + 18),
                     child: Wrap(
                       runSpacing: 10,
                       children: [
@@ -163,7 +166,9 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                       itemBuilder: (context, index) => children[index],
                       itemScrollController: itemScrollController,
                       scrollOffsetController: scrollOffsetController,
-                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              (widget.extraHorizontalPadding ?? 0) + 18),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       // physics:

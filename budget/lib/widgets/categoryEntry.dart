@@ -245,16 +245,15 @@ class CategoryEntry extends StatelessWidget {
                                   ),
                                 )
                               : TextFont(
-                                  text: (extraText ?? "percent-of-spending")
-                                      .toString()
-                                      .tr(namedArgs: {
-                                    "percent": (totalSpent == 0
-                                            ? "0"
-                                            : (categorySpent / totalSpent * 100)
-                                                .abs()
-                                                .toStringAsFixed(0)) +
-                                        "%"
-                                  }),
+                                  text: (totalSpent == 0
+                                          ? "0"
+                                          : (categorySpent / totalSpent * 100)
+                                              .abs()
+                                              .toStringAsFixed(0)) +
+                                      "% " +
+                                      (extraText ?? "of-spending")
+                                          .toString()
+                                          .tr(),
                                   fontSize: 14,
                                   textColor: selected
                                       ? getColor(context, "black")

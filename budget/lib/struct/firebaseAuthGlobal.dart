@@ -1,4 +1,3 @@
-import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -151,8 +151,8 @@ Future<bool> signInGoogle(
     if (waitForCompletion == true) Navigator.of(context).pop();
     openSnackbar(
       SnackbarMessage(
-        title: "Sign-in Error",
-        description: "Check your connection and try again",
+        title: "sign-in-error".tr(),
+        description: "sign-in-error-description".tr(),
         icon: Icons.error_rounded,
         onTap: () async {},
         timeout: Duration(milliseconds: 3400),
@@ -642,7 +642,7 @@ class _BackupManagementState extends State<BackupManagement> {
 
     return PopupFramework(
       title: widget.isClientSync
-          ? "devices".tr()
+          ? "devices".tr().capitalizeFirst
           : widget.isManaging
               ? "backups".tr()
               : "restore-a-backup".tr(),

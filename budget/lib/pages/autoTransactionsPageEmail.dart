@@ -318,7 +318,7 @@ Future<void> parseEmailsInBackground(context,
               pushRoute(
                 context,
                 AddTransactionPage(
-                  title: "Edit Transaction",
+                  title: "edit-transaction".tr(),
                   transaction: transactionToAdd,
                 ),
               );

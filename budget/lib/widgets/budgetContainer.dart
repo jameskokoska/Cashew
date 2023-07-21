@@ -434,23 +434,32 @@ class DaySpending extends StatelessWidget {
                     text: isOutOfRange
                         ? ""
                         : amount < 0
-                            ? "saving-tracking".tr(namedArgs: {
-                                'amount': convertToMoney(
-                                    Provider.of<AllWallets>(context),
-                                    amount.abs()),
-                                'days': budgetRange.end
+                            ? "saving-tracking".tr() +
+                                " " +
+                                convertToMoney(Provider.of<AllWallets>(context),
+                                    amount.abs()) +
+                                " " +
+                                "for".tr() +
+                                " " +
+                                budgetRange.end
                                     .difference(DateTime.now())
                                     .inDays
-                                    .toString(),
-                              })
-                            : "spending-tracking".tr(namedArgs: {
-                                'amount': convertToMoney(
-                                    Provider.of<AllWallets>(context), amount),
-                                'days': budgetRange.end
+                                    .toString() +
+                                " " +
+                                "more-days".tr()
+                            : "spending-tracking".tr() +
+                                " " +
+                                convertToMoney(Provider.of<AllWallets>(context),
+                                    amount.abs()) +
+                                " " +
+                                "for".tr() +
+                                " " +
+                                budgetRange.end
                                     .difference(DateTime.now())
                                     .inDays
-                                    .toString(),
-                              }),
+                                    .toString() +
+                                " " +
+                                "more-days".tr(),
                     fontSize: large ? 15 : 13,
                     textAlign: TextAlign.center,
                   ),

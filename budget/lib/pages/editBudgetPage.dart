@@ -203,7 +203,15 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                   TextFont(
                                     text: budget.periodLength == 1
                                         ? nameRecurrence[budget.reoccurrence]
-                                        : namesRecurrence[budget.reoccurrence],
+                                            .toString()
+                                            .toLowerCase()
+                                            .tr()
+                                            .toLowerCase()
+                                        : namesRecurrence[budget.reoccurrence]
+                                            .toString()
+                                            .toLowerCase()
+                                            .tr()
+                                            .toLowerCase(),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
@@ -221,10 +229,11 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                   ? TextFont(
                                       text: budget.categoryFks == null ||
                                               budget.categoryFks!.length == 0
-                                          ? "All categories budget"
+                                          ? "all-categories-budget".tr()
                                           : budget.categoryFks!.length
                                                   .toString() +
-                                              " category budget",
+                                              " " +
+                                              "category-budget".tr(),
                                       fontSize: 14,
                                     )
                                   : FutureBuilder<int?>(
@@ -367,7 +376,7 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
     {Function? afterDelete}) async {
   return openPopup(
     context,
-    title: "Delete " + budget.name + "?",
+    title: "delete".tr().capitalizeFirst + budget.name + "?",
     icon: Icons.delete_rounded,
     onCancel: () {
       Navigator.pop(context, false);
@@ -377,7 +386,7 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
       Navigator.pop(context, true);
       int result = await database.deleteBudget(context, budget);
       if (result == -1) return;
-      openSnackbar(SnackbarMessage(title: "Deleted budget"));
+      openSnackbar(SnackbarMessage(title: "deleted-budget".tr()));
       if (afterDelete != null) afterDelete();
     },
     onSubmitLabel: "delete".tr(),
@@ -387,9 +396,8 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
 Future<dynamic> deleteAddedTransactionsOnlyBudgetPopup(context, Budget budget) {
   return openPopup(
     context,
-    title: "Delete Budget?",
-    description:
-        "All transactions belonging to this budget will no longer be connected to a budget.",
+    title: "delete-budget-question".tr(),
+    description: "delete-budget-added-warning".tr(),
     icon: Icons.delete_rounded,
     onCancel: () {
       Navigator.pop(context, false);

@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'dart:math';
-import 'dart:developer';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
@@ -13,11 +11,11 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:drift/drift.dart' hide Column;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/timeDigits.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class DailyNotificationsSettings extends StatefulWidget {
@@ -165,7 +163,7 @@ class _UpcomingTransactionsNotificationsSettingsState
                                 pushRoute(
                                   context,
                                   AddTransactionPage(
-                                    title: "Edit Transaction",
+                                    title: "edit-transaction".tr(),
                                     transaction: transaction,
                                   ),
                                 );

@@ -5,7 +5,6 @@ import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
@@ -14,6 +13,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -240,7 +240,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 // SliverToBoxAdapter(
                 //   child: SizedBox(height: 7),
                 // ),
-                getTransactionsSlivers(
+                TransactionEntries(
                   null,
                   null,
                   listID: "TransactionsSearch",
@@ -538,7 +538,11 @@ class _TransactionFiltersSelectionState
           darkerBackground: true,
           items: [null, ...TransactionSpecialType.values],
           getLabel: (TransactionSpecialType? item) {
-            return transactionTypeDisplayToEnum[item] ?? "";
+            return transactionTypeDisplayToEnum[item]
+                    ?.toString()
+                    .toLowerCase()
+                    .tr() ??
+                "";
           },
           onSelected: (TransactionSpecialType? item) {
             if (selectedFilters.transactionTypes.contains(item)) {
@@ -586,9 +590,9 @@ class _TransactionFiltersSelectionState
           ],
           getLabel: (BudgetTransactionFilters item) {
             return item == BudgetTransactionFilters.addedToOtherBudget
-                ? "Added to Other Budgets"
+                ? "added-to-other-budgets".tr()
                 : item == BudgetTransactionFilters.sharedToOtherBudget
-                    ? "Shared to Other Budgets"
+                    ? "shared-to-other-budgets".tr()
                     : "";
           },
           onSelected: (BudgetTransactionFilters item) {
@@ -651,8 +655,8 @@ class _TransactionFiltersSelectionState
                 darkerBackground: true,
                 items: [null, ...snapshot.data!],
                 getLabel: (Budget? item) {
-                  if (item == null) return "No Budget";
-                  return item.name ?? "No Budget";
+                  if (item == null) return "no-budget".tr();
+                  return item.name;
                 },
                 onSelected: (Budget? item) {
                   if (selectedFilters.budgetPks.contains(item?.budgetPk)) {

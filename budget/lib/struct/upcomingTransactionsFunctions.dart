@@ -52,7 +52,8 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
               pushRoute(
                 context,
                 AddTransactionPage(
-                    title: "Edit Transaction", transaction: newTransaction),
+                    title: "edit-transaction".tr(),
+                    transaction: newTransaction),
               );
             },
           ),

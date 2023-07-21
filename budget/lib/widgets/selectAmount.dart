@@ -661,14 +661,6 @@ class _SelectAmountState extends State<SelectAmount> {
                             EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                         openPage: AddWalletPage(title: "add-wallet".tr()),
                         borderRadius: 8,
-                        backgroundColor: dynamicPastel(
-                          context,
-                          Theme.of(context)
-                              .colorScheme
-                              .secondaryContainer
-                              .withOpacity(0.4),
-                          amount: 0.5,
-                        ),
                       ),
                     ),
               SizedBox(height: 5),

@@ -2,24 +2,15 @@ import 'dart:convert';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/fadeIn.dart';
-import 'package:budget/struct/randomConstants.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/widgets/util/watchForDayChange.dart';
 import 'package:budget/widgets/watchAllWallets.dart';
-import 'package:drift/drift.dart' hide Column;
-import 'package:intl/date_symbol_data_custom.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/database/initializeDefaultDatabase.dart';
-import 'package:budget/struct/defaultCategories.dart';
-import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
-import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/struct/scrollBehaviorOverride.dart';
@@ -31,18 +22,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:budget/colors.dart';
-import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/gestures.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:system_theme/system_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/scheduler.dart' show SchedulerBinding, timeDilation;
 import 'package:device_preview/device_preview.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -61,6 +47,8 @@ void main() async {
   entireAppLoaded = false;
   currenciesJSON = await json.decode(
       await rootBundle.loadString('assets/static/generated/currencies.json'));
+  languageNamesJSON = await json
+      .decode(await rootBundle.loadString('assets/static/language-names.json'));
   await initializeSettings();
   tz.initializeTimeZones();
   final String? locationName = await FlutterNativeTimezone.getLocalTimezone();
@@ -71,10 +59,11 @@ void main() async {
       builder: (context) => EasyLocalization(
         useOnlyLangCode: true,
         supportedLocales: [
-          for (String key in languagesDictionary.keys) Locale(key)
+          for (String languageCode in supportedLanguagesSet)
+            Locale(languageCode)
         ],
         path: 'assets/translations/generated',
-        fallbackLocale: Locale(languagesDictionary.keys.toList()[0]),
+        fallbackLocale: Locale(supportedLanguagesSet.toList()[0]),
         child: RestartApp(
           child: InitializeApp(key: appStateKey),
         ),
@@ -84,6 +73,7 @@ void main() async {
 }
 
 late Map<String, dynamic> currenciesJSON;
+late Map<String, dynamic> languageNamesJSON;
 bool biometricsAvailable = false;
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;

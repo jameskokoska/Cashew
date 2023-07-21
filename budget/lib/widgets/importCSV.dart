@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -21,8 +20,6 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
-import 'package:intl/intl.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 class ImportCSV extends StatefulWidget {

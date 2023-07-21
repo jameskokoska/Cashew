@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
-import 'package:universal_io/io.dart';
 
 // default settings, defaultSettings, initial settings
 Future<Map<String, dynamic>> getDefaultPreferences() async {

@@ -5,7 +5,6 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

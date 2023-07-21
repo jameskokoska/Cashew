@@ -1,5 +1,4 @@
 import 'package:budget/database/tables.dart';
-import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
@@ -157,7 +156,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: getColor(context, "lightDarkAccentHeavy")!,
+              color: getColor(context, "lightDarkAccentHeavy"),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -214,7 +213,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: getColor(context, "lightDarkAccentHeavy")!,
+              color: getColor(context, "lightDarkAccentHeavy"),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -288,7 +287,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: getColor(context, "lightDarkAccentHeavy")!,
+              color: getColor(context, "lightDarkAccentHeavy"),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -583,7 +582,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                                 horizontal: 18, vertical: 15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              color: getColor(context, "lightDarkAccentHeavy")!,
+                              color: getColor(context, "lightDarkAccentHeavy"),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

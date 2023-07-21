@@ -1,30 +1,6 @@
-import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/noResults.dart';
-import 'package:budget/widgets/scrollbarWrap.dart';
-import 'package:budget/database/tables.dart';
-import 'package:budget/functions.dart';
-import 'package:budget/pages/addTransactionPage.dart';
-import 'package:budget/pages/budgetPage.dart';
-import 'package:budget/pages/transactionsSearchPage.dart';
-import 'package:budget/struct/databaseGlobal.dart';
-import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/selectedTransactionsActionBar.dart';
-import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:budget/main.dart';
-import 'package:budget/colors.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'dart:math';
 import 'package:flutter/rendering.dart';
-import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
-import 'package:implicitly_animated_reorderable_list/transitions.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class SliverPinnedOverlapInjector extends SingleChildRenderObjectWidget {
   const SliverPinnedOverlapInjector({
