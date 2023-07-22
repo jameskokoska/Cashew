@@ -26,9 +26,7 @@ import 'package:provider/provider.dart';
 class EditWalletsPage extends StatefulWidget {
   EditWalletsPage({
     Key? key,
-    required this.title,
   }) : super(key: key);
-  final String title;
 
   @override
   _EditWalletsPageState createState() => _EditWalletsPageState();
@@ -64,7 +62,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: widget.title,
+        title: "edit-wallets".tr(),
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(

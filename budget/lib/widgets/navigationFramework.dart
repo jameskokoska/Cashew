@@ -176,10 +176,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       NotificationsPage(), //6
       WalletDetailsPage(wallet: null), //7
       AccountsPage(key: accountsPageStateKey), // 8
-      EditWalletsPage(title: "edit-wallets".tr()), //9
-      EditBudgetPage(title: "edit-budgets".tr()), //10
-      EditCategoriesPage(title: "edit-categories".tr()), //11
-      EditAssociatedTitlesPage(title: "edit-titles".tr()), //12
+      EditWalletsPage(), //9
+      EditBudgetPage(), //10
+      EditCategoriesPage(), //11
+      EditAssociatedTitlesPage(), //12
       AboutPage(), //13
     ];
 

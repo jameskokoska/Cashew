@@ -23,9 +23,7 @@ import 'package:budget/modified/reorderable_list.dart';
 class EditAssociatedTitlesPage extends StatefulWidget {
   EditAssociatedTitlesPage({
     Key? key,
-    required this.title,
   }) : super(key: key);
-  final String title;
 
   @override
   _EditAssociatedTitlesPageState createState() =>
@@ -62,7 +60,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: widget.title,
+        title: "edit-titles".tr(),
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(

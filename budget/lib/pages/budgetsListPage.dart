@@ -51,7 +51,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
           onPressed: () {
             pushRoute(
               context,
-              EditBudgetPage(title: "edit-budgets".tr()),
+              EditBudgetPage(),
             );
           },
           icon: Icon(

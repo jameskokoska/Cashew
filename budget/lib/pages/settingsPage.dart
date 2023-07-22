@@ -309,7 +309,7 @@ class MorePages extends StatelessWidget {
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditWalletsPage(title: "edit-wallets".tr()),
+                  openPage: EditWalletsPage(),
                   title: "wallets".tr(),
                   icon: Icons.account_balance_wallet_rounded,
                   isOutlined: true,
@@ -317,7 +317,7 @@ class MorePages extends StatelessWidget {
               ),
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditBudgetPage(title: "edit-budgets".tr()),
+                  openPage: EditBudgetPage(),
                   title: "budgets".tr(),
                   icon: MoreIcons.chart_pie,
                   iconScale: 0.83,
@@ -334,7 +334,7 @@ class MorePages extends StatelessWidget {
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditCategoriesPage(title: "edit-categories".tr()),
+                  openPage: EditCategoriesPage(),
                   title: "categories".tr(),
                   icon: Icons.category_rounded,
                   isOutlined: true,
@@ -342,7 +342,7 @@ class MorePages extends StatelessWidget {
               ),
               Expanded(
                 child: SettingsContainerOpenPage(
-                  openPage: EditAssociatedTitlesPage(title: "edit-titles".tr()),
+                  openPage: EditAssociatedTitlesPage(),
                   title: "titles".tr(),
                   icon: Icons.text_fields_rounded,
                   isOutlined: true,

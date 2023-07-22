@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.5.8
+    Fixed edit pages titles translations
     < 3.5.7
     Fixed line chart showing an extra max X point
     Fixed past spending line chart bottom titles spreading

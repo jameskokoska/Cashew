@@ -26,9 +26,7 @@ import 'package:budget/modified/reorderable_list.dart';
 class EditCategoriesPage extends StatefulWidget {
   EditCategoriesPage({
     Key? key,
-    required this.title,
   }) : super(key: key);
-  final String title;
 
   @override
   _EditCategoriesPageState createState() => _EditCategoriesPageState();
@@ -64,7 +62,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: widget.title,
+        title: "edit-categories".tr(),
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(

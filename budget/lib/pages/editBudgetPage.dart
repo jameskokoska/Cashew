@@ -27,9 +27,7 @@ import 'package:provider/provider.dart';
 class EditBudgetPage extends StatefulWidget {
   EditBudgetPage({
     Key? key,
-    required this.title,
   }) : super(key: key);
-  final String title;
 
   @override
   _EditBudgetPageState createState() => _EditBudgetPageState();
@@ -65,7 +63,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: widget.title,
+        title: "edit-budgets".tr(),
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
