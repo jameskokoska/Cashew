@@ -1,4 +1,3 @@
-
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ class OpenContainerNavigation extends StatelessWidget {
     this.closedColor,
     this.borderRadius = 250,
     this.closedElevation,
+    this.customBorderRadius,
   }) : super(key: key);
 
   final Widget openPage;
@@ -19,6 +19,7 @@ class OpenContainerNavigation extends StatelessWidget {
   final Color? closedColor;
   final double borderRadius;
   final double? closedElevation;
+  final BorderRadiusGeometry? customBorderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class OpenContainerNavigation extends StatelessWidget {
         );
       });
       return ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),
         child: Container(
           color: closedColor ?? Colors.transparent,
           child: child,
@@ -54,9 +55,10 @@ class OpenContainerNavigation extends StatelessWidget {
         return button(openContainer);
       },
       closedShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(borderRadius),
-        ),
+        borderRadius: customBorderRadius ??
+            BorderRadius.all(
+              Radius.circular(borderRadius),
+            ),
       ),
     );
   }

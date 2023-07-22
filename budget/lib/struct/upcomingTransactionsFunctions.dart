@@ -51,9 +51,7 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
             onTap: () {
               pushRoute(
                 context,
-                AddTransactionPage(
-                    title: "edit-transaction".tr(),
-                    transaction: newTransaction),
+                AddTransactionPage(transaction: newTransaction),
               );
             },
           ),

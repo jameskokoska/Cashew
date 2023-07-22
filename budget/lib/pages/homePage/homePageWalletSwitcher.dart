@@ -58,9 +58,7 @@ class HomePageWalletSwitcher extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 6, right: 6),
                             child: AddButton(
                               onTap: () {},
-                              openPage: AddWalletPage(
-                                title: "add-wallet".tr(),
-                              ),
+                              openPage: AddWalletPage(),
                             ),
                           ),
                         ),

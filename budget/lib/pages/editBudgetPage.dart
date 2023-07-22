@@ -72,9 +72,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "add-budget".tr(),
-              openPage: AddBudgetPage(
-                title: "add-budget".tr(),
-              ),
+              openPage: AddBudgetPage(),
             ),
           ),
         ),
@@ -167,7 +165,6 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                             deleteBudgetPopup(context, budget);
                           },
                           openPage: AddBudgetPage(
-                            title: "edit-budget".tr(),
                             budget: budget,
                           ),
                           content: Column(

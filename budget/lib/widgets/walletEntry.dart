@@ -86,7 +86,7 @@ class WalletEntry extends StatelessWidget {
                             builder: (context, snapshot) {
                               return CountNumber(
                                 count: (snapshot.data ?? 0 * -1),
-                                duration: Duration(milliseconds: 1500),
+                                duration: Duration(milliseconds: 1000),
                                 dynamicDecimals: true,
                                 decimals: wallet.decimals,
                                 initialCount: (snapshot.data ?? 0 * -1),
@@ -144,8 +144,7 @@ class WalletEntry extends StatelessWidget {
               }
             },
             onLongPress: () {
-              pushRoute(context,
-                  AddWalletPage(title: "edit-wallet".tr(), wallet: wallet));
+              pushRoute(context, AddWalletPage(wallet: wallet));
             },
           );
         },

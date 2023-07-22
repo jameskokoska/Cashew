@@ -270,9 +270,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                           child: AddButton(
                             onTap: () {},
                             padding: EdgeInsets.zero,
-                            openPage: AddCategoryPage(
-                              title: "add-category".tr(),
-                            ),
+                            openPage: AddCategoryPage(),
                             width: 70,
                           ),
                         ),
@@ -381,9 +379,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                                         onTap: () {},
                                         height: constraints.maxWidth,
                                         width: constraints.maxWidth,
-                                        openPage: AddCategoryPage(
-                                          title: "add-category".tr(),
-                                        ),
+                                        openPage: AddCategoryPage(),
                                       );
                                     },
                                   ),
@@ -476,7 +472,6 @@ class _SelectCategoryState extends State<SelectCategory> {
                   //           onTap: () {},
                   //           padding: EdgeInsets.zero,
                   //           openPage: AddCategoryPage(
-                  //             title: "add-category".tr(),
                   //           ),
                   //           width: size + 20,
                   //           height: size + 20,

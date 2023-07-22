@@ -42,7 +42,7 @@ runNotificationPayLoadsNoContext(payloadData) {
   if (payloadData == "addTransaction") {
     navigatorKey.currentState!.push(
       MaterialPageRoute(
-        builder: (context) => AddTransactionPage(title: "add-transaction".tr()),
+        builder: (context) => AddTransactionPage(),
       ),
     );
   } else if (payloadData == "upcomingTransaction") {
@@ -62,7 +62,7 @@ void runNotificationPayLoads(context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddTransactionPage(title: "add-transaction".tr()),
+        builder: (context) => AddTransactionPage(),
       ),
     );
   } else if (notificationPayload == "upcomingTransaction") {

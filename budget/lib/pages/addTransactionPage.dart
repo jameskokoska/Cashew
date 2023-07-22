@@ -57,12 +57,10 @@ dynamic transactionTypeDisplayToEnum = {
 class AddTransactionPage extends StatefulWidget {
   AddTransactionPage({
     Key? key,
-    required this.title,
     this.transaction,
     this.selectedBudget,
     this.selectedType,
   }) : super(key: key);
-  final String title;
 
   //When a transaction is passed in, we are editing that transaction
   final Transaction? transaction;
@@ -422,7 +420,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   late TextEditingController _titleInputController;
   late TextEditingController _noteInputController;
-  List<TransactionWallet> allWallets = [];
 
   @override
   void initState() {
@@ -499,7 +496,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       });
     }
     Future.delayed(Duration.zero, () async {
-      allWallets = await database.getAllWallets();
       selectedWallet = await database.getWalletInstance(
           widget.transaction == null
               ? appStateSettings["selectedWallet"]
@@ -543,7 +539,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     underTitleSpace: false,
                     padding: false,
                     child: SelectAmount(
-                      allWallets: allWallets,
+                      enableWalletPicker: true,
                       selectedWallet: selectedWallet,
                       setSelectedWallet: setSelectedWalletPk,
                       padding: EdgeInsets.symmetric(horizontal: 18),
@@ -770,7 +766,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         },
         child: PageFramework(
           resizeToAvoidBottomInset: true,
-          title: widget.title,
+          title: widget.transaction == null
+              ? "add-transaction".tr()
+              : "edit-transaction".tr(),
           dragDownToDismiss: true,
           onBackButton: () async {
             if (widget.transaction != null) {
@@ -851,7 +849,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     padding: false,
                                     underTitleSpace: false,
                                     child: SelectAmount(
-                                      allWallets: allWallets,
+                                      enableWalletPicker: true,
                                       selectedWallet: selectedWallet,
                                       setSelectedWallet: setSelectedWalletPk,
                                       padding:
@@ -889,7 +887,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               padding: false,
                               underTitleSpace: false,
                               child: SelectAmount(
-                                allWallets: allWallets,
+                                enableWalletPicker: true,
                                 selectedWallet: selectedWallet,
                                 setSelectedWallet: setSelectedWalletPk,
                                 padding: EdgeInsets.symmetric(horizontal: 18),
@@ -1004,9 +1002,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           await pushRoute(
                             context,
                             AddCategoryPage(
-                              title: selectedCategory == null
-                                  ? "add-category".tr()
-                                  : "edit-category".tr(),
                               category: selectedCategory,
                             ),
                           );
@@ -1065,7 +1060,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 10),
                                   child: SelectAmount(
-                                    allWallets: allWallets,
+                                    enableWalletPicker: true,
                                     selectedWallet: selectedWallet,
                                     setSelectedWallet: setSelectedWalletPk,
                                     padding:
@@ -1384,6 +1379,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 5),
                                   child: SelectChips(
+                                    onLongPress: (TransactionWallet wallet) {
+                                      pushRoute(
+                                        context,
+                                        AddWalletPage(
+                                          wallet: wallet,
+                                        ),
+                                      );
+                                    },
                                     items:
                                         Provider.of<AllWallets>(context).list,
                                     getSelected: (TransactionWallet wallet) {
@@ -1412,8 +1415,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       width: 40,
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 5, vertical: 1),
-                                      openPage: AddWalletPage(
-                                          title: "add-wallet".tr()),
+                                      openPage: AddWalletPage(),
                                       borderRadius: 8,
                                     ),
                                   ),
@@ -2251,7 +2253,7 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
       stream: database.watchAllAddableBudgets(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data!.length <= 0) return SizedBox.shrink();
+          if (snapshot.data!.length <= 0) return Container();
           return HorizontalBreakAbove(
             enabled:
                 enableDoubleColumn(context) && widget.horizontalBreak == true,
@@ -2260,12 +2262,19 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
                 child: SelectChips(
                   wrapped: widget.wrapped ?? enableDoubleColumn(context),
                   extraHorizontalPadding: widget.extraHorizontalPadding,
+                  onLongPress: (Budget? item) {
+                    pushRoute(
+                      context,
+                      AddBudgetPage(
+                        budget: item,
+                      ),
+                    );
+                  },
                   extraWidget: AddButton(
                     onTap: () {},
                     width: 40,
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                     openPage: AddBudgetPage(
-                      title: "add-budget".tr(),
                       isAddedOnlyBudget: true,
                     ),
                     borderRadius: 8,
@@ -2302,7 +2311,7 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
                 )),
           );
         } else {
-          return SizedBox.shrink();
+          return Container();
         }
       },
     );

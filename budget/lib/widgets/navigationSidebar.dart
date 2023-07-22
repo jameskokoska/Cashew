@@ -119,11 +119,13 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                                     getColor(context, "black"),
                                                 fontSize: 48,
                                                 fontWeight: FontWeight.bold,
-                                                text: DateFormat(
-                                                        'h:mm',
-                                                        context.locale
-                                                            .toString())
-                                                    .format(now),
+                                                text: DateFormat.jm(context
+                                                        .locale
+                                                        .toString())
+                                                    .format(now)
+                                                    .replaceAll("AM", "")
+                                                    .replaceAll("PM", "")
+                                                    .replaceAll(" ", ""),
                                               ),
                                               TextFont(
                                                 textColor:

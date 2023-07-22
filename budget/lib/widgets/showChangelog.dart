@@ -10,6 +10,18 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.5.7
+    Fixed line chart showing an extra max X point
+    Fixed past spending line chart bottom titles spreading
+    Fixed line chart bottom titles if not full number
+    Past budgets fade in when loaded
+    Fixed transaction entry border radius
+    Fixed transactions count for transactions amount boxes
+    Sped up counting number animations
+    Navigation bar clock uses 24 hour format respective of locale
+    Long press choice chips to edit corresponding item
+    Enter amount watches wallets
+    Today indicator animation fixes
     < 3.5.6
     Fixed offset of sliver sticky header, pushed it up by 1 pixel
     Fixed force set budget amount before adding when total null

@@ -91,7 +91,8 @@ class TransactionsAmountBox extends StatelessWidget {
                           text: snapshot.hasData == false ||
                                   snapshot.data![0] == null
                               ? "/"
-                              : (" " +
+                              : (snapshot.data![0].toString() +
+                                  " " +
                                   (snapshot.data![0] == 1
                                       ? "transaction".tr().toLowerCase()
                                       : "transactions".tr().toLowerCase())),

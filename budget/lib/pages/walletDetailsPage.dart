@@ -84,7 +84,6 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                   pushRoute(
                     context,
                     AddWalletPage(
-                      title: "edit-wallet".tr(),
                       wallet: widget.wallet,
                     ),
                   );

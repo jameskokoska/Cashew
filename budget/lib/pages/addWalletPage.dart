@@ -23,10 +23,8 @@ import 'package:budget/colors.dart';
 class AddWalletPage extends StatefulWidget {
   AddWalletPage({
     Key? key,
-    required this.title,
     this.wallet,
   }) : super(key: key);
-  final String title;
 
   //When a wallet is passed in, we are editing that wallet
   final TransactionWallet? wallet;
@@ -260,7 +258,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           key: addWalletPageKey,
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
-          title: widget.title,
+          title: widget.wallet == null ? "add-wallet".tr() : "edit-wallet".tr(),
           onBackButton: () async {
             if (widget.wallet != null) {
               discardChangesPopup(

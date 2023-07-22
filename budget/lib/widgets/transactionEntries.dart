@@ -204,7 +204,6 @@ class TransactionEntries extends StatelessWidget {
                                     .transactionPk),
                                 category: transactionList[realIndex].category,
                                 openPage: AddTransactionPage(
-                                  title: "edit-transaction".tr(),
                                   transaction:
                                       transactionList[realIndex].transaction,
                                 ),
@@ -265,7 +264,6 @@ class TransactionEntries extends StatelessWidget {
                                   .transactionPk),
                               category: transactionList[realIndex].category,
                               openPage: AddTransactionPage(
-                                title: "edit-transaction".tr(),
                                 transaction:
                                     transactionList[realIndex].transaction,
                               ),
@@ -313,7 +311,6 @@ class TransactionEntries extends StatelessWidget {
                               key: ValueKey(item.transaction.transactionPk),
                               category: item.category,
                               openPage: AddTransactionPage(
-                                title: "edit-transaction".tr(),
                                 transaction: item.transaction,
                               ),
                               transaction: item.transaction,

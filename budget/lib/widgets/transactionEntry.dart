@@ -135,22 +135,28 @@ class TransactionEntry extends StatelessWidget {
           builder: (context, value, _) {
             bool selected = globalSelectedID.value[listID ?? "0"]!
                 .contains(transaction.transactionPk);
+            bool isTransactionBeforeSelected = transactionBefore != null &&
+                globalSelectedID.value[listID ?? "0"]!
+                    .contains(transactionBefore?.transactionPk);
+            bool isTransactionAfterSelected = transactionAfter != null &&
+                globalSelectedID.value[listID ?? "0"]!
+                    .contains(transactionAfter?.transactionPk);
             return Padding(
               padding: const EdgeInsets.only(left: 13, right: 13),
               child: OpenContainerNavigation(
-                borderRadius: 15,
+                borderRadius: 0,
+                customBorderRadius: BorderRadius.vertical(
+                  top: Radius.circular(
+                    isTransactionBeforeSelected ? 0 : 12,
+                  ),
+                  bottom: Radius.circular(
+                    isTransactionAfterSelected ? 0 : 12,
+                  ),
+                ),
                 closedColor: containerColor == null
                     ? Theme.of(context).canvasColor
                     : containerColor,
                 button: (openContainer) {
-                  bool isTransactionBeforeSelected =
-                      transactionBefore != null &&
-                          globalSelectedID.value[listID ?? "0"]!
-                              .contains(transactionBefore?.transactionPk);
-                  bool isTransactionAfterSelected = transactionAfter != null &&
-                      globalSelectedID.value[listID ?? "0"]!
-                          .contains(transactionAfter?.transactionPk);
-
                   return Tappable(
                     color: Colors.transparent,
                     borderRadius: 15,
@@ -297,7 +303,10 @@ class TransactionEntry extends StatelessWidget {
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
-                                                                  text: "For " +
+                                                                  text: "for"
+                                                                          .tr()
+                                                                          .capitalizeFirst +
+                                                                      " " +
                                                                       snapshot
                                                                           .data!
                                                                           .name,
@@ -655,7 +664,7 @@ class TransactionEntry extends StatelessWidget {
                                                     context),
                                                 transaction.walletFk) ??
                                             1),
-                                    duration: Duration(milliseconds: 2000),
+                                    duration: Duration(milliseconds: 1000),
                                     dynamicDecimals: true,
                                     initialCount: (transaction.amount.abs()) *
                                         (amountRatioToPrimaryCurrencyGivenPk(

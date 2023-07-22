@@ -2,7 +2,6 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -246,17 +245,19 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
-                  interval: getIsFullScreen(context) ? 1 : null,
-                  showTitles: true,
-                  getTitlesWidget: (value, _) {
-                    DateTime startDate = widget.dateRanges[0].start;
-                    if (widget.spots.length - 1 - value.toInt() <
-                            widget.dateRanges.length &&
-                        widget.spots.length - 1 - value.toInt() >= 0) {
-                      startDate = widget
-                          .dateRanges[widget.spots.length - 1 - value.toInt()]
-                          .start;
-                    }
+                interval: null,
+                showTitles: true,
+                getTitlesWidget: (value, meta) {
+                  DateTime startDate = widget.dateRanges[0].start;
+                  if (widget.spots.length - 1 - value.round() <
+                          widget.dateRanges.length &&
+                      widget.spots.length - 1 - value.round() >= 0) {
+                    startDate = widget
+                        .dateRanges[widget.spots.length - 1 - value.round()]
+                        .start;
+                  }
+                  if (value.toStringAsFixed(2) ==
+                      value.round().toStringAsFixed(2)) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: TextFont(
@@ -278,7 +279,10 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                             .withOpacity(0.5),
                       ),
                     );
-                  }),
+                  }
+                  return SizedBox.shrink();
+                },
+              ),
             ),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

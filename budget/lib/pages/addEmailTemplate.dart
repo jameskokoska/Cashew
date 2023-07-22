@@ -20,11 +20,9 @@ import 'package:googleapis/gmail/v1.dart' as gMail;
 class AddEmailTemplate extends StatefulWidget {
   AddEmailTemplate({
     Key? key,
-    required this.title,
     required this.messagesList,
     this.scannerTemplate,
   }) : super(key: key);
-  final String title;
   final List<gMail.Message> messagesList;
   //When a transaction is passed in, we are editing that transaction
   final ScannerTemplate? scannerTemplate;
@@ -393,7 +391,9 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
             children: [
               PageFramework(
                 dragDownToDismiss: true,
-                title: widget.title,
+                title: widget.scannerTemplate == null
+                    ? "Add Template"
+                    : "Edit Template",
                 onBackButton: () async {
                   if (widget.scannerTemplate != null) {
                     discardChangesPopup(

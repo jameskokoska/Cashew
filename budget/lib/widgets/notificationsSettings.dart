@@ -163,7 +163,6 @@ class _UpcomingTransactionsNotificationsSettingsState
                                 pushRoute(
                                   context,
                                   AddTransactionPage(
-                                    title: "edit-transaction".tr(),
                                     transaction: transaction,
                                   ),
                                 );

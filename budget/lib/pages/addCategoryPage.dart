@@ -28,10 +28,8 @@ import 'package:budget/colors.dart';
 class AddCategoryPage extends StatefulWidget {
   AddCategoryPage({
     Key? key,
-    required this.title,
     this.category,
   }) : super(key: key);
-  final String title;
 
   //When a category is passed in, we are editing that transaction
   final TransactionCategory? category;
@@ -204,7 +202,9 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         child: PageFramework(
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
-          title: widget.title,
+          title: widget.category == null
+              ? "add-category".tr()
+              : "edit-category".tr(),
           onBackButton: () async {
             if (widget.category != null) {
               discardChangesPopup(context,

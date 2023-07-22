@@ -94,7 +94,7 @@ class CountNumber extends StatefulWidget {
     required this.count,
     required this.textBuilder,
     this.fontSize = 16,
-    this.duration = const Duration(milliseconds: 3000),
+    this.duration = const Duration(milliseconds: 1000),
     this.curve = Curves.easeOutQuint,
     this.initialCount = 0,
     this.decimals,

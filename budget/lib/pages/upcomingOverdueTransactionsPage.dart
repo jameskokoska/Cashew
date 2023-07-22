@@ -83,7 +83,6 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                                   transaction: transaction),
                               TransactionEntry(
                                 openPage: AddTransactionPage(
-                                  title: "edit-transaction".tr(),
                                   transaction: transaction,
                                 ),
                                 transaction: transaction,

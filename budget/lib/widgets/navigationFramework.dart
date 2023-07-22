@@ -264,7 +264,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   //       fab: FAB(
                   //         tooltip: "Add Transaction",
                   //         openPage: AddTransactionPage(
-                  //           title: "Add Transaction",
+                  //
                   //         ),
                   //       ),
                   //       condition: currentPage == 0 || currentPage == 1,
@@ -289,7 +289,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   //     fab: FAB(
                   //       tooltip: "Add Transaction",
                   //       openPage: AddTransactionPage(
-                  //         title: "Add Transaction",
+                  //
                   //       ),
                   //     ),
                   //     condition: currentPage == 0 || currentPage == 1,
@@ -298,16 +298,14 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   AnimateFAB(
                     fab: FAB(
                       tooltip: "add-transaction".tr(),
-                      openPage: AddTransactionPage(
-                        title: "add-transaction".tr(),
-                      ),
+                      openPage: AddTransactionPage(),
                     ),
                     condition: currentPage == 0 || currentPage == 1,
                   ),
                   AnimateFAB(
                     fab: FAB(
                       tooltip: "add-budget".tr(),
-                      openPage: AddBudgetPage(title: "add-budget".tr()),
+                      openPage: AddBudgetPage(),
                     ),
                     condition: currentPage == 2,
                   ),

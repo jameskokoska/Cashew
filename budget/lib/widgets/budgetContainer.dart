@@ -378,7 +378,6 @@ class BudgetContainer extends StatelessWidget {
                     pushRoute(
                       context,
                       AddBudgetPage(
-                        title: "edit-budget".tr(),
                         budget: budget,
                       ),
                     );
@@ -868,12 +867,12 @@ class TodayIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: FractionalOffset(percent / 100, 0),
-      child: SlideFadeTransition(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SlideFadeTransition(
+            child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
                   color: getColor(context, "black")),
@@ -890,7 +889,9 @@ class TodayIndicator extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+          ),
+          FadeIn(
+            child: Container(
               width: 3,
               height: large ? 27 : 22,
               decoration: BoxDecoration(
@@ -898,8 +899,8 @@ class TodayIndicator extends StatelessWidget {
                 color: getColor(context, "black").withOpacity(0.4),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

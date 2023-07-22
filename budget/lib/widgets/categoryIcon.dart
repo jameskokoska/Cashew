@@ -106,7 +106,6 @@ class CategoryIcon extends StatelessWidget {
                         pushRoute(
                           context,
                           AddCategoryPage(
-                            title: "edit-category".tr(),
                             category: category,
                           ),
                         );

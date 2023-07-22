@@ -180,7 +180,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 child: FAB(
                   tooltip: "add-transaction".tr(),
                   openPage: AddTransactionPage(
-                    title: "add-transaction".tr(),
                     selectedBudget: widget.budget.sharedKey != null ||
                             widget.budget.addedTransactionsOnly == true
                         ? widget.budget
@@ -217,7 +216,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   pushRoute(
                     context,
                     AddBudgetPage(
-                      title: "edit-budget".tr(),
                       budget: widget.budget,
                     ),
                   );

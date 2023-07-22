@@ -44,7 +44,6 @@ class CreditDebtTransactions extends StatelessWidget {
                 child: FAB(
                   tooltip: isCredit ? "Add Credit" : "Add Debt",
                   openPage: AddTransactionPage(
-                    title: "add-transaction".tr(),
                     selectedType: isCredit
                         ? TransactionSpecialType.credit
                         : TransactionSpecialType.debt,
@@ -103,6 +102,7 @@ class CreditDebtTransactions extends StatelessWidget {
                                   snapshot.data![0] == null
                               ? "/"
                               : snapshot.data![0].toString() +
+                                  " " +
                                   (snapshot.data![0] == 1
                                       ? "transaction".tr().toLowerCase()
                                       : "transactions".tr().toLowerCase()),
@@ -152,7 +152,6 @@ class CreditDebtTransactions extends StatelessWidget {
                           animation: animation,
                           child: TransactionEntry(
                             openPage: AddTransactionPage(
-                              title: "edit-transaction".tr(),
                               transaction: item,
                             ),
                             transaction: item,

@@ -41,7 +41,6 @@ class HomeUpcomingTransactionSlivers extends StatelessWidget {
                       TransactionEntry(
                         useHorizontalPaddingConstrained: false,
                         openPage: AddTransactionPage(
-                          title: "edit-transaction".tr(),
                           transaction: transaction,
                         ),
                         transaction: transaction,

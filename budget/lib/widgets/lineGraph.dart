@@ -58,7 +58,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          right: 10 + extraHorizontalPadding, top: 8, bottom: 0),
+          right: 15 + extraHorizontalPadding, top: 8, bottom: 0),
       child: GestureDetector(
         child: LineChart(
           data,
@@ -86,7 +86,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             ? widget.maxPair.y
             : widget.maxPair.y + widget.maxPair.y * 0.7,
         maxX: loaded
-            ? widget.maxPair.x + 1
+            ? widget.maxPair.x
             : widget.maxPair.x - widget.maxPair.x * 0.7,
         // axisTitleData: axisTitleData,
         titlesData: titlesData,
@@ -157,21 +157,37 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               }
               DateTime currentDate =
                   widget.endDate == null ? DateTime.now() : widget.endDate!;
+              // double valueBefore = value - titleMeta.appliedInterval;
+              // print(valueBefore);
+              // print(value);
+              // print(titleMeta.max);
+
+              String text = getWordedDateShort(
+                DateTime(
+                  currentDate.year,
+                  currentDate.month,
+                  currentDate.day - widget.maxPair.x.toInt() + value.round(),
+                ),
+                showTodayTomorrow: false,
+              );
+
+              // String textBefore = getWordedDateShort(
+              //   DateTime(
+              //     currentDate.year,
+              //     currentDate.month,
+              //     currentDate.day -
+              //         widget.maxPair.x.toInt() +
+              //         valueBefore.round(),
+              //   ),
+              //   showTodayTomorrow: false,
+              // );
+
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextFont(
                   textAlign: TextAlign.center,
                   fontSize: 13,
-                  text: getWordedDateShort(
-                    DateTime(
-                      currentDate.year,
-                      currentDate.month,
-                      currentDate.day -
-                          widget.maxPair.x.toInt() +
-                          value.toInt(),
-                    ),
-                    showTodayTomorrow: false,
-                  ),
+                  text: text,
                   textColor: dynamicPastel(context, widget.color,
                           amount: 0.8, inverse: true)
                       .withOpacity(0.5),

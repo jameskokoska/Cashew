@@ -1,6 +1,8 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
@@ -134,9 +136,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       bottom: MediaQuery.of(context).viewPadding.bottom),
                   child: FAB(
                     tooltip: "add-transaction".tr(),
-                    openPage: AddTransactionPage(
-                      title: "add-transaction".tr(),
-                    ),
+                    openPage: AddTransactionPage(),
                   ),
                 ),
               ),
@@ -614,6 +614,14 @@ class _TransactionFiltersSelectionState
               return SelectChips(
                 darkerBackground: true,
                 items: snapshot.data!,
+                onLongPress: (TransactionWallet? item) {
+                  pushRoute(
+                    context,
+                    AddWalletPage(
+                      wallet: item,
+                    ),
+                  );
+                },
                 getLabel: (TransactionWallet item) {
                   return item.name;
                 },
@@ -654,6 +662,14 @@ class _TransactionFiltersSelectionState
               return SelectChips(
                 darkerBackground: true,
                 items: [null, ...snapshot.data!],
+                onLongPress: (Budget? item) {
+                  pushRoute(
+                    context,
+                    AddBudgetPage(
+                      budget: item,
+                    ),
+                  );
+                },
                 getLabel: (Budget? item) {
                   if (item == null) return "no-budget".tr();
                   return item.name;

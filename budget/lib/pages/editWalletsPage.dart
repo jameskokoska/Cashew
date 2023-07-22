@@ -71,9 +71,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "add-wallet".tr(),
-              openPage: AddWalletPage(
-                title: "add-wallet".tr(),
-              ),
+              openPage: AddWalletPage(),
             ),
           ),
         ),
@@ -197,7 +195,6 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                         deleteWalletPopup(context, wallet);
                       },
                       openPage: AddWalletPage(
-                        title: "edit-wallet".tr(),
                         wallet: wallet,
                       ),
                       key: ValueKey(index),
@@ -262,6 +259,14 @@ void deleteWalletPopup(context, TransactionWallet wallet,
                 items: walletsWithoutOneDeleted,
                 getLabel: (TransactionWallet item) {
                   return item.name;
+                },
+                onLongPress: (TransactionWallet? item) {
+                  pushRoute(
+                    context,
+                    AddWalletPage(
+                      wallet: item,
+                    ),
+                  );
                 },
                 onSelected: (TransactionWallet item) {
                   Navigator.pop(context, item.walletPk);

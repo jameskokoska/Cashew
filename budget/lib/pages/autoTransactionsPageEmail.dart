@@ -318,7 +318,6 @@ Future<void> parseEmailsInBackground(context,
               pushRoute(
                 context,
                 AddTransactionPage(
-                  title: "edit-transaction".tr(),
                   transaction: transactionToAdd,
                 ),
               );
@@ -540,7 +539,6 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
           ),
           OpenContainerNavigation(
             openPage: AddEmailTemplate(
-              title: "Add Template",
               messagesList: messagesList,
             ),
             borderRadius: 15,
@@ -589,7 +587,6 @@ class ScannerTemplateEntry extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
       child: OpenContainerNavigation(
         openPage: AddEmailTemplate(
-          title: "Add Template",
           messagesList: messagesList,
           scannerTemplate: scannerTemplate,
         ),

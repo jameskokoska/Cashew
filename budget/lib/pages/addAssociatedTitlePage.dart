@@ -14,10 +14,8 @@ import 'dart:async';
 class AddAssociatedTitlePage extends StatefulWidget {
   AddAssociatedTitlePage({
     Key? key,
-    required this.title,
     this.associatedTitle,
   }) : super(key: key);
-  final String title;
 
   //When a Title is passed in, we are editing that Title
   final TransactionAssociatedTitle? associatedTitle;
@@ -124,7 +122,8 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
   @override
   Widget build(BuildContext context) {
     return PopupFramework(
-      title: widget.title,
+      title:
+          widget.associatedTitle == null ? "add-title".tr() : "edit-title".tr(),
       child: Column(
         children: [
           Row(

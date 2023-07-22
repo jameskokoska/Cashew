@@ -59,7 +59,6 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 child: FAB(
                   tooltip: "add-subscription".tr(),
                   openPage: AddTransactionPage(
-                    title: "add-transaction".tr(),
                     selectedType: TransactionSpecialType.subscription,
                   ),
                 ),
@@ -262,7 +261,6 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                               ),
                               TransactionEntry(
                                 openPage: AddTransactionPage(
-                                  title: "edit-transaction".tr(),
                                   transaction: transaction,
                                 ),
                                 transaction: transaction,

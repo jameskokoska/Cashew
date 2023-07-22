@@ -8,7 +8,6 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -29,7 +28,7 @@ class SelectAmount extends StatefulWidget {
     this.onlyShowCurrencyIcon = false,
     this.allowZero = false,
     this.padding = EdgeInsets.zero,
-    this.allWallets,
+    this.enableWalletPicker = false,
     this.setSelectedWallet,
     this.selectedWallet,
   }) : super(key: key);
@@ -43,7 +42,7 @@ class SelectAmount extends StatefulWidget {
   final bool onlyShowCurrencyIcon;
   final bool allowZero;
   final EdgeInsets padding;
-  final List<TransactionWallet>? allWallets;
+  final bool enableWalletPicker;
   final Function(TransactionWallet)? setSelectedWallet;
   final TransactionWallet? selectedWallet;
 
@@ -466,8 +465,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                 ),
                               ),
                             ),
-                            widget.allWallets == null ||
-                                    widget.allWallets!.length <= 1 ||
+                            widget.enableWalletPicker == false ||
                                     Provider.of<AllWallets>(context)
                                             .list
                                             .length <=
@@ -512,8 +510,10 @@ class _SelectAmountState extends State<SelectAmount> {
                                                     // get the index of the primary wallet
                                                     int index = 0;
                                                     for (TransactionWallet wallet
-                                                        in widget.allWallets ??
-                                                            []) {
+                                                        in Provider.of<
+                                                                    AllWallets>(
+                                                                context)
+                                                            .list) {
                                                       if (wallet.walletPk ==
                                                           appStateSettings[
                                                               "selectedWallet"]) {
@@ -526,15 +526,18 @@ class _SelectAmountState extends State<SelectAmount> {
                                                             .setSelectedWallet !=
                                                         null)
                                                       widget.setSelectedWallet!(
-                                                          widget.allWallets![
-                                                              index]);
+                                                          Provider.of<AllWallets>(
+                                                                  context)
+                                                              .list[index]);
                                                     setState(() {
-                                                      selectedWallet = widget
-                                                          .allWallets![index];
+                                                      selectedWallet = Provider
+                                                              .of<AllWallets>(
+                                                                  context)
+                                                          .list[index];
                                                       walletPkForCurrency =
-                                                          widget
-                                                              .allWallets![
-                                                                  index]
+                                                          Provider.of<AllWallets>(
+                                                                  context)
+                                                              .list[index]
                                                               .walletPk;
                                                       numberDecimals = selectedWallet
                                                               ?.decimals ??
@@ -616,12 +619,19 @@ class _SelectAmountState extends State<SelectAmount> {
                   ],
                 ),
               ),
-              widget.allWallets == null ||
-                      widget.allWallets!.length <= 1 ||
+              widget.enableWalletPicker == false ||
                       Provider.of<AllWallets>(context).list.length <= 1
                   ? SizedBox.shrink()
                   : SelectChips(
-                      items: widget.allWallets!,
+                      items: Provider.of<AllWallets>(context).list,
+                      onLongPress: (TransactionWallet? item) {
+                        pushRoute(
+                          context,
+                          AddWalletPage(
+                            wallet: item,
+                          ),
+                        );
+                      },
                       getSelected: (TransactionWallet wallet) {
                         return selectedWallet == wallet;
                       },
@@ -659,7 +669,7 @@ class _SelectAmountState extends State<SelectAmount> {
                         width: 40,
                         padding:
                             EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        openPage: AddWalletPage(title: "add-wallet".tr()),
+                        openPage: AddWalletPage(),
                         borderRadius: 8,
                       ),
                     ),

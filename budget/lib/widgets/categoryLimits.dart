@@ -127,9 +127,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                           child: AddButton(
                             onTap: () {},
                             padding: EdgeInsets.zero,
-                            openPage: AddCategoryPage(
-                              title: "add-category".tr(),
-                            ),
+                            openPage: AddCategoryPage(),
                             width: null,
                           ),
                         ),

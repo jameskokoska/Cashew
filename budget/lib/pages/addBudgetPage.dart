@@ -33,11 +33,9 @@ import 'package:provider/provider.dart';
 class AddBudgetPage extends StatefulWidget {
   AddBudgetPage({
     Key? key,
-    required this.title,
     this.budget,
     this.isAddedOnlyBudget = false,
   }) : super(key: key);
-  final String title;
   final bool isAddedOnlyBudget;
 
   //When a transaction is passed in, we are editing that transaction
@@ -436,7 +434,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         child: PageFramework(
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
-          title: widget.title,
+          title: widget.budget == null ? "add-budget".tr() : "edit-budget".tr(),
           onBackButton: () async {
             if (widget.budget != null) {
               discardChangesPopupIfBudgetPassed();

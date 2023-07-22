@@ -71,9 +71,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "add-category".tr(),
-              openPage: AddCategoryPage(
-                title: "add-category".tr(),
-              ),
+              openPage: AddCategoryPage(),
             ),
           ),
         ),
@@ -213,7 +211,6 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         deleteCategoryPopup(context, category);
                       },
                       openPage: AddCategoryPage(
-                        title: "edit-category".tr(),
                         category: category,
                       ),
                     );
