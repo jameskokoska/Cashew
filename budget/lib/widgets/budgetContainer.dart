@@ -351,16 +351,29 @@ class BudgetContainer extends StatelessWidget {
     );
     Color backgroundColor = appStateSettings["materialYou"]
         ? budget.colour == null
-            ? dynamicPastel(context, HexColor(appStateSettings["accentColor"]),
-                amountDark: 0.8,
-                amountLight: appStateSettings["batterySaver"] ? 0.8 : 0.92)
+            ? appStateSettings["accentSystemColor"] == true &&
+                    appStateSettings["materialYou"] &&
+                    appStateSettings["batterySaver"] == false
+                ? dynamicPastel(
+                    context,
+                    Theme.of(context).colorScheme.primary,
+                    amountDark: 0.85,
+                    amountLight: 0.96,
+                  )
+                : dynamicPastel(
+                    context, HexColor(appStateSettings["accentColor"]),
+                    amountDark: 0.8,
+                    amountLight: appStateSettings["batterySaver"] ? 0.8 : 0.92)
             : dynamicPastel(
                 context,
                 budgetColorScheme.secondaryContainer,
                 amountDark: 0.6,
                 amountLight: 0.75,
               )
-        : getColor(context, "lightDarkAccentHeavyLight");
+        : getColor(
+            context,
+            "lightDarkAccentHeavyLight",
+          );
     return Container(
       decoration: BoxDecoration(
         boxShadow: boxShadowCheck(boxShadowGeneral(context)),

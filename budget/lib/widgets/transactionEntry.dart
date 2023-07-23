@@ -213,6 +213,7 @@ class TransactionEntry extends StatelessWidget {
                       child: Row(
                         children: [
                           CategoryIcon(
+                            cacheImage: true,
                             category: category,
                             categoryPk: transaction.categoryFk,
                             size: 27,

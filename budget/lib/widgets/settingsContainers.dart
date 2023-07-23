@@ -18,6 +18,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.verticalPadding,
     this.syncWithInitialValue = true,
     this.onLongPress,
+    this.enableBorderRadius = false,
     Key? key,
   }) : super(key: key);
 
@@ -30,6 +31,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final double? verticalPadding;
   final bool syncWithInitialValue;
   final VoidCallback? onLongPress;
+  final bool enableBorderRadius;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -81,6 +83,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       duration: Duration(milliseconds: 300),
       opacity: waiting ? 0.5 : 1,
       child: SettingsContainer(
+        enableBorderRadius: widget.enableBorderRadius,
         onLongPress: widget.onLongPress,
         onTap: () => {toggleSwitch()},
         title: widget.title,
@@ -183,6 +186,7 @@ class SettingsContainerDropdown extends StatefulWidget {
     required this.onChanged,
     this.getLabel,
     this.verticalPadding,
+    this.enableBorderRadius = false,
   }) : super(key: key);
 
   final String title;
@@ -193,6 +197,7 @@ class SettingsContainerDropdown extends StatefulWidget {
   final Function(String) onChanged;
   final Function(String)? getLabel;
   final double? verticalPadding;
+  final bool enableBorderRadius;
 
   @override
   State<SettingsContainerDropdown> createState() =>
@@ -205,6 +210,7 @@ class _SettingsContainerDropdownState extends State<SettingsContainerDropdown> {
   @override
   Widget build(BuildContext context) {
     return SettingsContainer(
+      enableBorderRadius: widget.enableBorderRadius,
       verticalPadding: widget.verticalPadding,
       title: widget.title,
       description: widget.description,
@@ -364,6 +370,7 @@ class SettingsContainer extends StatelessWidget {
     this.iconSize,
     this.iconScale,
     this.isOutlined,
+    this.enableBorderRadius = false,
   }) : super(key: key);
 
   final String title;
@@ -376,12 +383,15 @@ class SettingsContainer extends StatelessWidget {
   final double? iconSize;
   final double? iconScale;
   final bool? isOutlined;
+  final bool enableBorderRadius;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(
-          getWidthNavigationSidebar(context) <= 0 ? 0 : 20),
+          enableBorderRadius || getWidthNavigationSidebar(context) > 0
+              ? 20
+              : 0),
       child: isOutlined == true
           ? SettingsContainerOutlined(
               title: title,
@@ -394,80 +404,72 @@ class SettingsContainer extends StatelessWidget {
               onLongPress: onLongPress,
               verticalPadding: verticalPadding,
             )
-          : Padding(
-              padding: EdgeInsets.symmetric(vertical: 0),
-              child: Tappable(
-                color: Colors.transparent,
-                onTap: onTap,
-                onLongPress: onLongPress,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: verticalPadding ?? 11,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              icon == null
-                                  ? SizedBox.shrink()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(right: 16),
-                                      child: Transform.scale(
-                                        scale: iconScale ?? 1,
-                                        child: Icon(
-                                          icon,
-                                          size: iconSize ?? 30,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
-                                      ),
+          : Tappable(
+              color: Colors.transparent,
+              onTap: onTap,
+              onLongPress: onLongPress,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: verticalPadding ?? 11,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          icon == null
+                              ? SizedBox.shrink()
+                              : Padding(
+                                  padding: const EdgeInsets.only(right: 16),
+                                  child: Transform.scale(
+                                    scale: iconScale ?? 1,
+                                    child: Icon(
+                                      icon,
+                                      size: iconSize ?? 30,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     ),
-                              Expanded(
-                                child: description == null
-                                    ? TextFont(
+                                  ),
+                                ),
+                          Expanded(
+                            child: description == null
+                                ? TextFont(
+                                    fixParagraphMargin: true,
+                                    text: title,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    maxLines: 5,
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextFont(
                                         fixParagraphMargin: true,
                                         text: title,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         maxLines: 5,
-                                      )
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextFont(
-                                            fixParagraphMargin: true,
-                                            text: title,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            maxLines: 5,
-                                          ),
-                                          Container(height: 3),
-                                          TextFont(
-                                            text: description!,
-                                            fontSize: 14,
-                                            maxLines: 5,
-                                          ),
-                                        ],
                                       ),
-                              ),
-                            ],
+                                      Container(height: 3),
+                                      TextFont(
+                                        text: description!,
+                                        fontSize: 14,
+                                        maxLines: 5,
+                                      ),
+                                    ],
+                                  ),
                           ),
-                        ),
+                        ],
                       ),
-                      afterWidget ?? SizedBox()
-                    ],
-                  ),
+                    ),
+                    afterWidget ?? SizedBox()
+                  ],
                 ),
               ),
             ),

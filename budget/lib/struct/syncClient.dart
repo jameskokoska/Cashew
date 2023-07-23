@@ -9,6 +9,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:flutter/foundation.dart';
@@ -170,7 +171,7 @@ class SyncLog {
 }
 
 // load the latest backup and import any newly modified data into the db
-Future<bool> syncData() async {
+Future<bool> syncData(BuildContext context) async {
   if (appStateSettings["backupSync"] == false) return false;
   if (appStateSettings["currentUserEmail"] == "") return false;
 
@@ -401,8 +402,9 @@ Future<bool> syncData() async {
     await setPrimaryWallet((await database.getAllWallets())[0].walletPk);
   }
 
-  updateSettings("lastSynced", syncStarted.toString(),
-      pagesNeedingRefresh: [], updateGlobalState: true);
+  if (getWidthNavigationSidebar(context) > 0)
+    updateSettings("lastSynced", syncStarted.toString(),
+        pagesNeedingRefresh: [], updateGlobalState: true);
   print("DONE SYNCING");
   return true;
 }

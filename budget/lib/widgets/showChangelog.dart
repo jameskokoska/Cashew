@@ -10,6 +10,23 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.5.9
+    Icon for watched categories has background if selected
+    Fixed flickering select category
+    Fixed wrong initial type for watchedCategoriesOnBudget
+    Picking budget in initial category selector properly updates UI in add transaction page
+    If language is 2 words, line break added to reduce width of language picker dropdown
+    System color is more expressive when Material You is enabled - modified lightDarkAccentHeavyLight when using system theme color
+    Load more in budget history follows budget colorscheme
+    Moved load more past time periods button to upper right in graphs
+    Unpaid transactions are always at the top of the day section
+    New subscription transactions keep time
+    Only mark subscriptions as paid if setting enabled
+    Fixed if no date selected in custom start date for home page line graph
+    Cached category icons for transaction entry
+    Notifications translations
+    Fixed 24 hour clock on System language
+    Border radius on account and backup settings
     < 3.5.8
     Fixed edit pages titles translations
     < 3.5.7

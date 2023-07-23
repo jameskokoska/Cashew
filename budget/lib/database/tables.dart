@@ -667,7 +667,18 @@ class FinanceDatabase extends _$FinanceDatabase {
                         .lower()
                         .like("%" + search.toLowerCase() + "%"));
           })
-          ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]))
+          ..orderBy([
+            (t) => OrderingTerm(
+                  expression: (t.type
+                              .equalsValue(TransactionSpecialType.repetitive) |
+                          t.type.equalsValue(
+                              TransactionSpecialType.subscription) |
+                          t.type.equalsValue(TransactionSpecialType.upcoming)) &
+                      t.paid.equals(false),
+                  mode: OrderingMode.asc,
+                ),
+            (t) => OrderingTerm.asc(t.dateCreated),
+          ]))
         .join([
       innerJoin(
           categories, categories.categoryPk.equalsExp(transactions.categoryFk))

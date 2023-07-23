@@ -6,7 +6,6 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CategoryIcon extends StatelessWidget {
@@ -26,6 +25,7 @@ class CategoryIcon extends StatelessWidget {
     this.canEditByLongPress = true,
     this.tintColor,
     this.tintEnabled = true,
+    this.cacheImage = false,
   }) : super(key: key);
 
   final int? categoryPk;
@@ -42,6 +42,7 @@ class CategoryIcon extends StatelessWidget {
   final bool canEditByLongPress;
   final Color? tintColor;
   final bool tintEnabled;
+  final bool cacheImage;
 
   categoryIconWidget(context, TransactionCategory? category) {
     return Column(
@@ -116,10 +117,9 @@ class CategoryIcon extends StatelessWidget {
                   child: (category != null && category.iconName != null
                       ? !appStateSettings["colorTintCategoryIcon"] ||
                               !tintEnabled
-                          ? Image(
-                              image: AssetImage("assets/categories/" +
-                                  (category.iconName ?? "")),
-                              width: size,
+                          ? CacheCategoryIcon(
+                              iconName: category.iconName ?? "",
+                              size: size,
                             )
                           : ColorFiltered(
                               colorFilter: ColorFilter.mode(
@@ -134,10 +134,9 @@ class CategoryIcon extends StatelessWidget {
                                 colorFilter: greyScale,
                                 child: Opacity(
                                   opacity: 1,
-                                  child: Image(
-                                    image: AssetImage("assets/categories/" +
-                                        (category.iconName ?? "")),
-                                    width: size,
+                                  child: CacheCategoryIcon(
+                                    iconName: category.iconName ?? "",
+                                    size: size,
                                   ),
                                 ),
                               ),
@@ -182,5 +181,38 @@ class CategoryIcon extends StatelessWidget {
     } else {
       return categoryIconWidget(context, null);
     }
+  }
+}
+
+class CacheCategoryIcon extends StatefulWidget {
+  const CacheCategoryIcon(
+      {required this.iconName, required this.size, super.key});
+  final String iconName;
+  final double size;
+  @override
+  State<CacheCategoryIcon> createState() => _CacheCategoryIconState();
+}
+
+class _CacheCategoryIconState extends State<CacheCategoryIcon> {
+  late Image image;
+
+  @override
+  void initState() {
+    super.initState();
+    image = Image.asset(
+      "assets/categories/" + widget.iconName,
+      width: widget.size,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    precacheImage(image.image, context);
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return image;
   }
 }

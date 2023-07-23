@@ -2,7 +2,6 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
-import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -404,29 +403,33 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
         child: Stack(
           children: [
             Positioned(
-              left: 0,
-              bottom: 0,
-              child: IconButton(
-                icon: Icon(
-                  Icons.history_rounded,
-                  size: 22,
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              right: 0,
+              top: 0,
+              child: Transform.translate(
+                offset: Offset(5, -5),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.history_rounded,
+                    size: 22,
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      numberMonthsToLoad++;
+                    });
+                  },
                 ),
-                onPressed: () {
-                  setState(() {
-                    numberMonthsToLoad++;
-                  });
-                },
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 9, right: 9, bottom: 12, top: 18),
+              padding: EdgeInsets.only(left: 7, right: 7, bottom: 12, top: 18),
               child: PastSpendingGraph(
                 isIncome: null,
                 walletPks: widget.walletPks,
                 monthsToLoad: numberMonthsToLoad,
-                extraLeftPaddingIfSmall:
-                    10, //we want this because the corner has the load more dates button
+                // extraLeftPaddingIfSmall:
+                //     10, //we want this because the corner has the load more dates button
               ),
             ),
           ],

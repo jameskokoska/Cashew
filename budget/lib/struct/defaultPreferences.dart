@@ -92,6 +92,5 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "iOSNavigation": false,
     "locale": "System",
     "incomeExpenseStartDate": null,
-    "use24HourClock": false,
   };
 }

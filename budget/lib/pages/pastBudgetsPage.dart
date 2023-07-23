@@ -167,10 +167,15 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       appStateSettings["watchedCategoriesOnBudget"]
           [widget.budget.budgetPk.toString()] = {};
     }
-    Map<String, dynamic> newSetting =
+    Map<dynamic, dynamic> newSetting =
         appStateSettings["watchedCategoriesOnBudget"];
-    newSetting[widget.budget.budgetPk.toString()] = selectedCategoryFks;
-    updateSettings("watchedCategoriesOnBudget", newSetting);
+    Map<String, dynamic> convertedMap = {};
+    newSetting.forEach((key, value) {
+      convertedMap[key.toString()] = value;
+    });
+    convertedMap[widget.budget.budgetPk.toString()] = selectedCategoryFks;
+    updateSettings("watchedCategoriesOnBudget", convertedMap,
+        pagesNeedingRefresh: [], updateGlobalState: false);
   }
 
   @override
@@ -206,7 +211,6 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       ),
       actions: [
         IconButton(
-          padding: EdgeInsets.all(15),
           tooltip: "watch-categories".tr(),
           onPressed: () {
             openBottomSheet(
@@ -268,11 +272,22 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
               ),
             );
           },
-          icon: Icon(
-            Icons.category_outlined,
-            color: (selectedCategoryFks?.length ?? 0) > 0
-                ? budgetColorScheme.tertiary
-                : budgetColorScheme.onSecondaryContainer,
+          padding: EdgeInsets.all(15 - 8),
+          icon: AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            decoration: BoxDecoration(
+              color: (selectedCategoryFks?.length ?? 0) > 0
+                  ? budgetColorScheme.tertiary.withOpacity(0.1)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            padding: EdgeInsets.all(8),
+            child: Icon(
+              Icons.category_outlined,
+              color: (selectedCategoryFks?.length ?? 0) > 0
+                  ? budgetColorScheme.tertiary
+                  : budgetColorScheme.onSecondaryContainer,
+            ),
           ),
         ),
         IconButton(
@@ -309,6 +324,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 Stack(
                   children: [
                     Container(
+                      padding: const EdgeInsets.symmetric(vertical: 7),
+                      margin: const EdgeInsets.only(left: 5, right: 5),
                       color: backgroundColor,
                       child: StreamBuilder<Map<int, TransactionCategory>>(
                           stream: database.watchAllCategoriesMapped(),
@@ -410,45 +427,40 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                           }
                                           // print(categorySpentPoints);
 
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 7),
-                                            child: BudgetHistoryLineGraph(
-                                              onTouchedIndex: (index) {
-                                                // debounce to avoid duplicate key on AnimatedSwitcher
-                                                _pastBudgetContainerListStateStateKey
-                                                    .currentState
-                                                    ?.setTouchedBudgetIndex(
-                                                        index);
-                                              },
-                                              color: dynamicPastel(
-                                                context,
-                                                budgetColorScheme.primary,
-                                                amountLight: 0.4,
-                                                amountDark: 0.2,
-                                              ),
-                                              dateRanges: dateTimeRanges,
-                                              maxY: (selectedCategoryFks ?? [])
-                                                          .length >
-                                                      0
-                                                  ? maxY
-                                                  : widget.budget.amount +
-                                                              0.0000000000001 >
-                                                          maxY
-                                                      ? widget.budget.amount +
-                                                          0.0000000000001
-                                                      : maxY,
-                                              spots: spots,
-                                              initialSpots: initialSpots,
-                                              horizontalLineAt:
-                                                  widget.budget.amount,
-                                              budget: widget.budget,
-                                              extraCategorySpots:
-                                                  categorySpentPoints,
-                                              categoriesMapped:
-                                                  snapshotCategoriesMapped
-                                                      .data!,
+                                          return BudgetHistoryLineGraph(
+                                            onTouchedIndex: (index) {
+                                              // debounce to avoid duplicate key on AnimatedSwitcher
+                                              _pastBudgetContainerListStateStateKey
+                                                  .currentState
+                                                  ?.setTouchedBudgetIndex(
+                                                      index);
+                                            },
+                                            color: dynamicPastel(
+                                              context,
+                                              budgetColorScheme.primary,
+                                              amountLight: 0.4,
+                                              amountDark: 0.2,
                                             ),
+                                            dateRanges: dateTimeRanges,
+                                            maxY: (selectedCategoryFks ?? [])
+                                                        .length >
+                                                    0
+                                                ? maxY
+                                                : widget.budget.amount +
+                                                            0.0000000000001 >
+                                                        maxY
+                                                    ? widget.budget.amount +
+                                                        0.0000000000001
+                                                    : maxY,
+                                            spots: spots,
+                                            initialSpots: initialSpots,
+                                            horizontalLineAt:
+                                                widget.budget.amount,
+                                            budget: widget.budget,
+                                            extraCategorySpots:
+                                                categorySpentPoints,
+                                            categoriesMapped:
+                                                snapshotCategoriesMapped.data!,
                                           );
                                         });
                                   } else {
@@ -478,29 +490,30 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       ),
                     ),
                     Positioned(
-                      left: 0,
-                      bottom: 0,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.history_rounded,
-                          size: 22,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.8),
+                      right: 0,
+                      top: 0,
+                      child: Transform.translate(
+                        offset: Offset(2, -2),
+                        child: IconButton(
+                          color: budgetColorScheme.primary,
+                          icon: Icon(
+                            Icons.history_rounded,
+                            size: 22,
+                            color: budgetColorScheme.primary.withOpacity(0.8),
+                          ),
+                          onPressed: () {
+                            int amountMoreToLoad =
+                                getWidthNavigationSidebar(context) <= 0 ? 3 : 5;
+                            loadLines(amountLoaded + amountMoreToLoad);
+                            setState(() {
+                              amountLoaded = amountLoaded + amountMoreToLoad;
+                            });
+                            // Future.delayed(Duration(milliseconds: 150), () {
+                            //   budgetHistoryKey.currentState!
+                            //       .scrollToBottom(duration: 4000);
+                            // });
+                          },
                         ),
-                        onPressed: () {
-                          int amountMoreToLoad =
-                              getWidthNavigationSidebar(context) <= 0 ? 3 : 5;
-                          loadLines(amountLoaded + amountMoreToLoad);
-                          setState(() {
-                            amountLoaded = amountLoaded + amountMoreToLoad;
-                          });
-                          // Future.delayed(Duration(milliseconds: 150), () {
-                          //   budgetHistoryKey.currentState!
-                          //       .scrollToBottom(duration: 4000);
-                          // });
-                        },
                       ),
                     ),
                   ],

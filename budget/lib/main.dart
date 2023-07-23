@@ -111,6 +111,7 @@ class App extends StatelessWidget {
     //   child:
 
     return MaterialApp(
+      showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale:

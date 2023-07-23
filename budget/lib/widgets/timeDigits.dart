@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 bool is24HourFormat(BuildContext context) {
   DateFormat format = DateFormat.jm(context.locale.toString());
-  String formattedTime = format.format(DateTime.now());
+  String formattedTime =
+      format.format(DateTime.now()).toUpperCase().replaceAll(".", "");
   return !formattedTime.contains("AM") && !formattedTime.contains("PM");
 }
 

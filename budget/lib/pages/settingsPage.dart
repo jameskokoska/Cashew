@@ -152,7 +152,10 @@ class SettingsPageState extends State<SettingsPage>
           ],
           getLabel: (String item) {
             if (languageNamesJSON[item] != null) {
-              return languageNamesJSON[item].toString().capitalizeFirstofEach;
+              return languageNamesJSON[item]
+                  .toString()
+                  .capitalizeFirstofEach
+                  .replaceAll(" ", "\n");
             }
             // if (supportedLanguagesSet.contains(item))
             //   return supportedLanguagesSet[item];

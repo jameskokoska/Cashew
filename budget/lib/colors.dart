@@ -10,6 +10,19 @@ late AppColors appColorsLight;
 late AppColors appColorsDark;
 
 Color getColor(BuildContext context, String colorName) {
+  // Custom lightDarkAccentHeavyLight when material you given context if system color
+  // Makes the system color more vibrant in the UI
+  if (appStateSettings["accentSystemColor"] == true &&
+      colorName == "lightDarkAccentHeavyLight" &&
+      appStateSettings["materialYou"] &&
+      appStateSettings["batterySaver"] == false) {
+    return dynamicPastel(
+      context,
+      Theme.of(context).colorScheme.primary,
+      amountDark: 0.85,
+      amountLight: 0.96,
+    );
+  }
   return Theme.of(context).extension<AppColors>()!.colors[colorName] ??
       Colors.red;
 }

@@ -504,7 +504,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
               pagesNeedingRefresh: [0]);
         }
         if (user != null) {
-          await syncData();
+          await syncData(context);
           await syncPendingQueueOnServer();
           await getCloudBudgets();
         }
@@ -678,6 +678,7 @@ class _BackupManagementState extends State<BackupManagement> {
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 0),
                   child: SettingsContainerSwitch(
+                    enableBorderRadius: true,
                     onSwitched: (value) {
                       updateSettings("autoBackups", value,
                           pagesNeedingRefresh: [], updateGlobalState: false);
@@ -694,6 +695,7 @@ class _BackupManagementState extends State<BackupManagement> {
               : SizedBox.shrink(),
           widget.isClientSync
               ? SettingsContainerSwitch(
+                  enableBorderRadius: true,
                   onSwitched: (value) {
                     updateSettings("backupSync", value,
                         pagesNeedingRefresh: [], updateGlobalState: true);
@@ -720,6 +722,7 @@ class _BackupManagementState extends State<BackupManagement> {
                       duration: Duration(milliseconds: 300),
                       child: backupSync
                           ? SettingsContainerSwitch(
+                              enableBorderRadius: true,
                               onSwitched: (value) {
                                 updateSettings("syncEveryChange", value,
                                     pagesNeedingRefresh: [],
@@ -750,6 +753,7 @@ class _BackupManagementState extends State<BackupManagement> {
                             key: ValueKey(1),
                             padding: const EdgeInsets.only(bottom: 8),
                             child: SettingsContainerDropdown(
+                              enableBorderRadius: true,
                               items: ["1", "2", "3", "7", "10", "14"],
                               onChanged: (value) {
                                 updateSettings(
@@ -772,8 +776,9 @@ class _BackupManagementState extends State<BackupManagement> {
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: SettingsContainerDropdown(
+                    enableBorderRadius: true,
                     key: dropDownKey,
-                    verticalPadding: 0,
+                    verticalPadding: 5,
                     title: "backup-limit".tr(),
                     icon: Icons.format_list_numbered_rtl_outlined,
                     initial: appStateSettings["backupLimit"].toString(),

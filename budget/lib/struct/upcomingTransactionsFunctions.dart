@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -33,6 +34,10 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
         transaction.dateCreated.year + yearOffset,
         transaction.dateCreated.month + monthOffset,
         transaction.dateCreated.day + dayOffset,
+        transaction.dateCreated.hour,
+        transaction.dateCreated.minute,
+        transaction.dateCreated.second,
+        transaction.dateCreated.millisecond,
       );
       Transaction newTransaction = transaction.copyWith(
         paid: false,
@@ -216,16 +221,18 @@ void openUnpayDebtCreditPopup(BuildContext context, Transaction transaction) {
 }
 
 Future<bool> markSubscriptionsAsPaid() async {
-  List<Transaction> subscriptions = await database.getAllSubscriptions().$2;
-  for (Transaction transaction in subscriptions) {
-    if (transaction.dateCreated.isBefore(DateTime.now())) {
-      Transaction transactionNew = transaction.copyWith(
-        paid: true,
-        dateCreated: transaction.dateCreated,
-        createdAnotherFutureTransaction: Value(true),
-      );
-      await database.createOrUpdateTransaction(transactionNew);
-      await createNewSubscriptionTransaction(null, transaction);
+  if (appStateSettings["automaticallyPaySubscriptions"]) {
+    List<Transaction> subscriptions = await database.getAllSubscriptions().$2;
+    for (Transaction transaction in subscriptions) {
+      if (transaction.dateCreated.isBefore(DateTime.now())) {
+        Transaction transactionNew = transaction.copyWith(
+          paid: true,
+          dateCreated: transaction.dateCreated,
+          createdAnotherFutureTransaction: Value(true),
+        );
+        await database.createOrUpdateTransaction(transactionNew);
+        await createNewSubscriptionTransaction(null, transaction);
+      }
     }
   }
   return true;

@@ -159,13 +159,14 @@ class _SelectColorState extends State<SelectColor> {
         children: [
           widget.useSystemColorPrompt == true
               ? SettingsContainerSwitch(
+                  enableBorderRadius: true,
                   title: "use-system-color".tr(),
                   onSwitched: (value) async {
                     if (value == true) {
                       await SystemTheme.accentColor.load();
                       Color accentColor = SystemTheme.accentColor.accent;
                       updateSettings("accentColor", toHexString(accentColor),
-                          updateGlobalState: true);
+                          updateGlobalState: false);
                       generateColors();
                     } else {
                       widget.setSelectedColor!(selectedColor);

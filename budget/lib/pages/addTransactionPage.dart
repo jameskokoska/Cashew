@@ -2248,6 +2248,16 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
   late int? selectedBudgetPk = widget.selectedBudgetPk;
 
   @override
+  void didUpdateWidget(covariant SelectAddedBudget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (selectedBudgetPk != widget.selectedBudgetPk) {
+      setState(() {
+        selectedBudgetPk = widget.selectedBudgetPk;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Budget>>(
       stream: database.watchAllAddableBudgets(),

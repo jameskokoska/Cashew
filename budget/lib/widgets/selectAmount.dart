@@ -622,55 +622,58 @@ class _SelectAmountState extends State<SelectAmount> {
               widget.enableWalletPicker == false ||
                       Provider.of<AllWallets>(context).list.length <= 1
                   ? SizedBox.shrink()
-                  : SelectChips(
-                      items: Provider.of<AllWallets>(context).list,
-                      onLongPress: (TransactionWallet? item) {
-                        pushRoute(
-                          context,
-                          AddWalletPage(
-                            wallet: item,
-                          ),
-                        );
-                      },
-                      getSelected: (TransactionWallet wallet) {
-                        return selectedWallet == wallet;
-                      },
-                      onSelected: (TransactionWallet wallet) {
-                        if (widget.setSelectedWallet != null)
-                          widget.setSelectedWallet!(wallet);
-                        setState(() {
-                          selectedWallet = wallet;
-                          walletPkForCurrency = wallet.walletPk;
-                          numberDecimals = selectedWallet?.decimals ??
-                              Provider.of<AllWallets>(context)
-                                  .indexedByPk[
-                                      appStateSettings["selectedWallet"]]
-                                  ?.decimals ??
-                              2;
-                          try {
-                            amount = double.parse(amount)
-                                .toStringAsFixed(numberDecimals);
-                          } catch (e) {}
-                          amount = removeTrailingZeroes(amount);
-                          addToAmount("");
-                        });
-                      },
-                      getLabel: (TransactionWallet wallet) {
-                        return wallet.name ==
-                                wallet.currency.toString().toUpperCase()
-                            ? wallet.currency.toString().toUpperCase()
-                            : wallet.name +
-                                " (" +
-                                wallet.currency.toString().toUpperCase() +
-                                ")";
-                      },
-                      extraWidget: AddButton(
-                        onTap: () {},
-                        width: 40,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        openPage: AddWalletPage(),
-                        borderRadius: 8,
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: SelectChips(
+                        items: Provider.of<AllWallets>(context).list,
+                        onLongPress: (TransactionWallet? item) {
+                          pushRoute(
+                            context,
+                            AddWalletPage(
+                              wallet: item,
+                            ),
+                          );
+                        },
+                        getSelected: (TransactionWallet wallet) {
+                          return selectedWallet == wallet;
+                        },
+                        onSelected: (TransactionWallet wallet) {
+                          if (widget.setSelectedWallet != null)
+                            widget.setSelectedWallet!(wallet);
+                          setState(() {
+                            selectedWallet = wallet;
+                            walletPkForCurrency = wallet.walletPk;
+                            numberDecimals = selectedWallet?.decimals ??
+                                Provider.of<AllWallets>(context)
+                                    .indexedByPk[
+                                        appStateSettings["selectedWallet"]]
+                                    ?.decimals ??
+                                2;
+                            try {
+                              amount = double.parse(amount)
+                                  .toStringAsFixed(numberDecimals);
+                            } catch (e) {}
+                            amount = removeTrailingZeroes(amount);
+                            addToAmount("");
+                          });
+                        },
+                        getLabel: (TransactionWallet wallet) {
+                          return wallet.name ==
+                                  wallet.currency.toString().toUpperCase()
+                              ? wallet.currency.toString().toUpperCase()
+                              : wallet.name +
+                                  " (" +
+                                  wallet.currency.toString().toUpperCase() +
+                                  ")";
+                        },
+                        extraWidget: AddButton(
+                          onTap: () {},
+                          width: 40,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                          openPage: AddWalletPage(),
+                          borderRadius: 8,
+                        ),
                       ),
                     ),
               SizedBox(height: 5),

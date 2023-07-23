@@ -435,7 +435,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         icon: Icons.arrow_back_rounded,
                         size: 50,
                         padding: getWidthNavigationSidebar(context) <= 0
-                            ? null
+                            ? EdgeInsets.all(3)
                             : EdgeInsets.all(6),
                       ),
                     ),
@@ -491,7 +491,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         icon: Icons.arrow_forward_rounded,
                         size: 50,
                         padding: getWidthNavigationSidebar(context) <= 0
-                            ? null
+                            ? EdgeInsets.all(3)
                             : EdgeInsets.all(6),
                       ),
                     ),

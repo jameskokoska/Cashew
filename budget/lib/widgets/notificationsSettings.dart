@@ -38,8 +38,8 @@ class _DailyNotificationsSettingsState
     return Column(
       children: [
         SettingsContainerSwitch(
-          title: "Daily Notifications",
-          description: "If the app wasn't opened",
+          title: "daily-notifications".tr(),
+          description: "daily-notifications-description".tr(),
           onSwitched: (value) async {
             updateSettings("notifications", value, updateGlobalState: false);
             if (value == true) {
@@ -64,7 +64,7 @@ class _DailyNotificationsSettingsState
             child: notificationsEnabled
                 ? SettingsContainer(
                     key: ValueKey(1),
-                    title: "Alert Time",
+                    title: "alert-time".tr(),
                     icon: Icons.timer,
                     onTap: () async {
                       TimeOfDay? newTime =
@@ -118,7 +118,7 @@ class _UpcomingTransactionsNotificationsSettingsState
     return Column(
       children: [
         SettingsContainerSwitch(
-          title: "Upcoming Transactions",
+          title: "upcoming-transactions".tr(),
           onSwitched: (value) async {
             updateSettings("notificationsUpcomingTransactions", value,
                 updateGlobalState: false);
@@ -204,32 +204,7 @@ class _UpcomingTransactionsNotificationsSettingsState
 }
 
 List<String> _reminderStrings = [
-  "Don't forget to add transactions from today!",
-  "Add your daily transactions to stay on track.",
-  "Update your budget with today's expenses.",
-  "Add today's expenses to your budget tracker.",
-  "Record your transactions for the day.",
-  "Stay on top of your budget by adding your daily transactions.",
-  "Don't forget to add your daily transactions.",
-  "Update your budget with today's expenses.",
-  "Add your expenses from today to the app.",
-  "Record your transactions to stay on track.",
-  "Stay on top of your budget by adding transactions.",
-  "Keep an accurate record of your spending.",
-  "Add your daily transactions to the app.",
-  "Update your budget with today's expenses.",
-  "Record your transactions to stay on track.",
-  "Stay on top of your budget by adding transactions.",
-  "It's the end of the day, have you added your transactions?",
-  "Make sure to add your daily transactions to the app.",
-  "Add any expenses from today to your budget tracker.",
-  "Record your transactions for the day to get a complete picture of your spending habits.",
-  "Don't forget to add your daily transactions to stay on track with your budget.",
-  "Take a few minutes to update your budget with today's expenses.",
-  "Make sure to add any expenses from today to your budget tracker.",
-  "Remember to record your transactions for the day to get a complete picture of your spending habits.",
-  "Add your daily transactions to the app to keep your budget on track.",
-  "Stay on top of your budget by adding your daily transactions to the app.",
+  for (int i = 1; i <= 26; i++) "notification-reminder-" + i.toString()
 ];
 
 Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
@@ -249,13 +224,13 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
   // schedule a week worth of notifications
   for (int i = 1; i <= 7; i++) {
     String chosenMessage =
-        _reminderStrings[Random().nextInt(_reminderStrings.length)];
+        _reminderStrings[Random().nextInt(_reminderStrings.length)].tr();
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.zonedSchedule(
       i,
-      'Add Transactions',
+      'notification-reminder-title'.tr(),
       chosenMessage,
       dateTime,
       notificationDetails,
@@ -334,7 +309,7 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
         NotificationDetails(android: androidNotificationDetails);
     await flutterLocalNotificationsPlugin.zonedSchedule(
       idStart,
-      'Upcoming Transaction Due',
+      'notification-upcoming-transaction-title'.tr(),
       chosenMessage,
       dateTime,
       notificationDetails,
