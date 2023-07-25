@@ -12,6 +12,12 @@
       // "flutterMode": "profile",
     },
     // {
+    //   "name": "Flutter",
+    //   "request": "launch",
+    //   "type": "dart",
+    //   "flutterMode": "profile"
+    // },
+    // {
     //   "name": "budget",
     //   "cwd": "budget",
     //   "request": "launch",
