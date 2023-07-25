@@ -863,7 +863,7 @@ PlatformOS? getPlatform() {
   } else if (Platform.isIOS) {
     return PlatformOS.isIOS;
   } else if (Platform.isAndroid) {
-    PlatformOS.isAndroid;
+    return PlatformOS.isAndroid;
   }
   return null;
 }

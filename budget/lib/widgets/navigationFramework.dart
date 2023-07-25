@@ -117,6 +117,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
   late List<Widget> pagesExtended;
 
   int currentPage = 0;
+  int previousPage = 0;
   bool refresh = false;
 
   void changePage(int page, {bool switchNavbar = true}) {
@@ -125,6 +126,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       navbarStateKey.currentState?.setSelectedIndex(page >= 3 ? 3 : page);
     }
     setState(() {
+      previousPage = currentPage;
       currentPage = page;
     });
     setState(() {
@@ -162,6 +164,12 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           createSyncBackup(changeMadeSync: true);
         }
       });
+      if (kIsWeb) {
+        // On web, disable the browser's context menu since this example uses a custom
+        // Flutter-rendered context menu.
+        // Refer here: https://api.flutter.dev/flutter/material/TextField/contextMenuBuilder.html
+        BrowserContextMenu.disableContextMenu();
+      }
     });
 
     pages = [
@@ -295,19 +303,41 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   //     condition: currentPage == 0 || currentPage == 1,
                   //   ),
                   // ),
-                  AnimateFAB(
-                    fab: FAB(
-                      tooltip: "add-transaction".tr(),
-                      openPage: AddTransactionPage(),
-                    ),
-                    condition: currentPage == 0 || currentPage == 1,
-                  ),
-                  AnimateFAB(
-                    fab: FAB(
-                      tooltip: "add-budget".tr(),
-                      openPage: AddBudgetPage(),
-                    ),
-                    condition: currentPage == 2,
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 350),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.ease,
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: ScaleTransition(
+                          scale: Tween<double>(begin: 0.4, end: 1.0)
+                              .animate(animation),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: currentPage == 0 ||
+                            currentPage == 1 ||
+                            (previousPage == 0 && currentPage != 2) ||
+                            (previousPage == 1 && currentPage != 2)
+                        ? AnimateFAB(
+                            key: ValueKey(1),
+                            fab: FAB(
+                              tooltip: "add-transaction".tr(),
+                              openPage: AddTransactionPage(),
+                            ),
+                            condition: currentPage == 0 || currentPage == 1,
+                          )
+                        : AnimateFAB(
+                            key: ValueKey(2),
+                            fab: FAB(
+                              tooltip: "add-budget".tr(),
+                              openPage: AddBudgetPage(),
+                            ),
+                            condition: currentPage == 2,
+                          ),
                   ),
                 ],
               ),

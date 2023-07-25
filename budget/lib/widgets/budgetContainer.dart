@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
@@ -987,7 +988,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
     // if (widget.budget.sharedTransactionsShow ==
     //     SharedTransactionsShow.onlyIfOwner) return SizedBox.shrink();
     if (widget.budget.memberTransactionFilters ==
-        appStateSettings["currentUserEmail"]) return SizedBox.shrink();
+        [appStateSettings["currentUserEmail"]]) return SizedBox.shrink();
     if (mergedStreams == null) return SizedBox.shrink();
     return StreamBuilder<List<double?>>(
       stream: mergedStreams,

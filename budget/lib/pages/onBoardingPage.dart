@@ -314,9 +314,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                   drivePermissions: true,
                   next: () {},
                 );
-                if (appStateSettings["username"] == "" && user != null) {
-                  updateSettings("username", user?.displayName ?? "",
-                      pagesNeedingRefresh: [0]);
+                if (appStateSettings["username"] == "" && googleUser != null) {
+                  updateSettings("username", googleUser?.displayName ?? "",
+                      pagesNeedingRefresh: [0], updateGlobalState: false);
                 }
               } catch (e) {
                 print("Error signing in: " + e.toString());

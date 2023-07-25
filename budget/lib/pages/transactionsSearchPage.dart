@@ -513,7 +513,6 @@ class _TransactionFiltersSelectionState
         ),
         SizedBox(height: 10),
         SelectChips(
-          darkerBackground: true,
           items: ExpenseIncome.values,
           getLabel: (ExpenseIncome item) {
             return item == ExpenseIncome.expense
@@ -535,7 +534,6 @@ class _TransactionFiltersSelectionState
           },
         ),
         SelectChips(
-          darkerBackground: true,
           items: [null, ...TransactionSpecialType.values],
           getLabel: (TransactionSpecialType? item) {
             return transactionTypeDisplayToEnum[item]
@@ -557,7 +555,6 @@ class _TransactionFiltersSelectionState
           },
         ),
         SelectChips(
-          darkerBackground: true,
           items: PaidStatus.values,
           getLabel: (PaidStatus item) {
             return item == PaidStatus.paid
@@ -581,7 +578,6 @@ class _TransactionFiltersSelectionState
           },
         ),
         SelectChips(
-          darkerBackground: true,
           items: <BudgetTransactionFilters>[
             BudgetTransactionFilters.addedToOtherBudget,
             ...(appStateSettings["sharedBudgets"]
@@ -612,7 +608,6 @@ class _TransactionFiltersSelectionState
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SelectChips(
-                darkerBackground: true,
                 items: snapshot.data!,
                 onLongPress: (TransactionWallet? item) {
                   pushRoute(
@@ -660,7 +655,6 @@ class _TransactionFiltersSelectionState
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SelectChips(
-                darkerBackground: true,
                 items: [null, ...snapshot.data!],
                 onLongPress: (Budget? item) {
                   pushRoute(

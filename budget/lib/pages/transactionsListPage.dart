@@ -190,13 +190,6 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                   index - _pageController.initialPage;
                               DateTime startDate = DateTime(DateTime.now().year,
                                   DateTime.now().month + pageOffset);
-                              Widget transactionWidgets = TransactionEntries(
-                                startDate,
-                                new DateTime(startDate.year,
-                                    startDate.month + 1, startDate.day - 1),
-                                onSelected: onSelected,
-                                listID: "Transactions",
-                              );
 
                               return SwipeToSelectTransactions(
                                 listID: "Transactions",
@@ -208,7 +201,25 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                             .sliverOverlapAbsorberHandleFor(
                                                 contextPageView),
                                       ),
-                                      transactionWidgets,
+                                      TransactionEntries(
+                                        startDate,
+                                        new DateTime(
+                                            startDate.year,
+                                            startDate.month + 1,
+                                            startDate.day - 1),
+                                        onSelected: onSelected,
+                                        listID: "Transactions",
+                                        noResultsMessage: "no-transactions-for"
+                                                .tr() +
+                                            " " +
+                                            getMonth(startDate.month) +
+                                            (startDate.year !=
+                                                    DateTime.now().year
+                                                ? " " +
+                                                    startDate.year.toString()
+                                                : "") +
+                                            ".",
+                                      ),
                                       SliverToBoxAdapter(
                                         child: CashFlow(
                                           startDate,

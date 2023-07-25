@@ -216,7 +216,7 @@
   "delete-all-data": "Delete All Data",
   "erase-everything": "Erase everything?",
   "erase-everything-description": "All Google Drive backups will be kept.",
-  "erase-everything-wraning": "Are you sure you want to erase everything?",
+  "erase-everything-warning": "Are you sure you want to erase everything?",
   "erase-everything-warning-description": "All data and preferences will be deleted!",
   "erase": "Erase",
   "edit-category": "Edit Category",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Add your daily transactions to the app to keep your budget on track.",
   "notification-reminder-26": "Stay on top of your budget by adding your daily transactions to the app.",
   "notification-reminder-title": "Add Transactions",
-  "notification-upcoming-transaction-title": "Upcoming Transaction Due"
+  "notification-upcoming-transaction-title": "Upcoming Transaction Due",
+  "translations-help": "If you would like to help with translations, please email",
+  "no-transactions-for": "No transactions for"
 }

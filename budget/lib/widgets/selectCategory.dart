@@ -121,8 +121,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                 }
 
                 children.add(AnimatedScale(
-                  // Offset by 10 because, for some reason, categoryPk of 1 flickers
-                  key: ValueKey(category.categoryPk + 10),
+                  key: ValueKey(category.categoryPk.toString()),
                   duration: Duration(milliseconds: 1500),
                   curve: Curves.elasticOut,
                   scale: widget.scaleWhenSelected == true &&

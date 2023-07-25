@@ -216,7 +216,7 @@
   "delete-all-data": "Ta bort all data",
   "erase-everything": "Radera allt?",
   "erase-everything-description": "Alla Google Drive -säkerhetskopior kommer att hållas.",
-  "erase-everything-wraning": "Är du säker på att du vill radera allt?",
+  "erase-everything-warning": "Är du säker på att du vill radera allt?",
   "erase-everything-warning-description": "All data och preferenser kommer att raderas!",
   "erase": "Radera",
   "edit-category": "Redigera kategori",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Lägg till dina dagliga transaktioner i appen för att hålla din budget på rätt spår.",
   "notification-reminder-26": "Håll dig uppe på din budget genom att lägga till dina dagliga transaktioner i appen.",
   "notification-reminder-title": "Lägg till transaktioner",
-  "notification-upcoming-transaction-title": "Kommande transaktion på grund av"
+  "notification-upcoming-transaction-title": "Kommande transaktion på grund av",
+  "translations-help": "Om du vill hjälpa till med översättningar, maila maila",
+  "no-transactions-for": "Inga transaktioner för"
 }

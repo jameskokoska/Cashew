@@ -216,7 +216,7 @@
   "delete-all-data": "બધા ડેટા કા delete ી નાખો",
   "erase-everything": "બધું ભૂંસી નાખો?",
   "erase-everything-description": "બધા ગૂગલ ડ્રાઇવ બેકઅપ રાખવામાં આવશે.",
-  "erase-everything-wraning": "શું તમને ખાતરી છે કે તમે બધું ભૂંસી નાખવા માંગો છો?",
+  "erase-everything-warning": "શું તમને ખાતરી છે કે તમે બધું ભૂંસી નાખવા માંગો છો?",
   "erase-everything-warning-description": "બધા ડેટા અને પસંદગીઓ કા deleted ી નાખવામાં આવશે!",
   "erase": "ભુસવું",
   "edit-category": "કેટેગરી સંપાદિત કરો",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "તમારા બજેટને ટ્રેક પર રાખવા માટે એપ્લિકેશનમાં તમારા દૈનિક વ્યવહારો ઉમેરો.",
   "notification-reminder-26": "એપ્લિકેશનમાં તમારા દૈનિક વ્યવહાર ઉમેરીને તમારા બજેટની ટોચ પર રહો.",
   "notification-reminder-title": "વ્યવહાર ઉમેરો",
-  "notification-upcoming-transaction-title": "આગામી વ્યવહારને કારણે"
+  "notification-upcoming-transaction-title": "આગામી વ્યવહારને કારણે",
+  "translations-help": "જો તમે અનુવાદોમાં મદદ કરવા માંગતા હો, તો કૃપા કરીને ઇમેઇલ કરો",
+  "no-transactions-for": "માટે કોઈ વ્યવહાર"
 }

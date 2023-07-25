@@ -216,7 +216,7 @@
   "delete-all-data": "Удалить все данные",
   "erase-everything": "Стереть все?",
   "erase-everything-description": "Все резервные копии Google Drive будут сохранены.",
-  "erase-everything-wraning": "Вы уверены, что хотите все стереть?",
+  "erase-everything-warning": "Вы уверены, что хотите все стереть?",
   "erase-everything-warning-description": "Все данные и предпочтения будут удалены!",
   "erase": "Стереть",
   "edit-category": "Редактировать категорию",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Добавьте свои ежедневные транзакции в приложение, чтобы сохранить свой бюджет на пути.",
   "notification-reminder-26": "Оставайтесь в курсе своего бюджета, добавив свои ежедневные транзакции в приложение.",
   "notification-reminder-title": "Добавить транзакции",
-  "notification-upcoming-transaction-title": "Предстоящая транзакция"
+  "notification-upcoming-transaction-title": "Предстоящая транзакция",
+  "translations-help": "Если вы хотите помочь с переводами, пожалуйста, напишите по электронной почте",
+  "no-transactions-for": "Нет транзакций для"
 }

@@ -216,7 +216,7 @@
   "delete-all-data": "Verwijder alle gegevens",
   "erase-everything": "Wis alles?",
   "erase-everything-description": "Alle back -ups van Google Drive worden bewaard.",
-  "erase-everything-wraning": "Weet je zeker dat je alles wilt wissen?",
+  "erase-everything-warning": "Weet je zeker dat je alles wilt wissen?",
   "erase-everything-warning-description": "Alle gegevens en voorkeuren worden verwijderd!",
   "erase": "Wissen",
   "edit-category": "Categorie bewerken",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Voeg uw dagelijkse transacties toe aan de app om uw budget op het goede spoor te houden.",
   "notification-reminder-26": "Blijf op de hoogte van uw budget door uw dagelijkse transacties aan de app toe te voegen.",
   "notification-reminder-title": "Voeg transacties toe",
-  "notification-upcoming-transaction-title": "Aankomende transactie verschuldigd"
+  "notification-upcoming-transaction-title": "Aankomende transactie verschuldigd",
+  "translations-help": "Als u wilt helpen met vertalingen, stuur dan een e -mail",
+  "no-transactions-for": "Geen transacties voor"
 }

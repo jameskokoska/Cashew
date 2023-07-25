@@ -25,6 +25,9 @@ class TextFont extends StatelessWidget {
   final int? walletPkForCurrency;
   // Only show the currency icon and not the currency code afterwards
   final bool onlyShowCurrencyIcon;
+  final List<TextSpan>? richTextSpan;
+  final bool selectableText;
+  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
 
   const TextFont({
     Key? key,
@@ -36,6 +39,9 @@ class TextFont extends StatelessWidget {
     this.maxLines = null,
     this.fixParagraphMargin = false,
     this.shadow = false,
+    this.selectableText = false,
+    this.contextMenuBuilder = null,
+    this.richTextSpan,
     this.autoSizeText = false,
     this.maxFontSize,
     this.minFontSize,
@@ -78,28 +84,44 @@ class TextFont extends StatelessWidget {
       return Transform.translate(
         offset: Offset(0,
             this.fontSize * (appStateSettings["font"] == "Avenir" ? 0.1 : 0)),
-        child: autoSizeText
-            ? AutoSizeText(
+        child: selectableText == true
+            ? SelectableText(
                 textPassed,
+                style: textStyle,
                 maxLines: maxLines,
                 textAlign: textAlign,
-                overflow: overflowReplacement != null
-                    ? null
-                    : overflow ?? TextOverflow.ellipsis,
-                style: textStyle,
-                minFontSize: minFontSize ?? fontSize - 10,
-                maxFontSize: maxFontSize ?? fontSize + 10,
-                softWrap: softWrap,
-                overflowReplacement: overflowReplacement,
+                contextMenuBuilder: contextMenuBuilder,
               )
-            : Text(
-                textPassed,
-                maxLines: maxLines,
-                textAlign: textAlign,
-                overflow: overflow ?? TextOverflow.ellipsis,
-                style: textStyle,
-                softWrap: softWrap,
-              ),
+            : richTextSpan != null
+                ? RichText(
+                    text: TextSpan(
+                      text: textPassed,
+                      style: textStyle,
+                      children: richTextSpan,
+                    ),
+                  )
+                : autoSizeText
+                    ? AutoSizeText(
+                        textPassed,
+                        maxLines: maxLines,
+                        textAlign: textAlign,
+                        overflow: overflowReplacement != null
+                            ? null
+                            : overflow ?? TextOverflow.ellipsis,
+                        style: textStyle,
+                        minFontSize: minFontSize ?? fontSize - 10,
+                        maxFontSize: maxFontSize ?? fontSize + 10,
+                        softWrap: softWrap,
+                        overflowReplacement: overflowReplacement,
+                      )
+                    : Text(
+                        textPassed,
+                        maxLines: maxLines,
+                        textAlign: textAlign,
+                        overflow: overflow ?? TextOverflow.ellipsis,
+                        style: textStyle,
+                        softWrap: softWrap,
+                      ),
       );
     }
 

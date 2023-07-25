@@ -30,7 +30,7 @@ Future<bool> initializeSettings() async {
           userSettings[key] = userPreferencesDefault[key];
         }
       });
-      updateSettings("databaseJustImported", false);
+      updateSettings("databaseJustImported", false, updateGlobalState: false);
       print("Settings were restored");
     } catch (e) {
       print("Error restoring imported settings " + e.toString());
@@ -96,23 +96,41 @@ Future<bool> initializeSettings() async {
 }
 
 // setAppStateSettings
-Future<bool> updateSettings(setting, value,
-    {List<int> pagesNeedingRefresh = const [],
-    bool updateGlobalState = true}) async {
+Future<bool> updateSettings(
+  setting,
+  value, {
+  required bool updateGlobalState,
+  List<int> pagesNeedingRefresh = const [],
+  bool forceGlobalStateUpdate = false,
+}) async {
+  bool isChanged = appStateSettings[setting] != value;
+
   appStateSettings[setting] = value;
   await sharedPreferences.setString(
       'userSettings', json.encode(appStateSettings));
-  if (updateGlobalState == true) appStateKey.currentState?.refreshAppState();
-  //Refresh any pages listed
-  for (int page in pagesNeedingRefresh) {
-    if (page == 0) {
-      homePageStateKey.currentState?.refreshState();
-    } else if (page == 1) {
-      transactionsListPageStateKey.currentState?.refreshState();
-    } else if (page == 2) {
-      budgetsListPageStateKey.currentState?.refreshState();
-    } else if (page == 3) {
-      settingsPageStateKey.currentState?.refreshState();
+
+  if (updateGlobalState == true) {
+    // Only refresh global state if the value is different
+    if (isChanged || forceGlobalStateUpdate) {
+      print("Rebuilt Main Request from: " +
+          setting.toString() +
+          " : " +
+          value.toString());
+      appStateKey.currentState?.refreshAppState();
+    }
+  } else {
+    //Refresh any pages listed
+    for (int page in pagesNeedingRefresh) {
+      print("Pages Rebuilt and Refreshed: " + pagesNeedingRefresh.toString());
+      if (page == 0) {
+        homePageStateKey.currentState?.refreshState();
+      } else if (page == 1) {
+        transactionsListPageStateKey.currentState?.refreshState();
+      } else if (page == 2) {
+        budgetsListPageStateKey.currentState?.refreshState();
+      } else if (page == 3) {
+        settingsPageStateKey.currentState?.refreshState();
+      }
     }
   }
 

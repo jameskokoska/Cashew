@@ -216,7 +216,7 @@
   "delete-all-data": "எல்லா தரவையும் நீக்கு",
   "erase-everything": "எல்லாவற்றையும் அழிக்கவா?",
   "erase-everything-description": "அனைத்து கூகிள் டிரைவ் காப்புப்பிரதிகளும் வைக்கப்படும்.",
-  "erase-everything-wraning": "எல்லாவற்றையும் அழிக்க விரும்புகிறீர்களா?",
+  "erase-everything-warning": "எல்லாவற்றையும் அழிக்க விரும்புகிறீர்களா?",
   "erase-everything-warning-description": "எல்லா தரவுகளும் விருப்பங்களும் நீக்கப்படும்!",
   "erase": "அழிக்கவும்",
   "edit-category": "வகைத் திருத்து",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "உங்கள் பட்ஜெட்டை கண்காணிக்க பயன்பாட்டில் உங்கள் அன்றாட பரிவர்த்தனைகளைச் சேர்க்கவும்.",
   "notification-reminder-26": "பயன்பாட்டில் உங்கள் அன்றாட பரிவர்த்தனைகளைச் சேர்ப்பதன் மூலம் உங்கள் பட்ஜெட்டுக்கு மேல் இருங்கள்.",
   "notification-reminder-title": "பரிவர்த்தனைகளைச் சேர்க்கவும்",
-  "notification-upcoming-transaction-title": "வரவிருக்கும் பரிவர்த்தனை காரணமாக"
+  "notification-upcoming-transaction-title": "வரவிருக்கும் பரிவர்த்தனை காரணமாக",
+  "translations-help": "மொழிபெயர்ப்புகளுக்கு நீங்கள் உதவ விரும்பினால், தயவுசெய்து மின்னஞ்சல் செய்யவும்",
+  "no-transactions-for": "பரிவர்த்தனைகள் இல்லை"
 }

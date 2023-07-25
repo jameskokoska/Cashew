@@ -216,7 +216,7 @@
   "delete-all-data": "מחק את כל הנתונים",
   "erase-everything": "למחוק הכל?",
   "erase-everything-description": "כל הגיבויים של Google Drive יישמרו.",
-  "erase-everything-wraning": "האם אתה בטוח שאתה רוצה למחוק הכל?",
+  "erase-everything-warning": "האם אתה בטוח שאתה רוצה למחוק הכל?",
   "erase-everything-warning-description": "כל הנתונים וההעדפות יימחקו!",
   "erase": "לִמְחוֹק",
   "edit-category": "עריכת קטגוריה",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "הוסף את העסקאות היומיות שלך לאפליקציה כדי לשמור על התקציב שלך על המסלול.",
   "notification-reminder-26": "הישאר על גבי התקציב שלך על ידי הוספת העסקאות היומיות שלך לאפליקציה.",
   "notification-reminder-title": "הוסף עסקאות",
-  "notification-upcoming-transaction-title": "העסקה הקרובה המגיעה"
+  "notification-upcoming-transaction-title": "העסקה הקרובה המגיעה",
+  "translations-help": "אם ברצונך לעזור בתרגומים, אנא שלח דוא\"ל",
+  "no-transactions-for": "אין עסקאות עבור"
 }

@@ -10,6 +10,25 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.0
+    Consistent routing used when logging in with Google
+    Long press selected multiple transactions total in app bar to copy amount
+    Long press to copy amount in edit transaction page
+    Context menu for select amount - copy and paste
+    Context menu experiments
+    New context menu on web
+    Fixed cache image not changing image if category changes
+    Sidebar user login fixes
+    Download SQL backup by long pressing
+    Removed shadow for past budget container when material you
+    Choice chips follow background when deselected
+    Decreased background of popup in light mode material you
+    Increased efficiency of updating settings
+    Refactored Google User global
+    Transactions page, if empty, displays the time period
+    Home page is only refreshed when user closes Edit Home page
+    Added translations help text in settings
+    New FAB animation when switching pages
     < 3.5.9
     Icon for watched categories has background if selected
     Fixed flickering select category

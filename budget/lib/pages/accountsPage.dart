@@ -41,7 +41,7 @@ class AccountsPageState extends State<AccountsPage> {
       ),
       child: Center(
         child: TextFont(
-            text: user?.displayName![0] ?? "",
+            text: googleUser?.displayName![0] ?? "",
             fontSize: 60,
             textAlign: TextAlign.center,
             fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class AccountsPageState extends State<AccountsPage> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Center(
-            child: user == null
+            child: googleUser == null
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -95,13 +95,14 @@ class AccountsPageState extends State<AccountsPage> {
                     children: [
                       SizedBox(height: 35),
                       ClipOval(
-                        child: user == null || user!.photoUrl == null
+                        child: googleUser == null ||
+                                googleUser!.photoUrl == null
                             ? profileWidget
                             : FadeInImage.memoryNetwork(
                                 fadeInDuration: Duration(milliseconds: 500),
                                 fadeOutDuration: Duration(milliseconds: 500),
                                 placeholder: kTransparentImage,
-                                image: user!.photoUrl.toString(),
+                                image: googleUser!.photoUrl.toString(),
                                 height: 95,
                                 width: 95,
                                 imageErrorBuilder: (BuildContext context,
@@ -112,14 +113,15 @@ class AccountsPageState extends State<AccountsPage> {
                       ),
                       SizedBox(height: 10),
                       TextFont(
-                        text: (user?.displayName ?? "").toString(),
+                        text: (googleUser?.displayName ?? "").toString(),
                         textAlign: TextAlign.center,
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
                       ),
                       SizedBox(height: 2),
                       TextFont(
-                        text: (user?.email ?? "").toString(),
+                        text: (appStateSettings["currentUserEmail"] ?? "")
+                            .toString(),
                         textAlign: TextAlign.center,
                         fontSize: 15,
                       ),

@@ -135,7 +135,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                     Budget budget = snapshot.data![index];
                     DateTimeRange budgetRange =
                         getBudgetDate(budget, DateTime.now());
-                    Color backgroundColor = dynamicPastel(
+                    Color accentColor = dynamicPastel(
                         context,
                         HexColor(budget.colour,
                             defaultColor:
@@ -158,7 +158,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                               (snapshot.data ?? []).length != 1,
                           currentReorder:
                               currentReorder != -1 && currentReorder != index,
-                          backgroundColor: backgroundColor,
+                          accentColor: accentColor,
                           onDelete: () {
                             deleteBudgetPopup(context, budget);
                           },

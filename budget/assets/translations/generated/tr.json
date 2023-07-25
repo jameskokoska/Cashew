@@ -216,7 +216,7 @@
   "delete-all-data": "Tüm verileri sil",
   "erase-everything": "Her şeyi sil?",
   "erase-everything-description": "Tüm Google Drive yedeklemeleri saklanacaktır.",
-  "erase-everything-wraning": "Her şeyi silmek istediğinden emin misin?",
+  "erase-everything-warning": "Her şeyi silmek istediğinden emin misin?",
   "erase-everything-warning-description": "Tüm veriler ve tercihler silinecektir!",
   "erase": "Silmek",
   "edit-category": "Düzenle Kategorisi",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Bütçenizi takip etmek için günlük işlemlerinizi uygulamaya ekleyin.",
   "notification-reminder-26": "Uygulamaya günlük işlemlerinizi ekleyerek bütçenizin üstünde kalın.",
   "notification-reminder-title": "İşlemler ekle",
-  "notification-upcoming-transaction-title": "Yaklaşan işlem son"
+  "notification-upcoming-transaction-title": "Yaklaşan işlem son",
+  "translations-help": "Çevirilere yardımcı olmak isterseniz, lütfen e -posta gönderin",
+  "no-transactions-for": "İçin işlem yok"
 }

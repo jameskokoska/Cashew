@@ -216,7 +216,7 @@
   "delete-all-data": "మొత్తం డేటాను తొలగించండి",
   "erase-everything": "ప్రతిదీ చెరిపివేయాలా?",
   "erase-everything-description": "అన్ని గూగుల్ డ్రైవ్ బ్యాకప్‌లు ఉంచబడతాయి.",
-  "erase-everything-wraning": "మీరు ఖచ్చితంగా ప్రతిదీ తొలగించాలనుకుంటున్నారా?",
+  "erase-everything-warning": "మీరు ఖచ్చితంగా ప్రతిదీ తొలగించాలనుకుంటున్నారా?",
   "erase-everything-warning-description": "అన్ని డేటా మరియు ప్రాధాన్యతలు తొలగించబడతాయి!",
   "erase": "చెరిపివేస్తుంది",
   "edit-category": "వర్గాన్ని సవరించండి",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "మీ బడ్జెట్‌ను ట్రాక్ చేయడానికి మీ రోజువారీ లావాదేవీలను అనువర్తనానికి జోడించండి.",
   "notification-reminder-26": "మీ రోజువారీ లావాదేవీలను అనువర్తనానికి జోడించడం ద్వారా మీ బడ్జెట్ పైన ఉండండి.",
   "notification-reminder-title": "లావాదేవీలను జోడించండి",
-  "notification-upcoming-transaction-title": "రాబోయే లావాదేవీ"
+  "notification-upcoming-transaction-title": "రాబోయే లావాదేవీ",
+  "translations-help": "మీరు అనువాదాలకు సహాయం చేయాలనుకుంటే, దయచేసి ఇమెయిల్ చేయండి",
+  "no-transactions-for": "లావాదేవీలు లేవు"
 }

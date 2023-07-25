@@ -14,7 +14,7 @@ class EditRowEntry extends StatelessWidget {
   const EditRowEntry(
       {required this.index,
       required this.content,
-      this.backgroundColor,
+      this.accentColor,
       required this.openPage,
       required this.onDelete,
       this.onTap,
@@ -31,7 +31,7 @@ class EditRowEntry extends StatelessWidget {
       : super(key: key);
   final int index;
   final Widget content;
-  final Color? backgroundColor;
+  final Color? accentColor;
   final Widget openPage;
   final VoidCallback onDelete;
   final EdgeInsets? padding;
@@ -90,12 +90,12 @@ class EditRowEntry extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      backgroundColor != null
+                      accentColor != null
                           ? Container(
                               width: 5,
                               color: dynamicPastel(
                                 context,
-                                backgroundColor!,
+                                accentColor!,
                                 amount: 0.1,
                                 inverse: true,
                               ),
@@ -174,12 +174,12 @@ class EditRowEntry extends StatelessWidget {
     // alternative theme:
     // container = OpenContainerNavigation(
     //   openPage: openPage,
-    //   closedColor: dynamicPastel(context, backgroundColor, amount: 0.6),
+    //   closedColor: dynamicPastel(context, accentColor, amount: 0.6),
     //   borderRadius: 15,
     //   button: (openContainer) {
     //     return Tappable(
     //       borderRadius: 15,
-    //       color: dynamicPastel(context, backgroundColor, amount: 0.6),
+    //       color: dynamicPastel(context, accentColor, amount: 0.6),
     //       onTap: () {
     //         FocusScopeNode currentFocus = FocusScope.of(context);
     //         if (!currentFocus.hasPrimaryFocus) {
@@ -195,7 +195,7 @@ class EditRowEntry extends StatelessWidget {
     //           border: Border.all(
     //             color: dynamicPastel(
     //                 context,
-    //                 dynamicPastel(context, backgroundColor,
+    //                 dynamicPastel(context, accentColor,
     //                     inverse: true, amount: 0.3),
     //                 amount: 0.3),
     //             width: 2,

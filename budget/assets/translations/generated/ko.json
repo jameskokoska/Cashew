@@ -216,7 +216,7 @@
   "delete-all-data": "모든 데이터를 삭제합니다",
   "erase-everything": "모든 것을 지우시겠습니까?",
   "erase-everything-description": "모든 Google 드라이브 백업은 유지됩니다.",
-  "erase-everything-wraning": "모든 것을 지우고 싶습니까?",
+  "erase-everything-warning": "모든 것을 지우고 싶습니까?",
   "erase-everything-warning-description": "모든 데이터와 선호도가 삭제됩니다!",
   "erase": "삭제",
   "edit-category": "카테고리 편집",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "예산을 추적하려면 일일 거래를 앱에 추가하십시오.",
   "notification-reminder-26": "일일 거래를 앱에 추가하여 예산을 유지하십시오.",
   "notification-reminder-title": "트랜잭션을 추가하십시오",
-  "notification-upcoming-transaction-title": "다가오는 거래 마감"
+  "notification-upcoming-transaction-title": "다가오는 거래 마감",
+  "translations-help": "번역을 돕고 싶다면 이메일을 보내주십시오.",
+  "no-transactions-for": "거래가 없습니다"
 }

@@ -261,8 +261,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                             curve: Curves.easeInOutCubic,
                             child: AnimatedSwitcher(
                               duration: Duration(milliseconds: 300),
-                              child: appStateSettings["currentUserEmail"] ==
-                                          "" ||
+                              child: googleUser == null ||
                                       appStateSettings["backupSync"] == false
                                   ? Container(
                                       key: ValueKey(1),
@@ -294,53 +293,70 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             left: 10),
-                                                    child:
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        googleUser?.email !=
+                                                                null
+                                                            ? TextFont(
+                                                                textColor: getColor(
+                                                                    context,
+                                                                    "textLight"),
+                                                                fontSize: 13,
+                                                                text: (googleUser
+                                                                            ?.email ??
+                                                                        "")
+                                                                    .split(
+                                                                        "@")[0],
+                                                              )
+                                                            : SizedBox.shrink(),
                                                         TimerBuilder.periodic(
-                                                      Duration(seconds: 5),
-                                                      builder: (context) {
-                                                        DateTime?
-                                                            timeLastSynced =
-                                                            null;
-                                                        try {
-                                                          timeLastSynced =
-                                                              DateTime.parse(
-                                                            appStateSettings[
-                                                                "lastSynced"],
-                                                          );
-                                                        } catch (e) {
-                                                          print(
-                                                              "Error parsing time last synced: " +
+                                                          Duration(seconds: 5),
+                                                          builder: (context) {
+                                                            DateTime?
+                                                                timeLastSynced =
+                                                                null;
+                                                            try {
+                                                              timeLastSynced =
+                                                                  DateTime
+                                                                      .parse(
+                                                                appStateSettings[
+                                                                    "lastSynced"],
+                                                              );
+                                                            } catch (e) {
+                                                              print("Error parsing time last synced: " +
                                                                   e.toString());
-                                                        }
-                                                        return TextFont(
-                                                          textColor: getColor(
-                                                              context,
-                                                              "textLight"),
-                                                          fontSize: 13,
-                                                          text: "Synced " +
-                                                              (timeLastSynced ==
-                                                                      null
-                                                                  ? "?"
-                                                                  : getTimeAgo(
-                                                                      timeLastSynced)) +
-                                                              "\n" +
-                                                              appStateSettings[
-                                                                      "currentUserEmail"]
-                                                                  .split(
-                                                                      "@")[0],
-                                                        );
-                                                      },
+                                                            }
+                                                            return TextFont(
+                                                              textColor: getColor(
+                                                                  context,
+                                                                  "textLight"),
+                                                              fontSize: 13,
+                                                              text: "Synced " +
+                                                                  (timeLastSynced ==
+                                                                          null
+                                                                      ? "?"
+                                                                      : getTimeAgo(
+                                                                          timeLastSynced)),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
                                                 SizedBox(width: 2),
                                                 Opacity(
                                                   opacity: 0.7,
-                                                  child:
-                                                      RefreshButton(onTap: () {
-                                                    runAllCloudFunctions(
-                                                        context);
-                                                  }),
+                                                  child: RefreshButton(
+                                                    padding: EdgeInsets.all(8),
+                                                    onTap: () {
+                                                      runAllCloudFunctions(
+                                                          context);
+                                                    },
+                                                  ),
                                                 ),
                                               ],
                                             ),

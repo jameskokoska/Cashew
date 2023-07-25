@@ -216,7 +216,7 @@
   "delete-all-data": "Hapus semua data",
   "erase-everything": "Menghapus semuanya?",
   "erase-everything-description": "Semua cadangan Google Drive akan disimpan.",
-  "erase-everything-wraning": "Apakah Anda yakin ingin menghapus semuanya?",
+  "erase-everything-warning": "Apakah Anda yakin ingin menghapus semuanya?",
   "erase-everything-warning-description": "Semua data dan preferensi akan dihapus!",
   "erase": "Menghapus",
   "edit-category": "Edit kategori",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Tambahkan transaksi harian Anda ke aplikasi untuk menjaga anggaran Anda di jalur.",
   "notification-reminder-26": "Tetap di atas anggaran Anda dengan menambahkan transaksi harian Anda ke aplikasi.",
   "notification-reminder-title": "Tambahkan transaksi",
-  "notification-upcoming-transaction-title": "Transaksi yang akan datang karena"
+  "notification-upcoming-transaction-title": "Transaksi yang akan datang karena",
+  "translations-help": "Jika Anda ingin membantu terjemahan, silakan kirim email",
+  "no-transactions-for": "Tidak ada transaksi untuk"
 }

@@ -1,4 +1,3 @@
-
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +34,7 @@ Future openBottomSheet(
   bool snap = true,
   bool resizeForKeyboard = true,
   bool showScrollbar = false,
+  bool removeAnyContextMenus = false,
 }) async {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
@@ -45,7 +45,7 @@ Future openBottomSheet(
       bottomPaddingColor: appStateSettings["materialYou"]
           ? dynamicPastel(
               context, Theme.of(context).colorScheme.secondaryContainer,
-              amount: 0.3)
+              amountDark: 0.3, amountLight: 0.6)
           : getColor(context, "lightDarkAccent"), builder: (context) {
     double deviceAspectRatio =
         MediaQuery.of(context).size.height / MediaQuery.of(context).size.width;
@@ -92,6 +92,7 @@ Future openBottomSheet(
         positioning: SnapPositioning.relativeToAvailableSpace,
       ),
       listener: (SheetState state) {
+        if (removeAnyContextMenus) ContextMenuController.removeAny();
         if (state.maxExtent == 1 &&
             state.isExpanded &&
             state.isAtTop &&

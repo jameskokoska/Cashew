@@ -216,7 +216,7 @@
   "delete-all-data": "Eliminar todos los datos",
   "erase-everything": "¿Borra todo?",
   "erase-everything-description": "Se mantendrán todas las copias de seguridad de Google Drive.",
-  "erase-everything-wraning": "¿Estás seguro de que quieres borrar todo?",
+  "erase-everything-warning": "¿Estás seguro de que quieres borrar todo?",
   "erase-everything-warning-description": "¡Todos los datos y preferencias se eliminarán!",
   "erase": "Borrar",
   "edit-category": "Editar categoria",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Agregue sus transacciones diarias a la aplicación para mantener su presupuesto en camino.",
   "notification-reminder-26": "Manténgase al tanto de su presupuesto agregando sus transacciones diarias a la aplicación.",
   "notification-reminder-title": "Agregar transacciones",
-  "notification-upcoming-transaction-title": "Próxima transacción adeudada"
+  "notification-upcoming-transaction-title": "Próxima transacción adeudada",
+  "translations-help": "Si desea ayudar con las traducciones, envíe un correo electrónico",
+  "no-transactions-for": "No hay transacciones para"
 }

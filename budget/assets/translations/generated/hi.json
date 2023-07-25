@@ -216,7 +216,7 @@
   "delete-all-data": "सभी डेटा हटाएँ",
   "erase-everything": "सब कुछ मिटा दो?",
   "erase-everything-description": "सभी Google ड्राइव बैकअप रखे जाएंगे।",
-  "erase-everything-wraning": "क्या आप सुनिश्चित हैं कि आप सब कुछ मिटाना चाहते हैं?",
+  "erase-everything-warning": "क्या आप सुनिश्चित हैं कि आप सब कुछ मिटाना चाहते हैं?",
   "erase-everything-warning-description": "सभी डेटा और वरीयताओं को हटा दिया जाएगा!",
   "erase": "मिटाएं",
   "edit-category": "संपादित श्रेणी",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "अपने बजट को ट्रैक पर रखने के लिए अपने दैनिक लेनदेन को ऐप में जोड़ें।",
   "notification-reminder-26": "ऐप में अपने दैनिक लेनदेन को जोड़कर अपने बजट के शीर्ष पर रहें।",
   "notification-reminder-title": "लेनदेन जोड़ें",
-  "notification-upcoming-transaction-title": "आगामी लेन -देन"
+  "notification-upcoming-transaction-title": "आगामी लेन -देन",
+  "translations-help": "यदि आप अनुवादों के साथ मदद करना चाहते हैं, तो कृपया ईमेल करें",
+  "no-transactions-for": "के लिए कोई लेनदेन नहीं"
 }

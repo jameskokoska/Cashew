@@ -203,7 +203,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedBudget = selectedBudgetPassed;
       selectedBudgetIsShared = isSharedBudget;
       if (selectedBudgetPk != null && selectedPayer == null)
-        selectedPayer = appStateSettings["currentUserEmail"];
+        selectedPayer = appStateSettings["currentUserEmail"] ?? "";
       if (isSharedBudget == false || selectedBudgetPassed?.sharedKey == null) {
         selectedPayer = null;
       }
@@ -534,6 +534,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               next: () {
                 openBottomSheet(
                   context,
+                  removeAnyContextMenus: true,
                   PopupFramework(
                     title: "enter-amount".tr(),
                     underTitleSpace: false,
@@ -844,6 +845,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               if (selectedAmount == null)
                                 openBottomSheet(
                                   context,
+                                  removeAnyContextMenus: true,
                                   PopupFramework(
                                     title: "enter-amount".tr(),
                                     padding: false,
@@ -882,6 +884,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         onTap: () {
                           openBottomSheet(
                             context,
+                            removeAnyContextMenus: true,
                             PopupFramework(
                               title: "enter-amount".tr(),
                               padding: false,
@@ -1050,9 +1053,21 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       Expanded(
                         child: Tappable(
                           color: Colors.transparent,
+                          onLongPress: () {
+                            copyToClipboard(
+                              convertToMoney(
+                                Provider.of<AllWallets>(context, listen: false),
+                                selectedAmount ?? 0,
+                                showCurrency: false,
+                                finalNumber: selectedAmount ?? 0,
+                                decimals: selectedWallet?.decimals,
+                              ),
+                            );
+                          },
                           onTap: () {
                             openBottomSheet(
                               context,
+                              removeAnyContextMenus: true,
                               PopupFramework(
                                 padding: false,
                                 title: "enter-amount".tr(),
@@ -2342,6 +2357,7 @@ class HorizontalBreakAbove extends StatelessWidget {
     if (enabled == false) return child;
     return Column(
       children: [
+        // Divider(indent: 10, endIndent: 10),
         Container(
           margin: EdgeInsets.symmetric(vertical: 10),
           height: 2,

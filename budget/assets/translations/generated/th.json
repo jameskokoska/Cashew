@@ -216,7 +216,7 @@
   "delete-all-data": "ลบข้อมูลทั้งหมด",
   "erase-everything": "ลบทุกอย่าง?",
   "erase-everything-description": "การสำรองข้อมูล Google ไดรฟ์ทั้งหมดจะถูกเก็บไว้",
-  "erase-everything-wraning": "แน่ใจหรือว่าต้องการลบทุกอย่าง?",
+  "erase-everything-warning": "แน่ใจหรือว่าต้องการลบทุกอย่าง?",
   "erase-everything-warning-description": "ข้อมูลและการตั้งค่าทั้งหมดจะถูกลบ!",
   "erase": "ลบออก",
   "edit-category": "แก้ไขหมวดหมู่",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "เพิ่มธุรกรรมประจำวันของคุณลงในแอพเพื่อรักษางบประมาณของคุณ",
   "notification-reminder-26": "อยู่ด้านบนของงบประมาณของคุณโดยเพิ่มธุรกรรมประจำวันของคุณลงในแอพ",
   "notification-reminder-title": "เพิ่มธุรกรรม",
-  "notification-upcoming-transaction-title": "การทำธุรกรรมที่กำลังจะมาถึง"
+  "notification-upcoming-transaction-title": "การทำธุรกรรมที่กำลังจะมาถึง",
+  "translations-help": "หากคุณต้องการความช่วยเหลือเกี่ยวกับการแปลโปรดส่งอีเมล",
+  "no-transactions-for": "ไม่มีธุรกรรมสำหรับ"
 }

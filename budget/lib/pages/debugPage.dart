@@ -80,14 +80,13 @@ class DebugPage extends StatelessWidget {
           initial: appStateSettings["font"],
           items: ["Avenir", "Inter", "DMSans", "OpenSans", "Metropolis"],
           onChanged: (value) {
-            updateSettings("font", value,
-                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+            updateSettings("font", value, updateGlobalState: true);
           },
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("colorTintCategoryIcon", value,
-                pagesNeedingRefresh: [0, 1, 2, 3]);
+                updateGlobalState: true);
           },
           title: "Category Icon Tint",
           description:
@@ -98,7 +97,7 @@ class DebugPage extends StatelessWidget {
         SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("emailScanning", value,
-                pagesNeedingRefresh: [0, 1, 2, 3]);
+                updateGlobalState: false, pagesNeedingRefresh: [3]);
           },
           title: "Enable Email Scanning",
           description: "Not verified by Google. Still in testing.",
@@ -118,7 +117,7 @@ class DebugPage extends StatelessWidget {
         SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("sharedBudgets", value,
-                pagesNeedingRefresh: [0, 1, 2, 3]);
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
           },
           title: "Enable Shared Budgets",
           description:
@@ -143,7 +142,7 @@ class DebugPage extends StatelessWidget {
         SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("legacyTransactionAmountColors", value,
-                pagesNeedingRefresh: [0, 1, 2, 3]);
+                updateGlobalState: true);
             generateColors();
           },
           title: "Legacy transaction amount colors",
@@ -155,7 +154,7 @@ class DebugPage extends StatelessWidget {
         SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("incognitoKeyboard", value,
-                pagesNeedingRefresh: [0, 1, 2, 3]);
+                updateGlobalState: false);
           },
           title: "Incognito Text Input",
           description:
@@ -171,12 +170,13 @@ class DebugPage extends StatelessWidget {
           min: 0,
           max: 3,
           initialValue: appStateSettings["animationSpeed"].toDouble(),
-          onChange: (value) {
-            if (value == 0) value = 0.0000001;
-            updateSettings("animationSpeed", value);
-            timeDilation = value;
-          },
+          onChange: (value) {},
           divisions: 30,
+          onFinished: (value) {
+            if (value == 0) value = 0.0000001;
+            timeDilation = value;
+            updateSettings("animationSpeed", value, updateGlobalState: true);
+          },
         ),
         SizedBox(height: 10),
         Button(
@@ -326,6 +326,7 @@ class SliderSelector extends StatefulWidget {
   const SliderSelector({
     super.key,
     required this.onChange,
+    this.onFinished,
     required this.initialValue,
     this.divisions,
     required this.min,
@@ -333,6 +334,7 @@ class SliderSelector extends StatefulWidget {
   });
 
   final Function(double) onChange;
+  final Function(double)? onFinished;
   final double initialValue;
   final int? divisions;
   final double min;
@@ -357,6 +359,11 @@ class _SliderSelectorState extends State<SliderSelector> {
         setState(() {
           _currentSliderValue = value;
         });
+      },
+      onChangeEnd: (double value) {
+        if (widget.onFinished != null) {
+          widget.onFinished!(value);
+        }
       },
     );
   }

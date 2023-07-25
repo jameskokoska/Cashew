@@ -19,6 +19,8 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/functions.dart';
 
+// We need to refresh the home page when this route is popped
+
 class EditHomePageItem {
   final IconData icon;
   final String name;
@@ -62,7 +64,7 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: appStateSettings["showWalletSwitcher"],
             onSwitched: (value) {
               updateSettings("showWalletSwitcher", value,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
+                  pagesNeedingRefresh: [], updateGlobalState: false);
             },
           ),
           "budgets": EditHomePageItem(
@@ -71,7 +73,7 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: appStateSettings["showPinnedBudgets"],
             onSwitched: (value) {
               updateSettings("showPinnedBudgets", value,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
+                  pagesNeedingRefresh: [], updateGlobalState: false);
             },
             onTap: () async {
               String defaultLabel = "default-line-graph".tr();
@@ -144,7 +146,7 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: appStateSettings["showOverdueUpcoming"],
             onSwitched: (value) {
               updateSettings("showOverdueUpcoming", value,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
+                  pagesNeedingRefresh: [], updateGlobalState: false);
             },
           ),
           "creditDebts": EditHomePageItem(
@@ -153,7 +155,7 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: appStateSettings["showCreditDebt"],
             onSwitched: (value) {
               updateSettings("showCreditDebt", value,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
+                  pagesNeedingRefresh: [], updateGlobalState: false);
             },
           ),
           "allSpendingSummary": EditHomePageItem(
@@ -162,7 +164,7 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: appStateSettings["showAllSpendingSummary"],
             onSwitched: (value) {
               updateSettings("showAllSpendingSummary", value,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
+                  pagesNeedingRefresh: [], updateGlobalState: false);
             },
             onTap: () async {
               openBottomSheet(
@@ -178,7 +180,7 @@ class _EditHomePageState extends State<EditHomePage> {
                     onSelected: (DateTime? dateTime) {
                       updateSettings("incomeExpenseStartDate",
                           dateTime == null ? null : dateTime.toString(),
-                          pagesNeedingRefresh: [0], updateGlobalState: false);
+                          pagesNeedingRefresh: [], updateGlobalState: false);
                     },
                   ),
                 ),
@@ -191,7 +193,7 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: appStateSettings["showSpendingGraph"],
             onSwitched: (value) {
               updateSettings("showSpendingGraph", value,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
+                  pagesNeedingRefresh: [], updateGlobalState: false);
             },
             extraWidgetsBelow: [],
             onTap: () async {
@@ -233,7 +235,7 @@ class _EditHomePageState extends State<EditHomePage> {
                         updateSettings(
                           "lineGraphDisplayType",
                           LineGraphDisplay.Default30Days.index,
-                          pagesNeedingRefresh: [0],
+                          pagesNeedingRefresh: [],
                           updateGlobalState: false,
                         );
                       } else if (value == customLabel) {
@@ -262,7 +264,7 @@ class _EditHomePageState extends State<EditHomePage> {
                         updateSettings(
                           "lineGraphDisplayType",
                           LineGraphDisplay.CustomStartDate.index,
-                          pagesNeedingRefresh: [0],
+                          pagesNeedingRefresh: [],
                           updateGlobalState: false,
                         );
                       } else {
@@ -275,7 +277,7 @@ class _EditHomePageState extends State<EditHomePage> {
                         updateSettings(
                           "lineGraphDisplayType",
                           LineGraphDisplay.Budget.index,
-                          pagesNeedingRefresh: [0],
+                          pagesNeedingRefresh: [],
                           updateGlobalState: false,
                         );
                       }
@@ -384,7 +386,8 @@ class _EditHomePageState extends State<EditHomePage> {
               final String item = keyOrder.removeAt(oldIndex);
               keyOrder.insert(newIndex, item);
             });
-            updateSettings("homePageOrder", keyOrder, pagesNeedingRefresh: [0]);
+            updateSettings("homePageOrder", keyOrder,
+                pagesNeedingRefresh: [], updateGlobalState: false);
             return true;
           },
         ),

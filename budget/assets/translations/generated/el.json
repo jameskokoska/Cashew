@@ -216,7 +216,7 @@
   "delete-all-data": "Διαγραφή όλων των δεδομένων",
   "erase-everything": "Διαγράψτε τα πάντα;",
   "erase-everything-description": "Όλα τα αντίγραφα ασφαλείας Google Drive θα διατηρηθούν.",
-  "erase-everything-wraning": "Είστε βέβαιοι ότι θέλετε να διαγράψετε τα πάντα;",
+  "erase-everything-warning": "Είστε βέβαιοι ότι θέλετε να διαγράψετε τα πάντα;",
   "erase-everything-warning-description": "Όλα τα δεδομένα και οι προτιμήσεις θα διαγραφούν!",
   "erase": "Εξάλειψη",
   "edit-category": "Επεξεργασία κατηγορίας",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Προσθέστε τις καθημερινές σας συναλλαγές στην εφαρμογή για να διατηρήσετε τον προϋπολογισμό σας σε καλό δρόμο.",
   "notification-reminder-26": "Μείνετε στην κορυφή του προϋπολογισμού σας προσθέτοντας τις καθημερινές συναλλαγές σας στην εφαρμογή.",
   "notification-reminder-title": "Προσθήκη συναλλαγών",
-  "notification-upcoming-transaction-title": "Επερχόμενη συναλλαγή οφειλόμενη"
+  "notification-upcoming-transaction-title": "Επερχόμενη συναλλαγή οφειλόμενη",
+  "translations-help": "Εάν θέλετε να βοηθήσετε με μεταφράσεις, στείλτε email",
+  "no-transactions-for": "Χωρίς συναλλαγές για"
 }

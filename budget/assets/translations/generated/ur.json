@@ -216,7 +216,7 @@
   "delete-all-data": "تمام ڈیٹا کو حذف کریں",
   "erase-everything": "ہر چیز کو مٹائیں؟",
   "erase-everything-description": "تمام گوگل ڈرائیو بیک اپ رکھے جائیں گے۔",
-  "erase-everything-wraning": "کیا آپ کو یقین ہے کہ آپ سب کچھ مٹانا چاہتے ہیں؟",
+  "erase-everything-warning": "کیا آپ کو یقین ہے کہ آپ سب کچھ مٹانا چاہتے ہیں؟",
   "erase-everything-warning-description": "تمام ڈیٹا اور ترجیحات حذف ہوجائیں گی!",
   "erase": "مٹانا",
   "edit-category": "زمرہ میں ترمیم کریں",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "اپنے بجٹ کو ٹریک پر رکھنے کے لئے اپنے روزانہ کے لین دین کو ایپ میں شامل کریں۔",
   "notification-reminder-26": "ایپ میں اپنے روزانہ کے لین دین کو شامل کرکے اپنے بجٹ کے اوپری حصے پر رہیں۔",
   "notification-reminder-title": "لین دین شامل کریں",
-  "notification-upcoming-transaction-title": "آئندہ لین دین کی وجہ سے"
+  "notification-upcoming-transaction-title": "آئندہ لین دین کی وجہ سے",
+  "translations-help": "اگر آپ ترجموں میں مدد کرنا چاہتے ہیں تو ، براہ کرم ای میل کریں",
+  "no-transactions-for": "کے لئے کوئی لین دین نہیں ہے"
 }

@@ -3,7 +3,6 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
-import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
@@ -317,7 +316,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             Transform.translate(
                               offset: Offset(0, -10),
                               child: WidgetSize(
-                                onChange: (size) {
+                                onChange: (Size size) {
                                   budgetHeaderHeight = size.height - 20;
                                 },
                                 child: Container(
@@ -635,7 +634,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
 
 class WidgetSize extends StatefulWidget {
   final Widget child;
-  final Function onChange;
+  final Function(Size size) onChange;
 
   const WidgetSize({
     Key? key,
@@ -664,11 +663,53 @@ class _WidgetSizeState extends State<WidgetSize> {
     var context = widgetKey.currentContext;
     if (context == null) return;
 
-    var newSize = context.size;
+    Size newSize = context.size ?? Size(0, 0);
     if (oldSize == newSize) return;
 
     oldSize = newSize;
     widget.onChange(newSize);
+  }
+}
+
+class WidgetPosition extends StatefulWidget {
+  final Widget child;
+  final Function(Offset position) onChange;
+
+  const WidgetPosition({
+    Key? key,
+    required this.onChange,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  _WidgetPositionState createState() => _WidgetPositionState();
+}
+
+class _WidgetPositionState extends State<WidgetPosition> {
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback(postFrameCallback);
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldPosition;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    RenderBox? renderBox = context.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    Offset newPosition = renderBox.localToGlobal(Offset.zero);
+    if (oldPosition == newPosition) return;
+
+    oldPosition = newPosition;
+    widget.onChange(newPosition);
   }
 }
 

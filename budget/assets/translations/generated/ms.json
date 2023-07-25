@@ -216,7 +216,7 @@
   "delete-all-data": "Padam semua data",
   "erase-everything": "Padamkan semuanya?",
   "erase-everything-description": "Semua sandaran Google Drive akan disimpan.",
-  "erase-everything-wraning": "Adakah anda pasti mahu memadamkan semuanya?",
+  "erase-everything-warning": "Adakah anda pasti mahu memadamkan semuanya?",
   "erase-everything-warning-description": "Semua data dan keutamaan akan dipadamkan!",
   "erase": "Padam",
   "edit-category": "Kategori Edit",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Tambah urus niaga harian anda ke aplikasi untuk memastikan anggaran anda berada di landasan yang betul.",
   "notification-reminder-26": "Tinggal di atas belanjawan anda dengan menambah urus niaga harian anda ke aplikasinya.",
   "notification-reminder-title": "Tambah urus niaga",
-  "notification-upcoming-transaction-title": "Transaksi yang akan datang"
+  "notification-upcoming-transaction-title": "Transaksi yang akan datang",
+  "translations-help": "Sekiranya anda ingin membantu dengan terjemahan, sila e -mel",
+  "no-transactions-for": "Tiada urus niaga untuk"
 }

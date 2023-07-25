@@ -23,6 +23,8 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -100,8 +102,10 @@ class SettingsPageState extends State<SettingsPage>
                   selectedColor: selectedColor,
                   setSelectedColor: (color) {
                     selectedColor = color;
-                    updateSettings("accentColor", toHexString(color));
-                    updateSettings("accentSystemColor", false);
+                    updateSettings("accentColor", toHexString(color),
+                        updateGlobalState: true);
+                    updateSettings("accentSystemColor", false,
+                        updateGlobalState: true);
                     generateColors();
                   },
                   useSystemColorPrompt: true,
@@ -129,11 +133,11 @@ class SettingsPageState extends State<SettingsPage>
           items: ["Light", "Dark", "System"],
           onChanged: (value) {
             if (value == "Light") {
-              updateSettings("theme", "light");
+              updateSettings("theme", "light", updateGlobalState: true);
             } else if (value == "Dark") {
-              updateSettings("theme", "dark");
+              updateSettings("theme", "dark", updateGlobalState: true);
             } else if (value == "System") {
-              updateSettings("theme", "system");
+              updateSettings("theme", "system", updateGlobalState: true);
             }
           },
           getLabel: (item) {
@@ -142,6 +146,35 @@ class SettingsPageState extends State<SettingsPage>
         ),
         EnterName(),
         SettingsHeader(title: "preferences".tr()),
+        SettingsContainerSwitch(
+          title: "battery-saver".tr(),
+          description: "battery-saver-description".tr(),
+          onSwitched: (value) {
+            updateSettings("batterySaver", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          initialValue: appStateSettings["batterySaver"],
+          icon: Icons.battery_charging_full_rounded,
+        ),
+        biometricsAvailable
+            ? SettingsContainerSwitch(
+                title: "require-biometrics".tr(),
+                description: "require-biometrics-description".tr(),
+                onSwitched: (value) async {
+                  bool result = await checkBiometrics(
+                    checkAlways: true,
+                    message: "verify-identity".tr(),
+                  );
+                  if (result)
+                    updateSettings("requireAuth", value,
+                        updateGlobalState: false);
+                  return result;
+                },
+                initialValue: appStateSettings["requireAuth"],
+                icon: Icons.lock_rounded,
+              )
+            : SizedBox.shrink(),
+
         SettingsContainerDropdown(
           title: "language".tr(),
           icon: Icons.language_rounded,
@@ -176,34 +209,7 @@ class SettingsPageState extends State<SettingsPage>
             );
           },
         ),
-        SettingsContainerSwitch(
-          title: "battery-saver".tr(),
-          description: "battery-saver-description".tr(),
-          onSwitched: (value) {
-            updateSettings("batterySaver", value,
-                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          },
-          initialValue: appStateSettings["batterySaver"],
-          icon: Icons.battery_charging_full_rounded,
-        ),
-        biometricsAvailable
-            ? SettingsContainerSwitch(
-                title: "require-biometrics".tr(),
-                description: "require-biometrics-description".tr(),
-                onSwitched: (value) async {
-                  bool result = await checkBiometrics(
-                    checkAlways: true,
-                    message: "verify-identity".tr(),
-                  );
-                  if (result)
-                    updateSettings("requireAuth", value,
-                        updateGlobalState: false);
-                  return result;
-                },
-                initialValue: appStateSettings["requireAuth"],
-                icon: Icons.lock_rounded,
-              )
-            : SizedBox.shrink(),
+        TranslationsHelp(),
 
         SettingsHeader(title: "automation".tr()),
         // SettingsContainerOpenPage(
@@ -404,7 +410,8 @@ Future enterNameBottomSheet(context) async {
             icon: Icons.person_rounded,
             setSelectedText: (_) {},
             nextWithInput: (text) {
-              updateSettings("username", text.trim(), pagesNeedingRefresh: [0]);
+              updateSettings("username", text.trim(),
+                  pagesNeedingRefresh: [0], updateGlobalState: false);
             },
             selectedText: appStateSettings["username"],
             placeholder: "nickname".tr(),
@@ -415,4 +422,59 @@ Future enterNameBottomSheet(context) async {
       ),
     ),
   );
+}
+
+class TranslationsHelp extends StatelessWidget {
+  const TranslationsHelp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Tappable(
+        onTap: () {
+          openUrl('mailto:dapperappdeveloper@gmail.com');
+        },
+        color:
+            Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+        borderRadius: 10,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Icon(
+                  Icons.connect_without_contact_rounded,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: 31,
+                ),
+              ),
+              Expanded(
+                child: TextFont(
+                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                  richTextSpan: [
+                    TextSpan(
+                      text: 'dapperappdeveloper@gmail.com',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationStyle: TextDecorationStyle.solid,
+                        decorationColor:
+                            getColor(context, "unPaidOverdue").withOpacity(0.8),
+                        color:
+                            getColor(context, "unPaidOverdue").withOpacity(0.8),
+                      ),
+                    ),
+                  ],
+                  text: "translations-help".tr() + " ",
+                  maxLines: 5,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

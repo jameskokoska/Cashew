@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
@@ -37,6 +38,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
+import 'package:universal_html/html.dart' show AnchorElement;
 
 Future<bool> checkConnection() async {
   late bool isConnected;
@@ -65,8 +67,8 @@ class GoogleAuthClient extends http.BaseClient {
   }
 }
 
-signIn.GoogleSignInAccount? user;
 signIn.GoogleSignIn? googleSignIn;
+signIn.GoogleSignInAccount? googleUser;
 
 Future<bool> signInGoogle(
     {context,
@@ -75,16 +77,18 @@ Future<bool> signInGoogle(
     bool? gMailPermissions,
     bool? silentSignIn,
     Function()? next}) async {
-  bool isConnected = false;
+  // bool isConnected = false;
 
   if (appStateSettings["emailScanning"] == false) gMailPermissions = false;
 
   try {
-    if (gMailPermissions == true && !(await testIfHasGmailAccess())) {
+    if (gMailPermissions == true &&
+        googleUser != null &&
+        !(await testIfHasGmailAccess())) {
       await signOutGoogle();
       googleSignIn = null;
       settingsPageStateKey.currentState?.refreshState();
-    } else if (user == null) {
+    } else if (googleUser == null) {
       googleSignIn = null;
       settingsPageStateKey.currentState?.refreshState();
     }
@@ -103,7 +107,7 @@ Future<bool> signInGoogle(
     // }
 
     if (waitForCompletion == true) openLoadingPopup(context);
-    if (user == null) {
+    if (googleUser == null) {
       googleSignIn = signIn.GoogleSignIn.standard(scopes: [
         ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
         ...(gMailPermissions == true
@@ -129,9 +133,16 @@ Future<bool> signInGoogle(
           : await googleSignIn?.signIn();
 
       if (account != null) {
-        user = account;
-        updateSettings("currentUserEmail", user?.email ?? "",
-            updateGlobalState: kIsWeb ? true : false);
+        print("ACCOUNT");
+        print(account);
+        googleUser = account;
+        updateSettings(
+          "currentUserEmail",
+          googleUser?.email ?? "",
+          updateGlobalState: true,
+          forceGlobalStateUpdate:
+              getWidthNavigationSidebar(context) > 0 ? true : false,
+        );
         accountsPageStateKey.currentState?.refreshState();
       } else {
         throw ("Login failed");
@@ -158,7 +169,7 @@ Future<bool> signInGoogle(
         timeout: Duration(milliseconds: 3400),
       ),
     );
-    updateSettings("currentUserEmail", "", updateGlobalState: false);
+    updateSettings("currentUserEmail", "", updateGlobalState: true);
     throw ("Error signing in");
   }
 }
@@ -166,12 +177,13 @@ Future<bool> signInGoogle(
 Future<bool> testIfHasGmailAccess() async {
   print("TESTING GMAIL");
   try {
-    final authHeaders = await user!.authHeaders;
+    final authHeaders = await googleUser!.authHeaders;
     final authenticateClient = GoogleAuthClient(authHeaders);
     gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
-    gMail.ListMessagesResponse results =
-        await gmailApi.users.messages.list(user!.id.toString(), maxResults: 1);
+    gMail.ListMessagesResponse results = await gmailApi.users.messages
+        .list(googleUser!.id.toString(), maxResults: 1);
   } catch (e) {
+    print(e.toString());
     print("NO GMAIL");
     return false;
   }
@@ -180,8 +192,8 @@ Future<bool> testIfHasGmailAccess() async {
 
 Future<bool> signOutGoogle() async {
   await googleSignIn?.signOut();
-  user = null;
-  updateSettings("currentUserEmail", "");
+  googleUser = null;
+  updateSettings("currentUserEmail", "", updateGlobalState: true);
   print("Signedout");
   return true;
 }
@@ -209,7 +221,7 @@ Future<void> createBackupInBackground(context) async {
         print("auto backing up");
 
         bool hasSignedIn = false;
-        if (user == null) {
+        if (googleUser == null) {
           hasSignedIn = await signInGoogle(
               context: context,
               gMailPermissions: false,
@@ -280,7 +292,7 @@ Future<void> createBackup(
       dbFileBytes = await dbFile.readAsBytes();
       mediaStream = Stream.value(List<int>.from(dbFileBytes));
     }
-    final authHeaders = await user!.authHeaders;
+    final authHeaders = await googleUser!.authHeaders;
     final authenticateClient = GoogleAuthClient(authHeaders);
     final driveApi = drive.DriveApi(authenticateClient);
 
@@ -336,7 +348,7 @@ Future<void> deleteRecentBackups(context, amountToKeep,
       loadingIndeterminateKey.currentState!.setVisibility(true);
     }
 
-    final authHeaders = await user!.authHeaders;
+    final authHeaders = await googleUser!.authHeaders;
     final authenticateClient = GoogleAuthClient(authHeaders);
     final driveApi = drive.DriveApi(authenticateClient);
     if (driveApi == null) {
@@ -487,23 +499,23 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
             drivePermissions: true,
             next: () {
               setState(() {});
-              // pushRoute(context, accountsPage);
               if (widget.navigationSidebarButton) {
                 if (widget.onTap != null) widget.onTap!();
               } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AccountsPage(),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => AccountsPage(),
+                //   ),
+                // );
+                pushRoute(context, AccountsPage());
               }
             });
-        if (appStateSettings["username"] == "" && user != null) {
-          updateSettings("username", user?.displayName ?? "",
-              pagesNeedingRefresh: [0]);
+        if (appStateSettings["username"] == "" && googleUser != null) {
+          updateSettings("username", googleUser?.displayName ?? "",
+              pagesNeedingRefresh: [0], updateGlobalState: false);
         }
-        if (user != null) {
+        if (googleUser != null) {
           await syncData(context);
           await syncPendingQueueOnServer();
           await getCloudBudgets();
@@ -516,7 +528,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
     if (widget.navigationSidebarButton == true) {
       return AnimatedSwitcher(
         duration: Duration(milliseconds: 600),
-        child: user == null
+        child: googleUser == null
             ? NavigationSidebarButton(
                 key: ValueKey("login"),
                 label: "login".tr(),
@@ -528,7 +540,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
               )
             : NavigationSidebarButton(
                 key: ValueKey("user"),
-                label: user!.displayName ?? "",
+                label: googleUser!.displayName ?? "",
                 icon: Icons.person_rounded,
                 onTap: () async {
                   if (widget.onTap != null) widget.onTap!();
@@ -537,7 +549,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
               ),
       );
     }
-    return user == null
+    return googleUser == null
         ? SettingsContainer(
             isOutlined: true,
             onTap: () async {
@@ -548,7 +560,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
           )
         : SettingsContainerOpenPage(
             openPage: AccountsPage(),
-            title: user!.displayName ?? "",
+            title: googleUser!.displayName ?? "",
             icon: Icons.person_rounded,
             isOutlined: true,
           );
@@ -557,7 +569,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
 
 Future<(drive.DriveApi? driveApi, List<drive.File>?)> getDriveFiles() async {
   try {
-    final authHeaders = await user!.authHeaders;
+    final authHeaders = await googleUser!.authHeaders;
     final authenticateClient = GoogleAuthClient(authHeaders);
     drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
 
@@ -888,153 +900,171 @@ class _BackupManagementState extends State<BackupManagement> {
                                     : getColor(
                                         context, "lightDarkAccentHeavyLight"),
                             child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            widget.isClientSync
-                                                ? Icons.devices_rounded
-                                                : Icons.description_rounded,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            size: 30,
-                                          ),
-                                          SizedBox(
-                                              width: widget.isClientSync
-                                                  ? 17
-                                                  : 13),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                TextFont(
-                                                  text: getTimeAgo(
-                                                    (file.value.modifiedTime ??
-                                                            DateTime.now())
-                                                        .toLocal(),
-                                                  ),
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          widget.isClientSync
+                                              ? Icons.devices_rounded
+                                              : Icons.description_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          size: 30,
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                widget.isClientSync ? 17 : 13),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextFont(
+                                                text: getTimeAgo(
+                                                  (file.value.modifiedTime ??
+                                                          DateTime.now())
+                                                      .toLocal(),
                                                 ),
-                                                TextFont(
-                                                  text: (isSyncBackupFile(
-                                                          file.value.name)
-                                                      ? getDeviceFromSyncBackupFileName(
-                                                              file.value.name) +
-                                                          " " +
-                                                          "sync"
-                                                      : file.value.name ??
-                                                          "No name"),
-                                                  fontSize: 14,
-                                                  maxLines: 2,
-                                                ),
-                                                // isSyncBackupFile(
-                                                //         file.value.name)
-                                                //     ? Padding(
-                                                //         padding:
-                                                //             const EdgeInsets
-                                                //                 .only(top: 3),
-                                                //         child: TextFont(
-                                                //           text:
-                                                //               file.value.name ??
-                                                //                   "",
-                                                //           fontSize: 11,
-                                                //           maxLines: 2,
-                                                //         ),
-                                                //       )
-                                                //     : SizedBox.shrink()
-                                              ],
-                                            ),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              TextFont(
+                                                text: (isSyncBackupFile(
+                                                        file.value.name)
+                                                    ? getDeviceFromSyncBackupFileName(
+                                                            file.value.name) +
+                                                        " " +
+                                                        "sync"
+                                                    : file.value.name ??
+                                                        "No name"),
+                                                fontSize: 14,
+                                                maxLines: 2,
+                                              ),
+                                              // isSyncBackupFile(
+                                              //         file.value.name)
+                                              //     ? Padding(
+                                              //         padding:
+                                              //             const EdgeInsets
+                                              //                 .only(top: 3),
+                                              //         child: TextFont(
+                                              //           text:
+                                              //               file.value.name ??
+                                              //                   "",
+                                              //           fontSize: 11,
+                                              //           maxLines: 2,
+                                              //         ),
+                                              //       )
+                                              //     : SizedBox.shrink()
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    widget.isManaging
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0),
-                                            child: ButtonIcon(
-                                                color: appStateSettings[
-                                                        "materialYou"]
-                                                    ? Theme.of(context)
-                                                        .colorScheme
-                                                        .onSecondaryContainer
-                                                        .withOpacity(0.08)
-                                                    : getColor(context,
-                                                            "lightDarkAccentHeavy")
-                                                        .withOpacity(0.7),
-                                                onTap: () {
-                                                  openPopup(
-                                                    context,
-                                                    icon: Icons.delete_rounded,
-                                                    title: "delete-backup".tr(),
-                                                    description: "Backup " +
-                                                        (file.value.name ??
-                                                            "No name") +
-                                                        " created " +
-                                                        getWordedDateShortMore(
-                                                            (file.value.modifiedTime ??
-                                                                    DateTime
-                                                                        .now())
-                                                                .toLocal(),
-                                                            includeTimeIfToday:
-                                                                true),
-                                                    onSubmit: () async {
-                                                      Navigator.pop(context);
-                                                      loadingIndeterminateKey
-                                                          .currentState!
-                                                          .setVisibility(true);
-                                                      await deleteBackup(
-                                                          driveApiState,
-                                                          file.value.id ?? "");
-                                                      openSnackbar(
-                                                        SnackbarMessage(
-                                                            title:
-                                                                "deleted-backup"
-                                                                    .tr(),
-                                                            description: (file
-                                                                    .value
-                                                                    .name ??
+                                  ),
+                                  widget.isManaging
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: ButtonIcon(
+                                            color: appStateSettings[
+                                                    "materialYou"]
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondaryContainer
+                                                    .withOpacity(0.08)
+                                                : getColor(context,
+                                                        "lightDarkAccentHeavy")
+                                                    .withOpacity(0.7),
+                                            onTap: () {
+                                              openPopup(
+                                                context,
+                                                icon: Icons.delete_rounded,
+                                                title: "delete-backup".tr(),
+                                                description: "Backup " +
+                                                    (file.value.name ??
+                                                        "No name") +
+                                                    " created " +
+                                                    getWordedDateShortMore(
+                                                        (file.value.modifiedTime ??
+                                                                DateTime.now())
+                                                            .toLocal(),
+                                                        includeTimeIfToday:
+                                                            true),
+                                                onSubmit: () async {
+                                                  Navigator.pop(context);
+                                                  loadingIndeterminateKey
+                                                      .currentState!
+                                                      .setVisibility(true);
+                                                  await deleteBackup(
+                                                      driveApiState,
+                                                      file.value.id ?? "");
+                                                  openSnackbar(
+                                                    SnackbarMessage(
+                                                        title: "deleted-backup"
+                                                            .tr(),
+                                                        description:
+                                                            (file.value.name ??
                                                                 "No name"),
-                                                            icon: Icons
-                                                                .delete_rounded),
-                                                      );
-                                                      setState(() {
-                                                        deletedIndices
-                                                            .add(file.key);
-                                                      });
-                                                      // bottomSheetControllerGlobal
-                                                      //     .snapToExtent(0);
-                                                      if (widget.isClientSync)
-                                                        updateSettings(
-                                                            "devicesHaveBeenSynced",
-                                                            appStateSettings[
-                                                                    "devicesHaveBeenSynced"] -
-                                                                1);
-                                                      loadingIndeterminateKey
-                                                          .currentState!
-                                                          .setVisibility(false);
-                                                    },
-                                                    onSubmitLabel:
-                                                        "delete".tr(),
-                                                    onCancel: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    onCancelLabel:
-                                                        "cancel".tr(),
+                                                        icon: Icons
+                                                            .delete_rounded),
                                                   );
+                                                  setState(() {
+                                                    deletedIndices
+                                                        .add(file.key);
+                                                  });
+                                                  // bottomSheetControllerGlobal
+                                                  //     .snapToExtent(0);
+                                                  if (widget.isClientSync)
+                                                    updateSettings(
+                                                        "devicesHaveBeenSynced",
+                                                        appStateSettings[
+                                                                "devicesHaveBeenSynced"] -
+                                                            1,
+                                                        updateGlobalState:
+                                                            false);
+                                                  loadingIndeterminateKey
+                                                      .currentState!
+                                                      .setVisibility(false);
                                                 },
-                                                icon: Icons.close_rounded),
-                                          )
-                                        : SizedBox.shrink(),
-                                  ],
-                                )),
+                                                onSubmitLabel: "delete".tr(),
+                                                onCancel: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                onCancelLabel: "cancel".tr(),
+                                              );
+                                            },
+                                            icon: Icons.close_rounded,
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 8.0,
+                                          ),
+                                          child: ButtonIcon(
+                                            color: appStateSettings[
+                                                    "materialYou"]
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondaryContainer
+                                                    .withOpacity(0.08)
+                                                : getColor(context,
+                                                        "lightDarkAccentHeavy")
+                                                    .withOpacity(0.7),
+                                            onTap: () {
+                                              saveDriveFileToDevice(
+                                                  driveApiState, file.value);
+                                            },
+                                            icon: Icons.download_rounded,
+                                          ),
+                                        )
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                 ),
@@ -1128,5 +1158,62 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<bool> saveDriveFileToDevice(
+    drive.DriveApi driveApi, drive.File fileToSave) async {
+  List<int> dataStore = [];
+  dynamic response = await driveApi.files
+      .get(fileToSave.id!, downloadOptions: drive.DownloadOptions.fullMedia);
+  await for (var data in response.stream) {
+    dataStore.insertAll(dataStore.length, data);
+  }
+  String fileName = "cashew-" +
+      ((fileToSave.name ?? "") +
+              (fileToSave.modifiedTime ?? DateTime.now()).toString())
+          .replaceAll(".sqlite", "")
+          .replaceAll(".", "-")
+          .replaceAll("-", "-")
+          .replaceAll(" ", "-")
+          .replaceAll(":", "-") +
+      ".sqlite";
+
+  if (kIsWeb && getPlatform() == PlatformOS.web) {
+    try {
+      String base64String = base64Encode(dataStore);
+      AnchorElement anchor = AnchorElement(
+          href: 'data:application/octet-stream;base64,$base64String')
+        ..download = fileName
+        ..style.display = 'none';
+      anchor.click();
+      return true;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  try {
+    String directory = getPlatform() == PlatformOS.isAndroid
+        ? "/storage/emulated/0/Download"
+        : (await getApplicationDocumentsDirectory()).path;
+
+    String filePath = "${directory}/${fileName}";
+    File savedFile = File(filePath);
+    await savedFile.writeAsBytes(dataStore);
+    openSnackbar(SnackbarMessage(
+      title: "Backup Downloaded to Device",
+      description: fileName,
+      icon: Icons.download_done_rounded,
+    ));
+    return true;
+  } catch (e) {
+    openSnackbar(SnackbarMessage(
+      title: "Error Downloading",
+      description: e.toString(),
+      icon: Icons.warning_amber_rounded,
+    ));
+    print("Error saving file to device: " + e.toString());
+    return false;
   }
 }

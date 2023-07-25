@@ -216,7 +216,7 @@
   "delete-all-data": "حذف جميع البيانات",
   "erase-everything": "محو كل شيء؟",
   "erase-everything-description": "سيتم الاحتفاظ بجميع النسخ الاحتياطية لـ Google Drive.",
-  "erase-everything-wraning": "هل أنت متأكد أنك تريد محو كل شيء؟",
+  "erase-everything-warning": "هل أنت متأكد أنك تريد محو كل شيء؟",
   "erase-everything-warning-description": "سيتم حذف جميع البيانات والتفضيلات!",
   "erase": "مسح",
   "edit-category": "تحرير الفئة",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "أضف معاملاتك اليومية إلى التطبيق للحفاظ على ميزانيتك على المسار الصحيح.",
   "notification-reminder-26": "ابق على قمة ميزانيتك عن طريق إضافة معاملاتك اليومية إلى التطبيق.",
   "notification-reminder-title": "إضافة المعاملات",
-  "notification-upcoming-transaction-title": "المعاملة القادمة المستحقة"
+  "notification-upcoming-transaction-title": "المعاملة القادمة المستحقة",
+  "translations-help": "إذا كنت ترغب في المساعدة في الترجمات ، فيرجى إرسال بريد إلكتروني",
+  "no-transactions-for": "لا معاملات ل"
 }

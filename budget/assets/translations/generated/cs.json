@@ -216,7 +216,7 @@
   "delete-all-data": "Odstranit všechna data",
   "erase-everything": "Vymazat všechno?",
   "erase-everything-description": "Všechny zálohování Disku Google budou uchovávány.",
-  "erase-everything-wraning": "Jste si jisti, že chcete všechno vymazat?",
+  "erase-everything-warning": "Jste si jisti, že chcete všechno vymazat?",
   "erase-everything-warning-description": "Všechna data a preference budou odstraněny!",
   "erase": "Vymazat",
   "edit-category": "Úpravy kategorie",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Přidejte své denní transakce do aplikace, abyste udrželi svůj rozpočet na správné cestě.",
   "notification-reminder-26": "Zůstaňte na vrcholu svého rozpočtu přidáním denních transakcí do aplikace.",
   "notification-reminder-title": "Přidat transakce",
-  "notification-upcoming-transaction-title": "Nadcházející transakce splatná"
+  "notification-upcoming-transaction-title": "Nadcházející transakce splatná",
+  "translations-help": "Pokud byste chtěli pomoci s překlady, pošlete e -mail",
+  "no-transactions-for": "Žádné transakce pro"
 }

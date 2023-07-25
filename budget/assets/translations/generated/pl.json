@@ -216,7 +216,7 @@
   "delete-all-data": "Usuń wszystkie dane",
   "erase-everything": "Wymazac wszystko?",
   "erase-everything-description": "Wszystkie kopie zapasowe Dysku Google będą przechowywane.",
-  "erase-everything-wraning": "Czy na pewno chcesz wszystko wymazać?",
+  "erase-everything-warning": "Czy na pewno chcesz wszystko wymazać?",
   "erase-everything-warning-description": "Wszystkie dane i preferencje zostaną usunięte!",
   "erase": "Usuwać",
   "edit-category": "Edytuj kategorię",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Dodaj swoje codzienne transakcje do aplikacji, aby utrzymać budżet na dobrej drodze.",
   "notification-reminder-26": "Pozostań na bieżąco z budżetem, dodając codzienne transakcje do aplikacji.",
   "notification-reminder-title": "Dodaj transakcje",
-  "notification-upcoming-transaction-title": "Nadchodząca transakcja należna"
+  "notification-upcoming-transaction-title": "Nadchodząca transakcja należna",
+  "translations-help": "Jeśli chcesz pomóc w tłumaczeniach, napisz do e -maila",
+  "no-transactions-for": "Brak transakcji dla"
 }

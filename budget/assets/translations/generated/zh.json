@@ -216,7 +216,7 @@
   "delete-all-data": "删除所有数据",
   "erase-everything": "擦除一切？",
   "erase-everything-description": "将保留所有Google驱动器备份。",
-  "erase-everything-wraning": "您确定要删除所有内容吗？",
+  "erase-everything-warning": "您确定要删除所有内容吗？",
   "erase-everything-warning-description": "所有数据和偏好将被删除！",
   "erase": "擦除",
   "edit-category": "编辑类别",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "将您的日常交易添加到应用程序中，以保持预算的步伐。",
   "notification-reminder-26": "通过将您的日常交易添加到应用程序中来掌握预算。",
   "notification-reminder-title": "添加交易",
-  "notification-upcoming-transaction-title": "即将到期的交易"
+  "notification-upcoming-transaction-title": "即将到期的交易",
+  "translations-help": "如果您想帮助翻译，请发送电子邮件",
+  "no-transactions-for": "没有交易"
 }

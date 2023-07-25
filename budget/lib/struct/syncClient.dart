@@ -105,7 +105,7 @@ Future<bool> createSyncBackup(
   }
 
   bool hasSignedIn = false;
-  if (user == null) {
+  if (googleUser == null) {
     hasSignedIn = await signInGoogle(
       gMailPermissions: false,
       waitForCompletion: false,
@@ -120,7 +120,7 @@ Future<bool> createSyncBackup(
     return false;
   }
 
-  final authHeaders = await user!.authHeaders;
+  final authHeaders = await googleUser!.authHeaders;
   final authenticateClient = GoogleAuthClient(authHeaders);
   drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
   if (driveApi == null) {
@@ -176,7 +176,7 @@ Future<bool> syncData(BuildContext context) async {
   if (appStateSettings["currentUserEmail"] == "") return false;
 
   bool hasSignedIn = false;
-  if (user == null) {
+  if (googleUser == null) {
     hasSignedIn = await signInGoogle(
       gMailPermissions: false,
       waitForCompletion: false,
@@ -189,7 +189,7 @@ Future<bool> syncData(BuildContext context) async {
     return false;
   }
 
-  final authHeaders = await user!.authHeaders;
+  final authHeaders = await googleUser!.authHeaders;
   final authenticateClient = GoogleAuthClient(authHeaders);
   drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
   if (driveApi == null) {

@@ -6,6 +6,7 @@ import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -2966,7 +2967,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                     transactions, startDate, endDate, null) &
                 onlyShowIfFollowsFilters(transactions,
                     memberTransactionFilters: [
-                      appStateSettings["currentUserEmail"]
+                      appStateSettings["currentUserEmail"] ?? ""
                     ]) &
                 transactions.sharedReferenceBudgetPk.equals(budgetPk)));
       mergedStreams.add(query

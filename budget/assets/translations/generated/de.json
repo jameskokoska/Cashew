@@ -216,7 +216,7 @@
   "delete-all-data": "Alle Daten löschen",
   "erase-everything": "Alles löschen?",
   "erase-everything-description": "Alle Google Drive -Backups werden aufbewahrt.",
-  "erase-everything-wraning": "Sind Sie sicher, dass Sie alles löschen möchten?",
+  "erase-everything-warning": "Sind Sie sicher, dass Sie alles löschen möchten?",
   "erase-everything-warning-description": "Alle Daten und Einstellungen werden gelöscht!",
   "erase": "Löschen",
   "edit-category": "Kategorie bearbeiten",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Fügen Sie Ihre täglichen Transaktionen der App hinzu, um Ihr Budget auf dem Laufenden zu halten.",
   "notification-reminder-26": "Bleiben Sie ganz oben auf Ihrem Budget, indem Sie Ihre täglichen Transaktionen zur App hinzufügen.",
   "notification-reminder-title": "Transaktionen hinzufügen",
-  "notification-upcoming-transaction-title": "Bevorstehende Transaktion fällig"
+  "notification-upcoming-transaction-title": "Bevorstehende Transaktion fällig",
+  "translations-help": "Wenn Sie bei Übersetzungen helfen möchten, senden Sie bitte eine E -Mail",
+  "no-transactions-for": "Keine Transaktionen für"
 }

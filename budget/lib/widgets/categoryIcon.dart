@@ -206,6 +206,18 @@ class _CacheCategoryIconState extends State<CacheCategoryIcon> {
   }
 
   @override
+  void didUpdateWidget(covariant CacheCategoryIcon oldWidget) {
+    if (widget.iconName != oldWidget.iconName) {
+      setState(() {
+        image = Image.asset(
+          "assets/categories/" + widget.iconName,
+          width: widget.size,
+        );
+      });
+    }
+  }
+
+  @override
   void didChangeDependencies() {
     precacheImage(image.image, context);
     super.didChangeDependencies();

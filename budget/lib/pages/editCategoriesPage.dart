@@ -245,8 +245,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
 
 class RefreshButton extends StatefulWidget {
   final Function onTap;
+  final EdgeInsets? padding;
 
-  RefreshButton({required this.onTap});
+  RefreshButton({required this.onTap, this.padding});
 
   @override
   _RefreshButtonState createState() => _RefreshButtonState();
@@ -310,7 +311,7 @@ class _RefreshButtonState extends State<RefreshButton>
             opacity: _isEnabled ? 1 : 0.3,
             duration: Duration(milliseconds: 500),
             child: IconButton(
-              padding: EdgeInsets.all(15),
+              padding: widget.padding ?? EdgeInsets.all(15),
               icon: Icon(Icons.refresh_rounded),
               color: Theme.of(context).colorScheme.secondary,
               onPressed: () => _onTap(),

@@ -216,7 +216,7 @@
   "delete-all-data": "Poista kaikki tiedot",
   "erase-everything": "Poistaa kaikki?",
   "erase-everything-description": "Kaikki Google Drive -varmuuskopiot pidetään.",
-  "erase-everything-wraning": "Oletko varma, että haluat poistaa kaiken?",
+  "erase-everything-warning": "Oletko varma, että haluat poistaa kaiken?",
   "erase-everything-warning-description": "Kaikki tiedot ja asetukset poistetaan!",
   "erase": "Poistaa",
   "edit-category": "Muokkausluokka",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Lisää päivittäiset tapahtumasi sovellukseen, jotta budjetti on tiellä.",
   "notification-reminder-26": "Pysy budjetin kärjessä lisäämällä päivittäiset tapahtumat sovellukseen.",
   "notification-reminder-title": "Lisää tapahtumia",
-  "notification-upcoming-transaction-title": "Tuleva tapahtuma"
+  "notification-upcoming-transaction-title": "Tuleva tapahtuma",
+  "translations-help": "Jos haluat auttaa käännöksissä, lähetä sähköpostia",
+  "no-transactions-for": "Ei tapahtumia"
 }

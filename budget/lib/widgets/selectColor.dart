@@ -166,7 +166,7 @@ class _SelectColorState extends State<SelectColor> {
                       await SystemTheme.accentColor.load();
                       Color accentColor = SystemTheme.accentColor.accent;
                       updateSettings("accentColor", toHexString(accentColor),
-                          updateGlobalState: false);
+                          updateGlobalState: true);
                       generateColors();
                     } else {
                       widget.setSelectedColor!(selectedColor);

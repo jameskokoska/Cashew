@@ -216,7 +216,7 @@
   "delete-all-data": "सर्व डेटा हटवा",
   "erase-everything": "सर्वकाही मिटवा?",
   "erase-everything-description": "सर्व Google ड्राइव्ह बॅकअप ठेवले जाईल.",
-  "erase-everything-wraning": "आपणास खात्री आहे की आपण सर्वकाही मिटवू इच्छिता?",
+  "erase-everything-warning": "आपणास खात्री आहे की आपण सर्वकाही मिटवू इच्छिता?",
   "erase-everything-warning-description": "सर्व डेटा आणि प्राधान्ये हटविली जातील!",
   "erase": "मिटवा",
   "edit-category": "श्रेणी संपादित करा",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "आपले बजेट ट्रॅकवर ठेवण्यासाठी अ‍ॅपमध्ये आपले दैनंदिन व्यवहार जोडा.",
   "notification-reminder-26": "अ‍ॅपमध्ये आपले दैनंदिन व्यवहार जोडून आपल्या बजेटच्या शीर्षस्थानी रहा.",
   "notification-reminder-title": "व्यवहार जोडा",
-  "notification-upcoming-transaction-title": "आगामी व्यवहार देय"
+  "notification-upcoming-transaction-title": "आगामी व्यवहार देय",
+  "translations-help": "आपण भाषांतरांमध्ये मदत करू इच्छित असल्यास, कृपया ईमेल करा",
+  "no-transactions-for": "साठी कोणतेही व्यवहार नाहीत"
 }

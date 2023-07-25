@@ -44,11 +44,11 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      if (canReadEmails == true && user == null) {
+      if (canReadEmails == true && googleUser == null) {
         await signInGoogle(
             context: context, waitForCompletion: true, gMailPermissions: true);
         updateSettings("AutoTransactions-canReadEmails", true,
-            pagesNeedingRefresh: [3]);
+            pagesNeedingRefresh: [3], updateGlobalState: false);
         setState(() {});
       }
     });
@@ -93,12 +93,13 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
                 canReadEmails = true;
               });
               updateSettings("AutoTransactions-canReadEmails", true,
-                  pagesNeedingRefresh: [3]);
+                  pagesNeedingRefresh: [3], updateGlobalState: false);
             } else {
               setState(() {
                 canReadEmails = false;
               });
-              updateSettings("AutoTransactions-canReadEmails", false);
+              updateSettings("AutoTransactions-canReadEmails", false,
+                  updateGlobalState: false, pagesNeedingRefresh: [3]);
             }
           },
           title: "Read Emails",
@@ -133,7 +134,7 @@ Future<void> parseEmailsInBackground(context,
       print("Scanning emails");
 
       bool hasSignedIn = false;
-      if (user == null) {
+      if (googleUser == null) {
         hasSignedIn = await signInGoogle(
             context: context,
             gMailPermissions: true,
@@ -152,11 +153,11 @@ Future<void> parseEmailsInBackground(context,
           appStateSettings["EmailAutoTransactions-amountOfEmails"] ?? 10;
       int newEmailCount = 0;
 
-      final authHeaders = await user!.authHeaders;
+      final authHeaders = await googleUser!.authHeaders;
       final authenticateClient = GoogleAuthClient(authHeaders);
       gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
       gMail.ListMessagesResponse results = await gmailApi.users.messages
-          .list(user!.id.toString(), maxResults: amountOfEmails);
+          .list(googleUser!.id.toString(), maxResults: amountOfEmails);
 
       int currentEmailIndex = 0;
 
@@ -189,8 +190,8 @@ Future<void> parseEmailsInBackground(context,
         }
         newEmailCount++;
 
-        gMail.Message messageData =
-            await gmailApi.users.messages.get(user!.id.toString(), message.id!);
+        gMail.Message messageData = await gmailApi.users.messages
+            .get(googleUser!.id.toString(), message.id!);
         DateTime messageDate = DateTime.fromMillisecondsSinceEpoch(
             int.parse(messageData.internalDate ?? ""));
         String messageString = getEmailMessage(messageData);
@@ -326,9 +327,10 @@ Future<void> parseEmailsInBackground(context,
         );
         // TODO have setting so they can choose if the emails are markes as read
         gmailApi.users.messages.modify(
-            gMail.ModifyMessageRequest(removeLabelIds: ["UNREAD"]),
-            user!.id,
-            message.id!);
+          gMail.ModifyMessageRequest(removeLabelIds: ["UNREAD"]),
+          googleUser!.id,
+          message.id!,
+        );
 
         emailsParsed.insert(0, message.id!);
       }
@@ -417,13 +419,13 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
 
   init() async {
     loading = true;
-    if (user != null) {
+    if (googleUser != null) {
       try {
-        final authHeaders = await user!.authHeaders;
+        final authHeaders = await googleUser!.authHeaders;
         final authenticateClient = GoogleAuthClient(authHeaders);
         gMail.GmailApi gmailApi = gMail.GmailApi(authenticateClient);
         gMail.ListMessagesResponse results = await gmailApi.users.messages
-            .list(user!.id.toString(), maxResults: amountOfEmails);
+            .list(googleUser!.id.toString(), maxResults: amountOfEmails);
         setState(() {
           loaded = true;
           error = "";
@@ -431,7 +433,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
         int currentEmailIndex = 0;
         for (gMail.Message message in results.messages!) {
           gMail.Message messageData = await gmailApi.users.messages
-              .get(user!.id.toString(), message.id!);
+              .get(googleUser!.id.toString(), message.id!);
           // print(DateTime.fromMillisecondsSinceEpoch(
           //     int.parse(messageData.internalDate ?? "")));
           messagesList.add(messageData);
@@ -457,7 +459,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (user == null) {
+    if (googleUser == null) {
       return SizedBox();
     } else if (error != "" || (loaded == false && loading == false)) {
       init();
@@ -495,6 +497,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
               updateSettings(
                 "EmailAutoTransactions-amountOfEmails",
                 int.parse(value),
+                updateGlobalState: false,
               );
             },
             icon: Icons.format_list_numbered_rounded,

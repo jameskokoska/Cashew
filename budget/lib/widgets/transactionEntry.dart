@@ -194,12 +194,13 @@ class TransactionEntry extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: selected
                             ? appStateSettings["materialYou"]
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer
-                                    .withOpacity(0.13)
-                                : getColor(context, "lightDarkAccentHeavy")
-                                    .withAlpha(200)
+                                ? categoryTintColor == null
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer
+                                        .withOpacity(0.8)
+                                    : categoryTintColor!.withOpacity(0.2)
+                                : getColor(context, "black").withOpacity(0.1)
                             : Colors.transparent,
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(

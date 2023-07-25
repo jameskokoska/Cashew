@@ -216,7 +216,7 @@
   "delete-all-data": "Ștergeți toate datele",
   "erase-everything": "Ștergeți totul?",
   "erase-everything-description": "Toate backup -urile Google Drive vor fi păstrate.",
-  "erase-everything-wraning": "Ești sigur că vrei să ștergi totul?",
+  "erase-everything-warning": "Ești sigur că vrei să ștergi totul?",
   "erase-everything-warning-description": "Toate datele și preferințele vor fi șterse!",
   "erase": "Şterge",
   "edit-category": "Categorie de editare",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Adăugați tranzacțiile zilnice la aplicație pentru a vă menține bugetul pe cale.",
   "notification-reminder-26": "Rămâneți la curent cu bugetul adăugând tranzacțiile zilnice la aplicație.",
   "notification-reminder-title": "Adăugați tranzacții",
-  "notification-upcoming-transaction-title": "Tranzacția viitoare datorată"
+  "notification-upcoming-transaction-title": "Tranzacția viitoare datorată",
+  "translations-help": "Dacă doriți să vă ajutați cu traducerile, vă rugăm să trimiteți un e -mail",
+  "no-transactions-for": "Fără tranzacții pentru"
 }

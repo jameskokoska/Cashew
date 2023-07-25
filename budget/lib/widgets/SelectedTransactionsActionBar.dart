@@ -12,6 +12,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
@@ -92,25 +93,57 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                       return Wrap(
                                         alignment: WrapAlignment.spaceBetween,
                                         children: [
-                                          TextFont(
-                                            text: listOfIDs.length.toString() +
-                                                " " +
-                                                "selected".tr(),
-                                            fontSize: 17.5,
-                                            textAlign: TextAlign.left,
-                                            maxLines: 1,
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: TextFont(
+                                              text:
+                                                  listOfIDs.length.toString() +
+                                                      " " +
+                                                      "selected".tr(),
+                                              fontSize: 17.5,
+                                              textAlign: TextAlign.left,
+                                              maxLines: 1,
+                                            ),
                                           ),
-                                          TextFont(
-                                            text: convertToMoney(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                number,
-                                                finalNumber: snapshot.hasData
-                                                    ? snapshot.data!
-                                                    : 0),
-                                            fontSize: 17.5,
-                                            textAlign: TextAlign.left,
-                                            maxLines: 1,
+                                          Transform.translate(
+                                            offset: Offset(5, 0),
+                                            child: Tappable(
+                                              color: Colors.transparent,
+                                              borderRadius: 15,
+                                              onLongPress: () {
+                                                copyToClipboard(
+                                                  convertToMoney(
+                                                    Provider.of<AllWallets>(
+                                                        context,
+                                                        listen: false),
+                                                    number,
+                                                    finalNumber:
+                                                        snapshot.hasData
+                                                            ? snapshot.data!
+                                                            : 0,
+                                                    showCurrency: false,
+                                                  ),
+                                                );
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: TextFont(
+                                                  text: convertToMoney(
+                                                      Provider.of<AllWallets>(
+                                                          context),
+                                                      number,
+                                                      finalNumber:
+                                                          snapshot.hasData
+                                                              ? snapshot.data!
+                                                              : 0),
+                                                  fontSize: 17.5,
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       );
@@ -246,6 +279,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
   Future<void> selectAmount(BuildContext context) async {
     openBottomSheet(
       context,
+      removeAnyContextMenus: true,
       PopupFramework(
         title: "enter-amount".tr(),
         underTitleSpace: false,

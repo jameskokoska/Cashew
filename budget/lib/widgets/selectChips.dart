@@ -18,7 +18,6 @@ class SelectChips<T> extends StatefulWidget {
     this.extraWidget,
     this.onLongPress,
     this.wrapped = false,
-    this.darkerBackground = false,
     this.extraHorizontalPadding,
   });
   final List<T> items;
@@ -29,7 +28,6 @@ class SelectChips<T> extends StatefulWidget {
   final Widget? extraWidget;
   final Function(T)? onLongPress;
   final bool wrapped;
-  final bool darkerBackground;
   final double? extraHorizontalPadding;
 
   @override
@@ -90,31 +88,31 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                 if (widget.onLongPress != null) widget.onLongPress!(item);
               },
               color: Colors.transparent,
-              child: ChoiceChip(
-                backgroundColor: widget.darkerBackground
-                    ? Theme.of(context)
-                        .colorScheme
-                        .secondaryContainer
-                        .withOpacity(0.3)
-                    : null,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                selectedColor: appStateSettings["materialYou"]
-                    ? null
-                    : getColor(context, "lightDarkAccentHeavy"),
-                side: widget.getCustomBorderColor == null ||
-                        widget.getCustomBorderColor!(item) == null
-                    ? null
-                    : BorderSide(
-                        color: widget.getCustomBorderColor!(item)!,
-                      ),
-                label: TextFont(
-                  text: label,
-                  fontSize: 15,
+              child: Theme(
+                data:
+                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                child: ChoiceChip(
+                  surfaceTintColor: Colors.transparent,
+                  backgroundColor: Colors.transparent,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  selectedColor: appStateSettings["materialYou"]
+                      ? null
+                      : getColor(context, "lightDarkAccentHeavy"),
+                  side: widget.getCustomBorderColor == null ||
+                          widget.getCustomBorderColor!(item) == null
+                      ? null
+                      : BorderSide(
+                          color: widget.getCustomBorderColor!(item)!,
+                        ),
+                  label: TextFont(
+                    text: label,
+                    fontSize: 15,
+                  ),
+                  selected: selected,
+                  onSelected: (bool selected) {
+                    widget.onSelected(item);
+                  },
                 ),
-                selected: selected,
-                onSelected: (bool selected) {
-                  widget.onSelected(item);
-                },
               ),
             ),
           );

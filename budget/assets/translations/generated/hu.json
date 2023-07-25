@@ -216,7 +216,7 @@
   "delete-all-data": "Törölje az összes adatot",
   "erase-everything": "Mindent törölni?",
   "erase-everything-description": "Az összes Google Drive biztonsági mentést megőrzik.",
-  "erase-everything-wraning": "Biztos benne, hogy mindent törölni akar?",
+  "erase-everything-warning": "Biztos benne, hogy mindent törölni akar?",
   "erase-everything-warning-description": "Az összes adatot és preferenciát töröljük!",
   "erase": "Törli",
   "edit-category": "Kategória szerkesztése",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Adja hozzá napi tranzakcióit az alkalmazáshoz, hogy a költségvetést nyomon kövesse.",
   "notification-reminder-26": "Maradjon a költségvetés tetején azáltal, hogy hozzáadja a napi tranzakciókat az alkalmazáshoz.",
   "notification-reminder-title": "Adjon hozzá tranzakciókat",
-  "notification-upcoming-transaction-title": "A közelgő ügylet esedékes"
+  "notification-upcoming-transaction-title": "A közelgő ügylet esedékes",
+  "translations-help": "Ha szeretne segíteni a fordításokban, kérjük, írjon e -mailt",
+  "no-transactions-for": "Nincs tranzakció"
 }

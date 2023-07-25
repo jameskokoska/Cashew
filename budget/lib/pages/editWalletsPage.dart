@@ -122,7 +122,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                   },
                   itemBuilder: (context, index) {
                     TransactionWallet wallet = snapshot.data![index];
-                    Color backgroundColor = dynamicPastel(
+                    Color accentColor = dynamicPastel(
                         context,
                         HexColor(wallet.colour,
                             defaultColor:
@@ -136,7 +136,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                       currentReorder:
                           currentReorder != -1 && currentReorder != index,
                       index: index,
-                      backgroundColor: backgroundColor,
+                      accentColor: accentColor,
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

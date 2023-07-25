@@ -106,6 +106,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                 updateSettings(
                   "askForTransactionTitle",
                   value,
+                  updateGlobalState: false,
                 );
               },
               initialValue: appStateSettings["askForTransactionTitle"],

@@ -216,7 +216,7 @@
   "delete-all-data": "Xóa tất cả dữ liệu",
   "erase-everything": "Xoá đi mọi thứ?",
   "erase-everything-description": "Tất cả các bản sao lưu của Google Drive sẽ được lưu giữ.",
-  "erase-everything-wraning": "Bạn có chắc là bạn muốn xóa mọi thứ?",
+  "erase-everything-warning": "Bạn có chắc là bạn muốn xóa mọi thứ?",
   "erase-everything-warning-description": "Tất cả dữ liệu và sở thích sẽ bị xóa!",
   "erase": "Tẩy xóa",
   "edit-category": "Chỉnh sửa danh mục",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Thêm các giao dịch hàng ngày của bạn vào ứng dụng để giữ ngân sách của bạn theo dõi.",
   "notification-reminder-26": "Hãy đứng đầu ngân sách của bạn bằng cách thêm các giao dịch hàng ngày của bạn vào ứng dụng.",
   "notification-reminder-title": "Thêm giao dịch",
-  "notification-upcoming-transaction-title": "Giao dịch sắp tới do"
+  "notification-upcoming-transaction-title": "Giao dịch sắp tới do",
+  "translations-help": "Nếu bạn muốn giúp các bản dịch, vui lòng gửi email",
+  "no-transactions-for": "Không có giao dịch cho"
 }

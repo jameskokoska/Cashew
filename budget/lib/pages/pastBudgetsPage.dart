@@ -648,13 +648,15 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 200),
                         decoration: BoxDecoration(
-                          boxShadow: touchedBudgetIndex == null ||
-                                  widget.amountLoaded -
-                                          touchedBudgetIndex! -
-                                          1 ==
-                                      index
-                              ? boxShadowCheck(boxShadowGeneral(context))
-                              : [BoxShadow(color: Colors.transparent)],
+                          boxShadow: appStateSettings["materialYou"]
+                              ? []
+                              : touchedBudgetIndex == null ||
+                                      widget.amountLoaded -
+                                              touchedBudgetIndex! -
+                                              1 ==
+                                          index
+                                  ? boxShadowCheck(boxShadowGeneral(context))
+                                  : [BoxShadow(color: Colors.transparent)],
                         ),
                         child: AnimatedSize(
                           duration: Duration(milliseconds: 1000),
@@ -738,8 +740,9 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                             : 0.5,
                         child: Container(
                           decoration: BoxDecoration(
-                            boxShadow:
-                                boxShadowCheck(boxShadowGeneral(context)),
+                            boxShadow: appStateSettings["materialYou"]
+                                ? []
+                                : boxShadowCheck(boxShadowGeneral(context)),
                           ),
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 13.0),
@@ -1105,8 +1108,8 @@ class PastBudgetContainer extends StatelessWidget {
             color: appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context,
-                    budgetColorScheme.secondaryContainer,
-                    amount: 0.5,
+                    Theme.of(context).colorScheme.secondaryContainer,
+                    amount: 0.3,
                   )
                 : getColor(context, "lightDarkAccentHeavyLight"),
           );

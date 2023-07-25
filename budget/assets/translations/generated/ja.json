@@ -216,7 +216,7 @@
   "delete-all-data": "すべてのデータを削除します",
   "erase-everything": "すべてを消去しますか？",
   "erase-everything-description": "すべてのGoogleドライブバックアップが保持されます。",
-  "erase-everything-wraning": "あなたはすべてを消去したいですか？",
+  "erase-everything-warning": "あなたはすべてを消去したいですか？",
   "erase-everything-warning-description": "すべてのデータと設定が削除されます！",
   "erase": "消去します",
   "edit-category": "編集カテゴリ",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "毎日のトランザクションをアプリに追加して、予算を順調に進めます。",
   "notification-reminder-26": "毎日の取引をアプリに追加して、予算を把握してください。",
   "notification-reminder-title": "トランザクションを追加します",
-  "notification-upcoming-transaction-title": "今後のトランザクション"
+  "notification-upcoming-transaction-title": "今後のトランザクション",
+  "translations-help": "翻訳を手伝いたい場合は、メールでお問い合わせください",
+  "no-transactions-for": "取引はありません"
 }

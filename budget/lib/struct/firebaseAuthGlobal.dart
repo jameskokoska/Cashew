@@ -34,15 +34,15 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
       print(e.toString());
       print("will retry with a new credential");
       _credential = null;
-      user = null;
+      googleUser = null;
       return await firebaseGetDBInstance();
     }
   } else {
     try {
-      if (user == null) {
+      if (googleUser == null) {
         await signInGoogle(silentSignIn: true);
       }
-      GoogleSignInAccount? googleUser = user;
+      // GoogleSignInAccount? googleUser = googleUser;
 
       GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
@@ -53,7 +53,8 @@ Future<FirebaseFirestore?> firebaseGetDBInstance() async {
 
       await FirebaseAuth.instance.signInWithCredential(_credential!);
       updateSettings(
-          "currentUserEmail", FirebaseAuth.instance.currentUser!.email);
+          "currentUserEmail", FirebaseAuth.instance.currentUser!.email,
+          updateGlobalState: true);
       return FirebaseFirestore.instance;
     } catch (e) {
       print("There was an error with firebase login and possibly google");

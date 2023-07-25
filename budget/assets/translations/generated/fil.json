@@ -216,7 +216,7 @@
   "delete-all-data": "Tanggalin ang lahat ng data",
   "erase-everything": "Burahin ang lahat?",
   "erase-everything-description": "Ang lahat ng mga backup ng Google Drive ay itatago.",
-  "erase-everything-wraning": "Sigurado ka bang nais mong burahin ang lahat?",
+  "erase-everything-warning": "Sigurado ka bang nais mong burahin ang lahat?",
   "erase-everything-warning-description": "Tatanggalin ang lahat ng data at kagustuhan!",
   "erase": "Burahin",
   "edit-category": "I -edit ang kategorya",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Idagdag ang iyong pang -araw -araw na mga transaksyon sa app upang mapanatili ang iyong badyet sa track.",
   "notification-reminder-26": "Manatili sa tuktok ng iyong badyet sa pamamagitan ng pagdaragdag ng iyong pang -araw -araw na mga transaksyon sa app.",
   "notification-reminder-title": "Magdagdag ng mga transaksyon",
-  "notification-upcoming-transaction-title": "Paparating na transaksyon"
+  "notification-upcoming-transaction-title": "Paparating na transaksyon",
+  "translations-help": "Kung nais mong tumulong sa mga pagsasalin, mangyaring mag -email",
+  "no-transactions-for": "Walang mga transaksyon para sa"
 }

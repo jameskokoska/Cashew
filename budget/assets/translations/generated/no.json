@@ -216,7 +216,7 @@
   "delete-all-data": "Slett alle data",
   "erase-everything": "Slette alt?",
   "erase-everything-description": "Alle sikkerhetskopier av Google Drive blir holdt.",
-  "erase-everything-wraning": "Er du sikker på at du vil slette alt?",
+  "erase-everything-warning": "Er du sikker på at du vil slette alt?",
   "erase-everything-warning-description": "Alle data og preferanser blir slettet!",
   "erase": "Viske ut",
   "edit-category": "Rediger kategori",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Legg til dine daglige transaksjoner i appen for å holde budsjettet på sporet.",
   "notification-reminder-26": "Hold deg oppdatert på budsjettet ditt ved å legge dine daglige transaksjoner til appen.",
   "notification-reminder-title": "Legg til transaksjoner",
-  "notification-upcoming-transaction-title": "Kommende transaksjon forfaller"
+  "notification-upcoming-transaction-title": "Kommende transaksjon forfaller",
+  "translations-help": "Hvis du vil hjelpe deg med oversettelser, kan du sende en e -post",
+  "no-transactions-for": "Ingen transaksjoner for"
 }

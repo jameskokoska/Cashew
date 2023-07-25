@@ -216,7 +216,7 @@
   "delete-all-data": "Видалити всі дані",
   "erase-everything": "Стирати все?",
   "erase-everything-description": "Усі резервні копії Google накопичувач будуть зберігатись.",
-  "erase-everything-wraning": "Ви впевнені, що хочете все стерти?",
+  "erase-everything-warning": "Ви впевнені, що хочете все стерти?",
   "erase-everything-warning-description": "Всі дані та уподобання будуть видалені!",
   "erase": "Стерти",
   "edit-category": "Категорія редагування",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "Додайте свої щоденні транзакції до програми, щоб зберегти свій бюджет.",
   "notification-reminder-26": "Будьте в курсі свого бюджету, додавши до програми щоденні транзакції.",
   "notification-reminder-title": "Додати транзакції",
-  "notification-upcoming-transaction-title": "Майбутня транзакція належна"
+  "notification-upcoming-transaction-title": "Майбутня транзакція належна",
+  "translations-help": "Якщо ви хочете допомогти з перекладами, будь ласка, напишіть електронною поштою",
+  "no-transactions-for": "Немає транзакцій для"
 }

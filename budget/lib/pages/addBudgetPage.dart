@@ -1126,6 +1126,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   Future<void> selectAmount(BuildContext context) async {
     openBottomSheet(
       context,
+      removeAnyContextMenus: true,
       PopupFramework(
         title: "enter-amount".tr(),
         underTitleSpace: false,

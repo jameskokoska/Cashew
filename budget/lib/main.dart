@@ -109,7 +109,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     // FeatureDiscovery(
     //   child:
-
+    print("Rebuilt Material App");
     return MaterialApp(
       showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,

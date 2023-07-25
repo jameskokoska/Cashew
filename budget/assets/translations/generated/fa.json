@@ -216,7 +216,7 @@
   "delete-all-data": "تمام داده ها را حذف کنید",
   "erase-everything": "همه چیز را پاک کنید؟",
   "erase-everything-description": "تمام نسخه های پشتیبان Google Drive نگهداری می شوند.",
-  "erase-everything-wraning": "آیا مطمئن هستید که می خواهید همه چیز را پاک کنید؟",
+  "erase-everything-warning": "آیا مطمئن هستید که می خواهید همه چیز را پاک کنید؟",
   "erase-everything-warning-description": "تمام داده ها و ترجیحات حذف می شوند!",
   "erase": "پاک کردن",
   "edit-category": "گروه ویرایش",
@@ -358,5 +358,7 @@
   "notification-reminder-25": "معاملات روزانه خود را به برنامه اضافه کنید تا بودجه خود را در مسیر خود نگه دارید.",
   "notification-reminder-26": "با اضافه کردن معاملات روزانه خود به برنامه ، در بالای بودجه خود بمانید.",
   "notification-reminder-title": "معاملات را اضافه کنید",
-  "notification-upcoming-transaction-title": "معامله آینده"
+  "notification-upcoming-transaction-title": "معامله آینده",
+  "translations-help": "اگر مایل به کمک به ترجمه ها هستید ، لطفا ایمیل کنید",
+  "no-transactions-for": "بدون معامله برای"
 }

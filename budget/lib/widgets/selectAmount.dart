@@ -4,10 +4,12 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -434,33 +436,63 @@ class _SelectAmountState extends State<SelectAmount> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Flexible(
-                              child: Tappable(
-                                onLongPress: () async {
-                                  copyToClipboard(amountConverted);
+                              child: ContextMenuRegion(
+                                contextMenuBuilder: (context, offset) {
+                                  Offset newOffset = Offset(
+                                      offset.dx -
+                                          getWidthNavigationSidebar(context),
+                                      offset.dy);
+                                  return AdaptiveTextSelectionToolbar
+                                      .buttonItems(
+                                    anchors: TextSelectionToolbarAnchors(
+                                      primaryAnchor: newOffset,
+                                    ),
+                                    buttonItems: <ContextMenuButtonItem>[
+                                      ContextMenuButtonItem(
+                                        type: ContextMenuButtonType.copy,
+                                        onPressed: () {
+                                          ContextMenuController.removeAny();
+                                          copyToClipboard(amountConverted);
+                                        },
+                                      ),
+                                      ContextMenuButtonItem(
+                                        type: ContextMenuButtonType.paste,
+                                        onPressed: () {
+                                          ContextMenuController.removeAny();
+                                        },
+                                      ),
+                                    ],
+                                  );
                                 },
-                                color: Colors.transparent,
-                                borderRadius: 10,
-                                onTap: () {},
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    right: 8.0,
-                                    bottom: 5,
-                                    left: 5,
-                                    top: 5,
-                                  ),
-                                  child: TextFont(
-                                    autoSizeText: true,
-                                    maxLines: 1,
-                                    minFontSize: 16,
-                                    walletPkForCurrency: walletPkForCurrency ??
-                                        appStateSettings["selectedWallet"],
-                                    onlyShowCurrencyIcon:
-                                        widget.onlyShowCurrencyIcon,
-                                    text: amountConverted,
-                                    // text: amount,
-                                    textAlign: TextAlign.right,
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.bold,
+                                child: Tappable(
+                                  color: Colors.transparent,
+                                  borderRadius: 10,
+                                  onTap: () {
+                                    return;
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 8.0,
+                                      bottom: 5,
+                                      left: 5,
+                                      top: 5,
+                                    ),
+                                    child: TextFont(
+                                      autoSizeText: true,
+                                      maxLines: 1,
+                                      minFontSize: 16,
+                                      walletPkForCurrency:
+                                          walletPkForCurrency ??
+                                              appStateSettings[
+                                                  "selectedWallet"],
+                                      onlyShowCurrencyIcon:
+                                          widget.onlyShowCurrencyIcon,
+                                      text: amountConverted,
+                                      // text: amount,
+                                      textAlign: TextAlign.right,
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -512,7 +544,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                                     for (TransactionWallet wallet
                                                         in Provider.of<
                                                                     AllWallets>(
-                                                                context)
+                                                                context,
+                                                                listen: false)
                                                             .list) {
                                                       if (wallet.walletPk ==
                                                           appStateSettings[
@@ -527,22 +560,26 @@ class _SelectAmountState extends State<SelectAmount> {
                                                         null)
                                                       widget.setSelectedWallet!(
                                                           Provider.of<AllWallets>(
-                                                                  context)
+                                                                  context,
+                                                                  listen: false)
                                                               .list[index]);
                                                     setState(() {
                                                       selectedWallet = Provider
                                                               .of<AllWallets>(
-                                                                  context)
+                                                                  context,
+                                                                  listen: false)
                                                           .list[index];
                                                       walletPkForCurrency =
                                                           Provider.of<AllWallets>(
-                                                                  context)
+                                                                  context,
+                                                                  listen: false)
                                                               .list[index]
                                                               .walletPk;
                                                       numberDecimals = selectedWallet
                                                               ?.decimals ??
                                                           Provider.of<AllWallets>(
-                                                                  context)
+                                                                  context,
+                                                                  listen: false)
                                                               .indexedByPk[
                                                                   appStateSettings[
                                                                       "selectedWallet"]]
@@ -1240,4 +1277,102 @@ String removeTrailingZeroes(String input) {
     index--;
   }
   return input.substring(0, index + 1);
+}
+
+typedef ContextMenuBuilder = Widget Function(
+    BuildContext context, Offset offset);
+
+/// Shows and hides the context menu based on user gestures.
+///
+/// By default, shows the menu on right clicks and long presses.
+class ContextMenuRegion extends StatefulWidget {
+  /// Creates an instance of [ContextMenuRegion].
+  const ContextMenuRegion({
+    super.key,
+    required this.child,
+    required this.contextMenuBuilder,
+  });
+
+  /// Builds the context menu.
+  final ContextMenuBuilder contextMenuBuilder;
+
+  /// The child widget that will be listened to for gestures.
+  final Widget child;
+
+  @override
+  State<ContextMenuRegion> createState() => _ContextMenuRegionState();
+}
+
+class _ContextMenuRegionState extends State<ContextMenuRegion> {
+  Offset? _longPressOffset;
+
+  final ContextMenuController _contextMenuController = ContextMenuController();
+
+  static bool get _longPressEnabled {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+        return true;
+      case TargetPlatform.macOS:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return false;
+    }
+  }
+
+  void _onSecondaryTapUp(TapUpDetails details) {
+    _show(details.globalPosition);
+  }
+
+  void _onTap() {
+    if (!_contextMenuController.isShown) {
+      return;
+    }
+    _hide();
+  }
+
+  void _onLongPressStart(LongPressStartDetails details) {
+    _longPressOffset = details.globalPosition;
+  }
+
+  void _onLongPress() {
+    assert(_longPressOffset != null);
+    _show(_longPressOffset!);
+    _longPressOffset = null;
+  }
+
+  void _show(Offset position) {
+    _contextMenuController.show(
+      context: context,
+      contextMenuBuilder: (context) {
+        return widget.contextMenuBuilder(context, position);
+      },
+    );
+  }
+
+  void _hide() {
+    _contextMenuController.remove();
+  }
+
+  @override
+  void dispose() {
+    _hide();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPressStart: _onLongPressStart,
+      onLongPress: _longPressEnabled ? _onLongPress : null,
+      onTap: _onTap,
+      child: Listener(
+        onPointerDown: (_) {
+          _onTap();
+        },
+        child: widget.child,
+      ),
+    );
+  }
 }
