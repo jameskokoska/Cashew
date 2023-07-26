@@ -662,24 +662,21 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
 double getExpandedHeaderHeight(
     BuildContext context, double? expandedHeightPassed) {
   if (expandedHeightPassed != null) return expandedHeightPassed;
-  double aspectRatio = getDeviceAspectRatio(context);
+  double height = MediaQuery.of(context).size.height;
+  double minHeight = 682.37;
+  double maxHeight = 853.33;
 
-  double minAspectRatio = 1.777;
-  double maxAspectRatio = 2.222;
+  double minHeaderHeight = 100;
+  double maxHeaderHeight = 200;
 
-  double minHeight = 100.0;
-  double maxHeight = 200.0;
-
-  if (aspectRatio <= minAspectRatio) {
-    return minHeight;
-  } else if (aspectRatio >= maxAspectRatio) {
-    return maxHeight;
+  if (height >= maxHeight) {
+    return maxHeaderHeight;
+  } else if (height <= minHeight) {
+    return minHeaderHeight;
+  } else {
+    double heightPercentage = (height - minHeight) / (maxHeight - minHeight);
+    double expandedHeaderHeight = minHeaderHeight +
+        heightPercentage * (maxHeaderHeight - minHeaderHeight);
+    return expandedHeaderHeight;
   }
-
-  double heightRange = maxHeight - minHeight;
-  double ratioRange = maxAspectRatio - minAspectRatio;
-  double adjustedAspectRatio = (aspectRatio - minAspectRatio) / ratioRange;
-  double expandedHeight = minHeight + (adjustedAspectRatio * heightRange);
-
-  return expandedHeight;
 }

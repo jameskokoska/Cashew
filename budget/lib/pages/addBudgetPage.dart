@@ -6,6 +6,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -24,6 +25,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -518,6 +520,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput(
+                    autoFocus: kIsWeb && getWidthNavigationSidebar(context) > 0,
                     focusNode: _titleFocusNode,
                     labelText: "name-placeholder".tr(),
                     bubbly: false,

@@ -3,7 +3,6 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
-import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -17,6 +16,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -458,8 +458,11 @@ class _TransactionFiltersSelectionState
   void clearSearchFilters() {
     // Don't change the DateTime selected, as its handles separately
     DateTimeRange? dateTimeRange = selectedFilters.dateTimeRange;
+    // Don't change the search query, as its handled by the text box
+    String? searchQuery = selectedFilters.searchQuery;
     selectedFilters.clearSearchFilters();
     selectedFilters.dateTimeRange = dateTimeRange;
+    selectedFilters.searchQuery = searchQuery;
     widget.setSearchFilters(selectedFilters);
     setState(() {});
   }

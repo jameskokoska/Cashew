@@ -678,10 +678,8 @@ class CustomMaterialPageRoute extends MaterialPageRoute {
         );
 }
 
-Future<dynamic> pushRoute(context, page) async {
-  if (appStateSettings["batterySaver"] ||
-      appStateSettings["iOSNavigation"] ||
-      getPlatform() == PlatformOS.isIOS) {
+Future<dynamic> pushRoute(BuildContext context, Widget page) async {
+  if (appStateSettings["iOSNavigation"] || getPlatform() == PlatformOS.isIOS) {
     return await Navigator.push(
       context,
       CustomMaterialPageRoute(builder: (context) => page),
@@ -849,6 +847,31 @@ void copyToClipboard(String text) async {
       timeout: Duration(milliseconds: 2500),
     ),
   );
+}
+
+Future<String?> readClipboard() async {
+  HapticFeedback.mediumImpact();
+  final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+  String? clipboardText = clipboardData?.text;
+  openSnackbar(
+    SnackbarMessage(
+      title: "Pasted from clipboard",
+      icon: Icons.paste_rounded,
+      timeout: Duration(milliseconds: 2500),
+    ),
+  );
+  return clipboardText;
+}
+
+double? getAmountFromString(String inputString) {
+  RegExp regex = RegExp(r'[0-9]+(?:\.[0-9]+)?');
+  String? match = regex.stringMatch(inputString);
+
+  if (match != null) {
+    double amount = double.tryParse(match) ?? 0.0;
+    return amount;
+  }
+  return null;
 }
 
 enum PlatformOS {

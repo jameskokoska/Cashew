@@ -149,8 +149,8 @@ class ImageIcon extends StatelessWidget {
       decoration: outline
           ? BoxDecoration(
               border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 3,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                width: 2,
               ),
               borderRadius: BorderRadius.all(Radius.circular(500)),
             )

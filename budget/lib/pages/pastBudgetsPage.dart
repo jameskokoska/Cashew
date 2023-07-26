@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/budgetHistoryLineGraph.dart';
 import 'package:budget/pages/budgetPage.dart';
@@ -10,6 +11,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -19,6 +21,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/debouncer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -324,8 +327,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 Stack(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 7),
-                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 7, horizontal: 5),
                       color: backgroundColor,
                       child: StreamBuilder<Map<int, TransactionCategory>>(
                           stream: database.watchAllCategoriesMapped(),
@@ -363,19 +366,25 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                     }
                                     return StreamBuilder<List<double?>>(
                                         stream: mergedStreamsCategoriesTotal,
-                                        builder: (context, snapshot2) {
+                                        builder: (context,
+                                            snapshotMergedStreamsCategoriesTotal) {
                                           Map<int, List<FlSpot>>
                                               categorySpentPoints = {};
-                                          if (snapshot2.hasData &&
+                                          if (snapshotMergedStreamsCategoriesTotal
+                                                  .hasData &&
                                               (selectedCategoryFks ?? [])
                                                       .length >
                                                   0) {
                                             maxY = 0.1;
                                             // separate each into a map of their own
-                                            int i = snapshot2.data!.length - 1;
+                                            int i =
+                                                snapshotMergedStreamsCategoriesTotal
+                                                        .data!.length -
+                                                    1;
                                             for (int day = 0;
                                                 day <
-                                                    snapshot2.data!.length /
+                                                    snapshotMergedStreamsCategoriesTotal
+                                                            .data!.length /
                                                         (selectedCategoryFks ??
                                                                 [])
                                                             .length;
@@ -390,33 +399,42 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                       categoryFk] = [];
                                                 }
                                                 if (i <
-                                                        snapshot2
+                                                        snapshotMergedStreamsCategoriesTotal
                                                             .data!.length &&
                                                     i >= 0) {
                                                   categorySpentPoints[
                                                           categoryFk]!
                                                       .add(
                                                     FlSpot(
-                                                      (snapshot2.data!.length -
+                                                      (snapshotMergedStreamsCategoriesTotal
+                                                                  .data!
+                                                                  .length -
                                                               day.toDouble() -
-                                                              snapshot2
+                                                              snapshotMergedStreamsCategoriesTotal
                                                                   .data!.length)
                                                           .abs(),
-                                                      (snapshot2.data?[i] ?? 0)
+                                                      (snapshotMergedStreamsCategoriesTotal
+                                                                              .data?[
+                                                                          i] ??
+                                                                      0)
                                                                   .abs() ==
                                                               0
                                                           ? 0.001
-                                                          : (snapshot2.data![
+                                                          : (snapshotMergedStreamsCategoriesTotal
+                                                                          .data![
                                                                       i] ??
                                                                   0)
                                                               .abs(),
                                                     ),
                                                   );
-                                                  if ((snapshot2.data?[i] ?? 0)
+                                                  if ((snapshotMergedStreamsCategoriesTotal
+                                                                  .data?[i] ??
+                                                              0)
                                                           .abs() >
                                                       maxY) {
                                                     maxY =
-                                                        (snapshot2.data?[i] ??
+                                                        (snapshotMergedStreamsCategoriesTotal
+                                                                    .data?[i] ??
                                                                 0)
                                                             .abs();
                                                   }
@@ -541,21 +559,88 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           sliver: MultiSliver(
             children: [
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 8,
-                  ),
-                  child: BudgetSpenderSummary(
-                    budget: widget.budget,
-                    budgetRange: budgetRange,
-                    budgetColorScheme: budgetColorScheme,
-                    setSelectedMember: (member) {},
-                    disableMemberSelection: true,
-                    allTime: true,
-                    isLarge: true,
-                  ),
+                child: BudgetSpenderSummary(
+                  budget: widget.budget,
+                  budgetRange: budgetRange,
+                  budgetColorScheme: budgetColorScheme,
+                  setSelectedMember: (member) {},
+                  disableMemberSelection: true,
+                  allTime: true,
+                  isLarge: true,
                 ),
               ),
+              (selectedCategoryFks ?? []).length > 0
+                  ? SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: StreamBuilder<Map<int, TransactionCategory>>(
+                          stream: database.watchAllCategoriesMapped(),
+                          builder: (context, snapshotCategoriesMapped) {
+                            if (snapshotCategoriesMapped.hasData) {
+                              return StreamBuilder<List<double?>>(
+                                stream: mergedStreamsCategoriesTotal,
+                                builder: (context, snapshotCategoriesTotal) {
+                                  if (snapshotCategoriesTotal.hasData) {
+                                    List<Widget> children = [];
+                                    Map<int, double> categoryTotals = {};
+                                    for (int period = 0;
+                                        period <
+                                            amountLoaded *
+                                                (selectedCategoryFks ?? [])
+                                                    .length;
+                                        period++) {
+                                      int categoryIndex = period %
+                                          (selectedCategoryFks ?? []).length;
+                                      TransactionCategory? category =
+                                          snapshotCategoriesMapped.data![
+                                              selectedCategoryFks![
+                                                  categoryIndex]];
+                                      if (category != null &&
+                                          period <
+                                              snapshotCategoriesTotal
+                                                  .data!.length) {
+                                        categoryTotals[category.categoryPk] =
+                                            (categoryTotals[
+                                                        category.categoryPk] ??
+                                                    0) +
+                                                (snapshotCategoriesTotal
+                                                        .data?[period] ??
+                                                    0);
+                                      }
+                                    }
+                                    for (int categoryPk
+                                        in categoryTotals.keys) {
+                                      TransactionCategory? category =
+                                          snapshotCategoriesMapped
+                                              .data![categoryPk];
+                                      if (category != null) {
+                                        children.add(
+                                          CategoryAverageSpent(
+                                            category: category,
+                                            amountPeriods: amountLoaded,
+                                            amountSpent:
+                                                categoryTotals[categoryPk] ?? 0,
+                                          ),
+                                        );
+                                      }
+                                    }
+
+                                    return Column(
+                                      children: children,
+                                    );
+                                  } else {
+                                    return SizedBox.shrink();
+                                  }
+                                },
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  : SliverToBoxAdapter(child: SizedBox.shrink()),
               PastBudgetContainerList(
                 key: _pastBudgetContainerListStateStateKey,
                 budget: widget.budget,
@@ -670,7 +755,9 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                         index
                                 ? Padding(
                                     padding: EdgeInsets.only(
-                                        top: index == 0 ? 0 : 13.0),
+                                        bottom: index == widget.amountLoaded - 1
+                                            ? 0
+                                            : 13.0),
                                     child: PastBudgetContainer(
                                       budget: widget.budget,
                                       smallBudgetContainer: true,
@@ -1125,14 +1212,122 @@ class PastBudgetContainer extends StatelessWidget {
   }
 }
 
-class Debouncer {
-  final int milliseconds;
-  Timer? _timer;
+class CategoryAverageSpent extends StatelessWidget {
+  const CategoryAverageSpent({
+    required this.category,
+    required this.amountPeriods,
+    required this.amountSpent,
+    super.key,
+  });
+  final TransactionCategory category;
+  final int amountPeriods;
+  final double amountSpent;
 
-  Debouncer({required this.milliseconds});
-
-  run(VoidCallback action) {
-    _timer?.cancel();
-    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onLongPress: () {
+        pushRoute(
+          context,
+          AddCategoryPage(
+            category: category,
+          ),
+        );
+      },
+      color: Colors.transparent,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(context),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Row(
+            children: [
+              CategoryIcon(
+                category: category,
+                size: 30,
+                margin: EdgeInsets.zero,
+                borderRadius: 1000,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextFont(
+                        text: category.name,
+                        fontSize: 17,
+                        maxLines: 2,
+                      ),
+                      SizedBox(
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: CountNumber(
+                              count: (amountSpent / amountPeriods).abs(),
+                              duration: Duration(milliseconds: 4000),
+                              dynamicDecimals: true,
+                              initialCount: (amountSpent / amountPeriods).abs(),
+                              textBuilder: (number) {
+                                return TextFont(
+                                  text: convertToMoney(
+                                          Provider.of<AllWallets>(context),
+                                          number,
+                                          finalNumber:
+                                              (amountSpent / amountPeriods)
+                                                  .abs()) +
+                                      " " +
+                                      "average-spent".tr(),
+                                  fontSize: 13,
+                                  textColor: getColor(context, "textLight"),
+                                );
+                              },
+                            ),
+                          ),
+                          // TextFont(
+                          //   text: transactionCount.toString() +
+                          //       " " +
+                          //       (transactionCount == 1
+                          //           ? "transaction".tr().toLowerCase()
+                          //           : "transactions".tr().toLowerCase()),
+                          //   fontSize: 13,
+                          //   textColor: selected
+                          //       ? getColor(context, "black").withOpacity(0.4)
+                          //       : getColor(context, "textLight"),
+                          // ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              CountNumber(
+                count: amountSpent.abs(),
+                duration: Duration(milliseconds: 400),
+                dynamicDecimals: true,
+                initialCount: amountSpent.abs(),
+                textBuilder: (number) {
+                  return TextFont(
+                    fontWeight: FontWeight.bold,
+                    text: convertToMoney(
+                        Provider.of<AllWallets>(context), number,
+                        finalNumber: amountSpent.abs()),
+                    fontSize: 20,
+                    textColor: getColor(context, "black"),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

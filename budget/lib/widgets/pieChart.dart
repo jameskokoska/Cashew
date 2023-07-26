@@ -7,6 +7,7 @@ import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_shadow/simple_shadow.dart';
 
 class CategoryTotal {
   CategoryTotal(
@@ -244,6 +245,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           assetImage: AssetImage(
             "assets/categories/" + (widget.data[i].category.iconName ?? ""),
           ),
+          categoryColor: HexColor(widget.data[i].category.colour),
           percent: widget.totalSpent == 0
               ? 0
               : (widget.data[i].total / widget.totalSpent * 100).abs(),
@@ -263,6 +265,7 @@ class _Badge extends StatelessWidget {
   final double percent;
   final bool isTouched;
   final bool showLabels;
+  final Color categoryColor;
 
   const _Badge({
     Key? key,
@@ -272,6 +275,7 @@ class _Badge extends StatelessWidget {
     required this.percent,
     required this.isTouched,
     required this.showLabels,
+    required this.categoryColor,
   }) : super(key: key);
 
   @override
@@ -338,9 +342,15 @@ class _Badge extends StatelessWidget {
                 color: Theme.of(context).canvasColor,
               ),
               child: Center(
-                child: Image(
-                  image: assetImage,
-                  width: 23,
+                child: SimpleShadow(
+                  child: Image(
+                    image: assetImage,
+                    width: 23,
+                  ),
+                  opacity: 0.8,
+                  color: categoryColor,
+                  offset: Offset(0, 0),
+                  sigma: 1,
                 ),
               ),
             ),

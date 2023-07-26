@@ -164,7 +164,7 @@ class TextInput extends StatelessWidget {
               enabledBorder: bubbly == false
                   ? UnderlineInputBorder(
                       borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(8.0)),
+                          BorderRadius.vertical(top: Radius.circular(10)),
                       borderSide: BorderSide(
                         color: appStateSettings["materialYou"]
                             ? Theme.of(context)

@@ -82,6 +82,8 @@ dependencies:
   device_preview: ^1.1.0
   scrollable_positioned_list: ^0.3.8
   easy_localization: ^3.0.2
+  simple_shadow: ^0.3.1
+  quick_actions: ^1.0.5
   # feature_discovery: ^0.14.1
   
 # flutter pub run flutter_launcher_icons:main

@@ -371,7 +371,7 @@ Future<dynamic> deleteBudgetPopup(context, Budget budget,
     {Function? afterDelete}) async {
   return openPopup(
     context,
-    title: "delete".tr().capitalizeFirst + budget.name + "?",
+    title: "delete".tr().capitalizeFirst + " " + budget.name + "?",
     icon: Icons.delete_rounded,
     onCancel: () {
       Navigator.pop(context, false);

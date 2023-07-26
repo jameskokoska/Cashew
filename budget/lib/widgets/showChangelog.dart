@@ -11,6 +11,17 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.6.2
+    Search string no longer gets reset when filters cleared
+    Added quick action shortcuts on Android - Add transaction and view budgets
+    Name entry is auto focused when adding a category, wallet etc.
+    Fixed colors of background progress indicators on budget page
+    Added shadow to category icons without background
+    Improved add button colors
+    Fixed flickering color when using choice chip
+    When watching categories in past budget page, show average and total spent for categories
+    Fixed horizontal margin for past budgets page line graph
+    Added paste from clipboard functionality for amounts
+    Used height of display instead of ratio
     Adjusted header height based on screen size
     < 3.6.1
     Fixed Android keyboard height issue

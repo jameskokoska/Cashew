@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:provider/provider.dart';
 import '../colors.dart';
+import 'package:simple_shadow/simple_shadow.dart';
 
 class CategoryEntry extends StatelessWidget {
   CategoryEntry({
@@ -120,9 +122,11 @@ class CategoryEntry extends StatelessWidget {
             CategoryIconPercent(
               category: category,
               percent: percentSpent * 100,
-              progressBackgroundColor: selected
-                  ? getColor(context, "white")
-                  : getColor(context, "lightDarkAccentHeavy"),
+              progressBackgroundColor: appStateSettings["materialYou"]
+                  ? budgetColorScheme.secondaryContainer
+                  : selected
+                      ? getColor(context, "white")
+                      : getColor(context, "lightDarkAccentHeavy"),
               size: 28,
               insetPadding: 18,
             ),
@@ -218,11 +222,13 @@ class CategoryEntry extends StatelessWidget {
                                     child: Stack(
                                       children: [
                                         Container(
-                                          color: selected
-                                              ? getColor(context, "white")
-                                              : getColor(context,
-                                                      "lightDarkAccentHeavy")
-                                                  .withOpacity(0.7),
+                                          color: appStateSettings["materialYou"]
+                                              ? budgetColorScheme
+                                                  .secondaryContainer
+                                              : selected
+                                                  ? getColor(context, "white")
+                                                  : getColor(context,
+                                                      "lightDarkAccentHeavy"),
                                           height: 5,
                                         ),
                                         AnimatedFractionallySizedBox(
@@ -365,9 +371,15 @@ class CategoryIconPercent extends StatelessWidget {
     return Stack(alignment: Alignment.center, children: [
       Padding(
         padding: EdgeInsets.all(insetPadding / 2),
-        child: Image(
-          image: AssetImage("assets/categories/" + (category.iconName ?? "")),
-          width: size - 3,
+        child: SimpleShadow(
+          child: Image.asset(
+            "assets/categories/" + (category.iconName ?? ""),
+            width: size - 3,
+          ),
+          opacity: 0.8,
+          color: HexColor(category.colour),
+          offset: Offset(0, 0),
+          sigma: 1,
         ),
       ),
       AnimatedSwitcher(

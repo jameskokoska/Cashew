@@ -325,7 +325,7 @@ void enterCategoryLimitPopup(
                 amount = selectedAmountPassed;
               },
               // Keep all the decimals, so don't use convertToPercent(amount)
-              amountPassed: amount.toString(),
+              amountPassed: amount == 0.0 ? "0" : amount.toString(),
               next: () async {
                 Navigator.pop(context);
               },

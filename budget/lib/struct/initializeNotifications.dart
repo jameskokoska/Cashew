@@ -1,10 +1,10 @@
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -59,19 +59,14 @@ runNotificationPayLoadsNoContext(payloadData) {
 void runNotificationPayLoads(context) {
   if (kIsWeb) return;
   if (notificationPayload == "addTransaction") {
-    Navigator.push(
+    pushRoute(
       context,
-      MaterialPageRoute(
-        builder: (context) => AddTransactionPage(),
-      ),
+      AddTransactionPage(),
     );
   } else if (notificationPayload == "upcomingTransaction") {
-    Navigator.push(
+    pushRoute(
       context,
-      MaterialPageRoute(
-        builder: (context) =>
-            UpcomingOverdueTransactions(overdueTransactions: false),
-      ),
+      UpcomingOverdueTransactions(overdueTransactions: false),
     );
   }
   notificationPayload = "";

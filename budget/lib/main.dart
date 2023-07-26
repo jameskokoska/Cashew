@@ -31,6 +31,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 // Requires hot reload when changed
 bool enableDevicePreview = false;
@@ -235,28 +236,22 @@ class App extends StatelessWidget {
         Widget mainWidget = InitializeBiometrics(
           child: WatchForDayChange(
             child: WatchAllWallets(
-              child: Listener(
-                onPointerDown: (_) {
-                  // needs to go below a scaffold!!
-                  ContextMenuController.removeAny();
-                },
-                child: Stack(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(width: getWidthNavigationSidebar(context)),
-                        Expanded(
-                          child: child!,
-                        ),
-                      ],
-                    ),
-                    NavigationSidebar(key: sidebarStateKey),
-                    // The persistent global Widget stack (stays on navigation change)
-                    GlobalSnackbar(key: snackbarKey),
-                    GlobalLoadingProgress(key: loadingProgressKey),
-                    GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
-                  ],
-                ),
+              child: Stack(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(width: getWidthNavigationSidebar(context)),
+                      Expanded(
+                        child: child!,
+                      ),
+                    ],
+                  ),
+                  NavigationSidebar(key: sidebarStateKey),
+                  // The persistent global Widget stack (stays on navigation change)
+                  GlobalSnackbar(key: snackbarKey),
+                  GlobalLoadingProgress(key: loadingProgressKey),
+                  GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
+                ],
               ),
             ),
           ),

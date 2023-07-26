@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -12,6 +13,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -422,6 +424,8 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextInput(
+                      autoFocus:
+                          kIsWeb && getWidthNavigationSidebar(context) > 0,
                       labelText: "name-placeholder".tr(),
                       bubbly: false,
                       initialValue: selectedName,

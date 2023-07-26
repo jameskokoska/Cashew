@@ -85,6 +85,7 @@ class WalletEntry extends StatelessWidget {
                                 database.watchTotalOfWallet(wallet.walletPk),
                             builder: (context, snapshot) {
                               return CountNumber(
+                                lazyFirstRender: false,
                                 count: (snapshot.data ?? 0 * -1),
                                 duration: Duration(milliseconds: 1000),
                                 dynamicDecimals: true,

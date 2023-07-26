@@ -92,8 +92,6 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                 data:
                     Theme.of(context).copyWith(canvasColor: Colors.transparent),
                 child: ChoiceChip(
-                  surfaceTintColor: Colors.transparent,
-                  backgroundColor: Colors.transparent,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   selectedColor: appStateSettings["materialYou"]
                       ? null

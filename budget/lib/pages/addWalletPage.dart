@@ -4,6 +4,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -16,6 +17,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/currencyPicker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -342,6 +344,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextInput(
+                  autoFocus: kIsWeb && getWidthNavigationSidebar(context) > 0,
                   focusNode: _titleFocusNode,
                   labelText: "name-placeholder".tr(),
                   bubbly: false,

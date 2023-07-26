@@ -99,8 +99,8 @@ class AccountsPageState extends State<AccountsPage> {
                                 googleUser!.photoUrl == null
                             ? profileWidget
                             : FadeInImage.memoryNetwork(
-                                fadeInDuration: Duration(milliseconds: 500),
-                                fadeOutDuration: Duration(milliseconds: 500),
+                                fadeInDuration: Duration(milliseconds: 100),
+                                fadeOutDuration: Duration(milliseconds: 100),
                                 placeholder: kTransparentImage,
                                 image: googleUser!.photoUrl.toString(),
                                 height: 95,

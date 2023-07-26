@@ -18,6 +18,7 @@ import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/quickActions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
@@ -153,6 +154,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await initializeDefaultDatabase();
       await markSubscriptionsAsPaid();
       runNotificationPayLoads(context);
+      runQuickActionsPayLoads(context);
       await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);

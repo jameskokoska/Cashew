@@ -9,6 +9,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -21,6 +22,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -271,7 +273,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     openBottomSheet(
                       context,
                       PopupFramework(
-                        title: "Select Icon",
+                        title: "select-icon".tr(),
                         child: SelectCategoryImage(
                           setSelectedImage: setSelectedImage,
                           selectedImage:
@@ -327,6 +329,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20, bottom: 40),
                       child: TextInput(
+                        autoFocus:
+                            kIsWeb && getWidthNavigationSidebar(context) > 0,
                         focusNode: _titleFocusNode,
                         labelText: "name-placeholder".tr(),
                         bubbly: false,
@@ -663,7 +667,6 @@ class AddButton extends StatelessWidget {
     this.height = 52,
     this.openPage,
     this.borderRadius = 15,
-    this.backgroundColor,
   }) : super(key: key);
 
   final VoidCallback onTap;
@@ -672,33 +675,31 @@ class AddButton extends StatelessWidget {
   final double? height;
   final double borderRadius;
   final Widget? openPage;
-  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
+    Color color = appStateSettings["materialYou"]
+        ? Theme.of(context).colorScheme.secondary.withOpacity(0.3)
+        : getColor(context, "lightDarkAccentHeavy");
     Widget getButton(onTap) {
       return Tappable(
-        color: backgroundColor ?? Theme.of(context).canvasColor,
+        color: Colors.transparent,
         borderRadius: borderRadius,
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
               width: 1.5,
-              color: appStateSettings["materialYou"]
-                  ? Theme.of(context).colorScheme.secondaryContainer
-                  : getColor(context, "lightDarkAccentHeavy"),
+              color: color,
             ),
             borderRadius: BorderRadius.circular(borderRadius),
           ),
           width: width,
           height: height,
           child: Center(
-            child: TextFont(
-              text: "+",
-              fontWeight: FontWeight.bold,
-              textColor: appStateSettings["materialYou"]
-                  ? Theme.of(context).colorScheme.secondaryContainer
-                  : getColor(context, "lightDarkAccentHeavy"),
+            child: Icon(
+              Icons.add_rounded,
+              size: 22,
+              color: color,
             ),
           ),
         ),

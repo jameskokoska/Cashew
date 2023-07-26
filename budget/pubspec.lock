@@ -1044,6 +1044,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  quick_actions:
+    dependency: "direct main"
+    description:
+      name: quick_actions
+      sha256: "0562d78b8d6a87576fb8fe55bc655bda6ebe3c61a5904df56d20bd88f98cf3a3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
+  quick_actions_android:
+    dependency: transitive
+    description:
+      name: quick_actions_android
+      sha256: e31ae2181d1bd3b07e375feda452ae573c90b65fee6d4ac64cf113c789bff8c3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.7"
+  quick_actions_ios:
+    dependency: transitive
+    description:
+      name: quick_actions_ios
+      sha256: "9ed8b003a65034de9f36a7f593026bf114c8796a38011b23240f8bf7e4668e2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
+  quick_actions_platform_interface:
+    dependency: transitive
+    description:
+      name: quick_actions_platform_interface
+      sha256: "2985e12b5fecb5715a35cc0a3b2127b4391e1969e62bd0a4a721b4de21d5fedb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   quiver:
     dependency: transitive
     description:
@@ -1221,6 +1253,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.0"
+  simple_shadow:
+    dependency: "direct main"
+    description:
+      name: simple_shadow
+      sha256: "0c0872b2baffaf12fc91416643785a88081120bac61d704f3f9dbd7e712360fa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
   sky_engine:
     dependency: transitive
     description: flutter
