@@ -378,7 +378,8 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
         return false;
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: GestureDetector(
           onTap: () {
             //Minimize keyboard when tap non interactive widget

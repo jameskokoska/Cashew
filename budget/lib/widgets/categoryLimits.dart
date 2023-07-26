@@ -199,6 +199,13 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
           widget.isAbsoluteSpendingLimit,
         );
       },
+      onLongPress: () {
+        pushRoute(
+            context,
+            AddCategoryPage(
+              category: widget.category,
+            ));
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
         child: Row(
@@ -317,7 +324,8 @@ void enterCategoryLimitPopup(
                 selectedAmountPassed = selectedAmountPassed.abs();
                 amount = selectedAmountPassed;
               },
-              amountPassed: removeLastCharacter(convertToPercent(amount)),
+              // Keep all the decimals, so don't use convertToPercent(amount)
+              amountPassed: amount.toString(),
               next: () async {
                 Navigator.pop(context);
               },

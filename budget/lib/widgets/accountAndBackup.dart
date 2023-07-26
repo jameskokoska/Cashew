@@ -393,13 +393,16 @@ Future<void> deleteBackup(drive.DriveApi driveApi, String fileId) async {
 }
 
 Future<void> chooseBackup(context,
-    {bool isManaging = false, bool isClientSync = false}) async {
+    {bool isManaging = false,
+    bool isClientSync = false,
+    bool hideDownloadButton = false}) async {
   try {
     openBottomSheet(
       context,
       BackupManagement(
         isManaging: isManaging,
         isClientSync: isClientSync,
+        hideDownloadButton: hideDownloadButton,
       ),
     );
   } catch (e) {
@@ -594,10 +597,12 @@ class BackupManagement extends StatefulWidget {
     Key? key,
     required this.isManaging,
     required this.isClientSync,
+    this.hideDownloadButton = false,
   }) : super(key: key);
 
   final bool isManaging;
   final bool isClientSync;
+  final bool hideDownloadButton;
 
   @override
   State<BackupManagement> createState() => _BackupManagementState();
@@ -1041,27 +1046,30 @@ class _BackupManagementState extends State<BackupManagement> {
                                             icon: Icons.close_rounded,
                                           ),
                                         )
-                                      : Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 8.0,
-                                          ),
-                                          child: ButtonIcon(
-                                            color: appStateSettings[
-                                                    "materialYou"]
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .onSecondaryContainer
-                                                    .withOpacity(0.08)
-                                                : getColor(context,
-                                                        "lightDarkAccentHeavy")
-                                                    .withOpacity(0.7),
-                                            onTap: () {
-                                              saveDriveFileToDevice(
-                                                  driveApiState, file.value);
-                                            },
-                                            icon: Icons.download_rounded,
-                                          ),
-                                        )
+                                      : widget.hideDownloadButton
+                                          ? SizedBox.shrink()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 8.0,
+                                              ),
+                                              child: ButtonIcon(
+                                                color: appStateSettings[
+                                                        "materialYou"]
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .onSecondaryContainer
+                                                        .withOpacity(0.08)
+                                                    : getColor(context,
+                                                            "lightDarkAccentHeavy")
+                                                        .withOpacity(0.7),
+                                                onTap: () {
+                                                  saveDriveFileToDevice(
+                                                      driveApiState,
+                                                      file.value);
+                                                },
+                                                icon: Icons.download_rounded,
+                                              ),
+                                            )
                                 ],
                               ),
                             ),

@@ -103,7 +103,8 @@ class HomePageState extends State<HomePage>
         child: Stack(
           children: [
             Scaffold(
-              resizeToAvoidBottomInset: false,
+              // resizeToAvoidBottomInset: false,
+              resizeToAvoidBottomInset: true,
               body: ScrollbarWrap(
                 child: ListView(
                   controller: _scrollController,

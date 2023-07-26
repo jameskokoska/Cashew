@@ -241,7 +241,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                         : Duration(milliseconds: 300),
               ),
               extendBody: true,
-              resizeToAvoidBottomInset: false,
+              // resizeToAvoidBottomInset: false,
+              resizeToAvoidBottomInset: true,
               bottomNavigationBar: BottomNavBar(
                 key: navbarStateKey,
                 onChanged: (index) {

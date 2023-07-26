@@ -235,22 +235,29 @@ class App extends StatelessWidget {
         Widget mainWidget = InitializeBiometrics(
           child: WatchForDayChange(
             child: WatchAllWallets(
-              child: Stack(
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(width: getWidthNavigationSidebar(context)),
-                      Expanded(
-                        child: child!,
-                      ),
-                    ],
-                  ),
-                  NavigationSidebar(key: sidebarStateKey),
-                  // The persistent global Widget stack (stays on navigation change)
-                  GlobalSnackbar(key: snackbarKey),
-                  GlobalLoadingProgress(key: loadingProgressKey),
-                  GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
-                ],
+              child: Listener(
+                onPointerDown: (_) {
+                  print(MediaQuery.of(context).viewInsets.bottom);
+                  // needs to go below a scaffold!!
+                  ContextMenuController.removeAny();
+                },
+                child: Stack(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(width: getWidthNavigationSidebar(context)),
+                        Expanded(
+                          child: child!,
+                        ),
+                      ],
+                    ),
+                    NavigationSidebar(key: sidebarStateKey),
+                    // The persistent global Widget stack (stays on navigation change)
+                    GlobalSnackbar(key: snackbarKey),
+                    GlobalLoadingProgress(key: loadingProgressKey),
+                    GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
+                  ],
+                ),
               ),
             ),
           ),

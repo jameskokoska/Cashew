@@ -108,7 +108,7 @@ Future openBottomSheet(
       color: appStateSettings["materialYou"]
           ? dynamicPastel(
               context, Theme.of(context).colorScheme.secondaryContainer,
-              amount: 0.3)
+              amountDark: 0.3, amountLight: 0.6)
           : getColor(context, "lightDarkAccent"),
       cornerRadius: 20,
       duration: Duration(milliseconds: 300),

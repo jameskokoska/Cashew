@@ -470,6 +470,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                   onTap: () {
                                     return;
                                   },
+                                  // onLongPress: () {},
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                       right: 8.0,
@@ -1364,13 +1365,18 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onSecondaryTapUp: _onSecondaryTapUp,
       onLongPressStart: _onLongPressStart,
       onLongPress: _longPressEnabled ? _onLongPress : null,
-      onTap: _onTap,
       child: Listener(
-        onPointerDown: (_) {
-          _onTap();
-        },
+        onPointerDown: _longPressEnabled
+            ? (PointerDownEvent e) {
+                _hide();
+              }
+            : (PointerDownEvent e) {
+                _show(e.position);
+              },
         child: widget.child,
       ),
     );

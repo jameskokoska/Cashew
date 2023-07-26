@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.1
+    Fixed Android keyboard height issue
+    Fixed color of bottom sheet for padding
+    Added limo and parents icons
+    Long press category limit entry to edit category
+    Category spending limits keeps decimals in percent when editing
+    Switching absolute budget spending limit converts values properly between percent and absolute
     < 3.6.0
     Consistent routing used when logging in with Google
     Long press selected multiple transactions total in app bar to copy amount

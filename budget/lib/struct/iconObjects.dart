@@ -3207,4 +3207,36 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Cabin",
   ),
+  IconForCategory(
+    icon: "limousine.png",
+    tags: [
+      "limousine",
+      "car",
+      "luxury",
+      "transportation",
+      "chauffeur",
+      "vehicle",
+      "travel",
+      "ride",
+      "fancy",
+      "prestige"
+    ],
+    mostLikelyCategoryName: "Limousine",
+  ),
+  IconForCategory(
+    icon: "parents.png",
+    tags: [
+      "parents",
+      "family",
+      "children",
+      "mom",
+      "dad",
+      "love",
+      "parenting",
+      "home",
+      "mother",
+      "father"
+    ],
+    mostLikelyCategoryName: "Parents",
+  ),
 ];

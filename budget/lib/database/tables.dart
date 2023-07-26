@@ -6,7 +6,6 @@ import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -1472,6 +1471,26 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(categoryBudgetLimits)
           ..where((t) => t.budgetFk.equals(budgetPk)))
         .watch();
+  }
+
+  Future<bool> toggleAbsolutePercentSpendingCategoryBudgetLimits(
+      int budgetPk, double budgetSetAmount, bool absoluteToPercentage) async {
+    List<CategoryBudgetLimit> categorySpendingLimits =
+        await (select(categoryBudgetLimits)
+              ..where((t) => t.budgetFk.equals(budgetPk)))
+            .get();
+    for (CategoryBudgetLimit categorySpendingLimit in categorySpendingLimits) {
+      double convertedAmount = categorySpendingLimit.amount;
+      if (absoluteToPercentage) {
+        convertedAmount = convertedAmount / budgetSetAmount * 100;
+      } else {
+        convertedAmount = convertedAmount / 100 * budgetSetAmount;
+      }
+      print(convertedAmount);
+      await createOrUpdateCategoryLimit(
+          categorySpendingLimit.copyWith(amount: convertedAmount));
+    }
+    return true;
   }
 
   Expression<bool> evaluateIfNull(

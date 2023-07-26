@@ -53,7 +53,8 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
       return widget.child;
     }
     Widget child = Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Tappable(
         onTap: () async {
           setState(() {

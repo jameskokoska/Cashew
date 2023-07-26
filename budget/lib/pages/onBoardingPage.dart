@@ -340,7 +340,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                 );
               }
               if (result == true) {
-                chooseBackup(context);
+                chooseBackup(context, hideDownloadButton: true);
               } else {
                 nextNavigation();
               }

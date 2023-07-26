@@ -872,7 +872,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 padding: EdgeInsets.symmetric(
                     horizontal: getHorizontalPaddingConstrained(context)),
                 child: SettingsContainerSwitch(
-                  onSwitched: (value) {
+                  onSwitched: (value) async {
+                    await database
+                        .toggleAbsolutePercentSpendingCategoryBudgetLimits(
+                      widget.budget != null
+                          ? widget.budget!.budgetPk
+                          : setBudgetPk,
+                      selectedAmount ?? 1,
+                      selectedIsAbsoluteSpendingLimit,
+                    );
                     setState(() {
                       selectedIsAbsoluteSpendingLimit =
                           !selectedIsAbsoluteSpendingLimit;
