@@ -341,12 +341,12 @@
   "notification-reminder-8": "Aktualisieren Sie Ihr Budget mit den heutigen Ausgaben.",
   "notification-reminder-9": "Fügen Sie Ihre Ausgaben von heute der App hinzu.",
   "notification-reminder-10": "Notieren Sie Ihre Transaktionen, um auf dem richtigen Weg zu bleiben.",
-  "notification-reminder-11": "Bleiben Sie ganz oben auf Ihrem Budget, indem Sie Transaktionen hinzufügen.",
+  "notification-reminder-11": "Bleiben Sie auf dem neuesten Stand Ihres Budgets, indem Sie Transaktionen hinzufügen.",
   "notification-reminder-12": "Behalten Sie Ihre Ausgaben genau auf.",
   "notification-reminder-13": "Fügen Sie Ihre täglichen Transaktionen der App hinzu.",
   "notification-reminder-14": "Aktualisieren Sie Ihr Budget mit den heutigen Ausgaben.",
   "notification-reminder-15": "Notieren Sie Ihre Transaktionen, um auf dem richtigen Weg zu bleiben.",
-  "notification-reminder-16": "Bleiben Sie ganz oben auf Ihrem Budget, indem Sie Transaktionen hinzufügen.",
+  "notification-reminder-16": "Bleiben Sie auf dem neuesten Stand Ihres Budgets, indem Sie Transaktionen hinzufügen.",
   "notification-reminder-17": "Es ist das Ende des Tages, haben Sie Ihre Transaktionen hinzugefügt?",
   "notification-reminder-18": "Stellen Sie sicher, dass Sie Ihre täglichen Transaktionen zur App hinzufügen.",
   "notification-reminder-19": "Fügen Sie Ihren Budget -Tracker von heute alle Kosten hinzu.",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "Transaktionen hinzufügen",
   "notification-upcoming-transaction-title": "Bevorstehende Transaktion fällig",
   "translations-help": "Wenn Sie bei Übersetzungen helfen möchten, senden Sie bitte eine E -Mail",
-  "no-transactions-for": "Keine Transaktionen für"
+  "no-transactions-for": "Keine Transaktionen für",
+  "average-spent": "durchschnittlich verbracht",
+  "select-icon": "Wählen Sie das Symbol"
 }

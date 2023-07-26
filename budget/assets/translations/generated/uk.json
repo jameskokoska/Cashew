@@ -360,5 +360,7 @@
   "notification-reminder-title": "Додати транзакції",
   "notification-upcoming-transaction-title": "Майбутня транзакція належна",
   "translations-help": "Якщо ви хочете допомогти з перекладами, будь ласка, напишіть електронною поштою",
-  "no-transactions-for": "Немає транзакцій для"
+  "no-transactions-for": "Немає транзакцій для",
+  "average-spent": "середній витрачений",
+  "select-icon": "Виберіть значок"
 }

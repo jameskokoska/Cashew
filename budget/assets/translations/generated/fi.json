@@ -151,7 +151,7 @@
   "saving-tracking": "Sinun pitäisi tallentaa",
   "for": "puolesta",
   "more-days": "Lisää päiviä",
-  "spending-tracking": "Voit jatkaa kuluttamista",
+  "spending-tracking": "Voit jatkaa menoja",
   "of-spending": "kuluttaa",
   "of-income": "tulo",
   "of-expense": "kustannus",
@@ -334,7 +334,7 @@
   "notification-reminder-1": "Älä unohda lisätä tapahtumia tänään!",
   "notification-reminder-2": "Lisää päivittäiset tapahtumat pysyäksesi raiteilla.",
   "notification-reminder-3": "Päivitä budjettisi tämän päivän kuluilla.",
-  "notification-reminder-4": "Lisää tämän päivän kulut budjettisi seurantalaitteeseesi.",
+  "notification-reminder-4": "Lisää tämän päivän kulut budjettimaailmaan.",
   "notification-reminder-5": "Tallenna tapahtumasi päiväksi.",
   "notification-reminder-6": "Pysy budjettisi päällä lisäämällä päivittäisiä tapahtumia.",
   "notification-reminder-7": "Älä unohda lisätä päivittäisiä tapahtumia.",
@@ -350,7 +350,7 @@
   "notification-reminder-17": "On päivän loppu, oletko lisännyt tapahtumiasi?",
   "notification-reminder-18": "Muista lisätä päivittäiset tapahtumat sovellukseen.",
   "notification-reminder-19": "Lisää kaikki kulut tänään budjettiseurannasta.",
-  "notification-reminder-20": "Tallenna päiväsi päiväsi saadaksesi täydellisen kuvan kulutustottumuksistasi.",
+  "notification-reminder-20": "Tallenna päivän tapahtumat saadaksesi täydellisen kuvan kulutustottumuksistasi.",
   "notification-reminder-21": "Älä unohda lisätä päivittäisiä tapahtumiasi pysyäksesi tiellä budjettisi kanssa.",
   "notification-reminder-22": "Päivitä budjettisi nykypäivän kuluilla muutama minuutti.",
   "notification-reminder-23": "Varmista, että lisäät kulut tänään budjettiseurannasta.",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "Lisää tapahtumia",
   "notification-upcoming-transaction-title": "Tuleva tapahtuma",
   "translations-help": "Jos haluat auttaa käännöksissä, lähetä sähköpostia",
-  "no-transactions-for": "Ei tapahtumia"
+  "no-transactions-for": "Ei tapahtumia",
+  "average-spent": "keskimääräinen käytetty",
+  "select-icon": "Valitse kuvake"
 }

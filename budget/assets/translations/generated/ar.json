@@ -341,12 +341,12 @@
   "notification-reminder-8": "قم بتحديث ميزانيتك بنفقات اليوم.",
   "notification-reminder-9": "أضف نفقاتك من اليوم إلى التطبيق.",
   "notification-reminder-10": "سجل المعاملات الخاصة بك للبقاء على المسار الصحيح.",
-  "notification-reminder-11": "ابق على قمة ميزانيتك عن طريق إضافة المعاملات.",
+  "notification-reminder-11": "ابق على رأس ميزانيتك عن طريق إضافة المعاملات.",
   "notification-reminder-12": "احتفظ بسجل دقيق لإنفاقك.",
   "notification-reminder-13": "أضف معاملاتك اليومية إلى التطبيق.",
   "notification-reminder-14": "قم بتحديث ميزانيتك بنفقات اليوم.",
   "notification-reminder-15": "سجل المعاملات الخاصة بك للبقاء على المسار الصحيح.",
-  "notification-reminder-16": "ابق على قمة ميزانيتك عن طريق إضافة المعاملات.",
+  "notification-reminder-16": "ابق على رأس ميزانيتك عن طريق إضافة المعاملات.",
   "notification-reminder-17": "إنها نهاية اليوم ، هل أضفت معاملاتك؟",
   "notification-reminder-18": "تأكد من إضافة معاملاتك اليومية إلى التطبيق.",
   "notification-reminder-19": "أضف أي نفقات من اليوم إلى متتبع الميزانية.",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "إضافة المعاملات",
   "notification-upcoming-transaction-title": "المعاملة القادمة المستحقة",
   "translations-help": "إذا كنت ترغب في المساعدة في الترجمات ، فيرجى إرسال بريد إلكتروني",
-  "no-transactions-for": "لا معاملات ل"
+  "no-transactions-for": "لا معاملات ل",
+  "average-spent": "متوسط ​​الإنفاق",
+  "select-icon": "حدد أيقونة"
 }

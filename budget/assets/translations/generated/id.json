@@ -360,5 +360,7 @@
   "notification-reminder-title": "Tambahkan transaksi",
   "notification-upcoming-transaction-title": "Transaksi yang akan datang karena",
   "translations-help": "Jika Anda ingin membantu terjemahan, silakan kirim email",
-  "no-transactions-for": "Tidak ada transaksi untuk"
+  "no-transactions-for": "Tidak ada transaksi untuk",
+  "average-spent": "rata -rata dihabiskan",
+  "select-icon": "Pilih ikon"
 }

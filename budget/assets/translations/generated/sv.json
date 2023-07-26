@@ -360,5 +360,7 @@
   "notification-reminder-title": "Lägg till transaktioner",
   "notification-upcoming-transaction-title": "Kommande transaktion på grund av",
   "translations-help": "Om du vill hjälpa till med översättningar, maila maila",
-  "no-transactions-for": "Inga transaktioner för"
+  "no-transactions-for": "Inga transaktioner för",
+  "average-spent": "genomsnittlig",
+  "select-icon": "Välj ikon"
 }

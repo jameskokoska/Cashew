@@ -349,7 +349,7 @@
   "notification-reminder-16": "Maradjon a költségvetés tetején tranzakciók hozzáadásával.",
   "notification-reminder-17": "A nap vége van, hozzáadta a tranzakciókat?",
   "notification-reminder-18": "Feltétlenül adja hozzá a napi tranzakciókat az alkalmazáshoz.",
-  "notification-reminder-19": "Adja hozzá a mai naptól származó költségeket a költségvetési nyomkövetőjéhez.",
+  "notification-reminder-19": "Adjon hozzá a mai naptól származó költségeket a költségvetési nyomkövetőbe.",
   "notification-reminder-20": "Jegyezze fel a napi tranzakciókat, hogy teljes képet kapjon a kiadási szokásairól.",
   "notification-reminder-21": "Ne felejtsd el hozzáadni a napi tranzakciókat, hogy a költségvetéssel nyomon maradjanak.",
   "notification-reminder-22": "Szánjon néhány percet a költségvetés frissítésére a mai költségekkel.",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "Adjon hozzá tranzakciókat",
   "notification-upcoming-transaction-title": "A közelgő ügylet esedékes",
   "translations-help": "Ha szeretne segíteni a fordításokban, kérjük, írjon e -mailt",
-  "no-transactions-for": "Nincs tranzakció"
+  "no-transactions-for": "Nincs tranzakció",
+  "average-spent": "átlagosan elköltött",
+  "select-icon": "Válassza ki az ikont"
 }

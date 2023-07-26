@@ -360,5 +360,7 @@
   "notification-reminder-title": "Adăugați tranzacții",
   "notification-upcoming-transaction-title": "Tranzacția viitoare datorată",
   "translations-help": "Dacă doriți să vă ajutați cu traducerile, vă rugăm să trimiteți un e -mail",
-  "no-transactions-for": "Fără tranzacții pentru"
+  "no-transactions-for": "Fără tranzacții pentru",
+  "average-spent": "Media cheltuită",
+  "select-icon": "Selectați pictograma"
 }

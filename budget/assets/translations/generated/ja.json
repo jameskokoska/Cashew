@@ -331,7 +331,7 @@
   "daily-notifications-description": "アプリが開かれていない場合",
   "alert-time": "時間を変更します",
   "upcoming-transactions": "今後のトランザクション",
-  "notification-reminder-1": "今日からトランザクションを追加することを忘れないでください！",
+  "notification-reminder-1": "今日から取引を追加することを忘れないでください！",
   "notification-reminder-2": "毎日のトランザクションを追加して、順調に進みます。",
   "notification-reminder-3": "今日の費用で予算を更新してください。",
   "notification-reminder-4": "予算トラッカーに今日の費用を追加します。",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "トランザクションを追加します",
   "notification-upcoming-transaction-title": "今後のトランザクション",
   "translations-help": "翻訳を手伝いたい場合は、メールでお問い合わせください",
-  "no-transactions-for": "取引はありません"
+  "no-transactions-for": "取引はありません",
+  "average-spent": "平均費用",
+  "select-icon": "アイコンを選択します"
 }

@@ -328,7 +328,7 @@
   "delete-transaction-description": "您确定要删除此交易吗？",
   "deleted-transaction": "删除交易",
   "daily-notifications": "每日通知",
-  "daily-notifications-description": "如果该应用程序未打开",
+  "daily-notifications-description": "如果该应用未打开",
   "alert-time": "改变时间",
   "upcoming-transactions": "即将进行的交易",
   "notification-reminder-1": "不要忘记添加今天的交易！",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "添加交易",
   "notification-upcoming-transaction-title": "即将到期的交易",
   "translations-help": "如果您想帮助翻译，请发送电子邮件",
-  "no-transactions-for": "没有交易"
+  "no-transactions-for": "没有交易",
+  "average-spent": "平均支出",
+  "select-icon": "选择图标"
 }

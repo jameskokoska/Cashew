@@ -360,5 +360,7 @@
   "notification-reminder-title": "Add Transactions",
   "notification-upcoming-transaction-title": "Upcoming Transaction Due",
   "translations-help": "If you would like to help with translations, please email",
-  "no-transactions-for": "No transactions for"
+  "no-transactions-for": "No transactions for",
+  "average-spent": "average spent",
+  "select-icon": "Select Icon"
 }

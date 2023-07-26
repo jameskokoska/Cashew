@@ -334,7 +334,7 @@
   "notification-reminder-1": "Jangan lupa untuk menambah transaksi dari hari ini!",
   "notification-reminder-2": "Tambah urus niaga harian anda untuk terus berjalan.",
   "notification-reminder-3": "Kemas kini anggaran anda dengan perbelanjaan hari ini.",
-  "notification-reminder-4": "Tambahkan perbelanjaan hari ini ke pelacak bajet anda.",
+  "notification-reminder-4": "Tambahkan perbelanjaan hari ini kepada pelacak belanjawan anda.",
   "notification-reminder-5": "Catat urus niaga anda untuk hari itu.",
   "notification-reminder-6": "Tinggal di atas belanjawan anda dengan menambah urus niaga harian anda.",
   "notification-reminder-7": "Jangan lupa untuk menambah urus niaga harian anda.",
@@ -343,7 +343,7 @@
   "notification-reminder-10": "Catat urus niaga anda untuk terus berjalan.",
   "notification-reminder-11": "Tinggal di atas belanjawan anda dengan menambah urus niaga.",
   "notification-reminder-12": "Simpan rekod perbelanjaan anda yang tepat.",
-  "notification-reminder-13": "Tambah urus niaga harian anda ke aplikasinya.",
+  "notification-reminder-13": "Tambah transaksi harian anda ke aplikasinya.",
   "notification-reminder-14": "Kemas kini anggaran anda dengan perbelanjaan hari ini.",
   "notification-reminder-15": "Catat urus niaga anda untuk terus berjalan.",
   "notification-reminder-16": "Tinggal di atas belanjawan anda dengan menambah urus niaga.",
@@ -359,6 +359,8 @@
   "notification-reminder-26": "Tinggal di atas belanjawan anda dengan menambah urus niaga harian anda ke aplikasinya.",
   "notification-reminder-title": "Tambah urus niaga",
   "notification-upcoming-transaction-title": "Transaksi yang akan datang",
-  "translations-help": "Sekiranya anda ingin membantu dengan terjemahan, sila e -mel",
-  "no-transactions-for": "Tiada urus niaga untuk"
+  "translations-help": "Sekiranya anda ingin membantu terjemahan, sila e -mel",
+  "no-transactions-for": "Tiada urus niaga untuk",
+  "average-spent": "purata dibelanjakan",
+  "select-icon": "Pilih ikon"
 }

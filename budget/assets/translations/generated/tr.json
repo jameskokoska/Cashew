@@ -360,5 +360,7 @@
   "notification-reminder-title": "İşlemler ekle",
   "notification-upcoming-transaction-title": "Yaklaşan işlem son",
   "translations-help": "Çevirilere yardımcı olmak isterseniz, lütfen e -posta gönderin",
-  "no-transactions-for": "İçin işlem yok"
+  "no-transactions-for": "İçin işlem yok",
+  "average-spent": "ortalama harcanan",
+  "select-icon": "Simgeyi seçin"
 }

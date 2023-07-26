@@ -328,7 +328,7 @@
   "delete-transaction-description": "आपणास खात्री आहे की आपण हा व्यवहार हटवू इच्छिता?",
   "deleted-transaction": "हटविला व्यवहार",
   "daily-notifications": "दैनंदिन सूचना",
-  "daily-notifications-description": "जर अ‍ॅप उघडला नसेल तर",
+  "daily-notifications-description": "अ‍ॅप उघडला नसेल तर",
   "alert-time": "वेळ बदल",
   "upcoming-transactions": "आगामी व्यवहार",
   "notification-reminder-1": "आजपासून व्यवहार जोडणे विसरू नका!",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "व्यवहार जोडा",
   "notification-upcoming-transaction-title": "आगामी व्यवहार देय",
   "translations-help": "आपण भाषांतरांमध्ये मदत करू इच्छित असल्यास, कृपया ईमेल करा",
-  "no-transactions-for": "साठी कोणतेही व्यवहार नाहीत"
+  "no-transactions-for": "साठी कोणतेही व्यवहार नाहीत",
+  "average-spent": "सरासरी खर्च",
+  "select-icon": "चिन्ह निवडा"
 }

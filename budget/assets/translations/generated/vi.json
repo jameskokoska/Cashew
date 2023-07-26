@@ -331,7 +331,7 @@
   "daily-notifications-description": "Nếu ứng dụng không được mở",
   "alert-time": "Thay đổi thời gian",
   "upcoming-transactions": "Giao dịch sắp tới",
-  "notification-reminder-1": "Đừng quên thêm giao dịch từ hôm nay!",
+  "notification-reminder-1": "Đừng quên thêm các giao dịch từ hôm nay!",
   "notification-reminder-2": "Thêm các giao dịch hàng ngày của bạn để theo dõi.",
   "notification-reminder-3": "Cập nhật ngân sách của bạn với các chi phí hôm nay.",
   "notification-reminder-4": "Thêm chi phí hôm nay vào trình theo dõi ngân sách của bạn.",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "Thêm giao dịch",
   "notification-upcoming-transaction-title": "Giao dịch sắp tới do",
   "translations-help": "Nếu bạn muốn giúp các bản dịch, vui lòng gửi email",
-  "no-transactions-for": "Không có giao dịch cho"
+  "no-transactions-for": "Không có giao dịch cho",
+  "average-spent": "Trung bình chi tiêu",
+  "select-icon": "Chọn Biểu tượng"
 }

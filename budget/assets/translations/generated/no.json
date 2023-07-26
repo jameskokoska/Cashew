@@ -360,5 +360,7 @@
   "notification-reminder-title": "Legg til transaksjoner",
   "notification-upcoming-transaction-title": "Kommende transaksjon forfaller",
   "translations-help": "Hvis du vil hjelpe deg med oversettelser, kan du sende en e -post",
-  "no-transactions-for": "Ingen transaksjoner for"
+  "no-transactions-for": "Ingen transaksjoner for",
+  "average-spent": "gjennomsnittlig brukt",
+  "select-icon": "Velg ikon"
 }

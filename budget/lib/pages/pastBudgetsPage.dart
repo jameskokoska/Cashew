@@ -1272,7 +1272,7 @@ class CategoryAverageSpent extends StatelessWidget {
                           Expanded(
                             child: CountNumber(
                               count: (amountSpent / amountPeriods).abs(),
-                              duration: Duration(milliseconds: 4000),
+                              duration: Duration(milliseconds: 400),
                               dynamicDecimals: true,
                               initialCount: (amountSpent / amountPeriods).abs(),
                               textBuilder: (number) {

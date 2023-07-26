@@ -342,7 +342,7 @@
   "notification-reminder-9": "Voeg uw uitgaven van vandaag toe aan de app.",
   "notification-reminder-10": "Noteer uw transacties om op koers te blijven.",
   "notification-reminder-11": "Blijf op de hoogte van uw budget door transacties toe te voegen.",
-  "notification-reminder-12": "Houd uw uitgaven nauwkeurig bij.",
+  "notification-reminder-12": "Houd uw uitgaven nauwkeurig vast.",
   "notification-reminder-13": "Voeg uw dagelijkse transacties toe aan de app.",
   "notification-reminder-14": "Update uw budget met de kosten van vandaag.",
   "notification-reminder-15": "Noteer uw transacties om op koers te blijven.",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "Voeg transacties toe",
   "notification-upcoming-transaction-title": "Aankomende transactie verschuldigd",
   "translations-help": "Als u wilt helpen met vertalingen, stuur dan een e -mail",
-  "no-transactions-for": "Geen transacties voor"
+  "no-transactions-for": "Geen transacties voor",
+  "average-spent": "Gemiddeld besteed",
+  "select-icon": "Selecteer Pictogram"
 }

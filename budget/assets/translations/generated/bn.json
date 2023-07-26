@@ -360,5 +360,7 @@
   "notification-reminder-title": "লেনদেন যোগ করুন",
   "notification-upcoming-transaction-title": "আসন্ন লেনদেন কারণে",
   "translations-help": "আপনি যদি অনুবাদগুলিতে সহায়তা করতে চান তবে দয়া করে ইমেল করুন",
-  "no-transactions-for": "জন্য কোনও লেনদেন নেই"
+  "no-transactions-for": "জন্য কোনও লেনদেন নেই",
+  "average-spent": "গড় ব্যয়",
+  "select-icon": "আইকন নির্বাচন করুন"
 }

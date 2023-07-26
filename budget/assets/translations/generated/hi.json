@@ -360,5 +360,7 @@
   "notification-reminder-title": "लेनदेन जोड़ें",
   "notification-upcoming-transaction-title": "आगामी लेन -देन",
   "translations-help": "यदि आप अनुवादों के साथ मदद करना चाहते हैं, तो कृपया ईमेल करें",
-  "no-transactions-for": "के लिए कोई लेनदेन नहीं"
+  "no-transactions-for": "के लिए कोई लेनदेन नहीं",
+  "average-spent": "औसत खर्च",
+  "select-icon": "आइकन का चयन करें"
 }

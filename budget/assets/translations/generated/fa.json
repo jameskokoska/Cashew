@@ -360,5 +360,7 @@
   "notification-reminder-title": "معاملات را اضافه کنید",
   "notification-upcoming-transaction-title": "معامله آینده",
   "translations-help": "اگر مایل به کمک به ترجمه ها هستید ، لطفا ایمیل کنید",
-  "no-transactions-for": "بدون معامله برای"
+  "no-transactions-for": "بدون معامله برای",
+  "average-spent": "متوسط ​​خرج کردن",
+  "select-icon": "نماد را انتخاب کنید"
 }

@@ -359,6 +359,8 @@
   "notification-reminder-26": "Pozostań na bieżąco z budżetem, dodając codzienne transakcje do aplikacji.",
   "notification-reminder-title": "Dodaj transakcje",
   "notification-upcoming-transaction-title": "Nadchodząca transakcja należna",
-  "translations-help": "Jeśli chcesz pomóc w tłumaczeniach, napisz do e -maila",
-  "no-transactions-for": "Brak transakcji dla"
+  "translations-help": "Jeśli chcesz pomóc w tłumaczeniach, napisz e -mail",
+  "no-transactions-for": "Brak transakcji dla",
+  "average-spent": "Średnia wydana",
+  "select-icon": "Wybierz ikonę"
 }

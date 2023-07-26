@@ -353,12 +353,14 @@
   "notification-reminder-20": "Zaznamenejte své transakce za den, abyste získali úplný obrázek o svých výdajových návycích.",
   "notification-reminder-21": "Nezapomeňte přidat své denní transakce, abyste zůstali na dobré cestě s rozpočtem.",
   "notification-reminder-22": "Udělejte si několik minut a aktualizujte svůj rozpočet s dnešními výdaji.",
-  "notification-reminder-23": "Nezapomeňte přidat jakékoli výdaje od dnešního dne do svého rozpočtového sledování.",
+  "notification-reminder-23": "Nezapomeňte přidat jakékoli výdaje od dnešního dne do svého rozpočtového sledovače.",
   "notification-reminder-24": "Nezapomeňte zaznamenat své transakce za den, abyste získali úplný obrázek o svých výdajových návycích.",
   "notification-reminder-25": "Přidejte své denní transakce do aplikace, abyste udrželi svůj rozpočet na správné cestě.",
   "notification-reminder-26": "Zůstaňte na vrcholu svého rozpočtu přidáním denních transakcí do aplikace.",
   "notification-reminder-title": "Přidat transakce",
   "notification-upcoming-transaction-title": "Nadcházející transakce splatná",
   "translations-help": "Pokud byste chtěli pomoci s překlady, pošlete e -mail",
-  "no-transactions-for": "Žádné transakce pro"
+  "no-transactions-for": "Žádné transakce pro",
+  "average-spent": "průměrně utracené",
+  "select-icon": "Vyberte ikonu"
 }

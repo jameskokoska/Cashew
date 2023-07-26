@@ -329,7 +329,7 @@
   "deleted-transaction": "עסקה שנמחקו",
   "daily-notifications": "התראות יומיות",
   "daily-notifications-description": "אם האפליקציה לא נפתחה",
-  "alert-time": "לשנות את הזמן",
+  "alert-time": "לשנות זמן",
   "upcoming-transactions": "עסקאות צפויות",
   "notification-reminder-1": "אל תשכח להוסיף עסקאות מהיום!",
   "notification-reminder-2": "הוסף את העסקאות היומיות שלך כדי להישאר על המסלול.",
@@ -360,5 +360,7 @@
   "notification-reminder-title": "הוסף עסקאות",
   "notification-upcoming-transaction-title": "העסקה הקרובה המגיעה",
   "translations-help": "אם ברצונך לעזור בתרגומים, אנא שלח דוא\"ל",
-  "no-transactions-for": "אין עסקאות עבור"
+  "no-transactions-for": "אין עסקאות עבור",
+  "average-spent": "ממוצע שהוצא",
+  "select-icon": "בחר סמל"
 }
