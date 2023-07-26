@@ -37,7 +37,7 @@ class PageFramework extends StatefulWidget {
     this.onBackButton,
     this.onDragDownToDissmiss,
     this.actions,
-    this.expandedHeight = 200,
+    this.expandedHeight,
     this.listID,
     this.sharedBudgetRefresh = false,
     this.horizontalPadding = 0,
@@ -71,7 +71,7 @@ class PageFramework extends StatefulWidget {
   final VoidCallback? onBackButton;
   final VoidCallback? onDragDownToDissmiss;
   final List<Widget>? actions;
-  final double expandedHeight;
+  final double? expandedHeight;
   final String? listID;
   final bool? sharedBudgetRefresh;
   final double horizontalPadding;
@@ -88,7 +88,8 @@ class PageFramework extends StatefulWidget {
 class PageFrameworkState extends State<PageFramework>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   late ScrollController _scrollController;
-  late AnimationController _animationControllerShift;
+  late AnimationController _animationControllerShift =
+      AnimationController(vsync: this);
   late AnimationController _animationControllerOpacity;
   late AnimationController _animationController0at50;
   late AnimationController _animationControllerDragY;
@@ -116,8 +117,15 @@ class PageFrameworkState extends State<PageFramework>
 
   void initState() {
     super.initState();
-    _animationControllerShift = AnimationController(
-        vsync: this, value: widget.expandedHeight - 56 == 0 ? 1 : 0);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      double expandedHeaderHeight =
+          getExpandedHeaderHeight(context, widget.expandedHeight);
+      _animationControllerShift = AnimationController(
+        vsync: this,
+        value: expandedHeaderHeight - 56 == 0 ? 1 : 0,
+      );
+    });
+
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
     _animationController0at50 = AnimationController(vsync: this, value: 1);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
@@ -152,21 +160,27 @@ class PageFrameworkState extends State<PageFramework>
       widget.onBottomReached!();
     }
     double percent;
-    if (widget.expandedHeight - 56 == 0) {
+    if (getExpandedHeaderHeight(context, widget.expandedHeight) - 56 == 0) {
       percent = 100;
     } else {
-      percent = _scrollController.offset / (widget.expandedHeight - 56);
+      percent = _scrollController.offset /
+          (getExpandedHeaderHeight(context, widget.expandedHeight) - 56);
     }
     if (widget.backButton == true ||
         widget.subtitle != null && percent >= 0 && percent <= 1) {
-      _animationControllerShift.value =
-          (_scrollController.offset / (widget.expandedHeight - 56));
-      _animationControllerOpacity.value =
-          0.5 + (_scrollController.offset / (widget.expandedHeight - 56) / 2);
+      _animationControllerShift.value = (_scrollController.offset /
+          (getExpandedHeaderHeight(context, widget.expandedHeight) - 56));
+      _animationControllerOpacity.value = 0.5 +
+          (_scrollController.offset /
+              (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
+              2);
     }
     if (widget.subtitle != null && percent <= 0.75 && percent >= 0) {
-      _animationController0at50.value =
-          1 - (_scrollController.offset / (widget.expandedHeight - 56)) * 1.75;
+      _animationController0at50.value = 1 -
+          (_scrollController.offset /
+                  (getExpandedHeaderHeight(context, widget.expandedHeight) -
+                      56)) *
+              1.75;
     }
     if (_scrollController.offset > 400 &&
         _scrollToTopAnimationController.value == 0) {
@@ -267,7 +281,8 @@ class PageFrameworkState extends State<PageFramework>
                   textColor: widget.textColor,
                   onBackButton: widget.onBackButton,
                   actions: widget.actions,
-                  expandedHeight: widget.expandedHeight,
+                  expandedHeight:
+                      getExpandedHeaderHeight(context, widget.expandedHeight),
                 ),
                 for (Widget sliver in widget.slivers)
                   widget.horizontalPadding == 0
@@ -452,7 +467,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.actions,
     this.textColor,
     this.onBackButton,
-    this.expandedHeight = 200,
+    this.expandedHeight,
     this.bottom,
   }) : super(key: key);
 
@@ -474,7 +489,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final List<Widget>? actions;
   final Color? textColor;
   final VoidCallback? onBackButton;
-  final double expandedHeight;
+  final double? expandedHeight;
   final double collapsedHeight = 56;
   final PreferredSizeWidget? bottom;
   @override
@@ -512,7 +527,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           : appBarBackgroundColor,
       floating: false,
       pinned: enableDoubleColumn(context) ? true : pinned,
-      expandedHeight: expandedHeight,
+      expandedHeight: getExpandedHeaderHeight(context, expandedHeight),
       collapsedHeight: collapsedHeight,
       actions: [
         ...(actions ?? []).asMap().entries.map((action) {
@@ -529,12 +544,14 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         // print('constraints=' + constraints.toString());
+        double expandedHeightCalculated =
+            getExpandedHeaderHeight(context, expandedHeight);
         double percent = 1 -
             (constraints.biggest.height -
                     collapsedHeight -
                     MediaQuery.of(context).padding.top) /
-                (expandedHeight - collapsedHeight);
-        if (collapsedHeight == expandedHeight) percent = 1;
+                (expandedHeightCalculated - collapsedHeight);
+        if (collapsedHeight == expandedHeightCalculated) percent = 1;
         return FlexibleSpaceBar(
           centerTitle: enableDoubleColumn(context) ? true : false,
           titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
@@ -622,7 +639,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   }
 }
 
-
 // customTitleBuilder: (_animationControllerShift) {
 //   return AnimatedBuilder(
 //     animation: _animationControllerShift,
@@ -642,3 +658,28 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
 //     ),
 //   );
 // },
+
+double getExpandedHeaderHeight(
+    BuildContext context, double? expandedHeightPassed) {
+  if (expandedHeightPassed != null) return expandedHeightPassed;
+  double aspectRatio = getDeviceAspectRatio(context);
+
+  double minAspectRatio = 1.777;
+  double maxAspectRatio = 2.222;
+
+  double minHeight = 100.0;
+  double maxHeight = 200.0;
+
+  if (aspectRatio <= minAspectRatio) {
+    return minHeight;
+  } else if (aspectRatio >= maxAspectRatio) {
+    return maxHeight;
+  }
+
+  double heightRange = maxHeight - minHeight;
+  double ratioRange = maxAspectRatio - minAspectRatio;
+  double adjustedAspectRatio = (aspectRatio - minAspectRatio) / ratioRange;
+  double expandedHeight = minHeight + (adjustedAspectRatio * heightRange);
+
+  return expandedHeight;
+}

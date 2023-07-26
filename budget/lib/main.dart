@@ -237,7 +237,6 @@ class App extends StatelessWidget {
             child: WatchAllWallets(
               child: Listener(
                 onPointerDown: (_) {
-                  print(MediaQuery.of(context).viewInsets.bottom);
                   // needs to go below a scaffold!!
                   ContextMenuController.removeAny();
                 },

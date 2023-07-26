@@ -12,6 +12,7 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/homePage/homePageCreditDebts.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
@@ -147,51 +148,48 @@ class HomePageState extends State<HomePage>
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(height: 1, color: Theme.of(context).canvasColor),
 
-                    Container(
-                      // Subtract one (1) here because of the thickness of the wiper above
-                      height: 179 -
-                          1 +
-                          (MediaQuery.of(context).padding.top > 30
-                              ? 30
-                              : MediaQuery.of(context).padding.top) -
-                          48 -
-                          10,
-                      alignment: Alignment.bottomLeft,
-                      padding: EdgeInsets.only(left: 9, bottom: 17, right: 9),
-
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Profile icon
-                          // AnimatedBuilder(
-                          //   animation: _animationControllerHeader,
-                          //   builder: (_, child) {
-                          //     return Transform.scale(
-                          //       alignment: Alignment.bottomRight,
-                          //       scale: _animationControllerHeader.value < 0.5
-                          //           ? 0.25 + 0.5
-                          //           : (_animationControllerHeader.value) * 0.5 +
-                          //               0.5,
-                          //       child: child,
-                          //     );
-                          //   },
-                          //   child: Container(
-                          //     width: 50,
-                          //     height: 50,
-                          //     color: Colors.red,
-                          //   ),
-                          // ),
-                          HomePageUsername(
-                            animationControllerHeader:
-                                _animationControllerHeader,
-                            animationControllerHeader2:
-                                _animationControllerHeader2,
-                            showUsername: showUsername,
-                            appStateSettings: appStateSettings,
-                            enterNameBottomSheet: enterNameBottomSheet,
-                          ),
-                        ],
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minHeight:
+                              getExpandedHeaderHeight(context, null) / 1.34),
+                      child: Container(
+                        // Subtract one (1) here because of the thickness of the wiper above
+                        alignment: Alignment.bottomLeft,
+                        padding: EdgeInsets.only(left: 9, bottom: 17, right: 9),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Profile icon
+                            // AnimatedBuilder(
+                            //   animation: _animationControllerHeader,
+                            //   builder: (_, child) {
+                            //     return Transform.scale(
+                            //       alignment: Alignment.bottomRight,
+                            //       scale: _animationControllerHeader.value < 0.5
+                            //           ? 0.25 + 0.5
+                            //           : (_animationControllerHeader.value) * 0.5 +
+                            //               0.5,
+                            //       child: child,
+                            //     );
+                            //   },
+                            //   child: Container(
+                            //     width: 50,
+                            //     height: 50,
+                            //     color: Colors.red,
+                            //   ),
+                            // ),
+                            HomePageUsername(
+                              animationControllerHeader:
+                                  _animationControllerHeader,
+                              animationControllerHeader2:
+                                  _animationControllerHeader2,
+                              showUsername: showUsername,
+                              appStateSettings: appStateSettings,
+                              enterNameBottomSheet: enterNameBottomSheet,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     ...[

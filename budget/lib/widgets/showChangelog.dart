@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.2
+    Adjusted header height based on screen size
     < 3.6.1
     Fixed Android keyboard height issue
     Fixed color of bottom sheet for padding

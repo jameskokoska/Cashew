@@ -875,3 +875,9 @@ dynamic nullIfIndexOutOfRange(List list, index) {
     return list[index];
   }
 }
+
+double getDeviceAspectRatio(BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+  final double aspectRatio = size.height / size.width;
+  return aspectRatio;
+}
