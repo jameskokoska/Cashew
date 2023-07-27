@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
@@ -174,6 +175,8 @@ class SyncLog {
 Future<bool> syncData(BuildContext context) async {
   if (appStateSettings["backupSync"] == false) return false;
   if (appStateSettings["currentUserEmail"] == "") return false;
+  // Prevent sign-in on web - background sign-in cannot access Google Drive etc.
+  if (kIsWeb && !entireAppLoaded) return false;
 
   bool hasSignedIn = false;
   if (googleUser == null) {
@@ -219,6 +222,8 @@ Future<bool> syncData(BuildContext context) async {
   List<drive.File> filesSyncing = [];
 
   for (drive.File file in filesToDownloadSyncChanges) {
+    loadingIndeterminateKey.currentState!.setVisibility(true);
+
     // we don't want to restore this clients backup
     if (isCurrentDeviceSyncBackupFile(file.name)) continue;
 
@@ -402,9 +407,12 @@ Future<bool> syncData(BuildContext context) async {
     await setPrimaryWallet((await database.getAllWallets())[0].walletPk);
   }
 
-  if (getWidthNavigationSidebar(context) > 0)
-    updateSettings("lastSynced", syncStarted.toString(),
-        pagesNeedingRefresh: [], updateGlobalState: true);
+  updateSettings(
+    "lastSynced",
+    syncStarted.toString(),
+    pagesNeedingRefresh: [],
+    updateGlobalState: getWidthNavigationSidebar(context) > 0 ? true : false,
+  );
   print("DONE SYNCING");
   return true;
 }

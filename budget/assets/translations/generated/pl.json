@@ -337,7 +337,7 @@
   "notification-reminder-4": "Dodaj dzisiejsze wydatki do śledzenia budżetu.",
   "notification-reminder-5": "Zapisz swoje transakcje na dzień.",
   "notification-reminder-6": "Pozostań na bieżąco, dodając codzienne transakcje.",
-  "notification-reminder-7": "Nie zapomnij dodać codziennych transakcji.",
+  "notification-reminder-7": "Nie zapomnij dodać swoich codziennych transakcji.",
   "notification-reminder-8": "Zaktualizuj swój budżet na dzisiejsze wydatki.",
   "notification-reminder-9": "Dodaj swoje wydatki z dziś do aplikacji.",
   "notification-reminder-10": "Nagraj swoje transakcje, aby pozostać na dobrej drodze.",
@@ -362,5 +362,14 @@
   "translations-help": "Jeśli chcesz pomóc w tłumaczeniach, napisz e -mail",
   "no-transactions-for": "Brak transakcji dla",
   "average-spent": "Średnia wydana",
-  "select-icon": "Wybierz ikonę"
+  "select-icon": "Wybierz ikonę",
+  "1-day-ago": "1 dzień temu",
+  "1-hour-ago": "1 godzinę temu",
+  "1-minute-ago": "1 minuta temu",
+  "days-ago": "kilka dni temu",
+  "hours-ago": "godzinę temu",
+  "minutes-ago": "minuty temu",
+  "just-now": "Właśnie",
+  "synced": "Zsynchronizowany",
+  "never": "nigdy"
 }

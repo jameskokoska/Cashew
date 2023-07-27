@@ -1496,7 +1496,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 28),
                                 child: TextFont(
-                                  text: "Synced " +
+                                  text: "synced".tr() +
+                                      " " +
                                       getTimeAgo(
                                         widget.transaction!.sharedDateUpdated!,
                                       ).toLowerCase() +

@@ -362,5 +362,14 @@
   "translations-help": "Si desea ayudar con las traducciones, envíe un correo electrónico",
   "no-transactions-for": "No hay transacciones para",
   "average-spent": "promedio gastado",
-  "select-icon": "Seleccionar icono"
+  "select-icon": "Seleccionar icono",
+  "1-day-ago": "Hace 1 día",
+  "1-hour-ago": "1 hora antes",
+  "1-minute-ago": "Hace 1 minuto",
+  "days-ago": "hace días",
+  "hours-ago": "horas atras",
+  "minutes-ago": "hace minutos",
+  "just-now": "En este momento",
+  "synced": "Sincronizado",
+  "never": "nunca"
 }

@@ -10,6 +10,21 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.3
+    If sign-in fails on launch, boarding page does not proceed
+    Selected transaction opens with selected color
+    Fixed color of past budget container
+    Delete category warning and ask about transfer transactions
+    Fixed calendar able to be opened more than once with sidebar
+    Added (control + c) and (control + v) shortcuts when entering amount
+    New sync button on sidebar
+    New login and refresh sync system for web
+    If auto backup hasn't been made when user signs in, will make backup
+    Web no longer attempts to log user in on launch
+    Snackbar centered if side navigation bar enabled
+    Disabled drag down to dismiss when action does nothing
+    Fixed double routing for quick actions
+    Fixed translations
     < 3.6.2
     Search string no longer gets reset when filters cleared
     Added quick action shortcuts on Android - Add transaction and view budgets

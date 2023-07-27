@@ -349,7 +349,7 @@
   "notification-reminder-16": "Rămâneți la curent cu bugetul adăugând tranzacții.",
   "notification-reminder-17": "Este sfârșitul zilei, v -ați adăugat tranzacțiile?",
   "notification-reminder-18": "Asigurați -vă că adăugați tranzacțiile zilnice la aplicație.",
-  "notification-reminder-19": "Adăugați orice cheltuieli de astăzi la trackerul bugetar.",
+  "notification-reminder-19": "Adăugați orice cheltuieli de astăzi la următorul bugetar.",
   "notification-reminder-20": "Înregistrați -vă tranzacțiile pentru ziua pentru a obține o imagine completă a obiceiurilor dvs. de cheltuieli.",
   "notification-reminder-21": "Nu uitați să adăugați tranzacțiile zilnice pentru a rămâne pe cale cu bugetul.",
   "notification-reminder-22": "Luați câteva minute pentru a vă actualiza bugetul cu cheltuielile de astăzi.",
@@ -362,5 +362,14 @@
   "translations-help": "Dacă doriți să vă ajutați cu traducerile, vă rugăm să trimiteți un e -mail",
   "no-transactions-for": "Fără tranzacții pentru",
   "average-spent": "Media cheltuită",
-  "select-icon": "Selectați pictograma"
+  "select-icon": "Selectați pictograma",
+  "1-day-ago": "Acum o zi",
+  "1-hour-ago": "1 oră în urmă",
+  "1-minute-ago": "Acum 1 minut",
+  "days-ago": "zile în urmă",
+  "hours-ago": "ore în urmă",
+  "minutes-ago": "acum câteva minute",
+  "just-now": "Chiar acum",
+  "synced": "Sincronizat",
+  "never": "nu"
 }

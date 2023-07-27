@@ -362,5 +362,14 @@
   "translations-help": "Si vous souhaitez aider avec les traductions, veuillez envoyer un e-mail",
   "no-transactions-for": "Aucune transaction pour",
   "average-spent": "Moyenne dépensée",
-  "select-icon": "Sélectionner l'icône"
+  "select-icon": "Sélectionner l'icône",
+  "1-day-ago": "il y a 1 jour",
+  "1-hour-ago": "Il ya 1 heure",
+  "1-minute-ago": "il y a 1 minute",
+  "days-ago": "il y a quelques jours",
+  "hours-ago": "il y a des heures",
+  "minutes-ago": "il y a quelques minutes",
+  "just-now": "Juste maintenant",
+  "synced": "Synchronisé",
+  "never": "jamais"
 }

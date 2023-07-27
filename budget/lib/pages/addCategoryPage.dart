@@ -8,14 +8,11 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
-import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -380,64 +377,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                       icon: Icons.merge_rounded,
                       label: "merge-category".tr(),
                       onTap: () async {
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "select-category".tr(),
-                            subtitle:
-                                "category-to-transfer-all-transactions-to".tr(),
-                            child: SelectCategory(
-                              popRoute: true,
-                              setSelectedCategory: (category) async {
-                                Future.delayed(Duration(milliseconds: 90),
-                                    () async {
-                                  final result = await openPopup(
-                                    context,
-                                    title: "merge-into".tr() +
-                                        " " +
-                                        category.name +
-                                        "?",
-                                    description: "merge-into-description".tr(),
-                                    icon: Icons.warning_amber_rounded,
-                                    onSubmit: () async {
-                                      Navigator.pop(context, true);
-                                    },
-                                    onSubmitLabel: "merge".tr(),
-                                    onCancelLabel: "cancel".tr(),
-                                    onCancel: () {
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                  if (result == true) {
-                                    openLoadingPopup(context);
-                                    List<Transaction> transactionsToUpdate =
-                                        await database
-                                            .getAllTransactionsFromCategory(
-                                                widget.category!.categoryPk);
-                                    for (Transaction transaction
-                                        in transactionsToUpdate) {
-                                      await Future.delayed(
-                                          Duration(milliseconds: 1));
-                                      Transaction transactionEdited =
-                                          transaction.copyWith(
-                                              categoryFk: category.categoryPk);
-                                      await database.createOrUpdateTransaction(
-                                          transactionEdited);
-                                    }
-                                    Navigator.pop(context);
-                                    await database.deleteCategory(
-                                        widget.category!.categoryPk,
-                                        widget.category!.order);
-                                    openSnackbar(SnackbarMessage(
-                                        title: "Merged into " + category.name));
-                                  }
-                                  Navigator.of(context)
-                                      .popUntil((route) => route.isFirst);
-                                });
-                              },
-                            ),
-                          ),
-                        );
+                        if (widget.category != null)
+                          mergeCategoryPopup(context, widget.category!);
                       },
                       color: Theme.of(context).colorScheme.secondaryContainer,
                       textColor:

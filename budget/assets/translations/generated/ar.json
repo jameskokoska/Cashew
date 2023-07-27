@@ -362,5 +362,14 @@
   "translations-help": "إذا كنت ترغب في المساعدة في الترجمات ، فيرجى إرسال بريد إلكتروني",
   "no-transactions-for": "لا معاملات ل",
   "average-spent": "متوسط ​​الإنفاق",
-  "select-icon": "حدد أيقونة"
+  "select-icon": "حدد أيقونة",
+  "1-day-ago": "1 منذ يوم",
+  "1-hour-ago": "منذ 1 ساعة",
+  "1-minute-ago": "منذ 1 دقيقة",
+  "days-ago": "أيام مضت",
+  "hours-ago": "منذ ساعات",
+  "minutes-ago": "دقائق مضت",
+  "just-now": "الآن",
+  "synced": "مزامنة",
+  "never": "أبداً"
 }

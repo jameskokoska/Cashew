@@ -112,8 +112,6 @@ class TransactionEntry extends StatelessWidget {
         context, Theme.of(context).colorScheme.primary,
         amount: 0.3);
 
-    Color textColorLight = getColor(context, "textLight");
-
     bool showOtherCurrency =
         transaction.walletFk != appStateSettings["selectedWallet"] &&
             ((Provider.of<AllWallets>(context)
@@ -153,9 +151,18 @@ class TransactionEntry extends StatelessWidget {
                     isTransactionAfterSelected ? 0 : 12,
                   ),
                 ),
-                closedColor: containerColor == null
-                    ? Theme.of(context).canvasColor
-                    : containerColor,
+                closedColor: selected
+                    ? appStateSettings["materialYou"]
+                        ? categoryTintColor == null
+                            ? Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer
+                                .withOpacity(0.8)
+                            : categoryTintColor!.withOpacity(0.2)
+                        : getColor(context, "black").withOpacity(0.1)
+                    : containerColor == null
+                        ? Theme.of(context).canvasColor
+                        : containerColor,
                 button: (openContainer) {
                   return Tappable(
                     color: Colors.transparent,
@@ -512,258 +519,17 @@ class TransactionEntry extends StatelessWidget {
                           //     ),
                           //   ),
                           // ),
-                          transaction.type != null
-                              ? Row(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 3.0),
-                                      child: Tappable(
-                                        color: Colors.transparent,
-                                        borderRadius: 10,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 3),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 6, horizontal: 7),
-                                            decoration: BoxDecoration(
-                                                color: appStateSettings[
-                                                        "materialYou"]
-                                                    ? Theme.of(context)
-                                                        .colorScheme
-                                                        .primary
-                                                        .withOpacity(0.1)
-                                                    : getColor(context,
-                                                        "lightDarkAccent"),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10))),
-                                            child: TextFont(
-                                              text: transaction.type ==
-                                                      TransactionSpecialType
-                                                          .credit
-                                                  ? transaction.paid
-                                                      ? "collect".tr() + "?"
-                                                      : "collected".tr()
-                                                  : transaction.type ==
-                                                          TransactionSpecialType
-                                                              .debt
-                                                      ? transaction.paid
-                                                          ? "settle".tr() + "?"
-                                                          : "settled".tr()
-                                                      : transaction.income
-                                                          ? (transaction.paid
-                                                              ? "deposited".tr()
-                                                              : transaction
-                                                                      .skipPaid
-                                                                  ? "skipped"
-                                                                      .tr()
-                                                                  : "deposit"
-                                                                          .tr() +
-                                                                      "?")
-                                                          : (transaction.paid
-                                                              ? "paid".tr()
-                                                              : transaction
-                                                                      .skipPaid
-                                                                  ? "skipped"
-                                                                      .tr()
-                                                                  : "pay".tr() +
-                                                                      "?"),
-                                              fontSize: 14,
-                                              textColor: textColorLight,
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          if (transaction.paid == false &&
-                                              (transaction.type ==
-                                                      TransactionSpecialType
-                                                          .credit ||
-                                                  transaction.type ==
-                                                      TransactionSpecialType
-                                                          .debt)) {
-                                            openUnpayDebtCreditPopup(
-                                                context, transaction);
-                                          } else if (transaction.paid == true &&
-                                              (transaction.type ==
-                                                      TransactionSpecialType
-                                                          .credit ||
-                                                  transaction.type ==
-                                                      TransactionSpecialType
-                                                          .debt)) {
-                                            openPayDebtCreditPopup(
-                                                context, transaction);
-                                          } else if (transaction.paid == true) {
-                                            openUnpayPopup(
-                                                context, transaction);
-                                          } else if (transaction.skipPaid ==
-                                              true) {
-                                            openRemoveSkipPopup(
-                                                context, transaction);
-                                          } else {
-                                            openPayPopup(context, transaction);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : SizedBox(),
-                          transaction.note.toString().trim() != ""
-                              ? Tooltip(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  margin: EdgeInsets.symmetric(horizontal: 15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: getColor(context, "lightDarkAccent"),
-                                    boxShadow: boxShadowCheck(
-                                      [
-                                        BoxShadow(
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.light
-                                              ? getColor(context,
-                                                      "shadowColorLight")
-                                                  .withOpacity(0.3)
-                                              : Colors.black.withOpacity(0.5),
-                                          blurRadius: 20,
-                                          offset: Offset(0, 4),
-                                          spreadRadius: 9,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  textStyle: TextStyle(
-                                      color: getColor(context, "black"),
-                                      fontFamily: 'Avenir'),
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  showDuration:
-                                      getWidthNavigationSidebar(context) <= 0
-                                          ? Duration(milliseconds: 10000)
-                                          : Duration(milliseconds: 100),
-                                  message: transaction.note,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 7, vertical: 10),
-                                    child: Icon(
-                                      Icons.sticky_note_2_rounded,
-                                      size: 22,
-                                      color: iconColor,
-                                    ),
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  CountNumber(
-                                    count: (transaction.amount.abs()) *
-                                        (amountRatioToPrimaryCurrencyGivenPk(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                transaction.walletFk) ??
-                                            1),
-                                    duration: Duration(milliseconds: 1000),
-                                    dynamicDecimals: true,
-                                    initialCount: (transaction.amount.abs()) *
-                                        (amountRatioToPrimaryCurrencyGivenPk(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                transaction.walletFk) ??
-                                            1),
-                                    textBuilder: (number) {
-                                      return Row(
-                                        children: [
-                                          Transform.translate(
-                                            offset: Offset(3, 0),
-                                            child: AnimatedSize(
-                                              curve: Curves
-                                                  .easeInOutCubicEmphasized,
-                                              duration:
-                                                  Duration(milliseconds: 1000),
-                                              child: (transaction.type ==
-                                                              TransactionSpecialType
-                                                                  .credit ||
-                                                          transaction.type ==
-                                                              TransactionSpecialType
-                                                                  .debt) &&
-                                                      transaction.paid == false
-                                                  ? Container(width: 5)
-                                                  : AnimatedRotation(
-                                                      duration: Duration(
-                                                          milliseconds: 2000),
-                                                      curve:
-                                                          ElasticOutCurve(0.5),
-                                                      turns: transaction.income
-                                                          ? 0.5
-                                                          : 0,
-                                                      child: Icon(
-                                                        Icons
-                                                            .arrow_drop_down_rounded,
-                                                        color: textColor,
-                                                      ),
-                                                    ),
-                                            ),
-                                          ),
-                                          TextFont(
-                                            text: convertToMoney(
-                                              Provider.of<AllWallets>(context),
-                                              number,
-                                              showCurrency: false,
-                                              finalNumber: (transaction.amount
-                                                      .abs()) *
-                                                  (amountRatioToPrimaryCurrencyGivenPk(
-                                                          Provider.of<
-                                                                  AllWallets>(
-                                                              context),
-                                                          transaction
-                                                              .walletFk) ??
-                                                      1),
-                                            ),
-                                            fontSize: 19 -
-                                                (showOtherCurrency ? 1 : 0),
-                                            fontWeight: FontWeight.bold,
-                                            textColor: textColor,
-                                            walletPkForCurrency:
-                                                appStateSettings[
-                                                    "selectedWallet"],
-                                            onlyShowCurrencyIcon: true,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              AnimatedSize(
-                                duration: Duration(milliseconds: 500),
-                                child: showOtherCurrency
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(top: 1),
-                                        child: TextFont(
-                                          text: convertToMoney(
-                                            Provider.of<AllWallets>(context),
-                                            transaction.amount.abs(),
-                                            showCurrency: false,
-                                            decimals: 2,
-                                            // TODO this should match the decimal count of transaction.walletFk
-                                          ),
-                                          fontSize: 12,
-                                          textColor: textColor.withOpacity(0.6),
-                                          walletPkForCurrency:
-                                              transaction.walletFk,
-                                          onlyShowCurrencyIcon:
-                                              transaction.walletFk ==
-                                                  appStateSettings[
-                                                      "selectedWallet"],
-                                        ),
-                                      )
-                                    : SizedBox.shrink(),
-                              ),
-                            ],
+                          TransactionEntryTypeButton(
+                            transaction: transaction,
+                          ),
+                          TransactionEntryNote(
+                            transaction: transaction,
+                            iconColor: iconColor,
+                          ),
+                          TransactionEntryAmount(
+                            transaction: transaction,
+                            showOtherCurrency: showOtherCurrency,
+                            textColor: textColor,
                           ),
                         ],
                       ),
@@ -776,6 +542,240 @@ class TransactionEntry extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class TransactionEntryTypeButton extends StatelessWidget {
+  const TransactionEntryTypeButton({required this.transaction, super.key});
+  final Transaction transaction;
+  @override
+  Widget build(BuildContext context) {
+    return transaction.type != null
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 3.0),
+                child: Tappable(
+                  color: Colors.transparent,
+                  borderRadius: 10,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 3),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 7),
+                      decoration: BoxDecoration(
+                          color: appStateSettings["materialYou"]
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.1)
+                              : getColor(context, "lightDarkAccent"),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: TextFont(
+                        text: transaction.type == TransactionSpecialType.credit
+                            ? transaction.paid
+                                ? "collect".tr() + "?"
+                                : "collected".tr()
+                            : transaction.type == TransactionSpecialType.debt
+                                ? transaction.paid
+                                    ? "settle".tr() + "?"
+                                    : "settled".tr()
+                                : transaction.income
+                                    ? (transaction.paid
+                                        ? "deposited".tr()
+                                        : transaction.skipPaid
+                                            ? "skipped".tr()
+                                            : "deposit".tr() + "?")
+                                    : (transaction.paid
+                                        ? "paid".tr()
+                                        : transaction.skipPaid
+                                            ? "skipped".tr()
+                                            : "pay".tr() + "?"),
+                        fontSize: 14,
+                        textColor: getColor(context, "textLight"),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    if (transaction.paid == false &&
+                        (transaction.type == TransactionSpecialType.credit ||
+                            transaction.type == TransactionSpecialType.debt)) {
+                      openUnpayDebtCreditPopup(context, transaction);
+                    } else if (transaction.paid == true &&
+                        (transaction.type == TransactionSpecialType.credit ||
+                            transaction.type == TransactionSpecialType.debt)) {
+                      openPayDebtCreditPopup(context, transaction);
+                    } else if (transaction.paid == true) {
+                      openUnpayPopup(context, transaction);
+                    } else if (transaction.skipPaid == true) {
+                      openRemoveSkipPopup(context, transaction);
+                    } else {
+                      openPayPopup(context, transaction);
+                    }
+                  },
+                ),
+              ),
+            ],
+          )
+        : SizedBox();
+  }
+}
+
+class TransactionEntryNote extends StatelessWidget {
+  const TransactionEntryNote({
+    required this.transaction,
+    required this.iconColor,
+    super.key,
+  });
+  final Transaction transaction;
+  final Color iconColor;
+  @override
+  Widget build(BuildContext context) {
+    return transaction.note.toString().trim() != ""
+        ? Tooltip(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: getColor(context, "lightDarkAccent"),
+              boxShadow: boxShadowCheck(
+                [
+                  BoxShadow(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? getColor(context, "shadowColorLight").withOpacity(0.3)
+                        : Colors.black.withOpacity(0.5),
+                    blurRadius: 20,
+                    offset: Offset(0, 4),
+                    spreadRadius: 9,
+                  ),
+                ],
+              ),
+            ),
+            textStyle: TextStyle(
+                color: getColor(context, "black"), fontFamily: 'Avenir'),
+            triggerMode: TooltipTriggerMode.tap,
+            showDuration: getWidthNavigationSidebar(context) <= 0
+                ? Duration(milliseconds: 10000)
+                : Duration(milliseconds: 100),
+            message: transaction.note,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 10),
+              child: Icon(
+                Icons.sticky_note_2_rounded,
+                size: 22,
+                color: iconColor,
+              ),
+            ),
+          )
+        : SizedBox.shrink();
+  }
+}
+
+class TransactionEntryAmount extends StatelessWidget {
+  const TransactionEntryAmount({
+    required this.transaction,
+    required this.textColor,
+    required this.showOtherCurrency,
+    super.key,
+  });
+  final Transaction transaction;
+  final Color textColor;
+  final bool showOtherCurrency;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            CountNumber(
+              count: (transaction.amount.abs()) *
+                  (amountRatioToPrimaryCurrencyGivenPk(
+                          Provider.of<AllWallets>(context),
+                          transaction.walletFk) ??
+                      1),
+              duration: Duration(milliseconds: 1000),
+              dynamicDecimals: true,
+              initialCount: (transaction.amount.abs()) *
+                  (amountRatioToPrimaryCurrencyGivenPk(
+                          Provider.of<AllWallets>(context),
+                          transaction.walletFk) ??
+                      1),
+              textBuilder: (number) {
+                return Row(
+                  children: [
+                    Transform.translate(
+                      offset: Offset(3, 0),
+                      child: AnimatedSize(
+                        curve: Curves.easeInOutCubicEmphasized,
+                        duration: Duration(milliseconds: 1000),
+                        child: (transaction.type ==
+                                        TransactionSpecialType.credit ||
+                                    transaction.type ==
+                                        TransactionSpecialType.debt) &&
+                                transaction.paid == false
+                            ? Container(width: 5)
+                            : AnimatedRotation(
+                                duration: Duration(milliseconds: 2000),
+                                curve: ElasticOutCurve(0.5),
+                                turns: transaction.income ? 0.5 : 0,
+                                child: Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  color: textColor,
+                                ),
+                              ),
+                      ),
+                    ),
+                    TextFont(
+                      text: convertToMoney(
+                        Provider.of<AllWallets>(context),
+                        number,
+                        showCurrency: false,
+                        finalNumber: (transaction.amount.abs()) *
+                            (amountRatioToPrimaryCurrencyGivenPk(
+                                    Provider.of<AllWallets>(context),
+                                    transaction.walletFk) ??
+                                1),
+                      ),
+                      fontSize: 19 - (showOtherCurrency ? 1 : 0),
+                      fontWeight: FontWeight.bold,
+                      textColor: textColor,
+                      walletPkForCurrency: appStateSettings["selectedWallet"],
+                      onlyShowCurrencyIcon: true,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+        AnimatedSize(
+          duration: Duration(milliseconds: 500),
+          child: showOtherCurrency
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 1),
+                  child: TextFont(
+                    text: convertToMoney(
+                      Provider.of<AllWallets>(context),
+                      transaction.amount.abs(),
+                      showCurrency: false,
+                      decimals: 2,
+                      // TODO this should match the decimal count of transaction.walletFk
+                    ),
+                    fontSize: 12,
+                    textColor: textColor.withOpacity(0.6),
+                    walletPkForCurrency: transaction.walletFk,
+                    onlyShowCurrencyIcon: transaction.walletFk ==
+                        appStateSettings["selectedWallet"],
+                  ),
+                )
+              : SizedBox.shrink(),
+        ),
+      ],
     );
   }
 }

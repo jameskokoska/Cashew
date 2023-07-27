@@ -74,7 +74,9 @@ GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
 GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
 bool runningCloudFunctions = false;
-Future<bool> runAllCloudFunctions(context, {bool forceSignIn = false}) async {
+Future<bool> runAllCloudFunctions(BuildContext context,
+    {bool forceSignIn = false}) async {
+  print("Running All Cloud Functions");
   runningCloudFunctions = true;
   try {
     loadingIndeterminateKey.currentState!.setVisibility(true);
@@ -160,7 +162,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setUpcomingNotifications(context);
       await runAllCloudFunctions(context);
       database.deleteWanderingTransactions();
+
       entireAppLoaded = true;
+
       database.watchAllForAutoSync().listen((event) {
         if (runningCloudFunctions == false) {
           createSyncBackup(changeMadeSync: true);

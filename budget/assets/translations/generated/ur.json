@@ -330,9 +330,9 @@
   "daily-notifications": "روزانہ کی اطلاعات",
   "daily-notifications-description": "اگر ایپ کو نہیں کھولا گیا تھا",
   "alert-time": "وقت کو تبدیل کریں",
-  "upcoming-transactions": "آنے والے لین دین",
+  "upcoming-transactions": "آئندہ لین دین",
   "notification-reminder-1": "آج سے لین دین شامل کرنا نہ بھولیں!",
-  "notification-reminder-2": "ٹریک پر رہنے کے لئے اپنے روزانہ کے لین دین شامل کریں۔",
+  "notification-reminder-2": "ٹریک پر رہنے کے لئے اپنے روزانہ کے لین دین کو شامل کریں۔",
   "notification-reminder-3": "آج کے اخراجات کے ساتھ اپنے بجٹ کو اپ ڈیٹ کریں۔",
   "notification-reminder-4": "اپنے بجٹ ٹریکر میں آج کے اخراجات شامل کریں۔",
   "notification-reminder-5": "دن کے لئے اپنے لین دین کو ریکارڈ کریں۔",
@@ -362,5 +362,14 @@
   "translations-help": "اگر آپ ترجمے میں مدد کرنا چاہتے ہیں تو ، براہ کرم ای میل کریں",
   "no-transactions-for": "کے لئے کوئی لین دین نہیں ہے",
   "average-spent": "اوسط خرچ",
-  "select-icon": "آئیکن منتخب کریں"
+  "select-icon": "آئیکن منتخب کریں",
+  "1-day-ago": "1 دن قبل",
+  "1-hour-ago": "1 گھنٹہ پہلے",
+  "1-minute-ago": "1 منٹ پہلے",
+  "days-ago": "دنوں پہلے",
+  "hours-ago": "گھنٹوں پہلے",
+  "minutes-ago": "کچھ لمحے قبل",
+  "just-now": "ابھی ابھی",
+  "synced": "مطابقت پذیر",
+  "never": "کبھی نہیں"
 }

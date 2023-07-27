@@ -212,7 +212,10 @@ class PageFrameworkState extends State<PageFramework>
   bool swipeDownToDismiss = false;
 
   _onPointerMove(PointerMoveEvent ptr) {
-    if (widget.dragDownToDismissEnabled && selectingTransactionsActive == 0) {
+    if ((widget.onDragDownToDissmiss != null ||
+            Navigator.of(context).canPop()) &&
+        widget.dragDownToDismissEnabled &&
+        selectingTransactionsActive == 0) {
       if (swipeDownToDismiss) {
         totalDragX = totalDragX + ptr.delta.dx;
         totalDragY = totalDragY + ptr.delta.dy;

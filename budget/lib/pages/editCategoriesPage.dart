@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
@@ -8,6 +9,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/noResults.dart';
@@ -15,6 +17,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -246,14 +249,26 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
 class RefreshButton extends StatefulWidget {
   final Function onTap;
   final EdgeInsets? padding;
+  final VisualDensity? visualDensity;
+  final IconData? customIcon;
+  final bool? flipIcon;
+  final bool? halfAnimation;
 
-  RefreshButton({required this.onTap, this.padding});
+  RefreshButton({
+    required this.onTap,
+    this.padding,
+    this.visualDensity,
+    this.customIcon,
+    this.flipIcon,
+    this.halfAnimation,
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _RefreshButtonState createState() => _RefreshButtonState();
+  RefreshButtonState createState() => RefreshButtonState();
 }
 
-class _RefreshButtonState extends State<RefreshButton>
+class RefreshButtonState extends State<RefreshButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -270,7 +285,8 @@ class _RefreshButtonState extends State<RefreshButton>
       parent: _animationController,
       curve: Curves.easeInOutCubicEmphasized,
     );
-    _tween = Tween<double>(begin: 0.0, end: 12.5664 / 2);
+    _tween = Tween<double>(
+        begin: 0.0, end: 12.5664 / 2 / (widget.halfAnimation == true ? 2 : 1));
     super.initState();
   }
 
@@ -280,13 +296,13 @@ class _RefreshButtonState extends State<RefreshButton>
     super.dispose();
   }
 
-  void _startAnimation() {
+  void startAnimation() {
     _animationController.forward(from: 0.0);
   }
 
   void _onTap() async {
     if (_isEnabled) {
-      _startAnimation();
+      startAnimation();
       setState(() {
         _isEnabled = false;
       });
@@ -305,16 +321,21 @@ class _RefreshButtonState extends State<RefreshButton>
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
-        return Transform.rotate(
-          angle: _tween.evaluate(_animation),
-          child: AnimatedOpacity(
-            opacity: _isEnabled ? 1 : 0.3,
-            duration: Duration(milliseconds: 500),
-            child: IconButton(
-              padding: widget.padding ?? EdgeInsets.all(15),
-              icon: Icon(Icons.refresh_rounded),
-              color: Theme.of(context).colorScheme.secondary,
-              onPressed: () => _onTap(),
+        return AnimatedOpacity(
+          opacity: _isEnabled ? 1 : 0.3,
+          duration: Duration(milliseconds: 500),
+          child: Transform.rotate(
+            angle: _tween.evaluate(_animation),
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(widget.flipIcon == true ? pi : 0),
+              child: IconButton(
+                padding: widget.padding ?? EdgeInsets.all(15),
+                icon: Icon(widget.customIcon ?? Icons.refresh_rounded),
+                color: Theme.of(context).colorScheme.secondary,
+                onPressed: () => _onTap(),
+                visualDensity: widget.visualDensity,
+              ),
             ),
           ),
         );
@@ -324,8 +345,8 @@ class _RefreshButtonState extends State<RefreshButton>
 }
 
 void deleteCategoryPopup(context, TransactionCategory category,
-    {Function? afterDelete}) {
-  openPopup(
+    {Function? afterDelete}) async {
+  dynamic result = await openPopup(
     context,
     title: "Delete " + category.name + " category?",
     description:
@@ -336,16 +357,87 @@ void deleteCategoryPopup(context, TransactionCategory category,
     },
     onCancelLabel: "cancel".tr(),
     onSubmit: () async {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
-      await database.deleteCategory(category.categoryPk, category.order);
-      await database.deleteCategoryTransactions(category.categoryPk);
-      loadingIndeterminateKey.currentState!.setVisibility(false);
-      Navigator.pop(context);
-      openSnackbar(
-        SnackbarMessage(title: "Deleted " + category.name, icon: Icons.delete),
-      );
-      if (afterDelete != null) afterDelete();
+      Navigator.pop(context, true);
     },
     onSubmitLabel: "delete".tr(),
+  );
+  if (result == true) {
+    openPopup(
+      context,
+      title: "Delete all " + category.name + " transactions?",
+      description:
+          "Deleting a category will delete all transactions associated with this category. Merge the category to move transactions to another category.",
+      icon: Icons.warning_amber_rounded,
+      onCancel: () {
+        Navigator.pop(context);
+      },
+      onCancelLabel: "cancel".tr(),
+      onSubmit: () async {
+        loadingIndeterminateKey.currentState!.setVisibility(true);
+        await database.deleteCategory(category.categoryPk, category.order);
+        await database.deleteCategoryTransactions(category.categoryPk);
+        loadingIndeterminateKey.currentState!.setVisibility(false);
+        Navigator.pop(context, true);
+        openSnackbar(
+          SnackbarMessage(
+              title: "Deleted " + category.name, icon: Icons.delete),
+        );
+        if (afterDelete != null) afterDelete();
+      },
+      onExtra: () {
+        Navigator.pop(context);
+        mergeCategoryPopup(context, category);
+      },
+      onExtraLabel: "Merge",
+      onSubmitLabel: "delete".tr(),
+    );
+  }
+}
+
+void mergeCategoryPopup(BuildContext context, TransactionCategory category) {
+  openBottomSheet(
+    context,
+    PopupFramework(
+      title: "select-category".tr(),
+      subtitle: "category-to-transfer-all-transactions-to".tr(),
+      child: SelectCategory(
+        popRoute: true,
+        setSelectedCategory: (category) async {
+          Future.delayed(Duration(milliseconds: 90), () async {
+            final result = await openPopup(
+              context,
+              title: "merge-into".tr() + " " + category.name + "?",
+              description: "merge-into-description".tr(),
+              icon: Icons.warning_amber_rounded,
+              onSubmit: () async {
+                Navigator.pop(context, true);
+              },
+              onSubmitLabel: "merge".tr(),
+              onCancelLabel: "cancel".tr(),
+              onCancel: () {
+                Navigator.pop(context);
+              },
+            );
+            if (result == true) {
+              openLoadingPopup(context);
+              List<Transaction> transactionsToUpdate = await database
+                  .getAllTransactionsFromCategory(category.categoryPk);
+              for (Transaction transaction in transactionsToUpdate) {
+                await Future.delayed(Duration(milliseconds: 1));
+                Transaction transactionEdited =
+                    transaction.copyWith(categoryFk: category.categoryPk);
+                await database.createOrUpdateTransaction(transactionEdited);
+              }
+              Navigator.pop(context);
+              await database.deleteCategory(
+                  category.categoryPk, category.order);
+              openSnackbar(
+                  SnackbarMessage(title: "Merged into " + category.name));
+            }
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          });
+        },
+      ),
+    ),
   );
 }

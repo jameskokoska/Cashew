@@ -40,6 +40,7 @@ class NavigationSidebar extends StatefulWidget {
 
 class NavigationSidebarState extends State<NavigationSidebar> {
   int selectedIndex = 0;
+  bool isCalendarOpened = false;
 
   void setSelectedIndex(index) {
     setState(() {
@@ -55,327 +56,338 @@ class NavigationSidebarState extends State<NavigationSidebar> {
       return SizedBox.shrink();
     }
     // print(selectedIndex);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(
-            color: getColor(context, "lightDarkAccent"),
-            width: 3,
+    return Listener(
+      onPointerDown: (_) {
+        if (isCalendarOpened) Navigator.maybePop(navigatorKey.currentContext!);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(
+              color: getColor(context, "lightDarkAccent"),
+              width: 3,
+            ),
           ),
+          color: Theme.of(context).canvasColor,
         ),
-        color: Theme.of(context).canvasColor,
-      ),
-      width: getWidthNavigationSidebar(context),
-      child: Padding(
-        padding: EdgeInsets.only(left: MediaQuery.of(context).viewPadding.left),
-        child: IgnorePointer(
-          ignoring: appStateSettings["hasOnboarded"] == false,
-          child: AnimatedOpacity(
-            duration: Duration(milliseconds: 500),
-            opacity: appStateSettings["hasOnboarded"] == false ? 0.3 : 1,
-            child: SingleChildScrollView(
-              child: IntrinsicHeight(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(height: 40),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 14),
-                                  child: Tappable(
-                                    borderRadius: 20,
-                                    onTap: () async {
-                                      await showCustomDatePicker(
-                                          navigatorKey.currentContext!,
-                                          DateTime.now());
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 30, bottom: 30),
-                                      child: TimerBuilder.periodic(
-                                        Duration(seconds: 5),
-                                        builder: (context) {
-                                          DateTime now = DateTime.now();
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              TextFont(
-                                                textColor:
-                                                    getColor(context, "black"),
-                                                fontSize: 48,
-                                                fontWeight: FontWeight.bold,
-                                                text: DateFormat.jm(context
-                                                        .locale
-                                                        .toString())
-                                                    .format(now)
-                                                    .replaceAll("AM", "")
-                                                    .replaceAll("PM", "")
-                                                    .replaceAll(" ", ""),
-                                              ),
-                                              TextFont(
-                                                textColor:
-                                                    getColor(context, "black")
-                                                        .withOpacity(0.5),
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                text: DateFormat(
-                                                        'EEEE',
-                                                        context.locale
-                                                            .toString())
-                                                    .format(now),
-                                              ),
-                                              SizedBox(height: 5),
-                                              TextFont(
-                                                textColor:
-                                                    getColor(context, "black")
-                                                        .withOpacity(0.5),
-                                                fontSize: 18,
-                                                text: DateFormat(
-                                                        'MMMM d, y',
-                                                        context.locale
-                                                            .toString())
-                                                    .format(now),
-                                              ),
-                                            ],
-                                          );
-                                        },
+        width: getWidthNavigationSidebar(context),
+        child: Padding(
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).viewPadding.left),
+          child: IgnorePointer(
+            ignoring: appStateSettings["hasOnboarded"] == false,
+            child: AnimatedOpacity(
+              duration: Duration(milliseconds: 500),
+              opacity: appStateSettings["hasOnboarded"] == false ? 0.3 : 1,
+              child: SingleChildScrollView(
+                child: IntrinsicHeight(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(height: 40),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14),
+                                    child: Tappable(
+                                      borderRadius: 20,
+                                      onTap: () async {
+                                        isCalendarOpened = true;
+                                        if (navigatorKey.currentContext !=
+                                            null) {
+                                          await showCustomDatePicker(
+                                              navigatorKey.currentContext!,
+                                              DateTime.now());
+                                          isCalendarOpened = false;
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 30, bottom: 30),
+                                        child: TimerBuilder.periodic(
+                                          Duration(seconds: 5),
+                                          builder: (context) {
+                                            DateTime now = DateTime.now();
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextFont(
+                                                  textColor: getColor(
+                                                      context, "black"),
+                                                  fontSize: 48,
+                                                  fontWeight: FontWeight.bold,
+                                                  text: DateFormat.jm(context
+                                                          .locale
+                                                          .toString())
+                                                      .format(now)
+                                                      .replaceAll("AM", "")
+                                                      .replaceAll("PM", "")
+                                                      .replaceAll(" ", ""),
+                                                ),
+                                                TextFont(
+                                                  textColor:
+                                                      getColor(context, "black")
+                                                          .withOpacity(0.5),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  text: DateFormat(
+                                                          'EEEE',
+                                                          context.locale
+                                                              .toString())
+                                                      .format(now),
+                                                ),
+                                                SizedBox(height: 5),
+                                                TextFont(
+                                                  textColor:
+                                                      getColor(context, "black")
+                                                          .withOpacity(0.5),
+                                                  fontSize: 18,
+                                                  text: DateFormat(
+                                                          'MMMM d, y',
+                                                          context.locale
+                                                              .toString())
+                                                      .format(now),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 30),
-                          NavigationSidebarButton(
-                            icon: Icons.home_rounded,
-                            label: "home".tr(),
-                            isSelected: selectedIndex == 0,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(0, switchNavbar: true);
-                            },
-                          ),
-                          NavigationSidebarButton(
-                            icon: Icons.payments_rounded,
-                            label: "transactions".tr(),
-                            isSelected: selectedIndex == 1,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(1, switchNavbar: true);
-                            },
-                          ),
-                          NavigationSidebarButton(
-                            icon: MoreIcons.chart_pie,
-                            iconSize: 15,
-                            label: "budgets".tr(),
-                            isSelected: selectedIndex == 2,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(2, switchNavbar: true);
-                            },
-                          ),
-                          NavigationSidebarButton(
-                            icon: Icons.event_repeat_rounded,
-                            label: "subscriptions".tr(),
-                            isSelected: selectedIndex == 5,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(5, switchNavbar: true);
-                            },
-                          ),
-                          kIsWeb
-                              ? SizedBox.shrink()
-                              : NavigationSidebarButton(
-                                  icon: Icons.notifications_rounded,
-                                  label: "notifications".tr(),
-                                  isSelected: selectedIndex == 6,
-                                  onTap: () {
-                                    pageNavigationFrameworkKey.currentState!
-                                        .changePage(6, switchNavbar: true);
-                                  },
-                                ),
-                          NavigationSidebarButton(
-                            icon: Icons.line_weight_rounded,
-                            label: "all-spending".tr(),
-                            isSelected: selectedIndex == 7,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(7, switchNavbar: true);
-                            },
-                          ),
-                          EditDataButtons(selectedIndex: selectedIndex),
-                        ],
-                      ),
-                      Spacer(),
-                      SizedBox(height: 40),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GoogleAccountLoginButton(
-                            navigationSidebarButton: true,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(8, switchNavbar: true);
-                              appStateKey.currentState?.refreshAppState();
-                            },
-                            isButtonSelected: selectedIndex == 8,
-                          ),
-                          NavigationSidebarButton(
-                            icon: Icons.settings_rounded,
-                            label: "settings".tr(),
-                            isSelected: selectedIndex == 4,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(4, switchNavbar: true);
-                            },
-                          ),
-                          NavigationSidebarButton(
-                            icon: Icons.info_outline_rounded,
-                            label: "about".tr(),
-                            isSelected: selectedIndex == 13,
-                            onTap: () {
-                              pageNavigationFrameworkKey.currentState!
-                                  .changePage(13, switchNavbar: true);
-                            },
-                          ),
-                          AnimatedSize(
-                            duration: Duration(milliseconds: 1500),
-                            curve: Curves.easeInOutCubic,
-                            child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 300),
-                              child: googleUser == null ||
-                                      appStateSettings["backupSync"] == false
-                                  ? Container(
-                                      key: ValueKey(1),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12),
-                                      child: AnimatedSwitcher(
-                                        duration: Duration(milliseconds: 500),
-                                        child: Tappable(
-                                          key: ValueKey(
-                                              appStateSettings["lastSynced"]),
-                                          onTap: () {
-                                            runAllCloudFunctions(
-                                              context,
-                                              forceSignIn: true,
-                                            );
-                                          },
-                                          borderRadius: 15,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 10),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        googleUser?.email !=
-                                                                null
-                                                            ? TextFont(
-                                                                textColor: getColor(
-                                                                    context,
-                                                                    "textLight"),
-                                                                fontSize: 13,
-                                                                text: (googleUser
-                                                                            ?.email ??
-                                                                        "")
-                                                                    .split(
-                                                                        "@")[0],
-                                                              )
-                                                            : SizedBox.shrink(),
-                                                        TimerBuilder.periodic(
-                                                          Duration(seconds: 5),
-                                                          builder: (context) {
-                                                            DateTime?
-                                                                timeLastSynced =
-                                                                null;
-                                                            try {
-                                                              timeLastSynced =
-                                                                  DateTime
-                                                                      .parse(
-                                                                appStateSettings[
-                                                                    "lastSynced"],
-                                                              );
-                                                            } catch (e) {
-                                                              print("Error parsing time last synced: " +
-                                                                  e.toString());
-                                                            }
-                                                            return TextFont(
-                                                              textColor: getColor(
-                                                                  context,
-                                                                  "textLight"),
-                                                              fontSize: 13,
-                                                              text: "Synced " +
-                                                                  (timeLastSynced ==
-                                                                          null
-                                                                      ? "?"
-                                                                      : getTimeAgo(
-                                                                          timeLastSynced)),
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 2),
-                                                Opacity(
-                                                  opacity: 0.7,
-                                                  child: RefreshButton(
-                                                    padding: EdgeInsets.all(8),
-                                                    onTap: () {
-                                                      runAllCloudFunctions(
-                                                          context);
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                              ],
                             ),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    ],
+                            SizedBox(height: 30),
+                            NavigationSidebarButton(
+                              icon: Icons.home_rounded,
+                              label: "home".tr(),
+                              isSelected: selectedIndex == 0,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(0, switchNavbar: true);
+                              },
+                            ),
+                            NavigationSidebarButton(
+                              icon: Icons.payments_rounded,
+                              label: "transactions".tr(),
+                              isSelected: selectedIndex == 1,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(1, switchNavbar: true);
+                              },
+                            ),
+                            NavigationSidebarButton(
+                              icon: MoreIcons.chart_pie,
+                              iconSize: 15,
+                              label: "budgets".tr(),
+                              isSelected: selectedIndex == 2,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(2, switchNavbar: true);
+                              },
+                            ),
+                            NavigationSidebarButton(
+                              icon: Icons.event_repeat_rounded,
+                              label: "subscriptions".tr(),
+                              isSelected: selectedIndex == 5,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(5, switchNavbar: true);
+                              },
+                            ),
+                            kIsWeb
+                                ? SizedBox.shrink()
+                                : NavigationSidebarButton(
+                                    icon: Icons.notifications_rounded,
+                                    label: "notifications".tr(),
+                                    isSelected: selectedIndex == 6,
+                                    onTap: () {
+                                      pageNavigationFrameworkKey.currentState!
+                                          .changePage(6, switchNavbar: true);
+                                    },
+                                  ),
+                            NavigationSidebarButton(
+                              icon: Icons.line_weight_rounded,
+                              label: "all-spending".tr(),
+                              isSelected: selectedIndex == 7,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(7, switchNavbar: true);
+                              },
+                            ),
+                            EditDataButtons(selectedIndex: selectedIndex),
+                          ],
+                        ),
+                        Spacer(),
+                        SizedBox(height: 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GoogleAccountLoginButton(
+                              navigationSidebarButton: true,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(8, switchNavbar: true);
+                                appStateKey.currentState?.refreshAppState();
+                              },
+                              isButtonSelected: selectedIndex == 8,
+                            ),
+                            NavigationSidebarButton(
+                              icon: Icons.settings_rounded,
+                              label: "settings".tr(),
+                              isSelected: selectedIndex == 4,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(4, switchNavbar: true);
+                              },
+                            ),
+                            NavigationSidebarButton(
+                              icon: Icons.info_outline_rounded,
+                              label: "about".tr(),
+                              isSelected: selectedIndex == 13,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(13, switchNavbar: true);
+                              },
+                            ),
+                            SyncButton(),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SyncButton extends StatefulWidget {
+  const SyncButton({super.key});
+
+  @override
+  State<SyncButton> createState() => _SyncButtonState();
+}
+
+class _SyncButtonState extends State<SyncButton> {
+  GlobalKey<RefreshButtonState> refreshButtonKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: Duration(milliseconds: 1500),
+      curve: Curves.easeInOutCubic,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        child: appStateSettings["currentUserEmail"] == "" ||
+                appStateSettings["backupSync"] == false
+            ? Container(
+                key: ValueKey(1),
+              )
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Tappable(
+                  onTap: () async {
+                    refreshButtonKey.currentState?.startAnimation();
+                    await runAllCloudFunctions(
+                      context,
+                      forceSignIn: true,
+                    );
+                    refreshButtonKey.currentState?.startAnimation();
+                  },
+                  borderRadius: 15,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 8,
+                      left: 5,
+                      top: 5,
+                      bottom: 5,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Opacity(
+                          opacity: 0.7,
+                          child: RefreshButton(
+                            key: refreshButtonKey,
+                            halfAnimation: true,
+                            customIcon: Icons.sync_rounded,
+                            flipIcon: true,
+                            padding: EdgeInsets.all(8),
+                            onTap: () {
+                              runAllCloudFunctions(
+                                context,
+                                forceSignIn: true,
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 6),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              AnimatedSwitcher(
+                                duration: Duration(milliseconds: 500),
+                                child: SizedBox(
+                                  key: ValueKey(appStateSettings["lastSynced"]),
+                                  child: TimerBuilder.periodic(
+                                    Duration(seconds: 5),
+                                    builder: (context) {
+                                      DateTime? timeLastSynced = null;
+                                      try {
+                                        timeLastSynced = DateTime.parse(
+                                          appStateSettings["lastSynced"],
+                                        );
+                                      } catch (e) {
+                                        print(
+                                            "Error parsing time last synced: " +
+                                                e.toString());
+                                      }
+                                      return TextFont(
+                                        textColor:
+                                            getColor(context, "textLight"),
+                                        fontSize: 13,
+                                        text: "synced".tr() +
+                                            " " +
+                                            (timeLastSynced == null
+                                                ? " " + "never".tr()
+                                                : getTimeAgo(timeLastSynced)
+                                                    .toLowerCase()),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
       ),
     );
   }

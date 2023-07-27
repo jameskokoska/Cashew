@@ -21,6 +21,7 @@ import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:provider/provider.dart';
@@ -125,7 +126,9 @@ Future<void> parseEmailsInBackground(context,
     {bool sayUpdates = false, bool forceParse = false}) async {
   if (appStateSettings["currentUserEmail"] == "") return;
   if (appStateSettings["emailScanning"] == false) return;
-  print(entireAppLoaded);
+  // Prevent sign-in on web - background sign-in cannot access Google Drive etc.
+  if (kIsWeb && !entireAppLoaded) return;
+  // print(entireAppLoaded);
   //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
   if (entireAppLoaded == false || forceParse) {
     if (appStateSettings["AutoTransactions-canReadEmails"] == true) {

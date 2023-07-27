@@ -71,7 +71,7 @@ signIn.GoogleSignIn? googleSignIn;
 signIn.GoogleSignInAccount? googleUser;
 
 Future<bool> signInGoogle(
-    {context,
+    {BuildContext? context,
     bool? waitForCompletion,
     bool? drivePermissions,
     bool? gMailPermissions,
@@ -106,7 +106,7 @@ Future<bool> signInGoogle(
     //   return false;
     // }
 
-    if (waitForCompletion == true) openLoadingPopup(context);
+    if (waitForCompletion == true && context != null) openLoadingPopup(context);
     if (googleUser == null) {
       googleSignIn = signIn.GoogleSignIn.standard(scopes: [
         ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
@@ -129,7 +129,11 @@ Future<bool> signInGoogle(
           // await googleSignIn?.signInSilently().then((value) async {
           //     return await googleSignIn?.signIn();
           //   })
-          await googleSignIn?.signInSilently()
+          // Currently we do not use silent sign in anymore, as it does not allow any access
+          // to GDrive or other tools, so there is no point to get the username/email form silent
+          kIsWeb
+              ? await googleSignIn?.signIn()
+              : await googleSignIn?.signInSilently()
           : await googleSignIn?.signIn();
 
       if (account != null) {
@@ -141,14 +145,17 @@ Future<bool> signInGoogle(
           googleUser?.email ?? "",
           updateGlobalState: true,
           forceGlobalStateUpdate:
-              getWidthNavigationSidebar(context) > 0 ? true : false,
+              context == null || getWidthNavigationSidebar(context) > 0
+                  ? true
+                  : false,
         );
         accountsPageStateKey.currentState?.refreshState();
       } else {
         throw ("Login failed");
       }
     }
-    if (waitForCompletion == true) Navigator.of(context).pop();
+    if (waitForCompletion == true && context != null)
+      Navigator.of(context).pop();
     next != null ? next() : 0;
 
     if (appStateSettings["hasSignedInOnce"] == false) {
@@ -159,7 +166,8 @@ Future<bool> signInGoogle(
     return true;
   } catch (e) {
     print(e);
-    if (waitForCompletion == true) Navigator.of(context).pop();
+    if (waitForCompletion == true && context != null)
+      Navigator.of(context).pop();
     openSnackbar(
       SnackbarMessage(
         title: "sign-in-error".tr(),
@@ -206,39 +214,41 @@ Future<bool> refreshGoogleSignIn() async {
 
 Future<void> createBackupInBackground(context) async {
   if (appStateSettings["currentUserEmail"] == "") return;
+  if (kIsWeb && !entireAppLoaded) return;
   // print(entireAppLoaded);
-  print("last backup:");
-  print(appStateSettings["lastBackup"]);
+  print("Last backup: " + appStateSettings["lastBackup"]);
   //Only run this once, don't run again if the global state changes (e.g. when changing a setting)
-  if (entireAppLoaded == false) {
-    if (appStateSettings["autoBackups"] == true) {
-      DateTime lastUpdate = DateTime.parse(appStateSettings["lastBackup"]);
-      DateTime nextPlannedBackup = lastUpdate
-          .add(Duration(days: appStateSettings["autoBackupsFrequency"]));
-      print("next backup planned on " + nextPlannedBackup.toString());
-      if (DateTime.now().millisecondsSinceEpoch >=
-          nextPlannedBackup.millisecondsSinceEpoch) {
-        print("auto backing up");
+  // Update: Does this still run when global state changes? I don't think so...
+  // If the entire app is loaded and we want to do an auto backup, lets do it no matter what!
+  // if (entireAppLoaded == false || entireAppLoaded) {
+  if (appStateSettings["autoBackups"] == true) {
+    DateTime lastUpdate = DateTime.parse(appStateSettings["lastBackup"]);
+    DateTime nextPlannedBackup = lastUpdate
+        .add(Duration(days: appStateSettings["autoBackupsFrequency"]));
+    print("next backup planned on " + nextPlannedBackup.toString());
+    if (DateTime.now().millisecondsSinceEpoch >=
+        nextPlannedBackup.millisecondsSinceEpoch) {
+      print("auto backing up");
 
-        bool hasSignedIn = false;
-        if (googleUser == null) {
-          hasSignedIn = await signInGoogle(
-              context: context,
-              gMailPermissions: false,
-              waitForCompletion: false,
-              silentSignIn: true);
-        } else {
-          hasSignedIn = true;
-        }
-        if (hasSignedIn == false) {
-          return;
-        }
-        await createBackup(context, silentBackup: true, deleteOldBackups: true);
+      bool hasSignedIn = false;
+      if (googleUser == null) {
+        hasSignedIn = await signInGoogle(
+            context: context,
+            gMailPermissions: false,
+            waitForCompletion: false,
+            silentSignIn: true);
       } else {
-        print("backup already made today");
+        hasSignedIn = true;
       }
+      if (hasSignedIn == false) {
+        return;
+      }
+      await createBackup(context, silentBackup: true, deleteOldBackups: true);
+    } else {
+      print("backup already made today");
     }
   }
+  // }
   return;
 }
 
@@ -519,9 +529,14 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
               pagesNeedingRefresh: [0], updateGlobalState: false);
         }
         if (googleUser != null) {
+          loadingIndeterminateKey.currentState!.setVisibility(true);
           await syncData(context);
+          loadingIndeterminateKey.currentState!.setVisibility(true);
           await syncPendingQueueOnServer();
+          loadingIndeterminateKey.currentState!.setVisibility(true);
           await getCloudBudgets();
+          loadingIndeterminateKey.currentState!.setVisibility(true);
+          await createBackupInBackground(context);
         }
       } catch (e) {
         print(e.toString());

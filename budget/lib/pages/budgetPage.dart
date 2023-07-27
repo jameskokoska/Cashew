@@ -602,7 +602,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 0),
                         child: TextFont(
-                          text: "Synced " +
+                          text: "synced".tr() +
+                              " " +
                               getTimeAgo(
                                 widget.budget.sharedDateUpdated!,
                               ).toLowerCase() +

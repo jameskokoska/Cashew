@@ -362,5 +362,14 @@
   "translations-help": "Ha szeretne segíteni a fordításokban, kérjük, írjon e -mailt",
   "no-transactions-for": "Nincs tranzakció",
   "average-spent": "átlagosan elköltött",
-  "select-icon": "Válassza ki az ikont"
+  "select-icon": "Válassza ki az ikont",
+  "1-day-ago": "1 napja",
+  "1-hour-ago": "1 órával ezelőtt",
+  "1-minute-ago": "1 perccel ezelőtt",
+  "days-ago": "napja",
+  "hours-ago": "órákkal ezelőtt",
+  "minutes-ago": "perccel ezelőtt",
+  "just-now": "Pont most",
+  "synced": "Szinkronizált",
+  "never": "soha"
 }

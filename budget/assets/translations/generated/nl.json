@@ -362,5 +362,14 @@
   "translations-help": "Als u wilt helpen met vertalingen, stuur dan een e -mail",
   "no-transactions-for": "Geen transacties voor",
   "average-spent": "Gemiddeld besteed",
-  "select-icon": "Selecteer Pictogram"
+  "select-icon": "Selecteer Pictogram",
+  "1-day-ago": "1 dag geleden",
+  "1-hour-ago": "1 uur geleden",
+  "1-minute-ago": "1 minuut geleden",
+  "days-ago": "dagen geleden",
+  "hours-ago": "uren geleden",
+  "minutes-ago": "minuten geleden",
+  "just-now": "Net nu",
+  "synced": "Gesynchroniseerd",
+  "never": "nooit"
 }

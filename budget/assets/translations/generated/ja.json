@@ -362,5 +362,14 @@
   "translations-help": "翻訳を手伝いたい場合は、メールでお問い合わせください",
   "no-transactions-for": "取引はありません",
   "average-spent": "平均費用",
-  "select-icon": "アイコンを選択します"
+  "select-icon": "アイコンを選択します",
+  "1-day-ago": "1日前",
+  "1-hour-ago": "1時間前",
+  "1-minute-ago": "1分前",
+  "days-ago": "数日前",
+  "hours-ago": "時間前",
+  "minutes-ago": "数分前",
+  "just-now": "ちょうど今",
+  "synced": "同期",
+  "never": "一度もない"
 }

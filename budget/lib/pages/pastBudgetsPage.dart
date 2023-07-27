@@ -328,167 +328,174 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 7, horizontal: 5),
+                          vertical: 7, horizontal: 0),
                       color: backgroundColor,
-                      child: StreamBuilder<Map<int, TransactionCategory>>(
-                          stream: database.watchAllCategoriesMapped(),
-                          builder: (context, snapshotCategoriesMapped) {
-                            if (snapshotCategoriesMapped.hasData) {
-                              return StreamBuilder<List<double?>>(
-                                stream: mergedStreamsBudgetTotal,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    double maxY = 0.1;
-                                    List<FlSpot> spots = [];
-                                    List<FlSpot> initialSpots = [];
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: StreamBuilder<Map<int, TransactionCategory>>(
+                            stream: database.watchAllCategoriesMapped(),
+                            builder: (context, snapshotCategoriesMapped) {
+                              if (snapshotCategoriesMapped.hasData) {
+                                return StreamBuilder<List<double?>>(
+                                  stream: mergedStreamsBudgetTotal,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      double maxY = 0.1;
+                                      List<FlSpot> spots = [];
+                                      List<FlSpot> initialSpots = [];
 
-                                    for (int i = snapshot.data!.length - 1;
-                                        i >= 0;
-                                        i--) {
-                                      if ((snapshot.data![i] ?? 0).abs() > maxY)
-                                        maxY = (snapshot.data![i] ?? 0).abs();
-                                      spots.add(FlSpot(
-                                        snapshot.data!.length -
-                                            1 -
-                                            i.toDouble(),
-                                        (snapshot.data![i] ?? 0).abs() == 0
-                                            ? 0.001
-                                            : (snapshot.data![i] ?? 0).abs(),
-                                      ));
-                                      initialSpots.add(
-                                        FlSpot(
+                                      for (int i = snapshot.data!.length - 1;
+                                          i >= 0;
+                                          i--) {
+                                        if ((snapshot.data![i] ?? 0).abs() >
+                                            maxY)
+                                          maxY = (snapshot.data![i] ?? 0).abs();
+                                        spots.add(FlSpot(
                                           snapshot.data!.length -
                                               1 -
                                               i.toDouble(),
-                                          0.000000000001,
-                                        ),
-                                      );
-                                    }
-                                    return StreamBuilder<List<double?>>(
-                                        stream: mergedStreamsCategoriesTotal,
-                                        builder: (context,
-                                            snapshotMergedStreamsCategoriesTotal) {
-                                          Map<int, List<FlSpot>>
-                                              categorySpentPoints = {};
-                                          if (snapshotMergedStreamsCategoriesTotal
-                                                  .hasData &&
-                                              (selectedCategoryFks ?? [])
-                                                      .length >
-                                                  0) {
-                                            maxY = 0.1;
-                                            // separate each into a map of their own
-                                            int i =
-                                                snapshotMergedStreamsCategoriesTotal
-                                                        .data!.length -
-                                                    1;
-                                            for (int day = 0;
-                                                day <
-                                                    snapshotMergedStreamsCategoriesTotal
-                                                            .data!.length /
-                                                        (selectedCategoryFks ??
-                                                                [])
-                                                            .length;
-                                                day++) {
-                                              for (int categoryFk
-                                                  in (selectedCategoryFks ?? [])
-                                                      .reversed) {
-                                                if (categorySpentPoints[
-                                                        categoryFk] ==
-                                                    null) {
-                                                  categorySpentPoints[
-                                                      categoryFk] = [];
-                                                }
-                                                if (i <
-                                                        snapshotMergedStreamsCategoriesTotal
-                                                            .data!.length &&
-                                                    i >= 0) {
-                                                  categorySpentPoints[
-                                                          categoryFk]!
-                                                      .add(
-                                                    FlSpot(
-                                                      (snapshotMergedStreamsCategoriesTotal
-                                                                  .data!
-                                                                  .length -
-                                                              day.toDouble() -
-                                                              snapshotMergedStreamsCategoriesTotal
-                                                                  .data!.length)
-                                                          .abs(),
-                                                      (snapshotMergedStreamsCategoriesTotal
-                                                                              .data?[
-                                                                          i] ??
-                                                                      0)
-                                                                  .abs() ==
-                                                              0
-                                                          ? 0.001
-                                                          : (snapshotMergedStreamsCategoriesTotal
-                                                                          .data![
-                                                                      i] ??
-                                                                  0)
-                                                              .abs(),
-                                                    ),
-                                                  );
-                                                  if ((snapshotMergedStreamsCategoriesTotal
-                                                                  .data?[i] ??
-                                                              0)
-                                                          .abs() >
-                                                      maxY) {
-                                                    maxY =
+                                          (snapshot.data![i] ?? 0).abs() == 0
+                                              ? 0.001
+                                              : (snapshot.data![i] ?? 0).abs(),
+                                        ));
+                                        initialSpots.add(
+                                          FlSpot(
+                                            snapshot.data!.length -
+                                                1 -
+                                                i.toDouble(),
+                                            0.000000000001,
+                                          ),
+                                        );
+                                      }
+                                      return StreamBuilder<List<double?>>(
+                                          stream: mergedStreamsCategoriesTotal,
+                                          builder: (context,
+                                              snapshotMergedStreamsCategoriesTotal) {
+                                            Map<int, List<FlSpot>>
+                                                categorySpentPoints = {};
+                                            if (snapshotMergedStreamsCategoriesTotal
+                                                    .hasData &&
+                                                (selectedCategoryFks ?? [])
+                                                        .length >
+                                                    0) {
+                                              maxY = 0.1;
+                                              // separate each into a map of their own
+                                              int i =
+                                                  snapshotMergedStreamsCategoriesTotal
+                                                          .data!.length -
+                                                      1;
+                                              for (int day = 0;
+                                                  day <
+                                                      snapshotMergedStreamsCategoriesTotal
+                                                              .data!.length /
+                                                          (selectedCategoryFks ??
+                                                                  [])
+                                                              .length;
+                                                  day++) {
+                                                for (int categoryFk
+                                                    in (selectedCategoryFks ??
+                                                            [])
+                                                        .reversed) {
+                                                  if (categorySpentPoints[
+                                                          categoryFk] ==
+                                                      null) {
+                                                    categorySpentPoints[
+                                                        categoryFk] = [];
+                                                  }
+                                                  if (i <
+                                                          snapshotMergedStreamsCategoriesTotal
+                                                              .data!.length &&
+                                                      i >= 0) {
+                                                    categorySpentPoints[
+                                                            categoryFk]!
+                                                        .add(
+                                                      FlSpot(
                                                         (snapshotMergedStreamsCategoriesTotal
+                                                                    .data!
+                                                                    .length -
+                                                                day.toDouble() -
+                                                                snapshotMergedStreamsCategoriesTotal
+                                                                    .data!
+                                                                    .length)
+                                                            .abs(),
+                                                        (snapshotMergedStreamsCategoriesTotal.data?[
+                                                                            i] ??
+                                                                        0)
+                                                                    .abs() ==
+                                                                0
+                                                            ? 0.001
+                                                            : (snapshotMergedStreamsCategoriesTotal
+                                                                            .data![
+                                                                        i] ??
+                                                                    0)
+                                                                .abs(),
+                                                      ),
+                                                    );
+                                                    if ((snapshotMergedStreamsCategoriesTotal
                                                                     .data?[i] ??
                                                                 0)
-                                                            .abs();
+                                                            .abs() >
+                                                        maxY) {
+                                                      maxY =
+                                                          (snapshotMergedStreamsCategoriesTotal
+                                                                          .data?[
+                                                                      i] ??
+                                                                  0)
+                                                              .abs();
+                                                    }
                                                   }
+                                                  i--;
                                                 }
-                                                i--;
                                               }
                                             }
-                                          }
-                                          // print(categorySpentPoints);
+                                            // print(categorySpentPoints);
 
-                                          return BudgetHistoryLineGraph(
-                                            onTouchedIndex: (index) {
-                                              // debounce to avoid duplicate key on AnimatedSwitcher
-                                              _pastBudgetContainerListStateStateKey
-                                                  .currentState
-                                                  ?.setTouchedBudgetIndex(
-                                                      index);
-                                            },
-                                            color: dynamicPastel(
-                                              context,
-                                              budgetColorScheme.primary,
-                                              amountLight: 0.4,
-                                              amountDark: 0.2,
-                                            ),
-                                            dateRanges: dateTimeRanges,
-                                            maxY: (selectedCategoryFks ?? [])
-                                                        .length >
-                                                    0
-                                                ? maxY
-                                                : widget.budget.amount +
-                                                            0.0000000000001 >
-                                                        maxY
-                                                    ? widget.budget.amount +
-                                                        0.0000000000001
-                                                    : maxY,
-                                            spots: spots,
-                                            initialSpots: initialSpots,
-                                            horizontalLineAt:
-                                                widget.budget.amount,
-                                            budget: widget.budget,
-                                            extraCategorySpots:
-                                                categorySpentPoints,
-                                            categoriesMapped:
-                                                snapshotCategoriesMapped.data!,
-                                          );
-                                        });
-                                  } else {
-                                    return SizedBox.shrink();
-                                  }
-                                },
-                              );
-                            }
-                            return SizedBox.shrink();
-                          }),
+                                            return BudgetHistoryLineGraph(
+                                              onTouchedIndex: (index) {
+                                                // debounce to avoid duplicate key on AnimatedSwitcher
+                                                _pastBudgetContainerListStateStateKey
+                                                    .currentState
+                                                    ?.setTouchedBudgetIndex(
+                                                        index);
+                                              },
+                                              color: dynamicPastel(
+                                                context,
+                                                budgetColorScheme.primary,
+                                                amountLight: 0.4,
+                                                amountDark: 0.2,
+                                              ),
+                                              dateRanges: dateTimeRanges,
+                                              maxY: (selectedCategoryFks ?? [])
+                                                          .length >
+                                                      0
+                                                  ? maxY
+                                                  : widget.budget.amount +
+                                                              0.0000000000001 >
+                                                          maxY
+                                                      ? widget.budget.amount +
+                                                          0.0000000000001
+                                                      : maxY,
+                                              spots: spots,
+                                              initialSpots: initialSpots,
+                                              horizontalLineAt:
+                                                  widget.budget.amount,
+                                              budget: widget.budget,
+                                              extraCategorySpots:
+                                                  categorySpentPoints,
+                                              categoriesMapped:
+                                                  snapshotCategoriesMapped
+                                                      .data!,
+                                            );
+                                          });
+                                    } else {
+                                      return SizedBox.shrink();
+                                    }
+                                  },
+                                );
+                              }
+                              return SizedBox.shrink();
+                            }),
+                      ),
                     ),
                     Transform.translate(
                       offset: Offset(0, -1),
@@ -743,22 +750,21 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                   ? boxShadowCheck(boxShadowGeneral(context))
                                   : [BoxShadow(color: Colors.transparent)],
                         ),
-                        child: AnimatedSize(
-                          duration: Duration(milliseconds: 1000),
-                          curve: Curves.easeInOutCubicEmphasized,
-                          child: AnimatedSwitcher(
-                            duration: Duration(milliseconds: 200),
-                            child: touchedBudgetIndex == null ||
-                                    widget.amountLoaded -
-                                            touchedBudgetIndex! -
-                                            1 ==
-                                        index
-                                ? Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: index == widget.amountLoaded - 1
-                                            ? 0
-                                            : 13.0),
-                                    child: PastBudgetContainer(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              bottom:
+                                  index == widget.amountLoaded - 1 ? 0 : 13.0),
+                          child: AnimatedSize(
+                            duration: Duration(milliseconds: 1000),
+                            curve: Curves.easeInOutCubicEmphasized,
+                            child: AnimatedSwitcher(
+                              duration: Duration(milliseconds: 200),
+                              child: touchedBudgetIndex == null ||
+                                      widget.amountLoaded -
+                                              touchedBudgetIndex! -
+                                              1 ==
+                                          index
+                                  ? PastBudgetContainer(
                                       budget: widget.budget,
                                       smallBudgetContainer: true,
                                       showTodayForSmallBudget:
@@ -768,12 +774,12 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                       isPastBudgetButCurrentPeriod: index == 0,
                                       budgetColorScheme:
                                           widget.budgetColorScheme,
+                                    )
+                                  : Container(
+                                      key: ValueKey(
+                                          datePast.millisecondsSinceEpoch),
                                     ),
-                                  )
-                                : Container(
-                                    key: ValueKey(
-                                        datePast.millisecondsSinceEpoch),
-                                  ),
+                            ),
                           ),
                         ),
                       ),
@@ -1195,7 +1201,7 @@ class PastBudgetContainer extends StatelessWidget {
             color: appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context,
-                    Theme.of(context).colorScheme.secondaryContainer,
+                    budgetColorScheme.secondaryContainer,
                     amount: 0.3,
                   )
                 : getColor(context, "lightDarkAccentHeavyLight"),

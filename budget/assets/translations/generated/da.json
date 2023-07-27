@@ -351,7 +351,7 @@
   "notification-reminder-18": "Sørg for at tilføje dine daglige transaktioner til appen.",
   "notification-reminder-19": "Føj eventuelle udgifter fra i dag til din budget tracker.",
   "notification-reminder-20": "Registrer dine transaktioner for dagen for at få et komplet billede af dine forbrugsvaner.",
-  "notification-reminder-21": "Glem ikke at tilføje dine daglige transaktioner for at forblive på banen med dit budget.",
+  "notification-reminder-21": "Glem ikke at tilføje dine daglige transaktioner for at forblive på sporet med dit budget.",
   "notification-reminder-22": "Tag et par minutter på at opdatere dit budget med dagens udgifter.",
   "notification-reminder-23": "Sørg for at tilføje eventuelle udgifter fra i dag til din budget tracker.",
   "notification-reminder-24": "Husk at registrere dine transaktioner for dagen for at få et komplet billede af dine forbrugsvaner.",
@@ -362,5 +362,14 @@
   "translations-help": "Hvis du gerne vil hjælpe med oversættelser, skal du e -maile",
   "no-transactions-for": "Ingen transaktioner til",
   "average-spent": "Gennemsnitligt brugt",
-  "select-icon": "Vælg ikon"
+  "select-icon": "Vælg ikon",
+  "1-day-ago": "1 dag siden",
+  "1-hour-ago": "1 time siden",
+  "1-minute-ago": "For 1 minut siden",
+  "days-ago": "dage siden",
+  "hours-ago": "timer siden",
+  "minutes-ago": "minutter siden",
+  "just-now": "Lige nu",
+  "synced": "Synkroniseret",
+  "never": "aldrig"
 }

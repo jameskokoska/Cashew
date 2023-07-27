@@ -178,6 +178,15 @@ class DebugPage extends StatelessWidget {
             updateSettings("animationSpeed", value, updateGlobalState: true);
           },
         ),
+        Button(
+            label: "Force auto backup next launch",
+            onTap: () async {
+              updateSettings(
+                "lastBackup",
+                DateTime.now().subtract(Duration(days: 50)).toString(),
+                updateGlobalState: false,
+              );
+            }),
         SizedBox(height: 10),
         Button(
             label: "Create random transactions",

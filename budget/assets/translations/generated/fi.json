@@ -362,5 +362,14 @@
   "translations-help": "Jos haluat auttaa käännöksissä, lähetä sähköpostia",
   "no-transactions-for": "Ei tapahtumia",
   "average-spent": "keskimääräinen käytetty",
-  "select-icon": "Valitse kuvake"
+  "select-icon": "Valitse kuvake",
+  "1-day-ago": "1 päivä sitten",
+  "1-hour-ago": "1 tunti sitten",
+  "1-minute-ago": "Minuutti sitten",
+  "days-ago": "päiviä sitten",
+  "hours-ago": "tunteja sitten",
+  "minutes-ago": "minuuttia sitten",
+  "just-now": "Juuri nyt",
+  "synced": "Synkronoitu",
+  "never": "ei koskaan"
 }

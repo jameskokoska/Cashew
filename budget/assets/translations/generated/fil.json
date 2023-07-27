@@ -151,7 +151,7 @@
   "saving-tracking": "Dapat kang makatipid",
   "for": "para sa",
   "more-days": "mas maraming araw",
-  "spending-tracking": "Maaari kang patuloy na gumastos",
+  "spending-tracking": "Maaari mong patuloy na gumastos",
   "of-spending": "ng paggasta",
   "of-income": "ng kita",
   "of-expense": "ng gastos",
@@ -362,5 +362,14 @@
   "translations-help": "Kung nais mong makatulong sa mga pagsasalin, mangyaring mag -email",
   "no-transactions-for": "Walang mga transaksyon para sa",
   "average-spent": "average na ginugol",
-  "select-icon": "Piliin ang icon"
+  "select-icon": "Piliin ang icon",
+  "1-day-ago": "1 araw na ang nakakaraan",
+  "1-hour-ago": "1 oras na ang nakakaraan",
+  "1-minute-ago": "1 minuto ang nakakaraan",
+  "days-ago": "mga araw na ang nakakaraan",
+  "hours-ago": "oras na ang nakakaraan",
+  "minutes-ago": "mga minuto ang nakaraan",
+  "just-now": "Ngayon lang",
+  "synced": "Naka -sync",
+  "never": "hindi kailanman"
 }

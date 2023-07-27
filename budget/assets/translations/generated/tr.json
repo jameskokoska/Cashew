@@ -362,5 +362,14 @@
   "translations-help": "Çevirilere yardımcı olmak isterseniz, lütfen e -posta gönderin",
   "no-transactions-for": "İçin işlem yok",
   "average-spent": "ortalama harcanan",
-  "select-icon": "Simgeyi seçin"
+  "select-icon": "Simgeyi seçin",
+  "1-day-ago": "1 gün önce",
+  "1-hour-ago": "1 saat önce",
+  "1-minute-ago": "1 dakika önce",
+  "days-ago": "günler önce",
+  "hours-ago": "saatler önce",
+  "minutes-ago": "dakika önce",
+  "just-now": "Şu anda",
+  "synced": "Senkronize",
+  "never": "Asla"
 }

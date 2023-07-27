@@ -468,6 +468,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             ),
             widget.budget != null
                 ? IconButton(
+                    padding: EdgeInsets.all(15),
                     tooltip: "delete-budget".tr(),
                     onPressed: () {
                       deleteBudgetPopup(context, widget.budget!,

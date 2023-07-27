@@ -361,6 +361,15 @@
   "notification-upcoming-transaction-title": "Giao dịch sắp tới do",
   "translations-help": "Nếu bạn muốn giúp các bản dịch, vui lòng gửi email",
   "no-transactions-for": "Không có giao dịch cho",
-  "average-spent": "Trung bình chi tiêu",
-  "select-icon": "Chọn Biểu tượng"
+  "average-spent": "chi tiêu trung bình",
+  "select-icon": "Chọn Biểu tượng",
+  "1-day-ago": "1 ngày trước",
+  "1-hour-ago": "1 giờ trước",
+  "1-minute-ago": "1 phút trước",
+  "days-ago": "ngày trước",
+  "hours-ago": "nhiều giờ trước",
+  "minutes-ago": "Vài phút trước",
+  "just-now": "Vừa rồi",
+  "synced": "Đồng bộ hóa",
+  "never": "không bao giờ"
 }

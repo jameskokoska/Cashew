@@ -318,33 +318,35 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                   updateSettings("username", googleUser?.displayName ?? "",
                       pagesNeedingRefresh: [0], updateGlobalState: false);
                 }
+
+                List<drive.File>? files = (await getDriveFiles()).$2;
+                var result;
+                if ((files?.length ?? 0) > 0) {
+                  result = await openPopup(
+                    context,
+                    icon: Icons.cloud_sync_rounded,
+                    title: "Backup Found",
+                    description: "Would you like to restore a backup?",
+                    onSubmit: () {
+                      Navigator.pop(context, true);
+                    },
+                    onCancel: () {
+                      Navigator.pop(context, false);
+                    },
+                    onSubmitLabel: "Restore",
+                    onCancelLabel: "cancel".tr(),
+                  );
+                }
+                if (result == true) {
+                  chooseBackup(context, hideDownloadButton: true);
+                } else {
+                  nextNavigation();
+                }
+                loadingIndeterminateKey.currentState?.setVisibility(false);
               } catch (e) {
                 print("Error signing in: " + e.toString());
+                loadingIndeterminateKey.currentState?.setVisibility(false);
               }
-              List<drive.File>? files = (await getDriveFiles()).$2;
-              var result;
-              if ((files?.length ?? 0) > 0) {
-                result = await openPopup(
-                  context,
-                  icon: Icons.cloud_sync_rounded,
-                  title: "Backup Found",
-                  description: "Would you like to restore a backup?",
-                  onSubmit: () {
-                    Navigator.pop(context, true);
-                  },
-                  onCancel: () {
-                    Navigator.pop(context, false);
-                  },
-                  onSubmitLabel: "Restore",
-                  onCancelLabel: "cancel".tr(),
-                );
-              }
-              if (result == true) {
-                chooseBackup(context, hideDownloadButton: true);
-              } else {
-                nextNavigation();
-              }
-              loadingIndeterminateKey.currentState?.setVisibility(false);
             },
             title: "sign-in-with-google".tr(),
             icon: MoreIcons.google,

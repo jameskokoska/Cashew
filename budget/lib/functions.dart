@@ -219,21 +219,21 @@ String getTimeAgo(DateTime time) {
     );
   } else if (duration.inDays >= 1) {
     if (duration.inDays == 1) {
-      return '1 day ago';
+      return '1-day-ago'.tr();
     }
-    return '${duration.inDays} days ago';
+    return '${duration.inDays} ${"days-ago".tr()}';
   } else if (duration.inHours >= 1) {
     if (duration.inHours == 1) {
-      return '1 hour ago';
+      return '1-hour-ago'.tr();
     }
-    return '${duration.inHours} hours ago';
+    return '${duration.inHours} ${"hours-ago".tr()}';
   } else if (duration.inMinutes >= 1) {
     if (duration.inMinutes == 1) {
-      return '1 minute ago';
+      return '1-minute-ago'.tr();
     }
-    return '${duration.inMinutes} minutes ago';
+    return '${duration.inMinutes} ${"minutes-ago".tr()}';
   }
-  return 'Just now';
+  return 'just-now'.tr();
 }
 
 //e.g. Today/Yesterday/Tomorrow/Tuesday/ Thursday, September 15
@@ -837,29 +837,31 @@ String getDevicesDefaultCurrencyCode() {
   return popularCurrencies[0];
 }
 
-void copyToClipboard(String text) async {
+void copyToClipboard(String text, {bool showSnackbar = true}) async {
   HapticFeedback.mediumImpact();
   await Clipboard.setData(ClipboardData(text: text));
-  openSnackbar(
-    SnackbarMessage(
-      title: "Copied to clipboard",
-      icon: Icons.copy_rounded,
-      timeout: Duration(milliseconds: 2500),
-    ),
-  );
+  if (showSnackbar)
+    openSnackbar(
+      SnackbarMessage(
+        title: "copied-to-clipboard".tr(),
+        icon: Icons.copy_rounded,
+        timeout: Duration(milliseconds: 2500),
+      ),
+    );
 }
 
-Future<String?> readClipboard() async {
+Future<String?> readClipboard({bool showSnackbar = true}) async {
   HapticFeedback.mediumImpact();
   final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
   String? clipboardText = clipboardData?.text;
-  openSnackbar(
-    SnackbarMessage(
-      title: "Pasted from clipboard",
-      icon: Icons.paste_rounded,
-      timeout: Duration(milliseconds: 2500),
-    ),
-  );
+  if (showSnackbar)
+    openSnackbar(
+      SnackbarMessage(
+        title: "pasted-from-clipboard".tr(),
+        icon: Icons.paste_rounded,
+        timeout: Duration(milliseconds: 2500),
+      ),
+    );
   return clipboardText;
 }
 

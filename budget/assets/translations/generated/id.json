@@ -362,5 +362,14 @@
   "translations-help": "Jika Anda ingin membantu terjemahan, silakan kirim email",
   "no-transactions-for": "Tidak ada transaksi untuk",
   "average-spent": "rata -rata dihabiskan",
-  "select-icon": "Pilih ikon"
+  "select-icon": "Pilih ikon",
+  "1-day-ago": "1 hari yang lalu",
+  "1-hour-ago": "1 jam yang lalu",
+  "1-minute-ago": "1 menit yang lalu",
+  "days-ago": "beberapa hari yang lalu",
+  "hours-ago": "beberapa jam yang lalu",
+  "minutes-ago": "beberapa menit yang lalu",
+  "just-now": "Baru saja",
+  "synced": "Disinkronkan",
+  "never": "tidak pernah"
 }

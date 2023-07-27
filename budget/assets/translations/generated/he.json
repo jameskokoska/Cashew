@@ -148,7 +148,7 @@
   "select-categories": "בחר קטגוריות",
   "transaction-filters": "מסנני עסקאות",
   "category-spending-goals": "יעדי הוצאות קטגוריות",
-  "saving-tracking": "אתה צריך לחסוך",
+  "saving-tracking": "אתה צריך לשמור",
   "for": "ל",
   "more-days": "עוד ימים",
   "spending-tracking": "אתה יכול להמשיך לבזבז",
@@ -362,5 +362,14 @@
   "translations-help": "אם ברצונך לעזור בתרגומים, אנא שלח דוא\"ל",
   "no-transactions-for": "אין עסקאות עבור",
   "average-spent": "ממוצע שהוצא",
-  "select-icon": "בחר סמל"
+  "select-icon": "בחר סמל",
+  "1-day-ago": "לפני יום אחד",
+  "1-hour-ago": "לפני שעה",
+  "1-minute-ago": "לפני 1 דקה",
+  "days-ago": "לפני מספר ימים",
+  "hours-ago": "לפני שעות",
+  "minutes-ago": "לפני דקות",
+  "just-now": "זֶה עַתָה",
+  "synced": "מסונכרן",
+  "never": "לעולם לא"
 }

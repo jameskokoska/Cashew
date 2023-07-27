@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Query, Column;
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' hide Transaction;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -261,6 +263,7 @@ Timer? cloudTimeoutTimer;
 Future<bool> getCloudBudgets() async {
   if (appStateSettings["sharedBudgets"] == false) return false;
   if (appStateSettings["currentUserEmail"] == "") return false;
+  if (kIsWeb && !entireAppLoaded) return false;
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (cloudTimeoutTimer?.isActive == true) {
     // openSnackbar(SnackbarMessage(title: "Please wait..."));
@@ -301,7 +304,8 @@ Future<bool> getCloudBudgets() async {
     openSnackbar(
       SnackbarMessage(
         icon: Icons.cloud_sync_rounded,
-        title: "Synced " +
+        title: "synced".tr() +
+            " " +
             totalTransactionsUpdated.toString() +
             " " +
             pluralString(totalTransactionsUpdated == 1, "change"),
@@ -621,6 +625,7 @@ Future<bool> deleteOnServer(
 Future<bool> syncPendingQueueOnServer() async {
   if (appStateSettings["sharedBudgets"] == false) return false;
   if (appStateSettings["currentUserEmail"] == "") return false;
+  if (kIsWeb && !entireAppLoaded) return false;
   print("syncing pending queue");
   Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
       appStateSettings["sendTransactionsToServerQueue"];
