@@ -349,6 +349,27 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   Future<Transaction> createTransaction({bool removeShared = false}) async {
+    bool paid = widget.transaction != null
+        ? widget.transaction!.paid
+        : selectedType == null;
+    bool skipPaid = widget.transaction != null
+        ? widget.transaction!.skipPaid
+        : selectedType == null;
+    if (([
+          TransactionSpecialType.subscription,
+          TransactionSpecialType.repetitive,
+          TransactionSpecialType.upcoming
+        ].contains(selectedType)) &&
+        widget.transaction != null &&
+        [
+              TransactionSpecialType.subscription,
+              TransactionSpecialType.repetitive,
+              TransactionSpecialType.upcoming
+            ].contains(widget.transaction!.type) ==
+            false) {
+      paid = false;
+      skipPaid = false;
+    }
     Transaction createdTransaction = Transaction(
       transactionPk: widget.transaction != null
           ? widget.transaction!.transactionPk
@@ -363,12 +384,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       dateTimeModified: null,
       income: selectedIncome,
       walletFk: selectedWalletPk,
-      paid: widget.transaction != null
-          ? widget.transaction!.paid
-          : selectedType == null,
-      skipPaid: widget.transaction != null
-          ? widget.transaction!.skipPaid
-          : selectedType == null,
+      paid: paid,
+      skipPaid: skipPaid,
       type: selectedType,
       reoccurrence: widget.transaction != null
           ? widget.transaction!.reoccurrence

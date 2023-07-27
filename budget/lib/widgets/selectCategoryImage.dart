@@ -58,19 +58,21 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Column(
         children: [
-          TextInput(
-            labelText: "search-placeholder".tr(),
-            icon: Icons.search_rounded,
-            onSubmitted: (value) {},
-            onChanged: (value) {
-              setState(() {
-                searchTerm = value;
-              });
-              bottomSheetControllerGlobal.snapToExtent(0);
-            },
-            padding: EdgeInsets.all(0),
-            autoFocus: true,
-          ),
+          context.locale.toString() == "en"
+              ? TextInput(
+                  labelText: "search-placeholder".tr(),
+                  icon: Icons.search_rounded,
+                  onSubmitted: (value) {},
+                  onChanged: (value) {
+                    setState(() {
+                      searchTerm = value;
+                    });
+                    bottomSheetControllerGlobal.snapToExtent(0);
+                  },
+                  padding: EdgeInsets.all(0),
+                  autoFocus: true,
+                )
+              : SizedBox(height: 0),
           SizedBox(height: 5),
           Center(
             child: Wrap(

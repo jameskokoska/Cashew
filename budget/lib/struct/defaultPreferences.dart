@@ -93,5 +93,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "iOSNavigation": false,
     "locale": "System",
     "incomeExpenseStartDate": null,
+    "disableShadows": false,
   };
 }

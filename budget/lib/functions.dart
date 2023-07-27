@@ -587,6 +587,7 @@ getTotalSubscriptions(AllWallets allWallets, SelectedSubscriptionsType type,
 }
 
 List<BoxShadow> boxShadowGeneral(context) {
+  if (appStateSettings["disableShadows"] == true) return [];
   return [
     BoxShadow(
       color: getColor(context, "shadowColorLight").withAlpha(30),
@@ -598,6 +599,7 @@ List<BoxShadow> boxShadowGeneral(context) {
 }
 
 List<BoxShadow> boxShadowSharp(context) {
+  if (appStateSettings["disableShadows"] == true) return [];
   return [
     BoxShadow(
       color: getColor(context, "shadowColorLight").withAlpha(30),
@@ -609,6 +611,7 @@ List<BoxShadow> boxShadowSharp(context) {
 }
 
 List<BoxShadow>? boxShadowCheck(list) {
+  if (appStateSettings["disableShadows"] == true) return null;
   if (appStateSettings["batterySaver"]) return null;
   return list;
 }

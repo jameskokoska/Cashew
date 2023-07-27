@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.4
+    Fixed when converting a transaction into a subscription, upcoming, or repetitive, it would be marked as paid
+    Fixed upcoming notifications were getting set if before the current time
+    Disabled icon searching on other languages
+    Added preview data generation in debug menu
     < 3.6.3
     If sign-in fails on launch, boarding page does not proceed
     Selected transaction opens with selected color

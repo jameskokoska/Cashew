@@ -280,8 +280,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                         categoryEntries.add(
                           CategoryEntry(
                             extraText: category.total > 0
-                                ? "percent-of-income".tr()
-                                : "percent-of-expense".tr(),
+                                ? "of-income".tr()
+                                : "of-expense".tr(),
                             isTiled: tiledCategoryEntries,
                             budgetColorScheme: widget.walletColorScheme,
                             category: category.category,

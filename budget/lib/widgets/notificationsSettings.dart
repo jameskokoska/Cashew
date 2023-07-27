@@ -307,17 +307,22 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
     );
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      idStart,
-      'notification-upcoming-transaction-title'.tr(),
-      chosenMessage,
-      dateTime,
-      notificationDetails,
-      androidAllowWhileIdle: true,
-      payload: 'upcomingTransaction',
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+    if (upcomingTransaction.dateCreated.isAfter(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        idStart,
+        'notification-upcoming-transaction-title'.tr(),
+        chosenMessage,
+        dateTime,
+        notificationDetails,
+        androidAllowWhileIdle: true,
+        payload: 'upcomingTransaction',
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+    } else {
+      print("Cannot set up notification before current time!");
+    }
+
     print("Notification " +
         chosenMessage +
         " scheduled for " +

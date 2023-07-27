@@ -50,8 +50,8 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
       if (context != null) {
         openSnackbar(
           SnackbarMessage(
-            title: "Created New Subscription",
-            description: "On " + getWordedDateShort(newDate),
+            title: "created-new-transaction".tr(),
+            description: getWordedDateShort(newDate),
             icon: Icons.event_repeat_rounded,
             onTap: () {
               pushRoute(

@@ -6,6 +6,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
@@ -162,6 +163,18 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["incognitoKeyboard"],
           icon: Icons.keyboard_rounded,
         ),
+        SettingsContainerSwitch(
+          title: "Disable shadows",
+          onSwitched: (value) {
+            updateSettings("disableShadows", value, updateGlobalState: true);
+            // if (value == true) {
+            //   updateSettings("removeZeroTransactionEntries", false,
+            //       pagesNeedingRefresh: [0], updateGlobalState: false);
+            // }
+          },
+          initialValue: appStateSettings["disableShadows"],
+          icon: Icons.dark_mode,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 13, right: 13),
           child: TextFont(text: "Animation Scale"),
@@ -186,6 +199,12 @@ class DebugPage extends StatelessWidget {
                 DateTime.now().subtract(Duration(days: 50)).toString(),
                 updateGlobalState: false,
               );
+            }),
+        SizedBox(height: 20),
+        Button(
+            label: "Create preview data",
+            onTap: () async {
+              generatePreviewData();
             }),
         SizedBox(height: 10),
         Button(
