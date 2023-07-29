@@ -371,5 +371,8 @@
   "minutes-ago": "কিছুক্ষণ আগে",
   "just-now": "এক্ষুনি",
   "synced": "সিঙ্কড",
-  "never": "কখনও না"
+  "never": "কখনও না",
+  "copied-to-clipboard": "ক্লিপবোর্ডে অনুলিপি করা হয়েছে",
+  "pasted-from-clipboard": "ক্লিপবোর্ড থেকে আটকানো",
+  "created-new-transaction": "নতুন লেনদেন তৈরি করেছে"
 }

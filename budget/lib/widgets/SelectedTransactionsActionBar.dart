@@ -51,9 +51,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     // borderRadius: BorderRadius.only(
                     //   bottomLeft: Radius.circular(
-                    //       getWidthNavigationSidebar(context) > 0 ? 20 : 10),
+                    //       getIsFullScreen(context) ? 20 : 10),
                     //   bottomRight: Radius.circular(
-                    //       getWidthNavigationSidebar(context) > 0 ? 20 : 10),
+                    //       getIsFullScreen(context) ? 20 : 10),
                     // ),
                     boxShadow: boxShadowCheck(boxShadowSharp(context)),
                     color: Theme.of(context).colorScheme.secondaryContainer,

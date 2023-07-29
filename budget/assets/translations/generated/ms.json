@@ -334,7 +334,7 @@
   "notification-reminder-1": "Jangan lupa untuk menambah transaksi dari hari ini!",
   "notification-reminder-2": "Tambah urus niaga harian anda untuk terus berjalan.",
   "notification-reminder-3": "Kemas kini anggaran anda dengan perbelanjaan hari ini.",
-  "notification-reminder-4": "Tambahkan perbelanjaan hari ini ke pelacak bajet anda.",
+  "notification-reminder-4": "Tambahkan perbelanjaan hari ini kepada pelacak belanjawan anda.",
   "notification-reminder-5": "Catat urus niaga anda untuk hari itu.",
   "notification-reminder-6": "Tinggal di atas belanjawan anda dengan menambah urus niaga harian anda.",
   "notification-reminder-7": "Jangan lupa untuk menambah urus niaga harian anda.",
@@ -371,5 +371,8 @@
   "minutes-ago": "minit yang lalu",
   "just-now": "Sebentar tadi",
   "synced": "Disegerakkan",
-  "never": "tidak pernah"
+  "never": "tidak pernah",
+  "copied-to-clipboard": "Disalin ke papan klip",
+  "pasted-from-clipboard": "Disisipkan dari papan klip",
+  "created-new-transaction": "Mencipta transaksi baru"
 }

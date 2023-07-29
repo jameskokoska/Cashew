@@ -58,6 +58,20 @@ class DebugPage extends StatelessWidget {
           icon: Icons.money_off_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Start spending at 0",
+          description: "For spending line graphs",
+          onSwitched: (value) {
+            updateSettings("ignorePastAmountSpent", value,
+                pagesNeedingRefresh: [0, 3], updateGlobalState: false);
+            // if (value == true) {
+            //   updateSettings("removeZeroTransactionEntries", false,
+            //       pagesNeedingRefresh: [0], updateGlobalState: false);
+            // }
+          },
+          initialValue: appStateSettings["ignorePastAmountSpent"],
+          icon: Icons.add_chart_rounded,
+        ),
+        SettingsContainerSwitch(
           title: "Show past spending trajectory",
           onSwitched: (value) {
             updateSettings("showPastSpendingTrajectory", value,

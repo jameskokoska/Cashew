@@ -371,5 +371,8 @@
   "minutes-ago": "λεπτά πριν",
   "just-now": "Μόλις τώρα",
   "synced": "Συγχρονισμένος",
-  "never": "ποτέ"
+  "never": "ποτέ",
+  "copied-to-clipboard": "Αντιγράφηκε στο πρόχειρο",
+  "pasted-from-clipboard": "Επικολλημένο από πρόχειρο",
+  "created-new-transaction": "Δημιουργήθηκε νέα συναλλαγή"
 }

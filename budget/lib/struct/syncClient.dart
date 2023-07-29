@@ -10,6 +10,7 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/walletEntry.dart';
@@ -411,7 +412,7 @@ Future<bool> syncData(BuildContext context) async {
     "lastSynced",
     syncStarted.toString(),
     pagesNeedingRefresh: [],
-    updateGlobalState: getWidthNavigationSidebar(context) > 0 ? true : false,
+    updateGlobalState: getIsFullScreen(context) ? true : false,
   );
   print("DONE SYNCING");
   return true;

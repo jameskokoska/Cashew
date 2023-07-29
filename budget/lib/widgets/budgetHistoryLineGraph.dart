@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -141,8 +142,8 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.3 >
-              (getWidthNavigationSidebar(context) <= 0 ? 190 : 350)
-          ? getWidthNavigationSidebar(context) <= 0
+              (getIsFullScreen(context) == false ? 190 : 350)
+          ? getIsFullScreen(context) == false
               ? 190
               : 350
           : MediaQuery.of(context).size.height * 0.3,

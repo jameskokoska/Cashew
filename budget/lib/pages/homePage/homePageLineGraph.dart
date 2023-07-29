@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/budgetPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
@@ -9,7 +10,6 @@ import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:budget/struct/currencyFunctions.dart';
 
 enum LineGraphDisplay {
   Default30Days,
@@ -118,19 +118,14 @@ class PastSpendingGraph extends StatelessWidget {
     if (customStartDate?.isAfter(DateTime.now()) ?? false) {
       customStartDateChecked = DateTime.now();
     }
-    return StreamBuilder<List<Transaction>>(
-      stream: database.getTransactionsInTimeRangeFromCategories(
+    return StreamBuilder<double?>(
+      stream: database.getTotalBeforeStartDateInTimeRangeFromCategories(
         customStartDateChecked ??
             DateTime(
               DateTime.now().year,
               DateTime.now().month - monthsToLoad,
               DateTime.now().day,
             ),
-        DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().day,
-        ),
         [],
         true,
         true,
@@ -138,50 +133,82 @@ class PastSpendingGraph extends StatelessWidget {
         null,
         null,
         walletPks: walletPks,
+        allWallets: Provider.of<AllWallets>(context),
       ),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          bool cumulative = appStateSettings["showCumulativeSpending"];
-          double cumulativeTotal = 0;
-          List<Pair> points = [];
-          for (DateTime indexDay = customStartDateChecked ??
+      builder: (context, snapshotTotalSpentBefore) {
+        if (snapshotTotalSpentBefore.hasData) {
+          double totalSpentBefore = appStateSettings["ignorePastAmountSpent"]
+              ? 0
+              : snapshotTotalSpentBefore.data!;
+          return StreamBuilder<List<Transaction>>(
+            stream: database.getTransactionsInTimeRangeFromCategories(
+              customStartDateChecked ??
                   DateTime(
                     DateTime.now().year,
                     DateTime.now().month - monthsToLoad,
                     DateTime.now().day,
-                  );
-              indexDay.compareTo(DateTime.now()) < 0;
-              indexDay =
-                  DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
-            //can be optimized...
-            double totalForDay = 0;
-            for (Transaction transaction in snapshot.data!) {
-              if (indexDay.year == transaction.dateCreated.year &&
-                  indexDay.month == transaction.dateCreated.month &&
-                  indexDay.day == transaction.dateCreated.day) {
-                if (transaction.income) {
-                  totalForDay += transaction.amount.abs() *
-                      (amountRatioToPrimaryCurrencyGivenPk(
-                              Provider.of<AllWallets>(context),
-                              transaction.walletFk) ??
-                          0);
-                } else {
-                  totalForDay -= transaction.amount.abs() *
-                      (amountRatioToPrimaryCurrencyGivenPk(
-                              Provider.of<AllWallets>(context),
-                              transaction.walletFk) ??
-                          0);
+                  ),
+              DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+                DateTime.now().day,
+              ),
+              [],
+              true,
+              true,
+              isIncome,
+              null,
+              null,
+              walletPks: walletPks,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                bool cumulative = appStateSettings["showCumulativeSpending"];
+                double cumulativeTotal = totalSpentBefore;
+                List<Pair> points = [];
+                for (DateTime indexDay = customStartDateChecked ??
+                        DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month - monthsToLoad,
+                          DateTime.now().day,
+                        );
+                    indexDay.compareTo(DateTime.now()) < 0;
+                    indexDay = DateTime(
+                        indexDay.year, indexDay.month, indexDay.day + 1)) {
+                  //can be optimized...
+                  double totalForDay = 0;
+                  for (Transaction transaction in snapshot.data!) {
+                    if (indexDay.year == transaction.dateCreated.year &&
+                        indexDay.month == transaction.dateCreated.month &&
+                        indexDay.day == transaction.dateCreated.day) {
+                      if (transaction.income) {
+                        totalForDay += transaction.amount.abs() *
+                            (amountRatioToPrimaryCurrencyGivenPk(
+                                    Provider.of<AllWallets>(context),
+                                    transaction.walletFk) ??
+                                0);
+                      } else {
+                        totalForDay -= transaction.amount.abs() *
+                            (amountRatioToPrimaryCurrencyGivenPk(
+                                    Provider.of<AllWallets>(context),
+                                    transaction.walletFk) ??
+                                0);
+                      }
+                    }
+                  }
+                  cumulativeTotal += totalForDay;
+                  points.add(Pair(points.length.toDouble(),
+                      cumulative ? cumulativeTotal : totalForDay));
                 }
+                return LineChartWrapper(
+                  points: [points],
+                  isCurved: true,
+                  extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
+                  amountBefore: totalSpentBefore,
+                );
               }
-            }
-            cumulativeTotal += totalForDay;
-            points.add(Pair(points.length.toDouble(),
-                cumulative ? cumulativeTotal : totalForDay));
-          }
-          return LineChartWrapper(
-            points: [points],
-            isCurved: true,
-            extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
+              return SizedBox.shrink();
+            },
           );
         }
         return SizedBox.shrink();

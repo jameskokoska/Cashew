@@ -371,5 +371,8 @@
   "minutes-ago": "数分前",
   "just-now": "ちょうど今",
   "synced": "同期",
-  "never": "一度もない"
+  "never": "一度もない",
+  "copied-to-clipboard": "クリップボードにコピーされました",
+  "pasted-from-clipboard": "クリップボードから貼り付けられました",
+  "created-new-transaction": "新しいトランザクションを作成しました"
 }

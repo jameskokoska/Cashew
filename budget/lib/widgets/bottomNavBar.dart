@@ -3,6 +3,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -20,10 +21,10 @@ class BottomNavBarState extends State<BottomNavBar> {
 
   void onItemTapped(int index) {
     if (index == selectedIndex) {
-      if (index == 0) homePageStateKey.currentState!.scrollToTop();
-      if (index == 1) transactionsListPageStateKey.currentState!.scrollToTop();
-      if (index == 2) budgetsListPageStateKey.currentState!.scrollToTop();
-      if (index == 3) settingsPageStateKey.currentState!.scrollToTop();
+      if (index == 0) homePageStateKey.currentState?.scrollToTop();
+      if (index == 1) transactionsListPageStateKey.currentState?.scrollToTop();
+      if (index == 2) budgetsListPageStateKey.currentState?.scrollToTop();
+      if (index == 3) settingsPageStateKey.currentState?.scrollToTop();
     } else {
       widget.onChanged(index);
       setState(() {
@@ -42,7 +43,7 @@ class BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    if (getWidthNavigationSidebar(context) > 0) return SizedBox.shrink();
+    if (getIsFullScreen(context)) return SizedBox.shrink();
     return Padding(
       //Bottom padding is a container wrapped with absorb pointer
       padding: const EdgeInsets.only(bottom: 0, left: 10, right: 10),

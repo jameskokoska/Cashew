@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/util/debouncer.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class GlobalLoadingProgressState extends State<GlobalLoadingProgress> {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: getWidthNavigationSidebar(context) <= 0
+      alignment: getIsFullScreen(context) == false
           ? Alignment.bottomLeft
           : Alignment.topCenter,
       child: AnimatedContainer(
@@ -79,11 +80,11 @@ class GlobalLoadingIndeterminateState
     return Opacity(
       opacity: opacity,
       child: SizedBox(
-        width: getWidthNavigationSidebar(context) <= 0
+        width: getIsFullScreen(context) == false
             ? null
             : getWidthNavigationSidebar(context),
         child: Align(
-          alignment: getWidthNavigationSidebar(context) <= 0
+          alignment: getIsFullScreen(context) == false
               ? Alignment.bottomLeft
               : Alignment.topCenter,
           child: AnimatedContainer(

@@ -336,7 +336,7 @@
   "notification-reminder-3": "Päivitä budjettisi tämän päivän kuluilla.",
   "notification-reminder-4": "Lisää tämän päivän kulut budjettimaailmaan.",
   "notification-reminder-5": "Tallenna tapahtumasi päiväksi.",
-  "notification-reminder-6": "Pysy budjettisi päällä lisäämällä päivittäisiä tapahtumia.",
+  "notification-reminder-6": "Pysy budjetin kärjessä lisäämällä päivittäiset tapahtumat.",
   "notification-reminder-7": "Älä unohda lisätä päivittäisiä tapahtumia.",
   "notification-reminder-8": "Päivitä budjettisi tämän päivän kuluilla.",
   "notification-reminder-9": "Lisää kulut tänään sovellukseen.",
@@ -371,5 +371,8 @@
   "minutes-ago": "minuuttia sitten",
   "just-now": "Juuri nyt",
   "synced": "Synkronoitu",
-  "never": "ei koskaan"
+  "never": "ei koskaan",
+  "copied-to-clipboard": "Kopioitu leikepöydälle",
+  "pasted-from-clipboard": "Liitetty leikepöydältä",
+  "created-new-transaction": "Loi uutta tapahtumaa"
 }

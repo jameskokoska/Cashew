@@ -371,5 +371,8 @@
   "minutes-ago": "मिनिटांपूर्वी",
   "just-now": "आत्ताच",
   "synced": "Syned",
-  "never": "कधीही नाही"
+  "never": "कधीही नाही",
+  "copied-to-clipboard": "क्लिपबोर्डवर कॉपी केली",
+  "pasted-from-clipboard": "क्लिपबोर्ड वरून पेस्ट केलेले",
+  "created-new-transaction": "नवीन व्यवहार तयार केले"
 }

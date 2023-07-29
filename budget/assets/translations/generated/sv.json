@@ -371,5 +371,8 @@
   "minutes-ago": "minuter sedan",
   "just-now": "Precis nu",
   "synced": "Synkroniserad",
-  "never": "aldrig"
+  "never": "aldrig",
+  "copied-to-clipboard": "Kopierad till urklipp",
+  "pasted-from-clipboard": "Klistra in från urklipp",
+  "created-new-transaction": "Skapad ny transaktion"
 }

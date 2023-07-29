@@ -371,5 +371,8 @@
   "minutes-ago": "il y a quelques minutes",
   "just-now": "Juste maintenant",
   "synced": "Synchronisé",
-  "never": "jamais"
+  "never": "jamais",
+  "copied-to-clipboard": "Copié dans le presse-papier",
+  "pasted-from-clipboard": "Collé dans le presse-papiers",
+  "created-new-transaction": "Créé une nouvelle transaction"
 }

@@ -371,5 +371,8 @@
   "minutes-ago": "beberapa menit yang lalu",
   "just-now": "Baru saja",
   "synced": "Disinkronkan",
-  "never": "tidak pernah"
+  "never": "tidak pernah",
+  "copied-to-clipboard": "Disalin ke clipboard",
+  "pasted-from-clipboard": "Ditempelkan dari clipboard",
+  "created-new-transaction": "Membuat transaksi baru"
 }

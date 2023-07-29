@@ -1,4 +1,5 @@
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,10 @@ class FAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double fabSize = getWidthNavigationSidebar(context) <= 0 ? 60 : 70;
+    double fabSize = getIsFullScreen(context) == false ? 60 : 70;
     return OpenContainerNavigation(
       closedElevation: 10,
-      borderRadius: getWidthNavigationSidebar(context) <= 0 ? 18 : 22,
+      borderRadius: getIsFullScreen(context) == false ? 18 : 22,
       closedColor:
           color != null ? color : Theme.of(context).colorScheme.secondary,
       button: (openContainer) {

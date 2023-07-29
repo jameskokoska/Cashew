@@ -2,6 +2,8 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/creditDebtTransactionsPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
@@ -73,7 +75,7 @@ class SettingsPageState extends State<SettingsPage>
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
-        getWidthNavigationSidebar(context) > 0
+        getIsFullScreen(context)
             ? SizedBox.shrink()
             : SettingsContainerOpenPage(
                 openPage: AboutPage(),
@@ -144,18 +146,18 @@ class SettingsPageState extends State<SettingsPage>
             return item.toLowerCase().tr();
           },
         ),
-        EnterName(),
+        // EnterName(),
         SettingsHeader(title: "preferences".tr()),
-        SettingsContainerSwitch(
-          title: "battery-saver".tr(),
-          description: "battery-saver-description".tr(),
-          onSwitched: (value) {
-            updateSettings("batterySaver", value,
-                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          },
-          initialValue: appStateSettings["batterySaver"],
-          icon: Icons.battery_charging_full_rounded,
-        ),
+        // SettingsContainerSwitch(
+        //   title: "battery-saver".tr(),
+        //   description: "battery-saver-description".tr(),
+        //   onSwitched: (value) {
+        //     updateSettings("batterySaver", value,
+        //         updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+        //   },
+        //   initialValue: appStateSettings["batterySaver"],
+        //   icon: Icons.battery_charging_full_rounded,
+        // ),
         biometricsAvailable
             ? SettingsContainerSwitch(
                 title: "require-biometrics".tr(),
@@ -261,25 +263,33 @@ class MorePages extends StatelessWidget {
               kIsWeb
                   ? SizedBox.shrink()
                   : Expanded(
-                      child: SettingsContainer(
-                        onTap: () {
-                          openUrl("https://github.com/jameskokoska/Cashew");
-                        },
-                        title: "open-source".tr(),
-                        icon: Icons.code_rounded,
-                        isOutlined: true,
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                        child: SettingsContainer(
+                          onTap: () {
+                            openUrl("https://github.com/jameskokoska/Cashew");
+                          },
+                          title: "open-source".tr(),
+                          icon: Icons.code_rounded,
+                          isOutlined: true,
+                        ),
                       ),
                     ),
               kIsWeb
                   ? SizedBox.shrink()
                   : Expanded(
-                      child: SettingsContainer(
-                        onTap: () {
-                          openBottomSheet(context, RatingPopup());
-                        },
-                        title: "feedback".tr(),
-                        icon: Icons.rate_review_rounded,
-                        isOutlined: true,
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                        child: SettingsContainer(
+                          onTap: () {
+                            openBottomSheet(context, RatingPopup());
+                          },
+                          title: "feedback".tr(),
+                          icon: Icons.rate_review_rounded,
+                          isOutlined: true,
+                        ),
                       ),
                     ),
             ],
@@ -318,6 +328,75 @@ class MorePages extends StatelessWidget {
             children: [
               Expanded(
                 child: SettingsContainerOpenPage(
+                  openPage: WalletDetailsPage(wallet: null),
+                  title: "all-spending".tr(),
+                  icon: Icons.receipt_long_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(child: GoogleAccountLoginButton()),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
+                  openPage:
+                      UpcomingOverdueTransactions(overdueTransactions: true),
+                  title: "overdue".tr(),
+                  icon: Icons.date_range_rounded,
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
+                  openPage:
+                      UpcomingOverdueTransactions(overdueTransactions: false),
+                  title: "upcoming".tr(),
+                  icon: getTransactionTypeIcon(TransactionSpecialType.upcoming),
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
+                  openPage: CreditDebtTransactions(isCredit: true),
+                  title: "lent".tr(),
+                  icon: getTransactionTypeIcon(TransactionSpecialType.credit),
+                  isOutlined: true,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
+                  openPage: CreditDebtTransactions(isCredit: false),
+                  title: "borrowed".tr(),
+                  icon: getTransactionTypeIcon(TransactionSpecialType.debt),
+                  isOutlined: true,
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
                   openPage: EditWalletsPage(),
                   title: "wallets".tr(),
                   icon: Icons.account_balance_wallet_rounded,
@@ -325,7 +404,9 @@ class MorePages extends StatelessWidget {
                 ),
               ),
               Expanded(
+                flex: 1,
                 child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
                   openPage: EditBudgetPage(),
                   title: "budgets".tr(),
                   icon: MoreIcons.chart_pie,
@@ -333,16 +414,10 @@ class MorePages extends StatelessWidget {
                   isOutlined: true,
                 ),
               ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
               Expanded(
+                flex: 1,
                 child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
                   openPage: EditCategoriesPage(),
                   title: "categories".tr(),
                   icon: Icons.category_rounded,
@@ -350,30 +425,15 @@ class MorePages extends StatelessWidget {
                 ),
               ),
               Expanded(
+                flex: 1,
                 child: SettingsContainerOpenPage(
+                  isOutlinedColumn: true,
                   openPage: EditAssociatedTitlesPage(),
                   title: "titles".tr(),
                   icon: Icons.text_fields_rounded,
                   isOutlined: true,
                 ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: WalletDetailsPage(wallet: null),
-                  title: "all-spending".tr(),
-                  icon: Icons.line_weight_rounded,
-                  isOutlined: true,
-                ),
-              ),
-              Expanded(child: GoogleAccountLoginButton()),
+              )
             ],
           ),
         ),

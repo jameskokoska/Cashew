@@ -356,10 +356,10 @@
   "notification-reminder-23": "Assicurati di aggiungere eventuali spese da oggi al tuo tracker di budget.",
   "notification-reminder-24": "Ricorda di registrare le tue transazioni per la giornata per ottenere un quadro completo delle tue abitudini di spesa.",
   "notification-reminder-25": "Aggiungi le tue transazioni giornaliere all'app per mantenere il budget in pista.",
-  "notification-reminder-26": "Rimani al passo con il budget aggiungendo le tue transazioni giornaliere all'app.",
+  "notification-reminder-26": "Rimani al passo con il tuo budget aggiungendo le tue transazioni giornaliere all'app.",
   "notification-reminder-title": "Aggiungi transazioni",
   "notification-upcoming-transaction-title": "Imminente transazione dovuta",
-  "translations-help": "Se desideri aiutare con le traduzioni, ti preghiamo di e -mail",
+  "translations-help": "Se desideri aiutarti con le traduzioni, ti preghiamo di e -mail",
   "no-transactions-for": "Nessuna transazione per",
   "average-spent": "speso medio",
   "select-icon": "Seleziona icona",
@@ -371,5 +371,8 @@
   "minutes-ago": "minuti fa",
   "just-now": "Proprio adesso",
   "synced": "Sincronizzato",
-  "never": "Mai"
+  "never": "Mai",
+  "copied-to-clipboard": "Copiato negli appunti",
+  "pasted-from-clipboard": "Incollato dagli appunti",
+  "created-new-transaction": "Creato una nuova transazione"
 }

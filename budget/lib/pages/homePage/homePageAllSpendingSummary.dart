@@ -8,6 +8,7 @@ import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePageAllSpendingSummary extends StatelessWidget {
   const HomePageAllSpendingSummary({super.key});
@@ -30,6 +31,7 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                       amountStream: database.watchTotalOfWallet(
                         null,
                         isIncome: true,
+                        allWallets: Provider.of<AllWallets>(context),
                         startDate:
                             appStateSettings["incomeExpenseStartDate"] == null
                                 ? null
@@ -56,6 +58,7 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                       amountStream: database.watchTotalOfWallet(
                         null,
                         isIncome: false,
+                        allWallets: Provider.of<AllWallets>(context),
                         startDate:
                             appStateSettings["incomeExpenseStartDate"] == null
                                 ? null

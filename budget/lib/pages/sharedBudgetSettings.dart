@@ -4,7 +4,6 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/shareBudget.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -49,6 +48,12 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
         openSnackbar(SnackbarMessage(title: "Connection error"));
         setState(() {
           isErrored = true;
+        });
+        return;
+      } else if (response == false) {
+        setState(() {
+          members = [];
+          isLoaded = false;
         });
         return;
       }

@@ -371,5 +371,8 @@
   "minutes-ago": "minutes ago",
   "just-now": "Just now",
   "synced": "Synced",
-  "never": "never"
+  "never": "never",
+  "copied-to-clipboard": "Copied to clipboard",
+  "pasted-from-clipboard": "Pasted from clipboard",
+  "created-new-transaction": "Created New Transaction"
 }

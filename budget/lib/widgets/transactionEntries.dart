@@ -316,8 +316,7 @@ class TransactionEntries extends StatelessWidget {
                               transaction: item.transaction,
                               onSelected:
                                   (Transaction transaction, bool selected) {
-                                onSelected ??
-                                    onSelected!(transaction, selected);
+                                onSelected?.call(transaction, selected);
                               },
                               listID: listID,
                             ),

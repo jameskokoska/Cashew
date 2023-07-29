@@ -371,5 +371,8 @@
   "minutes-ago": "कुछ मिनट पहले",
   "just-now": "बस अब ",
   "synced": "सिंक किया गया",
-  "never": "कभी नहीँ"
+  "never": "कभी नहीँ",
+  "copied-to-clipboard": "क्लिपबोर्ड पर नकल",
+  "pasted-from-clipboard": "क्लिपबोर्ड से चिपकाया गया",
+  "created-new-transaction": "नया लेनदेन बनाया"
 }

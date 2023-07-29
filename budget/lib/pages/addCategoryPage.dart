@@ -326,8 +326,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20, bottom: 40),
                       child: TextInput(
-                        autoFocus:
-                            kIsWeb && getWidthNavigationSidebar(context) > 0,
+                        autoFocus: kIsWeb && getIsFullScreen(context),
                         focusNode: _titleFocusNode,
                         labelText: "name-placeholder".tr(),
                         bubbly: false,

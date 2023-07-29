@@ -521,7 +521,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput(
-                    autoFocus: kIsWeb && getWidthNavigationSidebar(context) > 0,
+                    autoFocus: kIsWeb && getIsFullScreen(context),
                     focusNode: _titleFocusNode,
                     labelText: "name-placeholder".tr(),
                     bubbly: false,
@@ -1335,7 +1335,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                           .toString()
                           .toLowerCase()
                           .tr()
-                          .capitalizeFirst,
+                          .toLowerCase(),
                       placeholder: "",
                       onTap: () {
                         selectRecurrence(context);

@@ -10,6 +10,15 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.5
+    All spending total fixes now accounts for currencies
+    New line graph intervals and visuals
+    Line graphs now account for spending before that date
+    Added new debug option: start spending at 0 for line graphs
+    Fixed horizontal line for custom budget periods
+    New settings page layout for mobile
+    Remove battery saver setting
+    Removed username setting
     < 3.6.4
     Fixed when converting a transaction into a subscription, upcoming, or repetitive, it would be marked as paid
     Fixed upcoming notifications were getting set if before the current time

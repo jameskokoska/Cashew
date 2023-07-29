@@ -371,5 +371,8 @@
   "minutes-ago": "minutos atrás",
   "just-now": "Agora mesmo",
   "synced": "Sincronizado",
-  "never": "nunca"
+  "never": "nunca",
+  "copied-to-clipboard": "Copiado para a área de transferência",
+  "pasted-from-clipboard": "Colado a partir da área de transferência",
+  "created-new-transaction": "Criou uma nova transação"
 }

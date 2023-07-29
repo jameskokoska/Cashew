@@ -8,6 +8,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -436,7 +437,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         },
                         icon: Icons.arrow_back_rounded,
                         size: 50,
-                        padding: getWidthNavigationSidebar(context) <= 0
+                        padding: getIsFullScreen(context) == false
                             ? EdgeInsets.all(3)
                             : EdgeInsets.all(6),
                       ),
@@ -492,7 +493,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         },
                         icon: Icons.arrow_forward_rounded,
                         size: 50,
-                        padding: getWidthNavigationSidebar(context) <= 0
+                        padding: getIsFullScreen(context) == false
                             ? EdgeInsets.all(3)
                             : EdgeInsets.all(6),
                       ),

@@ -132,7 +132,7 @@ class AccountsPageState extends State<AccountsPage> {
                           onTap: () async {
                             final result = await signOutGoogle();
                             if (result == true) {
-                              if (getWidthNavigationSidebar(context) <= 0) {
+                              if (getIsFullScreen(context) == false) {
                                 Navigator.maybePop(context);
                                 settingsPageStateKey.currentState
                                     ?.refreshState();

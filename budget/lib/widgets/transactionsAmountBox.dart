@@ -60,7 +60,7 @@ class TransactionsAmountBox extends StatelessWidget {
                               snapshot.hasData == false || snapshot.data == null
                                   ? 0
                                   : (snapshot.data ?? 0).abs(),
-                          duration: Duration(milliseconds: 1500),
+                          duration: Duration(milliseconds: 1000),
                           dynamicDecimals: true,
                           initialCount: (0),
                           textBuilder: (number) {

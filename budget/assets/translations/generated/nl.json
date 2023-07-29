@@ -371,5 +371,8 @@
   "minutes-ago": "minuten geleden",
   "just-now": "Net nu",
   "synced": "Gesynchroniseerd",
-  "never": "nooit"
+  "never": "nooit",
+  "copied-to-clipboard": "Gekopieerd naar het klembord",
+  "pasted-from-clipboard": "Geplakt van klembord",
+  "created-new-transaction": "Nieuwe transactie gecreëerd"
 }

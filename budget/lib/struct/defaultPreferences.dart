@@ -45,6 +45,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showTotalSpentForBudget": false,
     "showCumulativeSpending": true,
     "removeZeroTransactionEntries": true,
+    "ignorePastAmountSpent": false,
     // "askForTransactionTitle": androidVersion > 10,
     "askForTransactionTitle": true,
     // "batterySaver": kIsWeb,

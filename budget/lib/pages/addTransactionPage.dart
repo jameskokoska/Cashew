@@ -1382,7 +1382,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                               title: selectedRecurrenceDisplay
                                                   .toString()
                                                   .toLowerCase()
-                                                  .tr(),
+                                                  .tr()
+                                                  .toLowerCase(),
                                               placeholder: "",
                                               onTap: () {
                                                 selectRecurrence(context);
@@ -1858,7 +1859,7 @@ class _SelectTitleState extends State<SelectTitle> {
                           ),
                   ),
                 ),
-                getWidthNavigationSidebar(context) > 0
+                getIsFullScreen(context)
                     ? Padding(
                         padding: const EdgeInsets.only(top: 13),
                         child: Container(

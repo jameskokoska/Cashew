@@ -22,6 +22,7 @@ class _LineChart extends StatefulWidget {
     required this.enableTouch,
     this.extraLeftPaddingIfSmall = 0,
     this.colors = const [],
+    this.amountBefore = 0,
     Key? key,
   }) : super(key: key);
 
@@ -36,6 +37,7 @@ class _LineChart extends StatefulWidget {
   final double? horizontalLineAt;
   final bool enableTouch;
   final double extraLeftPaddingIfSmall;
+  final double amountBefore;
 
   @override
   State<_LineChart> createState() => _LineChartState();
@@ -77,14 +79,16 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         lineBarsData: lineBarsData,
         minX: 0,
         minY: loaded
-            ? (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
-                    (widget.maxPair.y < 0 && widget.minPair.y < 0)
-                ? 0
-                : widget.minPair.y
-            : widget.minPair.y - widget.minPair.y * 0.7,
+            ?
+            // (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
+            //         (widget.maxPair.y < 0 && widget.minPair.y < 0)
+            //     ? 0
+            //     : widget.minPair.y
+            widget.minPair.y
+            : widget.minPair.y - (widget.minPair.y - widget.amountBefore) * 0.7,
         maxY: loaded
             ? widget.maxPair.y
-            : widget.maxPair.y + widget.maxPair.y * 0.7,
+            : widget.maxPair.y + (widget.maxPair.y - widget.amountBefore) * 0.7,
         maxX: loaded
             ? widget.maxPair.x
             : widget.maxPair.x - widget.maxPair.x * 0.7,
@@ -206,15 +210,22 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               titleMeta,
             ) {
               bool show = false;
-              if (value == 0) {
+              if (value == titleMeta.max || value == titleMeta.min) {
+                return SizedBox.shrink();
+              } else if (value == 0) {
                 show = true;
-              } else if (value < widget.maxPair.y && value > 1) {
+              } else if (value < widget.maxPair.y &&
+                  value > 1 &&
+                  value < titleMeta.max) {
                 show = true;
-              } else if (value > widget.minPair.y && value < 1) {
+              } else if (value > widget.minPair.y &&
+                  value < 1 &&
+                  value > titleMeta.min) {
                 show = true;
               } else {
                 return SizedBox.shrink();
               }
+
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: TextFont(
@@ -228,6 +239,9 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                 ),
               );
             },
+            interval: ((widget.maxPair.y - widget.minPair.y) /
+                    (getIsFullScreen(context) ? 7 : 4))
+                .abs(),
             reservedSize: (widget.minPair.y <= -10000
                     ? 55
                     : widget.minPair.y <= -1000
@@ -359,14 +373,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         // horizontalInterval:
         //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) /
         //         (getIsFullScreen(context) ? 6 : 3.5),
-        getDrawingHorizontalLine: (value) {
-          return FlLine(
-            color: dynamicPastel(context, widget.color, amount: 0.3)
-                .withOpacity(0.2),
-            strokeWidth: 2,
-            dashArray: [2, 8],
-          );
-        },
+
         getDrawingVerticalLine: (value) {
           // print((widget.maxPair.y) /
           //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()));
@@ -380,16 +387,21 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             dashArray: [2, 8],
           );
         },
+        horizontalInterval: ((widget.maxPair.y - widget.minPair.y) /
+                (getIsFullScreen(context) ? 7 : 4))
+            .abs(),
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: dynamicPastel(context, widget.color, amount: 0.3)
+                .withOpacity(0.2),
+            strokeWidth: 2,
+            dashArray: [2, 8],
+          );
+        },
       );
 
   FlBorderData get borderData => FlBorderData(
-        show: true,
-        border: Border(
-          bottom: BorderSide(color: Colors.transparent),
-          // left: BorderSide(color: widget.color.withAlpha(200), width: 3),
-          right: BorderSide(color: Colors.transparent),
-          top: BorderSide(color: Colors.transparent),
-        ),
+        show: false,
       );
 
   LineChartBarData lineChartBarData(List<FlSpot> spots, int index) {
@@ -408,7 +420,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       aboveBarData: BarAreaData(
         applyCutOffY: true,
         cutOffY: 0,
-        show: index != 0 ? false : true,
+        show: widget.minPair.y > 0 && widget.maxPair.y > 0
+            ? false
+            : index != 0
+                ? false
+                : true,
         gradient: LinearGradient(
           colors: [
             index == 0
@@ -430,7 +446,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       belowBarData: BarAreaData(
         applyCutOffY: true,
         cutOffY: 0,
-        show: true,
+        show: widget.minPair.y < 0 && widget.maxPair.y < 0 ? false : true,
         gradient: LinearGradient(
           colors: [
             index == 0
@@ -473,6 +489,7 @@ class LineChartWrapper extends StatelessWidget {
     this.colors = const [],
     this.keepHorizontalLineInView = false,
     this.extraLeftPaddingIfSmall = 0,
+    this.amountBefore = 0,
     Key? key,
   }) : super(key: key);
 
@@ -486,6 +503,7 @@ class LineChartWrapper extends StatelessWidget {
   final List<Color> colors;
   final bool keepHorizontalLineInView;
   final double extraLeftPaddingIfSmall;
+  final double amountBefore;
 
   List<List<Pair>> filterPointsList(List<List<Pair>> pointsList) {
     List<List<Pair>> pointsOut = [];
@@ -547,6 +565,11 @@ class LineChartWrapper extends StatelessWidget {
 
   Pair getMaxPoint(List<List<Pair>> pointsList) {
     Pair max = Pair(1, 1);
+    if (amountBefore != 0 &&
+        pointsList.isNotEmpty &&
+        pointsList[0].isNotEmpty) {
+      max.y = pointsList[0][0].y;
+    }
     for (List<Pair> points in pointsList) {
       for (Pair pair in points) {
         if (pair.x > max.x) {
@@ -567,6 +590,11 @@ class LineChartWrapper extends StatelessWidget {
 
   Pair getMinPoint(List<List<Pair>> pointsList) {
     Pair min = Pair(0, 0);
+    if (amountBefore != 0 &&
+        pointsList.isNotEmpty &&
+        pointsList[0].isNotEmpty) {
+      min.y = pointsList[0][0].y;
+    }
     for (List<Pair> points in pointsList) {
       if (points.length <= 0 && min.x == 0 && min.y == 0) {
         min = Pair(1, 1);
@@ -600,6 +628,7 @@ class LineChartWrapper extends StatelessWidget {
           enableTouch: enableTouch,
           colors: colors,
           extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
+          amountBefore: amountBefore,
         ),
       ),
     );

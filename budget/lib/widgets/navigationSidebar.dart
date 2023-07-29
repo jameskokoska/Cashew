@@ -222,7 +222,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                     },
                                   ),
                             NavigationSidebarButton(
-                              icon: Icons.line_weight_rounded,
+                              icon: Icons.receipt_long_rounded,
                               label: "all-spending".tr(),
                               isSelected: selectedIndex == 7,
                               onTap: () {

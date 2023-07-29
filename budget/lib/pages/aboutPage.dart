@@ -242,11 +242,11 @@ class AboutPage extends StatelessWidget {
         ),
         AboutInfoBox(
           title: "freepik-credit".tr(),
-          link: "https://www.flaticon.com/",
+          link: "https://www.flaticon.com/authors/freepik",
         ),
         AboutInfoBox(
           title: "font-awesome-credit".tr(),
-          link: "http://fortawesome.github.com/Font-Awesome/",
+          link: "https://fontawesome.com/",
         ),
         AboutInfoBox(
           title: "pch-vector-credit".tr(),

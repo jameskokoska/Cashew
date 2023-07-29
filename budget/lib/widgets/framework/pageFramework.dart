@@ -633,7 +633,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       }),
       // shape: RoundedRectangleBorder(
       //   borderRadius: BorderRadius.vertical(
-      //     bottom: getWidthNavigationSidebar(context) > 0
+      //     bottom: getIsFullScreen(context)
       //         ? Radius.circular(0)
       //         : Radius.circular(15),
       //   ),

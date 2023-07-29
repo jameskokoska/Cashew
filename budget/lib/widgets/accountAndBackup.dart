@@ -145,9 +145,7 @@ Future<bool> signInGoogle(
           googleUser?.email ?? "",
           updateGlobalState: true,
           forceGlobalStateUpdate:
-              context == null || getWidthNavigationSidebar(context) > 0
-                  ? true
-                  : false,
+              context == null || getIsFullScreen(context) ? true : false,
         );
         accountsPageStateKey.currentState?.refreshState();
       } else {

@@ -371,5 +371,8 @@
   "minutes-ago": "Vor ein paar Minuten",
   "just-now": "Soeben",
   "synced": "Synchronisiert",
-  "never": "niemals"
+  "never": "niemals",
+  "copied-to-clipboard": "In die Zwischenablage kopiert",
+  "pasted-from-clipboard": "Aus Zwischenablage geklebt",
+  "created-new-transaction": "Neue Transaktion erstellt"
 }

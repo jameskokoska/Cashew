@@ -151,18 +151,9 @@ class TransactionEntry extends StatelessWidget {
                     isTransactionAfterSelected ? 0 : 12,
                   ),
                 ),
-                closedColor: selected
-                    ? appStateSettings["materialYou"]
-                        ? categoryTintColor == null
-                            ? Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer
-                                .withOpacity(0.8)
-                            : categoryTintColor!.withOpacity(0.2)
-                        : getColor(context, "black").withOpacity(0.1)
-                    : containerColor == null
-                        ? Theme.of(context).canvasColor
-                        : containerColor,
+                closedColor: containerColor == null
+                    ? Theme.of(context).canvasColor
+                    : containerColor,
                 button: (openContainer) {
                   return Tappable(
                     color: Colors.transparent,
@@ -251,34 +242,41 @@ class TransactionEntry extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 3),
-                                child: transaction.name != ""
-                                    ? TextFont(
-                                        text: transaction.name.capitalizeFirst,
-                                        fontSize: 16,
-                                      )
-                                    : category == null
-                                        ? StreamBuilder<TransactionCategory>(
-                                            stream: database
-                                                .getCategory(
-                                                    transaction.categoryFk)
-                                                .$1,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                return TextFont(
-                                                  text: snapshot.data!.name,
-                                                  fontSize: 16,
-                                                );
-                                              }
-                                              return Container();
-                                            },
-                                          )
-                                        : TextFont(
-                                            text: category!.name,
-                                            fontSize: 16,
-                                          ),
-                              ),
+                              Builder(builder: (contextBuilder) {
+                                double fontSize =
+                                    getIsFullScreen(context) == false
+                                        ? 15.5
+                                        : 16.5;
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 3),
+                                  child: transaction.name != ""
+                                      ? TextFont(
+                                          text:
+                                              transaction.name.capitalizeFirst,
+                                          fontSize: fontSize,
+                                        )
+                                      : category == null
+                                          ? StreamBuilder<TransactionCategory>(
+                                              stream: database
+                                                  .getCategory(
+                                                      transaction.categoryFk)
+                                                  .$1,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return TextFont(
+                                                    text: snapshot.data!.name,
+                                                    fontSize: fontSize,
+                                                  );
+                                                }
+                                                return Container();
+                                              },
+                                            )
+                                          : TextFont(
+                                              text: category!.name,
+                                              fontSize: fontSize,
+                                            ),
+                                );
+                              }),
                               transaction.sharedReferenceBudgetPk != null &&
                                       transaction.sharedKey == null &&
                                       transaction.sharedStatus == null
@@ -656,7 +654,7 @@ class TransactionEntryNote extends StatelessWidget {
             textStyle: TextStyle(
                 color: getColor(context, "black"), fontFamily: 'Avenir'),
             triggerMode: TooltipTriggerMode.tap,
-            showDuration: getWidthNavigationSidebar(context) <= 0
+            showDuration: getIsFullScreen(context) == false
                 ? Duration(milliseconds: 10000)
                 : Duration(milliseconds: 100),
             message: transaction.note,

@@ -20,6 +20,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 
 Future<bool> shareBudget(Budget? budgetToShare, context) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   if (budgetToShare == null) {
     return false;
   }
@@ -72,6 +73,7 @@ Future<bool> shareBudget(Budget? budgetToShare, context) async {
 
 Future<bool> removedSharedFromBudget(Budget sharedBudget,
     {bool removeFromServer = true}) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   if (removeFromServer)
     try {
       FirebaseFirestore? db = await firebaseGetDBInstance();
@@ -127,6 +129,7 @@ Future<bool> removedSharedFromBudget(Budget sharedBudget,
 }
 
 Future<bool> leaveSharedBudget(Budget sharedBudget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     return false;
@@ -169,6 +172,7 @@ Future<bool> addMemberToBudget(
 
 Future<bool> removeMemberFromBudget(
     String sharedKey, String member, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     return false;
@@ -193,6 +197,7 @@ Future<bool> removeMemberFromBudget(
 
 // the owner is always the first entry!
 Future<dynamic> getMembersFromBudget(String sharedKey, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     return null;
@@ -218,6 +223,7 @@ Future<dynamic> getMembersFromBudget(String sharedKey, Budget budget) async {
 
 Future<bool> compareSharedToCurrentBudgets(
     List<QueryDocumentSnapshot<Object?>> budgetSnapshot) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   List<Budget> budgets = await database.getAllBudgets();
   for (Budget budget in budgets) {
     if (budget.sharedKey != null) {
@@ -325,6 +331,7 @@ Future<bool> getCloudBudgets() async {
 
 Future<int> downloadTransactionsFromBudgets(
     FirebaseFirestore db, List<DocumentSnapshot> snapshots) async {
+  if (appStateSettings["sharedBudgets"] == false) return 0;
   int totalUpdated = 0;
   for (DocumentSnapshot budget in snapshots) {
     Set<String> allMembersEver = {};
@@ -467,6 +474,7 @@ Future<int> downloadTransactionsFromBudgets(
 }
 
 Future<bool> sendTransactionSet(Transaction transaction, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   print("SETTING UP TRANSACTION TO BE SET: " + transaction.toString());
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
@@ -494,6 +502,7 @@ Future<bool> sendTransactionSet(Transaction transaction, Budget budget) async {
 // update the entry on the server
 Future<bool> setOnServer(
     FirebaseFirestore db, Transaction transaction, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   TransactionCategory transactionCategory =
       await database.getCategoryInstance(transaction.categoryFk);
   CollectionReference subCollectionRef =
@@ -523,6 +532,7 @@ Future<bool> setOnServer(
 }
 
 Future<bool> sendTransactionAdd(Transaction transaction, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
@@ -548,6 +558,7 @@ Future<bool> sendTransactionAdd(Transaction transaction, Budget budget) async {
 
 Future<bool> addOnServer(
     FirebaseFirestore db, Transaction transaction, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   TransactionCategory transactionCategory =
       await database.getCategoryInstance(transaction.categoryFk);
   CollectionReference subCollectionRef =
@@ -582,6 +593,7 @@ Future<bool> addOnServer(
 
 Future<bool> sendTransactionDelete(
     Transaction transaction, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   FirebaseFirestore? db = await firebaseGetDBInstance();
   if (db == null) {
     Map<dynamic, dynamic> currentSendTransactionsToServerQueue =
@@ -607,6 +619,7 @@ Future<bool> sendTransactionDelete(
 
 Future<bool> deleteOnServer(
     FirebaseFirestore db, String? transactionSharedKey, Budget budget) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   if (transactionSharedKey != null && transactionSharedKey != "null") {
     CollectionReference subCollectionRef = db
         .collection('budgets')
@@ -733,6 +746,7 @@ class _SharedBudgetRefreshState extends State<SharedBudgetRefresh> {
 
 Future<bool> updateTransactionOnServerAfterChangingCategoryInformation(
     TransactionCategory category) async {
+  if (appStateSettings["sharedBudgets"] == false) return false;
   loadingIndeterminateKey.currentState?.setVisibility(true);
   List<Transaction> sharedTransactionsInCategory =
       await database.getAllTransactionsSharedInCategory(category.categoryPk);

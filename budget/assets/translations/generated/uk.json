@@ -371,5 +371,8 @@
   "minutes-ago": "хвилин тому",
   "just-now": "Прямо зараз",
   "synced": "Синхронізований",
-  "never": "ніколи"
+  "never": "ніколи",
+  "copied-to-clipboard": "Скопійований у буфер обміну",
+  "pasted-from-clipboard": "Вставлений із буфера обміну",
+  "created-new-transaction": "Створена нова транзакція"
 }

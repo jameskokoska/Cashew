@@ -22,12 +22,13 @@ import 'package:budget/widgets/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+
+import '../widgets/util/widgetSize.dart';
 
 class BudgetPage extends StatelessWidget {
   const BudgetPage({
@@ -633,45 +634,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
   }
 }
 
-class WidgetSize extends StatefulWidget {
-  final Widget child;
-  final Function(Size size) onChange;
-
-  const WidgetSize({
-    Key? key,
-    required this.onChange,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  _WidgetSizeState createState() => _WidgetSizeState();
-}
-
-class _WidgetSizeState extends State<WidgetSize> {
-  @override
-  Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
-    return Container(
-      key: widgetKey,
-      child: widget.child,
-    );
-  }
-
-  var widgetKey = GlobalKey();
-  var oldSize;
-
-  void postFrameCallback(_) {
-    var context = widgetKey.currentContext;
-    if (context == null) return;
-
-    Size newSize = context.size ?? Size(0, 0);
-    if (oldSize == newSize) return;
-
-    oldSize = newSize;
-    widget.onChange(newSize);
-  }
-}
-
 class WidgetPosition extends StatefulWidget {
   final Widget child;
   final Function(Offset position) onChange;
@@ -919,6 +881,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                           .withOpacity((index) / snapshot.data!.length)
               ],
               horizontalLineAt: widget.isPastBudget == true ||
+                      widget.budget.reoccurrence == BudgetReoccurence.custom ||
                       (widget.budget.addedTransactionsOnly &&
                           widget.budget.endDate.millisecondsSinceEpoch <
                               DateTime.now().millisecondsSinceEpoch)
@@ -1015,7 +978,7 @@ class _TotalSpentState extends State<TotalSpent> {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(bottom: 3.8),
+                          padding: const EdgeInsets.only(bottom: 1.5),
                           child: TextFont(
                             text: (showTotalSpent
                                     ? " " + "spent-amount-of".tr() + " "
@@ -1065,7 +1028,7 @@ class _TotalSpentState extends State<TotalSpent> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(bottom: 3.8),
+                      padding: const EdgeInsets.only(bottom: 1.5),
                       child: TextFont(
                         text: (showTotalSpent
                                 ? " " + "spent-amount-of".tr() + " "

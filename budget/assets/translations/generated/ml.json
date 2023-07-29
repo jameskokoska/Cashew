@@ -371,5 +371,8 @@
   "minutes-ago": "മിനിറ്റ് മുമ്പ്",
   "just-now": "ഇപ്പോള്",
   "synced": "സമന്വയവും",
-  "never": "ഒരിക്കലും"
+  "never": "ഒരിക്കലും",
+  "copied-to-clipboard": "ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി",
+  "pasted-from-clipboard": "ക്ലിപ്പ്ബോർഡിൽ നിന്ന് ഒട്ടിച്ചു",
+  "created-new-transaction": "പുതിയ ഇടപാട് സൃഷ്ടിച്ചു"
 }

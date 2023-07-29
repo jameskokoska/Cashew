@@ -424,8 +424,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextInput(
-                      autoFocus:
-                          kIsWeb && getWidthNavigationSidebar(context) > 0,
+                      autoFocus: kIsWeb && getIsFullScreen(context),
                       labelText: "name-placeholder".tr(),
                       bubbly: false,
                       initialValue: selectedName,

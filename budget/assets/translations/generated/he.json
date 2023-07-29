@@ -148,7 +148,7 @@
   "select-categories": "בחר קטגוריות",
   "transaction-filters": "מסנני עסקאות",
   "category-spending-goals": "יעדי הוצאות קטגוריות",
-  "saving-tracking": "אתה צריך לשמור",
+  "saving-tracking": "אתה צריך לחסוך",
   "for": "ל",
   "more-days": "עוד ימים",
   "spending-tracking": "אתה יכול להמשיך לבזבז",
@@ -371,5 +371,8 @@
   "minutes-ago": "לפני דקות",
   "just-now": "זֶה עַתָה",
   "synced": "מסונכרן",
-  "never": "לעולם לא"
+  "never": "לעולם לא",
+  "copied-to-clipboard": "הועתק ללוח",
+  "pasted-from-clipboard": "מודבק מהלוח",
+  "created-new-transaction": "יצר עסקה חדשה"
 }

@@ -371,5 +371,8 @@
   "minutes-ago": "minutter siden",
   "just-now": "Akkurat nå",
   "synced": "Synkronisert",
-  "never": "aldri"
+  "never": "aldri",
+  "copied-to-clipboard": "Kopiert til utklippstavle",
+  "pasted-from-clipboard": "Limt inn fra utklippstavlen",
+  "created-new-transaction": "Opprettet ny transaksjon"
 }

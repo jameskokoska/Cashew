@@ -81,8 +81,10 @@ class WalletEntry extends StatelessWidget {
                             ),
                           ),
                           StreamBuilder<double?>(
-                            stream:
-                                database.watchTotalOfWallet(wallet.walletPk),
+                            stream: database.watchTotalOfWallet(
+                              wallet.walletPk,
+                              allWallets: Provider.of<AllWallets>(context),
+                            ),
                             builder: (context, snapshot) {
                               return CountNumber(
                                 lazyFirstRender: false,

@@ -1,7 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/budgetPage.dart';
@@ -155,7 +154,7 @@ class BudgetContainer extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                bottom: 1.7),
+                                                bottom: 0.7),
                                             child: Container(
                                               child: TextFont(
                                                 text: (appStateSettings[
@@ -218,7 +217,7 @@ class BudgetContainer extends StatelessWidget {
                                           ),
                                           Container(
                                             padding: const EdgeInsets.only(
-                                                bottom: 1.5),
+                                                bottom: 0.7),
                                             child: TextFont(
                                               text: (appStateSettings[
                                                           "showTotalSpentForBudget"]

@@ -1,4 +1,5 @@
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -249,7 +250,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                           );
                         },
                       ),
-                      getWidthNavigationSidebar(context) <= 0
+                      getIsFullScreen(context) == false
                           ? SizedBox.shrink()
                           : Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -274,7 +275,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                 ),
                               ),
                             ),
-                      getWidthNavigationSidebar(context) <= 0
+                      getIsFullScreen(context) == false
                           ? SizedBox.shrink()
                           : Padding(
                               padding: const EdgeInsets.all(8.0),

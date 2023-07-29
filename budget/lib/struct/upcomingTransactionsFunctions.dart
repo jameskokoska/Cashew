@@ -135,7 +135,7 @@ void openPayDebtCreditPopup(BuildContext context, Transaction transaction) {
     description: transaction.type == TransactionSpecialType.credit
         ? "collect-description".tr()
         : transaction.type == TransactionSpecialType.debt
-            ? "settled-description".tr()
+            ? "settle-description".tr()
             : "",
     onCancelLabel: "cancel".tr(),
     onCancel: () {

@@ -528,7 +528,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                           ),
                           onPressed: () {
                             int amountMoreToLoad =
-                                getWidthNavigationSidebar(context) <= 0 ? 3 : 5;
+                                getIsFullScreen(context) == false ? 3 : 5;
                             loadLines(amountLoaded + amountMoreToLoad);
                             setState(() {
                               amountLoaded = amountLoaded + amountMoreToLoad;
@@ -706,7 +706,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
   @override
   Widget build(BuildContext context) {
     return MultiSliver(children: [
-      getWidthNavigationSidebar(context) <= 0
+      getIsFullScreen(context) == false
           ? SliverPadding(
               padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
               sliver: SliverList(
@@ -878,7 +878,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                 ),
                 onTap: () {
                   int amountMoreToLoad =
-                      getWidthNavigationSidebar(context) <= 0 ? 3 : 5;
+                      getIsFullScreen(context) == false ? 3 : 5;
                   widget.loadLines(widget.amountLoaded + amountMoreToLoad);
                   widget
                       .setAmountLoaded(widget.amountLoaded + amountMoreToLoad);

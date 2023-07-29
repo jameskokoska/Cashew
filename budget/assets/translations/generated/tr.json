@@ -371,5 +371,8 @@
   "minutes-ago": "dakika önce",
   "just-now": "Şu anda",
   "synced": "Senkronize",
-  "never": "Asla"
+  "never": "Asla",
+  "copied-to-clipboard": "Panoya kopyalandı",
+  "pasted-from-clipboard": "Panodan yapıştırıldı",
+  "created-new-transaction": "Yeni işlem yarattı"
 }

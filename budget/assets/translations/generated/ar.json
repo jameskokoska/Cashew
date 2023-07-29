@@ -371,5 +371,8 @@
   "minutes-ago": "دقائق مضت",
   "just-now": "الآن",
   "synced": "مزامنة",
-  "never": "أبداً"
+  "never": "أبداً",
+  "copied-to-clipboard": "نسخ إلى الحافظة",
+  "pasted-from-clipboard": "لصق من الحافظة",
+  "created-new-transaction": "أنشأت معاملة جديدة"
 }

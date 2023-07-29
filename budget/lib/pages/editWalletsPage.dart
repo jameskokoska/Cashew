@@ -147,8 +147,8 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                           ),
                           Container(height: 2),
                           StreamBuilder<double?>(
-                            stream:
-                                database.watchTotalOfWallet(wallet.walletPk),
+                            stream: database.watchTotalOfWallet(wallet.walletPk,
+                                allWallets: Provider.of<AllWallets>(context)),
                             builder: (context, snapshot) {
                               return TextFont(
                                 textAlign: TextAlign.left,

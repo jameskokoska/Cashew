@@ -151,7 +151,7 @@
   "saving-tracking": "Dapat kang makatipid",
   "for": "para sa",
   "more-days": "mas maraming araw",
-  "spending-tracking": "Maaari mong patuloy na gumastos",
+  "spending-tracking": "Maaari kang patuloy na gumastos",
   "of-spending": "ng paggasta",
   "of-income": "ng kita",
   "of-expense": "ng gastos",
@@ -351,7 +351,7 @@
   "notification-reminder-18": "Siguraduhin na idagdag ang iyong pang -araw -araw na mga transaksyon sa app.",
   "notification-reminder-19": "Magdagdag ng anumang mga gastos mula ngayon sa iyong tracker ng badyet.",
   "notification-reminder-20": "Itala ang iyong mga transaksyon para sa araw upang makakuha ng isang kumpletong larawan ng iyong mga gawi sa paggastos.",
-  "notification-reminder-21": "Huwag kalimutan na idagdag ang iyong pang -araw -araw na mga transaksyon upang manatili sa track sa iyong badyet.",
+  "notification-reminder-21": "Huwag kalimutan na idagdag ang iyong pang -araw -araw na mga transaksyon upang manatili sa track gamit ang iyong badyet.",
   "notification-reminder-22": "Tumagal ng ilang minuto upang mai -update ang iyong badyet sa mga gastos ngayon.",
   "notification-reminder-23": "Siguraduhin na magdagdag ng anumang mga gastos mula ngayon sa iyong tracker ng badyet.",
   "notification-reminder-24": "Tandaan na i -record ang iyong mga transaksyon para sa araw upang makakuha ng isang kumpletong larawan ng iyong mga gawi sa paggastos.",
@@ -359,7 +359,7 @@
   "notification-reminder-26": "Manatili sa tuktok ng iyong badyet sa pamamagitan ng pagdaragdag ng iyong pang -araw -araw na mga transaksyon sa app.",
   "notification-reminder-title": "Magdagdag ng mga transaksyon",
   "notification-upcoming-transaction-title": "Paparating na transaksyon",
-  "translations-help": "Kung nais mong makatulong sa mga pagsasalin, mangyaring mag -email",
+  "translations-help": "Kung nais mong tumulong sa mga pagsasalin, mangyaring mag -email",
   "no-transactions-for": "Walang mga transaksyon para sa",
   "average-spent": "average na ginugol",
   "select-icon": "Piliin ang icon",
@@ -371,5 +371,8 @@
   "minutes-ago": "mga minuto ang nakaraan",
   "just-now": "Ngayon lang",
   "synced": "Naka -sync",
-  "never": "hindi kailanman"
+  "never": "hindi kailanman",
+  "copied-to-clipboard": "Kinopya sa clipboard",
+  "pasted-from-clipboard": "Na -paste mula sa clipboard",
+  "created-new-transaction": "Nilikha ng bagong transaksyon"
 }
