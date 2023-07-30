@@ -15,7 +15,6 @@ import 'package:budget/pages/notificationsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/ratingPopup.dart';

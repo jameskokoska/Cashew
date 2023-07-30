@@ -10,7 +10,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openSnackbar.dart';
-import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:drift/drift.dart' hide Query, Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';

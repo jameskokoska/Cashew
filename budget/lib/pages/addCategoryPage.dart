@@ -8,7 +8,6 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -37,7 +36,8 @@ class AddCategoryPage extends StatefulWidget {
   _AddCategoryPageState createState() => _AddCategoryPageState();
 }
 
-class _AddCategoryPageState extends State<AddCategoryPage> {
+class _AddCategoryPageState extends State<AddCategoryPage>
+    with SingleTickerProviderStateMixin {
   String? selectedTitle;
   String? selectedImage = "image.png";
   Color? selectedColor;
@@ -49,6 +49,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
   TextEditingController _titleController = TextEditingController();
   bool userAttemptedToChangeTitle = false;
   FocusNode _titleFocusNode = FocusNode();
+  late TabController _incomeTabController =
+      TabController(length: 2, vsync: this);
 
   void setSelectedColor(Color? color) {
     setState(() {
@@ -155,13 +157,19 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
       if (widget.category != null) {
         //We are editing a transaction
         //Fill in the information from the passed in transaction
+
         setState(() {
-          selectedTitle = widget.category!.name;
-          selectedImage = widget.category!.iconName;
+          selectedTitle = widget.category?.name;
+          selectedImage = widget.category?.iconName;
           selectedIncome = widget.category!.income;
           userAttemptedToChangeTitle = true;
         });
         _titleController.text = selectedTitle ?? "";
+        if (widget.category?.income == true) {
+          _incomeTabController.animateTo(1);
+        } else {
+          _incomeTabController.animateTo(0);
+        }
       }
     });
     //Set to false because we can't save until we made some changes
@@ -262,6 +270,73 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   ),
           ),
           listWidgets: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 13),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Material(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .secondaryContainer
+                      .withOpacity(0.2),
+                  child: Theme(
+                    data: ThemeData().copyWith(
+                      splashColor: Theme.of(context).splashColor,
+                    ),
+                    child: TabBar(
+                      splashFactory: Theme.of(context).splashFactory,
+                      controller: _incomeTabController,
+                      onTap: (value) {
+                        if (value == 1)
+                          setSelectedIncome(true);
+                        else
+                          setSelectedIncome(false);
+                      },
+                      dividerColor: Colors.transparent,
+                      indicatorColor: Colors.transparent,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicator: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                      ),
+                      labelColor: getColor(context, "black"),
+                      unselectedLabelColor: Colors.white.withOpacity(0.3),
+                      tabs: [
+                        Tab(
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                "expense".tr(),
+                                style: TextStyle(
+                                  fontSize: 14.5,
+                                  fontFamily: 'Avenir',
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Tab(
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                "income".tr(),
+                                style: TextStyle(
+                                  fontSize: 14.5,
+                                  fontFamily: 'Avenir',
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -291,8 +366,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                   },
                   color: Colors.transparent,
                   child: Container(
-                    height: 136,
-                    padding: const EdgeInsets.only(left: 17, right: 20),
+                    height: 126,
+                    padding: const EdgeInsets.only(left: 13, right: 18),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -312,8 +387,8 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                               iconName: selectedImage,
                               colour: toHexString(selectedColor),
                             ),
-                            size: 60,
-                            sizePadding: 25,
+                            size: 50,
+                            sizePadding: 30,
                             canEditByLongPress: false,
                           ),
                         ),
@@ -336,7 +411,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                               userAttemptedToChangeTitlePassed: true);
                         },
                         padding: EdgeInsets.zero,
-                        fontSize: 34,
+                        fontSize: getIsFullScreen(context) ? 34 : 27,
                         fontWeight: FontWeight.bold,
                         topContentPadding: 40,
                       ),
@@ -353,21 +428,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                 setSelectedColor: setSelectedColor,
               ),
             ),
-            SizedBox(height: 13),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 400),
-                child: IncomeTypeButton(
-                  key: ValueKey(selectedIncome),
-                  onTap: () {
-                    setSelectedIncome(!selectedIncome);
-                  },
-                  selectedIncome: selectedIncome,
-                ),
-              ),
-            ),
-            SizedBox(height: 13),
+            SizedBox(height: 20),
             widgetCategory == null
                 ? SizedBox.shrink()
                 : Padding(
@@ -384,7 +445,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                           Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                   ),
-            SizedBox(height: 23),
+            widgetCategory == null ? SizedBox.shrink() : SizedBox(height: 13),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFont(
@@ -669,39 +730,39 @@ class AddButton extends StatelessWidget {
   }
 }
 
-class IncomeTypeButton extends StatelessWidget {
-  const IncomeTypeButton(
-      {Key? key, required this.onTap, required this.selectedIncome})
-      : super(key: key);
-  final VoidCallback onTap;
-  final bool selectedIncome;
-  @override
-  Widget build(BuildContext context) {
-    return Tappable(
-      onTap: onTap,
-      borderRadius: 10,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-        child: Row(
-          children: [
-            ButtonIcon(
-              onTap: onTap,
-              icon: selectedIncome
-                  ? Icons.exit_to_app_rounded
-                  : Icons.logout_rounded,
-              size: 41,
-            ),
-            SizedBox(width: 15),
-            Expanded(
-              child: TextFont(
-                text: selectedIncome == false ? "expense".tr() : "income".tr(),
-                fontWeight: FontWeight.bold,
-                fontSize: 26,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// class IncomeTypeButton extends StatelessWidget {
+//   const IncomeTypeButton(
+//       {Key? key, required this.onTap, required this.selectedIncome})
+//       : super(key: key);
+//   final VoidCallback onTap;
+//   final bool selectedIncome;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Tappable(
+//       onTap: onTap,
+//       borderRadius: 10,
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+//         child: Row(
+//           children: [
+//             ButtonIcon(
+//               onTap: onTap,
+//               icon: selectedIncome
+//                   ? Icons.exit_to_app_rounded
+//                   : Icons.logout_rounded,
+//               size: 41,
+//             ),
+//             SizedBox(width: 15),
+//             Expanded(
+//               child: TextFont(
+//                 text: selectedIncome == false ? "expense".tr() : "income".tr(),
+//                 fontWeight: FontWeight.bold,
+//                 fontSize: 26,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

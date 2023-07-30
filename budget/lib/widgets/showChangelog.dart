@@ -10,6 +10,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.6
+    Started transaction type actions within add transaction page
+    Transaction entry type buttons changed to be more streamlined
+    Refactored transaction entry
+    Transactions on lent and borrowed page combine when selected
+    Changed income selector in edit category page
+    Fixed spacing in edit category page
+    Text size fixes on smaller screens for adding titles and category names
     < 3.6.5
     All spending total fixes now accounts for currencies
     New line graph intervals and visuals

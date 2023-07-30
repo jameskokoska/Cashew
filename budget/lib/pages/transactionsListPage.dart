@@ -10,7 +10,7 @@ import 'package:budget/widgets/monthSelector.dart';
 import 'package:budget/widgets/cashFlow.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/transactionEntries.dart';
-import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';

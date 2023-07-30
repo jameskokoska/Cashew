@@ -15,7 +15,7 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
-import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';

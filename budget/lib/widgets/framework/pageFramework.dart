@@ -6,7 +6,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
@@ -633,7 +633,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       }),
       // shape: RoundedRectangleBorder(
       //   borderRadius: BorderRadius.vertical(
-      //     bottom: getIsFullScreen(context)
+      //     bottom: getWidthNavigationSidebar(context) > 0
       //         ? Radius.circular(0)
       //         : Radius.circular(15),
       //   ),

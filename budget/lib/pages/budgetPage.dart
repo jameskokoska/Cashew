@@ -18,7 +18,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
-import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';

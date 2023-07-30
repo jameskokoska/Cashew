@@ -203,7 +203,7 @@ class _EditHomePageState extends State<EditHomePage> {
               openBottomSheet(
                 context,
                 PopupFramework(
-                  title: "select-reference".tr(),
+                  title: "select-graph".tr(),
                   child: RadioItems(
                     items: [
                       defaultLabel,

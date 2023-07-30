@@ -14,7 +14,7 @@ import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

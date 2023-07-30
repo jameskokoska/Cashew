@@ -23,6 +23,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -348,7 +349,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     return true;
   }
 
-  Future<Transaction> createTransaction({bool removeShared = false}) async {
+  Transaction createTransaction({bool removeShared = false}) {
     bool paid = widget.transaction != null
         ? widget.transaction!.paid
         : selectedType == null;
@@ -846,20 +847,76 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,
-            child: selectedCategory == null
-                ? SaveBottomButton(
-                    label: "select-category".tr(),
-                    onTap: () {
-                      openBottomSheet(
-                        context,
-                        PopupFramework(
-                          title: "select-category".tr(),
-                          child: SelectCategory(
-                            selectedCategory: selectedCategory,
-                            setSelectedCategory: setSelectedCategory,
-                            skipIfSet: true,
-                            next: () {
-                              if (selectedAmount == null)
+            child: Row(
+              children: [
+                Expanded(
+                  child: SaveBottomButton(
+                    label: widget.transaction != null
+                        ? getTransactionActionNameFromType(createTransaction())
+                            .tr()
+                        : "",
+                    onTap: () {},
+                  ),
+                ),
+                Expanded(
+                  child: selectedCategory == null
+                      ? SaveBottomButton(
+                          label: "select-category".tr(),
+                          onTap: () {
+                            openBottomSheet(
+                              context,
+                              PopupFramework(
+                                title: "select-category".tr(),
+                                child: SelectCategory(
+                                  selectedCategory: selectedCategory,
+                                  setSelectedCategory: setSelectedCategory,
+                                  skipIfSet: true,
+                                  next: () {
+                                    if (selectedAmount == null)
+                                      openBottomSheet(
+                                        context,
+                                        removeAnyContextMenus: true,
+                                        PopupFramework(
+                                          title: "enter-amount".tr(),
+                                          padding: false,
+                                          underTitleSpace: false,
+                                          child: SelectAmount(
+                                            enableWalletPicker: true,
+                                            selectedWallet: selectedWallet,
+                                            setSelectedWallet:
+                                                setSelectedWalletPk,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 18),
+                                            walletPkForCurrency:
+                                                selectedWalletPk,
+                                            onlyShowCurrencyIcon:
+                                                appStateSettings[
+                                                        "selectedWallet"] ==
+                                                    selectedWalletPk,
+                                            amountPassed:
+                                                (selectedAmount ?? "0")
+                                                    .toString(),
+                                            setSelectedAmount:
+                                                setSelectedAmount,
+                                            next: () async {
+                                              await addTransaction();
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                            },
+                                            nextLabel: textAddTransaction,
+                                          ),
+                                        ),
+                                      );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : selectedAmount == null
+                          ? SaveBottomButton(
+                              label: "enter-amount".tr(),
+                              onTap: () {
                                 openBottomSheet(
                                   context,
                                   removeAnyContextMenus: true,
@@ -889,55 +946,20 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     ),
                                   ),
                                 );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                : selectedAmount == null
-                    ? SaveBottomButton(
-                        label: "enter-amount".tr(),
-                        onTap: () {
-                          openBottomSheet(
-                            context,
-                            removeAnyContextMenus: true,
-                            PopupFramework(
-                              title: "enter-amount".tr(),
-                              padding: false,
-                              underTitleSpace: false,
-                              child: SelectAmount(
-                                enableWalletPicker: true,
-                                selectedWallet: selectedWallet,
-                                setSelectedWallet: setSelectedWalletPk,
-                                padding: EdgeInsets.symmetric(horizontal: 18),
-                                walletPkForCurrency: selectedWalletPk,
-                                onlyShowCurrencyIcon:
-                                    appStateSettings["selectedWallet"] ==
-                                        selectedWalletPk,
-                                amountPassed:
-                                    (selectedAmount ?? "0").toString(),
-                                setSelectedAmount: setSelectedAmount,
-                                next: () async {
-                                  await addTransaction();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                nextLabel: textAddTransaction,
-                              ),
+                              },
+                            )
+                          : SaveBottomButton(
+                              label: widget.transaction != null
+                                  ? "save-changes".tr()
+                                  : textAddTransaction ?? "",
+                              onTap: () async {
+                                bool result = await addTransaction();
+                                if (result) Navigator.of(context).pop();
+                              },
                             ),
-                          );
-                        },
-                      )
-                    : SaveBottomButton(
-                        label: widget.transaction != null
-                            ? "save-changes".tr()
-                            : textAddTransaction ?? "",
-                        onTap: () async {
-                          bool result = await addTransaction();
-                          if (result) Navigator.of(context).pop();
-                        },
-                      ),
+                ),
+              ],
+            ),
           ),
           listWidgets: [
             AnimatedContainer(
@@ -954,62 +976,65 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       child: selectedType == TransactionSpecialType.credit ||
                               selectedType == TransactionSpecialType.debt
                           ? Container()
-                          : SizedBox(
-                              height: 45,
-                              child: Material(
-                                color: Colors.black.withOpacity(0.2),
-                                child: Theme(
-                                  data: ThemeData().copyWith(
-                                    splashColor: Theme.of(context).splashColor,
+                          : Material(
+                              color: Colors.black.withOpacity(0.2),
+                              child: Theme(
+                                data: ThemeData().copyWith(
+                                  splashColor: Theme.of(context).splashColor,
+                                ),
+                                child: TabBar(
+                                  splashFactory:
+                                      Theme.of(context).splashFactory,
+                                  controller: _incomeTabController,
+                                  onTap: (value) {
+                                    if (value == 1)
+                                      setSelectedIncome(true);
+                                    else
+                                      setSelectedIncome(false);
+                                  },
+                                  dividerColor: Colors.transparent,
+                                  indicatorColor: Colors.transparent,
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  indicator: BoxDecoration(
+                                    color: categoryColor,
                                   ),
-                                  child: TabBar(
-                                    splashFactory:
-                                        Theme.of(context).splashFactory,
-                                    controller: _incomeTabController,
-                                    onTap: (value) {
-                                      if (value == 1)
-                                        setSelectedIncome(true);
-                                      else
-                                        setSelectedIncome(false);
-                                    },
-                                    dividerColor: Colors.transparent,
-                                    indicatorColor: Colors.transparent,
-                                    indicatorSize: TabBarIndicatorSize.tab,
-                                    indicator: BoxDecoration(
-                                      color: categoryColor,
-                                    ),
-                                    labelColor: getColor(context, "black"),
-                                    unselectedLabelColor:
-                                        Colors.white.withOpacity(0.3),
-                                    tabs: [
-                                      Tab(
+                                  labelColor: getColor(context, "black"),
+                                  unselectedLabelColor:
+                                      Colors.white.withOpacity(0.3),
+                                  tabs: [
+                                    Tab(
+                                      child: Center(
                                         child: Padding(
                                           padding:
-                                              const EdgeInsets.only(top: 5.0),
+                                              const EdgeInsets.only(top: 5),
                                           child: Text(
                                             "expense".tr(),
                                             style: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 14.5,
                                               fontFamily: 'Avenir',
                                             ),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
-                                      Tab(
+                                    ),
+                                    Tab(
+                                      child: Center(
                                         child: Padding(
                                           padding:
-                                              const EdgeInsets.only(top: 5.0),
+                                              const EdgeInsets.only(top: 5),
                                           child: Text(
                                             "income".tr(),
                                             style: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 14.5,
                                               fontFamily: 'Avenir',
                                             ),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
