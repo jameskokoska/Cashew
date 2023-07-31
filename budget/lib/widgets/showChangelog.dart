@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.7
+    No longer asks to restore a backup, instead it automatically restores the 'sync' backups before launched
+    Streamlined login and restore backup process
     < 3.6.6
     Started transaction type actions within add transaction page
     Transaction entry type buttons changed to be more streamlined

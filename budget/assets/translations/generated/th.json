@@ -51,6 +51,7 @@
   "edit-budgets": "แก้ไขงบประมาณ",
   "edit-categories": "แก้ไขหมวดหมู่",
   "edit-titles": "แก้ไขชื่อเรื่อง",
+  "edit-title": "แก้ไขหัวข้อ",
   "select-categories-to-watch": "เลือกหมวดหมู่ที่จะดู",
   "watch-categories": "ดูหมวดหมู่",
   "upcoming": "ที่กำลังจะมาถึง",
@@ -329,7 +330,7 @@
   "deleted-transaction": "ธุรกรรมที่ถูกลบ",
   "daily-notifications": "การแจ้งเตือนทุกวัน",
   "daily-notifications-description": "หากแอปไม่ได้เปิด",
-  "alert-time": "เปลี่ยนเวลา",
+  "alert-time": "เวลาเตือน",
   "upcoming-transactions": "ธุรกรรมที่กำลังจะมาถึง",
   "notification-reminder-1": "อย่าลืมเพิ่มธุรกรรมตั้งแต่วันนี้!",
   "notification-reminder-2": "เพิ่มธุรกรรมประจำวันของคุณเพื่อติดตาม",
@@ -374,5 +375,10 @@
   "never": "ไม่เคย",
   "copied-to-clipboard": "คัดลอกไปยังคลิปบอร์ด",
   "pasted-from-clipboard": "วางจากคลิปบอร์ด",
-  "created-new-transaction": "สร้างธุรกรรมใหม่"
+  "created-new-transaction": "สร้างธุรกรรมใหม่",
+  "select-graph": "เลือกกราฟ",
+  "logout": "ออกจากระบบ",
+  "backup-found": "พบการสำรองข้อมูล",
+  "backup-found-description": "คุณต้องการกู้คืนการสำรองข้อมูลหรือไม่?",
+  "restore": "คืนค่า"
 }

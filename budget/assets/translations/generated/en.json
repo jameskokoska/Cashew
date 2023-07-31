@@ -51,6 +51,7 @@
   "edit-budgets": "Edit Budgets",
   "edit-categories": "Edit Categories",
   "edit-titles": "Edit Titles",
+  "edit-title": "Edit Title",
   "select-categories-to-watch": "Select Categories to Watch",
   "watch-categories": "Watch Categories",
   "upcoming": "Upcoming",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Deleted transaction",
   "daily-notifications": "Daily Notifications",
   "daily-notifications-description": "If the app was not opened",
-  "alert-time": "Alter Time",
+  "alert-time": "Alert Time",
   "upcoming-transactions": "Upcoming Transactions",
   "notification-reminder-1": "Don't forget to add transactions from today!",
   "notification-reminder-2": "Add your daily transactions to stay on track.",
@@ -374,5 +375,10 @@
   "never": "never",
   "copied-to-clipboard": "Copied to clipboard",
   "pasted-from-clipboard": "Pasted from clipboard",
-  "created-new-transaction": "Created New Transaction"
+  "created-new-transaction": "Created New Transaction",
+  "select-graph": "Select Graph",
+  "logout": "Logout",
+  "backup-found": "Backup Found",
+  "backup-found-description": "Would you like to restore a backup?",
+  "restore": "Restore"
 }

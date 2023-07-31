@@ -128,7 +128,7 @@ class AccountsPageState extends State<AccountsPage> {
                       SizedBox(height: 15),
                       IntrinsicWidth(
                         child: Button(
-                          label: "Logout",
+                          label: "logout".tr(),
                           onTap: () async {
                             final result = await signOutGoogle();
                             if (result == true) {

@@ -51,6 +51,7 @@
   "edit-budgets": "予算を編集します",
   "edit-categories": "カテゴリを編集します",
   "edit-titles": "タイトルを編集します",
+  "edit-title": "タイトルを編集します",
   "select-categories-to-watch": "視聴するカテゴリを選択します",
   "watch-categories": "カテゴリを見る",
   "upcoming": "今後",
@@ -329,7 +330,7 @@
   "deleted-transaction": "削除されたトランザクション",
   "daily-notifications": "毎日の通知",
   "daily-notifications-description": "アプリが開かれていない場合",
-  "alert-time": "時間を変更します",
+  "alert-time": "アラート時間",
   "upcoming-transactions": "今後のトランザクション",
   "notification-reminder-1": "今日から取引を追加することを忘れないでください！",
   "notification-reminder-2": "毎日のトランザクションを追加して、順調に進みます。",
@@ -374,5 +375,10 @@
   "never": "一度もない",
   "copied-to-clipboard": "クリップボードにコピーされました",
   "pasted-from-clipboard": "クリップボードから貼り付けられました",
-  "created-new-transaction": "新しいトランザクションを作成しました"
+  "created-new-transaction": "新しいトランザクションを作成しました",
+  "select-graph": "グラフを選択します",
+  "logout": "ログアウト",
+  "backup-found": "バックアップが見つかりました",
+  "backup-found-description": "バックアップを復元しますか？",
+  "restore": "戻す"
 }

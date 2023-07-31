@@ -51,6 +51,7 @@
   "edit-budgets": "Bütçeleri Düzenle",
   "edit-categories": "Kategorileri Düzenle",
   "edit-titles": "Başlıkları Düzenle",
+  "edit-title": "Başlık Düzenle",
   "select-categories-to-watch": "İzlenecek Kategoriler Seçin",
   "watch-categories": "Kategorileri İzleyin",
   "upcoming": "Yaklaşan",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Silinen İşlem",
   "daily-notifications": "Günlük Bildirimler",
   "daily-notifications-description": "Uygulama açılmamışsa",
-  "alert-time": "Zamanı Değiştirin",
+  "alert-time": "Uyarı süresi",
   "upcoming-transactions": "Yaklaşan işlemler",
   "notification-reminder-1": "Bugünden işlem eklemeyi unutmayın!",
   "notification-reminder-2": "Yolda kalmak için günlük işlemlerinizi ekleyin.",
@@ -374,5 +375,10 @@
   "never": "Asla",
   "copied-to-clipboard": "Panoya kopyalandı",
   "pasted-from-clipboard": "Panodan yapıştırıldı",
-  "created-new-transaction": "Yeni işlem yarattı"
+  "created-new-transaction": "Yeni işlem yarattı",
+  "select-graph": "Grafiği seçin",
+  "logout": "Çıkış Yap",
+  "backup-found": "Yedek bulundu",
+  "backup-found-description": "Bir yedeklemeyi geri yüklemek ister misiniz?",
+  "restore": "Eski haline getirmek"
 }

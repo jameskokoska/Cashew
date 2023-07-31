@@ -51,6 +51,7 @@
   "edit-budgets": "Upravit rozpočty",
   "edit-categories": "Úpravy kategorií",
   "edit-titles": "Upravit tituly",
+  "edit-title": "Upravit název",
   "select-categories-to-watch": "Vyberte kategorie, které chcete sledovat",
   "watch-categories": "Sledujte kategorie",
   "upcoming": "Nadcházející",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Smazaná transakce",
   "daily-notifications": "Denní oznámení",
   "daily-notifications-description": "Pokud aplikace nebyla otevřena",
-  "alert-time": "Změnit čas",
+  "alert-time": "Varovný čas",
   "upcoming-transactions": "Nadcházející transakce",
   "notification-reminder-1": "Nezapomeňte přidat transakce ze dnešního dne!",
   "notification-reminder-2": "Přidejte své denní transakce, abyste zůstali na trati.",
@@ -374,5 +375,10 @@
   "never": "nikdy",
   "copied-to-clipboard": "Zkopírováno do schránky",
   "pasted-from-clipboard": "Vloženo ze schránky",
-  "created-new-transaction": "Vytvořená nová transakce"
+  "created-new-transaction": "Vytvořená nová transakce",
+  "select-graph": "Vyberte graf",
+  "logout": "Odhlásit se",
+  "backup-found": "Nalezena záloha",
+  "backup-found-description": "Chcete obnovit zálohu?",
+  "restore": "Obnovit"
 }

@@ -51,6 +51,7 @@
   "edit-budgets": "బడ్జెట్లను సవరించండి",
   "edit-categories": "వర్గాలను సవరించండి",
   "edit-titles": "శీర్షికలను సవరించండి",
+  "edit-title": "శీర్షికను సవరించండి",
   "select-categories-to-watch": "చూడటానికి వర్గాలను ఎంచుకోండి",
   "watch-categories": "వర్గాలను చూడండి",
   "upcoming": "రాబోయే",
@@ -329,7 +330,7 @@
   "deleted-transaction": "లావాదేవీ తొలగించబడింది",
   "daily-notifications": "రోజువారీ నోటిఫికేషన్లు",
   "daily-notifications-description": "అనువర్తనం తెరవకపోతే",
-  "alert-time": "సమయం మార్చండి",
+  "alert-time": "హెచ్చరిక సమయం",
   "upcoming-transactions": "రాబోయే లావాదేవీలు",
   "notification-reminder-1": "ఈ రోజు నుండి లావాదేవీలను జోడించడం మర్చిపోవద్దు!",
   "notification-reminder-2": "ట్రాక్‌లో ఉండటానికి మీ రోజువారీ లావాదేవీలను జోడించండి.",
@@ -374,5 +375,10 @@
   "never": "ఎప్పుడూ",
   "copied-to-clipboard": "క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది",
   "pasted-from-clipboard": "క్లిప్‌బోర్డ్ నుండి అతికించబడింది",
-  "created-new-transaction": "కొత్త లావాదేవీని సృష్టించింది"
+  "created-new-transaction": "కొత్త లావాదేవీని సృష్టించింది",
+  "select-graph": "గ్రాఫ్ ఎంచుకోండి",
+  "logout": "లాగ్అవుట్",
+  "backup-found": "బ్యాకప్ కనుగొనబడింది",
+  "backup-found-description": "మీరు బ్యాకప్‌ను పునరుద్ధరించాలనుకుంటున్నారా?",
+  "restore": "పునరుద్ధరించండి"
 }

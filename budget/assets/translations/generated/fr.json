@@ -51,6 +51,7 @@
   "edit-budgets": "Modifier les budgets",
   "edit-categories": "Modifier les catégories",
   "edit-titles": "Modifier les titres",
+  "edit-title": "Modifier le titre",
   "select-categories-to-watch": "Sélectionnez les catégories à regarder",
   "watch-categories": "Catégories de surveillance",
   "upcoming": "A venir",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Transaction supprimée",
   "daily-notifications": "Notifications quotidiennes",
   "daily-notifications-description": "Si l'application n'a pas été ouverte",
-  "alert-time": "Altérer le temps",
+  "alert-time": "Temps d'alerte",
   "upcoming-transactions": "Transactions à venir",
   "notification-reminder-1": "N'oubliez pas d'ajouter des transactions à partir d'aujourd'hui!",
   "notification-reminder-2": "Ajoutez vos transactions quotidiennes pour rester sur la bonne voie.",
@@ -374,5 +375,10 @@
   "never": "jamais",
   "copied-to-clipboard": "Copié dans le presse-papier",
   "pasted-from-clipboard": "Collé dans le presse-papiers",
-  "created-new-transaction": "Créé une nouvelle transaction"
+  "created-new-transaction": "Créé une nouvelle transaction",
+  "select-graph": "Sélectionner le graphique",
+  "logout": "Se déconnecter",
+  "backup-found": "Sauvegarde trouvée",
+  "backup-found-description": "Souhaitez-vous restaurer une sauvegarde?",
+  "restore": "Restaurer"
 }

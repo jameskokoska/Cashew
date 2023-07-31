@@ -51,6 +51,7 @@
   "edit-budgets": "Επεξεργασία προϋπολογισμών",
   "edit-categories": "Επεξεργασία κατηγοριών",
   "edit-titles": "Επεξεργασία τίτλων",
+  "edit-title": "Επεξεργασία τίτλου",
   "select-categories-to-watch": "Επιλέξτε κατηγορίες για παρακολούθηση",
   "watch-categories": "Κατηγορίες παρακολούθησης",
   "upcoming": "Ανερχόμενος",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Διαγραμμένη συναλλαγή",
   "daily-notifications": "Καθημερινές ειδοποιήσεις",
   "daily-notifications-description": "Εάν η εφαρμογή δεν άνοιξε",
-  "alert-time": "Μεταβολή του χρόνου",
+  "alert-time": "Προειδοποίηση",
   "upcoming-transactions": "Επερχόμενες συναλλαγές",
   "notification-reminder-1": "Μην ξεχάσετε να προσθέσετε συναλλαγές από σήμερα!",
   "notification-reminder-2": "Προσθέστε τις καθημερινές συναλλαγές σας για να παραμείνετε σε καλό δρόμο.",
@@ -373,6 +374,11 @@
   "synced": "Συγχρονισμένος",
   "never": "ποτέ",
   "copied-to-clipboard": "Αντιγράφηκε στο πρόχειρο",
-  "pasted-from-clipboard": "Επικολλημένο από πρόχειρο",
-  "created-new-transaction": "Δημιουργήθηκε νέα συναλλαγή"
+  "pasted-from-clipboard": "Επικολλημένη από πρόχειρο",
+  "created-new-transaction": "Δημιουργήθηκε νέα συναλλαγή",
+  "select-graph": "Επιλέξτε γραφήματα",
+  "logout": "Αποσύνδεση",
+  "backup-found": "Βρέθηκε αντίγραφο ασφαλείας",
+  "backup-found-description": "Θέλετε να επαναφέρετε ένα αντίγραφο ασφαλείας;",
+  "restore": "Επαναφέρω"
 }

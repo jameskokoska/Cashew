@@ -51,6 +51,7 @@
   "edit-budgets": "Chỉnh sửa ngân sách",
   "edit-categories": "Chỉnh sửa danh mục",
   "edit-titles": "Chỉnh sửa tiêu đề",
+  "edit-title": "Chỉnh sửa tiêu đề",
   "select-categories-to-watch": "Chọn danh mục để xem",
   "watch-categories": "Xem danh mục",
   "upcoming": "Sắp tới",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Đã xóa giao dịch",
   "daily-notifications": "Thông báo hàng ngày",
   "daily-notifications-description": "Nếu ứng dụng không được mở",
-  "alert-time": "Thay đổi thời gian",
+  "alert-time": "Thời gian cảnh báo",
   "upcoming-transactions": "Giao dịch sắp tới",
   "notification-reminder-1": "Đừng quên thêm giao dịch từ hôm nay!",
   "notification-reminder-2": "Thêm các giao dịch hàng ngày của bạn để theo dõi.",
@@ -361,7 +362,7 @@
   "notification-upcoming-transaction-title": "Giao dịch sắp tới do",
   "translations-help": "Nếu bạn muốn giúp các bản dịch, vui lòng gửi email",
   "no-transactions-for": "Không có giao dịch cho",
-  "average-spent": "chi tiêu trung bình",
+  "average-spent": "Trung bình chi tiêu",
   "select-icon": "Chọn Biểu tượng",
   "1-day-ago": "1 ngày trước",
   "1-hour-ago": "1 giờ trước",
@@ -374,5 +375,10 @@
   "never": "không bao giờ",
   "copied-to-clipboard": "Sao chép vào clipboard",
   "pasted-from-clipboard": "Dán từ clipboard",
-  "created-new-transaction": "Tạo giao dịch mới"
+  "created-new-transaction": "Tạo giao dịch mới",
+  "select-graph": "Chọn đồ thị",
+  "logout": "Đăng xuất",
+  "backup-found": "Sao lưu tìm thấy",
+  "backup-found-description": "Bạn có muốn khôi phục một bản sao lưu không?",
+  "restore": "Khôi phục"
 }

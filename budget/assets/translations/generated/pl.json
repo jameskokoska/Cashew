@@ -51,6 +51,7 @@
   "edit-budgets": "Edytuj budżety",
   "edit-categories": "Edytuj kategorie",
   "edit-titles": "Edytuj tytuły",
+  "edit-title": "Edytuj tytuł",
   "select-categories-to-watch": "Wybierz kategorie do oglądania",
   "watch-categories": "Oglądaj kategorie",
   "upcoming": "Nadchodzące",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Usunięta transakcja",
   "daily-notifications": "Codzienne powiadomienia",
   "daily-notifications-description": "Jeśli aplikacja nie została otwarta",
-  "alert-time": "Zmień czas",
+  "alert-time": "Czas ostrzegania",
   "upcoming-transactions": "Nadchodzące transakcje",
   "notification-reminder-1": "Nie zapomnij dodać transakcji z dziś!",
   "notification-reminder-2": "Dodaj swoje codzienne transakcje, aby pozostać na dobrej drodze.",
@@ -351,7 +352,7 @@
   "notification-reminder-18": "Pamiętaj, aby dodać swoje codzienne transakcje do aplikacji.",
   "notification-reminder-19": "Dodaj wszelkie wydatki z dziś do śledzenia budżetu.",
   "notification-reminder-20": "Zapisz swoje transakcje na cały dzień, aby uzyskać pełne zdjęcie swoich nawyków związanych z wydatkami.",
-  "notification-reminder-21": "Nie zapomnij dodać swoich codziennych transakcji, aby pozostać na dobrej drodze do budżetu.",
+  "notification-reminder-21": "Nie zapomnij dodać codziennych transakcji, aby pozostać na dobrej drodze do budżetu.",
   "notification-reminder-22": "Poświęć kilka minut, aby zaktualizować budżet na dzisiejsze wydatki.",
   "notification-reminder-23": "Pamiętaj, aby dodać wszelkie wydatki z dziś do śledzenia budżetu.",
   "notification-reminder-24": "Pamiętaj, aby nagrać swoje transakcje na cały dzień, aby uzyskać pełne zdjęcie swoich nawyków związanych z wydatkami.",
@@ -374,5 +375,10 @@
   "never": "nigdy",
   "copied-to-clipboard": "Skopiowane do schowka",
   "pasted-from-clipboard": "Wklejone ze schowka",
-  "created-new-transaction": "Stworzył nową transakcję"
+  "created-new-transaction": "Stworzył nową transakcję",
+  "select-graph": "Wybierz wykres",
+  "logout": "Wyloguj",
+  "backup-found": "Znaleziono kopię zapasową",
+  "backup-found-description": "Czy chciałbyś przywrócić kopię zapasową?",
+  "restore": "Przywrócić"
 }

@@ -51,6 +51,7 @@
   "edit-budgets": "बजेट संपादित करा",
   "edit-categories": "श्रेणी संपादित करा",
   "edit-titles": "शीर्षके संपादित करा",
+  "edit-title": "शीर्षक संपादित करा",
   "select-categories-to-watch": "पाहण्यासाठी श्रेणी निवडा",
   "watch-categories": "श्रेणी पहा",
   "upcoming": "आगामी",
@@ -329,7 +330,7 @@
   "deleted-transaction": "हटविला व्यवहार",
   "daily-notifications": "दैनंदिन सूचना",
   "daily-notifications-description": "अ‍ॅप उघडला नसेल तर",
-  "alert-time": "वेळ बदल",
+  "alert-time": "सावध वेळ",
   "upcoming-transactions": "आगामी व्यवहार",
   "notification-reminder-1": "आजपासून व्यवहार जोडणे विसरू नका!",
   "notification-reminder-2": "ट्रॅकवर राहण्यासाठी आपले दैनंदिन व्यवहार जोडा.",
@@ -374,5 +375,10 @@
   "never": "कधीही नाही",
   "copied-to-clipboard": "क्लिपबोर्डवर कॉपी केली",
   "pasted-from-clipboard": "क्लिपबोर्ड वरून पेस्ट केलेले",
-  "created-new-transaction": "नवीन व्यवहार तयार केले"
+  "created-new-transaction": "नवीन व्यवहार तयार केले",
+  "select-graph": "आलेख निवडा",
+  "logout": "बाहेर पडणे",
+  "backup-found": "बॅकअप सापडला",
+  "backup-found-description": "आपण बॅकअप पुनर्संचयित करू इच्छिता?",
+  "restore": "पुनर्संचयित करा"
 }

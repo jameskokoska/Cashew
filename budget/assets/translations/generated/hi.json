@@ -51,6 +51,7 @@
   "edit-budgets": "बजट संपादित करें",
   "edit-categories": "श्रेणियां संपादित करें",
   "edit-titles": "शीर्षक संपादित करें",
+  "edit-title": "शीर्षक संपादित करें",
   "select-categories-to-watch": "देखने के लिए श्रेणियों का चयन करें",
   "watch-categories": "देखो श्रेणियां",
   "upcoming": "आगामी",
@@ -329,7 +330,7 @@
   "deleted-transaction": "हटाए गए लेन -देन",
   "daily-notifications": "दैनिक सूचनाएँ",
   "daily-notifications-description": "अगर ऐप नहीं खोला गया था",
-  "alert-time": "समय बदलें",
+  "alert-time": "सतर्क समय",
   "upcoming-transactions": "आगामी लेनदेन",
   "notification-reminder-1": "आज से लेनदेन जोड़ना न भूलें!",
   "notification-reminder-2": "ट्रैक पर रहने के लिए अपने दैनिक लेनदेन जोड़ें।",
@@ -374,5 +375,10 @@
   "never": "कभी नहीँ",
   "copied-to-clipboard": "क्लिपबोर्ड पर नकल",
   "pasted-from-clipboard": "क्लिपबोर्ड से चिपकाया गया",
-  "created-new-transaction": "नया लेनदेन बनाया"
+  "created-new-transaction": "नया लेनदेन बनाया",
+  "select-graph": "ग्राफ का चयन करें",
+  "logout": "लॉग आउट",
+  "backup-found": "बैकअप मिला",
+  "backup-found-description": "क्या आप बैकअप को पुनर्स्थापित करना चाहेंगे?",
+  "restore": "पुनर्स्थापित करना"
 }

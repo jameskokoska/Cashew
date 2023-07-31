@@ -51,6 +51,7 @@
   "edit-budgets": "બજેટ સંપાદિત કરો",
   "edit-categories": "શ્રેણીઓ સંપાદિત કરો",
   "edit-titles": "શીર્ષકો સંપાદિત કરો",
+  "edit-title": "ચીપ -હક",
   "select-categories-to-watch": "જોવા માટે કેટેગરીઝ પસંદ કરો",
   "watch-categories": "કેટેગરીઝ જુઓ",
   "upcoming": "આગામી",
@@ -329,7 +330,7 @@
   "deleted-transaction": "કા deleted ી નાખેલ લેવડદેવડ",
   "daily-notifications": "દૈનિક સૂચનાઓ",
   "daily-notifications-description": "જો એપ્લિકેશન ખોલવામાં આવી ન હતી",
-  "alert-time": "ફેરફારનો સમય",
+  "alert-time": "ચેતવણીનો સમય",
   "upcoming-transactions": "આગામી વ્યવહાર",
   "notification-reminder-1": "આજથી વ્યવહાર ઉમેરવાનું ભૂલશો નહીં!",
   "notification-reminder-2": "ટ્રેક પર રહેવા માટે તમારા દૈનિક વ્યવહારો ઉમેરો.",
@@ -351,7 +352,7 @@
   "notification-reminder-18": "એપ્લિકેશનમાં તમારા દૈનિક વ્યવહાર ઉમેરવાની ખાતરી કરો.",
   "notification-reminder-19": "આજથી તમારા બજેટ ટ્રેકરમાં કોઈપણ ખર્ચ ઉમેરો.",
   "notification-reminder-20": "તમારી ખર્ચની ટેવનું સંપૂર્ણ ચિત્ર મેળવવા માટે દિવસ માટે તમારા વ્યવહારો રેકોર્ડ કરો.",
-  "notification-reminder-21": "તમારા બજેટ સાથે ટ્રેક પર રહેવા માટે તમારા દૈનિક વ્યવહારો ઉમેરવાનું ભૂલશો નહીં.",
+  "notification-reminder-21": "તમારા બજેટ સાથે ટ્રેક પર રહેવા માટે તમારા દૈનિક વ્યવહાર ઉમેરવાનું ભૂલશો નહીં.",
   "notification-reminder-22": "આજના ખર્ચ સાથે તમારા બજેટને અપડેટ કરવા માટે થોડી મિનિટો લો.",
   "notification-reminder-23": "તમારા બજેટ ટ્રેકરમાં આજથી કોઈપણ ખર્ચ ઉમેરવાની ખાતરી કરો.",
   "notification-reminder-24": "તમારી ખર્ચની ટેવનું સંપૂર્ણ ચિત્ર મેળવવા માટે દિવસ માટે તમારા વ્યવહારો રેકોર્ડ કરવાનું ભૂલશો નહીં.",
@@ -374,5 +375,10 @@
   "never": "ક્યારેય",
   "copied-to-clipboard": "ક્લિપબોર્ડ પર ક ied પિ કરેલ",
   "pasted-from-clipboard": "ક્લિપબોર્ડથી પેસ્ટ",
-  "created-new-transaction": "નવો વ્યવહાર બનાવ્યો"
+  "created-new-transaction": "નવો વ્યવહાર બનાવ્યો",
+  "select-graph": "આલેખ પસંદ કરો",
+  "logout": "લૉગ આઉટ",
+  "backup-found": "બેકઅપ મળી",
+  "backup-found-description": "શું તમે બેકઅપ પુન restore સ્થાપિત કરવા માંગો છો?",
+  "restore": "પુનઃસ્થાપિત"
 }

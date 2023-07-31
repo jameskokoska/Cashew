@@ -160,16 +160,23 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
-      await runAllCloudFunctions(context);
+
+      if (entireAppLoaded == false) {
+        await runAllCloudFunctions(context);
+      }
+
       database.deleteWanderingTransactions();
 
       entireAppLoaded = true;
+
+      print("Entire app loaded");
 
       database.watchAllForAutoSync().listen((event) {
         if (runningCloudFunctions == false) {
           createSyncBackup(changeMadeSync: true);
         }
       });
+
       if (kIsWeb) {
         // On web, disable the browser's context menu since this example uses a custom
         // Flutter-rendered context menu.
