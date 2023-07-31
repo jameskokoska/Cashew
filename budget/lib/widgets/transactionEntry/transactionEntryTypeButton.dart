@@ -56,22 +56,25 @@ class TransactionEntryTypeButton extends StatelessWidget {
   }
 }
 
-void openTransactionActionFromType(
-    BuildContext context, Transaction transaction) {
+Future openTransactionActionFromType(
+  BuildContext context,
+  Transaction transaction, {
+  Function? runBefore,
+}) {
   if (transaction.paid == false &&
       (transaction.type == TransactionSpecialType.credit ||
           transaction.type == TransactionSpecialType.debt)) {
-    openUnpayDebtCreditPopup(context, transaction);
+    return openUnpayDebtCreditPopup(context, transaction, runBefore: runBefore);
   } else if (transaction.paid == true &&
       (transaction.type == TransactionSpecialType.credit ||
           transaction.type == TransactionSpecialType.debt)) {
-    openPayDebtCreditPopup(context, transaction);
+    return openPayDebtCreditPopup(context, transaction, runBefore: runBefore);
   } else if (transaction.paid == true) {
-    openUnpayPopup(context, transaction);
+    return openUnpayPopup(context, transaction, runBefore: runBefore);
   } else if (transaction.skipPaid == true) {
-    openRemoveSkipPopup(context, transaction);
+    return openRemoveSkipPopup(context, transaction, runBefore: runBefore);
   } else {
-    openPayPopup(context, transaction);
+    return openPayPopup(context, transaction, runBefore: runBefore);
   }
 }
 

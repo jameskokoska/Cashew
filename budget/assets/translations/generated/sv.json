@@ -51,6 +51,7 @@
   "edit-budgets": "Redigera budgetar",
   "edit-categories": "Redigera kategorier",
   "edit-titles": "Redigera titlar",
+  "edit-title": "Redigera titel",
   "select-categories-to-watch": "Välj kategorier att titta på",
   "watch-categories": "Titta på kategorier",
   "upcoming": "Kommande",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Raderad transaktion",
   "daily-notifications": "Dagliga aviseringar",
   "daily-notifications-description": "Om appen inte öppnades",
-  "alert-time": "Ändra tid",
+  "alert-time": "Varningstid",
   "upcoming-transactions": "Kommande transaktioner",
   "notification-reminder-1": "Glöm inte att lägga till transaktioner från idag!",
   "notification-reminder-2": "Lägg till dina dagliga transaktioner för att hålla dig på rätt spår.",
@@ -374,5 +375,6 @@
   "never": "aldrig",
   "copied-to-clipboard": "Kopierad till urklipp",
   "pasted-from-clipboard": "Klistra in från urklipp",
-  "created-new-transaction": "Skapad ny transaktion"
+  "created-new-transaction": "Skapad ny transaktion",
+  "select-graph": "Välj graf"
 }

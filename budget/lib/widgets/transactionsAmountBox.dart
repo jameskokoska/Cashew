@@ -6,8 +6,12 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:provider/provider.dart';
+
+// If you just added an upcoming transaction and mark it as paid, it will not show up here
+// This is because the query transactionsAmountStream needs to be updated to have the new DateTime.now(),
+// as it won't catch the new transaction amount!
 
 class TransactionsAmountBox extends StatelessWidget {
   const TransactionsAmountBox(

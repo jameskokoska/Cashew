@@ -1,5 +1,5 @@
 name: budget
-description: A new Flutter project.
+description: A budget and financial tracking application designed for you
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 3.6.6+118
+version: 3.6.8+119
 
 environment:
   sdk: ">= 3.0.0"
@@ -61,7 +61,7 @@ dependencies:
   pausable_timer: ^1.0.0+6
   animated_fractionally_sized_box: ^2.0.1
   flutter_local_notifications: ^14.0.0+1
-  system_theme: ^2.0.0
+  system_theme: ^2.3.1
   firebase_core: ^2.7.1
   firebase_auth: ^4.2.2
   cloud_firestore: ^4.4.4
@@ -82,7 +82,7 @@ dependencies:
   device_preview: ^1.1.0
   scrollable_positioned_list: ^0.3.8
   easy_localization: ^3.0.2
-  simple_shadow: ^0.3.1
+  # simple_shadow: ^0.3.1
   quick_actions: ^1.0.5
   # feature_discovery: ^0.14.1
   

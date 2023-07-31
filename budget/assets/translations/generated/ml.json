@@ -51,6 +51,7 @@
   "edit-budgets": "ബജറ്റുകൾ എഡിറ്റുചെയ്യുക",
   "edit-categories": "വിഭാഗങ്ങൾ എഡിറ്റുചെയ്യുക",
   "edit-titles": "ശീർഷകങ്ങൾ എഡിറ്റുചെയ്യുക",
+  "edit-title": "ശീർഷകം എഡിറ്റുചെയ്യുക",
   "select-categories-to-watch": "കാണുന്നതിന് വിഭാഗങ്ങൾ തിരഞ്ഞെടുക്കുക",
   "watch-categories": "കാറ്റുകളെ കാണുക",
   "upcoming": "വരാനിരിക്കുന്ന",
@@ -329,7 +330,7 @@
   "deleted-transaction": "ഇല്ലാതാക്കിയ ഇടപാട്",
   "daily-notifications": "ദൈനംദിന അറിയിപ്പുകൾ",
   "daily-notifications-description": "അപ്ലിക്കേഷൻ തുറന്നിട്ടില്ലെങ്കിൽ",
-  "alert-time": "സമയം മാറ്റുക",
+  "alert-time": "അലേർട്ട് സമയം",
   "upcoming-transactions": "വരാനിരിക്കുന്ന ഇടപാടുകൾ",
   "notification-reminder-1": "ഇന്ന് മുതൽ ഇടപാടുകൾ ചേർക്കാൻ മറക്കരുത്!",
   "notification-reminder-2": "ട്രാക്കിൽ തുടരാൻ നിങ്ങളുടെ ദൈനംദിന ഇടപാടുകൾ ചേർക്കുക.",
@@ -374,5 +375,6 @@
   "never": "ഒരിക്കലും",
   "copied-to-clipboard": "ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി",
   "pasted-from-clipboard": "ക്ലിപ്പ്ബോർഡിൽ നിന്ന് ഒട്ടിച്ചു",
-  "created-new-transaction": "പുതിയ ഇടപാട് സൃഷ്ടിച്ചു"
+  "created-new-transaction": "പുതിയ ഇടപാട് സൃഷ്ടിച്ചു",
+  "select-graph": "ഗ്രാഫ് തിരഞ്ഞെടുക്കുക"
 }

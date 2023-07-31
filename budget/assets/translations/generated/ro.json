@@ -51,6 +51,7 @@
   "edit-budgets": "Editați bugetele",
   "edit-categories": "Editați categorii",
   "edit-titles": "Editați titluri",
+  "edit-title": "Editați titlul",
   "select-categories-to-watch": "Selectați categorii de urmărit",
   "watch-categories": "Urmăriți categoriile",
   "upcoming": "Viitoare",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Tranzacția ștersă",
   "daily-notifications": "Notificări zilnice",
   "daily-notifications-description": "Dacă aplicația nu a fost deschisă",
-  "alert-time": "Modifica timpul",
+  "alert-time": "Timp de alertă",
   "upcoming-transactions": "Tranzacții viitoare",
   "notification-reminder-1": "Nu uitați să adăugați tranzacții de astăzi!",
   "notification-reminder-2": "Adăugați tranzacțiile zilnice pentru a rămâne pe cale.",
@@ -374,5 +375,6 @@
   "never": "nu",
   "copied-to-clipboard": "Copiat în clipboard",
   "pasted-from-clipboard": "Lipit din clipboard",
-  "created-new-transaction": "A creat o nouă tranzacție"
+  "created-new-transaction": "A creat o nouă tranzacție",
+  "select-graph": "Selectați grafic"
 }

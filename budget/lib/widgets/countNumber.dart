@@ -173,14 +173,16 @@ class _CountNumberState extends State<CountNumber> {
     if (lazyFirstRender && widget.initialCount == widget.count) {
       lazyFirstRender = false;
       return widget.textBuilder(
-        widget.initialCount,
+        double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)),
       );
     }
 
     Widget builtWidget = TweenAnimationBuilder<int>(
       tween: IntTween(
         begin: (previousAmount * pow(10, decimals)).toInt(),
-        end: (widget.count * pow(10, decimals)).toInt(),
+        end: (double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)) *
+                pow(10, decimals))
+            .toInt(),
       ),
       duration: widget.duration,
       curve: widget.curve,

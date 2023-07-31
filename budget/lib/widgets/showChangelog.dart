@@ -10,6 +10,17 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.8
+    Transaction amounts round properly - when using CountUp
+    Transaction entry converted amount matches set decimals of other wallet
+    Amount is lighter color is it does not count towards total
+    New belonging to budget tag in transaction entry
+    Removed icon shadows
+    Added background color to category icons in UI
+    < 3.6.7
+    New add transaction layout for large screens
+    Added website meta tags
+    Removed system color on web causing issues on Mac
     < 3.6.6
     Started transaction type actions within add transaction page
     Transaction entry type buttons changed to be more streamlined

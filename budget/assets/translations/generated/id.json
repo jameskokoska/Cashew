@@ -51,6 +51,7 @@
   "edit-budgets": "Edit Anggaran",
   "edit-categories": "Edit kategori",
   "edit-titles": "Edit judul",
+  "edit-title": "Edit judul",
   "select-categories-to-watch": "Pilih kategori untuk ditonton",
   "watch-categories": "Tonton kategori",
   "upcoming": "Mendatang",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Transaksi yang dihapus",
   "daily-notifications": "Pemberitahuan harian",
   "daily-notifications-description": "Jika aplikasi tidak dibuka",
-  "alert-time": "Ubah waktu",
+  "alert-time": "Waktu peringatan",
   "upcoming-transactions": "Transaksi yang akan datang",
   "notification-reminder-1": "Jangan lupa untuk menambahkan transaksi dari hari ini!",
   "notification-reminder-2": "Tambahkan transaksi harian Anda agar tetap di jalur.",
@@ -374,5 +375,6 @@
   "never": "tidak pernah",
   "copied-to-clipboard": "Disalin ke clipboard",
   "pasted-from-clipboard": "Ditempelkan dari clipboard",
-  "created-new-transaction": "Membuat transaksi baru"
+  "created-new-transaction": "Membuat transaksi baru",
+  "select-graph": "Pilih Grafik"
 }

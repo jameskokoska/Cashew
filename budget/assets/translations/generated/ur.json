@@ -51,6 +51,7 @@
   "edit-budgets": "بجٹ میں ترمیم کریں",
   "edit-categories": "زمرے میں ترمیم کریں",
   "edit-titles": "عنوانات میں ترمیم کریں",
+  "edit-title": "عنوان میں ترمیم کریں",
   "select-categories-to-watch": "دیکھنے کے لئے زمرے منتخب کریں",
   "watch-categories": "زمرے دیکھیں",
   "upcoming": "آنے والا",
@@ -329,8 +330,8 @@
   "deleted-transaction": "حذف شدہ لین دین",
   "daily-notifications": "روزانہ کی اطلاعات",
   "daily-notifications-description": "اگر ایپ کو نہیں کھولا گیا تھا",
-  "alert-time": "وقت کو تبدیل کریں",
-  "upcoming-transactions": "آنے والے لین دین",
+  "alert-time": "الرٹ ٹائم",
+  "upcoming-transactions": "آئندہ لین دین",
   "notification-reminder-1": "آج سے لین دین شامل کرنا نہ بھولیں!",
   "notification-reminder-2": "ٹریک پر رہنے کے لئے اپنے روزانہ کے لین دین شامل کریں۔",
   "notification-reminder-3": "آج کے اخراجات کے ساتھ اپنے بجٹ کو اپ ڈیٹ کریں۔",
@@ -374,5 +375,6 @@
   "never": "کبھی نہیں",
   "copied-to-clipboard": "کلپ بورڈ میں کاپی کیا",
   "pasted-from-clipboard": "کلپ بورڈ سے چسپاں کیا گیا",
-  "created-new-transaction": "نیا لین دین پیدا کیا"
+  "created-new-transaction": "نیا لین دین پیدا کیا",
+  "select-graph": "گراف منتخب کریں"
 }

@@ -4,7 +4,6 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -301,20 +300,22 @@ class _AddWalletPageState extends State<AddWalletPage> {
               },
               icon: Icon(Icons.info),
             ),
-            widget.wallet != null && widget.wallet!.walletPk != 0
-                ? IconButton(
-                    padding: EdgeInsets.all(15),
-                    tooltip: "Delete wallet",
-                    onPressed: () {
-                      deleteWalletPopup(context, widget.wallet!,
-                          afterDelete: () {
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
-                      });
-                    },
-                    icon: Icon(Icons.delete_rounded),
-                  )
-                : SizedBox.shrink()
+            ...(widget.wallet != null && widget.wallet!.walletPk != 0
+                ? [
+                    IconButton(
+                      padding: EdgeInsets.all(15),
+                      tooltip: "Delete wallet",
+                      onPressed: () {
+                        deleteWalletPopup(context, widget.wallet!,
+                            afterDelete: () {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                        });
+                      },
+                      icon: Icon(Icons.delete_rounded),
+                    )
+                  ]
+                : [])
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,

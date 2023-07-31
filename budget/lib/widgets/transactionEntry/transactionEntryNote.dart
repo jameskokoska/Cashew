@@ -35,7 +35,7 @@ class TransactionEntryNote extends StatelessWidget {
                         ? getColor(context, "shadowColorLight")
                             .withOpacity(0.12)
                         : getColor(context, "shadowColorLight")
-                            .withOpacity(0.3),
+                            .withOpacity(0.1),
                     blurRadius: 6,
                     offset: Offset(0, 4),
                     spreadRadius: 4,
@@ -51,7 +51,8 @@ class TransactionEntryNote extends StatelessWidget {
                 : Duration(milliseconds: 100),
             message: transaction.note,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+              padding:
+                  const EdgeInsets.only(left: 5, right: 3, top: 10, bottom: 10),
               child: Icon(
                 Icons.sticky_note_2_rounded,
                 size: 22,

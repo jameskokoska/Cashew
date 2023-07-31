@@ -75,7 +75,7 @@ Future openBottomSheet(
       //         width: 40,
       //         height: 5,
       //         decoration: BoxDecoration(
-      //           borderRadius: BorderRadius.circular(100),
+      //           shape: BoxShape.circle,
       //           color: Colors.red,
       //         ),
       //       ),

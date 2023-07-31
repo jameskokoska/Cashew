@@ -7,7 +7,6 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:system_theme/system_theme.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 class SelectColor extends StatefulWidget {
@@ -157,15 +156,14 @@ class _SelectColorState extends State<SelectColor> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Column(
         children: [
-          widget.useSystemColorPrompt == true
+          widget.useSystemColorPrompt == true && supportsSystemColor()
               ? SettingsContainerSwitch(
                   enableBorderRadius: true,
                   title: "use-system-color".tr(),
                   onSwitched: (value) async {
                     if (value == true) {
-                      await SystemTheme.accentColor.load();
-                      Color accentColor = SystemTheme.accentColor.accent;
-                      updateSettings("accentColor", toHexString(accentColor),
+                      updateSettings(
+                          "accentColor", await getAccentColorSystemString(),
                           updateGlobalState: true);
                       generateColors();
                     } else {

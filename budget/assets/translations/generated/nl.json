@@ -51,6 +51,7 @@
   "edit-budgets": "Budgetten bewerken",
   "edit-categories": "Categorieën bewerken",
   "edit-titles": "Bewerk titels",
+  "edit-title": "Titel bewerken",
   "select-categories-to-watch": "Selecteer categorieën om te bekijken",
   "watch-categories": "Bekijk categorieën",
   "upcoming": "Aankomend",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Verwijderde transactie",
   "daily-notifications": "Dagelijkse meldingen",
   "daily-notifications-description": "Als de app niet is geopend",
-  "alert-time": "De tijd veranderen",
+  "alert-time": "Alert tijd",
   "upcoming-transactions": "Aankomende transacties",
   "notification-reminder-1": "Vergeet niet om transacties van vandaag toe te voegen!",
   "notification-reminder-2": "Voeg uw dagelijkse transacties toe om op koers te blijven.",
@@ -374,5 +375,6 @@
   "never": "nooit",
   "copied-to-clipboard": "Gekopieerd naar het klembord",
   "pasted-from-clipboard": "Geplakt van klembord",
-  "created-new-transaction": "Nieuwe transactie gecreëerd"
+  "created-new-transaction": "Nieuwe transactie gecreëerd",
+  "select-graph": "Selecteer grafiek"
 }

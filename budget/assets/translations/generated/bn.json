@@ -51,6 +51,7 @@
   "edit-budgets": "বাজেট সম্পাদনা করুন",
   "edit-categories": "বিভাগগুলি সম্পাদনা করুন",
   "edit-titles": "শিরোনাম সম্পাদনা করুন",
+  "edit-title": "শিরোনাম সম্পাদনা",
   "select-categories-to-watch": "দেখার জন্য বিভাগগুলি নির্বাচন করুন",
   "watch-categories": "বিভাগ দেখুন",
   "upcoming": "আসন্ন",
@@ -329,7 +330,7 @@
   "deleted-transaction": "মোছা লেনদেন",
   "daily-notifications": "দৈনিক বিজ্ঞপ্তি",
   "daily-notifications-description": "অ্যাপটি খোলা না থাকলে",
-  "alert-time": "সময় পরিবর্তন",
+  "alert-time": "সতর্ক সময়",
   "upcoming-transactions": "আসন্ন লেনদেন",
   "notification-reminder-1": "আজ থেকে লেনদেন যুক্ত করতে ভুলবেন না!",
   "notification-reminder-2": "ট্র্যাকে থাকতে আপনার প্রতিদিনের লেনদেন যুক্ত করুন।",
@@ -374,5 +375,6 @@
   "never": "কখনও না",
   "copied-to-clipboard": "ক্লিপবোর্ডে অনুলিপি করা হয়েছে",
   "pasted-from-clipboard": "ক্লিপবোর্ড থেকে আটকানো",
-  "created-new-transaction": "নতুন লেনদেন তৈরি করেছে"
+  "created-new-transaction": "নতুন লেনদেন তৈরি করেছে",
+  "select-graph": "গ্রাফ নির্বাচন করুন"
 }

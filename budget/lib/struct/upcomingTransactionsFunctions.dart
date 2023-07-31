@@ -66,8 +66,12 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
   }
 }
 
-void openPayPopup(BuildContext context, Transaction transaction) {
-  openPopup(
+Future openPayPopup(
+  BuildContext context,
+  Transaction transaction, {
+  Function? runBefore,
+}) async {
+  return await openPopup(
     context,
     icon: Icons.check_circle_rounded,
     title: (transaction.income ? "deposit".tr() : "pay".tr()) + "?",
@@ -76,11 +80,11 @@ void openPayPopup(BuildContext context, Transaction transaction) {
         : "pay-description".tr(),
     onCancelLabel: "cancel".tr().tr(),
     onCancel: () {
-      Navigator.pop(context);
+      Navigator.pop(context, false);
     },
     onExtraLabel: "skip".tr(),
     onExtra: () async {
-      Navigator.pop(context);
+      if (runBefore != null) await runBefore();
       Transaction transactionNew = transaction.copyWith(
         skipPaid: true,
         dateCreated: DateTime.now(),
@@ -88,11 +92,12 @@ void openPayPopup(BuildContext context, Transaction transaction) {
       );
       await database.createOrUpdateTransaction(transactionNew);
       await createNewSubscriptionTransaction(context, transaction);
-      setUpcomingNotifications(context);
+      await setUpcomingNotifications(context);
+      Navigator.pop(context, true);
     },
     onSubmitLabel: transaction.income ? "deposit".tr() : "pay".tr(),
     onSubmit: () async {
-      Navigator.pop(context);
+      if (runBefore != null) await runBefore();
       double amount = transaction.amount;
       if (transaction.amount == 0) {
         amount = await openBottomSheet(
@@ -117,13 +122,18 @@ void openPayPopup(BuildContext context, Transaction transaction) {
       );
       await database.createOrUpdateTransaction(transactionNew);
       await createNewSubscriptionTransaction(context, transaction);
-      setUpcomingNotifications(context);
+      await setUpcomingNotifications(context);
+      Navigator.pop(context, true);
     },
   );
 }
 
-void openPayDebtCreditPopup(BuildContext context, Transaction transaction) {
-  openPopup(
+Future openPayDebtCreditPopup(
+  BuildContext context,
+  Transaction transaction, {
+  Function? runBefore,
+}) async {
+  return await openPopup(
     context,
     icon: Icons.check_circle_rounded,
     title: (transaction.type == TransactionSpecialType.credit
@@ -139,7 +149,7 @@ void openPayDebtCreditPopup(BuildContext context, Transaction transaction) {
             : "",
     onCancelLabel: "cancel".tr(),
     onCancel: () {
-      Navigator.pop(context);
+      Navigator.pop(context, false);
     },
     onSubmitLabel: transaction.type == TransactionSpecialType.credit
         ? "collect".tr()
@@ -147,46 +157,58 @@ void openPayDebtCreditPopup(BuildContext context, Transaction transaction) {
             ? "settle".tr()
             : "",
     onSubmit: () async {
-      Navigator.pop(context);
+      if (runBefore != null) await runBefore();
       Transaction transactionNew = transaction.copyWith(
         //we don't want it to count towards the total - net is zero now
         paid: false,
       );
       await database.createOrUpdateTransaction(transactionNew);
+      Navigator.pop(context, true);
     },
   );
 }
 
-void openRemoveSkipPopup(BuildContext context, Transaction transaction) {
-  openPopup(context,
-      icon: Icons.unpublished_rounded,
-      title: "remove-skip".tr() + "?",
-      description: "remove-skip-description".tr(),
-      onCancelLabel: "cancel".tr(),
-      onCancel: () {
-        Navigator.pop(context);
-      },
-      onSubmitLabel: "remove".tr(),
-      onSubmit: () async {
-        Navigator.pop(context);
-        Transaction transactionNew = transaction.copyWith(skipPaid: false);
-        await database.createOrUpdateTransaction(transactionNew);
-        setUpcomingNotifications(context);
-      });
+Future openRemoveSkipPopup(
+  BuildContext context,
+  Transaction transaction, {
+  Function? runBefore,
+}) async {
+  return await openPopup(
+    context,
+    icon: Icons.unpublished_rounded,
+    title: "remove-skip".tr() + "?",
+    description: "remove-skip-description".tr(),
+    onCancelLabel: "cancel".tr(),
+    onCancel: () {
+      Navigator.pop(context, false);
+    },
+    onSubmitLabel: "remove".tr(),
+    onSubmit: () async {
+      if (runBefore != null) await runBefore();
+
+      Transaction transactionNew = transaction.copyWith(skipPaid: false);
+      await database.createOrUpdateTransaction(transactionNew);
+      await setUpcomingNotifications(context);
+      Navigator.pop(context, true);
+    },
+  );
 }
 
-void openUnpayPopup(BuildContext context, Transaction transaction) {
-  openPopup(context,
+Future openUnpayPopup(
+  BuildContext context,
+  Transaction transaction, {
+  Function? runBefore,
+}) async {
+  return await openPopup(context,
       icon: Icons.unpublished_rounded,
       title: "remove-payment".tr() + "?",
       description: "remove-payment-description".tr(),
       onCancelLabel: "cancel".tr(),
       onCancel: () {
-        Navigator.pop(context);
+        Navigator.pop(context, false);
       },
       onSubmitLabel: "remove".tr(),
       onSubmit: () async {
-        Navigator.pop(context);
         await database.deleteTransaction(transaction.transactionPk);
         Transaction transactionNew = transaction.copyWith(
           paid: false,
@@ -196,29 +218,37 @@ void openUnpayPopup(BuildContext context, Transaction transaction) {
           sharedStatus: Value(null),
         );
         await database.createOrUpdateTransaction(transactionNew);
-        setUpcomingNotifications(context);
+        await setUpcomingNotifications(context);
+        Navigator.pop(context, true);
       });
 }
 
-void openUnpayDebtCreditPopup(BuildContext context, Transaction transaction) {
-  openPopup(context,
-      icon: Icons.unpublished_rounded,
-      title: "remove-payment".tr() + "?",
-      description: "remove-payment-description".tr(),
-      onCancelLabel: "cancel".tr(),
-      onCancel: () {
-        Navigator.pop(context);
-      },
-      onSubmitLabel: "remove".tr(),
-      onSubmit: () async {
-        Navigator.pop(context);
-        Transaction transactionNew = transaction.copyWith(
-          //we want it to count towards the total now - net is not zero
-          paid: true,
-        );
-        await database.createOrUpdateTransaction(transactionNew,
-            updateSharedEntry: false);
-      });
+Future openUnpayDebtCreditPopup(
+  BuildContext context,
+  Transaction transaction, {
+  Function? runBefore,
+}) async {
+  return await openPopup(
+    context,
+    icon: Icons.unpublished_rounded,
+    title: "remove-payment".tr() + "?",
+    description: "remove-payment-description".tr(),
+    onCancelLabel: "cancel".tr(),
+    onCancel: () {
+      Navigator.pop(context, false);
+    },
+    onSubmitLabel: "remove".tr(),
+    onSubmit: () async {
+      if (runBefore != null) await runBefore();
+      Transaction transactionNew = transaction.copyWith(
+        //we want it to count towards the total now - net is not zero
+        paid: true,
+      );
+      await database.createOrUpdateTransaction(transactionNew,
+          updateSharedEntry: false);
+      Navigator.pop(context, true);
+    },
+  );
 }
 
 Future<bool> markSubscriptionsAsPaid() async {

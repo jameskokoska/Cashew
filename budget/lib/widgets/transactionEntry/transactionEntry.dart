@@ -7,17 +7,16 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 
-import '../util/infiniteRotationAnimation.dart';
 import 'swipeToSelectTransactions.dart';
 import 'transactionEntryAmount.dart';
 import 'transactionEntryNote.dart';
+import 'associatedBudgetLabel.dart';
 
 ValueNotifier<Map<String, List<int>>> globalSelectedID =
     ValueNotifier<Map<String, List<int>>>({});
@@ -177,9 +176,7 @@ class TransactionEntry extends StatelessWidget {
                       curve: Curves.easeInOutCubicEmphasized,
                       padding: EdgeInsets.only(
                         left: selected ? 12 - 2 : 10 - 2,
-                        right: transaction.type == null
-                            ? (selected ? 12 : 10)
-                            : (selected ? 12 - 5 : 10 - 5),
+                        right: selected ? 12 : 10,
                         top: selected && isTransactionBeforeSelected == false
                             ? 6
                             : 4,
@@ -222,18 +219,18 @@ class TransactionEntry extends StatelessWidget {
                             },
                             tintColor: categoryTintColor,
                           ),
-
                           transaction.type == null
                               ? SizedBox(
                                   width: 10,
                                 )
                               : AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 600),
+                                  duration: Duration(milliseconds: 800),
                                   child: Tooltip(
-                                    key: ValueKey(transaction.paid),
+                                    key: ValueKey(transaction.paid.toString() +
+                                        transaction.type.toString() +
+                                        transaction.transactionPk.toString()),
                                     message: getTransactionActionNameFromType(
-                                            transaction)
-                                        .tr(),
+                                        transaction),
                                     child: GestureDetector(
                                       onTap: () {
                                         openTransactionActionFromType(
@@ -291,225 +288,73 @@ class TransactionEntry extends StatelessWidget {
                                   ),
                                 ),
                           Expanded(
-                              child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Builder(builder: (contextBuilder) {
-                                double fontSize =
-                                    getIsFullScreen(context) == false
-                                        ? 15.5
-                                        : 16.5;
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 3),
-                                  child: transaction.name != ""
-                                      ? TextFont(
-                                          text:
-                                              transaction.name.capitalizeFirst,
-                                          fontSize: fontSize,
-                                        )
-                                      : category == null
-                                          ? StreamBuilder<TransactionCategory>(
-                                              stream: database
-                                                  .getCategory(
-                                                      transaction.categoryFk)
-                                                  .$1,
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return TextFont(
-                                                    text: snapshot.data!.name,
-                                                    fontSize: fontSize,
-                                                  );
-                                                }
-                                                return Container();
-                                              },
-                                            )
-                                          : TextFont(
-                                              text: category!.name,
-                                              fontSize: fontSize,
-                                            ),
-                                );
-                              }),
-                              transaction.sharedReferenceBudgetPk != null &&
-                                      transaction.sharedKey == null &&
-                                      transaction.sharedStatus == null
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(top: 1.0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                transaction.sharedReferenceBudgetPk ==
-                                                        null
-                                                    ? SizedBox.shrink()
-                                                    : Expanded(
-                                                        child: StreamBuilder<
-                                                            Budget>(
-                                                          stream: database
-                                                              .getBudget(transaction
-                                                                  .sharedReferenceBudgetPk!),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            if (snapshot
-                                                                .hasData) {
-                                                              return Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            3),
-                                                                child: TextFont(
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  text: "for"
-                                                                          .tr()
-                                                                          .capitalizeFirst +
-                                                                      " " +
-                                                                      snapshot
-                                                                          .data!
-                                                                          .name,
-                                                                  fontSize:
-                                                                      12.5,
-                                                                  textColor: getColor(
-                                                                          context,
-                                                                          "black")
-                                                                      .withOpacity(
-                                                                          0.7),
-                                                                ),
-                                                              );
-                                                            }
-                                                            return Container();
-                                                          },
-                                                        ),
-                                                      ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : SizedBox.shrink(),
-                              transaction.sharedKey != null ||
-                                      transaction.sharedStatus ==
-                                          SharedStatus.waiting
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(top: 1.0),
-                                      child: Row(
-                                        children: [
-                                          transaction.sharedStatus ==
-                                                  SharedStatus.waiting
-                                              ? Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 2.0),
-                                                  child:
-                                                      InfiniteRotationAnimation(
-                                                    duration: Duration(
-                                                        milliseconds: 5000),
-                                                    child: Icon(
-                                                      transaction.sharedStatus ==
-                                                              SharedStatus
-                                                                  .waiting
-                                                          ? Icons.sync_rounded
-                                                          : transaction
-                                                                      .transactionOwnerEmail !=
-                                                                  appStateSettings[
-                                                                      "currentUserEmail"]
-                                                              ? Icons
-                                                                  .arrow_circle_down_rounded
-                                                              : Icons
-                                                                  .arrow_circle_up_rounded,
-                                                      size: 14,
-                                                      color: getColor(
-                                                              context, "black")
-                                                          .withOpacity(0.7),
-                                                    ),
-                                                  ),
-                                                )
-                                              : Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 2),
-                                                  child: Icon(
-                                                    transaction.transactionOwnerEmail !=
-                                                            appStateSettings[
-                                                                "currentUserEmail"]
-                                                        ? Icons
-                                                            .arrow_circle_down_rounded
-                                                        : Icons
-                                                            .arrow_circle_up_rounded,
-                                                    size: 14,
-                                                    color: getColor(
-                                                            context, "black")
-                                                        .withOpacity(0.7),
-                                                  ),
-                                                ),
-                                          SizedBox(width: 2),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                transaction.sharedReferenceBudgetPk ==
-                                                        null
-                                                    ? SizedBox.shrink()
-                                                    : Expanded(
-                                                        child: StreamBuilder<
-                                                            Budget>(
-                                                          stream: database
-                                                              .getBudget(transaction
-                                                                  .sharedReferenceBudgetPk!),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            if (snapshot
-                                                                .hasData) {
-                                                              return TextFont(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                text: (transaction.transactionOwnerEmail.toString() ==
-                                                                            appStateSettings[
-                                                                                "currentUserEmail"]
-                                                                        ? getMemberNickname(appStateSettings[
-                                                                            "currentUserEmail"])
-                                                                        : transaction.sharedStatus == SharedStatus.waiting &&
-                                                                                (transaction.transactionOwnerEmail == appStateSettings["currentUserEmail"] || transaction.transactionOwnerEmail == null)
-                                                                            ? getMemberNickname(appStateSettings["currentUserEmail"])
-                                                                            : getMemberNickname(transaction.transactionOwnerEmail.toString())) +
-                                                                    " for " +
-                                                                    snapshot.data!.name,
-                                                                fontSize: 12.5,
-                                                                textColor: getColor(
-                                                                        context,
-                                                                        "black")
-                                                                    .withOpacity(
-                                                                        0.7),
-                                                              );
-                                                            }
-                                                            return Container();
-                                                          },
-                                                        ),
-                                                      ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : SizedBox.shrink()
-                            ],
-                          )),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Builder(builder: (contextBuilder) {
+                                  double fontSize =
+                                      getIsFullScreen(context) == false
+                                          ? 15.5
+                                          : 16.5;
+                                  return Padding(
+                                    padding: const EdgeInsets.only(left: 3),
+                                    child: transaction.name != ""
+                                        ? TextFont(
+                                            text: transaction
+                                                .name.capitalizeFirst,
+                                            fontSize: fontSize,
+                                          )
+                                        : category == null
+                                            ? StreamBuilder<
+                                                TransactionCategory>(
+                                                stream: database
+                                                    .getCategory(
+                                                        transaction.categoryFk)
+                                                    .$1,
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return TextFont(
+                                                      text: snapshot.data!.name,
+                                                      fontSize: fontSize,
+                                                    );
+                                                  }
+                                                  return Container();
+                                                },
+                                              )
+                                            : TextFont(
+                                                text: category!.name,
+                                                fontSize: fontSize,
+                                              ),
+                                  );
+                                }),
+                                transaction.sharedReferenceBudgetPk != null &&
+                                        transaction.sharedKey == null &&
+                                        transaction.sharedStatus == null
+                                    ? AssociatedBudgetLabel(
+                                        transaction: transaction)
+                                    : SizedBox.shrink(),
+                                transaction.sharedKey != null ||
+                                        transaction.sharedStatus ==
+                                            SharedStatus.waiting
+                                    ? SharedBudgetLabel(
+                                        transaction: transaction)
+                                    : SizedBox.shrink()
+                              ],
+                            ),
+                          ),
                           SizedBox(
                             width: 7,
                           ),
-                          // TransactionEntryTypeButton(
-                          //   transaction: transaction,
-                          // ),
+                          getIsFullScreen(context)
+                              ? TransactionEntryTypeButton(
+                                  transaction: transaction,
+                                )
+                              : SizedBox.shrink(),
                           TransactionEntryNote(
                             transaction: transaction,
                             iconColor: iconColor,
                           ),
-
                           TransactionEntryAmount(
                             transaction: transaction,
                             showOtherCurrency: showOtherCurrency,

@@ -4,6 +4,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:provider/provider.dart';
 import '../colors.dart';
-import 'package:simple_shadow/simple_shadow.dart';
 
 class CategoryEntry extends StatelessWidget {
   CategoryEntry({
@@ -369,19 +369,33 @@ class CategoryIconPercent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
-      Padding(
-        padding: EdgeInsets.all(insetPadding / 2),
-        child: SimpleShadow(
-          child: Image.asset(
-            "assets/categories/" + (category.iconName ?? ""),
-            width: size - 3,
-          ),
-          opacity: 0.8,
-          color: HexColor(category.colour),
-          offset: Offset(0, 0),
-          sigma: 1,
+      // Padding(
+      //   padding: EdgeInsets.all(insetPadding / 2),
+      //   child: SimpleShadow(
+      //     child: Image.asset(
+      //       "assets/categories/" + (category.iconName ?? ""),
+      //       width: size - 3,
+      //     ),
+      //     opacity: 0.8,
+      //     color: HexColor(category.colour),
+      //     offset: Offset(0, 0),
+      //     sigma: 1,
+      //   ),
+      // ),
+      Container(
+        decoration: BoxDecoration(
+          color: HexColor(category.colour).withOpacity(0.5),
+          shape: BoxShape.circle,
+        ),
+        height: size + insetPadding,
+        width: size + insetPadding,
+        padding: EdgeInsets.all(10),
+        child: CacheCategoryIcon(
+          iconName: category.iconName ?? "",
+          size: size,
         ),
       ),
+
       AnimatedSwitcher(
         duration: Duration(milliseconds: 300),
         child: Container(
@@ -391,8 +405,10 @@ class CategoryIconPercent extends StatelessWidget {
           child: AnimatedCircularProgress(
             percent: percent / 100,
             backgroundColor: progressBackgroundColor,
-            foregroundColor: HexColor(category.colour,
-                defaultColor: Theme.of(context).colorScheme.primary),
+            foregroundColor: darkenPastel(
+                HexColor(category.colour,
+                    defaultColor: Theme.of(context).colorScheme.primary),
+                amount: 0.25),
           ),
         ),
       ),

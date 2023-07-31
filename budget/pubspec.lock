@@ -1253,14 +1253,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.0"
-  simple_shadow:
-    dependency: "direct main"
-    description:
-      name: simple_shadow
-      sha256: "0c0872b2baffaf12fc91416643785a88081120bac61d704f3f9dbd7e712360fa"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1373,10 +1365,10 @@ packages:
     dependency: "direct main"
     description:
       name: system_theme
-      sha256: "1592228ae9872fd14201aa20a5268c0373dd412910071660bc13ada392d14b62"
+      sha256: "1f208db140a3d1e1eac2034b54920d95699c1534df576ced44b3312c5de3975f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.1"
   system_theme_web:
     dependency: transitive
     description:

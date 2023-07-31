@@ -51,6 +51,7 @@
   "edit-budgets": "Rediger budsjetter",
   "edit-categories": "Rediger kategorier",
   "edit-titles": "Rediger titler",
+  "edit-title": "Rediger tittel",
   "select-categories-to-watch": "Velg kategorier du vil se",
   "watch-categories": "Se kategorier",
   "upcoming": "Kommende",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Slettet transaksjon",
   "daily-notifications": "Daglige varsler",
   "daily-notifications-description": "Hvis appen ikke ble åpnet",
-  "alert-time": "Endre tid",
+  "alert-time": "Varslingstid",
   "upcoming-transactions": "Kommende transaksjoner",
   "notification-reminder-1": "Ikke glem å legge til transaksjoner fra i dag!",
   "notification-reminder-2": "Legg til dine daglige transaksjoner for å holde deg på sporet.",
@@ -374,5 +375,6 @@
   "never": "aldri",
   "copied-to-clipboard": "Kopiert til utklippstavle",
   "pasted-from-clipboard": "Limt inn fra utklippstavlen",
-  "created-new-transaction": "Opprettet ny transaksjon"
+  "created-new-transaction": "Opprettet ny transaksjon",
+  "select-graph": "Velg graf"
 }

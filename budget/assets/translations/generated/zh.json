@@ -51,6 +51,7 @@
   "edit-budgets": "编辑预算",
   "edit-categories": "编辑类别",
   "edit-titles": "编辑标题",
+  "edit-title": "编辑标题",
   "select-categories-to-watch": "选择要观看的类别",
   "watch-categories": "观看类别",
   "upcoming": "即将到来",
@@ -329,7 +330,7 @@
   "deleted-transaction": "删除交易",
   "daily-notifications": "每日通知",
   "daily-notifications-description": "如果该应用未打开",
-  "alert-time": "改变时间",
+  "alert-time": "机敏时间",
   "upcoming-transactions": "即将进行的交易",
   "notification-reminder-1": "不要忘记添加今天的交易！",
   "notification-reminder-2": "添加您的日常交易以保持正轨。",
@@ -374,5 +375,6 @@
   "never": "绝不",
   "copied-to-clipboard": "复制到剪贴板",
   "pasted-from-clipboard": "从剪贴板粘贴",
-  "created-new-transaction": "创建了新事务"
+  "created-new-transaction": "创建了新事务",
+  "select-graph": "选择图"
 }

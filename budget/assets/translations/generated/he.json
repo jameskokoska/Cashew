@@ -51,6 +51,7 @@
   "edit-budgets": "ערוך תקציבים",
   "edit-categories": "ערוך קטגוריות",
   "edit-titles": "ערוך כותרות",
+  "edit-title": "עריכה כותרת",
   "select-categories-to-watch": "בחר קטגוריות לצפייה",
   "watch-categories": "צפו בקטגוריות",
   "upcoming": "צפוי",
@@ -329,7 +330,7 @@
   "deleted-transaction": "עסקה שנמחקו",
   "daily-notifications": "התראות יומיות",
   "daily-notifications-description": "אם האפליקציה לא נפתחה",
-  "alert-time": "לשנות זמן",
+  "alert-time": "זמן התראה",
   "upcoming-transactions": "עסקאות צפויות",
   "notification-reminder-1": "אל תשכח להוסיף עסקאות מהיום!",
   "notification-reminder-2": "הוסף את העסקאות היומיות שלך כדי להישאר על המסלול.",
@@ -350,7 +351,7 @@
   "notification-reminder-17": "זה סוף היום, האם הוספת את העסקאות שלך?",
   "notification-reminder-18": "הקפד להוסיף את העסקאות היומיות שלך לאפליקציה.",
   "notification-reminder-19": "הוסף כל הוצאות מהיום לגשש התקציב שלך.",
-  "notification-reminder-20": "רשמו את העסקאות שלכם ליום כדי לקבל תמונה מלאה של הרגלי ההוצאות שלכם.",
+  "notification-reminder-20": "רשמו את העסקאות שלכם ליום כדי לקבל תמונה שלמה של הרגלי ההוצאות שלכם.",
   "notification-reminder-21": "אל תשכח להוסיף את העסקאות היומיות שלך כדי להישאר על המסלול עם התקציב שלך.",
   "notification-reminder-22": "קח מספר דקות כדי לעדכן את התקציב שלך בהוצאות של היום.",
   "notification-reminder-23": "הקפד להוסיף הוצאות מהיום לגשש התקציב שלך.",
@@ -374,5 +375,6 @@
   "never": "לעולם לא",
   "copied-to-clipboard": "הועתק ללוח",
   "pasted-from-clipboard": "מודבק מהלוח",
-  "created-new-transaction": "יצר עסקה חדשה"
+  "created-new-transaction": "יצר עסקה חדשה",
+  "select-graph": "בחר גרף"
 }

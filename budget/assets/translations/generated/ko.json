@@ -51,6 +51,7 @@
   "edit-budgets": "예산 편집",
   "edit-categories": "카테고리 편집",
   "edit-titles": "제목 편집",
+  "edit-title": "제목 편집",
   "select-categories-to-watch": "볼 카테고리를 선택하십시오",
   "watch-categories": "카테고리보기",
   "upcoming": "다가오는",
@@ -329,7 +330,7 @@
   "deleted-transaction": "삭제 된 거래",
   "daily-notifications": "매일 알림",
   "daily-notifications-description": "앱이 열리지 않은 경우",
-  "alert-time": "변경 시간",
+  "alert-time": "경고 시간",
   "upcoming-transactions": "다가오는 거래",
   "notification-reminder-1": "오늘부터 거래를 추가하는 것을 잊지 마십시오!",
   "notification-reminder-2": "매일 거래를 추가하여 추적을 유지하십시오.",
@@ -347,7 +348,7 @@
   "notification-reminder-14": "오늘의 비용으로 예산을 업데이트하십시오.",
   "notification-reminder-15": "트랜잭션을 기록하십시오.",
   "notification-reminder-16": "거래를 추가하여 예산을 유지하십시오.",
-  "notification-reminder-17": "하루의 끝입니다. 거래를 추가 했습니까?",
+  "notification-reminder-17": "하루가 끝났습니다. 거래를 추가 했습니까?",
   "notification-reminder-18": "매일 거래를 앱에 추가하십시오.",
   "notification-reminder-19": "오늘부터 예산 추적기에 비용을 추가하십시오.",
   "notification-reminder-20": "지출 습관에 대한 완전한 그림을 얻으려면 하루 종일 거래를 기록하십시오.",
@@ -374,5 +375,6 @@
   "never": "절대",
   "copied-to-clipboard": "클립 보드에 복사",
   "pasted-from-clipboard": "클립 보드에서 붙여 넣었습니다",
-  "created-new-transaction": "새로운 거래를 만들었습니다"
+  "created-new-transaction": "새로운 거래를 만들었습니다",
+  "select-graph": "그래프를 선택하십시오"
 }

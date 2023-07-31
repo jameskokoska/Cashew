@@ -610,6 +610,18 @@ List<BoxShadow> boxShadowSharp(context) {
   ];
 }
 
+List<BoxShadow> boxShadowCategoryPercent(context) {
+  if (appStateSettings["disableShadows"] == true) return [];
+  return [
+    BoxShadow(
+      color: getColor(context, "shadowColor").withOpacity(0.4),
+      blurRadius: 3,
+      offset: Offset(0, 0),
+      spreadRadius: 2,
+    ),
+  ];
+}
+
 List<BoxShadow>? boxShadowCheck(list) {
   if (appStateSettings["disableShadows"] == true) return null;
   if (appStateSettings["batterySaver"]) return null;

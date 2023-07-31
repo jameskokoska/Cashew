@@ -1,14 +1,10 @@
-import 'dart:ui';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/src/animation/curves.dart';
 import 'package:flutter/src/material/icons.dart';
-import 'package:flutter/src/painting/edge_insets.dart';
-import 'package:flutter/src/rendering/flex.dart';
 import 'package:flutter/src/widgets/animated_size.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -30,6 +26,10 @@ class TransactionEntryAmount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double count = transaction.amount.abs() *
+        (amountRatioToPrimaryCurrencyGivenPk(
+                Provider.of<AllWallets>(context), transaction.walletFk) ??
+            1);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -37,18 +37,10 @@ class TransactionEntryAmount extends StatelessWidget {
         Row(
           children: [
             CountNumber(
-              count: (transaction.amount.abs()) *
-                  (amountRatioToPrimaryCurrencyGivenPk(
-                          Provider.of<AllWallets>(context),
-                          transaction.walletFk) ??
-                      1),
+              count: count,
               duration: Duration(milliseconds: 1000),
               dynamicDecimals: true,
-              initialCount: (transaction.amount.abs()) *
-                  (amountRatioToPrimaryCurrencyGivenPk(
-                          Provider.of<AllWallets>(context),
-                          transaction.walletFk) ??
-                      1),
+              initialCount: count,
               textBuilder: (number) {
                 return Row(
                   children: [
@@ -79,11 +71,7 @@ class TransactionEntryAmount extends StatelessWidget {
                         Provider.of<AllWallets>(context),
                         number,
                         showCurrency: false,
-                        finalNumber: (transaction.amount.abs()) *
-                            (amountRatioToPrimaryCurrencyGivenPk(
-                                    Provider.of<AllWallets>(context),
-                                    transaction.walletFk) ??
-                                1),
+                        finalNumber: count,
                       ),
                       fontSize: 19 - (showOtherCurrency ? 1 : 0),
                       fontWeight: FontWeight.bold,
@@ -107,8 +95,10 @@ class TransactionEntryAmount extends StatelessWidget {
                       Provider.of<AllWallets>(context),
                       transaction.amount.abs(),
                       showCurrency: false,
-                      decimals: 2,
-                      // TODO this should match the decimal count of transaction.walletFk
+                      decimals: Provider.of<AllWallets>(context)
+                              .indexedByPk[transaction.walletFk]
+                              ?.decimals ??
+                          2,
                     ),
                     fontSize: 12,
                     textColor: textColor.withOpacity(0.6),

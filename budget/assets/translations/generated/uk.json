@@ -51,6 +51,7 @@
   "edit-budgets": "Редагувати бюджети",
   "edit-categories": "Редагувати категорії",
   "edit-titles": "Редагувати заголовки",
+  "edit-title": "Назва редагування",
   "select-categories-to-watch": "Виберіть категорії для перегляду",
   "watch-categories": "Дивіться категорії",
   "upcoming": "Майбутній",
@@ -329,7 +330,7 @@
   "deleted-transaction": "Видалена транзакція",
   "daily-notifications": "Щоденні сповіщення",
   "daily-notifications-description": "Якщо додаток не було відкрито",
-  "alert-time": "Змінювати час",
+  "alert-time": "Час попередження",
   "upcoming-transactions": "Майбутні транзакції",
   "notification-reminder-1": "Не забудьте додати транзакції з сьогоднішнього дня!",
   "notification-reminder-2": "Додайте свої щоденні транзакції, щоб залишатися на шляху.",
@@ -374,5 +375,6 @@
   "never": "ніколи",
   "copied-to-clipboard": "Скопійований у буфер обміну",
   "pasted-from-clipboard": "Вставлений із буфера обміну",
-  "created-new-transaction": "Створена нова транзакція"
+  "created-new-transaction": "Створена нова транзакція",
+  "select-graph": "Виберіть графік"
 }

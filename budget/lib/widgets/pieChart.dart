@@ -2,12 +2,12 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_shadow/simple_shadow.dart';
 
 class CategoryTotal {
   CategoryTotal(
@@ -242,9 +242,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                   defaultColor: Theme.of(context).colorScheme.primary),
               amountLight: 0.3,
               amountDark: 0.1),
-          assetImage: AssetImage(
-            "assets/categories/" + (widget.data[i].category.iconName ?? ""),
-          ),
+          iconName: widget.data[i].category.iconName ?? "",
           categoryColor: HexColor(widget.data[i].category.colour),
           percent: widget.totalSpent == 0
               ? 0
@@ -261,7 +259,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
 class _Badge extends StatelessWidget {
   final double scale;
   final Color color;
-  final AssetImage assetImage;
+  final String iconName;
   final double percent;
   final bool isTouched;
   final bool showLabels;
@@ -271,7 +269,7 @@ class _Badge extends StatelessWidget {
     Key? key,
     required this.scale,
     required this.color,
-    required this.assetImage,
+    required this.iconName,
     required this.percent,
     required this.isTouched,
     required this.showLabels,
@@ -296,7 +294,7 @@ class _Badge extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(
             color: color,
-            width: 2,
+            width: 2.5,
           ),
         ),
         child: Stack(
@@ -342,15 +340,26 @@ class _Badge extends StatelessWidget {
                 color: Theme.of(context).canvasColor,
               ),
               child: Center(
-                child: SimpleShadow(
-                  child: Image(
-                    image: assetImage,
-                    width: 23,
+                // child: SimpleShadow(
+                //   child: Image(
+                //     image: assetImage,
+                //     width: 23,
+                //   ),
+                //   opacity: 0.8,
+                //   color: categoryColor,
+                //   offset: Offset(0, 0),
+                //   sigma: 1,
+                // ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: categoryColor.withOpacity(0.5),
+                    shape: BoxShape.circle,
                   ),
-                  opacity: 0.8,
-                  color: categoryColor,
-                  offset: Offset(0, 0),
-                  sigma: 1,
+                  padding: EdgeInsets.all(8),
+                  child: CacheCategoryIcon(
+                    iconName: iconName,
+                    size: 34,
+                  ),
                 ),
               ),
             ),

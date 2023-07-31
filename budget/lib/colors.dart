@@ -1,6 +1,9 @@
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:system_theme/system_theme.dart';
 
 //import 'package:budget/colors.dart';
 //getColor(context, "lightDarkAccent")
@@ -283,3 +286,21 @@ const ColorFilter greyScale = ColorFilter.matrix(<double>[
   1,
   0,
 ]);
+
+Future<String?> getAccentColorSystemString() async {
+  if (supportsSystemColor() && appStateSettings["accentSystemColor"] == true) {
+    SystemTheme.fallbackColor = Colors.blue;
+    await SystemTheme.accentColor.load();
+    Color accentColor = SystemTheme.accentColor.accent;
+    appStateSettings["accentColor"] = toHexString(accentColor);
+    return toHexString(accentColor);
+  } else {
+    return null;
+  }
+}
+
+bool supportsSystemColor() {
+  return defaultTargetPlatform.supportsAccentColor &&
+      kIsWeb == false &&
+      getPlatform() != PlatformOS.isIOS;
+}

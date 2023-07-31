@@ -5,10 +5,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:system_theme/system_theme.dart';
 
 Map<String, dynamic> appStateSettings = {};
 
@@ -42,12 +41,8 @@ Future<bool> initializeSettings() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();
 
   // Do some actions based on loaded settings
-  if (getPlatform() != PlatformOS.isIOS &&
-      appStateSettings["accentSystemColor"] == true) {
-    await SystemTheme.accentColor.load();
-    Color accentColor = SystemTheme.accentColor.accent;
-    appStateSettings["accentColor"] = toHexString(accentColor);
-  }
+
+  appStateSettings["accentColor"] = await getAccentColorSystemString();
 
   if (appStateSettings["hasOnboarded"] == true) {
     updateSettings("numLogins", appStateSettings["numLogins"] + 1,
