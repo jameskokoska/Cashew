@@ -11,6 +11,11 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.7.0
+    Fixed gradient in save button for transaction action
+    Selected filter chips on search page
+    Context menu appear height higher than target
+    Vibrate on show custom context menu
+    Added quick fade to context menu
     Added scroll to top arrow on edit data pages
     Made added budget icon background more prominent
     Only perform auto sync if user is already logged in

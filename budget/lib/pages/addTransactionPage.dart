@@ -26,6 +26,7 @@ import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
+import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -1309,25 +1310,36 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             ),
                 ),
                 widget.transaction != null && selectedType != null
-                    ? SaveBottomButton(
-                        margin: EdgeInsets.only(left: 5),
-                        color: isTransactionActionDealtWith(createTransaction())
-                            ? Theme.of(context).colorScheme.tertiaryContainer
-                            : null,
-                        label: widget.transaction != null
-                            ? getTransactionActionNameFromType(
-                                    createTransaction())
-                                .tr()
-                            : "",
-                        onTap: () async {
-                          dynamic result = await openTransactionActionFromType(
-                            context,
-                            createTransaction(),
-                            runBefore: () async {
-                              await addTransaction();
-                            },
+                    ? WidgetSizeBuilder(
+                        widgetBuilder: (Size? size) {
+                          return Container(
+                            width: size?.width,
+                            child: SaveBottomButton(
+                              margin: EdgeInsets.only(left: 5),
+                              color: isTransactionActionDealtWith(
+                                      createTransaction())
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer
+                                  : null,
+                              label: widget.transaction != null
+                                  ? getTransactionActionNameFromType(
+                                          createTransaction())
+                                      .tr()
+                                  : "",
+                              onTap: () async {
+                                dynamic result =
+                                    await openTransactionActionFromType(
+                                  context,
+                                  createTransaction(),
+                                  runBefore: () async {
+                                    await addTransaction();
+                                  },
+                                );
+                                if (result == true) Navigator.of(context).pop();
+                              },
+                            ),
                           );
-                          if (result == true) Navigator.of(context).pop();
                         },
                       )
                     : SizedBox.shrink(),

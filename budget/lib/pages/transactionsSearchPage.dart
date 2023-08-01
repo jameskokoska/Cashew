@@ -12,6 +12,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/selectCategory.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
@@ -222,6 +223,13 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 SliverToBoxAdapter(
                   child: SizedBox(height: 13),
                 ),
+                SliverToBoxAdapter(
+                    child: AppliedFilterChips(
+                  searchFilters: searchFilters,
+                  openFiltersSelection: () {
+                    selectFilters(context);
+                  },
+                )),
                 // SliverToBoxAdapter(
                 //   child: SlidingSelectorIncomeExpense(
                 //       onSelected: (index) {
@@ -287,6 +295,224 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
             pageID: "TransactionsSearch",
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AppliedFilterChip extends StatelessWidget {
+  const AppliedFilterChip({
+    required this.label,
+    required this.openFiltersSelection,
+    this.icon,
+    this.customBorderColor,
+    super.key,
+  });
+  final Color? customBorderColor;
+  final String label;
+  final IconData? icon;
+  final Function openFiltersSelection;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Tappable(
+        onTap: () {
+          openFiltersSelection();
+        },
+        borderRadius: 8,
+        color:
+            Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5),
+        child: Container(
+          padding: EdgeInsets.only(left: 14, right: 14, top: 7, bottom: 7),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: customBorderColor == null
+                  ? Theme.of(context).colorScheme.secondaryContainer
+                  : customBorderColor!.withOpacity(0.4),
+            ),
+          ),
+          child: Row(
+            children: [
+              icon == null
+                  ? SizedBox.shrink()
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: Icon(icon, size: 23),
+                    ),
+              TextFont(
+                text: label,
+                fontSize: 14,
+              ),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 4.5),
+              //   child: Opacity(
+              //     opacity: 0.6,
+              //     child: Icon(
+              //       Icons.close,
+              //       size: 14,
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AppliedFilterChips extends StatelessWidget {
+  const AppliedFilterChips({
+    required this.searchFilters,
+    required this.openFiltersSelection,
+    super.key,
+  });
+  final SearchFilters searchFilters;
+  final Function openFiltersSelection;
+
+  Future<List<Widget>> getSearchFilterWidgets(BuildContext context) async {
+    AllWallets allWallets = Provider.of<AllWallets>(context);
+    List<Widget> out = [];
+    // Categories
+    for (TransactionCategory category in await database.getAllCategories(
+        categoryFks: searchFilters.categoryPks, allCategories: false)) {
+      out.add(AppliedFilterChip(
+        label: category.name,
+        customBorderColor: HexColor(category.colour),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Amount range
+    if (searchFilters.amountRange != null) {
+      out.add(
+        AppliedFilterChip(
+          label: convertToMoney(allWallets, searchFilters.amountRange!.start) +
+              " - " +
+              convertToMoney(
+                allWallets,
+                searchFilters.amountRange!.end,
+              ),
+          openFiltersSelection: openFiltersSelection,
+        ),
+      );
+    }
+    // Expense Income
+    if (searchFilters.expenseIncome.contains(ExpenseIncome.expense)) {
+      out.add(AppliedFilterChip(
+        label: "expense".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    if (searchFilters.expenseIncome.contains(ExpenseIncome.income)) {
+      out.add(AppliedFilterChip(
+        label: "income".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Transaction Types
+    for (TransactionSpecialType? transactionType
+        in searchFilters.transactionTypes) {
+      out.add(AppliedFilterChip(
+        label: transactionTypeDisplayToEnum[transactionType]
+                ?.toString()
+                .toLowerCase()
+                .tr() ??
+            "default".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Paid status
+    if (searchFilters.paidStatus.contains(PaidStatus.paid)) {
+      out.add(AppliedFilterChip(
+        label: "paid".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    if (searchFilters.paidStatus.contains(PaidStatus.notPaid)) {
+      out.add(AppliedFilterChip(
+        label: "not-paid".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    if (searchFilters.paidStatus.contains(PaidStatus.skipped)) {
+      out.add(AppliedFilterChip(
+        label: "skipped".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Budget Transaction Filters
+    if (searchFilters.budgetTransactionFilters
+        .contains(BudgetTransactionFilters.sharedToOtherBudget)) {
+      out.add(AppliedFilterChip(
+        label: "added-to-other-budgets".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    if (searchFilters.budgetTransactionFilters
+        .contains(BudgetTransactionFilters.addedToOtherBudget)) {
+      out.add(AppliedFilterChip(
+        label: "shared-to-other-budgets".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Wallets
+    for (int walletPk in searchFilters.walletPks) {
+      out.add(AppliedFilterChip(
+        label: allWallets.indexedByPk[walletPk]?.name ?? "",
+        customBorderColor: HexColor(allWallets.indexedByPk[walletPk]?.colour),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Budgets
+    for (Budget budget in await database.getAllBudgets()) {
+      if (searchFilters.budgetPks.contains(budget.budgetPk))
+        out.add(AppliedFilterChip(
+          label: budget.name,
+          customBorderColor: HexColor(budget.colour),
+          openFiltersSelection: openFiltersSelection,
+        ));
+    }
+    if (searchFilters.budgetPks.contains(null)) {
+      out.add(AppliedFilterChip(
+        label: "no-budget".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+
+    return out;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        openFiltersSelection();
+      },
+      child: FutureBuilder(
+        future: getSearchFilterWidgets(context),
+        builder: (context, AsyncSnapshot<List<Widget>> snapshot) {
+          return AnimatedSize(
+            curve: Curves.easeInOutCubicEmphasized,
+            duration: Duration(milliseconds: 1000),
+            child: snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.data!.length > 0
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: snapshot.data!,
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
+          );
+        },
       ),
     );
   }

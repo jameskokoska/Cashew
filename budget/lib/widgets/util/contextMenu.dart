@@ -1,6 +1,8 @@
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomContextMenu extends StatelessWidget {
   const CustomContextMenu(
@@ -13,13 +15,16 @@ class CustomContextMenu extends StatelessWidget {
     return ContextMenuRegion(
       child: child,
       contextMenuBuilder: (context, offset) {
-        Offset newOffset =
-            Offset(offset.dx - getWidthNavigationSidebar(context), offset.dy);
-        return AdaptiveTextSelectionToolbar.buttonItems(
-          anchors: TextSelectionToolbarAnchors(
-            primaryAnchor: newOffset,
+        Offset newOffset = Offset(
+            offset.dx - getWidthNavigationSidebar(context), offset.dy - 15);
+        return FadeIn(
+          duration: Duration(milliseconds: 125),
+          child: AdaptiveTextSelectionToolbar.buttonItems(
+            anchors: TextSelectionToolbarAnchors(
+              primaryAnchor: newOffset,
+            ),
+            buttonItems: buttonItems,
           ),
-          buttonItems: buttonItems,
         );
       },
     );
@@ -90,6 +95,7 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
   }
 
   void _show(Offset position) {
+    HapticFeedback.mediumImpact();
     _contextMenuController.show(
       context: context,
       contextMenuBuilder: (context) {
