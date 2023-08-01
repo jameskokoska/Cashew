@@ -66,6 +66,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-categories".tr(),
+        scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(

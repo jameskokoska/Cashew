@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.7.0
+    Added scroll to top arrow on edit data pages
+    Made added budget icon background more prominent
     Only perform auto sync if user is already logged in
     No longer asks to restore a backup, instead it automatically restores the 'sync' backups before launched
     Streamlined login and restore backup process

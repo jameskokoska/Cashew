@@ -62,6 +62,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
+        scrollToTopButton: true,
         title: "edit-wallets".tr(),
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(

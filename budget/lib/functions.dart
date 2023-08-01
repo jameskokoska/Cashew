@@ -693,7 +693,8 @@ class CustomMaterialPageRoute extends MaterialPageRoute {
         );
 }
 
-Future<dynamic> pushRoute(BuildContext context, Widget page) async {
+Future<dynamic> pushRoute(BuildContext context, Widget page,
+    {String? routeName}) async {
   if (appStateSettings["iOSNavigation"] || getPlatform() == PlatformOS.isIOS) {
     return await Navigator.push(
       context,

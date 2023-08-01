@@ -64,6 +64,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-budgets".tr(),
+        scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(

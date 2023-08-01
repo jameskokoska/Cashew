@@ -61,6 +61,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-titles".tr(),
+        scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
@@ -196,9 +197,8 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                                     //     " - " +
                                     //     associatedTitle.order.toString()
                                     ,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 19,
-                                    maxLines: 10,
+                                    fontSize: 16,
+                                    maxLines: 3,
                                   ),
                                 ),
                               ],

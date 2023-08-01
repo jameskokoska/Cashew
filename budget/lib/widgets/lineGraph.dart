@@ -435,8 +435,10 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           begin: Alignment.bottomCenter,
           end: Alignment(
               0,
-              (widget.minPair.y) /
-                  ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
+              widget.maxPair.y > 0
+                  ? (widget.minPair.y) /
+                      ((widget.maxPair.y).abs() + (widget.minPair.y).abs())
+                  : -1),
         ),
         // gradientFrom: Offset(
         //     0,

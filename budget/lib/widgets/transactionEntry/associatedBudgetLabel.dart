@@ -26,7 +26,7 @@ class AssociatedBudgetLabel extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 3),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: HexColor(budget.colour).withOpacity(0.1),
+                        color: HexColor(budget.colour).withOpacity(0.25),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       padding:

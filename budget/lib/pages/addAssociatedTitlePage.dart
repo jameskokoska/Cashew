@@ -146,7 +146,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                 color: Colors.transparent,
                 child: CategoryIcon(
                   category: selectedCategory,
-                  size: 40,
+                  size: getIsFullScreen(context) ? 40 : 30,
                   onTap: () {
                     openBottomSheet(
                       context,
@@ -171,7 +171,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                     setSelectedTitle(text);
                   },
                   padding: EdgeInsets.only(left: 7, right: 7),
-                  fontSize: getIsFullScreen(context) ? 30 : 27,
+                  fontSize: getIsFullScreen(context) ? 25 : 23,
                   fontWeight: FontWeight.bold,
                   topContentPadding: 0,
                   focusNode: _focusNode,
@@ -180,7 +180,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
             ],
           ),
           SizedBox(
-            height: 15,
+            height: 12,
           ),
           canAddTitle ?? false
               ? Button(
