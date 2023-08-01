@@ -179,7 +179,10 @@ class _CountNumberState extends State<CountNumber> {
 
     Widget builtWidget = TweenAnimationBuilder<int>(
       tween: IntTween(
-        begin: (previousAmount * pow(10, decimals)).toInt(),
+        begin: (double.parse(
+                    (previousAmount).toStringAsFixed(finalDecimalPlaces)) *
+                pow(10, decimals))
+            .toInt(),
         end: (double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)) *
                 pow(10, decimals))
             .toInt(),

@@ -352,7 +352,9 @@ class _Badge extends StatelessWidget {
                 // ),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: categoryColor.withOpacity(0.5),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? categoryColor.withOpacity(0.5)
+                        : Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   padding: EdgeInsets.all(8),

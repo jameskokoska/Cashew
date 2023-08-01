@@ -750,36 +750,36 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                   ? boxShadowCheck(boxShadowGeneral(context))
                                   : [BoxShadow(color: Colors.transparent)],
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              bottom:
-                                  index == widget.amountLoaded - 1 ? 0 : 13.0),
-                          child: AnimatedSize(
-                            duration: Duration(milliseconds: 1000),
-                            curve: Curves.easeInOutCubicEmphasized,
-                            child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 200),
-                              child: touchedBudgetIndex == null ||
-                                      widget.amountLoaded -
-                                              touchedBudgetIndex! -
-                                              1 ==
-                                          index
-                                  ? PastBudgetContainer(
-                                      budget: widget.budget,
-                                      smallBudgetContainer: true,
-                                      showTodayForSmallBudget:
-                                          (index == 0 ? true : false),
-                                      dateForRange: datePast,
-                                      isPastBudget: index == 0 ? false : true,
-                                      isPastBudgetButCurrentPeriod: index == 0,
-                                      budgetColorScheme:
-                                          widget.budgetColorScheme,
-                                    )
-                                  : Container(
-                                      key: ValueKey(
-                                          datePast.millisecondsSinceEpoch),
-                                    ),
-                            ),
+                        padding: EdgeInsets.only(
+                          bottom: touchedBudgetIndex != null ||
+                                  index == widget.amountLoaded - 1
+                              ? 0
+                              : 13.0,
+                        ),
+                        child: AnimatedSize(
+                          duration: Duration(milliseconds: 1000),
+                          curve: Curves.easeInOutCubicEmphasized,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 200),
+                            child: touchedBudgetIndex == null ||
+                                    widget.amountLoaded -
+                                            touchedBudgetIndex! -
+                                            1 ==
+                                        index
+                                ? PastBudgetContainer(
+                                    budget: widget.budget,
+                                    smallBudgetContainer: true,
+                                    showTodayForSmallBudget:
+                                        (index == 0 ? true : false),
+                                    dateForRange: datePast,
+                                    isPastBudget: index == 0 ? false : true,
+                                    isPastBudgetButCurrentPeriod: index == 0,
+                                    budgetColorScheme: widget.budgetColorScheme,
+                                  )
+                                : Container(
+                                    key: ValueKey(
+                                        datePast.millisecondsSinceEpoch),
+                                  ),
                           ),
                         ),
                       ),

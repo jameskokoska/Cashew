@@ -384,7 +384,9 @@ class CategoryIconPercent extends StatelessWidget {
       // ),
       Container(
         decoration: BoxDecoration(
-          color: HexColor(category.colour).withOpacity(0.5),
+          color: Theme.of(context).brightness == Brightness.light
+              ? HexColor(category.colour).withOpacity(0.5)
+              : Colors.transparent,
           shape: BoxShape.circle,
         ),
         height: size + insetPadding,

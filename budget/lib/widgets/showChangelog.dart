@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.6.9
+    Fixed padding on Google login button
+    Fixed flickering of count up beginning amount
+    Fixed animation and spacing for past budget containers when selected on mobile
     < 3.6.8
     Transaction amounts round properly - when using CountUp
     Transaction entry converted amount matches set decimals of other wallet

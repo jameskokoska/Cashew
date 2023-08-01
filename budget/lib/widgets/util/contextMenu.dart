@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CustomContextMenu extends StatelessWidget {
-  const CustomContextMenu({required this.child, required this.buttonItems, super.key});
+  const CustomContextMenu(
+      {required this.child, required this.buttonItems, super.key});
   final Widget child;
   final List<ContextMenuButtonItem> buttonItems;
 

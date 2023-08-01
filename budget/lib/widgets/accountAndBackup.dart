@@ -566,13 +566,16 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
       );
     }
     return googleUser == null
-        ? SettingsContainer(
-            isOutlined: true,
-            onTap: () async {
-              login();
-            },
-            title: "login".tr(),
-            icon: MoreIcons.google,
+        ? Padding(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+            child: SettingsContainer(
+              isOutlined: true,
+              onTap: () async {
+                login();
+              },
+              title: "login".tr(),
+              icon: MoreIcons.google,
+            ),
           )
         : SettingsContainerOpenPage(
             openPage: AccountsPage(),
