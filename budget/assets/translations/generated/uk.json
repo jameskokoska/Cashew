@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Скопійований у буфер обміну",
   "pasted-from-clipboard": "Вставлений із буфера обміну",
   "created-new-transaction": "Створена нова транзакція",
-  "select-graph": "Виберіть графік"
+  "select-graph": "Виберіть графік",
+  "logout": "Вийти",
+  "backup-found": "Знайдено резервне копіювання",
+  "backup-found-description": "Ви хотіли б відновити резервну копію?",
+  "restore": "Відновлення"
 }

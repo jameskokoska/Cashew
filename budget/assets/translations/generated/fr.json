@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Copié dans le presse-papier",
   "pasted-from-clipboard": "Collé dans le presse-papiers",
   "created-new-transaction": "Créé une nouvelle transaction",
-  "select-graph": "Sélectionner le graphique"
+  "select-graph": "Sélectionner le graphique",
+  "logout": "Se déconnecter",
+  "backup-found": "Sauvegarde trouvée",
+  "backup-found-description": "Souhaitez-vous restaurer une sauvegarde?",
+  "restore": "Restaurer"
 }

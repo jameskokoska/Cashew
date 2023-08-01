@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Sao chép vào clipboard",
   "pasted-from-clipboard": "Dán từ clipboard",
   "created-new-transaction": "Tạo giao dịch mới",
-  "select-graph": "Chọn đồ thị"
+  "select-graph": "Chọn đồ thị",
+  "logout": "Đăng xuất",
+  "backup-found": "Sao lưu tìm thấy",
+  "backup-found-description": "Bạn có muốn khôi phục một bản sao lưu không?",
+  "restore": "Khôi phục"
 }

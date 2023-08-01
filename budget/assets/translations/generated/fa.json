@@ -376,5 +376,9 @@
   "copied-to-clipboard": "کپی شده در کلیپ بورد",
   "pasted-from-clipboard": "از کلیپ بورد چسبیده است",
   "created-new-transaction": "معامله جدید ایجاد کرد",
-  "select-graph": "نمودار را انتخاب کنید"
+  "select-graph": "نمودار را انتخاب کنید",
+  "logout": "خروج",
+  "backup-found": "تهیه نسخه پشتیبان",
+  "backup-found-description": "آیا دوست دارید نسخه پشتیبان تهیه کنید؟",
+  "restore": "بازگرداندن"
 }

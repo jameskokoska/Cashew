@@ -376,5 +376,9 @@
   "copied-to-clipboard": "نسخ إلى الحافظة",
   "pasted-from-clipboard": "لصق من الحافظة",
   "created-new-transaction": "أنشأت معاملة جديدة",
-  "select-graph": "حدد الرسم البياني"
+  "select-graph": "حدد الرسم البياني",
+  "logout": "تسجيل خروج",
+  "backup-found": "وجدت النسخ الاحتياطي",
+  "backup-found-description": "هل ترغب في استعادة نسخة احتياطية؟",
+  "restore": "يعيد"
 }

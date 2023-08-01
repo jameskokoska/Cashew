@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.0
+    Only perform auto sync if user is already logged in
+    No longer asks to restore a backup, instead it automatically restores the 'sync' backups before launched
+    Streamlined login and restore backup process
     < 3.6.9
     Fixed padding on Google login button
     Fixed flickering of count up beginning amount

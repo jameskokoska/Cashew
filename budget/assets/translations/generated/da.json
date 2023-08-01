@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Kopieret til udklipsholder",
   "pasted-from-clipboard": "Indsat fra udklipsholder",
   "created-new-transaction": "Oprettet ny transaktion",
-  "select-graph": "Vælg Graf"
+  "select-graph": "Vælg Graf",
+  "logout": "Log ud",
+  "backup-found": "Backup fundet",
+  "backup-found-description": "Vil du gendanne en sikkerhedskopi?",
+  "restore": "Gendanne"
 }

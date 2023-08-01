@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Copiat în clipboard",
   "pasted-from-clipboard": "Lipit din clipboard",
   "created-new-transaction": "A creat o nouă tranzacție",
-  "select-graph": "Selectați grafic"
+  "select-graph": "Selectați grafic",
+  "logout": "Deconectare",
+  "backup-found": "Backup găsit",
+  "backup-found-description": "Doriți să restaurați o copie de rezervă?",
+  "restore": "Restabili"
 }

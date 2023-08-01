@@ -376,5 +376,9 @@
   "copied-to-clipboard": "क्लिपबोर्ड पर नकल",
   "pasted-from-clipboard": "क्लिपबोर्ड से चिपकाया गया",
   "created-new-transaction": "नया लेनदेन बनाया",
-  "select-graph": "ग्राफ का चयन करें"
+  "select-graph": "ग्राफ का चयन करें",
+  "logout": "लॉग आउट",
+  "backup-found": "बैकअप मिला",
+  "backup-found-description": "क्या आप बैकअप को पुनर्स्थापित करना चाहेंगे?",
+  "restore": "पुनर्स्थापित करना"
 }

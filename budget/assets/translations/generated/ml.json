@@ -376,5 +376,9 @@
   "copied-to-clipboard": "ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി",
   "pasted-from-clipboard": "ക്ലിപ്പ്ബോർഡിൽ നിന്ന് ഒട്ടിച്ചു",
   "created-new-transaction": "പുതിയ ഇടപാട് സൃഷ്ടിച്ചു",
-  "select-graph": "ഗ്രാഫ് തിരഞ്ഞെടുക്കുക"
+  "select-graph": "ഗ്രാഫ് തിരഞ്ഞെടുക്കുക",
+  "logout": "ലോഗൗട്ട്",
+  "backup-found": "ബാക്കപ്പ് കണ്ടെത്തി",
+  "backup-found-description": "ഒരു ബാക്കപ്പ് പുന restore സ്ഥാപിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?",
+  "restore": "വീണ്ടെടുക്കുക"
 }

@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Panoya kopyalandı",
   "pasted-from-clipboard": "Panodan yapıştırıldı",
   "created-new-transaction": "Yeni işlem yarattı",
-  "select-graph": "Grafiği seçin"
+  "select-graph": "Grafiği seçin",
+  "logout": "Çıkış Yap",
+  "backup-found": "Yedek bulundu",
+  "backup-found-description": "Bir yedeklemeyi geri yüklemek ister misiniz?",
+  "restore": "Eski haline getirmek"
 }

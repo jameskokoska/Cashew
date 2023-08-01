@@ -376,5 +376,9 @@
   "copied-to-clipboard": "क्लिपबोर्डवर कॉपी केली",
   "pasted-from-clipboard": "क्लिपबोर्ड वरून पेस्ट केलेले",
   "created-new-transaction": "नवीन व्यवहार तयार केले",
-  "select-graph": "आलेख निवडा"
+  "select-graph": "आलेख निवडा",
+  "logout": "बाहेर पडणे",
+  "backup-found": "बॅकअप सापडला",
+  "backup-found-description": "आपण बॅकअप पुनर्संचयित करू इच्छिता?",
+  "restore": "पुनर्संचयित करा"
 }

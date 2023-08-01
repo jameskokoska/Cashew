@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Αντιγράφηκε στο πρόχειρο",
   "pasted-from-clipboard": "Επικολλημένη από πρόχειρο",
   "created-new-transaction": "Δημιουργήθηκε νέα συναλλαγή",
-  "select-graph": "Επιλέξτε γραφήματα"
+  "select-graph": "Επιλέξτε γραφήματα",
+  "logout": "Αποσύνδεση",
+  "backup-found": "Βρέθηκε αντίγραφο ασφαλείας",
+  "backup-found-description": "Θέλετε να επαναφέρετε ένα αντίγραφο ασφαλείας;",
+  "restore": "Επαναφέρω"
 }

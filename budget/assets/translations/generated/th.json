@@ -376,5 +376,9 @@
   "copied-to-clipboard": "คัดลอกไปยังคลิปบอร์ด",
   "pasted-from-clipboard": "วางจากคลิปบอร์ด",
   "created-new-transaction": "สร้างธุรกรรมใหม่",
-  "select-graph": "เลือกกราฟ"
+  "select-graph": "เลือกกราฟ",
+  "logout": "ออกจากระบบ",
+  "backup-found": "พบการสำรองข้อมูล",
+  "backup-found-description": "คุณต้องการกู้คืนการสำรองข้อมูลหรือไม่?",
+  "restore": "คืนค่า"
 }

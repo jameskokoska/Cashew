@@ -376,5 +376,9 @@
   "copied-to-clipboard": "کلپ بورڈ میں کاپی کیا",
   "pasted-from-clipboard": "کلپ بورڈ سے چسپاں کیا گیا",
   "created-new-transaction": "نیا لین دین پیدا کیا",
-  "select-graph": "گراف منتخب کریں"
+  "select-graph": "گراف منتخب کریں",
+  "logout": "لاگ آوٹ",
+  "backup-found": "بیک اپ ملا",
+  "backup-found-description": "کیا آپ بیک اپ کو بحال کرنا چاہیں گے؟",
+  "restore": "بحال کریں"
 }

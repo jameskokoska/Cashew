@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Copied to clipboard",
   "pasted-from-clipboard": "Pasted from clipboard",
   "created-new-transaction": "Created New Transaction",
-  "select-graph": "Select Graph"
+  "select-graph": "Select Graph",
+  "logout": "Logout",
+  "backup-found": "Backup Found",
+  "backup-found-description": "Would you like to restore a backup?",
+  "restore": "Restore"
 }

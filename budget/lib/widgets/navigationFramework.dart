@@ -160,16 +160,27 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
-      await runAllCloudFunctions(context);
+
+      if (entireAppLoaded == false) {
+        await runAllCloudFunctions(context);
+      }
+
       database.deleteWanderingTransactions();
 
       entireAppLoaded = true;
 
+      print("Entire app loaded");
+
       database.watchAllForAutoSync().listen((event) {
-        if (runningCloudFunctions == false) {
+        // Must be logged in to perform an automatic sync - googleUser != null
+        // If we remove this, it will ask the user to login though - but it can be annoying
+        // Users can visually see the last time of sync, especially on web where sign-in is not automatic,
+        // so it shouldn't be an issue
+        if (runningCloudFunctions == false && googleUser != null) {
           createSyncBackup(changeMadeSync: true);
         }
       });
+
       if (kIsWeb) {
         // On web, disable the browser's context menu since this example uses a custom
         // Flutter-rendered context menu.

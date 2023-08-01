@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Zkopírováno do schránky",
   "pasted-from-clipboard": "Vloženo ze schránky",
   "created-new-transaction": "Vytvořená nová transakce",
-  "select-graph": "Vyberte graf"
+  "select-graph": "Vyberte graf",
+  "logout": "Odhlásit se",
+  "backup-found": "Nalezena záloha",
+  "backup-found-description": "Chcete obnovit zálohu?",
+  "restore": "Obnovit"
 }

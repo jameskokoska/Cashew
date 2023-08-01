@@ -376,5 +376,9 @@
   "copied-to-clipboard": "A vágólapra másolt",
   "pasted-from-clipboard": "A vágólapról beillesztve",
   "created-new-transaction": "Létrehozott új tranzakciót",
-  "select-graph": "Válassza ki a grafikont"
+  "select-graph": "Válassza ki a grafikont",
+  "logout": "Kijelentkezés",
+  "backup-found": "Biztonsági mentés található",
+  "backup-found-description": "Szeretne visszaállítani egy biztonsági másolatot?",
+  "restore": "visszaállítás"
 }

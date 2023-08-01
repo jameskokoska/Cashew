@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Skopiowane do schowka",
   "pasted-from-clipboard": "Wklejone ze schowka",
   "created-new-transaction": "Stworzył nową transakcję",
-  "select-graph": "Wybierz wykres"
+  "select-graph": "Wybierz wykres",
+  "logout": "Wyloguj",
+  "backup-found": "Znaleziono kopię zapasową",
+  "backup-found-description": "Czy chciałbyś przywrócić kopię zapasową?",
+  "restore": "Przywrócić"
 }

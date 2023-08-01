@@ -376,5 +376,9 @@
   "copied-to-clipboard": "In die Zwischenablage kopiert",
   "pasted-from-clipboard": "Aus Zwischenablage geklebt",
   "created-new-transaction": "Neue Transaktion erstellt",
-  "select-graph": "Wählen Sie Graph"
+  "select-graph": "Wählen Sie Graph",
+  "logout": "Ausloggen",
+  "backup-found": "Backup gefunden",
+  "backup-found-description": "Möchten Sie ein Backup wiederherstellen?",
+  "restore": "Wiederherstellen"
 }

@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Copiado para a área de transferência",
   "pasted-from-clipboard": "Colado a partir da área de transferência",
   "created-new-transaction": "Criou uma nova transação",
-  "select-graph": "Selecione o gráfico"
+  "select-graph": "Selecione o gráfico",
+  "logout": "Sair",
+  "backup-found": "Backup encontrado",
+  "backup-found-description": "Você gostaria de restaurar um backup?",
+  "restore": "Restaurar"
 }

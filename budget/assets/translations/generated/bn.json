@@ -376,5 +376,9 @@
   "copied-to-clipboard": "ক্লিপবোর্ডে অনুলিপি করা হয়েছে",
   "pasted-from-clipboard": "ক্লিপবোর্ড থেকে আটকানো",
   "created-new-transaction": "নতুন লেনদেন তৈরি করেছে",
-  "select-graph": "গ্রাফ নির্বাচন করুন"
+  "select-graph": "গ্রাফ নির্বাচন করুন",
+  "logout": "প্রস্থান",
+  "backup-found": "ব্যাকআপ পাওয়া গেছে",
+  "backup-found-description": "আপনি কি একটি ব্যাকআপ পুনরুদ্ধার করতে চান?",
+  "restore": "পুনরুদ্ধার"
 }

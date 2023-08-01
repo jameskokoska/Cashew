@@ -376,5 +376,9 @@
   "copied-to-clipboard": "הועתק ללוח",
   "pasted-from-clipboard": "מודבק מהלוח",
   "created-new-transaction": "יצר עסקה חדשה",
-  "select-graph": "בחר גרף"
+  "select-graph": "בחר גרף",
+  "logout": "להתנתק",
+  "backup-found": "גיבוי נמצא",
+  "backup-found-description": "האם תרצה לשחזר גיבוי?",
+  "restore": "לשחזר"
 }

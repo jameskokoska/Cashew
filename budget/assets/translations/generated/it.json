@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Copiato negli appunti",
   "pasted-from-clipboard": "Incollato dagli appunti",
   "created-new-transaction": "Creato una nuova transazione",
-  "select-graph": "Seleziona grafico"
+  "select-graph": "Seleziona grafico",
+  "logout": "Disconnettersi",
+  "backup-found": "Backup trovato",
+  "backup-found-description": "Vorresti ripristinare un backup?",
+  "restore": "Ristabilire"
 }

@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Kopierad till urklipp",
   "pasted-from-clipboard": "Klistra in från urklipp",
   "created-new-transaction": "Skapad ny transaktion",
-  "select-graph": "Välj graf"
+  "select-graph": "Välj graf",
+  "logout": "Logga ut",
+  "backup-found": "Säkerhetskopiering hittades",
+  "backup-found-description": "Vill du återställa en säkerhetskopia?",
+  "restore": "Återställ"
 }

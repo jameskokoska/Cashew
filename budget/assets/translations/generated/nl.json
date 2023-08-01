@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Gekopieerd naar het klembord",
   "pasted-from-clipboard": "Geplakt van klembord",
   "created-new-transaction": "Nieuwe transactie gecreëerd",
-  "select-graph": "Selecteer grafiek"
+  "select-graph": "Selecteer grafiek",
+  "logout": "Uitloggen",
+  "backup-found": "Back -up gevonden",
+  "backup-found-description": "Wilt u een back -up herstellen?",
+  "restore": "Herstellen"
 }

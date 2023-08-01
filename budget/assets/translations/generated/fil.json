@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Kinopya sa clipboard",
   "pasted-from-clipboard": "Na -paste mula sa clipboard",
   "created-new-transaction": "Nilikha ng bagong transaksyon",
-  "select-graph": "Piliin ang Graph"
+  "select-graph": "Piliin ang Graph",
+  "logout": "Mag -logout",
+  "backup-found": "Natagpuan ang backup",
+  "backup-found-description": "Nais mo bang ibalik ang isang backup?",
+  "restore": "Ibalik"
 }

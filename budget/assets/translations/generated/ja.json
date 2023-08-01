@@ -376,5 +376,9 @@
   "copied-to-clipboard": "クリップボードにコピーされました",
   "pasted-from-clipboard": "クリップボードから貼り付けられました",
   "created-new-transaction": "新しいトランザクションを作成しました",
-  "select-graph": "グラフを選択します"
+  "select-graph": "グラフを選択します",
+  "logout": "ログアウト",
+  "backup-found": "バックアップが見つかりました",
+  "backup-found-description": "バックアップを復元しますか？",
+  "restore": "戻す"
 }

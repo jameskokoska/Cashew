@@ -376,5 +376,9 @@
   "copied-to-clipboard": "క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది",
   "pasted-from-clipboard": "క్లిప్‌బోర్డ్ నుండి అతికించబడింది",
   "created-new-transaction": "కొత్త లావాదేవీని సృష్టించింది",
-  "select-graph": "గ్రాఫ్ ఎంచుకోండి"
+  "select-graph": "గ్రాఫ్ ఎంచుకోండి",
+  "logout": "లాగ్అవుట్",
+  "backup-found": "బ్యాకప్ కనుగొనబడింది",
+  "backup-found-description": "మీరు బ్యాకప్‌ను పునరుద్ధరించాలనుకుంటున్నారా?",
+  "restore": "పునరుద్ధరించండి"
 }

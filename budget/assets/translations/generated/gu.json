@@ -376,5 +376,9 @@
   "copied-to-clipboard": "ક્લિપબોર્ડ પર ક ied પિ કરેલ",
   "pasted-from-clipboard": "ક્લિપબોર્ડથી પેસ્ટ",
   "created-new-transaction": "નવો વ્યવહાર બનાવ્યો",
-  "select-graph": "આલેખ પસંદ કરો"
+  "select-graph": "આલેખ પસંદ કરો",
+  "logout": "લૉગ આઉટ",
+  "backup-found": "બેકઅપ મળી",
+  "backup-found-description": "શું તમે બેકઅપ પુન restore સ્થાપિત કરવા માંગો છો?",
+  "restore": "પુનઃસ્થાપિત"
 }

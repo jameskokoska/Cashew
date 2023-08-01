@@ -376,5 +376,9 @@
   "copied-to-clipboard": "复制到剪贴板",
   "pasted-from-clipboard": "从剪贴板粘贴",
   "created-new-transaction": "创建了新事务",
-  "select-graph": "选择图"
+  "select-graph": "选择图",
+  "logout": "登出",
+  "backup-found": "找到了备份",
+  "backup-found-description": "您想恢复备份吗？",
+  "restore": "恢复"
 }

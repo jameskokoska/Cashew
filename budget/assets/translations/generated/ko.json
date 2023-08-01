@@ -376,5 +376,9 @@
   "copied-to-clipboard": "클립 보드에 복사",
   "pasted-from-clipboard": "클립 보드에서 붙여 넣었습니다",
   "created-new-transaction": "새로운 거래를 만들었습니다",
-  "select-graph": "그래프를 선택하십시오"
+  "select-graph": "그래프를 선택하십시오",
+  "logout": "로그 아웃",
+  "backup-found": "백업이 발견되었습니다",
+  "backup-found-description": "백업을 복원 하시겠습니까?",
+  "restore": "복원하다"
 }

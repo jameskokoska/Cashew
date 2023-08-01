@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Kopioitu leikepöydälle",
   "pasted-from-clipboard": "Liitetty leikepöydältä",
   "created-new-transaction": "Loi uutta tapahtumaa",
-  "select-graph": "Valitse kaavio"
+  "select-graph": "Valitse kaavio",
+  "logout": "Kirjautua ulos",
+  "backup-found": "Varmuuskopio löytyi",
+  "backup-found-description": "Haluatko palauttaa varmuuskopion?",
+  "restore": "Palauttaa"
 }

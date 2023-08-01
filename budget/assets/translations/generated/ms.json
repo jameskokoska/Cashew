@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Disalin ke papan klip",
   "pasted-from-clipboard": "Disisipkan dari papan klip",
   "created-new-transaction": "Mencipta transaksi baru",
-  "select-graph": "Pilih Graf"
+  "select-graph": "Pilih Graf",
+  "logout": "Log keluar",
+  "backup-found": "Backup dijumpai",
+  "backup-found-description": "Adakah anda ingin memulihkan sandaran?",
+  "restore": "Pulihkan"
 }

@@ -376,5 +376,9 @@
   "copied-to-clipboard": "Copiado al portapapeles",
   "pasted-from-clipboard": "Pastado del portapapeles",
   "created-new-transaction": "Creó una nueva transacción",
-  "select-graph": "Seleccionar gráfico"
+  "select-graph": "Seleccionar gráfico",
+  "logout": "Cerrar sesión",
+  "backup-found": "Copia de seguridad encontrada",
+  "backup-found-description": "¿Le gustaría restaurar una copia de seguridad?",
+  "restore": "Restaurar"
 }
