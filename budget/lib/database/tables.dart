@@ -2694,6 +2694,18 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
+  Future mergeAndDeleteCategory(TransactionCategory category) async {
+    List<Transaction> transactionsToUpdate =
+        await getAllTransactionsFromCategory(category.categoryPk);
+    for (Transaction transaction in transactionsToUpdate) {
+      await Future.delayed(Duration(milliseconds: 1));
+      Transaction transactionEdited =
+          transaction.copyWith(categoryFk: category.categoryPk);
+      await database.createOrUpdateTransaction(transactionEdited);
+    }
+    await database.deleteCategory(category.categoryPk, category.order);
+  }
+
   Stream<double?> totalDoubleStream(List<Stream<double?>> mergedStreams) {
     return StreamZip(mergedStreams)
         .map((list) => list.where((x) => x != null))

@@ -988,86 +988,37 @@ class _BackupManagementState extends State<BackupManagement> {
                                     ),
                                   ),
                                   widget.isManaging
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8.0),
-                                          child: ButtonIcon(
-                                            color: appStateSettings[
-                                                    "materialYou"]
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .onSecondaryContainer
-                                                    .withOpacity(0.08)
-                                                : getColor(context,
-                                                        "lightDarkAccentHeavy")
-                                                    .withOpacity(0.7),
-                                            onTap: () {
-                                              openPopup(
-                                                context,
-                                                icon: Icons.delete_rounded,
-                                                title: "delete-backup".tr(),
-                                                description: "Backup " +
-                                                    (file.value.name ??
-                                                        "No name") +
-                                                    " created " +
-                                                    getWordedDateShortMore(
-                                                        (file.value.modifiedTime ??
-                                                                DateTime.now())
-                                                            .toLocal(),
-                                                        includeTimeIfToday:
-                                                            true),
-                                                onSubmit: () async {
-                                                  Navigator.pop(context);
-                                                  loadingIndeterminateKey
-                                                      .currentState!
-                                                      .setVisibility(true);
-                                                  await deleteBackup(
-                                                      driveApiState,
-                                                      file.value.id ?? "");
-                                                  openSnackbar(
-                                                    SnackbarMessage(
-                                                        title: "deleted-backup"
-                                                            .tr(),
-                                                        description:
-                                                            (file.value.name ??
-                                                                "No name"),
-                                                        icon: Icons
-                                                            .delete_rounded),
-                                                  );
-                                                  setState(() {
-                                                    deletedIndices
-                                                        .add(file.key);
-                                                  });
-                                                  // bottomSheetControllerGlobal
-                                                  //     .snapToExtent(0);
-                                                  if (widget.isClientSync)
-                                                    updateSettings(
-                                                        "devicesHaveBeenSynced",
-                                                        appStateSettings[
-                                                                "devicesHaveBeenSynced"] -
-                                                            1,
-                                                        updateGlobalState:
-                                                            false);
-                                                  loadingIndeterminateKey
-                                                      .currentState!
-                                                      .setVisibility(false);
-                                                },
-                                                onSubmitLabel: "delete".tr(),
-                                                onCancel: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                onCancelLabel: "cancel".tr(),
-                                              );
-                                            },
-                                            icon: Icons.close_rounded,
-                                          ),
-                                        )
-                                      : widget.hideDownloadButton
-                                          ? SizedBox.shrink()
-                                          : Padding(
+                                      ? Row(
+                                          children: [
+                                            widget.hideDownloadButton
+                                                ? SizedBox.shrink()
+                                                : Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      left: 8.0,
+                                                    ),
+                                                    child: ButtonIcon(
+                                                      color: appStateSettings[
+                                                              "materialYou"]
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .onSecondaryContainer
+                                                              .withOpacity(0.08)
+                                                          : getColor(context,
+                                                                  "lightDarkAccentHeavy")
+                                                              .withOpacity(0.7),
+                                                      onTap: () {
+                                                        saveDriveFileToDevice(
+                                                            driveApiState,
+                                                            file.value);
+                                                      },
+                                                      icon: Icons
+                                                          .download_rounded,
+                                                    ),
+                                                  ),
+                                            Padding(
                                               padding: const EdgeInsets.only(
-                                                left: 8.0,
-                                              ),
+                                                  left: 5),
                                               child: ButtonIcon(
                                                 color: appStateSettings[
                                                         "materialYou"]
@@ -1079,13 +1030,74 @@ class _BackupManagementState extends State<BackupManagement> {
                                                             "lightDarkAccentHeavy")
                                                         .withOpacity(0.7),
                                                 onTap: () {
-                                                  saveDriveFileToDevice(
-                                                      driveApiState,
-                                                      file.value);
+                                                  openPopup(
+                                                    context,
+                                                    icon: Icons.delete_rounded,
+                                                    title: "delete-backup".tr(),
+                                                    description: "Backup " +
+                                                        (file.value.name ??
+                                                            "No name") +
+                                                        " created " +
+                                                        getWordedDateShortMore(
+                                                            (file.value.modifiedTime ??
+                                                                    DateTime
+                                                                        .now())
+                                                                .toLocal(),
+                                                            includeTimeIfToday:
+                                                                true),
+                                                    onSubmit: () async {
+                                                      Navigator.pop(context);
+                                                      loadingIndeterminateKey
+                                                          .currentState!
+                                                          .setVisibility(true);
+                                                      await deleteBackup(
+                                                          driveApiState,
+                                                          file.value.id ?? "");
+                                                      openSnackbar(
+                                                        SnackbarMessage(
+                                                            title:
+                                                                "deleted-backup"
+                                                                    .tr(),
+                                                            description: (file
+                                                                    .value
+                                                                    .name ??
+                                                                "No name"),
+                                                            icon: Icons
+                                                                .delete_rounded),
+                                                      );
+                                                      setState(() {
+                                                        deletedIndices
+                                                            .add(file.key);
+                                                      });
+                                                      // bottomSheetControllerGlobal
+                                                      //     .snapToExtent(0);
+                                                      if (widget.isClientSync)
+                                                        updateSettings(
+                                                            "devicesHaveBeenSynced",
+                                                            appStateSettings[
+                                                                    "devicesHaveBeenSynced"] -
+                                                                1,
+                                                            updateGlobalState:
+                                                                false);
+                                                      loadingIndeterminateKey
+                                                          .currentState!
+                                                          .setVisibility(false);
+                                                    },
+                                                    onSubmitLabel:
+                                                        "delete".tr(),
+                                                    onCancel: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    onCancelLabel:
+                                                        "cancel".tr(),
+                                                  );
                                                 },
-                                                icon: Icons.download_rounded,
+                                                icon: Icons.close_rounded,
                                               ),
-                                            )
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox.shrink(),
                                 ],
                               ),
                             ),

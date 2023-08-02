@@ -863,38 +863,30 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           Container(height: 5),
                           AnimatedSwitcher(
                             duration: Duration(milliseconds: 350),
-                            child: CountNumber(
-                              key: ValueKey(selectedWalletPk),
-                              count: selectedAmount ?? 0,
-                              duration: Duration(milliseconds: 1000),
-                              dynamicDecimals: true,
-                              decimals: selectedWallet?.decimals,
-                              initialCount: selectedAmount ?? 0,
-                              textBuilder: (number) {
-                                return Align(
-                                  alignment: Alignment.centerRight,
-                                  child: TextFont(
-                                    textAlign: TextAlign.right,
-                                    text: convertToMoney(
-                                      Provider.of<AllWallets>(context),
-                                      number,
-                                      showCurrency: false,
-                                      finalNumber: selectedAmount ?? 0,
-                                      decimals: selectedWallet?.decimals,
-                                    ),
-                                    walletPkForCurrency: selectedWalletPk,
-                                    onlyShowCurrencyIcon:
-                                        Provider.of<AllWallets>(context)
-                                                .list
-                                                .length <=
-                                            1,
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.bold,
-                                    maxLines: 1,
-                                    autoSizeText: true,
-                                  ),
-                                );
-                              },
+                            child: Align(
+                              key: ValueKey(selectedWalletPk.toString() +
+                                  selectedAmount.toString()),
+                              alignment: Alignment.centerRight,
+                              child: TextFont(
+                                textAlign: TextAlign.right,
+                                text: convertToMoney(
+                                  Provider.of<AllWallets>(context),
+                                  selectedAmount ?? 0,
+                                  showCurrency: false,
+                                  finalNumber: selectedAmount ?? 0,
+                                  decimals: selectedWallet?.decimals,
+                                ),
+                                walletPkForCurrency: selectedWalletPk,
+                                onlyShowCurrencyIcon:
+                                    Provider.of<AllWallets>(context)
+                                            .list
+                                            .length <=
+                                        1,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                maxLines: 1,
+                                autoSizeText: true,
+                              ),
                             ),
                           ),
                           Provider.of<AllWallets>(context).list.length <= 1 ||

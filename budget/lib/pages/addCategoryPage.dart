@@ -299,7 +299,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                         color: Theme.of(context).colorScheme.secondaryContainer,
                       ),
                       labelColor: getColor(context, "black"),
-                      unselectedLabelColor: Colors.white.withOpacity(0.3),
+                      unselectedLabelColor:
+                          getColor(context, "black").withOpacity(0.3),
                       tabs: [
                         Tab(
                           child: Center(

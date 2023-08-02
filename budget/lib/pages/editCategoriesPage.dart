@@ -421,17 +421,8 @@ void mergeCategoryPopup(BuildContext context, TransactionCategory category) {
             );
             if (result == true) {
               openLoadingPopup(context);
-              List<Transaction> transactionsToUpdate = await database
-                  .getAllTransactionsFromCategory(category.categoryPk);
-              for (Transaction transaction in transactionsToUpdate) {
-                await Future.delayed(Duration(milliseconds: 1));
-                Transaction transactionEdited =
-                    transaction.copyWith(categoryFk: category.categoryPk);
-                await database.createOrUpdateTransaction(transactionEdited);
-              }
+              database.mergeAndDeleteCategory(category);
               Navigator.pop(context);
-              await database.deleteCategory(
-                  category.categoryPk, category.order);
               openSnackbar(
                   SnackbarMessage(title: "Merged into " + category.name));
             }

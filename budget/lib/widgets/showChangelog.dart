@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.1
+    Removed counting of number in add transaction page
     < 3.7.0
     Fixed gradient in save button for transaction action
     Selected filter chips on search page

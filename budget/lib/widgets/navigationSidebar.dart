@@ -234,12 +234,12 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                           ],
                         ),
                         Spacer(),
-                        SizedBox(height: 40),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            SizedBox(height: 40),
                             GoogleAccountLoginButton(
                               navigationSidebarButton: true,
                               onTap: () {
