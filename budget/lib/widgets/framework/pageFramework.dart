@@ -46,6 +46,7 @@ class PageFramework extends StatefulWidget {
     this.overlay,
     this.scrollToTopButton = false,
     this.bottomPadding = true,
+    this.enableHeader = true,
   }) : super(key: key);
 
   final String title;
@@ -80,6 +81,7 @@ class PageFramework extends StatefulWidget {
   final Widget? overlay;
   final bool scrollToTopButton;
   final bool bottomPadding;
+  final bool enableHeader;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -262,31 +264,37 @@ class PageFrameworkState extends State<PageFramework>
             child: CustomScrollView(
               controller: _scrollController,
               slivers: [
-                PageFrameworkSliverAppBar(
-                  title: widget.title,
-                  titleWidget: widget.titleWidget,
-                  appBarBackgroundColor: widget.appBarBackgroundColor,
-                  appBarBackgroundColorStart: widget.backgroundColor == null ||
-                          widget.appBarBackgroundColorStart != null
-                      ? widget.appBarBackgroundColorStart
-                      : widget.backgroundColor,
-                  backButton: widget.backButton,
-                  subtitle: widget.subtitle,
-                  subtitleSize: widget.subtitleSize,
-                  subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
-                  onBottomReached: widget.onBottomReached,
-                  pinned: widget.pinned,
-                  subtitleAlignment: widget.subtitleAlignment,
-                  // customTitleBuilder: widget.customTitleBuilder,
-                  animationControllerOpacity: _animationControllerOpacity,
-                  animationControllerShift: _animationControllerShift,
-                  animationController0at50: _animationController0at50,
-                  textColor: widget.textColor,
-                  onBackButton: widget.onBackButton,
-                  actions: widget.actions,
-                  expandedHeight:
-                      getExpandedHeaderHeight(context, widget.expandedHeight),
-                ),
+                ...(widget.enableHeader
+                    ? [
+                        PageFrameworkSliverAppBar(
+                          title: widget.title,
+                          titleWidget: widget.titleWidget,
+                          appBarBackgroundColor: widget.appBarBackgroundColor,
+                          appBarBackgroundColorStart:
+                              widget.backgroundColor == null ||
+                                      widget.appBarBackgroundColorStart != null
+                                  ? widget.appBarBackgroundColorStart
+                                  : widget.backgroundColor,
+                          backButton: widget.backButton,
+                          subtitle: widget.subtitle,
+                          subtitleSize: widget.subtitleSize,
+                          subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
+                          onBottomReached: widget.onBottomReached,
+                          pinned: widget.pinned,
+                          subtitleAlignment: widget.subtitleAlignment,
+                          // customTitleBuilder: widget.customTitleBuilder,
+                          animationControllerOpacity:
+                              _animationControllerOpacity,
+                          animationControllerShift: _animationControllerShift,
+                          animationController0at50: _animationController0at50,
+                          textColor: widget.textColor,
+                          onBackButton: widget.onBackButton,
+                          actions: widget.actions,
+                          expandedHeight: getExpandedHeaderHeight(
+                              context, widget.expandedHeight),
+                        )
+                      ]
+                    : []),
                 for (Widget sliver in widget.slivers)
                   widget.horizontalPadding == 0
                       ? sliver

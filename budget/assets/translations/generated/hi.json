@@ -201,8 +201,8 @@
   "discard-changes-description": "क्या आप सुनिश्चित हैं कि आप अपने परिवर्तनों को छोड़ना चाहते हैं।",
   "discard": "खारिज करना",
   "changelog": "बदलाव का",
-  "view-changelog": "परिवर्तन लॉग देखें",
-  "view-app-intro": "ऑनबोर्डिंग देखें",
+  "view-changelog": "बदलाव का",
+  "view-app-intro": "ज्ञानप्राप्ति",
   "app-is-open-source": "{app} खुला स्रोत है!",
   "open-source": "खुला स्त्रोत",
   "lead-developer": "प्रमुख डेवलपर",
@@ -380,5 +380,6 @@
   "logout": "लॉग आउट",
   "backup-found": "बैकअप मिला",
   "backup-found-description": "क्या आप बैकअप को पुनर्स्थापित करना चाहेंगे?",
-  "restore": "पुनर्स्थापित करना"
+  "restore": "पुनर्स्थापित करना",
+  "privacy-policy": "गोपनीयता नीति और उपयोग की शर्तें"
 }

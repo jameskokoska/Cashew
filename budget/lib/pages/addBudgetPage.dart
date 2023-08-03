@@ -1,12 +1,12 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -307,6 +307,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
+      if (widget.budget == null) premiumPopupBudgets(context);
+
       allMembersOfAllBudgets = await database.getAllMembersOfBudgets();
       if (widget.isAddedOnlyBudget) {
         setAddedTransactionsOnly(true);
@@ -517,7 +519,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             ColumnSliver(
               centered: true,
               children: [
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput(
@@ -1138,7 +1140,6 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   Future<void> selectAmount(BuildContext context) async {
     openBottomSheet(
       context,
-      removeAnyContextMenus: true,
       PopupFramework(
         title: "enter-amount".tr(),
         underTitleSpace: false,

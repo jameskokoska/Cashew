@@ -201,8 +201,8 @@
   "discard-changes-description": "변경 사항을 폐기하고 싶습니까?",
   "discard": "버리다",
   "changelog": "변경 로그",
-  "view-changelog": "changelog를 봅니다",
-  "view-app-intro": "온보드를 봅니다",
+  "view-changelog": "변경 로그",
+  "view-app-intro": "온 보딩",
   "app-is-open-source": "{app}는 오픈 소스입니다!",
   "open-source": "오픈 소스",
   "lead-developer": "리드 개발자",
@@ -348,7 +348,7 @@
   "notification-reminder-14": "오늘의 비용으로 예산을 업데이트하십시오.",
   "notification-reminder-15": "트랜잭션을 기록하십시오.",
   "notification-reminder-16": "거래를 추가하여 예산을 유지하십시오.",
-  "notification-reminder-17": "하루가 끝났습니다. 거래를 추가 했습니까?",
+  "notification-reminder-17": "하루의 끝입니다. 거래를 추가 했습니까?",
   "notification-reminder-18": "매일 거래를 앱에 추가하십시오.",
   "notification-reminder-19": "오늘부터 예산 추적기에 비용을 추가하십시오.",
   "notification-reminder-20": "지출 습관에 대한 완전한 그림을 얻으려면 하루 종일 거래를 기록하십시오.",
@@ -380,5 +380,6 @@
   "logout": "로그 아웃",
   "backup-found": "백업이 발견되었습니다",
   "backup-found-description": "백업을 복원 하시겠습니까?",
-  "restore": "복원하다"
+  "restore": "복원하다",
+  "privacy-policy": "개인 정보 보호 정책 및 이용 약관"
 }

@@ -201,8 +201,8 @@
   "discard-changes-description": "Er du sikker på at du vil forkaste endringene dine.",
   "discard": "Kast",
   "changelog": "Changelog",
-  "view-changelog": "Se Changelog",
-  "view-app-intro": "Vis ombord",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Onboarding",
   "app-is-open-source": "{app} er åpen kildekode!",
   "open-source": "Åpen kilde",
   "lead-developer": "Lead Developer",
@@ -380,5 +380,6 @@
   "logout": "Logg ut",
   "backup-found": "Sikkerhetskopiering funnet",
   "backup-found-description": "Vil du gjenopprette en sikkerhetskopi?",
-  "restore": "Restaurere"
+  "restore": "Restaurere",
+  "privacy-policy": "Personvernregler og bruksvilkår"
 }

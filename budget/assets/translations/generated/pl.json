@@ -201,8 +201,8 @@
   "discard-changes-description": "Czy na pewno chcesz odrzucić swoje zmiany.",
   "discard": "Wyrzucać",
   "changelog": "Changelog",
-  "view-changelog": "Przeglądać zmiany rejestru",
-  "view-app-intro": "Wyświetl na pokład",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Proces wdrażania do firmy nowego pracownika",
   "app-is-open-source": "{app} to open source!",
   "open-source": "Otwarte źródło",
   "lead-developer": "Główny programista",
@@ -352,7 +352,7 @@
   "notification-reminder-18": "Pamiętaj, aby dodać swoje codzienne transakcje do aplikacji.",
   "notification-reminder-19": "Dodaj wszelkie wydatki z dziś do śledzenia budżetu.",
   "notification-reminder-20": "Zapisz swoje transakcje na cały dzień, aby uzyskać pełne zdjęcie swoich nawyków związanych z wydatkami.",
-  "notification-reminder-21": "Nie zapomnij dodać codziennych transakcji, aby pozostać na dobrej drodze do budżetu.",
+  "notification-reminder-21": "Nie zapomnij dodać swoich codziennych transakcji, aby pozostać na dobrej drodze do budżetu.",
   "notification-reminder-22": "Poświęć kilka minut, aby zaktualizować budżet na dzisiejsze wydatki.",
   "notification-reminder-23": "Pamiętaj, aby dodać wszelkie wydatki z dziś do śledzenia budżetu.",
   "notification-reminder-24": "Pamiętaj, aby nagrać swoje transakcje na cały dzień, aby uzyskać pełne zdjęcie swoich nawyków związanych z wydatkami.",
@@ -380,5 +380,6 @@
   "logout": "Wyloguj",
   "backup-found": "Znaleziono kopię zapasową",
   "backup-found-description": "Czy chciałbyś przywrócić kopię zapasową?",
-  "restore": "Przywrócić"
+  "restore": "Przywrócić",
+  "privacy-policy": "Polityka prywatności i warunki użytkowania"
 }

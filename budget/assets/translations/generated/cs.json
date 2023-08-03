@@ -201,8 +201,8 @@
   "discard-changes-description": "Jste si jisti, že chcete své změny zahodit.",
   "discard": "Vyřadit",
   "changelog": "ChangeLog",
-  "view-changelog": "Zobrazit ChangeLog",
-  "view-app-intro": "Zobrazit na palubě",
+  "view-changelog": "ChangeLog",
+  "view-app-intro": "Na palubě",
   "app-is-open-source": "{app} je open source!",
   "open-source": "Open Source",
   "lead-developer": "Vedoucí vývojář",
@@ -380,5 +380,6 @@
   "logout": "Odhlásit se",
   "backup-found": "Nalezena záloha",
   "backup-found-description": "Chcete obnovit zálohu?",
-  "restore": "Obnovit"
+  "restore": "Obnovit",
+  "privacy-policy": "Zásady ochrany osobních údajů a podmínky použití"
 }

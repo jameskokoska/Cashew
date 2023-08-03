@@ -201,8 +201,8 @@
   "discard-changes-description": "Adakah anda pasti mahu membuang perubahan anda.",
   "discard": "Buang",
   "changelog": "Changelog",
-  "view-changelog": "Lihat Changelog",
-  "view-app-intro": "Lihat onboarding",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Onboarding",
   "app-is-open-source": "{app} adalah sumber terbuka!",
   "open-source": "Sumber terbuka",
   "lead-developer": "Pemaju utama",
@@ -344,7 +344,7 @@
   "notification-reminder-10": "Catat urus niaga anda untuk terus berjalan.",
   "notification-reminder-11": "Tinggal di atas belanjawan anda dengan menambah urus niaga.",
   "notification-reminder-12": "Simpan rekod perbelanjaan anda yang tepat.",
-  "notification-reminder-13": "Tambah transaksi harian anda ke aplikasinya.",
+  "notification-reminder-13": "Tambah urus niaga harian anda ke aplikasinya.",
   "notification-reminder-14": "Kemas kini anggaran anda dengan perbelanjaan hari ini.",
   "notification-reminder-15": "Catat urus niaga anda untuk terus berjalan.",
   "notification-reminder-16": "Tinggal di atas belanjawan anda dengan menambah urus niaga.",
@@ -380,5 +380,6 @@
   "logout": "Log keluar",
   "backup-found": "Backup dijumpai",
   "backup-found-description": "Adakah anda ingin memulihkan sandaran?",
-  "restore": "Pulihkan"
+  "restore": "Pulihkan",
+  "privacy-policy": "Dasar Privasi dan Syarat Penggunaan"
 }

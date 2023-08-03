@@ -201,8 +201,8 @@
   "discard-changes-description": "Değişikliklerinizi atmak istediğinizden emin misiniz?",
   "discard": "Atmak",
   "changelog": "Değişim yeri",
-  "view-changelog": "Değişim günlüğünü incele",
-  "view-app-intro": "BAŞKA BAĞLANMA",
+  "view-changelog": "Değişim yeri",
+  "view-app-intro": "Yerleşik",
   "app-is-open-source": "{app} açık kaynak!",
   "open-source": "Açık kaynak",
   "lead-developer": "Baş geliştirici",
@@ -380,5 +380,6 @@
   "logout": "Çıkış Yap",
   "backup-found": "Yedek bulundu",
   "backup-found-description": "Bir yedeklemeyi geri yüklemek ister misiniz?",
-  "restore": "Eski haline getirmek"
+  "restore": "Eski haline getirmek",
+  "privacy-policy": "Gizlilik Politikası ve Kullanım Koşulları"
 }

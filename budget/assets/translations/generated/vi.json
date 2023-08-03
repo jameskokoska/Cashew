@@ -201,8 +201,8 @@
   "discard-changes-description": "Bạn có chắc là bạn muốn loại bỏ các thay đổi của mình.",
   "discard": "Loại bỏ",
   "changelog": "Thay đổi",
-  "view-changelog": "Xem Changelog",
-  "view-app-intro": "Xem trên tàu",
+  "view-changelog": "Thay đổi",
+  "view-app-intro": "Trên tàu",
   "app-is-open-source": "{app} là nguồn mở!",
   "open-source": "Mã nguồn mở",
   "lead-developer": "Nhà phát triển chính",
@@ -380,5 +380,6 @@
   "logout": "Đăng xuất",
   "backup-found": "Sao lưu tìm thấy",
   "backup-found-description": "Bạn có muốn khôi phục một bản sao lưu không?",
-  "restore": "Khôi phục"
+  "restore": "Khôi phục",
+  "privacy-policy": "Chính sách bảo mật và Điều khoản sử dụng"
 }

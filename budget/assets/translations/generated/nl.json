@@ -201,8 +201,8 @@
   "discard-changes-description": "Weet u zeker dat u uw wijzigingen wilt weggooien.",
   "discard": "Weggooien",
   "changelog": "Changelog",
-  "view-changelog": "Bekijk changelog",
-  "view-app-intro": "Bekijk onboarding",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Aan boord geven",
   "app-is-open-source": "{app} is open source!",
   "open-source": "Open source",
   "lead-developer": "Hoofdontwikkelaar",
@@ -380,5 +380,6 @@
   "logout": "Uitloggen",
   "backup-found": "Back -up gevonden",
   "backup-found-description": "Wilt u een back -up herstellen?",
-  "restore": "Herstellen"
+  "restore": "Herstellen",
+  "privacy-policy": "Privacybeleid en gebruiksvoorwaarden"
 }

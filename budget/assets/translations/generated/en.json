@@ -201,8 +201,8 @@
   "discard-changes-description": "Are you sure you want to discard your changes.",
   "discard": "Discard",
   "changelog": "Changelog",
-  "view-changelog": "View Changelog",
-  "view-app-intro": "View Onboarding",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Onboarding",
   "app-is-open-source": "{app} is Open Source!",
   "open-source": "Open Source",
   "lead-developer": "Lead Developer",
@@ -380,5 +380,6 @@
   "logout": "Logout",
   "backup-found": "Backup Found",
   "backup-found-description": "Would you like to restore a backup?",
-  "restore": "Restore"
+  "restore": "Restore",
+  "privacy-policy": "Privacy Policy and Terms of Use"
 }

@@ -172,7 +172,7 @@ class SettingsPageState extends State<SettingsPage>
                   return result;
                 },
                 initialValue: appStateSettings["requireAuth"],
-                icon: Icons.lock_rounded,
+                icon: Icons.fingerprint_rounded,
               )
             : SizedBox.shrink(),
 

@@ -201,8 +201,8 @@
   "discard-changes-description": "Er du sikker på, at du vil kassere dine ændringer.",
   "discard": "Kasser",
   "changelog": "Changelog",
-  "view-changelog": "Se Changelog",
-  "view-app-intro": "Vis onboarding",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Onboarding",
   "app-is-open-source": "{app} er open source!",
   "open-source": "Open source",
   "lead-developer": "Lead Developer",
@@ -356,7 +356,7 @@
   "notification-reminder-22": "Tag et par minutter på at opdatere dit budget med dagens udgifter.",
   "notification-reminder-23": "Sørg for at tilføje eventuelle udgifter fra i dag til din budget tracker.",
   "notification-reminder-24": "Husk at registrere dine transaktioner for dagen for at få et komplet billede af dine forbrugsvaner.",
-  "notification-reminder-25": "Tilføj dine daglige transaktioner til appen for at holde dit budget på sporet.",
+  "notification-reminder-25": "Føj dine daglige transaktioner til appen for at holde dit budget på sporet.",
   "notification-reminder-26": "Bliv på toppen af ​​dit budget ved at tilføje dine daglige transaktioner til appen.",
   "notification-reminder-title": "Tilføj transaktioner",
   "notification-upcoming-transaction-title": "Kommende transaktion forfaldt",
@@ -380,5 +380,6 @@
   "logout": "Log ud",
   "backup-found": "Backup fundet",
   "backup-found-description": "Vil du gendanne en sikkerhedskopi?",
-  "restore": "Gendanne"
+  "restore": "Gendanne",
+  "privacy-policy": "Privatlivspolitik og brugsbetingelser"
 }

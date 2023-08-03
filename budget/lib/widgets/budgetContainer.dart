@@ -498,13 +498,13 @@ class AnimatedGooBackground extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
           color:
-              dynamicPastel(context, color, amountLight: 0.6, amountDark: 0.5),
+              dynamicPastel(context, color, amountLight: 0.6, amountDark: 0.3),
         ),
       );
     }
     // Transform slightly to remove graphic artifacts
     return Transform(
-      transform: Matrix4.skewX(0.001),
+      transform: Matrix4.skewX(0.0001),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withAlpha(200),

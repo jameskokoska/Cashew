@@ -201,8 +201,8 @@
   "discard-changes-description": "Apakah Anda yakin ingin membuang perubahan Anda.",
   "discard": "Membuang",
   "changelog": "Changelog",
-  "view-changelog": "Lihat Changelog",
-  "view-app-intro": "Lihat Onboarding",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Onboarding",
   "app-is-open-source": "{app} adalah open source!",
   "open-source": "Open source",
   "lead-developer": "Pengembang utama",
@@ -380,5 +380,6 @@
   "logout": "Keluar",
   "backup-found": "Cadangan ditemukan",
   "backup-found-description": "Apakah Anda ingin mengembalikan cadangan?",
-  "restore": "Memulihkan"
+  "restore": "Memulihkan",
+  "privacy-policy": "Kebijakan Privasi dan Ketentuan Penggunaan"
 }

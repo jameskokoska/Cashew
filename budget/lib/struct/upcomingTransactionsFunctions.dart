@@ -102,7 +102,6 @@ Future openPayPopup(
       if (transaction.amount == 0) {
         amount = await openBottomSheet(
           context,
-          removeAnyContextMenus: true,
           PopupFramework(
             title: "enter-amount".tr(),
             underTitleSpace: false,

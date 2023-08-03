@@ -6,25 +6,42 @@ import 'package:flutter/services.dart';
 
 class CustomContextMenu extends StatelessWidget {
   const CustomContextMenu(
-      {required this.child, required this.buttonItems, super.key});
-  final Widget child;
+      {required this.buttonItems, required this.tappableBuilder, super.key});
   final List<ContextMenuButtonItem> buttonItems;
+  final Widget Function(VoidCallback onLongPress) tappableBuilder;
 
   @override
   Widget build(BuildContext context) {
     return ContextMenuRegion(
-      child: child,
+      tappableBuilder: tappableBuilder,
       contextMenuBuilder: (context, offset) {
         Offset newOffset = Offset(
-            offset.dx - getWidthNavigationSidebar(context), offset.dy - 15);
-        return FadeIn(
-          duration: Duration(milliseconds: 125),
-          child: AdaptiveTextSelectionToolbar.buttonItems(
-            anchors: TextSelectionToolbarAnchors(
-              primaryAnchor: newOffset,
+            offset.dx - getWidthNavigationSidebar(context),
+            offset.dy - (kIsWeb ? 0 : 15));
+        return Stack(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTapDown: (_) {
+                ContextMenuController.removeAny();
+              },
+              onVerticalDragDown: (_) {
+                ContextMenuController.removeAny();
+              },
+              onHorizontalDragDown: (_) {
+                ContextMenuController.removeAny();
+              },
             ),
-            buttonItems: buttonItems,
-          ),
+            FadeIn(
+              duration: Duration(milliseconds: 125),
+              child: AdaptiveTextSelectionToolbar.buttonItems(
+                anchors: TextSelectionToolbarAnchors(
+                  primaryAnchor: newOffset,
+                ),
+                buttonItems: buttonItems,
+              ),
+            ),
+          ],
         );
       },
     );
@@ -34,67 +51,25 @@ class CustomContextMenu extends StatelessWidget {
 typedef ContextMenuBuilder = Widget Function(
     BuildContext context, Offset offset);
 
-/// Shows and hides the context menu based on user gestures.
-///
-/// By default, shows the menu on right clicks and long presses.
 class ContextMenuRegion extends StatefulWidget {
-  /// Creates an instance of [ContextMenuRegion].
   const ContextMenuRegion({
     super.key,
-    required this.child,
     required this.contextMenuBuilder,
+    required this.tappableBuilder,
   });
 
-  /// Builds the context menu.
   final ContextMenuBuilder contextMenuBuilder;
 
-  /// The child widget that will be listened to for gestures.
-  final Widget child;
+  final Widget Function(VoidCallback onLongPress) tappableBuilder;
 
   @override
   State<ContextMenuRegion> createState() => _ContextMenuRegionState();
 }
 
 class _ContextMenuRegionState extends State<ContextMenuRegion> {
-  Offset? _longPressOffset;
-
   final ContextMenuController _contextMenuController = ContextMenuController();
 
-  static bool get _longPressEnabled {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.iOS:
-        return true;
-      case TargetPlatform.macOS:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return false;
-    }
-  }
-
-  void _onSecondaryTapUp(TapUpDetails details) {
-    _show(details.globalPosition);
-  }
-
-  void _onTap() {
-    if (!_contextMenuController.isShown) {
-      return;
-    }
-    _hide();
-  }
-
-  void _onLongPressStart(LongPressStartDetails details) {
-    _longPressOffset = details.globalPosition;
-  }
-
-  void _onLongPress() {
-    assert(_longPressOffset != null);
-    _show(_longPressOffset!);
-    _longPressOffset = null;
-  }
-
-  void _show(Offset position) {
+  void show() {
     HapticFeedback.mediumImpact();
     _contextMenuController.show(
       context: context,
@@ -104,33 +79,25 @@ class _ContextMenuRegionState extends State<ContextMenuRegion> {
     );
   }
 
-  void _hide() {
-    _contextMenuController.remove();
-  }
-
   @override
   void dispose() {
-    _hide();
+    _contextMenuController.remove();
     super.dispose();
   }
 
+  Offset position = Offset(0, 0);
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onSecondaryTapUp: _onSecondaryTapUp,
-      onLongPressStart: _onLongPressStart,
-      onLongPress: _longPressEnabled ? _onLongPress : null,
-      child: Listener(
-        onPointerDown: _longPressEnabled
-            ? (PointerDownEvent e) {
-                _hide();
-              }
-            : (PointerDownEvent e) {
-                _show(e.position);
-              },
-        child: widget.child,
-      ),
+    return Listener(
+      onPointerDown: (PointerDownEvent e) {
+        setState(() {
+          position = e.position;
+        });
+      },
+      child: widget.tappableBuilder(() {
+        show();
+      }),
     );
   }
 }

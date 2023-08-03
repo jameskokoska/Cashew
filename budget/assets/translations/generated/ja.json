@@ -201,8 +201,8 @@
   "discard-changes-description": "あなたはあなたの変更を捨てたいと思っていますか？",
   "discard": "破棄",
   "changelog": "Changelog",
-  "view-changelog": "changelogを表示します",
-  "view-app-intro": "オンボーディングを表示します",
+  "view-changelog": "Changelog",
+  "view-app-intro": "オンボーディング",
   "app-is-open-source": "{app}はオープンソースです！",
   "open-source": "オープンソース",
   "lead-developer": "リード開発者",
@@ -380,5 +380,6 @@
   "logout": "ログアウト",
   "backup-found": "バックアップが見つかりました",
   "backup-found-description": "バックアップを復元しますか？",
-  "restore": "戻す"
+  "restore": "戻す",
+  "privacy-policy": "プライバシーポリシーと利用規約"
 }

@@ -201,8 +201,8 @@
   "discard-changes-description": "Är du säker på att du vill kasta dina ändringar.",
   "discard": "Kassera",
   "changelog": "Byte",
-  "view-changelog": "Visa Changelog",
-  "view-app-intro": "Visa ombord",
+  "view-changelog": "Byte",
+  "view-app-intro": "Ombord",
   "app-is-open-source": "{app} är öppen källkod!",
   "open-source": "Öppen källa",
   "lead-developer": "Ledarutvecklare",
@@ -380,5 +380,6 @@
   "logout": "Logga ut",
   "backup-found": "Säkerhetskopiering hittades",
   "backup-found-description": "Vill du återställa en säkerhetskopia?",
-  "restore": "Återställ"
+  "restore": "Återställ",
+  "privacy-policy": "Sekretesspolicy och användarvillkor"
 }

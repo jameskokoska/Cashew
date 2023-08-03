@@ -304,7 +304,6 @@ void enterCategoryLimitPopup(
   double amount = categoryLimit != null ? categoryLimit.amount : 0;
   await openBottomSheet(
     context,
-    removeAnyContextMenus: true,
     PopupFramework(
       title: "enter-limit".tr(),
       subtitle: category.name,

@@ -153,7 +153,7 @@
   "for": "para sa",
   "more-days": "mas maraming araw",
   "spending-tracking": "Maaari kang patuloy na gumastos",
-  "of-spending": "ng paggastos",
+  "of-spending": "ng paggasta",
   "of-income": "ng kita",
   "of-expense": "ng gastos",
   "select-currency": "Piliin ang Pera",
@@ -201,8 +201,8 @@
   "discard-changes-description": "Sigurado ka bang nais mong itapon ang iyong mga pagbabago.",
   "discard": "Itapon",
   "changelog": "Changelog",
-  "view-changelog": "Tingnan ang Changelog",
-  "view-app-intro": "Tingnan ang onboarding",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Onboarding",
   "app-is-open-source": "Ang {app} ay bukas na mapagkukunan!",
   "open-source": "Bukas na mapagkukunan",
   "lead-developer": "Pangunahing Developer",
@@ -360,7 +360,7 @@
   "notification-reminder-26": "Manatili sa tuktok ng iyong badyet sa pamamagitan ng pagdaragdag ng iyong pang -araw -araw na mga transaksyon sa app.",
   "notification-reminder-title": "Magdagdag ng mga transaksyon",
   "notification-upcoming-transaction-title": "Paparating na transaksyon",
-  "translations-help": "Kung nais mong tumulong sa mga pagsasalin, mangyaring mag -email",
+  "translations-help": "Kung nais mong makatulong sa mga pagsasalin, mangyaring mag -email",
   "no-transactions-for": "Walang mga transaksyon para sa",
   "average-spent": "average na ginugol",
   "select-icon": "Piliin ang icon",
@@ -380,5 +380,6 @@
   "logout": "Mag -logout",
   "backup-found": "Natagpuan ang backup",
   "backup-found-description": "Nais mo bang ibalik ang isang backup?",
-  "restore": "Ibalik"
+  "restore": "Ibalik",
+  "privacy-policy": "Patakaran sa Pagkapribado at Mga Tuntunin ng Paggamit"
 }

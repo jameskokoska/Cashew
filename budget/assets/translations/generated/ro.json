@@ -201,8 +201,8 @@
   "discard-changes-description": "Sunteți sigur că doriți să vă aruncați modificările.",
   "discard": "Aruncat",
   "changelog": "Changelog",
-  "view-changelog": "Vizualizați ChangeLog",
-  "view-app-intro": "Vizualizați la bord",
+  "view-changelog": "Changelog",
+  "view-app-intro": "La imbarcare",
   "app-is-open-source": "{app} este open source!",
   "open-source": "Sursa deschisa",
   "lead-developer": "Dezvoltator de conducere",
@@ -350,7 +350,7 @@
   "notification-reminder-16": "Rămâneți la curent cu bugetul adăugând tranzacții.",
   "notification-reminder-17": "Este sfârșitul zilei, v -ați adăugat tranzacțiile?",
   "notification-reminder-18": "Asigurați -vă că adăugați tranzacțiile zilnice la aplicație.",
-  "notification-reminder-19": "Adăugați orice cheltuieli de astăzi la următorul bugetar.",
+  "notification-reminder-19": "Adăugați orice cheltuieli de astăzi la trackerul bugetar.",
   "notification-reminder-20": "Înregistrați -vă tranzacțiile pentru ziua pentru a obține o imagine completă a obiceiurilor dvs. de cheltuieli.",
   "notification-reminder-21": "Nu uitați să adăugați tranzacțiile zilnice pentru a rămâne pe cale cu bugetul.",
   "notification-reminder-22": "Luați câteva minute pentru a vă actualiza bugetul cu cheltuielile de astăzi.",
@@ -380,5 +380,6 @@
   "logout": "Deconectare",
   "backup-found": "Backup găsit",
   "backup-found-description": "Doriți să restaurați o copie de rezervă?",
-  "restore": "Restabili"
+  "restore": "Restabili",
+  "privacy-policy": "Politica de confidențialitate și termenii de utilizare"
 }

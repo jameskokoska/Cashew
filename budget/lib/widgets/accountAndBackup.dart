@@ -27,6 +27,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:googleapis/abusiveexperiencereport/v1.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -341,6 +342,8 @@ Future<void> createBackup(
     }
     if (e is DetailedApiRequestError && e.status == 401) {
       await refreshGoogleSignIn();
+    } else if (e is PlatformException) {
+      await refreshGoogleSignIn();
     } else {
       openSnackbar(
         SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
@@ -597,6 +600,9 @@ Future<(drive.DriveApi? driveApi, List<drive.File>?)> getDriveFiles() async {
     return (driveApi, fileList.files);
   } catch (e) {
     if (e is DetailedApiRequestError && e.status == 401) {
+      await refreshGoogleSignIn();
+      return await getDriveFiles();
+    } else if (e is PlatformException) {
       await refreshGoogleSignIn();
       return await getDriveFiles();
     } else {
@@ -1187,7 +1193,13 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                     ),
                   ),
                   isManaging
-                      ? ButtonIcon(onTap: () {}, icon: Icons.close_rounded)
+                      ? Row(
+                          children: [
+                            ButtonIcon(onTap: () {}, icon: Icons.close_rounded),
+                            SizedBox(width: 5),
+                            ButtonIcon(onTap: () {}, icon: Icons.close_rounded),
+                          ],
+                        )
                       : SizedBox.shrink(),
                 ],
               )),

@@ -201,8 +201,8 @@
   "discard-changes-description": "શું તમે ખરેખર તમારા ફેરફારોને કા discard ી નાખવા માંગો છો?",
   "discard": "કા discી નાખવા",
   "changelog": "પરિવર્તનશીલ",
-  "view-changelog": "ચેન્જલોગ જુઓ",
-  "view-app-intro": "ઓનબોર્ડિંગ જુઓ",
+  "view-changelog": "પરિવર્તનશીલ",
+  "view-app-intro": "ઓચ",
   "app-is-open-source": "{એપ્લિકેશન} એ ખુલ્લા સ્રોત છે!",
   "open-source": "ખુલ્લા સ્ત્રોત",
   "lead-developer": "મુખ્ય વિકાસકર્તા",
@@ -380,5 +380,6 @@
   "logout": "લૉગ આઉટ",
   "backup-found": "બેકઅપ મળી",
   "backup-found-description": "શું તમે બેકઅપ પુન restore સ્થાપિત કરવા માંગો છો?",
-  "restore": "પુનઃસ્થાપિત"
+  "restore": "પુનઃસ્થાપિત",
+  "privacy-policy": "ગોપનીયતા નીતિ અને ઉપયોગની શરતો"
 }

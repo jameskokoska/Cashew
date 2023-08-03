@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/colorPicker.dart';
@@ -413,37 +414,45 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
         ],
       ),
     );
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 250),
-      margin: widget.margin ??
-          EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
-      height: widget.size,
-      width: widget.size,
-      decoration: widget.outline
-          ? BoxDecoration(
-              border: Border.all(
-                color: dynamicPastel(context, selectedColor,
-                    amountLight: 0.5, amountDark: 0.4, inverse: true),
-                width: 3,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
-            )
-          : BoxDecoration(
-              border: Border.all(
-                color: Colors.transparent,
-                width: 0,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
-            ),
-      child: Tappable(
-        color: Colors.transparent,
-        onTap: () async {
+    return Tooltip(
+      message: "custom-color".tr(),
+      child: LockedFeature(
+        actionAfter: () async {
           await openBottomSheet(context, colorPickerPopup);
         },
-        borderRadius: 500,
-        child: Icon(
-          Icons.colorize_rounded,
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 250),
+          margin: widget.margin ??
+              EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+          height: widget.size,
+          width: widget.size,
+          decoration: widget.outline
+              ? BoxDecoration(
+                  border: Border.all(
+                    color: dynamicPastel(context, selectedColor,
+                        amountLight: 0.5, amountDark: 0.4, inverse: true),
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(500)),
+                )
+              : BoxDecoration(
+                  border: Border.all(
+                    color: Colors.transparent,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(500)),
+                ),
+          child: Tappable(
+            color: Colors.transparent,
+            onTap: () async {
+              await openBottomSheet(context, colorPickerPopup);
+            },
+            borderRadius: 500,
+            child: Icon(
+              Icons.colorize_rounded,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+            ),
+          ),
         ),
       ),
     );

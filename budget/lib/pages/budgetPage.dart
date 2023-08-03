@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
+import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
@@ -87,6 +88,14 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      if (widget.isPastBudget == true) premiumPopupPastBudgets(context);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

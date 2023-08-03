@@ -201,8 +201,8 @@
   "discard-changes-description": "మీరు మీ మార్పులను విస్మరించాలని అనుకుంటున్నారా.",
   "discard": "విస్మరించండి",
   "changelog": "చేంజ్లాగ్",
-  "view-changelog": "చేంజ్లాగ్ చూడండి",
-  "view-app-intro": "ఆన్‌బోర్డింగ్ చూడండి",
+  "view-changelog": "చేంజ్లాగ్",
+  "view-app-intro": "ఆన్‌బోర్డింగ్",
   "app-is-open-source": "App అనువర్తనం ఓపెన్ సోర్స్!",
   "open-source": "ఓపెన్ సోర్స్",
   "lead-developer": "లీడ్ డెవలపర్",
@@ -380,5 +380,6 @@
   "logout": "లాగ్అవుట్",
   "backup-found": "బ్యాకప్ కనుగొనబడింది",
   "backup-found-description": "మీరు బ్యాకప్‌ను పునరుద్ధరించాలనుకుంటున్నారా?",
-  "restore": "పునరుద్ధరించండి"
+  "restore": "పునరుద్ధరించండి",
+  "privacy-policy": "గోప్యతా విధానం మరియు ఉపయోగ నిబంధనలు"
 }

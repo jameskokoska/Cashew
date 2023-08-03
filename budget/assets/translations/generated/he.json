@@ -201,8 +201,8 @@
   "discard-changes-description": "האם אתה בטוח שאתה רוצה להשליך את השינויים שלך.",
   "discard": "להשליך",
   "changelog": "Changelog",
-  "view-changelog": "צפה ב- Changelog",
-  "view-app-intro": "תצוגה על הסיפון",
+  "view-changelog": "Changelog",
+  "view-app-intro": "על הסיפון",
   "app-is-open-source": "{app} הוא קוד פתוח!",
   "open-source": "קוד פתוח",
   "lead-developer": "המפתח המוביל",
@@ -380,5 +380,6 @@
   "logout": "להתנתק",
   "backup-found": "גיבוי נמצא",
   "backup-found-description": "האם תרצה לשחזר גיבוי?",
-  "restore": "לשחזר"
+  "restore": "לשחזר",
+  "privacy-policy": "מדיניות פרטיות ותנאי שימוש"
 }

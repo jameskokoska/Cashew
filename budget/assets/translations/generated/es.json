@@ -201,8 +201,8 @@
   "discard-changes-description": "¿Estás seguro de que quieres descartar tus cambios?",
   "discard": "Desechar",
   "changelog": "Colegio de cambios",
-  "view-changelog": "Ver ChangeLog",
-  "view-app-intro": "Vista a bordo",
+  "view-changelog": "Colegio de cambios",
+  "view-app-intro": "Inducción",
   "app-is-open-source": "{app} es código abierto!",
   "open-source": "Fuente abierta",
   "lead-developer": "Desarrollador principal",
@@ -380,5 +380,6 @@
   "logout": "Cerrar sesión",
   "backup-found": "Copia de seguridad encontrada",
   "backup-found-description": "¿Le gustaría restaurar una copia de seguridad?",
-  "restore": "Restaurar"
+  "restore": "Restaurar",
+  "privacy-policy": "Política de privacidad y condiciones de uso"
 }

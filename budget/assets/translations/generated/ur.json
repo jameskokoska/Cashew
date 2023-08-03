@@ -201,8 +201,8 @@
   "discard-changes-description": "کیا آپ واقعی اپنی تبدیلیوں کو ضائع کرنا چاہتے ہیں؟",
   "discard": "خارج کردیں",
   "changelog": "چینلگ",
-  "view-changelog": "چینلگ دیکھیں",
-  "view-app-intro": "بورڈنگ دیکھیں",
+  "view-changelog": "چینلگ",
+  "view-app-intro": "جہاز پر",
   "app-is-open-source": "{ایپ open اوپن سورس ہے!",
   "open-source": "آزاد مصدر",
   "lead-developer": "لیڈ ڈویلپر",
@@ -331,7 +331,7 @@
   "daily-notifications": "روزانہ کی اطلاعات",
   "daily-notifications-description": "اگر ایپ کو نہیں کھولا گیا تھا",
   "alert-time": "الرٹ ٹائم",
-  "upcoming-transactions": "آئندہ لین دین",
+  "upcoming-transactions": "آنے والے لین دین",
   "notification-reminder-1": "آج سے لین دین شامل کرنا نہ بھولیں!",
   "notification-reminder-2": "ٹریک پر رہنے کے لئے اپنے روزانہ کے لین دین شامل کریں۔",
   "notification-reminder-3": "آج کے اخراجات کے ساتھ اپنے بجٹ کو اپ ڈیٹ کریں۔",
@@ -360,7 +360,7 @@
   "notification-reminder-26": "ایپ میں اپنے روزانہ کے لین دین کو شامل کرکے اپنے بجٹ کے اوپری حصے پر رہیں۔",
   "notification-reminder-title": "لین دین شامل کریں",
   "notification-upcoming-transaction-title": "آئندہ لین دین کی وجہ سے",
-  "translations-help": "اگر آپ ترجمے میں مدد کرنا چاہتے ہیں تو ، براہ کرم ای میل کریں",
+  "translations-help": "اگر آپ ترجموں میں مدد کرنا چاہتے ہیں تو ، براہ کرم ای میل کریں",
   "no-transactions-for": "کے لئے کوئی لین دین نہیں ہے",
   "average-spent": "اوسط خرچ",
   "select-icon": "آئیکن منتخب کریں",
@@ -380,5 +380,6 @@
   "logout": "لاگ آوٹ",
   "backup-found": "بیک اپ ملا",
   "backup-found-description": "کیا آپ بیک اپ کو بحال کرنا چاہیں گے؟",
-  "restore": "بحال کریں"
+  "restore": "بحال کریں",
+  "privacy-policy": "رازداری کی پالیسی اور استعمال کی شرائط"
 }

@@ -201,8 +201,8 @@
   "discard-changes-description": "Tem certeza de que deseja descartar suas alterações.",
   "discard": "Descartar",
   "changelog": "Changelog",
-  "view-changelog": "Visualizar registro de alteração",
-  "view-app-intro": "Ver integração",
+  "view-changelog": "Changelog",
+  "view-app-intro": "Integração",
   "app-is-open-source": "{app} é de código aberto!",
   "open-source": "Código aberto",
   "lead-developer": "Desenvolvedor-chefe",
@@ -380,5 +380,6 @@
   "logout": "Sair",
   "backup-found": "Backup encontrado",
   "backup-found-description": "Você gostaria de restaurar um backup?",
-  "restore": "Restaurar"
+  "restore": "Restaurar",
+  "privacy-policy": "Política de privacidade e termos de uso"
 }

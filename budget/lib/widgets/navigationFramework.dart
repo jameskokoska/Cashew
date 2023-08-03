@@ -99,8 +99,9 @@ Future<bool> runAllCloudFunctions(BuildContext context,
     loadingIndeterminateKey.currentState!.setVisibility(false);
     runningCloudFunctions = false;
     if (e is DetailedApiRequestError &&
-        e.status == 401 &&
-        forceSignIn == true) {
+            e.status == 401 &&
+            forceSignIn == true ||
+        e is PlatformException) {
       // Request had invalid authentication credentials. Try logging out and back in.
       // This stems from silent sign-in not providing the credentials for GDrive API for e.g.
       await refreshGoogleSignIn();

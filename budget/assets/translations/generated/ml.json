@@ -201,8 +201,8 @@
   "discard-changes-description": "നിങ്ങളുടെ മാറ്റങ്ങൾ നിരസിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?",
   "discard": "ഉപേക്ഷിക്കുക",
   "changelog": "ചേഞ്ച്ലോഗ്",
-  "view-changelog": "ചേഞ്ച്ലോഗ് കാണുക",
-  "view-app-intro": "ഓൺബോർഡിംഗ് കാണുക",
+  "view-changelog": "ചേഞ്ച്ലോഗ്",
+  "view-app-intro": "ഓൺബോർഡിംഗ്",
   "app-is-open-source": "{അപ്ലിക്കേഷൻ} ഓപ്പൺ സോഴ്സ്!",
   "open-source": "തുറന്ന ഉറവിടം",
   "lead-developer": "ലീഡ് ഡവലപ്പർ",
@@ -380,5 +380,6 @@
   "logout": "ലോഗൗട്ട്",
   "backup-found": "ബാക്കപ്പ് കണ്ടെത്തി",
   "backup-found-description": "ഒരു ബാക്കപ്പ് പുന restore സ്ഥാപിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?",
-  "restore": "വീണ്ടെടുക്കുക"
+  "restore": "വീണ്ടെടുക്കുക",
+  "privacy-policy": "സ്വകാര്യതാ നയവും ഉപയോഗ നിബന്ധനകളും"
 }

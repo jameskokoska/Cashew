@@ -201,8 +201,8 @@
   "discard-changes-description": "আপনি কি নিশ্চিত যে আপনি আপনার পরিবর্তনগুলি বাতিল করতে চান?",
   "discard": "বাতিল করা",
   "changelog": "চেঞ্জলগ",
-  "view-changelog": "চেঞ্জলগ দেখুন",
-  "view-app-intro": "অন ​​বোর্ডিং দেখুন",
+  "view-changelog": "চেঞ্জলগ",
+  "view-app-intro": "অনবোর্ডিং",
   "app-is-open-source": "{অ্যাপ্লিকেশন open ওপেন সোর্স!",
   "open-source": "মুক্ত উৎস",
   "lead-developer": "প্রধান ডেভেলপার",
@@ -380,5 +380,6 @@
   "logout": "প্রস্থান",
   "backup-found": "ব্যাকআপ পাওয়া গেছে",
   "backup-found-description": "আপনি কি একটি ব্যাকআপ পুনরুদ্ধার করতে চান?",
-  "restore": "পুনরুদ্ধার"
+  "restore": "পুনরুদ্ধার",
+  "privacy-policy": "গোপনীয়তা নীতি এবং ব্যবহারের শর্তাদি"
 }

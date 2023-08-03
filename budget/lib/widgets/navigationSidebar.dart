@@ -59,6 +59,8 @@ class NavigationSidebarState extends State<NavigationSidebar> {
     return Listener(
       onPointerDown: (_) {
         if (isCalendarOpened) Navigator.maybePop(navigatorKey.currentContext!);
+        // Remove any open context menus when sidebar clicked
+        ContextMenuController.removeAny();
       },
       child: Container(
         decoration: BoxDecoration(

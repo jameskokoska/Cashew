@@ -154,7 +154,7 @@
   "more-days": "अधिक दिवस",
   "spending-tracking": "आपण खर्च ठेवू शकता",
   "of-spending": "खर्च",
-  "of-income": "उत्पन्नाचा",
+  "of-income": "उत्पन्न",
   "of-expense": "खर्चाचा",
   "select-currency": "चलन निवडा",
   "categories": "श्रेणी",
@@ -201,8 +201,8 @@
   "discard-changes-description": "आपल्याला खात्री आहे की आपण आपले बदल टाकून देऊ इच्छित आहात.",
   "discard": "टाकून द्या",
   "changelog": "चेंजलॉग",
-  "view-changelog": "चेंजलॉग पहा",
-  "view-app-intro": "ऑनबोर्डिंग पहा",
+  "view-changelog": "चेंजलॉग",
+  "view-app-intro": "ऑनबोर्डिंग",
   "app-is-open-source": "{अॅप} मुक्त स्त्रोत आहे!",
   "open-source": "मुक्त स्रोत",
   "lead-developer": "आघाडी विकसक",
@@ -380,5 +380,6 @@
   "logout": "बाहेर पडणे",
   "backup-found": "बॅकअप सापडला",
   "backup-found-description": "आपण बॅकअप पुनर्संचयित करू इच्छिता?",
-  "restore": "पुनर्संचयित करा"
+  "restore": "पुनर्संचयित करा",
+  "privacy-policy": "गोपनीयता धोरण आणि वापर अटी"
 }

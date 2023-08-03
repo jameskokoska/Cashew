@@ -285,26 +285,56 @@ class AboutPage extends StatelessWidget {
           title: "Currency Rates API",
           link: "https://github.com/fawazahmed0/currency-api",
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
-          child: Button(
-            label: "view-licenses-and-legalese".tr(),
-            onTap: () {
-              showLicensePage(
-                  context: context,
-                  applicationVersion: "v" +
-                      version +
-                      "+" +
-                      buildNumber +
-                      ", db-v" +
-                      schemaVersionGlobal.toString(),
-                  applicationLegalese:
-                      "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." +
-                          "\n\n" +
-                          "exchange-rate-notice-description".tr());
-            },
-          ),
+        SizedBox(height: 5),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 23),
+                child: Button(
+                  label: "view-licenses-and-legalese".tr(),
+                  color: Theme.of(context).colorScheme.tertiary,
+                  textColor: Theme.of(context).colorScheme.onTertiary,
+                  expandedLayout: true,
+                  onTap: () {
+                    showLicensePage(
+                        context: context,
+                        applicationVersion: "v" +
+                            version +
+                            "+" +
+                            buildNumber +
+                            ", db-v" +
+                            schemaVersionGlobal.toString(),
+                        applicationLegalese:
+                            "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." +
+                                "\n\n" +
+                                "exchange-rate-notice-description".tr());
+                  },
+                ),
+              ),
+            )
+          ],
         ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 23),
+                child: Button(
+                  label: "privacy-policy".tr(),
+                  color: Theme.of(context).colorScheme.tertiary,
+                  textColor: Theme.of(context).colorScheme.onTertiary,
+                  expandedLayout: true,
+                  onTap: () {
+                    openUrl("http://cashewapp.web.app/policy.html");
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
           child: Center(

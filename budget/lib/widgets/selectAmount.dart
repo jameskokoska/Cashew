@@ -487,13 +487,13 @@ class _SelectAmountState extends State<SelectAmount> {
                                     },
                                   ),
                                 ],
-                                child: Tappable(
+                                tappableBuilder: (onLongPress) => Tappable(
                                   color: Colors.transparent,
                                   borderRadius: 10,
                                   onTap: () {
                                     return;
                                   },
-                                  // onLongPress: () {},
+                                  onLongPress: onLongPress,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                       right: 8.0,
