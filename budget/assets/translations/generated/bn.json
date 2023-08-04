@@ -212,7 +212,7 @@
   "font-awesome-credit": "ফন্ট দুর্দান্ত থেকে আইকন",
   "pch-vector-credit": "পিসিএইচ-ভেক্টর দ্বারা অবতরণ গ্রাফিক্স",
   "major-tools": "প্রধান সরঞ্জাম",
-  "view-licenses-and-legalese": "লাইসেন্স এবং লিগ্যালিজ দেখুন",
+  "view-licenses-and-legalese": "লাইসেন্স এবং লিগ্যালিজ",
   "made-in-canada": "কানাডায় তৈরি",
   "delete-all-data": "সমস্ত ডেটা মুছুন",
   "erase-everything": "সবকিছু মুছুন?",
@@ -381,5 +381,14 @@
   "backup-found": "ব্যাকআপ পাওয়া গেছে",
   "backup-found-description": "আপনি কি একটি ব্যাকআপ পুনরুদ্ধার করতে চান?",
   "restore": "পুনরুদ্ধার",
-  "privacy-policy": "গোপনীয়তা নীতি এবং ব্যবহারের শর্তাদি"
+  "privacy-policy": "গোপনীয়তা নীতি এবং ব্যবহারের শর্তাদি",
+  "budget-like-a-pro": "সাথে একটি প্রো মত বাজেট",
+  "support-the-developer": "বিকাশকারীকে সমর্থন করুন",
+  "unlimited-budgets": "সীমাহীন বাজেট",
+  "unlimited-budgets-description": "1 টিরও বেশি বাজেট তৈরি করুন",
+  "past-budget-periods": "অতীত বাজেটের সময়কাল",
+  "past-budget-periods-description": "বিগত পিরিয়ডের বাজেট ভাঙ্গন দেখুন",
+  "unlimited-color-picker": "সীমাহীন রঙ বাছাইকারী",
+  "unlimited-color-picker-description": "আপনি চান যে কোনও রঙ চয়ন করুন",
+  "continue-for-free": "বিনামূল্যে চালিয়ে যান"
 }

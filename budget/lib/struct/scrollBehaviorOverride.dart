@@ -12,7 +12,7 @@ class ScrollBehaviorOverride extends MaterialScrollBehavior {
 
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
-    return appStateSettings["iOSNavigation"]
+    return appStateSettings["iOSEmulate"]
         ? BouncingScrollPhysics()
         : super.getScrollPhysics(context);
   }

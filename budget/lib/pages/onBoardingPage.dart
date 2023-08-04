@@ -8,7 +8,6 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -18,7 +17,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../functions.dart';
-import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:budget/database/initializeDefaultDatabase.dart';
 
 class OnBoardingPage extends StatelessWidget {
@@ -458,7 +456,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         onTap: () {
                           previousOnBoardPage();
                         },
-                        icon: Icons.arrow_back_rounded,
+                        icon: getPlatform() == PlatformOS.isIOS
+                            ? Icons.chevron_left_rounded
+                            : Icons.arrow_back_rounded,
                         size: 50,
                         padding: getIsFullScreen(context) == false
                             ? EdgeInsets.all(3)
@@ -514,7 +514,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                           if (currentIndex < children.length - 1)
                             nextOnBoardPage(children.length);
                         },
-                        icon: Icons.arrow_forward_rounded,
+                        icon: getPlatform() == PlatformOS.isIOS
+                            ? Icons.chevron_right_rounded
+                            : Icons.arrow_forward_rounded,
                         size: 50,
                         padding: getIsFullScreen(context) == false
                             ? EdgeInsets.all(3)

@@ -212,7 +212,7 @@
   "font-awesome-credit": "フォントのアイコンは素晴らしい",
   "pch-vector-credit": "PCH-Vectorによる着陸グラフィックス",
   "major-tools": "主要なツール",
-  "view-licenses-and-legalese": "ライセンスとリーガルを表示します",
+  "view-licenses-and-legalese": "ライセンスとリーガル",
   "made-in-canada": "カナダで作られています",
   "delete-all-data": "すべてのデータを削除します",
   "erase-everything": "すべてを消去しますか？",
@@ -332,7 +332,7 @@
   "daily-notifications-description": "アプリが開かれていない場合",
   "alert-time": "アラート時間",
   "upcoming-transactions": "今後のトランザクション",
-  "notification-reminder-1": "今日から取引を追加することを忘れないでください！",
+  "notification-reminder-1": "今日からトランザクションを追加することを忘れないでください！",
   "notification-reminder-2": "毎日のトランザクションを追加して、順調に進みます。",
   "notification-reminder-3": "今日の費用で予算を更新してください。",
   "notification-reminder-4": "予算トラッカーに今日の費用を追加します。",
@@ -381,5 +381,14 @@
   "backup-found": "バックアップが見つかりました",
   "backup-found-description": "バックアップを復元しますか？",
   "restore": "戻す",
-  "privacy-policy": "プライバシーポリシーと利用規約"
+  "privacy-policy": "プライバシーポリシーと利用規約",
+  "budget-like-a-pro": "プロのような予算",
+  "support-the-developer": "開発者をサポートします",
+  "unlimited-budgets": "無制限の予算",
+  "unlimited-budgets-description": "1つ以上の予算を作成します",
+  "past-budget-periods": "過去の予算期間",
+  "past-budget-periods-description": "過去の期間の予算内訳を表示します",
+  "unlimited-color-picker": "無制限のカラーピッカー",
+  "unlimited-color-picker-description": "必要な色を選んでください",
+  "continue-for-free": "無料で続けてください"
 }

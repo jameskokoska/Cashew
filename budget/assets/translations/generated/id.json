@@ -212,7 +212,7 @@
   "font-awesome-credit": "Ikon dari font mengagumkan",
   "pch-vector-credit": "Landing Graphics oleh PCH-Vector",
   "major-tools": "Alat utama",
-  "view-licenses-and-legalese": "Lihat lisensi dan legalese",
+  "view-licenses-and-legalese": "Lisensi dan legalese",
   "made-in-canada": "Buatan Kanada",
   "delete-all-data": "Hapus semua data",
   "erase-everything": "Menghapus semuanya?",
@@ -381,5 +381,14 @@
   "backup-found": "Cadangan ditemukan",
   "backup-found-description": "Apakah Anda ingin mengembalikan cadangan?",
   "restore": "Memulihkan",
-  "privacy-policy": "Kebijakan Privasi dan Ketentuan Penggunaan"
+  "privacy-policy": "Kebijakan Privasi dan Ketentuan Penggunaan",
+  "budget-like-a-pro": "Anggaran seperti pro dengan",
+  "support-the-developer": "Mendukung pengembang",
+  "unlimited-budgets": "Anggaran yang tidak terbatas",
+  "unlimited-budgets-description": "Buat lebih dari 1 anggaran",
+  "past-budget-periods": "Periode anggaran sebelumnya",
+  "past-budget-periods-description": "Lihat rincian anggaran dari periode sebelumnya",
+  "unlimited-color-picker": "Pemetik warna yang tidak terbatas",
+  "unlimited-color-picker-description": "Pilih warna apa pun yang Anda inginkan",
+  "continue-for-free": "Lanjutkan secara gratis"
 }

@@ -212,7 +212,7 @@
   "font-awesome-credit": "फ़ॉन्ट भयानक से आइकन",
   "pch-vector-credit": "पीसीएच-वेक्टर द्वारा लैंडिंग ग्राफिक्स",
   "major-tools": "प्रमुख उपकरण",
-  "view-licenses-and-legalese": "लाइसेंस और कानूनी देखें",
+  "view-licenses-and-legalese": "लाइसेंस और कानूनी",
   "made-in-canada": "कनाडा में निर्मित",
   "delete-all-data": "सभी डेटा हटाएँ",
   "erase-everything": "सब कुछ मिटा दो?",
@@ -381,5 +381,14 @@
   "backup-found": "बैकअप मिला",
   "backup-found-description": "क्या आप बैकअप को पुनर्स्थापित करना चाहेंगे?",
   "restore": "पुनर्स्थापित करना",
-  "privacy-policy": "गोपनीयता नीति और उपयोग की शर्तें"
+  "privacy-policy": "गोपनीयता नीति और उपयोग की शर्तें",
+  "budget-like-a-pro": "के साथ एक समर्थक की तरह बजट",
+  "support-the-developer": "डेवलपर का समर्थन करें",
+  "unlimited-budgets": "असीमित बजट",
+  "unlimited-budgets-description": "1 से अधिक बजट बनाएं",
+  "past-budget-periods": "पिछले बजट अवधि",
+  "past-budget-periods-description": "पिछले अवधियों के बजट टूटने देखें",
+  "unlimited-color-picker": "असीमित रंग पिकर",
+  "unlimited-color-picker-description": "आप चाहते हैं कि कोई भी रंग चुनें",
+  "continue-for-free": "मुफ्त में जारी रखें"
 }

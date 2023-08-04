@@ -92,6 +92,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // Should be of type Map<String,List<int>>
     "watchedCategoriesOnBudget": {},
     "iOSNavigation": false,
+    "iOSEmulate": false,
     "locale": "System",
     "incomeExpenseStartDate": null,
     "disableShadows": false,

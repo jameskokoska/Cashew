@@ -212,7 +212,7 @@
   "font-awesome-credit": "Ikoner från teckensnittet fantastiskt",
   "pch-vector-credit": "Landningsgrafik av PCH-Vector",
   "major-tools": "Stora verktyg",
-  "view-licenses-and-legalese": "Visa licenser och legalese",
+  "view-licenses-and-legalese": "Licenser och legalese",
   "made-in-canada": "Gjord i Kanada",
   "delete-all-data": "Ta bort all data",
   "erase-everything": "Radera allt?",
@@ -381,5 +381,14 @@
   "backup-found": "Säkerhetskopiering hittades",
   "backup-found-description": "Vill du återställa en säkerhetskopia?",
   "restore": "Återställ",
-  "privacy-policy": "Sekretesspolicy och användarvillkor"
+  "privacy-policy": "Sekretesspolicy och användarvillkor",
+  "budget-like-a-pro": "Budget som en proffs med",
+  "support-the-developer": "Stödja utvecklaren",
+  "unlimited-budgets": "Obegränsade budgetar",
+  "unlimited-budgets-description": "Skapa mer än 1 budget",
+  "past-budget-periods": "Tidigare budgetperioder",
+  "past-budget-periods-description": "Visa budgetuppdelningar från tidigare perioder",
+  "unlimited-color-picker": "Obegränsad färgväljare",
+  "unlimited-color-picker-description": "Välj vilken färg du vill ha",
+  "continue-for-free": "Fortsätt gratis"
 }

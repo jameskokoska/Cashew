@@ -212,7 +212,7 @@
   "font-awesome-credit": "ఫాంట్ నుండి చిహ్నాలు అద్భుతం",
   "pch-vector-credit": "పిసిహెచ్-వెక్టర్ చేత ల్యాండింగ్ గ్రాఫిక్స్",
   "major-tools": "ప్రధాన సాధనాలు",
-  "view-licenses-and-legalese": "లైసెన్సులు మరియు చట్టబద్ధమైన చూడండి",
+  "view-licenses-and-legalese": "లైసెన్సులు మరియు చట్టబద్ధం",
   "made-in-canada": "కెనడాలో తయారు చేయబడింది",
   "delete-all-data": "మొత్తం డేటాను తొలగించండి",
   "erase-everything": "ప్రతిదీ చెరిపివేయాలా?",
@@ -381,5 +381,14 @@
   "backup-found": "బ్యాకప్ కనుగొనబడింది",
   "backup-found-description": "మీరు బ్యాకప్‌ను పునరుద్ధరించాలనుకుంటున్నారా?",
   "restore": "పునరుద్ధరించండి",
-  "privacy-policy": "గోప్యతా విధానం మరియు ఉపయోగ నిబంధనలు"
+  "privacy-policy": "గోప్యతా విధానం మరియు ఉపయోగ నిబంధనలు",
+  "budget-like-a-pro": "ప్రో వంటి బడ్జెట్",
+  "support-the-developer": "డెవలపర్‌కు మద్దతు ఇవ్వండి",
+  "unlimited-budgets": "అపరిమిత బడ్జెట్లు",
+  "unlimited-budgets-description": "1 కంటే ఎక్కువ బడ్జెట్‌ను సృష్టించండి",
+  "past-budget-periods": "గత బడ్జెట్ కాలాలు",
+  "past-budget-periods-description": "గత కాలాల బడ్జెట్ విచ్ఛిన్నాలను చూడండి",
+  "unlimited-color-picker": "అపరిమిత రంగు పికర్",
+  "unlimited-color-picker-description": "మీకు కావలసిన రంగును ఎంచుకోండి",
+  "continue-for-free": "ఉచితంగా కొనసాగించండి"
 }

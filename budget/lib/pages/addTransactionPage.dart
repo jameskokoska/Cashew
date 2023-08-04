@@ -360,15 +360,21 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   Transaction createTransaction({bool removeShared = false}) {
+    bool? createdAnotherFutureTransaction = widget.transaction != null
+        ? widget.transaction!.createdAnotherFutureTransaction
+        : null;
     bool paid = widget.transaction != null
         ? widget.transaction!.paid
         : selectedType == null;
     bool skipPaid = widget.transaction != null
         ? widget.transaction!.skipPaid
         : selectedType == null;
+
     if (selectedType != null &&
         widget.transaction != null &&
         widget.transaction!.type != selectedType) {
+      createdAnotherFutureTransaction = false;
+
       if ([TransactionSpecialType.credit, TransactionSpecialType.debt]
           .contains(selectedType)) {
         paid = true;
@@ -403,9 +409,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           : selectedPeriodLength,
       methodAdded:
           widget.transaction != null ? widget.transaction!.methodAdded : null,
-      createdAnotherFutureTransaction: widget.transaction != null
-          ? widget.transaction!.createdAnotherFutureTransaction
-          : null,
+      createdAnotherFutureTransaction: createdAnotherFutureTransaction,
       sharedKey: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedKey
           : null,
@@ -1310,6 +1314,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 ),
                 widget.transaction != null && selectedType != null
                     ? WidgetSizeBuilder(
+                        // Change the key to re-render the widget when transaction type changed
+                        key: ValueKey(widget.transaction != null
+                            ? getTransactionActionNameFromType(
+                                    createTransaction())
+                                .tr()
+                            : ""),
                         widgetBuilder: (Size? size) {
                           return Container(
                             width: size?.width,

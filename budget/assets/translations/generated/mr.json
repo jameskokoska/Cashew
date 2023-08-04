@@ -154,7 +154,7 @@
   "more-days": "अधिक दिवस",
   "spending-tracking": "आपण खर्च ठेवू शकता",
   "of-spending": "खर्च",
-  "of-income": "उत्पन्न",
+  "of-income": "उत्पन्नाचा",
   "of-expense": "खर्चाचा",
   "select-currency": "चलन निवडा",
   "categories": "श्रेणी",
@@ -212,7 +212,7 @@
   "font-awesome-credit": "फॉन्ट अद्भुत प्रतीक",
   "pch-vector-credit": "पीसीएच-वेक्टरद्वारे लँडिंग ग्राफिक्स",
   "major-tools": "प्रमुख साधने",
-  "view-licenses-and-legalese": "परवाने आणि कायदेशीर पहा",
+  "view-licenses-and-legalese": "परवाने आणि कायदेशीर",
   "made-in-canada": "कॅनडा मध्ये बनवलेले",
   "delete-all-data": "सर्व डेटा हटवा",
   "erase-everything": "सर्वकाही मिटवा?",
@@ -381,5 +381,14 @@
   "backup-found": "बॅकअप सापडला",
   "backup-found-description": "आपण बॅकअप पुनर्संचयित करू इच्छिता?",
   "restore": "पुनर्संचयित करा",
-  "privacy-policy": "गोपनीयता धोरण आणि वापर अटी"
+  "privacy-policy": "गोपनीयता धोरण आणि वापर अटी",
+  "budget-like-a-pro": "सह एक प्रो सारखे बजेट",
+  "support-the-developer": "विकसकास समर्थन द्या",
+  "unlimited-budgets": "अमर्यादित बजेट",
+  "unlimited-budgets-description": "1 पेक्षा जास्त बजेट तयार करा",
+  "past-budget-periods": "मागील बजेट कालावधी",
+  "past-budget-periods-description": "मागील कालावधीचे बजेट ब्रेकडाउन पहा",
+  "unlimited-color-picker": "अमर्यादित रंग निवडी",
+  "unlimited-color-picker-description": "आपल्याला पाहिजे असलेला कोणताही रंग निवडा",
+  "continue-for-free": "विनामूल्य सुरू ठेवा"
 }

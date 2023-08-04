@@ -212,7 +212,7 @@
   "font-awesome-credit": "Biểu tượng từ phông chữ tuyệt vời",
   "pch-vector-credit": "Đồ họa hạ cánh của PCH-Vector",
   "major-tools": "Công cụ chính",
-  "view-licenses-and-legalese": "Xem giấy phép và người hợp pháp",
+  "view-licenses-and-legalese": "Giấy phép và pháp lý",
   "made-in-canada": "Được thực hiện ở Canada",
   "delete-all-data": "Xóa tất cả dữ liệu",
   "erase-everything": "Xoá đi mọi thứ?",
@@ -332,7 +332,7 @@
   "daily-notifications-description": "Nếu ứng dụng không được mở",
   "alert-time": "Thời gian cảnh báo",
   "upcoming-transactions": "Giao dịch sắp tới",
-  "notification-reminder-1": "Đừng quên thêm giao dịch từ hôm nay!",
+  "notification-reminder-1": "Đừng quên thêm các giao dịch từ hôm nay!",
   "notification-reminder-2": "Thêm các giao dịch hàng ngày của bạn để theo dõi.",
   "notification-reminder-3": "Cập nhật ngân sách của bạn với các chi phí hôm nay.",
   "notification-reminder-4": "Thêm chi phí hôm nay vào trình theo dõi ngân sách của bạn.",
@@ -381,5 +381,14 @@
   "backup-found": "Sao lưu tìm thấy",
   "backup-found-description": "Bạn có muốn khôi phục một bản sao lưu không?",
   "restore": "Khôi phục",
-  "privacy-policy": "Chính sách bảo mật và Điều khoản sử dụng"
+  "privacy-policy": "Chính sách bảo mật và Điều khoản sử dụng",
+  "budget-like-a-pro": "Ngân sách như một chuyên gia với",
+  "support-the-developer": "Hỗ trợ nhà phát triển",
+  "unlimited-budgets": "Ngân sách không giới hạn",
+  "unlimited-budgets-description": "Tạo nhiều hơn 1 ngân sách",
+  "past-budget-periods": "Thời gian ngân sách trong quá khứ",
+  "past-budget-periods-description": "Xem các phân tích ngân sách của các giai đoạn trong quá khứ",
+  "unlimited-color-picker": "Bộ chọn màu không giới hạn",
+  "unlimited-color-picker-description": "Chọn bất kỳ màu nào bạn muốn",
+  "continue-for-free": "Tiếp tục miễn phí"
 }

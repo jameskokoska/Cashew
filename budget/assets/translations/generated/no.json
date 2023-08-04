@@ -212,7 +212,7 @@
   "font-awesome-credit": "Ikoner fra Font Awesome",
   "pch-vector-credit": "Landingsgrafikk av PCH-Vector",
   "major-tools": "Hovedverktøy",
-  "view-licenses-and-legalese": "Se lisenser og legalese",
+  "view-licenses-and-legalese": "Lisenser og legalese",
   "made-in-canada": "Laget i Canada",
   "delete-all-data": "Slett alle data",
   "erase-everything": "Slette alt?",
@@ -381,5 +381,14 @@
   "backup-found": "Sikkerhetskopiering funnet",
   "backup-found-description": "Vil du gjenopprette en sikkerhetskopi?",
   "restore": "Restaurere",
-  "privacy-policy": "Personvernregler og bruksvilkår"
+  "privacy-policy": "Personvernregler og bruksvilkår",
+  "budget-like-a-pro": "Budsjett som en proff med",
+  "support-the-developer": "Støtt utvikleren",
+  "unlimited-budgets": "Ubegrensede budsjetter",
+  "unlimited-budgets-description": "Lag mer enn 1 budsjett",
+  "past-budget-periods": "Tidligere budsjettperioder",
+  "past-budget-periods-description": "Se budsjettfordelinger av tidligere perioder",
+  "unlimited-color-picker": "Ubegrenset fargeplukker",
+  "unlimited-color-picker-description": "Velg hvilken som helst farge du vil ha",
+  "continue-for-free": "Fortsett gratis"
 }

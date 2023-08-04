@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:budget/functions.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -89,6 +91,8 @@ class PageFramework extends StatefulWidget {
 
 class PageFrameworkState extends State<PageFramework>
     with TickerProviderStateMixin, WidgetsBindingObserver {
+  double leftBackSwipeDetectionWidth = 50;
+
   late ScrollController _scrollController;
   late AnimationController _animationControllerShift =
       AnimationController(vsync: this);
@@ -100,19 +104,30 @@ class PageFrameworkState extends State<PageFramework>
     vsync: this,
     duration: Duration(milliseconds: 500),
   );
-  // late AnimationController _animationControllerDragX;
 
-  void scrollToTop({duration = 1200}) {
+  void scrollToTop({int duration = 1200}) {
     _scrollController.animateTo(0,
-        duration: Duration(milliseconds: duration), curve: Curves.elasticOut);
+        duration: Duration(
+            milliseconds:
+                (getPlatform() == PlatformOS.isIOS ? duration * 0.2 : duration)
+                    .round()),
+        curve: getPlatform() == PlatformOS.isIOS
+            ? Curves.easeInOut
+            : Curves.elasticOut);
   }
 
-  void scrollToBottom({duration = 1200}) {
+  void scrollToBottom({int duration = 1200}) {
     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: duration), curve: Curves.elasticOut);
+        duration: Duration(
+            milliseconds:
+                (getPlatform() == PlatformOS.isIOS ? duration * 0.2 : duration)
+                    .round()),
+        curve: getPlatform() == PlatformOS.isIOS
+            ? Curves.easeInOut
+            : Curves.elasticOut);
   }
 
-  void scrollTo(double position, {duration = 1200}) {
+  void scrollTo(double position, {int duration = 1200}) {
     _scrollController.animateTo(position,
         duration: Duration(milliseconds: duration), curve: Curves.easeInOut);
   }
@@ -132,8 +147,6 @@ class PageFrameworkState extends State<PageFramework>
     _animationController0at50 = AnimationController(vsync: this, value: 1);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
     _animationControllerDragY.duration = Duration(milliseconds: 1000);
-    // _animationControllerDragX = AnimationController(vsync: this, value: 0.5);
-    // _animationControllerDragX.duration = Duration(milliseconds: 1000);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
 
@@ -199,7 +212,6 @@ class PageFrameworkState extends State<PageFramework>
     _animationControllerOpacity.dispose();
     _animationController0at50.dispose();
     _animationControllerDragY.dispose();
-    // _animationControllerDragX.dispose();
     _scrollToTopAnimationController.dispose();
 
     _scrollController.dispose();
@@ -212,18 +224,24 @@ class PageFrameworkState extends State<PageFramework>
   double totalDragY = 0;
   double totalDragX = 0;
   bool swipeDownToDismiss = false;
+  bool isBackSideSwiping = false;
 
   _onPointerMove(PointerMoveEvent ptr) {
     if ((widget.onDragDownToDissmiss != null ||
             Navigator.of(context).canPop()) &&
         widget.dragDownToDismissEnabled &&
         selectingTransactionsActive == 0) {
-      if (swipeDownToDismiss) {
+      if (isBackSideSwiping) {
         totalDragX = totalDragX + ptr.delta.dx;
+        double calculatedYOffset = totalDragX / 500;
+        if (calculatedYOffset > _animationControllerDragY.value)
+          _animationControllerDragY.value = calculatedYOffset;
+      }
+      if (swipeDownToDismiss) {
         totalDragY = totalDragY + ptr.delta.dy;
-        //How far you need to drag to track drags - for animation
-        _animationControllerDragY.value = totalDragY / 500;
-        // _animationControllerDragX.value = 0.5 + totalDragX / 500;
+        double calculatedYOffset = totalDragY / 500;
+        if (calculatedYOffset > _animationControllerDragY.value)
+          _animationControllerDragY.value = calculatedYOffset;
       }
     }
   }
@@ -231,21 +249,28 @@ class PageFrameworkState extends State<PageFramework>
   _onPointerUp(PointerUpEvent event) async {
     //How far you need to drag to dismiss
     if (widget.dragDownToDismissEnabled) {
-      if (totalDragY >= 125 && !(ModalRoute.of(context)?.isFirst ?? true)) {
+      if ((totalDragX >= 90 || totalDragY >= 125) &&
+          !(ModalRoute.of(context)?.isFirst ?? true)) {
         if (widget.onDragDownToDissmiss != null) {
           widget.onDragDownToDissmiss!();
         } else {
           await Navigator.of(context).maybePop();
         }
+      } else {
+        totalDragX = 0;
+        totalDragY = 0;
+        isBackSideSwiping = false;
+        _animationControllerDragY.reverse();
       }
-      totalDragX = 0;
-      totalDragY = 0;
-      _animationControllerDragY.reverse();
-      // _animationControllerDragX.animateTo(0.5);
     }
   }
 
   _onPointerDown(PointerDownEvent event) {
+    if (event.position.dx < leftBackSwipeDetectionWidth &&
+        isBackSideSwiping == false) {
+      isBackSideSwiping = true;
+    }
+
     if (_scrollController.offset != 0) {
       swipeDownToDismiss = false;
     } else {
@@ -339,33 +364,40 @@ class PageFrameworkState extends State<PageFramework>
         onPointerUp: (ptr) => {_onPointerUp(ptr)},
         onPointerDown: (ptr) => {_onPointerDown(ptr)},
         behavior: HitTestBehavior.opaque,
-        child: Scaffold(
-          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          backgroundColor: widget.dragDownToDissmissBackground,
-          body: Stack(
-            children: [
-              AnimatedBuilder(
-                // animation: _animationControllerDragX,
-                // builder: (_, child) {
-                //   return Transform.translate(
-                //     offset: Offset((_animationControllerDragX.value - 0.5) * 70, 0),
-                //     child: Scaffold(
-                //       backgroundColor: widget.dragDownToDissmissBackground,
-                //       body: AnimatedBuilder(
-                animation: _animationControllerDragY,
-                builder: (_, child) {
-                  return Transform.translate(
-                    offset: Offset(
-                        0,
-                        _animationControllerDragY.value *
-                            ((1 + 1 - _animationControllerDragY.value) * 50)),
-                    child: scaffold,
-                  );
-                },
+        child: Stack(
+          children: [
+            Scaffold(
+              resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+              backgroundColor: widget.dragDownToDissmissBackground,
+              body: Stack(
+                children: [
+                  AnimatedBuilder(
+                    animation: _animationControllerDragY,
+                    builder: (_, child) {
+                      return Transform.translate(
+                        offset: Offset(
+                            0,
+                            _animationControllerDragY.value *
+                                ((1 + 1 - _animationControllerDragY.value) *
+                                    50)),
+                        child: scaffold,
+                      );
+                    },
+                  ),
+                  widget.overlay ?? SizedBox.shrink(),
+                ],
               ),
-              widget.overlay ?? SizedBox.shrink(),
-            ],
-          ),
+            ),
+            // Catch any horizontal drag starts, we catch these so the use cannot scroll while back swiping
+            appStateSettings["iOSNavigation"]
+                ? SizedBox.shrink()
+                : Container(
+                    width: leftBackSwipeDetectionWidth,
+                    child: GestureDetector(
+                      onHorizontalDragStart: (details) => {},
+                    ),
+                  ),
+          ],
         ),
         //       );
         //     },
@@ -505,6 +537,18 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final PreferredSizeWidget? bottom;
   @override
   Widget build(BuildContext context) {
+    bool safeToIgnoreBG = appBarBackgroundColorStart == null ||
+        appBarBackgroundColorStart == Theme.of(context).canvasColor;
+    Color? appBarBGColorCalculated = appBarBackgroundColor == null
+        ? Theme.of(context).colorScheme.secondaryContainer
+        : appBarBackgroundColor;
+    if (appBarBGColorCalculated != null &&
+        safeToIgnoreBG &&
+        getPlatform() == PlatformOS.isIOS) {
+      appBarBGColorCalculated =
+          dynamicPastel(context, appBarBGColorCalculated, amount: 0.7)
+              .withOpacity(0.8);
+    }
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && backButton;
     return SliverAppBar(
@@ -515,7 +559,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 ? Brightness.dark
                 : Brightness.light,
       ),
-      shadowColor: Theme.of(context).shadowColor.withAlpha(130),
+      shadowColor: safeToIgnoreBG && getPlatform() == PlatformOS.isIOS
+          ? Colors.transparent
+          : Theme.of(context).shadowColor.withAlpha(130),
       leading: backButtonEnabled == true && animationControllerOpacity != null
           ? FadeTransition(
               opacity: animationControllerOpacity!,
@@ -527,15 +573,15 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     Navigator.of(context).maybePop();
                 },
                 icon: Icon(
-                  Icons.arrow_back_rounded,
+                  getPlatform() == PlatformOS.isIOS
+                      ? Icons.chevron_left_rounded
+                      : Icons.arrow_back_rounded,
                   color: getColor(context, "black"),
                 ),
               ),
             )
           : Container(),
-      backgroundColor: appBarBackgroundColor == null
-          ? Theme.of(context).colorScheme.secondaryContainer
-          : appBarBackgroundColor,
+      backgroundColor: appBarBGColorCalculated,
       floating: false,
       pinned: enableDoubleColumn(context) ? true : pinned,
       expandedHeight: getExpandedHeaderHeight(context, expandedHeight),
@@ -563,79 +609,79 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     MediaQuery.of(context).padding.top) /
                 (expandedHeightCalculated - collapsedHeight);
         if (collapsedHeight == expandedHeightCalculated) percent = 1;
-        return FlexibleSpaceBar(
-          centerTitle: enableDoubleColumn(context) ? true : false,
-          titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-          title: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: Transform.translate(
-              offset: enableDoubleColumn(context)
-                  ? Offset(0, 0)
-                  //  Offset(0, -(1 - percent) * 40)
-                  : Offset(
-                      backButtonEnabled ? 46 * percent : 10 * percent,
-                      -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
-                    ),
-              child: Transform.scale(
-                scale: percent * 0.15 + 1,
-                child: titleWidget ??
-                    TextFont(
-                      text: title,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      textColor: textColor == null
-                          ? Theme.of(context).colorScheme.onSecondaryContainer
-                          : textColor,
-                      textAlign: enableDoubleColumn(context)
-                          ? TextAlign.center
-                          : TextAlign.left,
-                    ),
-              ),
-            ),
-          ),
-          background: Stack(
-            children: [
-              Container(
-                color: appBarBackgroundColorStart == null
-                    ? Theme.of(context).canvasColor
-                    : appBarBackgroundColorStart,
-              ),
-              Opacity(
-                opacity: percent,
-                child: Container(
-                  color: appBarBackgroundColor == null
-                      ? Theme.of(context).colorScheme.secondaryContainer
-                      : appBarBackgroundColor,
+        return BlurBehindAppBar(
+          child: FlexibleSpaceBar(
+            centerTitle: enableDoubleColumn(context) ? true : false,
+            titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+            title: MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: Transform.translate(
+                offset: enableDoubleColumn(context)
+                    ? Offset(0, 0)
+                    //  Offset(0, -(1 - percent) * 40)
+                    : Offset(
+                        backButtonEnabled ? 46 * percent : 10 * percent,
+                        -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
+                      ),
+                child: Transform.scale(
+                  scale: percent * 0.15 + 1,
+                  child: titleWidget ??
+                      TextFont(
+                        text: title,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        textColor: textColor == null
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
+                            : textColor,
+                        textAlign: enableDoubleColumn(context)
+                            ? TextAlign.center
+                            : TextAlign.left,
+                      ),
                 ),
               ),
-              subtitle != null &&
-                      animationControllerShift != null &&
-                      animationController0at50 != null
-                  ? AnimatedBuilder(
-                      animation: animationControllerShift!,
-                      builder: (_, child) {
-                        return Transform.translate(
-                          offset: Offset(
-                            0,
-                            -(subtitleSize ?? 0) *
-                                (animationControllerShift!.value) *
-                                subtitleAnimationSpeed,
+            ),
+            background: Stack(
+              children: [
+                Container(
+                  color: appBarBackgroundColorStart == null
+                      ? Theme.of(context).canvasColor
+                      : appBarBackgroundColorStart,
+                ),
+                Opacity(
+                  opacity: percent,
+                  child: Container(
+                    color: appBarBGColorCalculated,
+                  ),
+                ),
+                subtitle != null &&
+                        animationControllerShift != null &&
+                        animationController0at50 != null
+                    ? AnimatedBuilder(
+                        animation: animationControllerShift!,
+                        builder: (_, child) {
+                          return Transform.translate(
+                            offset: Offset(
+                              0,
+                              -(subtitleSize ?? 0) *
+                                  (animationControllerShift!.value) *
+                                  subtitleAnimationSpeed,
+                            ),
+                            child: child,
+                          );
+                        },
+                        child: Align(
+                          alignment: enableDoubleColumn(context)
+                              ? Alignment.center
+                              : subtitleAlignment,
+                          child: FadeTransition(
+                            opacity: animationController0at50!,
+                            child: subtitle,
                           ),
-                          child: child,
-                        );
-                      },
-                      child: Align(
-                        alignment: enableDoubleColumn(context)
-                            ? Alignment.center
-                            : subtitleAlignment,
-                        child: FadeTransition(
-                          opacity: animationController0at50!,
-                          child: subtitle,
                         ),
-                      ),
-                    )
-                  : SizedBox(),
-            ],
+                      )
+                    : SizedBox(),
+              ],
+            ),
           ),
         );
       }),
@@ -646,6 +692,23 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       //         : Radius.circular(15),
       //   ),
       // ),
+    );
+  }
+}
+
+// Only blur if iOS
+class BlurBehindAppBar extends StatelessWidget {
+  const BlurBehindAppBar({required this.child, super.key});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (getPlatform() != PlatformOS.isIOS) return child;
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+        child: child,
+      ),
     );
   }
 }

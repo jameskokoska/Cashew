@@ -10,6 +10,18 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.2
+    Transaction type action button size re-checked when changed in add transaction page
+    Fixed upcoming transaction actions removing popup not finding context after database updated
+    Upcoming and Overdue transaction amounts get refreshed every 5 seconds - since the query uses DateTime.now() it needs to be refreshed
+    If transaction type changed, createdAnotherFutureTransaction is now reset
+    Added blur behind app bar for iOS
+    Fixed scroll animations for iOS
+    Added swipe to go back gesture
+    Refactored iOS debug settings
+    New iOS header colors and icons
+    Fixed range slider in filters
+    Silent sign-in when platform error when not on web
     < 3.7.1
     Cashew Pro popup
     Custom context menu refactored

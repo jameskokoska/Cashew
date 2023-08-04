@@ -212,7 +212,7 @@
   "font-awesome-credit": "Ikony z písma Awesome",
   "pch-vector-credit": "Přistávací grafika od PCH-vektoru",
   "major-tools": "Hlavní nástroje",
-  "view-licenses-and-legalese": "Zobrazit licence a legální",
+  "view-licenses-and-legalese": "Licence a legální",
   "made-in-canada": "Vyrobeno v Kanadě",
   "delete-all-data": "Odstranit všechna data",
   "erase-everything": "Vymazat všechno?",
@@ -381,5 +381,14 @@
   "backup-found": "Nalezena záloha",
   "backup-found-description": "Chcete obnovit zálohu?",
   "restore": "Obnovit",
-  "privacy-policy": "Zásady ochrany osobních údajů a podmínky použití"
+  "privacy-policy": "Zásady ochrany osobních údajů a podmínky použití",
+  "budget-like-a-pro": "Rozpočet jako profesionál s",
+  "support-the-developer": "Podpořte vývojáře",
+  "unlimited-budgets": "Neomezené rozpočty",
+  "unlimited-budgets-description": "Vytvořte více než 1 rozpočet",
+  "past-budget-periods": "Minulá rozpočtová období",
+  "past-budget-periods-description": "Zobrazit rozdělení rozpočtu minulých období",
+  "unlimited-color-picker": "Neomezený výběr barev",
+  "unlimited-color-picker-description": "Vyberte si jakoukoli barvu, kterou chcete",
+  "continue-for-free": "Pokračujte zdarma"
 }

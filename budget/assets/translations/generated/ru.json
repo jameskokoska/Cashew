@@ -212,7 +212,7 @@
   "font-awesome-credit": "Иконки от шрифта потрясающе",
   "pch-vector-credit": "Посадочная графика от PCH-Vector",
   "major-tools": "Основные инструменты",
-  "view-licenses-and-legalese": "Посмотреть лицензии и законные",
+  "view-licenses-and-legalese": "Лицензии и законные",
   "made-in-canada": "Сделано в Канаде",
   "delete-all-data": "Удалить все данные",
   "erase-everything": "Стереть все?",
@@ -343,7 +343,7 @@
   "notification-reminder-9": "Добавьте свои расходы с сегодняшнего дня в приложение.",
   "notification-reminder-10": "Запишите свои транзакции, чтобы оставаться на правильном пути.",
   "notification-reminder-11": "Оставайтесь в курсе своего бюджета, добавив транзакции.",
-  "notification-reminder-12": "Держите точную запись о ваших расходах.",
+  "notification-reminder-12": "Держите точную запись ваших расходов.",
   "notification-reminder-13": "Добавьте свои ежедневные транзакции в приложение.",
   "notification-reminder-14": "Обновите свой бюджет с сегодняшними расходами.",
   "notification-reminder-15": "Запишите свои транзакции, чтобы оставаться на правильном пути.",
@@ -381,5 +381,14 @@
   "backup-found": "Резервная копия найдена",
   "backup-found-description": "Хотели бы вы восстановить резервную копию?",
   "restore": "Восстановить",
-  "privacy-policy": "Политика конфиденциальности и условия использования"
+  "privacy-policy": "Политика конфиденциальности и условия использования",
+  "budget-like-a-pro": "Бюджет как профессионал с",
+  "support-the-developer": "Поддержите разработчика",
+  "unlimited-budgets": "Неограниченные бюджеты",
+  "unlimited-budgets-description": "Создать более 1 бюджета",
+  "past-budget-periods": "Прошлые бюджетные периоды",
+  "past-budget-periods-description": "Просмотреть бюджетные разбивки прошлых периодов",
+  "unlimited-color-picker": "Неограниченный цветовой сборщик",
+  "unlimited-color-picker-description": "Выберите любой цвет, который вы хотите",
+  "continue-for-free": "Продолжайте бесплатно"
 }

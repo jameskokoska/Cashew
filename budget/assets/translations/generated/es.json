@@ -212,7 +212,7 @@
   "font-awesome-credit": "Íconos de fuentes impresionantes",
   "pch-vector-credit": "Graphics de aterrizaje por PCH-vector",
   "major-tools": "Herramientas principales",
-  "view-licenses-and-legalese": "Ver licencias y legalsese",
+  "view-licenses-and-legalese": "Licencias y legales",
   "made-in-canada": "Hecho en Canadá",
   "delete-all-data": "Eliminar todos los datos",
   "erase-everything": "¿Borra todo?",
@@ -381,5 +381,14 @@
   "backup-found": "Copia de seguridad encontrada",
   "backup-found-description": "¿Le gustaría restaurar una copia de seguridad?",
   "restore": "Restaurar",
-  "privacy-policy": "Política de privacidad y condiciones de uso"
+  "privacy-policy": "Política de privacidad y condiciones de uso",
+  "budget-like-a-pro": "Presupuesto como un profesional con",
+  "support-the-developer": "Apoyar al desarrollador",
+  "unlimited-budgets": "Presupuestos ilimitados",
+  "unlimited-budgets-description": "Crear más de 1 presupuesto",
+  "past-budget-periods": "Períodos presupuestarios pasados",
+  "past-budget-periods-description": "Ver desgloses presupuestarios de períodos pasados",
+  "unlimited-color-picker": "Seleccionador de color ilimitado",
+  "unlimited-color-picker-description": "Elija cualquier color que desee",
+  "continue-for-free": "Continuar gratis"
 }

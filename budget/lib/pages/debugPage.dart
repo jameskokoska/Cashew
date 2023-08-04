@@ -142,7 +142,17 @@ class DebugPage extends StatelessWidget {
         ),
         SettingsContainerSwitch(
           title: "Emulate iOS",
-          description: "Enables iOS like navigation and scroll behaviour",
+          description: "Enables scroll behaviour and icons from iOS",
+          onSwitched: (value) {
+            updateSettings("iOSEmulate", value,
+                pagesNeedingRefresh: [], updateGlobalState: true);
+          },
+          initialValue: appStateSettings["iOSEmulate"],
+          icon: Icons.apple_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "Native iOS Navigation",
+          description: "Enables native iOS like navigation",
           onSwitched: (value) {
             updateSettings("iOSNavigation", value,
                 pagesNeedingRefresh: [], updateGlobalState: true);

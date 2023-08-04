@@ -212,7 +212,7 @@
   "font-awesome-credit": "أيقونات من الخط رائع",
   "pch-vector-credit": "الرسومات الهبوط من قبل PCH-Vector",
   "major-tools": "أدوات رئيسية",
-  "view-licenses-and-legalese": "عرض التراخيص والقانونية",
+  "view-licenses-and-legalese": "التراخيص والقانونية",
   "made-in-canada": "صنع في كندا",
   "delete-all-data": "حذف جميع البيانات",
   "erase-everything": "محو كل شيء؟",
@@ -381,5 +381,14 @@
   "backup-found": "وجدت النسخ الاحتياطي",
   "backup-found-description": "هل ترغب في استعادة نسخة احتياطية؟",
   "restore": "يعيد",
-  "privacy-policy": "سياسة الخصوصية وشروط الاستخدام"
+  "privacy-policy": "سياسة الخصوصية وشروط الاستخدام",
+  "budget-like-a-pro": "الميزانية مثل المحترف مع",
+  "support-the-developer": "دعم المطور",
+  "unlimited-budgets": "ميزانيات غير محدودة",
+  "unlimited-budgets-description": "إنشاء أكثر من ميزانية واحدة",
+  "past-budget-periods": "فترات الميزانية السابقة",
+  "past-budget-periods-description": "عرض تعطل الميزانية من الفترات الماضية",
+  "unlimited-color-picker": "منتقي ألوان غير محدود",
+  "unlimited-color-picker-description": "اختر أي لون تريده",
+  "continue-for-free": "تواصل مجانًا"
 }

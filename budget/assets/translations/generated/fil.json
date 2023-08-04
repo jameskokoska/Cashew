@@ -212,7 +212,7 @@
   "font-awesome-credit": "Mga icon mula sa Font Galing",
   "pch-vector-credit": "Landing Graphics ni PCH-Vector",
   "major-tools": "Mga pangunahing tool",
-  "view-licenses-and-legalese": "Tingnan ang Mga Lisensya at Legalese",
+  "view-licenses-and-legalese": "Mga Lisensya at Legalese",
   "made-in-canada": "Ginawa sa Canada",
   "delete-all-data": "Tanggalin ang lahat ng data",
   "erase-everything": "Burahin ang lahat?",
@@ -352,7 +352,7 @@
   "notification-reminder-18": "Siguraduhin na idagdag ang iyong pang -araw -araw na mga transaksyon sa app.",
   "notification-reminder-19": "Magdagdag ng anumang mga gastos mula ngayon sa iyong tracker ng badyet.",
   "notification-reminder-20": "Itala ang iyong mga transaksyon para sa araw upang makakuha ng isang kumpletong larawan ng iyong mga gawi sa paggastos.",
-  "notification-reminder-21": "Huwag kalimutan na idagdag ang iyong pang -araw -araw na mga transaksyon upang manatili sa track sa iyong badyet.",
+  "notification-reminder-21": "Huwag kalimutan na idagdag ang iyong pang -araw -araw na mga transaksyon upang manatili sa track gamit ang iyong badyet.",
   "notification-reminder-22": "Tumagal ng ilang minuto upang mai -update ang iyong badyet sa mga gastos ngayon.",
   "notification-reminder-23": "Siguraduhin na magdagdag ng anumang mga gastos mula ngayon sa iyong tracker ng badyet.",
   "notification-reminder-24": "Tandaan na i -record ang iyong mga transaksyon para sa araw upang makakuha ng isang kumpletong larawan ng iyong mga gawi sa paggastos.",
@@ -381,5 +381,14 @@
   "backup-found": "Natagpuan ang backup",
   "backup-found-description": "Nais mo bang ibalik ang isang backup?",
   "restore": "Ibalik",
-  "privacy-policy": "Patakaran sa Pagkapribado at Mga Tuntunin ng Paggamit"
+  "privacy-policy": "Patakaran sa Pagkapribado at Mga Tuntunin ng Paggamit",
+  "budget-like-a-pro": "Badyet tulad ng isang pro sa",
+  "support-the-developer": "Suportahan ang developer",
+  "unlimited-budgets": "Walang limitasyong mga badyet",
+  "unlimited-budgets-description": "Lumikha ng higit sa 1 badyet",
+  "past-budget-periods": "Mga nakaraang panahon ng badyet",
+  "past-budget-periods-description": "Tingnan ang mga breakdown ng badyet ng mga nakaraang panahon",
+  "unlimited-color-picker": "Walang limitasyong picker ng kulay",
+  "unlimited-color-picker-description": "Pumili ng anumang kulay na gusto mo",
+  "continue-for-free": "Magpatuloy nang libre"
 }

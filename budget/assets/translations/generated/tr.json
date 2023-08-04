@@ -212,7 +212,7 @@
   "font-awesome-credit": "Font Awesome'dan Simgeler",
   "pch-vector-credit": "PCH-Vector tarafından iniş grafikleri",
   "major-tools": "Ana araçlar",
-  "view-licenses-and-legalese": "Lisansları ve Hukukçu Görüntüle",
+  "view-licenses-and-legalese": "Lisanslar ve hukukçu",
   "made-in-canada": "Kanada'da üretilmiştir",
   "delete-all-data": "Tüm verileri sil",
   "erase-everything": "Her şeyi sil?",
@@ -381,5 +381,14 @@
   "backup-found": "Yedek bulundu",
   "backup-found-description": "Bir yedeklemeyi geri yüklemek ister misiniz?",
   "restore": "Eski haline getirmek",
-  "privacy-policy": "Gizlilik Politikası ve Kullanım Koşulları"
+  "privacy-policy": "Gizlilik Politikası ve Kullanım Koşulları",
+  "budget-like-a-pro": "Bir profesyonel gibi bütçe",
+  "support-the-developer": "Geliştiriciyi destekleyin",
+  "unlimited-budgets": "Sınırsız Bütçeler",
+  "unlimited-budgets-description": "1'den fazla bütçe oluşturun",
+  "past-budget-periods": "Geçmiş bütçe dönemleri",
+  "past-budget-periods-description": "Geçmiş dönemlerin bütçe dökümlerini görüntüleyin",
+  "unlimited-color-picker": "Sınırsız Renk Seçici",
+  "unlimited-color-picker-description": "İstediğiniz renkleri seçin",
+  "continue-for-free": "Ücretsiz devam et"
 }

@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -90,10 +91,11 @@ Future openPayPopup(
         dateCreated: DateTime.now(),
         createdAnotherFutureTransaction: Value(true),
       );
-      await database.createOrUpdateTransaction(transactionNew);
-      await createNewSubscriptionTransaction(context, transaction);
-      await setUpcomingNotifications(context);
       Navigator.pop(context, true);
+      await database.createOrUpdateTransaction(transactionNew);
+      await createNewSubscriptionTransaction(
+          navigatorKey.currentContext!, transaction);
+      await setUpcomingNotifications(navigatorKey.currentContext!);
     },
     onSubmitLabel: transaction.income ? "deposit".tr() : "pay".tr(),
     onSubmit: () async {
@@ -119,10 +121,11 @@ Future openPayPopup(
         dateCreated: DateTime.now(),
         createdAnotherFutureTransaction: Value(true),
       );
-      await database.createOrUpdateTransaction(transactionNew);
-      await createNewSubscriptionTransaction(context, transaction);
-      await setUpcomingNotifications(context);
       Navigator.pop(context, true);
+      await database.createOrUpdateTransaction(transactionNew);
+      await createNewSubscriptionTransaction(
+          navigatorKey.currentContext!, transaction);
+      await setUpcomingNotifications(navigatorKey.currentContext!);
     },
   );
 }
@@ -161,8 +164,8 @@ Future openPayDebtCreditPopup(
         //we don't want it to count towards the total - net is zero now
         paid: false,
       );
-      await database.createOrUpdateTransaction(transactionNew);
       Navigator.pop(context, true);
+      await database.createOrUpdateTransaction(transactionNew);
     },
   );
 }
@@ -186,9 +189,9 @@ Future openRemoveSkipPopup(
       if (runBefore != null) await runBefore();
 
       Transaction transactionNew = transaction.copyWith(skipPaid: false);
-      await database.createOrUpdateTransaction(transactionNew);
-      await setUpcomingNotifications(context);
       Navigator.pop(context, true);
+      await database.createOrUpdateTransaction(transactionNew);
+      await setUpcomingNotifications(navigatorKey.currentContext!);
     },
   );
 }
@@ -216,9 +219,9 @@ Future openUnpayPopup(
           sharedDateUpdated: Value(null),
           sharedStatus: Value(null),
         );
-        await database.createOrUpdateTransaction(transactionNew);
-        await setUpcomingNotifications(context);
         Navigator.pop(context, true);
+        await database.createOrUpdateTransaction(transactionNew);
+        await setUpcomingNotifications(navigatorKey.currentContext!);
       });
 }
 
@@ -243,9 +246,9 @@ Future openUnpayDebtCreditPopup(
         //we want it to count towards the total now - net is not zero
         paid: true,
       );
+      Navigator.pop(context, true);
       await database.createOrUpdateTransaction(transactionNew,
           updateSharedEntry: false);
-      Navigator.pop(context, true);
     },
   );
 }

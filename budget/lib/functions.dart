@@ -695,7 +695,7 @@ class CustomMaterialPageRoute extends MaterialPageRoute {
 
 Future<dynamic> pushRoute(BuildContext context, Widget page,
     {String? routeName}) async {
-  if (appStateSettings["iOSNavigation"] || getPlatform() == PlatformOS.isIOS) {
+  if (appStateSettings["iOSNavigation"]) {
     return await Navigator.push(
       context,
       CustomMaterialPageRoute(builder: (context) => page),
@@ -899,7 +899,9 @@ enum PlatformOS {
 }
 
 PlatformOS? getPlatform() {
-  if (kIsWeb) {
+  if (appStateSettings["iOSEmulate"] == true) {
+    return PlatformOS.isIOS;
+  } else if (kIsWeb) {
     return PlatformOS.web;
   } else if (Platform.isIOS) {
     return PlatformOS.isIOS;

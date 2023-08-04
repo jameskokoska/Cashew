@@ -8,6 +8,7 @@ import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
@@ -19,7 +20,7 @@ class PremiumPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageFramework(
       enableHeader: false,
-      dragDownToDismiss: true,
+      dragDownToDismiss: false,
       bottomPadding: false,
       slivers: [
         SliverFillRemaining(
@@ -34,9 +35,15 @@ class PremiumPage extends StatelessWidget {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Theme.of(context).colorScheme.tertiary,
-                        Theme.of(context).colorScheme.primary,
-                        Theme.of(context).colorScheme.tertiary,
+                        dynamicPastel(
+                            context, Theme.of(context).colorScheme.tertiary,
+                            amountDark: 0, amountLight: 0.4),
+                        dynamicPastel(
+                            context, Theme.of(context).colorScheme.primary,
+                            amountDark: 0, amountLight: 0.4),
+                        dynamicPastel(
+                            context, Theme.of(context).colorScheme.tertiary,
+                            amountDark: 0, amountLight: 0.4),
                       ],
                       stops: [
                         0,
@@ -109,7 +116,7 @@ class PremiumPage extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               TextFont(
-                                text: "Budget like a pro with" +
+                                text: "budget-like-a-pro".tr() +
                                     " " +
                                     globalAppName +
                                     " " +
@@ -119,55 +126,66 @@ class PremiumPage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 25),
+                          SizedBox(
+                              height: 15 +
+                                  MediaQuery.of(context).size.height * 0.024),
                           IntrinsicWidth(
                             child: Column(children: [
                               SubscriptionFeature(
                                 iconData: Icons.thumb_up_rounded,
-                                label: "Support the developer",
+                                label: "support-the-developer".tr(),
                               ),
-                              // SubscriptionFeature(
-                              //   iconData: Icons.payments_rounded,
-                              //   label: "Unlimited transactions",
-                              //   description:
-                              //       "Create more than 5 transactions a week",
-                              // ),
-                              // every 5 transactions show popup, max once a day
                               SubscriptionFeature(
                                 iconData: MoreIcons.chart_pie,
-                                label: "Unlimited budgets",
-                                description: "Create more than 1 budget",
+                                label: "Unlimited budgets".tr(),
+                                description:
+                                    "unlimited-budgets-description".tr(),
                               ),
                               SubscriptionFeature(
                                 iconData: Icons.history_rounded,
-                                label: "Past budget periods",
+                                label: "past-budget-periods".tr(),
                                 description:
-                                    "View budget breakdowns of past periods",
+                                    "past-budget-periods-description".tr(),
                               ),
                               SubscriptionFeature(
                                 iconData: Icons.color_lens_rounded,
-                                label: "Unlimited color picker",
-                                description: "Pick any color you want",
+                                label: "unlimited-color-picker".tr(),
+                                description:
+                                    "unlimited-color-picker-description".tr(),
                               ),
                             ]),
                           ),
-                          SizedBox(height: 25),
-                          Column(
-                            children: [
-                              SubscriptionOption(
-                                label: "Yearly",
-                                price: "\$20 / year",
+                          SizedBox(
+                              height: 15 +
+                                  MediaQuery.of(context).size.height * 0.024),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    getHorizontalPaddingConstrained(context) +
+                                        20),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Column(
+                                children: [
+                                  SubscriptionOption(
+                                    label: "Yearly",
+                                    price: "\$20 / year",
+                                    extraPadding: EdgeInsets.only(top: 13 / 2),
+                                  ),
+                                  SubscriptionOption(
+                                    label: "Monthly",
+                                    price: "\$2.50 / month",
+                                  ),
+                                  SubscriptionOption(
+                                    label: "One Time",
+                                    price: "\$30.00",
+                                    extraPadding:
+                                        EdgeInsets.only(bottom: 13 / 2),
+                                  ),
+                                ],
                               ),
-                              SubscriptionOption(
-                                label: "Monthly",
-                                price: "\$2.50 / month",
-                              ),
-                              SubscriptionOption(
-                                label: "One Time",
-                                price: "\$30.00",
-                              ),
-                            ],
-                          ),
+                            ),
+                          )
                         ],
                       ),
                       Opacity(
@@ -187,7 +205,7 @@ class PremiumPage extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
                               child: TextFont(
-                                text: "Continue for free",
+                                text: "continue-for-free".tr(),
                                 fontSize: 13,
                                 textColor: Colors.white,
                               ),
@@ -208,7 +226,9 @@ class PremiumPage extends StatelessWidget {
                     child: IconButton(
                       padding: EdgeInsets.all(15),
                       icon: Icon(
-                        Icons.arrow_back_rounded,
+                        getPlatform() == PlatformOS.isIOS
+                            ? Icons.chevron_left_rounded
+                            : Icons.arrow_back_rounded,
                         color: Colors.black.withOpacity(0.16),
                       ),
                       onPressed: () {
@@ -288,42 +308,43 @@ class SubscriptionOption extends StatelessWidget {
   const SubscriptionOption({
     required this.label,
     required this.price,
+    this.extraPadding,
     super.key,
   });
   final String label;
   final String price;
+  final EdgeInsets? extraPadding;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: getHorizontalPaddingConstrained(context)),
+    return Tappable(
+      onTap: () {},
+      color: dynamicPastel(
+        context,
+        Theme.of(context).colorScheme.primaryContainer,
+        amountDark: 0.2,
+        amountLight: 0.6,
+      ).withOpacity(0.45),
+      borderRadius: 0,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-        child: Tappable(
-          onTap: () {},
-          color: darkenPastel(Theme.of(context).colorScheme.primaryContainer,
-                  amount: 0.2)
-              .withOpacity(0.45),
-          borderRadius: 22,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 19),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextFont(
-                  text: label,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  textColor: Colors.white,
-                ),
-                TextFont(
-                  text: price,
-                  fontSize: 18,
-                  textColor: Colors.white,
-                ),
-              ],
-            ),
+        padding: extraPadding ?? EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 13),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextFont(
+                text: label,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                textColor: getColor(context, "black"),
+              ),
+              TextFont(
+                text: price,
+                fontSize: 18,
+                textColor: getColor(context, "black"),
+              ),
+            ],
           ),
         ),
       ),

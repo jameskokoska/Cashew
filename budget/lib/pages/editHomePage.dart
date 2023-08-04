@@ -141,7 +141,7 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "overdueUpcoming": EditHomePageItem(
-            icon: Icons.upcoming_rounded,
+            icon: getTransactionTypeIcon(TransactionSpecialType.subscription),
             name: "overdue-and-upcoming".tr(),
             isEnabled: appStateSettings["showOverdueUpcoming"],
             onSwitched: (value) {
@@ -150,7 +150,7 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "creditDebts": EditHomePageItem(
-            icon: Icons.sync_alt_rounded,
+            icon: getTransactionTypeIcon(TransactionSpecialType.credit),
             name: "lent-and-borrowed".tr(),
             isEnabled: appStateSettings["showCreditDebt"],
             onSwitched: (value) {
@@ -159,7 +159,7 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "allSpendingSummary": EditHomePageItem(
-            icon: Icons.line_weight_rounded,
+            icon: Icons.expand_rounded,
             name: "income-and-expenses".tr(),
             isEnabled: appStateSettings["showAllSpendingSummary"],
             onSwitched: (value) {

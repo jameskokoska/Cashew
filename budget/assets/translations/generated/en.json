@@ -212,7 +212,7 @@
   "font-awesome-credit": "Icons from Font Awesome",
   "pch-vector-credit": "Landing graphics by pch-vector",
   "major-tools": "Major Tools",
-  "view-licenses-and-legalese": "View Licenses and Legalese",
+  "view-licenses-and-legalese": "Licenses and Legalese",
   "made-in-canada": "Made in Canada",
   "delete-all-data": "Delete All Data",
   "erase-everything": "Erase everything?",
@@ -381,5 +381,14 @@
   "backup-found": "Backup Found",
   "backup-found-description": "Would you like to restore a backup?",
   "restore": "Restore",
-  "privacy-policy": "Privacy Policy and Terms of Use"
+  "privacy-policy": "Privacy Policy and Terms of Use",
+  "budget-like-a-pro": "Budget like a pro with",
+  "support-the-developer": "Support the developer",
+  "unlimited-budgets": "Unlimited budgets",
+  "unlimited-budgets-description": "Create more than 1 budget",
+  "past-budget-periods": "Past budget periods",
+  "past-budget-periods-description": "View budget breakdowns of past periods",
+  "unlimited-color-picker": "Unlimited color picker",
+  "unlimited-color-picker-description": "Pick any color you want",
+  "continue-for-free": "Continue for free"
 }

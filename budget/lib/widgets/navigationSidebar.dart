@@ -115,60 +115,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                         }
                                       },
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 30, bottom: 30),
-                                        child: TimerBuilder.periodic(
-                                          Duration(seconds: 5),
-                                          builder: (context) {
-                                            DateTime now = DateTime.now();
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                TextFont(
-                                                  textColor: getColor(
-                                                      context, "black"),
-                                                  fontSize: 48,
-                                                  fontWeight: FontWeight.bold,
-                                                  text: DateFormat.jm(context
-                                                          .locale
-                                                          .toString())
-                                                      .format(now)
-                                                      .replaceAll("AM", "")
-                                                      .replaceAll("PM", "")
-                                                      .replaceAll(" ", ""),
-                                                ),
-                                                TextFont(
-                                                  textColor:
-                                                      getColor(context, "black")
-                                                          .withOpacity(0.5),
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  text: DateFormat(
-                                                          'EEEE',
-                                                          context.locale
-                                                              .toString())
-                                                      .format(now),
-                                                ),
-                                                SizedBox(height: 5),
-                                                TextFont(
-                                                  textColor:
-                                                      getColor(context, "black")
-                                                          .withOpacity(0.5),
-                                                  fontSize: 18,
-                                                  text: DateFormat(
-                                                          'MMMM d, y',
-                                                          context.locale
-                                                              .toString())
-                                                      .format(now),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                          padding: const EdgeInsets.only(
+                                              top: 30, bottom: 30),
+                                          child: SidebarClock()),
                                     ),
                                   ),
                                 ),
@@ -282,6 +231,49 @@ class NavigationSidebarState extends State<NavigationSidebar> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SidebarClock extends StatelessWidget {
+  const SidebarClock({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TimerBuilder.periodic(
+      Duration(seconds: 5),
+      builder: (context) {
+        DateTime now = DateTime.now();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFont(
+              textColor: getColor(context, "black"),
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              text: DateFormat.jm(context.locale.toString())
+                  .format(now)
+                  .replaceAll("AM", "")
+                  .replaceAll("PM", "")
+                  .replaceAll(" ", ""),
+            ),
+            TextFont(
+              textColor: getColor(context, "black").withOpacity(0.5),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              text: DateFormat('EEEE', context.locale.toString()).format(now),
+            ),
+            SizedBox(height: 5),
+            TextFont(
+              textColor: getColor(context, "black").withOpacity(0.5),
+              fontSize: 18,
+              text: DateFormat('MMMM d, y', context.locale.toString())
+                  .format(now),
+            ),
+          ],
+        );
+      },
     );
   }
 }

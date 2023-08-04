@@ -212,7 +212,7 @@
   "font-awesome-credit": "Ikonok a betűtípusból félelmetes",
   "pch-vector-credit": "Landing grafika a PCH-Vector által",
   "major-tools": "Fő eszközök",
-  "view-licenses-and-legalese": "Tekintse meg az engedélyeket és a legaleset",
+  "view-licenses-and-legalese": "Engedélyek és legalese",
   "made-in-canada": "Kanadában készült",
   "delete-all-data": "Törölje az összes adatot",
   "erase-everything": "Mindent törölni?",
@@ -381,5 +381,14 @@
   "backup-found": "A biztonsági mentés megtalálta",
   "backup-found-description": "Szeretne visszaállítani egy biztonsági másolatot?",
   "restore": "visszaállítás",
-  "privacy-policy": "Adatvédelmi irányelv és használati feltételek"
+  "privacy-policy": "Adatvédelmi irányelv és használati feltételek",
+  "budget-like-a-pro": "Költségvetés, mint egy profi",
+  "support-the-developer": "Támogassa a fejlesztőt",
+  "unlimited-budgets": "Korlátlan költségvetés",
+  "unlimited-budgets-description": "Hozzon létre több mint 1 költségvetést",
+  "past-budget-periods": "A múlt költségvetési periódusai",
+  "past-budget-periods-description": "A múltbeli időszakok költségvetési bontásainak megtekintése",
+  "unlimited-color-picker": "Korlátlan színválasztó",
+  "unlimited-color-picker-description": "Válasszon minden olyan színt, amire vágyik",
+  "continue-for-free": "Folytassa ingyen"
 }

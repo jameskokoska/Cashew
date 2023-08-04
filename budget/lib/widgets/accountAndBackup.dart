@@ -207,7 +207,7 @@ Future<bool> signOutGoogle() async {
 
 Future<bool> refreshGoogleSignIn() async {
   await signOutGoogle();
-  await signInGoogle(silentSignIn: false);
+  await signInGoogle(silentSignIn: kIsWeb ? false : true);
   return true;
 }
 

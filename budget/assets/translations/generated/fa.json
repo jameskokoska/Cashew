@@ -212,7 +212,7 @@
   "font-awesome-credit": "آیکون از قلم عالی",
   "pch-vector-credit": "گرافیک فرود توسط PCH-Vector",
   "major-tools": "ابزارهای اصلی",
-  "view-licenses-and-legalese": "مجوزها و حقوقی را مشاهده کنید",
+  "view-licenses-and-legalese": "مجوزها و حقوقی",
   "made-in-canada": "ساخت کانادا",
   "delete-all-data": "تمام داده ها را حذف کنید",
   "erase-everything": "همه چیز را پاک کنید؟",
@@ -381,5 +381,14 @@
   "backup-found": "تهیه نسخه پشتیبان",
   "backup-found-description": "آیا دوست دارید نسخه پشتیبان تهیه کنید؟",
   "restore": "بازگرداندن",
-  "privacy-policy": "سیاست حفظ حریم خصوصی و شرایط استفاده"
+  "privacy-policy": "سیاست حفظ حریم خصوصی و شرایط استفاده",
+  "budget-like-a-pro": "بودجه مانند یک حرفه ای با",
+  "support-the-developer": "از توسعه دهنده پشتیبانی کنید",
+  "unlimited-budgets": "بودجه نامحدود",
+  "unlimited-budgets-description": "بیش از 1 بودجه ایجاد کنید",
+  "past-budget-periods": "دوره بودجه گذشته",
+  "past-budget-periods-description": "مشاهده خرابی بودجه دوره های گذشته",
+  "unlimited-color-picker": "انتخاب نامحدود رنگ",
+  "unlimited-color-picker-description": "هر رنگی را که می خواهید انتخاب کنید",
+  "continue-for-free": "به صورت رایگان ادامه دهید"
 }

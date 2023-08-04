@@ -212,7 +212,7 @@
   "font-awesome-credit": "Pictograme de la font minunat",
   "pch-vector-credit": "Grafică de aterizare de PCH-Vector",
   "major-tools": "Instrumente majore",
-  "view-licenses-and-legalese": "Vizualizați licențele și juridice",
+  "view-licenses-and-legalese": "Licențe și juridice",
   "made-in-canada": "Fabricat în Canada",
   "delete-all-data": "Ștergeți toate datele",
   "erase-everything": "Ștergeți totul?",
@@ -352,7 +352,7 @@
   "notification-reminder-18": "Asigurați -vă că adăugați tranzacțiile zilnice la aplicație.",
   "notification-reminder-19": "Adăugați orice cheltuieli de astăzi la trackerul bugetar.",
   "notification-reminder-20": "Înregistrați -vă tranzacțiile pentru ziua pentru a obține o imagine completă a obiceiurilor dvs. de cheltuieli.",
-  "notification-reminder-21": "Nu uitați să adăugați tranzacțiile zilnice pentru a rămâne pe cale cu bugetul.",
+  "notification-reminder-21": "Nu uitați să adăugați tranzacțiile zilnice pentru a rămâne pe cale cu bugetul dvs.",
   "notification-reminder-22": "Luați câteva minute pentru a vă actualiza bugetul cu cheltuielile de astăzi.",
   "notification-reminder-23": "Asigurați -vă că adăugați orice cheltuieli de astăzi la următorul bugetar.",
   "notification-reminder-24": "Nu uitați să înregistrați tranzacțiile pentru ziua pentru a obține o imagine completă a obiceiurilor dvs. de cheltuieli.",
@@ -381,5 +381,14 @@
   "backup-found": "Backup găsit",
   "backup-found-description": "Doriți să restaurați o copie de rezervă?",
   "restore": "Restabili",
-  "privacy-policy": "Politica de confidențialitate și termenii de utilizare"
+  "privacy-policy": "Politica de confidențialitate și termenii de utilizare",
+  "budget-like-a-pro": "Buget ca un profesionist cu",
+  "support-the-developer": "Sprijină dezvoltatorul",
+  "unlimited-budgets": "Bugete nelimitate",
+  "unlimited-budgets-description": "Creați mai mult de 1 buget",
+  "past-budget-periods": "Perioade bugetare trecute",
+  "past-budget-periods-description": "Vizualizați defalcările bugetare a perioadelor trecute",
+  "unlimited-color-picker": "Picker de culori nelimitat",
+  "unlimited-color-picker-description": "Alegeți orice culoare doriți",
+  "continue-for-free": "Continuați gratuit"
 }

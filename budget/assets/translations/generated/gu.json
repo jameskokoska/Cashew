@@ -202,7 +202,7 @@
   "discard": "કા discી નાખવા",
   "changelog": "પરિવર્તનશીલ",
   "view-changelog": "પરિવર્તનશીલ",
-  "view-app-intro": "ઓચ",
+  "view-app-intro": "Ingંચે બાંધેલી વસ્તુ",
   "app-is-open-source": "{એપ્લિકેશન} એ ખુલ્લા સ્રોત છે!",
   "open-source": "ખુલ્લા સ્ત્રોત",
   "lead-developer": "મુખ્ય વિકાસકર્તા",
@@ -212,7 +212,7 @@
   "font-awesome-credit": "ફોન્ટ અદ્ભુત માંથી ચિહ્નો",
   "pch-vector-credit": "પીસીએચ-વેક્ટર દ્વારા લેન્ડિંગ ગ્રાફિક્સ",
   "major-tools": "મુખ્ય સાધનો",
-  "view-licenses-and-legalese": "લાઇસન્સ અને કાયદેસર જુઓ",
+  "view-licenses-and-legalese": "પરવાનો અને કાયદેસર",
   "made-in-canada": "કેનેડામાં બનેલું",
   "delete-all-data": "બધા ડેટા કા delete ી નાખો",
   "erase-everything": "બધું ભૂંસી નાખો?",
@@ -381,5 +381,14 @@
   "backup-found": "બેકઅપ મળી",
   "backup-found-description": "શું તમે બેકઅપ પુન restore સ્થાપિત કરવા માંગો છો?",
   "restore": "પુનઃસ્થાપિત",
-  "privacy-policy": "ગોપનીયતા નીતિ અને ઉપયોગની શરતો"
+  "privacy-policy": "ગોપનીયતા નીતિ અને ઉપયોગની શરતો",
+  "budget-like-a-pro": "તરફી જેવા બજેટ",
+  "support-the-developer": "વિકાસકર્તાને ટેકો આપો",
+  "unlimited-budgets": "અમર્યાદિત બજેટ",
+  "unlimited-budgets-description": "1 થી વધુ બજેટ બનાવો",
+  "past-budget-periods": "પાછલો અંદાજપત્ર",
+  "past-budget-periods-description": "પાછલા સમયગાળાના બજેટ ભંગાણ જુઓ",
+  "unlimited-color-picker": "અમર્યાદિત રંગ પીકર",
+  "unlimited-color-picker-description": "તમે ઇચ્છો તે કોઈપણ રંગ પસંદ કરો",
+  "continue-for-free": "મફતમાં ચાલુ રાખો"
 }

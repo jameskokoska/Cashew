@@ -9,6 +9,7 @@ import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timer_builder/timer_builder.dart';
 
 class HomePageUpcomingTransactions extends StatelessWidget {
   const HomePageUpcomingTransactions({super.key});
@@ -25,33 +26,44 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: TransactionsAmountBox(
-                      openPage: UpcomingOverdueTransactions(
-                          overdueTransactions: false),
-                      label: "upcoming".tr(),
-                      amountStream: database.watchTotalOfUpcomingOverdue(
-                        Provider.of<AllWallets>(context),
-                        false,
+                  // Since the query uses DateTime.now()
+                  // We need to refresh every so often to get new data...
+                  // Is there a better way to do this? listen to database updates?
+                  TimerBuilder.periodic(Duration(seconds: 5),
+                      builder: (context) {
+                    return Expanded(
+                      child: TransactionsAmountBox(
+                        openPage: UpcomingOverdueTransactions(
+                            overdueTransactions: false),
+                        label: "upcoming".tr(),
+                        amountStream: database.watchTotalOfUpcomingOverdue(
+                          Provider.of<AllWallets>(context),
+                          false,
+                        ),
+                        textColor: getColor(context, "unPaidUpcoming"),
+                        transactionsAmountStream:
+                            database.watchCountOfUpcoming(),
                       ),
-                      textColor: getColor(context, "unPaidUpcoming"),
-                      transactionsAmountStream: database.watchCountOfUpcoming(),
-                    ),
-                  ),
+                    );
+                  }),
                   SizedBox(width: 13),
-                  Expanded(
-                    child: TransactionsAmountBox(
-                      openPage: UpcomingOverdueTransactions(
-                          overdueTransactions: true),
-                      label: "overdue".tr(),
-                      amountStream: database.watchTotalOfUpcomingOverdue(
-                        Provider.of<AllWallets>(context),
-                        true,
+                  TimerBuilder.periodic(Duration(seconds: 5),
+                      builder: (context) {
+                    return Expanded(
+                      child: TransactionsAmountBox(
+                        openPage: UpcomingOverdueTransactions(
+                            overdueTransactions: true),
+                        label: "overdue".tr(),
+                        amountStream: database.watchTotalOfUpcomingOverdue(
+                          Provider.of<AllWallets>(context),
+                          true,
+                        ),
+                        textColor: getColor(context, "unPaidOverdue"),
+                        transactionsAmountStream:
+                            database.watchCountOfOverdue(),
                       ),
-                      textColor: getColor(context, "unPaidOverdue"),
-                      transactionsAmountStream: database.watchCountOfOverdue(),
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             ),

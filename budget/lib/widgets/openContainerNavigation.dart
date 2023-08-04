@@ -23,14 +23,9 @@ class OpenContainerNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appStateSettings["batterySaver"] ||
-        appStateSettings["iOSNavigation"] ||
-        getPlatform() == PlatformOS.isIOS) {
+    if (appStateSettings["batterySaver"] || appStateSettings["iOSNavigation"]) {
       Widget child = button(() {
-        pushRoute(
-          context,
-          openPage,
-        );
+        pushRoute(context, openPage);
       });
       return ClipRRect(
         borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),

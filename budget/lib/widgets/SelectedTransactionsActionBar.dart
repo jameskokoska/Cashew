@@ -68,7 +68,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               padding: EdgeInsets.all(15),
                               color: Theme.of(context).colorScheme.secondary,
                               icon: Icon(
-                                Icons.arrow_back_rounded,
+                                getPlatform() == PlatformOS.isIOS
+                                    ? Icons.chevron_left_rounded
+                                    : Icons.arrow_back_rounded,
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {

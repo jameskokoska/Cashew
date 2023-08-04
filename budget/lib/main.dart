@@ -124,7 +124,10 @@ class App extends StatelessWidget {
       navigatorKey: navigatorKey,
       theme: ThemeData(
         pageTransitionsTheme: PageTransitionsTheme(builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          // the page route animation is set in pushRoute() - functions.dart
+          TargetPlatform.android: appStateSettings["iOSNavigation"]
+              ? CupertinoPageTransitionsBuilder()
+              : ZoomPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
         fontFamily: appStateSettings["font"],

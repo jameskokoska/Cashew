@@ -533,8 +533,14 @@ class AmountRangeSlider extends StatefulWidget {
 }
 
 class _AmountSlideRangerState extends State<AmountRangeSlider> {
-  late RangeValues _currentRangeValues = widget.initialRange ??
-      RangeValues(widget.rangeLimit.start, widget.rangeLimit.end);
+  late RangeValues _currentRangeValues;
+
+  @override
+  void initState() {
+    _currentRangeValues = widget.initialRange ??
+        RangeValues(widget.rangeLimit.start, widget.rangeLimit.end);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

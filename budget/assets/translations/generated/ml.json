@@ -212,7 +212,7 @@
   "font-awesome-credit": "ഫോണ്ട് ആകർഷണീയമായ ഐക്കണുകൾ",
   "pch-vector-credit": "പിഞ്ച് വെക്റ്റർ പ്രകാരം ലാൻഡിംഗ് ഗ്രാഫിക്സ്",
   "major-tools": "പ്രധാന ഉപകരണങ്ങൾ",
-  "view-licenses-and-legalese": "ലൈസൻസുകളും നിയമസഭാംഗങ്ങളും കാണുക",
+  "view-licenses-and-legalese": "ലൈസൻസുകളും നിയമസഭാംഗവും",
   "made-in-canada": "കാനഡയിൽ നിർമ്മിച്ചത്",
   "delete-all-data": "എല്ലാ ഡാറ്റയും ഇല്ലാതാക്കുക",
   "erase-everything": "എല്ലാം മായ്ക്കുകയാണോ?",
@@ -381,5 +381,14 @@
   "backup-found": "ബാക്കപ്പ് കണ്ടെത്തി",
   "backup-found-description": "ഒരു ബാക്കപ്പ് പുന restore സ്ഥാപിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?",
   "restore": "വീണ്ടെടുക്കുക",
-  "privacy-policy": "സ്വകാര്യതാ നയവും ഉപയോഗ നിബന്ധനകളും"
+  "privacy-policy": "സ്വകാര്യതാ നയവും ഉപയോഗ നിബന്ധനകളും",
+  "budget-like-a-pro": "ഒരു പ്രോ പോലുള്ള ബജറ്റ്",
+  "support-the-developer": "ഡവലപ്പറിനെ പിന്തുണയ്ക്കുക",
+  "unlimited-budgets": "പരിധിയില്ലാത്ത ബജറ്റുകൾ",
+  "unlimited-budgets-description": "1 ബജറ്റിൽ കൂടുതൽ സൃഷ്ടിക്കുക",
+  "past-budget-periods": "കഴിഞ്ഞ ബജറ്റ് കാലയളവുകൾ",
+  "past-budget-periods-description": "കഴിഞ്ഞ കാലഘട്ടങ്ങളുടെ ബജറ്റ് തകരുകൾ കാണുക",
+  "unlimited-color-picker": "പരിധിയില്ലാത്ത കളർ പിക്കർ",
+  "unlimited-color-picker-description": "നിങ്ങൾക്ക് ആവശ്യമുള്ള ഏതെങ്കിലും നിറം തിരഞ്ഞെടുക്കുക",
+  "continue-for-free": "സ for ജന്യമായി തുടരുക"
 }

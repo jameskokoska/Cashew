@@ -154,7 +154,7 @@ class BudgetContainer extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                bottom: 0.7),
+                                                bottom: 1.4),
                                             child: Container(
                                               child: TextFont(
                                                 text: (appStateSettings[
@@ -217,7 +217,7 @@ class BudgetContainer extends StatelessWidget {
                                           ),
                                           Container(
                                             padding: const EdgeInsets.only(
-                                                bottom: 0.7),
+                                                bottom: 1.4),
                                             child: TextFont(
                                               text: (appStateSettings[
                                                           "showTotalSpentForBudget"]
