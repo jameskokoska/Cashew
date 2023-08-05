@@ -1,9 +1,7 @@
-
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 
 class FadeIn extends StatefulWidget {
   FadeIn({Key? key, required this.child, this.duration}) : super(key: key);
@@ -190,6 +188,50 @@ class _ScalingWidgetState extends State<ScalingWidget>
           child: widget.child,
         );
       },
+    );
+  }
+}
+
+class ScaledAnimatedSwitcher extends StatelessWidget {
+  const ScaledAnimatedSwitcher({
+    required this.keyToWatch,
+    required this.child,
+    Key? key,
+  }) : super(key: key);
+
+  final String keyToWatch;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 450),
+      switchInCurve: Curves.easeInOutCubic,
+      switchOutCurve: Curves.easeOut,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        final fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: animation,
+            curve: Interval(0.5, 1),
+          ),
+        );
+
+        final scaleAnimation = Tween<double>(begin: 0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: animation,
+            curve: Interval(0, 1.0),
+          ),
+        );
+
+        return FadeTransition(
+          opacity: fadeAnimation,
+          child: ScaleTransition(
+            scale: scaleAnimation,
+            child: child,
+          ),
+        );
+      },
+      child: SizedBox(key: ValueKey(keyToWatch), child: child),
     );
   }
 }

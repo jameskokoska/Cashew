@@ -1,9 +1,11 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/database/generatePreviewData.dart';
@@ -32,6 +34,11 @@ class DebugPage extends StatelessWidget {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
+        // Global context below,
+        Container(
+          height: 5,
+          color: Theme.of(navigatorKey.currentContext!).primaryColor,
+        ),
         SettingsContainerSwitch(
           title: "Use Cumulative Spending",
           description: "For spending line graphs",
@@ -215,6 +222,14 @@ class DebugPage extends StatelessWidget {
             updateSettings("animationSpeed", value, updateGlobalState: true);
           },
         ),
+        Button(
+            label: "Send Notification",
+            onTap: () async {
+              initializeNotificationsPlatform();
+              scheduleDailyNotification(context, TimeOfDay.now(),
+                  scheduleNowDebug: true);
+            }),
+        SizedBox(height: 20),
         Button(
             label: "Force auto backup next launch",
             onTap: () async {

@@ -9,6 +9,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 
 class SelectColor extends StatefulWidget {
   SelectColor({
@@ -318,35 +319,38 @@ class ThemeColorIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 250),
-      margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
-      height: size,
-      width: size,
-      decoration: outline
-          ? BoxDecoration(
-              border: Border.all(
-                color: dynamicPastel(
-                    context, Theme.of(context).colorScheme.primary,
-                    amountLight: 0.5, amountDark: 0.4, inverse: true),
-                width: 3,
+    return Tooltip(
+      message: "theme-color".tr(),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 250),
+        margin: margin ?? EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+        height: size,
+        width: size,
+        decoration: outline
+            ? BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: dynamicPastel(
+                      context, Theme.of(context).colorScheme.primary,
+                      amountLight: 0.5, amountDark: 0.4, inverse: true),
+                  width: 3,
+                ),
+              )
+            : BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.transparent,
+                  width: 0,
+                ),
               ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
-            )
-          : BoxDecoration(
-              border: Border.all(
-                color: Colors.transparent,
-                width: 0,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(500)),
-            ),
-      child: Tappable(
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.9),
-        onTap: onTap,
-        borderRadius: 500,
-        child: Icon(
-          Icons.color_lens_rounded,
-          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+        child: Tappable(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.9),
+          onTap: onTap,
+          borderRadius: 500,
+          child: Icon(
+            Icons.color_lens_rounded,
+            color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+          ),
         ),
       ),
     );
@@ -420,8 +424,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
         actionAfter: () async {
           await openBottomSheet(context, colorPickerPopup);
         },
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 250),
+        child: Container(
           margin: widget.margin ??
               EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
           height: widget.size,
@@ -436,11 +439,17 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
                   borderRadius: BorderRadius.all(Radius.circular(500)),
                 )
               : BoxDecoration(
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 0,
+                  border: GradientBoxBorder(
+                    gradient: LinearGradient(colors: [
+                      Colors.red.withOpacity(0.8),
+                      Colors.yellow.withOpacity(0.8),
+                      Colors.green.withOpacity(0.8),
+                      Colors.blue.withOpacity(0.8),
+                      Colors.purple.withOpacity(0.8),
+                    ]),
+                    width: 3,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(500)),
+                  borderRadius: BorderRadius.circular(500),
                 ),
           child: Tappable(
             color: Colors.transparent,
@@ -450,7 +459,7 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
             borderRadius: 500,
             child: Icon(
               Icons.colorize_rounded,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ),

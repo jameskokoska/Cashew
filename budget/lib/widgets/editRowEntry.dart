@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart'
@@ -47,32 +48,32 @@ class EditRowEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget container = Container(
-      decoration: BoxDecoration(
-        boxShadow: appStateSettings["materialYou"]
-            ? []
-            : boxShadowCheck(boxShadowGeneral(context)),
-      ),
-      child: OpenContainerNavigation(
-        openPage: openPage,
-        closedColor: appStateSettings["materialYou"]
+    Color containerColor = getPlatform() == PlatformOS.isIOS
+        ? Theme.of(context).canvasColor
+        : appStateSettings["materialYou"]
             ? dynamicPastel(
                 context,
                 Theme.of(context).colorScheme.secondaryContainer,
                 amount: 0.5,
               )
-            : getColor(context, "lightDarkAccentHeavyLight"),
-        borderRadius: 18,
+            : getColor(context, "lightDarkAccentHeavyLight");
+    double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
+    Widget container = Container(
+      decoration: BoxDecoration(
+        boxShadow: getPlatform() == PlatformOS.isIOS
+            ? []
+            : appStateSettings["materialYou"]
+                ? []
+                : boxShadowCheck(boxShadowGeneral(context)),
+      ),
+      child: OpenContainerNavigation(
+        openPage: openPage,
+        closedColor: containerColor,
+        borderRadius: borderRadius,
         button: (openContainer) {
           return Tappable(
-            borderRadius: 18,
-            color: appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context,
-                    Theme.of(context).colorScheme.secondaryContainer,
-                    amount: 0.3,
-                  )
-                : getColor(context, "lightDarkAccentHeavyLight"),
+            borderRadius: borderRadius,
+            color: containerColor,
             onTap: () {
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
@@ -92,7 +93,7 @@ class EditRowEntry extends StatelessWidget {
                     children: [
                       accentColor != null
                           ? Container(
-                              width: 5,
+                              width: getPlatform() == PlatformOS.isIOS ? 4 : 5,
                               color: dynamicPastel(
                                 context,
                                 accentColor!,
@@ -116,11 +117,17 @@ class EditRowEntry extends StatelessWidget {
                       extraIcon != null
                           ? Tappable(
                               color: Colors.transparent,
-                              borderRadius: 18,
+                              borderRadius: borderRadius,
                               child: Container(
-                                  height: double.infinity,
-                                  width: 40,
-                                  child: Icon(extraIcon)),
+                                height: double.infinity,
+                                width: 40,
+                                child: ScaledAnimatedSwitcher(
+                                  keyToWatch: extraIcon.toString(),
+                                  child: Icon(
+                                    extraIcon,
+                                  ),
+                                ),
+                              ),
                               onTap: onExtra,
                             )
                           : SizedBox.shrink(),
@@ -128,7 +135,7 @@ class EditRowEntry extends StatelessWidget {
                       canDelete
                           ? Tappable(
                               color: Colors.transparent,
-                              borderRadius: 18,
+                              borderRadius: borderRadius,
                               child: Container(
                                   height: double.infinity,
                                   width: 40,
@@ -141,7 +148,7 @@ class EditRowEntry extends StatelessWidget {
                               index: index,
                               child: Tappable(
                                 color: Colors.transparent,
-                                borderRadius: 18,
+                                borderRadius: borderRadius,
                                 child: Container(
                                     margin: EdgeInsets.only(
                                         right: showMoreWidget == null ? 10 : 0),
@@ -272,20 +279,56 @@ class EditRowEntry extends StatelessWidget {
     //   },
     // );
     if (!canReorder) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: container,
+      return Column(
+        children: [
+          getPlatform() == PlatformOS.isIOS && index == 0
+              ? Container(
+                  height: 1.5,
+                  color: getColor(context, "lightDarkAccent"),
+                )
+              : SizedBox.shrink(),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
+                vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
+            child: container,
+          ),
+          getPlatform() == PlatformOS.isIOS
+              ? Container(
+                  height: 1.5,
+                  color: getColor(context, "lightDarkAccent"),
+                )
+              : SizedBox.shrink(),
+        ],
       );
     }
     return AnimatedOpacity(
       duration: Duration(milliseconds: 200),
       opacity: currentReorder ? 0.6 : 1,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: ReorderableDelayedDragStartListener(
-          index: index,
-          child: container,
-        ),
+      child: Column(
+        children: [
+          getPlatform() == PlatformOS.isIOS && index == 0
+              ? Container(
+                  height: 1.5,
+                  color: getColor(context, "lightDarkAccent"),
+                )
+              : SizedBox.shrink(),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
+                vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
+            child: ReorderableDelayedDragStartListener(
+              index: index,
+              child: container,
+            ),
+          ),
+          getPlatform() == PlatformOS.isIOS
+              ? Container(
+                  height: 1.5,
+                  color: getColor(context, "lightDarkAccent"),
+                )
+              : SizedBox.shrink(),
+        ],
       ),
     );
   }

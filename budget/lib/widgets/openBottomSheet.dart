@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ Future openBottomSheet(
               context, Theme.of(context).colorScheme.secondaryContainer,
               amountDark: 0.3, amountLight: 0.6)
           : getColor(context, "lightDarkAccent"),
-      cornerRadius: 20,
+      cornerRadius: getPlatform() == PlatformOS.isIOS ? 10 : 20,
       duration: Duration(milliseconds: 300),
       builder: (context, state) {
         return Material(

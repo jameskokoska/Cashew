@@ -1,11 +1,12 @@
 import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SettingsContainerSwitch extends StatefulWidget {
@@ -91,14 +92,22 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
         description: description,
         afterWidget: Padding(
           padding: const EdgeInsets.only(left: 5),
-          child: Switch(
-            activeColor: Theme.of(context).colorScheme.primary,
-            value: value,
-            onChanged: (_) {
-              toggleSwitch();
-            },
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
+          child: getPlatform() == PlatformOS.isIOS
+              ? CupertinoSwitch(
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  value: value,
+                  onChanged: (_) {
+                    toggleSwitch();
+                  },
+                )
+              : Switch(
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  value: value,
+                  onChanged: (_) {
+                    toggleSwitch();
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
         ),
         icon: widget.icon,
         verticalPadding: widget.verticalPadding,

@@ -131,6 +131,13 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                         amountLight: 0.55,
                         amountDark: 0.35);
                     return EditRowEntry(
+                      extraIcon:
+                          appStateSettings["selectedWallet"] == wallet.walletPk
+                              ? Icons.star_rounded
+                              : Icons.star_outline,
+                      onExtra: () async {
+                        setPrimaryWallet(wallet.walletPk);
+                      },
                       canDelete: (wallet.walletPk != 0),
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,

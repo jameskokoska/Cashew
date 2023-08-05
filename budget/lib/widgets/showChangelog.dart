@@ -10,6 +10,21 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.3
+    Edit row action button animated scale switcher
+    iOS notification configurations
+    Can select primary wallet in edit wallets list page
+    Pick custom color gradient outline
+    New iOS popup bottom sheet layout
+    New iOS edit row entries
+    Material You setting moved to accent color for iOS
+    Upcoming transaction icon changed
+    New iOS navigation bar
+    Fixed max offset for back gesture animation
+    Now can 'undo' back swipe progress be going in reverse
+    Fixed add budget page pin icon pushed too far offscreen
+    Fixed blur effect
+    Navigation gesture resets screen when a popup preventing navigation pop
     < 3.7.2
     Transaction type action button size re-checked when changed in add transaction page
     Fixed upcoming transaction actions removing popup not finding context after database updated

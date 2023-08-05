@@ -468,20 +468,22 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   ? Icons.push_pin_rounded
                   : Icons.push_pin_outlined),
             ),
-            widget.budget != null
-                ? IconButton(
-                    padding: EdgeInsets.all(15),
-                    tooltip: "delete-budget".tr(),
-                    onPressed: () {
-                      deleteBudgetPopup(context, widget.budget!,
-                          afterDelete: () {
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
-                      });
-                    },
-                    icon: Icon(Icons.delete_rounded),
-                  )
-                : SizedBox.shrink(),
+            ...(widget.budget != null
+                ? [
+                    IconButton(
+                      padding: EdgeInsets.all(15),
+                      tooltip: "delete-budget".tr(),
+                      onPressed: () {
+                        deleteBudgetPopup(context, widget.budget!,
+                            afterDelete: () {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                        });
+                      },
+                      icon: Icon(Icons.delete_rounded),
+                    )
+                  ]
+                : []),
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,

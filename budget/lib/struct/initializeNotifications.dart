@@ -16,8 +16,13 @@ Future<String?> initializeNotifications() async {
   }
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('notification_icon_android2');
+  final DarwinInitializationSettings initializationSettingsDarwin =
+      DarwinInitializationSettings(
+          onDidReceiveLocalNotification: (_, __, ___, ____) {});
+
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
+    iOS: initializationSettingsDarwin,
   );
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,

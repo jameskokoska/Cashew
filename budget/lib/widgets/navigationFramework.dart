@@ -273,13 +273,14 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: getIsFullScreen(context) == false
-                    ? 75 +
-                        MediaQuery.of(context).viewPadding.bottom -
-                        (MediaQuery.of(context).viewPadding.bottom > 10
-                            ? 10
-                            : 0)
-                    : 15 + MediaQuery.of(context).viewPadding.bottom,
+                bottom: (getIsFullScreen(context) == false
+                        ? 75 +
+                            MediaQuery.of(context).viewPadding.bottom -
+                            (MediaQuery.of(context).viewPadding.bottom > 10
+                                ? 10
+                                : 0)
+                        : 15 + MediaQuery.of(context).viewPadding.bottom) +
+                    (getPlatform() == PlatformOS.isIOS ? 7 : 0),
                 right: 15,
               ),
               child: Stack(

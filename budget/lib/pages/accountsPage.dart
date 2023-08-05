@@ -1,11 +1,11 @@
 import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -58,8 +58,9 @@ class AccountsPageState extends State<AccountsPage> {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart:
           Theme.of(context).colorScheme.secondaryContainer,
-      dragDownToDissmissBackground:
-          Theme.of(context).colorScheme.secondaryContainer,
+      dragDownToDissmissBackground: getPlatform() == PlatformOS.isIOS
+          ? Colors.transparent
+          : Theme.of(context).colorScheme.secondaryContainer,
       bottomPadding: false,
       slivers: [
         SliverFillRemaining(

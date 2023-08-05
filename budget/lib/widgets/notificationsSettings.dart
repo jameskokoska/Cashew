@@ -207,7 +207,8 @@ List<String> _reminderStrings = [
   for (int i = 1; i <= 26; i++) "notification-reminder-" + i.toString()
 ];
 
-Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
+Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
+    {bool scheduleNowDebug = false}) async {
   // If the app was opened on the day the notification was scheduled it will be
   // cancelled and set to the next day because of _nextInstanceOfSetTime
   await cancelDailyNotification();
@@ -221,13 +222,20 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay) async {
     color: Theme.of(context).colorScheme.primary,
   );
 
+  DarwinNotificationDetails darwinNotificationDetails =
+      DarwinNotificationDetails(threadIdentifier: 'transactionReminders');
+
   // schedule a week worth of notifications
   for (int i = 1; i <= 7; i++) {
     String chosenMessage =
         _reminderStrings[Random().nextInt(_reminderStrings.length)].tr();
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
-    NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+    if (scheduleNowDebug)
+      dateTime = tz.TZDateTime.now(tz.local).add(Duration(seconds: i * 5));
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: darwinNotificationDetails,
+    );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       i,
       'notification-reminder-title'.tr(),
@@ -274,6 +282,9 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
     color: Theme.of(context).colorScheme.primary,
   );
 
+  DarwinNotificationDetails darwinNotificationDetails =
+      DarwinNotificationDetails(threadIdentifier: 'upcomingTransactions');
+
   List<Transaction> upcomingTransactions =
       await database.getAllUpcomingTransactions(
     startDate: DateTime(
@@ -305,8 +316,10 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
       upcomingTransaction.dateCreated.hour,
       upcomingTransaction.dateCreated.minute,
     );
-    NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: darwinNotificationDetails,
+    );
     if (upcomingTransaction.dateCreated.isAfter(DateTime.now())) {
       await flutterLocalNotificationsPlugin.zonedSchedule(
         idStart,
@@ -372,11 +385,25 @@ Future<bool> initializeNotificationsPlatform() async {
   }
   try {
     if (Platform.isAndroid) await checkNotificationsPermissionAndroid();
+    if (Platform.isIOS) await checkNotificationsPermissionIOS();
   } catch (e) {
     print("Error setting up notifications: " + e.toString());
     return false;
   }
   print("Notifications initialized");
+  return true;
+}
+
+Future<bool> checkNotificationsPermissionIOS() async {
+  bool? result = await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+  if (result != true) return false;
   return true;
 }
 

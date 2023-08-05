@@ -98,18 +98,37 @@ class SettingsPageState extends State<SettingsPage>
               context,
               PopupFramework(
                 title: "select-color".tr(),
-                child: SelectColor(
-                  includeThemeColor: false,
-                  selectedColor: selectedColor,
-                  setSelectedColor: (color) {
-                    selectedColor = color;
-                    updateSettings("accentColor", toHexString(color),
-                        updateGlobalState: true);
-                    updateSettings("accentSystemColor", false,
-                        updateGlobalState: true);
-                    generateColors();
-                  },
-                  useSystemColorPrompt: true,
+                child: Column(
+                  children: [
+                    getPlatform() == PlatformOS.isIOS
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: SettingsContainerSwitch(
+                              title: "colorful-interface".tr(),
+                              onSwitched: (value) {
+                                updateSettings("materialYou", value,
+                                    updateGlobalState: true);
+                              },
+                              initialValue: appStateSettings["materialYou"],
+                              icon: Icons.brush_rounded,
+                              enableBorderRadius: true,
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    SelectColor(
+                      includeThemeColor: false,
+                      selectedColor: selectedColor,
+                      setSelectedColor: (color) {
+                        selectedColor = color;
+                        updateSettings("accentColor", toHexString(color),
+                            updateGlobalState: true);
+                        updateSettings("accentSystemColor", false,
+                            updateGlobalState: true);
+                        generateColors();
+                      },
+                      useSystemColorPrompt: true,
+                    ),
+                  ],
                 ),
               ),
             );
@@ -118,15 +137,17 @@ class SettingsPageState extends State<SettingsPage>
           description: "accent-color-description".tr(),
           icon: Icons.color_lens_rounded,
         ),
-        SettingsContainerSwitch(
-          title: "material-you".tr(),
-          description: "material-you-description".tr(),
-          onSwitched: (value) {
-            updateSettings("materialYou", value, updateGlobalState: true);
-          },
-          initialValue: appStateSettings["materialYou"],
-          icon: Icons.brush_rounded,
-        ),
+        getPlatform() == PlatformOS.isIOS
+            ? SizedBox.shrink()
+            : SettingsContainerSwitch(
+                title: "material-you".tr(),
+                description: "material-you-description".tr(),
+                onSwitched: (value) {
+                  updateSettings("materialYou", value, updateGlobalState: true);
+                },
+                initialValue: appStateSettings["materialYou"],
+                icon: Icons.brush_rounded,
+              ),
         SettingsContainerDropdown(
           title: "theme-mode".tr(),
           icon: Icons.lightbulb_rounded,

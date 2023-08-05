@@ -511,7 +511,7 @@ IconData getTransactionTypeIcon(TransactionSpecialType? selectedType) {
   if (selectedType == null) {
     return Icons.payments_rounded;
   } else if (selectedType == TransactionSpecialType.upcoming) {
-    return Icons.savings_rounded;
+    return Icons.event_rounded;
   } else if (selectedType == TransactionSpecialType.subscription) {
     return Icons.event_repeat_rounded;
   } else if (selectedType == TransactionSpecialType.repetitive) {

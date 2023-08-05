@@ -508,18 +508,16 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         openBottomSheet(
             context,
             appStateSettings["askForTransactionTitle"]
-                ? PopupFramework(
-                    child: SelectTitle(
-                      selectedTitle: selectedTitle,
-                      setSelectedNote: setSelectedNoteController,
-                      setSelectedTitle: setSelectedTitleController,
-                      setSelectedTags: setSelectedTags,
-                      selectedCategory: selectedCategory,
-                      setSelectedCategory: setSelectedCategory,
-                      next: () {
-                        openBottomSheet(context, afterSetTitle());
-                      },
-                    ),
+                ? SelectTitle(
+                    selectedTitle: selectedTitle,
+                    setSelectedNote: setSelectedNoteController,
+                    setSelectedTitle: setSelectedTitleController,
+                    setSelectedTags: setSelectedTags,
+                    selectedCategory: selectedCategory,
+                    setSelectedCategory: setSelectedCategory,
+                    next: () {
+                      openBottomSheet(context, afterSetTitle());
+                    },
                   )
                 : afterSetTitle(),
             snap: appStateSettings["askForTransactionTitle"] != true);
@@ -1006,14 +1004,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             onTap: () {
               openBottomSheet(
                 context,
-                PopupFramework(
-                  child: SelectTitle(
-                    setSelectedTitle: setSelectedTitle,
-                    setSelectedNote: setSelectedNoteController,
-                    setSelectedCategory: setSelectedCategory,
-                    setSelectedTags: setSelectedTags,
-                    selectedTitle: selectedTitle,
-                  ),
+                SelectTitle(
+                  setSelectedTitle: setSelectedTitle,
+                  setSelectedNote: setSelectedNoteController,
+                  setSelectedCategory: setSelectedCategory,
+                  setSelectedTags: setSelectedTags,
+                  selectedTitle: selectedTitle,
                 ),
               );
             },
@@ -1821,215 +1817,214 @@ class _SelectTitleState extends State<SelectTitle> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFont(
-                  text: "enter-title".tr(),
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-                Container(height: 14),
-                Container(
-                  width: getWidthBottomSheet(context) - 36,
-                  child: TextInput(
-                    icon: Icons.title_rounded,
-                    initialValue: widget.selectedTitle,
-                    autoFocus: true,
-                    onEditingComplete: () {
-                      //if selected a tag and a category is set, then go to enter amount
-                      //else enter amount
-                      if (selectedCategory?.name
-                              .toString()
-                              .trim()
-                              .toLowerCase() ==
-                          input?.toString().trim().toLowerCase()) {
-                        widget.setSelectedTitle("");
-                      } else {
-                        widget.setSelectedTitle(input ?? "");
-                      }
+    return PopupFramework(
+      title: "enter-title".tr(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: getWidthBottomSheet(context) - 36,
+                    child: TextInput(
+                      icon: Icons.title_rounded,
+                      initialValue: widget.selectedTitle,
+                      autoFocus: true,
+                      onEditingComplete: () {
+                        //if selected a tag and a category is set, then go to enter amount
+                        //else enter amount
+                        if (selectedCategory?.name
+                                .toString()
+                                .trim()
+                                .toLowerCase() ==
+                            input?.toString().trim().toLowerCase()) {
+                          widget.setSelectedTitle("");
+                        } else {
+                          widget.setSelectedTitle(input ?? "");
+                        }
 
-                      if (selectedCategory != null) {
-                        widget.setSelectedCategory(selectedCategory!);
-                      }
-                      Navigator.pop(context);
-                      if (widget.next != null) {
-                        widget.next!();
-                      }
-                    },
-                    onChanged: (text) async {
-                      input = text;
-                      widget.setSelectedTitle(input!);
+                        if (selectedCategory != null) {
+                          widget.setSelectedCategory(selectedCategory!);
+                        }
+                        Navigator.pop(context);
+                        if (widget.next != null) {
+                          widget.next!();
+                        }
+                      },
+                      onChanged: (text) async {
+                        input = text;
+                        widget.setSelectedTitle(input!);
 
-                      List result = await getRelatingAssociatedTitle(text);
-                      TransactionAssociatedTitle? selectedTitleLocal =
-                          result[0];
-                      int categoryFk = result[1];
-                      bool foundFromCategoryLocal = result[2];
+                        List result = await getRelatingAssociatedTitle(text);
+                        TransactionAssociatedTitle? selectedTitleLocal =
+                            result[0];
+                        int categoryFk = result[1];
+                        bool foundFromCategoryLocal = result[2];
 
-                      if (selectedTitleLocal == null) {
-                        selectedTitleLocal = await getLikeAssociatedTitle(text);
-                        categoryFk = selectedTitleLocal?.categoryFk ?? -1;
-                        foundFromCategoryLocal = false;
-                      }
+                        if (selectedTitleLocal == null) {
+                          selectedTitleLocal =
+                              await getLikeAssociatedTitle(text);
+                          categoryFk = selectedTitleLocal?.categoryFk ?? -1;
+                          foundFromCategoryLocal = false;
+                        }
 
-                      if (categoryFk != -1 && categoryFk != 0) {
-                        TransactionCategory? foundCategory =
-                            await database.getCategoryInstance(categoryFk);
-                        // Update the size of the bottom sheet
-                        Future.delayed(Duration(milliseconds: 100), () {
-                          bottomSheetControllerGlobal.snapToExtent(0);
-                        });
-                        setState(() {
-                          selectedCategory = foundCategory;
-                          selectedAssociatedTitle = selectedTitleLocal;
-                          foundFromCategory = foundFromCategoryLocal;
-                        });
-                      } else {
-                        setState(() {
-                          selectedCategory = null;
-                          selectedAssociatedTitle = null;
-                          foundFromCategory = foundFromCategoryLocal;
-                        });
-                        // Update the size of the bottom sheet
-                        Future.delayed(Duration(milliseconds: 300), () {
-                          bottomSheetControllerGlobal.snapToExtent(0);
-                        });
-                      }
-                    },
-                    labelText: "title-placeholder".tr(),
-                    padding: EdgeInsets.zero,
+                        if (categoryFk != -1 && categoryFk != 0) {
+                          TransactionCategory? foundCategory =
+                              await database.getCategoryInstance(categoryFk);
+                          // Update the size of the bottom sheet
+                          Future.delayed(Duration(milliseconds: 100), () {
+                            bottomSheetControllerGlobal.snapToExtent(0);
+                          });
+                          setState(() {
+                            selectedCategory = foundCategory;
+                            selectedAssociatedTitle = selectedTitleLocal;
+                            foundFromCategory = foundFromCategoryLocal;
+                          });
+                        } else {
+                          setState(() {
+                            selectedCategory = null;
+                            selectedAssociatedTitle = null;
+                            foundFromCategory = foundFromCategoryLocal;
+                          });
+                          // Update the size of the bottom sheet
+                          Future.delayed(Duration(milliseconds: 300), () {
+                            bottomSheetControllerGlobal.snapToExtent(0);
+                          });
+                        }
+                      },
+                      labelText: "title-placeholder".tr(),
+                      padding: EdgeInsets.zero,
+                    ),
                   ),
-                ),
-                AnimatedSize(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.easeInOut,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 250),
-                    child: selectedCategory == null
-                        ? Container(
-                            key: ValueKey(0),
+                  AnimatedSize(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 250),
+                      child: selectedCategory == null
+                          ? Container(
+                              key: ValueKey(0),
+                              width: getWidthBottomSheet(context) - 36,
+                            )
+                          : Container(
+                              key: ValueKey(selectedCategory!.categoryPk),
+                              width: getWidthBottomSheet(context) - 36,
+                              padding: EdgeInsets.only(top: 13),
+                              child: Tappable(
+                                borderRadius: 15,
+                                color: Colors.transparent,
+                                onTap: () {
+                                  selectTitle();
+                                },
+                                child: Row(
+                                  children: [
+                                    CategoryIcon(
+                                      categoryPk: 0,
+                                      size: 40,
+                                      category: selectedCategory,
+                                      margin: EdgeInsets.zero,
+                                      onTap: () {
+                                        selectTitle();
+                                      },
+                                    ),
+                                    SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextFont(
+                                          text: selectedCategory?.name ?? "",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        !foundFromCategory
+                                            ? TextFont(
+                                                text: selectedAssociatedTitle!
+                                                    .title,
+                                                fontSize: 16,
+                                              )
+                                            : Container(),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                  getIsFullScreen(context)
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 13),
+                          child: Container(
                             width: getWidthBottomSheet(context) - 36,
-                          )
-                        : Container(
-                            key: ValueKey(selectedCategory!.categoryPk),
-                            width: getWidthBottomSheet(context) - 36,
-                            padding: EdgeInsets.only(top: 13),
-                            child: Tappable(
-                              borderRadius: 15,
-                              color: Colors.transparent,
-                              onTap: () {
-                                selectTitle();
-                              },
-                              child: Row(
-                                children: [
-                                  CategoryIcon(
-                                    categoryPk: 0,
-                                    size: 40,
-                                    category: selectedCategory,
-                                    margin: EdgeInsets.zero,
-                                    onTap: () {
-                                      selectTitle();
-                                    },
-                                  ),
-                                  SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextFont(
-                                        text: selectedCategory?.name ?? "",
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      !foundFromCategory
-                                          ? TextFont(
-                                              text: selectedAssociatedTitle!
-                                                  .title,
-                                              fontSize: 16,
-                                            )
-                                          : Container(),
-                                    ],
-                                  )
-                                ],
+                            child: Container(
+                              width: getWidthBottomSheet(context) - 36,
+                              child: TextInput(
+                                autoFocus: false,
+                                onChanged: (text) {
+                                  widget.setSelectedNote(text);
+                                },
+                                labelText: "notes-placeholder".tr(),
+                                icon: Icons.sticky_note_2_rounded,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                minLines: 3,
+                                padding: EdgeInsets.zero,
                               ),
                             ),
                           ),
-                  ),
-                ),
-                getIsFullScreen(context)
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 13),
-                        child: Container(
-                          width: getWidthBottomSheet(context) - 36,
-                          child: Container(
-                            width: getWidthBottomSheet(context) - 36,
-                            child: TextInput(
-                              autoFocus: false,
-                              onChanged: (text) {
-                                widget.setSelectedNote(text);
-                              },
-                              labelText: "notes-placeholder".tr(),
-                              icon: Icons.sticky_note_2_rounded,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              minLines: 3,
-                              padding: EdgeInsets.zero,
-                            ),
-                          ),
-                        ),
-                      )
-                    : SizedBox.shrink()
-              ],
-            ),
-          ],
-        ),
-        // AnimatedSwitcher(
-        //   duration: Duration(milliseconds: 300),
-        //   child: CategoryIcon(
-        //     key: ValueKey(selectedCategory?.categoryPk ?? ""),
-        //     margin: EdgeInsets.zero,
-        //     categoryPk: selectedCategory?.categoryPk ?? 0,
-        //     size: 55,
-        //     onTap: () {
-        //       openBottomSheet(
-        //         context,
-        //         PopupFramework(
-        //           title: "select-category".tr(),
-        //           child: SelectCategory(
-        //             setSelectedCategory: (TransactionCategory category) {
-        //               widget.setSelectedCategory(category);
-        //               setState(() {
-        //                 selectedCategory = category;
-        //               });
-        //             },
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ),
-        Container(height: 20),
-        widget.next != null
-            ? Button(
-                label: "select-category".tr(),
-                width: getWidthBottomSheet(context),
-                onTap: () {
-                  Navigator.pop(context);
-                  if (widget.next != null) {
-                    widget.next!();
-                  }
-                },
-              )
-            : SizedBox.shrink()
-      ],
+                        )
+                      : SizedBox.shrink()
+                ],
+              ),
+            ],
+          ),
+          // AnimatedSwitcher(
+          //   duration: Duration(milliseconds: 300),
+          //   child: CategoryIcon(
+          //     key: ValueKey(selectedCategory?.categoryPk ?? ""),
+          //     margin: EdgeInsets.zero,
+          //     categoryPk: selectedCategory?.categoryPk ?? 0,
+          //     size: 55,
+          //     onTap: () {
+          //       openBottomSheet(
+          //         context,
+          //         PopupFramework(
+          //           title: "select-category".tr(),
+          //           child: SelectCategory(
+          //             setSelectedCategory: (TransactionCategory category) {
+          //               widget.setSelectedCategory(category);
+          //               setState(() {
+          //                 selectedCategory = category;
+          //               });
+          //             },
+          //           ),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+          Container(height: 20),
+          widget.next != null
+              ? Button(
+                  label: "select-category".tr(),
+                  width: getWidthBottomSheet(context),
+                  onTap: () {
+                    Navigator.pop(context);
+                    if (widget.next != null) {
+                      widget.next!();
+                    }
+                  },
+                )
+              : SizedBox.shrink()
+        ],
+      ),
     );
   }
 }

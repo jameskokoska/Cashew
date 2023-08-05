@@ -1693,7 +1693,9 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // create or update a new transaction
   Future<int>? createOrUpdateTransaction(Transaction transaction,
-      {bool updateSharedEntry = true, Transaction? originalTransaction}) async {
+      {bool insert = false,
+      bool updateSharedEntry = true,
+      Transaction? originalTransaction}) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
     double maxAmount = 10000000;
@@ -1775,9 +1777,18 @@ class FinanceDatabase extends _$FinanceDatabase {
         }
       }
     }
-    return into(transactions).insert(
-        transaction.copyWith(dateTimeModified: Value(DateTime.now())),
-        mode: InsertMode.insertOrReplace);
+
+    transaction = transaction.copyWith(dateTimeModified: Value(DateTime.now()));
+    TransactionsCompanion companionToInsert = transaction.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert =
+          companionToInsert.copyWith(transactionPk: Value.absent());
+    }
+
+    return into(transactions)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
   // ************************************************************

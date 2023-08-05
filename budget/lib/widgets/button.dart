@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -114,7 +115,8 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             _shrink();
             if (widget.disabled == false) widget.onTap();
           },
-          borderRadius: widget.borderRadius,
+          borderRadius:
+              getPlatform() == PlatformOS.isIOS ? 10 : widget.borderRadius,
           child: Padding(
             padding: EdgeInsets.only(
               bottom: widget.expandToFillBottomExtraSafeArea

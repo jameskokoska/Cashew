@@ -225,6 +225,8 @@ class PageFrameworkState extends State<PageFramework>
   double totalDragX = 0;
   bool swipeDownToDismiss = false;
   bool isBackSideSwiping = false;
+  double calculatedYOffsetForX = 0;
+  double calculatedYOffsetForY = 0;
 
   _onPointerMove(PointerMoveEvent ptr) {
     if ((widget.onDragDownToDissmiss != null ||
@@ -233,16 +235,14 @@ class PageFrameworkState extends State<PageFramework>
         selectingTransactionsActive == 0) {
       if (isBackSideSwiping) {
         totalDragX = totalDragX + ptr.delta.dx;
-        double calculatedYOffset = totalDragX / 500;
-        if (calculatedYOffset > _animationControllerDragY.value)
-          _animationControllerDragY.value = calculatedYOffset;
+        calculatedYOffsetForX = totalDragX / 500;
       }
       if (swipeDownToDismiss) {
         totalDragY = totalDragY + ptr.delta.dy;
-        double calculatedYOffset = totalDragY / 500;
-        if (calculatedYOffset > _animationControllerDragY.value)
-          _animationControllerDragY.value = calculatedYOffset;
+        calculatedYOffsetForY = totalDragY / 500;
       }
+      _animationControllerDragY.value =
+          max(calculatedYOffsetForX, calculatedYOffsetForY);
     }
   }
 
@@ -256,12 +256,16 @@ class PageFrameworkState extends State<PageFramework>
         } else {
           await Navigator.of(context).maybePop();
         }
-      } else {
-        totalDragX = 0;
-        totalDragY = 0;
-        isBackSideSwiping = false;
-        _animationControllerDragY.reverse();
       }
+      // This cannot be in an else statement
+      // If a popup comes e.g. discard changes and user hits cancel
+      // we need to already have had this reset!
+      totalDragX = 0;
+      totalDragY = 0;
+      calculatedYOffsetForY = 0;
+      calculatedYOffsetForX = 0;
+      isBackSideSwiping = false;
+      _animationControllerDragY.reverse();
     }
   }
 
@@ -537,7 +541,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final PreferredSizeWidget? bottom;
   @override
   Widget build(BuildContext context) {
-    bool safeToIgnoreBG = appBarBackgroundColorStart == null ||
+    bool safeToIgnoreBG = expandedHeight == collapsedHeight ||
+        appBarBackgroundColorStart == null ||
         appBarBackgroundColorStart == Theme.of(context).canvasColor;
     Color? appBarBGColorCalculated = appBarBackgroundColor == null
         ? Theme.of(context).colorScheme.secondaryContainer
@@ -545,13 +550,14 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     if (appBarBGColorCalculated != null &&
         safeToIgnoreBG &&
         getPlatform() == PlatformOS.isIOS) {
-      appBarBGColorCalculated =
-          dynamicPastel(context, appBarBGColorCalculated, amount: 0.7)
-              .withOpacity(0.8);
+      appBarBGColorCalculated = Theme.of(context).canvasColor;
     }
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && backButton;
     return SliverAppBar(
+      surfaceTintColor: safeToIgnoreBG
+          ? Theme.of(context).colorScheme.secondaryContainer
+          : null,
       bottom: bottom,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness:
@@ -642,17 +648,31 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
             ),
             background: Stack(
               children: [
-                Container(
-                  color: appBarBackgroundColorStart == null
-                      ? Theme.of(context).canvasColor
-                      : appBarBackgroundColorStart,
-                ),
-                Opacity(
-                  opacity: percent,
-                  child: Container(
-                    color: appBarBGColorCalculated,
-                  ),
-                ),
+                safeToIgnoreBG
+                    ? SizedBox.shrink()
+                    : Container(
+                        color: appBarBackgroundColorStart == null
+                            ? Theme.of(context).canvasColor
+                            : appBarBackgroundColorStart,
+                      ),
+                safeToIgnoreBG
+                    ? Opacity(
+                        opacity: 1 - percent,
+                        child: Container(
+                          color: appBarBackgroundColorStart == null
+                              ? Theme.of(context).canvasColor
+                              : appBarBackgroundColorStart,
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                safeToIgnoreBG
+                    ? SizedBox.shrink()
+                    : Opacity(
+                        opacity: percent,
+                        child: Container(
+                          color: appBarBGColorCalculated,
+                        ),
+                      ),
                 subtitle != null &&
                         animationControllerShift != null &&
                         animationController0at50 != null
@@ -706,7 +726,7 @@ class BlurBehindAppBar extends StatelessWidget {
     if (getPlatform() != PlatformOS.isIOS) return child;
     return ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
         child: child,
       ),
     );

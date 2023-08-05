@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:flutter/material.dart';
@@ -36,43 +37,93 @@ class PopupFramework extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(height: 17),
-              Padding(
-                padding: EdgeInsets.only(left: 18, right: 18, top: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
+              getPlatform() == PlatformOS.isIOS
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              title == null
+                                  ? SizedBox.shrink()
+                                  : Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 18),
+                                      child: TextFont(
+                                        text: title ?? "",
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.bold,
+                                        maxLines: 5,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                              subtitle == null
+                                  ? SizedBox.shrink()
+                                  : Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 18),
+                                      child: TextFont(
+                                        text: subtitle ?? "",
+                                        fontSize: 14,
+                                        maxLines: 5,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                              Container(
+                                height: 1.5,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
+                                margin: EdgeInsets.only(top: 10, bottom: 5),
+                              )
+                            ],
+                          ),
+                        ),
+                        icon ?? SizedBox.shrink()
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(left: 18, right: 18, top: 5),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          title == null
-                              ? SizedBox.shrink()
-                              : TextFont(
-                                  text: title ?? "",
-                                  fontSize: title!.length > 16 ? 24 : 32,
-                                  fontWeight: FontWeight.bold,
-                                  maxLines: 5,
-                                ),
-                          subtitle == null
-                              ? SizedBox.shrink()
-                              : Padding(
-                                  padding: EdgeInsets.only(left: 2, bottom: 4),
-                                  child: TextFont(
-                                    text: subtitle ?? "",
-                                    fontSize: 15,
-                                    maxLines: 5,
-                                  ),
-                                ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                title == null
+                                    ? SizedBox.shrink()
+                                    : TextFont(
+                                        text: title ?? "",
+                                        fontSize: title!.length > 16 ? 24 : 32,
+                                        fontWeight: FontWeight.bold,
+                                        maxLines: 5,
+                                      ),
+                                subtitle == null
+                                    ? SizedBox.shrink()
+                                    : Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 2, bottom: 4),
+                                        child: TextFont(
+                                          text: subtitle ?? "",
+                                          fontSize: 15,
+                                          maxLines: 5,
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          ),
+                          icon ?? SizedBox.shrink()
                         ],
                       ),
                     ),
-                    icon ?? SizedBox.shrink()
-                  ],
-                ),
-              ),
               title == null || underTitleSpace == false
                   ? Container()
                   : Container(height: 13),

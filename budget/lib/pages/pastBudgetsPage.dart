@@ -282,7 +282,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
               color: (selectedCategoryFks?.length ?? 0) > 0
                   ? budgetColorScheme.tertiary.withOpacity(0.1)
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadius.circular(100),
             ),
             padding: EdgeInsets.all(8),
             child: Icon(

@@ -169,16 +169,16 @@ class PremiumPage extends StatelessWidget {
                                 children: [
                                   SubscriptionOption(
                                     label: "Yearly",
-                                    price: "\$20 / year",
+                                    price: "\$19.99 / year",
                                     extraPadding: EdgeInsets.only(top: 13 / 2),
                                   ),
                                   SubscriptionOption(
                                     label: "Monthly",
-                                    price: "\$2.50 / month",
+                                    price: "\$1.99 / month",
                                   ),
                                   SubscriptionOption(
                                     label: "One Time",
-                                    price: "\$30.00",
+                                    price: "\$29.99",
                                     extraPadding:
                                         EdgeInsets.only(bottom: 13 / 2),
                                   ),

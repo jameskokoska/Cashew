@@ -1,8 +1,8 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +44,59 @@ class BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     if (getIsFullScreen(context)) return SizedBox.shrink();
+    if (getPlatform() == PlatformOS.isIOS) {
+      return Container(
+        decoration: BoxDecoration(
+          color: getColor(context, "lightDarkAccent"),
+          boxShadow: boxShadowSharp(context),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 2),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: Icons.home_rounded,
+                        index: 0,
+                        currentIndex: selectedIndex,
+                      ),
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: Icons.payments_rounded,
+                        index: 1,
+                        currentIndex: selectedIndex,
+                      ),
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: MoreIcons.chart_pie,
+                        index: 2,
+                        currentIndex: selectedIndex,
+                        customIconScale: 0.87,
+                      ),
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: Icons.more_horiz_rounded,
+                        index: 3,
+                        currentIndex: selectedIndex,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom)
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    }
     return Padding(
       //Bottom padding is a container wrapped with absorb pointer
       padding: const EdgeInsets.only(bottom: 0, left: 10, right: 10),
@@ -133,6 +186,79 @@ class BottomNavBarState extends State<BottomNavBar> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class NavBarIcon extends StatelessWidget {
+  const NavBarIcon({
+    required this.onItemTapped,
+    required this.icon,
+    required this.index,
+    required this.currentIndex,
+    this.customIconScale = 1,
+    super.key,
+  });
+  final Function(int index) onItemTapped;
+  final IconData icon;
+  final int index;
+  final int currentIndex;
+  final double customIconScale;
+
+  @override
+  Widget build(BuildContext context) {
+    bool selected = currentIndex == index;
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        selected
+            ? ScaleIn(
+                duration: Duration(milliseconds: 200),
+                curve: Curves.fastOutSlowIn,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.secondaryContainer
+                        : appStateSettings["materialYou"]
+                            ? dynamicPastel(
+                                context,
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
+                                inverse: true,
+                                amount: 0.13,
+                              )
+                            : Theme.of(context).colorScheme.secondaryContainer,
+                  ),
+                  height: 52,
+                  width: 52,
+                  margin: EdgeInsets.all(5),
+                ),
+              )
+            : Container(
+                color: Colors.transparent,
+                height: 52,
+                width: 52,
+                margin: EdgeInsets.all(5),
+              ),
+        IconButton(
+          padding: EdgeInsets.all(15),
+          color: selected
+              ? Theme.of(context).colorScheme.onSecondaryContainer
+              : null,
+          icon: Transform.scale(
+            scale: customIconScale,
+            child: Icon(
+              icon,
+              size: 27,
+            ),
+          ),
+          onPressed: () {
+            onItemTapped(index);
+          },
+        ),
+      ],
     );
   }
 }
