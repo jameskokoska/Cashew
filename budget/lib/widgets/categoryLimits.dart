@@ -62,7 +62,6 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                   return CountNumber(
                     count: snapshot.data ?? 0,
                     duration: Duration(milliseconds: 700),
-                    dynamicDecimals: true,
                     initialCount: (0),
                     textBuilder: (number) {
                       return TextFont(
@@ -358,8 +357,9 @@ void enterCategoryLimitPopup(
     }
   } else if (categoryLimit == null) {
     database.createOrUpdateCategoryLimit(
+      insert: true,
       CategoryBudgetLimit(
-        categoryLimitPk: DateTime.now().millisecondsSinceEpoch,
+        categoryLimitPk: -1,
         categoryFk: category.categoryPk,
         budgetFk: budgetPk,
         amount: amount,

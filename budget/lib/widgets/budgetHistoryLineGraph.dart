@@ -1,7 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -126,7 +125,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
               return FlDotCirclePainter(
                 radius: 3,
                 color: lightenPastel(
-                        HexColor(widget.categoriesMapped[categoryPk]!.colour),
+                        HexColor(widget.categoriesMapped[categoryPk]?.colour),
                         amount: 0.3)
                     .withOpacity(0.6),
                 strokeWidth: 0,
@@ -134,7 +133,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
             },
           ),
           color: lightenPastel(
-                  HexColor(widget.categoriesMapped[categoryPk]!.colour),
+                  HexColor(widget.categoriesMapped[categoryPk]?.colour),
                   amount: 0.3)
               .withOpacity(0.8),
         ),

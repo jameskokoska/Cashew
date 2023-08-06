@@ -505,6 +505,25 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
   @override
   Widget build(BuildContext context) {
     Function login = () async {
+      dynamic result = true;
+      if (getPlatform() == PlatformOS.isIOS) {
+        result = await openPopup(
+          context,
+          icon: Icons.badge_rounded,
+          title: "google-login".tr(),
+          description: "google-login-apple-disclaimer".tr(),
+          onSubmitLabel: "continue".tr(),
+          onSubmit: () {
+            Navigator.pop(context, true);
+          },
+          onCancel: () {
+            Navigator.pop(context);
+          },
+          onCancelLabel: "cancel".tr(),
+        );
+      }
+
+      if (result != true) return;
       loadingIndeterminateKey.currentState!.setVisibility(true);
       try {
         await signInGoogle(

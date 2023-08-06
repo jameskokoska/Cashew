@@ -299,7 +299,7 @@ Future<void> parseEmailsInBackground(context,
         await addAssociatedTitles(title, selectedCategory);
 
         Transaction transactionToAdd = Transaction(
-          transactionPk: messageDate.millisecondsSinceEpoch,
+          transactionPk: -1,
           name: title,
           amount: (amountDouble).abs() * -1,
           note: "",
@@ -345,7 +345,7 @@ Future<void> parseEmailsInBackground(context,
             Duration(milliseconds: 2500) - stopwatch.elapsed, () {});
       }
       for (Transaction transaction in transactionsToAdd) {
-        await database.createOrUpdateTransaction(transaction);
+        await database.createOrUpdateTransaction(insert: true, transaction);
       }
       List<dynamic> emails = [
         ...emailsParsed

@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
@@ -14,10 +17,16 @@ import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/number_symbols_data.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+
+String getDecimalSeparator() {
+  return numberFormatSymbols[Platform.localeName.split("-")[0]]?.DECIMAL_SEP ??
+      ".";
+}
 
 class SelectAmount extends StatefulWidget {
   SelectAmount({
@@ -196,6 +205,8 @@ class _SelectAmountState extends State<SelectAmount> {
         addToAmount(".");
       } else if (keyIsPressed &&
           event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+        addToAmount(".");
+      } else if (keyIsPressed && event.logicalKey == LogicalKeyboardKey.comma) {
         addToAmount(".");
       } else if (keyIsPressed &&
           event.logicalKey == LogicalKeyboardKey.backspace) {
@@ -402,34 +413,25 @@ class _SelectAmountState extends State<SelectAmount> {
   @override
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
-    String amountConverted = amount == ""
-        ? "0"
-        : numberDecimals > 2
-            ? includesOperations(amount, false)
-                ? calculateResult(amount).toString()
-                : amount
-            : includesOperations(amount, false)
-                ? convertToMoney(
-                    Provider.of<AllWallets>(context), calculateResult(amount),
-                    showCurrency: false)
-                : convertToMoney(
-                        Provider.of<AllWallets>(context),
-                        double.tryParse(
-                                amount.substring(amount.length - 1) == "." ||
-                                        (amount.length > numberDecimals &&
-                                            amount.substring(amount.length -
-                                                    numberDecimals) ==
-                                                ".0")
-                                    ? amount.substring(0, amount.length - 1)
-                                    : amount) ??
-                            0,
-                        showCurrency: false) +
-                    (amount.substring(amount.length - 1) == "." ? "." : "") +
-                    (amount.length > numberDecimals &&
-                            amount.substring(amount.length - numberDecimals) ==
-                                ".0"
-                        ? ".0"
-                        : "");
+    String amountConverted = amount;
+    if (amountConverted == "") amountConverted = "0";
+    amountConverted = convertToMoney(
+      Provider.of<AllWallets>(context),
+      calculateResult(amountConverted),
+      currencyKey: selectedWallet?.currency,
+      allDecimals: true,
+      decimals:
+          selectedWallet?.decimals == 2 && includesOperations(amount, true)
+              ? 2
+              : min(
+                  selectedWallet?.decimals ?? 1000,
+                  includesOperations(amount, false)
+                      ? countDecimalDigits(
+                          calculateResult(amountConverted).toString())
+                      : countDecimalDigits(amount),
+                ),
+    );
+    amountConverted = amountConverted.replaceAll(".", getDecimalSeparator());
     return Column(
       children: [
         Center(
@@ -464,7 +466,7 @@ class _SelectAmountState extends State<SelectAmount> {
                     AnimatedSwitcher(
                       duration: Duration(milliseconds: 200),
                       child: FractionallySizedBox(
-                        key: ValueKey(amountConverted),
+                        key: ValueKey(amount),
                         widthFactor: 0.5,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -505,12 +507,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                       autoSizeText: true,
                                       maxLines: 1,
                                       minFontSize: 16,
-                                      walletPkForCurrency:
-                                          walletPkForCurrency ??
-                                              appStateSettings[
-                                                  "selectedWallet"],
-                                      onlyShowCurrencyIcon:
-                                          widget.onlyShowCurrencyIcon,
+
                                       text: amountConverted,
                                       // text: amount,
                                       textAlign: TextAlign.right,
@@ -532,7 +529,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 3.0),
                                       child: AnimatedSize(
-                                        duration: Duration(milliseconds: 600),
+                                        duration: Duration(milliseconds: 300),
                                         curve: Curves.easeInOutCubicEmphasized,
                                         child: AnimatedSwitcher(
                                           duration: Duration(milliseconds: 200),
@@ -555,6 +552,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                                   key: ValueKey(1),
                                                 )
                                               : Tappable(
+                                                  key: ValueKey(
+                                                      selectedWallet?.walletPk),
                                                   color: Theme.of(context)
                                                       .colorScheme
                                                       .secondaryContainer,
@@ -727,6 +726,20 @@ class _SelectAmountState extends State<SelectAmount> {
                                   wallet.currency.toString().toUpperCase() +
                                   ")";
                         },
+                        getCustomBorderColor: (TransactionWallet item) {
+                          return dynamicPastel(
+                            context,
+                            lightenPastel(
+                              HexColor(
+                                item.colour,
+                                defaultColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                              amount: 0.3,
+                            ),
+                            amount: 0.4,
+                          );
+                        },
                         extraWidget: AddButton(
                           onTap: () {},
                           width: 40,
@@ -835,7 +848,7 @@ class _SelectAmountState extends State<SelectAmount> {
                           children: [
                             CalculatorButton(
                               disabled: !canChange(),
-                              label: ".",
+                              label: getDecimalSeparator(),
                               editAmount: () {
                                 addToAmount(".");
                               },
@@ -1088,6 +1101,8 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
       } else if (keyIsPressed &&
           event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
         addToAmount(".");
+      } else if (keyIsPressed && event.logicalKey == LogicalKeyboardKey.comma) {
+        addToAmount(".");
       } else if (keyIsPressed &&
           event.logicalKey == LogicalKeyboardKey.backspace) {
         removeToAmount();
@@ -1152,6 +1167,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
   @override
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
+    String amountConverted = amount.replaceAll(".", getDecimalSeparator());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -1166,7 +1182,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
                 autoSizeText: true,
                 maxLines: 1,
                 minFontSize: 16,
-                text: amount + widget.suffix,
+                text: amountConverted + widget.suffix,
                 textAlign: TextAlign.right,
                 fontSize: 35,
                 fontWeight: FontWeight.bold,
@@ -1239,7 +1255,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
         Row(
           children: [
             CalculatorButton(
-              label: ".",
+              label: getDecimalSeparator(),
               editAmount: () {
                 addToAmount(".");
               },

@@ -6,6 +6,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
@@ -633,7 +634,10 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                   scale: percent * 0.15 + 1,
                   child: titleWidget ??
                       TextFont(
-                        text: title,
+                        text: getIsFullScreen(context) == false &&
+                                title.length > 20
+                            ? title.split(" ")[0]
+                            : title,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         textColor: textColor == null

@@ -42,7 +42,6 @@ class _AddCategoryPageState extends State<AddCategoryPage>
   String? selectedImage = "image.png";
   Color? selectedColor;
   bool selectedIncome = false;
-  int setCategoryPk = DateTime.now().millisecondsSinceEpoch;
   bool? canAddCategory;
   TransactionCategory? widgetCategory;
   List<String>? selectedMembers;
@@ -115,7 +114,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
 
   Future addCategory() async {
     TransactionCategory createdCategory = await createTransactionCategory();
-    await database.createOrUpdateCategory(createdCategory);
+    await database.createOrUpdateCategory(
+      insert: widget.category == null,
+      createdCategory,
+    );
     Navigator.pop(context);
   }
 
@@ -126,8 +128,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
           await database.getCategoryInstance(widget.category!.categoryPk);
     }
     return TransactionCategory(
-      categoryPk:
-          widget.category != null ? widget.category!.categoryPk : setCategoryPk,
+      categoryPk: widget.category != null ? widget.category!.categoryPk : -1,
       name: (selectedTitle ?? "").trim(),
       dateCreated: widget.category != null
           ? widget.category!.dateCreated
@@ -250,7 +251,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
-                    label: "set-title".tr(),
+                    label: "set-name".tr(),
                     onTap: () async {
                       FocusScope.of(context).unfocus();
                       Future.delayed(Duration(milliseconds: 100), () {
@@ -447,112 +448,123 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                     ),
                   ),
             widgetCategory == null ? SizedBox.shrink() : SizedBox(height: 13),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextFont(
-                text: "associated-titles".tr(),
-                textColor: getColor(context, "textLight"),
-                fontSize: 16,
-              ),
-            ),
-            SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextFont(
-                text: "associated-titles-description".tr(),
-                textColor: getColor(context, "textLight"),
-                fontSize: 13,
-                maxLines: 10,
-              ),
-            ),
-            SizedBox(height: 10),
-            AddButton(
-                padding: EdgeInsets.only(
-                  left: 15,
-                  right: 15,
-                  bottom: 9,
-                  top: 4,
-                ),
-                onTap: () {
-                  openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "set-title".tr(),
-                      child: SelectText(
-                        setSelectedText: (_) {},
-                        labelText: "set-title".tr(),
-                        placeholder: "title-placeholder".tr(),
-                        nextWithInput: (text) async {
-                          int length =
-                              await database.getAmountOfAssociatedTitles();
-
-                          await database.createOrUpdateAssociatedTitle(
-                            TransactionAssociatedTitle(
-                              associatedTitlePk:
-                                  DateTime.now().millisecondsSinceEpoch,
-                              categoryFk: widget.category == null
-                                  ? setCategoryPk
-                                  : widget.category!.categoryPk,
-                              isExactMatch: false,
-                              title: text.trim(),
-                              dateCreated: DateTime.now(),
-                              dateTimeModified: null,
-                              order: length,
-                            ),
-                          );
-                        },
-                      ),
+            widget.category == null
+                ? SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text: "associated-titles".tr(),
+                      textColor: getColor(context, "textLight"),
+                      fontSize: 16,
                     ),
-                  );
-                }),
-            StreamBuilder<List<TransactionAssociatedTitle>>(
-                stream: database.watchAllAssociatedTitlesInCategory(
-                  widget.category == null
-                      ? setCategoryPk
-                      : widget.category!.categoryPk,
-                ),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-                    List<Widget> associatedTitleWidgets = [];
-                    for (int i = 0; i < snapshot.data!.length; i++) {
-                      TransactionAssociatedTitle associatedTitle =
-                          snapshot.data![i];
-                      associatedTitleWidgets.add(
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: AssociatedTitleContainer(
-                            title: associatedTitle.title,
-                            setTitle: (text) async {
+                  ),
+            widget.category == null ? SizedBox.shrink() : SizedBox(height: 5),
+            widget.category == null
+                ? SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      text: "associated-titles-description".tr(),
+                      textColor: getColor(context, "textLight"),
+                      fontSize: 13,
+                      maxLines: 10,
+                    ),
+                  ),
+            widget.category == null ? SizedBox.shrink() : SizedBox(height: 10),
+            widget.category == null
+                ? SizedBox.shrink()
+                : AddButton(
+                    padding: EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                      bottom: 9,
+                      top: 4,
+                    ),
+                    onTap: () {
+                      openBottomSheet(
+                        context,
+                        PopupFramework(
+                          title: "set-title".tr(),
+                          child: SelectText(
+                            setSelectedText: (_) {},
+                            labelText: "set-title".tr(),
+                            placeholder: "title-placeholder".tr(),
+                            nextWithInput: (text) async {
+                              int length =
+                                  await database.getAmountOfAssociatedTitles();
+
                               await database.createOrUpdateAssociatedTitle(
+                                insert: true,
                                 TransactionAssociatedTitle(
-                                  associatedTitlePk:
-                                      associatedTitle.associatedTitlePk,
+                                  associatedTitlePk: -1,
                                   categoryFk: widget.category == null
-                                      ? setCategoryPk
+                                      ? -1
                                       : widget.category!.categoryPk,
-                                  isExactMatch: associatedTitle.isExactMatch,
+                                  isExactMatch: false,
                                   title: text.trim(),
                                   dateCreated: DateTime.now(),
                                   dateTimeModified: null,
-                                  order: associatedTitle.order,
+                                  order: length,
                                 ),
                               );
-                            },
-                            onDelete: () async {
-                              await database.deleteAssociatedTitle(
-                                  snapshot.data![i].associatedTitlePk,
-                                  snapshot.data![i].order);
                             },
                           ),
                         ),
                       );
-                    }
-                    return Column(
-                      children: [...associatedTitleWidgets],
-                    );
-                  }
-                  return SizedBox();
-                }),
+                    }),
+            widget.category == null
+                ? SizedBox.shrink()
+                : StreamBuilder<List<TransactionAssociatedTitle>>(
+                    stream: database.watchAllAssociatedTitlesInCategory(
+                      widget.category == null
+                          ? -1
+                          : widget.category!.categoryPk,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          (snapshot.data ?? []).length > 0) {
+                        List<Widget> associatedTitleWidgets = [];
+                        for (int i = 0; i < snapshot.data!.length; i++) {
+                          TransactionAssociatedTitle associatedTitle =
+                              snapshot.data![i];
+                          associatedTitleWidgets.add(
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: AssociatedTitleContainer(
+                                title: associatedTitle.title,
+                                setTitle: (text) async {
+                                  await database.createOrUpdateAssociatedTitle(
+                                    TransactionAssociatedTitle(
+                                      associatedTitlePk:
+                                          associatedTitle.associatedTitlePk,
+                                      categoryFk: widget.category == null
+                                          ? -1
+                                          : widget.category!.categoryPk,
+                                      isExactMatch:
+                                          associatedTitle.isExactMatch,
+                                      title: text.trim(),
+                                      dateCreated: DateTime.now(),
+                                      dateTimeModified: null,
+                                      order: associatedTitle.order,
+                                    ),
+                                  );
+                                },
+                                onDelete: () async {
+                                  await database.deleteAssociatedTitle(
+                                      snapshot.data![i].associatedTitlePk,
+                                      snapshot.data![i].order);
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                        return Column(
+                          children: [...associatedTitleWidgets],
+                        );
+                      }
+                      return SizedBox();
+                    }),
             SizedBox(height: 80),
           ],
         ),

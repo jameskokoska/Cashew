@@ -65,20 +65,51 @@ String removeLastCharacter(String text) {
   return text.substring(0, text.length - 1);
 }
 
+int countDecimalDigits(String value) {
+  int decimalIndex = value.indexOf('.');
+  if (decimalIndex == -1) {
+    return 0;
+  }
+
+  int count = 0;
+  for (int i = decimalIndex + 1; i < value.length; i++) {
+    count++;
+  }
+  return count;
+}
+
+bool hasDecimalPoints(double? value) {
+  if (value == null) return false;
+  String stringValue = value.toString();
+  int dotIndex = stringValue.indexOf('.');
+
+  if (dotIndex != -1) {
+    for (int i = dotIndex + 1; i < stringValue.length; i++) {
+      if (stringValue[i] != '0') {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 String convertToMoney(
   AllWallets allWallets,
   double amount, {
   String? currencyKey,
-  bool showCurrency = true,
   double? finalNumber,
   int? decimals,
+  bool? allDecimals,
+  bool? addCurrencyName,
 }) {
   int numberDecimals = decimals ??
       allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.decimals ??
       2;
-  numberDecimals = numberDecimals > 2 && amount.toString().split('.').length > 1
-      ? amount.toString().split('.')[1].length < numberDecimals
-          ? amount.toString().split('.')[1].length
+  numberDecimals = numberDecimals > 2 &&
+          (finalNumber ?? amount).toString().split('.').length > 1
+      ? (finalNumber ?? amount).toString().split('.')[1].length < numberDecimals
+          ? (finalNumber ?? amount).toString().split('.')[1].length
           : numberDecimals
       : numberDecimals;
 
@@ -88,36 +119,42 @@ String convertToMoney(
   if (amount == double.infinity) {
     return "Infinity";
   }
-  NumberFormat currency = new NumberFormat.currency(
-    decimalDigits: numberDecimals,
+  NumberFormat currency = NumberFormat.currency(
+    decimalDigits: allDecimals == true ||
+            hasDecimalPoints(finalNumber) ||
+            hasDecimalPoints(amount)
+        ? numberDecimals
+        : 0,
     locale: Platform.localeName,
-    symbol: (showCurrency
-        ? getCurrencyString(allWallets, currencyKey: currencyKey)
-        : ''),
+    symbol: getCurrencyString(allWallets, currencyKey: currencyKey),
   );
-  String formatOutput = currency.format(amount);
-
-  if (finalNumber != null &&
-      !finalNumber
-          .abs()
-          .toStringAsFixed(numberDecimals)
-          .split(".")[1]
-          .startsWith("0" * numberDecimals)) {
-    return currency.format(amount);
-  }
-  if ((finalNumber != null &&
-          finalNumber
-              .abs()
-              .toStringAsFixed(numberDecimals)
-              .split(".")[1]
-              .startsWith("0" * numberDecimals)) ||
-      formatOutput.substring(formatOutput.length - numberDecimals) ==
-          "0" * numberDecimals) {
-    // Do not show the zeroes
-    return formatOutput.replaceRange(
-        formatOutput.length - numberDecimals - 1, formatOutput.length, '');
-  }
-  return currency.format(amount);
+  String formatOutput = currency.format(amount).trim();
+  if (addCurrencyName == true)
+    formatOutput = formatOutput +
+        " " +
+        (currencyKey ?? "Missing Currency Key").toUpperCase();
+  return formatOutput;
+  // if (finalNumber != null &&
+  //     !finalNumber
+  //         .abs()
+  //         .toStringAsFixed(numberDecimals)
+  //         .split(".")[1]
+  //         .startsWith("0" * numberDecimals)) {
+  //   return currency.format(amount);
+  // }
+  // if ((finalNumber != null &&
+  //         finalNumber
+  //             .abs()
+  //             .toStringAsFixed(numberDecimals)
+  //             .split(".")[1]
+  //             .startsWith("0" * numberDecimals)) ||
+  //     formatOutput.substring(formatOutput.length - numberDecimals) ==
+  //         "0" * numberDecimals) {
+  //   // Do not show the zeroes
+  //   return formatOutput.replaceRange(
+  //       formatOutput.length - numberDecimals - 1, formatOutput.length, '');
+  // }
+  // return currency.format(amount);
 }
 
 String getMonth(int monthIndex) {

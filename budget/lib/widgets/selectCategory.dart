@@ -30,6 +30,7 @@ class SelectCategory extends StatefulWidget {
     this.addButton = true,
     this.scaleWhenSelected = false,
     this.categoryFks,
+    this.hideCategoryFks,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<int>)? setSelectedCategories;
@@ -45,6 +46,7 @@ class SelectCategory extends StatefulWidget {
   final bool addButton;
   final bool scaleWhenSelected;
   final List<int>? categoryFks;
+  final List<int>? hideCategoryFks;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -117,6 +119,9 @@ class _SelectCategoryState extends State<SelectCategory> {
               for (TransactionCategory category in snapshot.data!) {
                 if (widget.categoryFks != null &&
                     !widget.categoryFks!.contains(category.categoryPk)) {
+                  continue;
+                } else if (widget.hideCategoryFks != null &&
+                    widget.hideCategoryFks!.contains(category.categoryPk)) {
                   continue;
                 }
 
@@ -287,6 +292,9 @@ class _SelectCategoryState extends State<SelectCategory> {
             for (TransactionCategory category in snapshot.data!) {
               if (widget.categoryFks != null &&
                   !widget.categoryFks!.contains(category.categoryPk)) {
+                continue;
+              } else if (widget.hideCategoryFks != null &&
+                  widget.hideCategoryFks!.contains(category.categoryPk)) {
                 continue;
               }
               categoryIcons.add(

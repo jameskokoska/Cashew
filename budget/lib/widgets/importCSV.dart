@@ -494,9 +494,6 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
   Future<void> _importEntry(Map<String, Map<String, dynamic>> assignedColumns,
       String dateFormat, List<String> row, int i) async {
-    int transactionPk = 0;
-    transactionPk = DateTime.now().millisecondsSinceEpoch;
-
     String name = "";
     if (assignedColumns["name"]!["setHeaderIndex"] != -1) {
       name = row[assignedColumns["name"]!["setHeaderIndex"]].toString();
@@ -537,8 +534,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       int numberOfCategories =
           (await database.getTotalCountOfCategories())[0] ?? 0;
       await database.createOrUpdateCategory(
+        insert: true,
         TransactionCategory(
-          categoryPk: DateTime.now().millisecondsSinceEpoch,
+          categoryPk: -1,
           name: row[assignedColumns["category"]!["setHeaderIndex"]],
           dateCreated: DateTime.now(),
           dateTimeModified: null,
@@ -598,8 +596,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     bool income = amount > 0;
 
     await database.createOrUpdateTransaction(
+      insert: true,
       Transaction(
-        transactionPk: transactionPk,
+        transactionPk: -1,
         name: name,
         amount: amount,
         note: note,

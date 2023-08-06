@@ -33,7 +33,7 @@ import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 // Requires hot reload when changed
-bool enableDevicePreview = false;
+bool enableDevicePreview = false && kDebugMode;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

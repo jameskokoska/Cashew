@@ -131,7 +131,6 @@ class BudgetContainer extends StatelessWidget {
                                                   : budget.amount - totalSpent,
                                               duration:
                                                   Duration(milliseconds: 700),
-                                              dynamicDecimals: true,
                                               initialCount: (0),
                                               textBuilder: (number) {
                                                 return TextFont(
@@ -194,7 +193,6 @@ class BudgetContainer extends StatelessWidget {
                                                           totalSpent),
                                               duration:
                                                   Duration(milliseconds: 700),
-                                              dynamicDecimals: true,
                                               initialCount: (0),
                                               textBuilder: (number) {
                                                 return TextFont(

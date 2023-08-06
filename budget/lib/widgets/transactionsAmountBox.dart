@@ -65,7 +65,6 @@ class TransactionsAmountBox extends StatelessWidget {
                                   ? 0
                                   : (snapshot.data ?? 0).abs(),
                           duration: Duration(milliseconds: 1000),
-                          dynamicDecimals: true,
                           initialCount: (0),
                           textBuilder: (number) {
                             return TextFont(

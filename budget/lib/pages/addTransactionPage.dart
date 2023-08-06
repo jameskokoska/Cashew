@@ -33,7 +33,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -346,6 +345,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
 
     await database.createOrUpdateTransaction(
+      insert: widget.transaction == null,
       await createTransaction(),
       originalTransaction: widget.transaction,
     );
@@ -385,9 +385,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       }
     }
     Transaction createdTransaction = Transaction(
-      transactionPk: widget.transaction != null
-          ? widget.transaction!.transactionPk
-          : DateTime.now().millisecondsSinceEpoch,
+      transactionPk:
+          widget.transaction != null ? widget.transaction!.transactionPk : -1,
       name: (selectedTitle ?? "").trim(),
       amount: (selectedIncome
           ? (selectedAmount ?? 0).abs()
@@ -771,7 +770,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           convertToMoney(
                             Provider.of<AllWallets>(context, listen: false),
                             selectedAmount ?? 0,
-                            showCurrency: false,
                             finalNumber: selectedAmount ?? 0,
                             decimals: selectedWallet?.decimals,
                           ),
@@ -877,16 +875,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   text: convertToMoney(
                                     Provider.of<AllWallets>(context),
                                     selectedAmount ?? 0,
-                                    showCurrency: false,
-                                    finalNumber: selectedAmount ?? 0,
                                     decimals: selectedWallet?.decimals,
+                                    currencyKey: selectedWallet?.currency,
                                   ),
-                                  walletPkForCurrency: selectedWalletPk,
-                                  onlyShowCurrencyIcon:
-                                      Provider.of<AllWallets>(context)
-                                              .list
-                                              .length <=
-                                          1,
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                   maxLines: 1,
@@ -920,59 +911,23 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   )
                                 : AnimatedSwitcher(
                                     duration: Duration(milliseconds: 350),
-                                    child: CountNumber(
-                                      key: ValueKey(selectedWalletPk),
-                                      count: (selectedAmount ?? 0) *
-                                          (amountRatioToPrimaryCurrencyGivenPk(
-                                                  Provider.of<AllWallets>(
-                                                      context),
-                                                  selectedWalletPk) ??
-                                              1),
-                                      duration: Duration(milliseconds: 1000),
-                                      dynamicDecimals: true,
-                                      decimals: Provider.of<AllWallets>(context)
-                                          .indexedByPk[appStateSettings[
-                                              "selectedWallet"]]
-                                          ?.decimals,
-                                      initialCount: (selectedAmount ?? 0) *
-                                          (amountRatioToPrimaryCurrencyGivenPk(
-                                                  Provider.of<AllWallets>(
-                                                      context),
-                                                  selectedWalletPk) ??
-                                              1),
-                                      textBuilder: (number) {
-                                        return Align(
-                                          alignment: Alignment.centerRight,
-                                          child: TextFont(
-                                            textAlign: TextAlign.right,
-                                            text: convertToMoney(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                number,
-                                                showCurrency: false,
-                                                finalNumber: (selectedAmount ??
-                                                        0) *
-                                                    (amountRatioToPrimaryCurrencyGivenPk(
-                                                            Provider.of<
-                                                                    AllWallets>(
-                                                                context),
-                                                            selectedWalletPk) ??
-                                                        1),
-                                                decimals: Provider.of<
-                                                        AllWallets>(context)
-                                                    .indexedByPk[
-                                                        appStateSettings[
-                                                            "selectedWallet"]]
-                                                    ?.decimals),
-                                            walletPkForCurrency:
-                                                appStateSettings[
-                                                    "selectedWallet"],
-                                            fontSize: 18,
-                                            maxLines: 1,
-                                            autoSizeText: true,
-                                          ),
-                                        );
-                                      },
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextFont(
+                                        textAlign: TextAlign.right,
+                                        text: convertToMoney(
+                                          Provider.of<AllWallets>(context),
+                                          (selectedAmount ?? 0) *
+                                              (amountRatioToPrimaryCurrencyGivenPk(
+                                                      Provider.of<AllWallets>(
+                                                          context),
+                                                      selectedWalletPk) ??
+                                                  1),
+                                        ),
+                                        fontSize: 18,
+                                        maxLines: 1,
+                                        autoSizeText: true,
+                                      ),
                                     ),
                                   ),
                           ],
@@ -1533,6 +1488,22 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       },
                                       onSelected: (TransactionWallet wallet) {
                                         setSelectedWalletPk(wallet);
+                                      },
+                                      getCustomBorderColor:
+                                          (TransactionWallet item) {
+                                        return dynamicPastel(
+                                          context,
+                                          lightenPastel(
+                                            HexColor(
+                                              item.colour,
+                                              defaultColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                            amount: 0.3,
+                                          ),
+                                          amount: 0.4,
+                                        );
                                       },
                                       getLabel: (TransactionWallet wallet) {
                                         return wallet.name ==
@@ -2344,8 +2315,9 @@ Future<bool> addAssociatedTitles(
       //it makes sense to add a new title if the exisitng one is from a different category, it will bump this one down and take priority
 
       await database.createOrUpdateAssociatedTitle(
+        insert: true,
         TransactionAssociatedTitle(
-          associatedTitlePk: DateTime.now().millisecondsSinceEpoch,
+          associatedTitlePk: -1,
           categoryFk: selectedCategory.categoryPk,
           isExactMatch: false,
           title: selectedTitle.trim(),

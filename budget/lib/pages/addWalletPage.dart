@@ -93,7 +93,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
 
   Future addWallet() async {
     print("Added wallet");
-    await database.createOrUpdateWallet(await createTransactionWallet());
+    await database.createOrUpdateWallet(
+        insert: widget.wallet == null, await createTransactionWallet());
     Navigator.pop(context);
   }
 
@@ -321,7 +322,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
-                    label: "set-title".tr(),
+                    label: "set-name".tr(),
                     onTap: () async {
                       FocusScope.of(context).unfocus();
                       Future.delayed(Duration(milliseconds: 100), () {

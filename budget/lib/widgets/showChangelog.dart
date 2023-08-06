@@ -10,6 +10,18 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.4
+    Improved decimal precisions and support for comma locale
+    Fixed animations in enter amount
+    Added border color to wallet pickers
+    iOS homepage scroll animation fix
+    Fixed amount range filters getting added on first open
+    Spending goals moved to separate page
+    New dropdown menu actions for app bar
+    Fixed merge category
+    Google login warning on iOS
+    Add element to database key generation uses auto increment
+    Done for: wallets, budgets, transactions, categories, titles, scanner templates
     < 3.7.3
     Edit row action button animated scale switcher
     iOS notification configurations

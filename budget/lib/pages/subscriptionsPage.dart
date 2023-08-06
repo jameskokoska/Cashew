@@ -87,7 +87,6 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                           return CountNumber(
                             count: total.abs(),
                             duration: Duration(milliseconds: 700),
-                            dynamicDecimals: true,
                             initialCount: (0),
                             textBuilder: (number) {
                               return TextFont(

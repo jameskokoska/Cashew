@@ -2,10 +2,12 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/editBudgetLimitsPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -200,39 +202,48 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               ),
             ),
             actions: [
-              widget.budget.reoccurrence == BudgetReoccurence.custom ||
-                      widget.isPastBudget == true ||
-                      widget.isPastBudgetButCurrentPeriod == true
-                  ? SizedBox.shrink()
-                  : IconButton(
-                      padding: EdgeInsets.all(15),
-                      tooltip: "past-budget-cycles".tr(),
-                      onPressed: () {
-                        pushRoute(
-                          context,
-                          PastBudgetsPage(budgetPk: widget.budget.budgetPk),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.history_rounded,
-                        color: budgetColorScheme.onSecondaryContainer,
-                      ),
-                    ),
-              IconButton(
-                padding: EdgeInsets.all(15),
-                tooltip: "edit-budget".tr(),
-                onPressed: () {
-                  pushRoute(
-                    context,
-                    AddBudgetPage(
-                      budget: widget.budget,
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.edit_rounded,
-                  color: budgetColorScheme.onSecondaryContainer,
-                ),
+              CustomPopupMenuButton(
+                showButtons: enableDoubleColumn(context),
+                keepOutFirst: true,
+                items: [
+                  DropdownItemMenu(
+                    id: "edit-budget",
+                    label: "edit-budget".tr(),
+                    icon: Icons.edit_rounded,
+                    action: () {
+                      pushRoute(
+                        context,
+                        AddBudgetPage(
+                          budget: widget.budget,
+                        ),
+                      );
+                    },
+                  ),
+                  DropdownItemMenu(
+                    id: "budget-history",
+                    label: "budget-history".tr(),
+                    icon: Icons.history_rounded,
+                    action: () {
+                      pushRoute(
+                        context,
+                        PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                      );
+                    },
+                  ),
+                  DropdownItemMenu(
+                    id: "spending-goals",
+                    label: "spending-goals".tr(),
+                    icon: Icons.fact_check_rounded,
+                    action: () {
+                      pushRoute(
+                        context,
+                        EditBudgetLimitsPage(
+                          budget: widget.budget,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
             title: widget.budget.name,
@@ -322,133 +333,164 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           ));
                         });
                         return SliverToBoxAdapter(
-                          child: Column(children: [
-                            Transform.translate(
-                              offset: Offset(0, -10),
-                              child: WidgetSize(
-                                onChange: (Size size) {
-                                  budgetHeaderHeight = size.height - 20;
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 22,
-                                    left: 22,
-                                    right: 22,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    // borderRadius: BorderRadius.vertical(
-                                    //     bottom: Radius.circular(10)),
-                                    color: budgetColorScheme.secondaryContainer,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Transform.scale(
-                                        alignment: Alignment.bottomCenter,
-                                        scale: 1500,
-                                        child: Container(
-                                          height: 10,
-                                          width: 100,
-                                          color: budgetColorScheme
-                                              .secondaryContainer,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              getHorizontalPaddingConstrained(
-                                                  context),
-                                        ),
-                                        child: BudgetTimeline(
-                                          dateForRange: dateForRange,
-                                          budget: widget.budget,
-                                          large: true,
-                                          percent: widget.budget.amount == 0
-                                              ? 0
-                                              : totalSpent /
-                                                  widget.budget.amount *
-                                                  100,
-                                          yourPercent: totalSpent == 0
-                                              ? 0
-                                              : snapshotTotalSpentByCurrentUserOnly
-                                                          .data! ==
-                                                      null
-                                                  ? 0
-                                                  : (snapshotTotalSpentByCurrentUserOnly
-                                                              .data! /
-                                                          totalSpent *
-                                                          100)
-                                                      .abs(),
-                                          todayPercent: widget.isPastBudget ==
-                                                  true
-                                              ? -1
-                                              : getPercentBetweenDates(
-                                                  budgetRange, dateForRange),
-                                        ),
-                                      ),
-                                      widget.isPastBudget == true
-                                          ? SizedBox.shrink()
-                                          : DaySpending(
-                                              budget: widget.budget,
-                                              amount: (widget.budget.amount -
-                                                      totalSpent) /
-                                                  daysBetween(dateForRange,
-                                                      budgetRange.end),
-                                              large: true,
-                                              budgetRange: budgetRange,
-                                              padding: const EdgeInsets.only(
-                                                  top: 15, bottom: 0),
-                                            ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            BudgetSpenderSummary(
-                              budget: widget.budget,
-                              budgetRange: budgetRange,
-                              budgetColorScheme: budgetColorScheme,
-                              setSelectedMember: (member) {
-                                setState(() {
-                                  selectedMember = member;
-                                  selectedCategory = null;
-                                  selectedCategoryPk = -1;
-                                });
-                                _pieChartDisplayStateKey.currentState!
-                                    .setTouchedIndex(-1);
-                              },
-                            ),
-                            if (snapshot.data!.length > 0) SizedBox(height: 30),
-                            if (snapshot.data!.length > 0)
-                              Container(
-                                decoration: BoxDecoration(
-                                    boxShadow: boxShadowCheck(
-                                      boxShadowGeneral(context),
-                                    ),
-                                    borderRadius: BorderRadius.circular(200)),
-                                child: PieChartWrapper(
-                                  pieChartDisplayStateKey:
-                                      _pieChartDisplayStateKey,
-                                  data: snapshot.data ?? [],
-                                  totalSpent: totalSpent,
-                                  setSelectedCategory: (categoryPk, category) {
-                                    setState(() {
-                                      selectedCategoryPk = categoryPk;
-                                      selectedCategory = category;
-                                    });
+                          child: Column(
+                            children: [
+                              Transform.translate(
+                                offset: Offset(0, -10),
+                                child: WidgetSize(
+                                  onChange: (Size size) {
+                                    budgetHeaderHeight = size.height - 20;
                                   },
-                                  isPastBudget: widget.isPastBudget ?? false,
-                                  middleColor: appStateSettings["materialYou"]
-                                      ? dynamicPastel(
-                                          context, budgetColorScheme.primary,
-                                          amount: 0.92)
-                                      : null,
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                      top: 10,
+                                      bottom: 22,
+                                      left: 22,
+                                      right: 22,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      // borderRadius: BorderRadius.vertical(
+                                      //     bottom: Radius.circular(10)),
+                                      color:
+                                          budgetColorScheme.secondaryContainer,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Transform.scale(
+                                          alignment: Alignment.bottomCenter,
+                                          scale: 1500,
+                                          child: Container(
+                                            height: 10,
+                                            width: 100,
+                                            color: budgetColorScheme
+                                                .secondaryContainer,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                getHorizontalPaddingConstrained(
+                                                    context),
+                                          ),
+                                          child: BudgetTimeline(
+                                            dateForRange: dateForRange,
+                                            budget: widget.budget,
+                                            large: true,
+                                            percent: widget.budget.amount == 0
+                                                ? 0
+                                                : totalSpent /
+                                                    widget.budget.amount *
+                                                    100,
+                                            yourPercent: totalSpent == 0
+                                                ? 0
+                                                : snapshotTotalSpentByCurrentUserOnly
+                                                            .data! ==
+                                                        null
+                                                    ? 0
+                                                    : (snapshotTotalSpentByCurrentUserOnly
+                                                                .data! /
+                                                            totalSpent *
+                                                            100)
+                                                        .abs(),
+                                            todayPercent: widget.isPastBudget ==
+                                                    true
+                                                ? -1
+                                                : getPercentBetweenDates(
+                                                    budgetRange, dateForRange),
+                                          ),
+                                        ),
+                                        widget.isPastBudget == true
+                                            ? SizedBox.shrink()
+                                            : DaySpending(
+                                                budget: widget.budget,
+                                                amount: (widget.budget.amount -
+                                                        totalSpent) /
+                                                    daysBetween(dateForRange,
+                                                        budgetRange.end),
+                                                large: true,
+                                                budgetRange: budgetRange,
+                                                padding: const EdgeInsets.only(
+                                                    top: 15, bottom: 0),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            if (snapshot.data!.length > 0) SizedBox(height: 35),
-                            ...categoryEntries,
-                            if (snapshot.data!.length > 0) SizedBox(height: 15),
-                          ]),
+                              BudgetSpenderSummary(
+                                budget: widget.budget,
+                                budgetRange: budgetRange,
+                                budgetColorScheme: budgetColorScheme,
+                                setSelectedMember: (member) {
+                                  setState(() {
+                                    selectedMember = member;
+                                    selectedCategory = null;
+                                    selectedCategoryPk = -1;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedIndex(-1);
+                                },
+                              ),
+                              if (snapshot.data!.length > 0)
+                                SizedBox(height: 30),
+                              if (snapshot.data!.length > 0)
+                                Container(
+                                  decoration: BoxDecoration(
+                                      boxShadow: boxShadowCheck(
+                                        boxShadowGeneral(context),
+                                      ),
+                                      borderRadius: BorderRadius.circular(200)),
+                                  child: PieChartWrapper(
+                                    pieChartDisplayStateKey:
+                                        _pieChartDisplayStateKey,
+                                    data: snapshot.data ?? [],
+                                    totalSpent: totalSpent,
+                                    setSelectedCategory:
+                                        (categoryPk, category) {
+                                      setState(() {
+                                        selectedCategoryPk = categoryPk;
+                                        selectedCategory = category;
+                                      });
+                                    },
+                                    isPastBudget: widget.isPastBudget ?? false,
+                                    middleColor: appStateSettings["materialYou"]
+                                        ? dynamicPastel(
+                                            context, budgetColorScheme.primary,
+                                            amount: 0.92)
+                                        : null,
+                                  ),
+                                ),
+                              Tooltip(
+                                message: "edit-spending-goals".tr(),
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Transform.translate(
+                                    offset: Offset(-9, 10),
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(15),
+                                      onPressed: () {
+                                        pushRoute(
+                                          context,
+                                          EditBudgetLimitsPage(
+                                            budget: widget.budget,
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.fact_check_rounded,
+                                        color: budgetColorScheme.secondary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // if (snapshot.data!.length > 0)
+                              //   SizedBox(height: 35),
+                              ...categoryEntries,
+                              if (snapshot.data!.length > 0)
+                                SizedBox(height: 15),
+                            ],
+                          ),
                         );
                       }
                       return SliverToBoxAdapter(child: Container());
@@ -967,7 +1009,6 @@ class _TotalSpentState extends State<TotalSpent> {
                                 ? widget.totalSpent
                                 : widget.budget.amount - widget.totalSpent,
                             duration: Duration(milliseconds: 400),
-                            dynamicDecimals: true,
                             initialCount: (0),
                             textBuilder: (number) {
                               return TextFont(
@@ -1016,7 +1057,6 @@ class _TotalSpentState extends State<TotalSpent> {
                             ? widget.totalSpent
                             : -1 * (widget.budget.amount - widget.totalSpent),
                         duration: Duration(milliseconds: 400),
-                        dynamicDecimals: true,
                         initialCount: (0),
                         textBuilder: (number) {
                           return TextFont(

@@ -38,52 +38,54 @@ class PopupFramework extends StatelessWidget {
             children: [
               Container(height: 17),
               getPlatform() == PlatformOS.isIOS
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ? Stack(
+                      alignment: Alignment.topLeft,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              title == null
-                                  ? SizedBox.shrink()
-                                  : Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 18),
-                                      child: TextFont(
-                                        text: title ?? "",
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold,
-                                        maxLines: 5,
-                                        textAlign: TextAlign.center,
-                                      ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            title == null
+                                ? SizedBox.shrink()
+                                : Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 18),
+                                    child: TextFont(
+                                      text: title ?? "",
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold,
+                                      maxLines: 5,
+                                      textAlign: TextAlign.center,
                                     ),
-                              subtitle == null
-                                  ? SizedBox.shrink()
-                                  : Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 18),
-                                      child: TextFont(
-                                        text: subtitle ?? "",
-                                        fontSize: 14,
-                                        maxLines: 5,
-                                        textAlign: TextAlign.center,
-                                      ),
+                                  ),
+                            subtitle == null
+                                ? SizedBox.shrink()
+                                : Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 18),
+                                    child: TextFont(
+                                      text: subtitle ?? "",
+                                      fontSize: 14,
+                                      maxLines: 5,
+                                      textAlign: TextAlign.center,
                                     ),
-                              Container(
-                                height: 1.5,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                                margin: EdgeInsets.only(top: 10, bottom: 5),
-                              )
-                            ],
-                          ),
+                                  ),
+                            Container(
+                              height: 1.5,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                              margin: EdgeInsets.only(top: 10, bottom: 5),
+                            )
+                          ],
                         ),
-                        icon ?? SizedBox.shrink()
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                          ),
+                          child: icon ?? SizedBox.shrink(),
+                        )
                       ],
                     )
                   : Padding(

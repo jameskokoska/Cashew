@@ -201,7 +201,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     return PageFramework(
       backgroundColor: backgroundColor,
       key: budgetHistoryKey,
-      title: "budget-history".tr(),
+      title: "history".tr(),
       subtitle: Padding(
         padding: EdgeInsets.only(
             left: enableDoubleColumn(context) ? 0 : 20, bottom: 6),
@@ -1012,7 +1012,6 @@ class PastBudgetContainer extends StatelessWidget {
                                                 : budget.amount - totalSpent,
                                             duration:
                                                 Duration(milliseconds: 700),
-                                            dynamicDecimals: true,
                                             initialCount: (0),
                                             textBuilder: (number) {
                                               return TextFont(
@@ -1071,7 +1070,6 @@ class PastBudgetContainer extends StatelessWidget {
                                             ? totalSpent
                                             : -1 * (budget.amount - totalSpent),
                                         duration: Duration(milliseconds: 700),
-                                        dynamicDecimals: true,
                                         initialCount: (0),
                                         textBuilder: (number) {
                                           return TextFont(
@@ -1129,7 +1127,6 @@ class PastBudgetContainer extends StatelessWidget {
                                   ? 0
                                   : (totalSpent / budget.amount * 100),
                               duration: Duration(milliseconds: 1000),
-                              dynamicDecimals: false,
                               initialCount: (0),
                               textBuilder: (value) {
                                 return TextFont(
@@ -1279,7 +1276,6 @@ class CategoryAverageSpent extends StatelessWidget {
                             child: CountNumber(
                               count: (amountSpent / amountPeriods).abs(),
                               duration: Duration(milliseconds: 400),
-                              dynamicDecimals: true,
                               initialCount: (amountSpent / amountPeriods).abs(),
                               textBuilder: (number) {
                                 return TextFont(
@@ -1317,7 +1313,6 @@ class CategoryAverageSpent extends StatelessWidget {
               CountNumber(
                 count: amountSpent.abs(),
                 duration: Duration(milliseconds: 400),
-                dynamicDecimals: true,
                 initialCount: amountSpent.abs(),
                 textBuilder: (number) {
                   return TextFont(

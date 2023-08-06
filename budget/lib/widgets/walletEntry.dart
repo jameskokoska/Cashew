@@ -90,18 +90,18 @@ class WalletEntry extends StatelessWidget {
                                 lazyFirstRender: false,
                                 count: (snapshot.data ?? 0 * -1),
                                 duration: Duration(milliseconds: 1000),
-                                dynamicDecimals: true,
                                 decimals: wallet.decimals,
                                 initialCount: (snapshot.data ?? 0 * -1),
                                 textBuilder: (number) {
                                   return TextFont(
-                                    walletPkForCurrency: wallet.walletPk,
                                     textAlign: TextAlign.left,
                                     text: convertToMoney(
                                       Provider.of<AllWallets>(context),
                                       number,
-                                      showCurrency: false,
                                       finalNumber: snapshot.data ?? 0 * -1,
+                                      currencyKey: wallet.currency,
+                                      decimals: wallet.decimals,
+                                      addCurrencyName: true,
                                     ),
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,

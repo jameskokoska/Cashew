@@ -1,7 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/currencyFunctions.dart';
-import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/src/material/icons.dart';
@@ -39,7 +38,6 @@ class TransactionEntryAmount extends StatelessWidget {
             CountNumber(
               count: count,
               duration: Duration(milliseconds: 1000),
-              dynamicDecimals: true,
               initialCount: count,
               textBuilder: (number) {
                 return Row(
@@ -70,14 +68,11 @@ class TransactionEntryAmount extends StatelessWidget {
                       text: convertToMoney(
                         Provider.of<AllWallets>(context),
                         number,
-                        showCurrency: false,
                         finalNumber: count,
                       ),
                       fontSize: 19 - (showOtherCurrency ? 1 : 0),
                       fontWeight: FontWeight.bold,
                       textColor: textColor,
-                      walletPkForCurrency: appStateSettings["selectedWallet"],
-                      onlyShowCurrencyIcon: true,
                     ),
                   ],
                 );
@@ -94,17 +89,16 @@ class TransactionEntryAmount extends StatelessWidget {
                     text: convertToMoney(
                       Provider.of<AllWallets>(context),
                       transaction.amount.abs(),
-                      showCurrency: false,
                       decimals: Provider.of<AllWallets>(context)
                               .indexedByPk[transaction.walletFk]
                               ?.decimals ??
                           2,
+                      currencyKey: Provider.of<AllWallets>(context)
+                          .indexedByPk[transaction.walletFk]
+                          ?.currency,
                     ),
                     fontSize: 12,
                     textColor: textColor.withOpacity(0.6),
-                    walletPkForCurrency: transaction.walletFk,
-                    onlyShowCurrencyIcon: transaction.walletFk ==
-                        appStateSettings["selectedWallet"],
                   ),
                 )
               : SizedBox.shrink(),

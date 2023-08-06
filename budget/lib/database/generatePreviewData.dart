@@ -406,8 +406,9 @@ void generatePreviewData() async {
     List<int> moreCommonCommonCategories = [1, 2, 4];
     await database.createOrUpdateTransaction(
       updateSharedEntry: false,
+      insert: true,
       Transaction(
-        transactionPk: DateTime.now().millisecondsSinceEpoch,
+        transactionPk: -1,
         name: "",
         amount: (1 + Random().nextDouble() * 45) * -1,
         note: "",
@@ -430,8 +431,9 @@ void generatePreviewData() async {
   for (int i = 90; i < 320; i = i + 25 + Random().nextInt(10)) {
     await database.createOrUpdateTransaction(
       updateSharedEntry: false,
+      insert: true,
       Transaction(
-        transactionPk: DateTime.now().millisecondsSinceEpoch,
+        transactionPk: -1,
         name: "",
         amount: 300 + Random().nextDouble() * 200,
         note: "",

@@ -42,11 +42,11 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
       );
       Transaction newTransaction = transaction.copyWith(
         paid: false,
-        transactionPk: DateTime.now().millisecondsSinceEpoch,
+        transactionPk: -1,
         dateCreated: newDate,
         createdAnotherFutureTransaction: Value(false),
       );
-      await database.createOrUpdateTransaction(newTransaction);
+      await database.createOrUpdateTransaction(insert: true, newTransaction);
 
       if (context != null) {
         openSnackbar(

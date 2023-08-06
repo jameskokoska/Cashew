@@ -276,7 +276,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                 bottom: (getIsFullScreen(context) == false
                         ? 75 +
                             MediaQuery.of(context).viewPadding.bottom -
-                            (MediaQuery.of(context).viewPadding.bottom > 10
+                            (getPlatform() != PlatformOS.isIOS &&
+                                    MediaQuery.of(context).viewPadding.bottom >
+                                        10
                                 ? 10
                                 : 0)
                         : 15 + MediaQuery.of(context).viewPadding.bottom) +

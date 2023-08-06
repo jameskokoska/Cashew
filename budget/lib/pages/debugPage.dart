@@ -253,8 +253,9 @@ class DebugPage extends StatelessWidget {
                   await database.getAllCategories();
               for (int i = 0; i < 10; i++) {
                 await database.createOrUpdateTransaction(
+                  insert: true,
                   Transaction(
-                    transactionPk: DateTime.now().millisecondsSinceEpoch,
+                    transactionPk: -1,
                     name: "Test" + randomDouble[i].toString(),
                     amount: randomInt[i].toDouble(),
                     note: "",

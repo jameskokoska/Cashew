@@ -137,7 +137,6 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                   ? 0
                   : (snapshot.data ?? 0).abs(),
               duration: Duration(milliseconds: 700),
-              dynamicDecimals: true,
               initialCount: (0),
               textBuilder: (number) {
                 return TextFont(

@@ -67,10 +67,12 @@ class HomePageState extends State<HomePage>
 
   _scrollListener() {
     double percent = _scrollController.offset / (200);
-    if (percent >= 0 && percent <= 1) {
-      _animationControllerHeader.value = 1 - _scrollController.offset / (200);
-      _animationControllerHeader2.value =
-          1 - _scrollController.offset * 2 / (200);
+    print(percent);
+    if (percent <= 1) {
+      double offset = _scrollController.offset;
+      if (percent >= 1) offset = 0;
+      _animationControllerHeader.value = 1 - offset / (200);
+      _animationControllerHeader2.value = 1 - offset * 2 / (200);
     }
   }
 

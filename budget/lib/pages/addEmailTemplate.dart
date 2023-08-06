@@ -2,7 +2,6 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -339,7 +338,10 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
 
   Future addTemplate() async {
     print("Added template");
-    await database.createOrUpdateScannerTemplate(createTemplate());
+    await database.createOrUpdateScannerTemplate(
+      insert: widget.scannerTemplate == null,
+      createTemplate(),
+    );
     Navigator.pop(context);
   }
 

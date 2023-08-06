@@ -337,8 +337,9 @@ Future<int> downloadTransactionsFromBudgets(
     Set<String> allMembersEver = {};
     Map<dynamic, dynamic> budgetDecoded = budget.data() as Map;
     await database.createOrUpdateFromSharedBudget(
+      insert: true,
       Budget(
-        budgetPk: DateTime.now().millisecondsSinceEpoch,
+        budgetPk: -1,
         name: budgetDecoded["name"],
         amount: budgetDecoded["amount"].toDouble(),
         colour: budgetDecoded["colour"],
@@ -400,8 +401,9 @@ Future<int> downloadTransactionsFromBudgets(
           int numberOfCategories =
               (await database.getTotalCountOfCategories())[0] ?? 0;
           await database.createOrUpdateCategory(
+            insert: true,
             TransactionCategory(
-              categoryPk: DateTime.now().millisecondsSinceEpoch,
+              categoryPk: -1,
               name: transactionDecoded["categoryName"],
               dateCreated: DateTime.now(),
               dateTimeModified: null,
@@ -417,8 +419,9 @@ Future<int> downloadTransactionsFromBudgets(
         }
 
         await database.createOrUpdateFromSharedTransaction(
+          insert: true,
           Transaction(
-            transactionPk: DateTime.now().millisecondsSinceEpoch,
+            transactionPk: -1,
             name: transactionDecoded["name"],
             amount: transactionDecoded["amount"].toDouble(),
             note: transactionDecoded["note"],

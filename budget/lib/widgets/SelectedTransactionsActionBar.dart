@@ -89,7 +89,6 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                     count:
                                         snapshot.hasData ? snapshot.data! : 0,
                                     duration: Duration(milliseconds: 250),
-                                    dynamicDecimals: true,
                                     initialCount: (0),
                                     textBuilder: (number) {
                                       return Wrap(
@@ -124,7 +123,6 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                                         snapshot.hasData
                                                             ? snapshot.data!
                                                             : 0,
-                                                    showCurrency: false,
                                                   ),
                                                 );
                                               },

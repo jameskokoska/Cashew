@@ -113,3 +113,114 @@ class DropdownSelectState extends State<DropdownSelect> {
     );
   }
 }
+
+class DropdownItemMenu {
+  final String id;
+  final String label;
+  final IconData icon;
+  final Function action;
+
+  DropdownItemMenu({
+    required this.id,
+    required this.label,
+    required this.icon,
+    required this.action,
+  });
+}
+
+class CustomPopupMenuButton extends StatelessWidget {
+  final List<DropdownItemMenu> items;
+  final EdgeInsetsGeometry padding;
+  final ShapeBorder shape;
+  final bool showButtons;
+  final bool keepOutFirst;
+
+  CustomPopupMenuButton({
+    required this.items,
+    this.padding = const EdgeInsets.all(15),
+    this.shape = const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
+    this.showButtons = false,
+    this.keepOutFirst = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    List<DropdownItemMenu> itemsFiltered = [...items];
+    if (keepOutFirst) itemsFiltered.removeAt(0);
+
+    if (showButtons) {
+      return Row(
+        children: [
+          ...(items).asMap().entries.map((item) {
+            int idx = item.key;
+            int length = items.length;
+            double offsetX = (length - 1 - idx) * 7;
+            return Transform.translate(
+              offset: Offset(offsetX, 0),
+              child: IconButton(
+                padding: EdgeInsets.all(15),
+                onPressed: () {
+                  item.value.action();
+                },
+                icon: Icon(
+                  item.value.icon,
+                ),
+              ),
+            );
+          })
+        ],
+      );
+    }
+
+    return Row(
+      children: [
+        if (keepOutFirst)
+          Transform.translate(
+            offset: Offset(7, 0),
+            child: IconButton(
+              padding: EdgeInsets.all(15),
+              onPressed: () {
+                items[0].action();
+              },
+              icon: Icon(
+                items[0].icon,
+              ),
+            ),
+          ),
+        PopupMenuButton<String>(
+          padding: padding,
+          shape: shape,
+          onSelected: (value) {
+            for (DropdownItemMenu item in items) {
+              if (item.id == value) {
+                item.action();
+                break;
+              }
+            }
+          },
+          itemBuilder: (BuildContext context) {
+            return itemsFiltered.map((item) {
+              return PopupMenuItem<String>(
+                value: item.id,
+                child: Row(
+                  children: [
+                    Icon(item.icon),
+                    SizedBox(width: 7),
+                    Text(
+                      item.label,
+                      style: TextStyle(fontSize: 14.5),
+                    ),
+                  ],
+                ),
+              );
+            }).toList();
+          },
+        ),
+      ],
+    );
+  }
+}

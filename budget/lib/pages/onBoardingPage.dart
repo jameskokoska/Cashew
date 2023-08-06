@@ -57,8 +57,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
     if (selectedAmount != null && selectedAmount != 0) {
       int order = await database.getAmountOfBudgets();
       await database.createOrUpdateBudget(
+        insert: true,
         Budget(
-          budgetPk: DateTime.now().millisecondsSinceEpoch,
+          budgetPk: -1,
           name: "default-budget-name".tr(),
           amount: selectedAmount ?? 0,
           startDate: selectedStartDate,
@@ -304,93 +305,116 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
             ),
           ),
           SizedBox(height: 25),
-          SettingsContainerOutlined(
-            onTap: () async {
-              loadingIndeterminateKey.currentState?.setVisibility(true);
-              try {
-                await signInGoogle(
-                  context: context,
-                  waitForCompletion: false,
-                  drivePermissions: true,
-                  next: () {},
-                );
-                if (appStateSettings["username"] == "" && googleUser != null) {
-                  updateSettings("username", googleUser?.displayName ?? "",
-                      pagesNeedingRefresh: [0], updateGlobalState: false);
-                }
+          getPlatform() == PlatformOS.isIOS
+              ? IntrinsicWidth(
+                  child: Button(
+                    label: "Let's go!",
+                    onTap: () {},
+                    expandedLayout: false,
+                  ),
+                )
+              : SizedBox.shrink(),
+          getPlatform() == PlatformOS.isIOS
+              ? SizedBox.shrink()
+              : SettingsContainerOutlined(
+                  onTap: () async {
+                    loadingIndeterminateKey.currentState?.setVisibility(true);
+                    try {
+                      await signInGoogle(
+                        context: context,
+                        waitForCompletion: false,
+                        drivePermissions: true,
+                        next: () {},
+                      );
+                      if (appStateSettings["username"] == "" &&
+                          googleUser != null) {
+                        updateSettings(
+                            "username", googleUser?.displayName ?? "",
+                            pagesNeedingRefresh: [0], updateGlobalState: false);
+                      }
 
-                // If user has sync backups, but no real backups it will show up here
-                // For now disable restoring of a backup popup, the sync backups will be restored automatically using the function call below
-                // var result;
-                // List<drive.File>? files = (await getDriveFiles()).$2;
-                // if ((files?.length ?? 0) > 0) {
-                //   result = await openPopup(
-                //     context,
-                //     icon: Icons.cloud_sync_rounded,
-                //     title: "backup-found".tr(),
-                //     description: "backup-found-description".tr(),
-                //     onSubmit: () {
-                //       Navigator.pop(context, true);
-                //     },
-                //     onCancel: () {
-                //       Navigator.pop(context, false);
-                //     },
-                //     onSubmitLabel: "restore".tr(),
-                //     onCancelLabel: "cancel".tr(),
-                //   );
-                // }
-                // if (result == true) {
-                //   chooseBackup(context, hideDownloadButton: true);
-                // } else if (result == false && googleUser != null) {
-                //   openLoadingPopup(context);
-                //   // set this to true so cloud functions run
-                //   entireAppLoaded = true;
-                //   await runAllCloudFunctions(
-                //     context,
-                //     forceSignIn: true,
-                //   );
-                //   Navigator.pop(context);
-                //   nextNavigation();
-                // }
-                // else {
-                //   nextNavigation();
-                // }
-                openLoadingPopup(context);
-                // set this to true so cloud functions run
-                entireAppLoaded = true;
-                await runAllCloudFunctions(
-                  context,
-                  forceSignIn: true,
-                );
-                Navigator.pop(context);
-                nextNavigation();
-                loadingIndeterminateKey.currentState?.setVisibility(false);
-              } catch (e) {
-                print("Error signing in: " + e.toString());
-                loadingIndeterminateKey.currentState?.setVisibility(false);
-              }
-            },
-            title: "sign-in-with-google".tr(),
-            icon: MoreIcons.google,
-            isExpanded: false,
-          ),
-          SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: TextFont(
-              text: "onboarding-info-3".tr(),
-              textAlign: TextAlign.center,
-              fontSize: 16,
-              maxLines: 5,
-            ),
-          ),
-          SizedBox(height: 35),
-          LowKeyButton(
-            onTap: () {
-              nextNavigation();
-            },
-            text: "continue-without-sign-in".tr(),
-          ),
+                      // If user has sync backups, but no real backups it will show up here
+                      // For now disable restoring of a backup popup, the sync backups will be restored automatically using the function call below
+                      // var result;
+                      // List<drive.File>? files = (await getDriveFiles()).$2;
+                      // if ((files?.length ?? 0) > 0) {
+                      //   result = await openPopup(
+                      //     context,
+                      //     icon: Icons.cloud_sync_rounded,
+                      //     title: "backup-found".tr(),
+                      //     description: "backup-found-description".tr(),
+                      //     onSubmit: () {
+                      //       Navigator.pop(context, true);
+                      //     },
+                      //     onCancel: () {
+                      //       Navigator.pop(context, false);
+                      //     },
+                      //     onSubmitLabel: "restore".tr(),
+                      //     onCancelLabel: "cancel".tr(),
+                      //   );
+                      // }
+                      // if (result == true) {
+                      //   chooseBackup(context, hideDownloadButton: true);
+                      // } else if (result == false && googleUser != null) {
+                      //   openLoadingPopup(context);
+                      //   // set this to true so cloud functions run
+                      //   entireAppLoaded = true;
+                      //   await runAllCloudFunctions(
+                      //     context,
+                      //     forceSignIn: true,
+                      //   );
+                      //   Navigator.pop(context);
+                      //   nextNavigation();
+                      // }
+                      // else {
+                      //   nextNavigation();
+                      // }
+                      openLoadingPopup(context);
+                      // set this to true so cloud functions run
+                      entireAppLoaded = true;
+                      await runAllCloudFunctions(
+                        context,
+                        forceSignIn: true,
+                      );
+                      Navigator.pop(context);
+                      nextNavigation();
+                      loadingIndeterminateKey.currentState
+                          ?.setVisibility(false);
+                    } catch (e) {
+                      print("Error signing in: " + e.toString());
+                      loadingIndeterminateKey.currentState
+                          ?.setVisibility(false);
+                    }
+                  },
+                  title: "sign-in-with-google".tr(),
+                  icon: MoreIcons.google,
+                  isExpanded: false,
+                ),
+          getPlatform() == PlatformOS.isIOS
+              ? SizedBox.shrink()
+              : SizedBox(height: 8),
+          getPlatform() == PlatformOS.isIOS
+              ? SizedBox.shrink()
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: TextFont(
+                    text: "onboarding-info-3".tr(),
+                    textAlign: TextAlign.center,
+                    fontSize: 16,
+                    maxLines: 5,
+                  ),
+                ),
+          getPlatform() == PlatformOS.isIOS
+              ? SizedBox.shrink()
+              : SizedBox(height: 35),
+          getPlatform() == PlatformOS.isIOS
+              ? SizedBox.shrink()
+              : LowKeyButton(
+                  onTap: () {
+                    nextNavigation();
+                  },
+                  text: "continue-without-sign-in".tr(),
+                ),
           // IntrinsicWidth(
           //   child: Button(
           //     label: "Let's go!",
@@ -507,11 +531,16 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                       ],
                     ),
                     AnimatedOpacity(
-                      opacity: currentIndex >= children.length - 1 ? 0 : 1,
+                      opacity: getPlatform() == PlatformOS.isIOS
+                          ? 1
+                          : currentIndex >= children.length - 1
+                              ? 0
+                              : 1,
                       duration: Duration(milliseconds: 200),
                       child: ButtonIcon(
                         onTap: () {
-                          if (currentIndex < children.length - 1)
+                          if (currentIndex < children.length - 1 ||
+                              getPlatform() == PlatformOS.isIOS)
                             nextOnBoardPage(children.length);
                         },
                         icon: getPlatform() == PlatformOS.isIOS

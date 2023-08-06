@@ -4,6 +4,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -45,55 +46,57 @@ class BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     if (getIsFullScreen(context)) return SizedBox.shrink();
     if (getPlatform() == PlatformOS.isIOS) {
-      return Container(
-        decoration: BoxDecoration(
-          color: getColor(context, "lightDarkAccent"),
-          boxShadow: boxShadowSharp(context),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 2),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: Icons.home_rounded,
-                        index: 0,
-                        currentIndex: selectedIndex,
-                      ),
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: Icons.payments_rounded,
-                        index: 1,
-                        currentIndex: selectedIndex,
-                      ),
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: MoreIcons.chart_pie,
-                        index: 2,
-                        currentIndex: selectedIndex,
-                        customIconScale: 0.87,
-                      ),
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: Icons.more_horiz_rounded,
-                        index: 3,
-                        currentIndex: selectedIndex,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).padding.bottom)
-                ],
-              ),
-            )
-          ],
+      return BlurBehindAppBar(
+        child: Container(
+          decoration: BoxDecoration(
+            color: getColor(context, "lightDarkAccent").withOpacity(0.6),
+            boxShadow: boxShadowSharp(context),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 2),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        NavBarIcon(
+                          onItemTapped: onItemTapped,
+                          icon: Icons.home_rounded,
+                          index: 0,
+                          currentIndex: selectedIndex,
+                        ),
+                        NavBarIcon(
+                          onItemTapped: onItemTapped,
+                          icon: Icons.payments_rounded,
+                          index: 1,
+                          currentIndex: selectedIndex,
+                        ),
+                        NavBarIcon(
+                          onItemTapped: onItemTapped,
+                          icon: MoreIcons.chart_pie,
+                          index: 2,
+                          currentIndex: selectedIndex,
+                          customIconScale: 0.87,
+                        ),
+                        NavBarIcon(
+                          onItemTapped: onItemTapped,
+                          icon: Icons.more_horiz_rounded,
+                          index: 3,
+                          currentIndex: selectedIndex,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.of(context).padding.bottom)
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     }
@@ -220,16 +223,10 @@ class NavBarIcon extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Theme.of(context).colorScheme.secondaryContainer
-                        : appStateSettings["materialYou"]
-                            ? dynamicPastel(
-                                context,
-                                Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                                inverse: true,
-                                amount: 0.13,
-                              )
-                            : Theme.of(context).colorScheme.secondaryContainer,
+                        : Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.3),
                   ),
                   height: 52,
                   width: 52,

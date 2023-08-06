@@ -1343,7 +1343,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         dateTimeModified: Value(DateTime.now()),
       ),
     );
-    print((await getAllDeleteLogs()).length);
+    // print((await getAllDeleteLogs()).length);
     return true;
   }
 
@@ -1377,22 +1377,53 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //create or update a new wallet
   Future<int> createOrUpdateWallet(TransactionWallet wallet,
-      {DateTime? customDateTimeModified}) {
-    return into(wallets).insert(
-        wallet.copyWith(
-            dateTimeModified: Value(customDateTimeModified ?? DateTime.now())),
-        mode: InsertMode.insertOrReplace);
+      {DateTime? customDateTimeModified, bool insert = false}) {
+    wallet = wallet.copyWith(
+        dateTimeModified: Value(customDateTimeModified ?? DateTime.now()));
+    WalletsCompanion companionToInsert = wallet.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert = companionToInsert.copyWith(walletPk: Value.absent());
+    }
+
+    return into(wallets)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
   //create or update a new wallet
-  Future<int> createOrUpdateScannerTemplate(ScannerTemplate scannerTemplate) {
-    return into(scannerTemplates).insertOnConflictUpdate(
-        scannerTemplate.copyWith(dateTimeModified: Value(DateTime.now())));
+  Future<int> createOrUpdateScannerTemplate(ScannerTemplate scannerTemplate,
+      {bool insert = false}) {
+    scannerTemplate =
+        scannerTemplate.copyWith(dateTimeModified: Value(DateTime.now()));
+    ScannerTemplatesCompanion companionToInsert =
+        scannerTemplate.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert =
+          companionToInsert.copyWith(scannerTemplatePk: Value.absent());
+    }
+
+    return into(scannerTemplates)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
-  Future<int> createOrUpdateCategoryLimit(CategoryBudgetLimit categoryLimit) {
-    return into(categoryBudgetLimits).insertOnConflictUpdate(
-        categoryLimit.copyWith(dateTimeModified: Value(DateTime.now())));
+  Future<int> createOrUpdateCategoryLimit(CategoryBudgetLimit categoryLimit,
+      {bool insert = false}) {
+    categoryLimit =
+        categoryLimit.copyWith(dateTimeModified: Value(DateTime.now()));
+    CategoryBudgetLimitsCompanion companionToInsert =
+        categoryLimit.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert =
+          companionToInsert.copyWith(categoryLimitPk: Value.absent());
+    }
+
+    return into(categoryBudgetLimits)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(
@@ -1455,15 +1486,21 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
-      int categoryFk,
-      {int? limit,
-      int? offset}) {
+    int categoryFk,
+  ) {
     return (select(associatedTitles)
           ..where((t) => t.categoryFk.equals(categoryFk))
-          ..orderBy([(t) => OrderingTerm.asc(t.order)])
-        // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
-        )
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .watch();
+  }
+
+  Future<List<TransactionAssociatedTitle>> getAllAssociatedTitlesInCategory(
+    int categoryFk,
+  ) {
+    return (select(associatedTitles)
+          ..where((t) => t.categoryFk.equals(categoryFk))
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+        .get();
   }
 
   Stream<List<CategoryBudgetLimit>> watchAllCategoryLimitsInBudget(int budgetPk,
@@ -1547,10 +1584,22 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //create or update a new associatedTitle
   Future<int> createOrUpdateAssociatedTitle(
-      TransactionAssociatedTitle associatedTitle) {
-    return into(associatedTitles).insert(
-        associatedTitle.copyWith(dateTimeModified: Value(DateTime.now())),
-        mode: InsertMode.insertOrReplace);
+    TransactionAssociatedTitle associatedTitle, {
+    insert = false,
+  }) {
+    associatedTitle =
+        associatedTitle.copyWith(dateTimeModified: Value(DateTime.now()));
+    AssociatedTitlesCompanion companionToInsert =
+        associatedTitle.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert =
+          companionToInsert.copyWith(associatedTitlePk: Value.absent());
+    }
+
+    return into(associatedTitles)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
   Future moveAssociatedTitle(
@@ -1692,10 +1741,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // create or update a new transaction
-  Future<int>? createOrUpdateTransaction(Transaction transaction,
-      {bool insert = false,
-      bool updateSharedEntry = true,
-      Transaction? originalTransaction}) async {
+  Future<int>? createOrUpdateTransaction(
+    Transaction transaction, {
+    bool insert = false,
+    bool updateSharedEntry = true,
+    Transaction? originalTransaction,
+  }) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
     double maxAmount = 10000000;
@@ -1728,8 +1779,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               transaction.sharedReferenceBudgetPk) {
             await deleteTransaction(transaction.transactionPk);
             await createOrUpdateTransaction(
+              insert: true,
               transaction.copyWith(
-                transactionPk: DateTime.now().millisecondsSinceEpoch,
+                transactionPk: -1,
                 sharedKey: Value(null),
                 // transactionOwnerEmail: Value(null),
                 // transactionOriginalOwnerEmail: Value(null),
@@ -1763,8 +1815,9 @@ class FinanceDatabase extends _$FinanceDatabase {
             print(e.toString());
           }
           await createOrUpdateTransaction(
+              insert: true,
               transaction.copyWith(
-                transactionPk: DateTime.now().millisecondsSinceEpoch,
+                transactionPk: -1,
                 sharedKey: Value(null),
                 transactionOwnerEmail: Value(null),
                 transactionOriginalOwnerEmail: Value(null),
@@ -2029,15 +2082,15 @@ class FinanceDatabase extends _$FinanceDatabase {
   //   return true;
   // }
 
-  // // This doesn't handle order of titles!
-  // Future<bool> createOrUpdateBatchAssociatedTitlesOnly(
-  //     List<TransactionAssociatedTitle> associatedTitlesInserting) async {
-  //   await batch((batch) {
-  //     batch.insertAll(associatedTitles, associatedTitlesInserting,
-  //         mode: InsertMode.insertOrReplace);
-  //   });
-  //   return true;
-  // }
+  // This doesn't handle order of titles!
+  Future<bool> createOrUpdateBatchAssociatedTitlesOnly(
+      List<TransactionAssociatedTitle> associatedTitlesInserting) async {
+    await batch((batch) {
+      batch.insertAll(associatedTitles, associatedTitlesInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
 
   // Future<int> deleteBatchWalletsGivenPks(List<int> walletPks) async {
   //   return (delete(wallets)..where((tbl) => tbl.walletPk.isIn(walletPks))).go();
@@ -2151,21 +2204,36 @@ class FinanceDatabase extends _$FinanceDatabase {
   // ************************************************************
 
   // create or update a category
-  Future<int> createOrUpdateCategory(TransactionCategory category,
-      {bool updateSharedEntry = true, DateTime? customDateTimeModified}) async {
+  Future<int> createOrUpdateCategory(
+    TransactionCategory category, {
+    bool updateSharedEntry = true,
+    DateTime? customDateTimeModified,
+    bool insert = false,
+  }) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
+
+    category = category.copyWith(
+        dateTimeModified: Value(customDateTimeModified ?? DateTime.now()));
+    CategoriesCompanion companionToInsert = category.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert =
+          companionToInsert.copyWith(categoryPk: Value.absent());
+    }
+
     // We need to ensure the value is set back to null, so insert/replace
-    int result = await into(categories).insert(
-        category.copyWith(
-            dateTimeModified: Value(customDateTimeModified ?? DateTime.now())),
-        mode: InsertMode.insertOrReplace);
+    int result = await into(categories)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
+
     if (updateSharedEntry)
       updateTransactionOnServerAfterChangingCategoryInformation(category);
     return result;
   }
 
-  Future<int> createOrUpdateFromSharedBudget(Budget budget) async {
+  Future<int> createOrUpdateFromSharedBudget(Budget budget,
+      {insert = false}) async {
     if (budget.sharedKey != null) {
       Budget sharedBudget;
 
@@ -2183,11 +2251,17 @@ class FinanceDatabase extends _$FinanceDatabase {
         return into(budgets).insertOnConflictUpdate(
             sharedBudget.copyWith(dateTimeModified: Value(DateTime.now())));
       } catch (e) {
-        // new entry is needed
         int numberOfBudgets = (await database.getAmountOfBudgets());
-        sharedBudget = budget.copyWith(order: numberOfBudgets);
-        return into(budgets).insertOnConflictUpdate(
-            sharedBudget.copyWith(dateTimeModified: Value(DateTime.now())));
+        // new entry is needed
+        sharedBudget = budget.copyWith(
+            dateTimeModified: Value(DateTime.now()), order: numberOfBudgets);
+        BudgetsCompanion companionToInsert = sharedBudget.toCompanion(true);
+        if (insert) {
+          // Use auto incremented ID when inserting
+          companionToInsert =
+              companionToInsert.copyWith(budgetPk: Value.absent());
+        }
+        return into(budgets).insert((companionToInsert));
       }
     } else {
       return 0;
@@ -2220,8 +2294,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
-  Future<int> createOrUpdateFromSharedTransaction(
-      Transaction transaction) async {
+  Future<int> createOrUpdateFromSharedTransaction(Transaction transaction,
+      {insert = false}) async {
     if (transaction.sharedKey != null) {
       Transaction sharedTransaction;
       try {
@@ -2240,8 +2314,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       } catch (e) {
         print(e.toString());
         // new entry is needed
-        return into(transactions).insertOnConflictUpdate(
-            transaction.copyWith(dateTimeModified: Value(DateTime.now())));
+        transaction =
+            transaction.copyWith(dateTimeModified: Value(DateTime.now()));
+        TransactionsCompanion companionToInsert = transaction.toCompanion(true);
+        if (insert) {
+          // Use auto incremented ID when inserting
+          companionToInsert =
+              companionToInsert.copyWith(transactionPk: Value.absent());
+        }
+        return into(transactions).insert((companionToInsert));
       }
     } else {
       return 0;
@@ -2270,8 +2351,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   // }
 
   // create or update a budget
+
   Future<int> createOrUpdateBudget(Budget budget,
-      {bool updateSharedEntry = true}) async {
+      {bool updateSharedEntry = true, bool insert = false}) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
     print(budget);
@@ -2293,9 +2375,16 @@ class FinanceDatabase extends _$FinanceDatabase {
       });
     }
 
-    return into(budgets).insert(
-        budget.copyWith(dateTimeModified: Value(DateTime.now())),
-        mode: InsertMode.replace);
+    budget = budget.copyWith(dateTimeModified: Value(DateTime.now()));
+    BudgetsCompanion companionToInsert = budget.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert = companionToInsert.copyWith(budgetPk: Value.absent());
+    }
+
+    return into(budgets)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
   // get category given key
@@ -2705,16 +2794,33 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
-  Future mergeAndDeleteCategory(TransactionCategory category) async {
+  Future mergeAndDeleteCategory(
+      TransactionCategory categoryFrom, TransactionCategory categoryTo) async {
     List<Transaction> transactionsToUpdate =
-        await getAllTransactionsFromCategory(category.categoryPk);
+        await getAllTransactionsFromCategory(categoryFrom.categoryPk);
+    // This is good for shared budgets, but shared is discontinued
+    // for (Transaction transaction in transactionsToUpdate) {
+    //   Transaction transactionEdited =
+    //       transaction.copyWith(categoryFk: categoryTo.categoryPk);
+    //   await database.createOrUpdateTransaction(transactionEdited);
+    // }
+    List<Transaction> transactionsEdited = [];
     for (Transaction transaction in transactionsToUpdate) {
-      await Future.delayed(Duration(milliseconds: 1));
-      Transaction transactionEdited =
-          transaction.copyWith(categoryFk: category.categoryPk);
-      await database.createOrUpdateTransaction(transactionEdited);
+      transactionsEdited
+          .add(transaction.copyWith(categoryFk: categoryTo.categoryPk));
     }
-    await database.deleteCategory(category.categoryPk, category.order);
+    await createOrUpdateBatchTransactionsOnly(transactionsEdited);
+
+    List<TransactionAssociatedTitle> associatedTitlesToUpdate =
+        await getAllAssociatedTitlesInCategory(categoryFrom.categoryPk);
+    List<TransactionAssociatedTitle> associatedTitlesEdited = [];
+    for (TransactionAssociatedTitle title in associatedTitlesToUpdate) {
+      associatedTitlesEdited
+          .add(title.copyWith(categoryFk: categoryTo.categoryPk));
+    }
+    await createOrUpdateBatchAssociatedTitlesOnly(associatedTitlesEdited);
+
+    await database.deleteCategory(categoryFrom.categoryPk, categoryFrom.order);
   }
 
   Stream<double?> totalDoubleStream(List<Stream<double?>> mergedStreams) {

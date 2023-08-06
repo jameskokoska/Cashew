@@ -4,7 +4,6 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:provider/provider.dart';
 
@@ -55,7 +54,6 @@ class _CountUpState extends State<CountUp> {
         textAlign: widget.textAlign,
         textColor: widget.textColor,
         maxLines: widget.maxLines,
-        walletPkForCurrency: widget.walletPkForCurrency,
       );
     }
     return TweenAnimationBuilder<int>(
@@ -81,7 +79,6 @@ class _CountUpState extends State<CountUp> {
           textAlign: widget.textAlign,
           textColor: widget.textColor,
           maxLines: widget.maxLines,
-          walletPkForCurrency: widget.walletPkForCurrency,
         );
       },
     );
@@ -98,7 +95,6 @@ class CountNumber extends StatefulWidget {
     this.curve = Curves.easeOutQuint,
     this.initialCount = 0,
     this.decimals,
-    this.dynamicDecimals = false,
     this.lazyFirstRender = true,
   }) : super(key: key);
 
@@ -109,7 +105,6 @@ class CountNumber extends StatefulWidget {
   final Curve curve;
   final double initialCount;
   final int? decimals;
-  final bool dynamicDecimals;
   final bool lazyFirstRender;
 
   @override
@@ -117,73 +112,45 @@ class CountNumber extends StatefulWidget {
 }
 
 class _CountNumberState extends State<CountNumber> {
-  int finalDecimalPlaces = 2;
-  double previousAmount = 0;
-  int decimals = 2;
-  bool lazyFirstRender = true;
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      if (mounted)
-        setState(() {
-          int currentSelectedDecimals =
-              Provider.of<AllWallets>(context, listen: false)
-                      .indexedByPk[appStateSettings["selectedWallet"]]
-                      ?.decimals ??
-                  2;
-          finalDecimalPlaces = ((widget.decimals ?? currentSelectedDecimals) > 2
-              ? widget.count.toString().split('.')[1].length <
-                      (widget.decimals ?? currentSelectedDecimals)
-                  ? widget.count.toString().split('.')[1].length
-                  : (widget.decimals ?? currentSelectedDecimals)
-              : (widget.decimals ?? currentSelectedDecimals));
-          previousAmount = widget.initialCount;
-          decimals = finalDecimalPlaces;
-          lazyFirstRender = widget.lazyFirstRender;
-        });
-    });
-  }
+  late double previousAmount = widget.initialCount;
+  late bool lazyFirstRender = widget.lazyFirstRender;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.dynamicDecimals) {
-      if (widget.count % 1 == 0) {
-        decimals = 0;
-      } else {
-        int currentSelectedDecimals = Provider.of<AllWallets>(context)
-                .indexedByPk[appStateSettings["selectedWallet"]]
-                ?.decimals ??
-            2;
-        decimals = ((widget.decimals ?? currentSelectedDecimals) > 2
-            ? widget.count.toString().split('.')[1].length <
-                    (widget.decimals ?? currentSelectedDecimals)
-                ? widget.count.toString().split('.')[1].length
-                : (widget.decimals ?? currentSelectedDecimals)
-            : (widget.decimals ?? currentSelectedDecimals));
-      }
+    int decimals = 0;
+
+    if (widget.count % 1 == 0) {
+      decimals = 0;
+    } else {
+      int currentSelectedDecimals = Provider.of<AllWallets>(context)
+              .indexedByPk[appStateSettings["selectedWallet"]]
+              ?.decimals ??
+          2;
+      decimals = ((widget.decimals ?? currentSelectedDecimals) > 2
+          ? widget.count.toString().split('.')[1].length <
+                  (widget.decimals ?? currentSelectedDecimals)
+              ? widget.count.toString().split('.')[1].length
+              : (widget.decimals ?? currentSelectedDecimals)
+          : (widget.decimals ?? currentSelectedDecimals));
     }
 
     if (appStateSettings["batterySaver"]) {
-      return widget.textBuilder(
-        double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)),
-      );
+      return widget.textBuilder(widget.count);
     }
 
     if (lazyFirstRender && widget.initialCount == widget.count) {
       lazyFirstRender = false;
       return widget.textBuilder(
-        double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)),
+        double.parse((widget.count).toStringAsFixed(decimals)),
       );
     }
 
     Widget builtWidget = TweenAnimationBuilder<int>(
       tween: IntTween(
-        begin: (double.parse(
-                    (previousAmount).toStringAsFixed(finalDecimalPlaces)) *
+        begin: (double.parse((previousAmount).toStringAsFixed(decimals)) *
                 pow(10, decimals))
             .toInt(),
-        end: (double.parse((widget.count).toStringAsFixed(finalDecimalPlaces)) *
+        end: (double.parse((widget.count).toStringAsFixed(decimals)) *
                 pow(10, decimals))
             .toInt(),
       ),

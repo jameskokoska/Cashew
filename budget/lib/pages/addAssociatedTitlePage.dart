@@ -50,10 +50,11 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
     print("Added Title");
     int length = await database.getAmountOfAssociatedTitles();
     await database.createOrUpdateAssociatedTitle(
+      insert: widget.associatedTitle == null,
       TransactionAssociatedTitle(
         associatedTitlePk: widget.associatedTitle != null
             ? widget.associatedTitle!.associatedTitlePk
-            : DateTime.now().millisecondsSinceEpoch,
+            : -1,
         categoryFk: selectedCategory == null ? 0 : selectedCategory!.categoryPk,
         isExactMatch: false,
         title: selectedTitle?.trim() ?? "",

@@ -725,12 +725,16 @@ class _TransactionFiltersSelectionState
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               RangeValues rangeLimit = RangeValues(
-                  (snapshot.data?.start ?? 0) - 0.00000001,
-                  (snapshot.data?.end ?? 0) + 0.00000001);
+                  (snapshot.data?.start ?? -0.00000001),
+                  (snapshot.data?.end ?? 0.00000001));
               if ((selectedFilters.amountRange?.start ?? 0) <
                       rangeLimit.start ||
                   (selectedFilters.amountRange?.end ?? 0) > rangeLimit.end) {
                 selectedFilters.amountRange = rangeLimit;
+              }
+              if (selectedFilters.amountRange?.end == rangeLimit.end &&
+                  selectedFilters.amountRange?.start == rangeLimit.start) {
+                selectedFilters.amountRange = null;
               }
               return AmountRangeSlider(
                 rangeLimit: rangeLimit,

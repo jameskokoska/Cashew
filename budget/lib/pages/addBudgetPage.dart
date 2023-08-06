@@ -13,12 +13,10 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
-import 'package:budget/widgets/categoryLimits.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectColor.dart';
-import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -88,7 +86,6 @@ dynamic enumRecurrence = {
 
 class _AddBudgetPageState extends State<AddBudgetPage> {
   bool? canAddBudget;
-  int setBudgetPk = DateTime.now().millisecondsSinceEpoch;
   List<int>? selectedCategories;
   double? selectedAmount;
   String? selectedAmountCalculation;
@@ -207,8 +204,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     loadingIndeterminateKey.currentState!.setVisibility(true);
     Budget createdBudget = await createBudget();
     print("Added budget");
-    int result = await database.createOrUpdateBudget(createdBudget);
-    if (selectedShared == true && widget.budget == null) {
+    int result = await database.createOrUpdateBudget(
+        insert: widget.budget == null, createdBudget);
+    if (selectedShared == true &&
+        widget.budget == null &&
+        appStateSettings["sharedBudgets"] == true) {
       openLoadingPopup(context);
       bool result2 = await shareBudget(createdBudget, context);
       Navigator.pop(context);
@@ -231,7 +231,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       }
     }
     loadingIndeterminateKey.currentState!.setVisibility(false);
-    if (result == -1) {
+    if (result == -1 && appStateSettings["sharedBudgets"] == true) {
       openPopup(
         context,
         title: "No Connection",
@@ -260,7 +260,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           await database.getBudgetInstance(widget.budget!.budgetPk);
     }
     return await Budget(
-      budgetPk: widget.budget != null ? widget.budget!.budgetPk : setBudgetPk,
+      budgetPk: widget.budget != null ? widget.budget!.budgetPk : -1,
       name: selectedTitle ?? "",
       amount: selectedAmount ?? 0,
       colour: toHexString(selectedColor),
@@ -420,10 +420,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         if (widget.budget != null) {
           discardChangesPopupIfBudgetPassed();
         } else {
-          // remove budget category limits created for a budget that has not been made yet
-          discardChangesPopup(context, onDiscard: () {
-            database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
-          });
+          discardChangesPopup(context, forceShow: true);
         }
         return false;
       },
@@ -443,18 +440,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             if (widget.budget != null) {
               discardChangesPopupIfBudgetPassed();
             } else {
-              discardChangesPopup(context, onDiscard: () {
-                database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
-              });
+              discardChangesPopup(context, forceShow: true);
             }
           },
           onDragDownToDissmiss: () async {
             if (widget.budget != null) {
               discardChangesPopupIfBudgetPassed();
             } else {
-              discardChangesPopup(context, onDiscard: () {
-                database.deleteCategoryBudgetLimitsInBudget(setBudgetPk);
-              });
+              discardChangesPopup(context, forceShow: true);
             }
           },
           actions: [
@@ -489,7 +482,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(
-                    label: "set-title".tr(),
+                    label: "set-name".tr(),
                     onTap: () async {
                       FocusScope.of(context).unfocus();
                       Future.delayed(Duration(milliseconds: 100), () {
@@ -863,44 +856,26 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             ),
                     ),
                   ),
+                  widget.budget != null && widget.budget!.addedTransactionsOnly
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, right: 15, top: 25),
+                                child: TextFont(
+                                  text: "added-budget-description".tr(),
+                                  fontSize: 14,
+                                  textColor: getColor(context, "textLight"),
+                                  maxLines: 5,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : SizedBox.shrink(),
                 ],
-              ),
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: 8)),
-            CategoryLimits(
-              isAbsoluteSpendingLimit: selectedIsAbsoluteSpendingLimit,
-              selectedCategories: selectedCategories ?? [],
-              budgetPk:
-                  widget.budget == null ? setBudgetPk : widget.budget!.budgetPk,
-              budgetLimit: selectedAmount ?? 0,
-              showAddCategoryButton: selectedAllCategories,
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getHorizontalPaddingConstrained(context)),
-                child: SettingsContainerSwitch(
-                  onSwitched: (value) async {
-                    await database
-                        .toggleAbsolutePercentSpendingCategoryBudgetLimits(
-                      widget.budget != null
-                          ? widget.budget!.budgetPk
-                          : setBudgetPk,
-                      selectedAmount ?? 1,
-                      selectedIsAbsoluteSpendingLimit,
-                    );
-                    setState(() {
-                      selectedIsAbsoluteSpendingLimit =
-                          !selectedIsAbsoluteSpendingLimit;
-                    });
-                    determineBottomButton();
-                  },
-                  initialValue: selectedIsAbsoluteSpendingLimit,
-                  syncWithInitialValue: true,
-                  title: "absolute-spending-limits".tr(),
-                  description: "absolute-spending-limits-description".tr(),
-                  icon: Icons.numbers_rounded,
-                ),
               ),
             ),
           ],

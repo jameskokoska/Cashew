@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -395,13 +396,15 @@ void deleteCategoryPopup(context, TransactionCategory category,
   }
 }
 
-void mergeCategoryPopup(BuildContext context, TransactionCategory category) {
+void mergeCategoryPopup(
+    BuildContext context, TransactionCategory categoryOriginal) {
   openBottomSheet(
     context,
     PopupFramework(
       title: "select-category".tr(),
       subtitle: "category-to-transfer-all-transactions-to".tr(),
       child: SelectCategory(
+        hideCategoryFks: [categoryOriginal.categoryPk],
         popRoute: true,
         setSelectedCategory: (category) async {
           Future.delayed(Duration(milliseconds: 90), () async {
@@ -420,13 +423,13 @@ void mergeCategoryPopup(BuildContext context, TransactionCategory category) {
               },
             );
             if (result == true) {
-              openLoadingPopup(context);
-              database.mergeAndDeleteCategory(category);
               Navigator.pop(context);
+              openLoadingPopup(context);
+              await database.mergeAndDeleteCategory(categoryOriginal, category);
               openSnackbar(
                   SnackbarMessage(title: "Merged into " + category.name));
+              Navigator.pop(navigatorKey.currentContext!);
             }
-            Navigator.of(context).popUntil((route) => route.isFirst);
           });
         },
       ),
