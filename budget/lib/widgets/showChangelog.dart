@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.7.5
+    Universal IO for locale on web
     Translations
     < 3.7.4
     Improved decimal precisions and support for comma locale

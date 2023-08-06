@@ -22,6 +22,7 @@ import 'package:math_expressions/math_expressions.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:universal_io/io.dart';
 
 String getDecimalSeparator() {
   return numberFormatSymbols[Platform.localeName.split("-")[0]]?.DECIMAL_SEP ??
