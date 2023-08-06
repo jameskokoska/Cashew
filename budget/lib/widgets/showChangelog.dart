@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.5
+    Translations
     < 3.7.4
     Improved decimal precisions and support for comma locale
     Fixed animations in enter amount
