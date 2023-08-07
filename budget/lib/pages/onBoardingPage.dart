@@ -307,10 +307,15 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           SizedBox(height: 25),
           getPlatform() == PlatformOS.isIOS
               ? IntrinsicWidth(
-                  child: Button(
-                    label: "Let's go!",
-                    onTap: () {},
-                    expandedLayout: false,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Button(
+                      label: "lets-go".tr(),
+                      onTap: () {
+                        nextNavigation();
+                      },
+                      expandedLayout: false,
+                    ),
                   ),
                 )
               : SizedBox.shrink(),

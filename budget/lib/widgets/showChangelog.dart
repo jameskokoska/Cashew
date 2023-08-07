@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.7
+    Fixed iOS onboarding page
+    Changelog can always be opened when forced
     < 3.7.6
     Fixed recommended spending amount sizes
     Backup limit shown in backup popup
@@ -974,7 +977,7 @@ end""";
       );
 
     //Don't show changelog on first login
-    if (appStateSettings["numLogins"] > 1) {
+    if (forceShow || appStateSettings["numLogins"] > 1) {
       openBottomSheet(
         context,
         PopupFramework(
