@@ -13,6 +13,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart' hide SliverReorderableList;
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -327,17 +328,29 @@ class _EditHomePageState extends State<EditHomePage> {
               key: ValueKey(key),
               extraWidget: Row(
                 children: [
-                  Switch(
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    value: editHomePageItems[key]!.isEnabled,
-                    onChanged: (value) {
-                      editHomePageItems[key]!.onSwitched(value);
-                      setState(() {
-                        editHomePageItems[key]!.isEnabled = value;
-                      });
-                    },
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
+                  getPlatform() == PlatformOS.isIOS
+                      ? CupertinoSwitch(
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          value: editHomePageItems[key]!.isEnabled,
+                          onChanged: (value) {
+                            editHomePageItems[key]!.onSwitched(value);
+                            setState(() {
+                              editHomePageItems[key]!.isEnabled = value;
+                            });
+                          },
+                        )
+                      : Switch(
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          value: editHomePageItems[key]!.isEnabled,
+                          onChanged: (value) {
+                            editHomePageItems[key]!.onSwitched(value);
+                            setState(() {
+                              editHomePageItems[key]!.isEnabled = value;
+                            });
+                          },
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                        ),
                 ],
               ),
               content: Row(

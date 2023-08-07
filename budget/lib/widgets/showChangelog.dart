@@ -11,6 +11,14 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.7.5
+    Cashew Pro banner in settings
+    Removed old implementation of associated titles lookup
+    Added vibration when scrubbing through line graphs
+    New budget history container for iOS
+    Current period in past budget periods is only labelled as current period if it is one
+    Fixed scroll animations when scrolled past 0 in iOS
+    Fixed past budget periods, if the 31 of the month it fails to show certain past periods, such as Feb
+    Removed vibration for iOS bottom sheet
     Universal IO for locale on web
     Translations
     < 3.7.4

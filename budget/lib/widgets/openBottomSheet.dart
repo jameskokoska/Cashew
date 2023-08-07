@@ -100,7 +100,8 @@ Future openBottomSheet(
             ScrollConfiguration.of(context)
                     .getScrollPhysics(context)
                     .toString() !=
-                "BouncingScrollPhysics") {
+                "BouncingScrollPhysics" &&
+            getPlatform() != PlatformOS.isIOS) {
           HapticFeedback.heavyImpact();
         }
       },

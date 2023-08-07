@@ -3,6 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
+import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/widgets/importCSV.dart';
@@ -81,6 +82,10 @@ class SettingsPageState extends State<SettingsPage>
                 title: "about-app".tr(namedArgs: {"app": globalAppName}),
                 icon: Icons.info_outline_rounded,
               ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: PremiumBanner(),
+        ),
         kIsWeb
             ? SettingsContainer(
                 title: "share-feedback".tr(),
@@ -193,7 +198,7 @@ class SettingsPageState extends State<SettingsPage>
                   return result;
                 },
                 initialValue: appStateSettings["requireAuth"],
-                icon: Icons.fingerprint_rounded,
+                icon: Icons.lock_rounded,
               )
             : SizedBox.shrink(),
 

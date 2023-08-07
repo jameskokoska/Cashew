@@ -7,6 +7,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class _LineChart extends StatefulWidget {
@@ -281,6 +282,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
   //       ),
   //     );
 
+  int? touchedValue = null;
+
   LineTouchData get lineTouchData => LineTouchData(
         enabled: true,
         touchSpotThreshold: 1000,
@@ -316,6 +319,25 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               ),
             );
           }).toList();
+        },
+        touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+          if (!event.isInterestedForInteractions || touchResponse == null) {
+            touchedValue = null;
+            return;
+          }
+
+          print(event.runtimeType);
+
+          double value = touchResponse.lineBarSpots![0].x;
+          if (event.runtimeType == FlLongPressStart) {
+            HapticFeedback.lightImpact();
+          } else if (touchedValue != value.toInt() &&
+              (event.runtimeType == FlLongPressMoveUpdate ||
+                  event.runtimeType == FlPanUpdateEvent)) {
+            HapticFeedback.lightImpact();
+          }
+
+          touchedValue = value.toInt();
         },
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: widget.color.withOpacity(0.7),

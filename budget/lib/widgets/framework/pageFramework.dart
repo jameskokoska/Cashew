@@ -182,18 +182,21 @@ class PageFrameworkState extends State<PageFramework>
       percent = _scrollController.offset /
           (getExpandedHeaderHeight(context, widget.expandedHeight) - 56);
     }
-    if (widget.backButton == true ||
-        widget.subtitle != null && percent >= 0 && percent <= 1) {
-      _animationControllerShift.value = (_scrollController.offset /
+    if (widget.backButton == true || widget.subtitle != null && percent <= 1) {
+      double offset = _scrollController.offset;
+      if (percent < 0) offset = 0;
+      _animationControllerShift.value = (offset /
           (getExpandedHeaderHeight(context, widget.expandedHeight) - 56));
       _animationControllerOpacity.value = 0.5 +
-          (_scrollController.offset /
+          (offset /
               (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
               2);
     }
-    if (widget.subtitle != null && percent <= 0.75 && percent >= 0) {
+    if (widget.subtitle != null && percent <= 0.75) {
+      double offset = _scrollController.offset;
+      if (percent < 0) offset = 0;
       _animationController0at50.value = 1 -
-          (_scrollController.offset /
+          (offset /
                   (getExpandedHeaderHeight(context, widget.expandedHeight) -
                       56)) *
               1.75;

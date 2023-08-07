@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addAssociatedTitlePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -171,7 +172,9 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                               );
                             },
                             padding: EdgeInsets.symmetric(
-                                vertical: 7, horizontal: 7),
+                                vertical: 7,
+                                horizontal:
+                                    getPlatform() == PlatformOS.isIOS ? 17 : 7),
                             currentReorder:
                                 currentReorder != -1 && currentReorder != index,
                             index: index,

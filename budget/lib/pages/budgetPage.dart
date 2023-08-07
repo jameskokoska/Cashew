@@ -392,11 +392,14 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                                             totalSpent *
                                                             100)
                                                         .abs(),
-                                            todayPercent: widget.isPastBudget ==
-                                                    true
-                                                ? -1
-                                                : getPercentBetweenDates(
-                                                    budgetRange, dateForRange),
+                                            todayPercent:
+                                                widget.isPastBudget == true
+                                                    ? -1
+                                                    : getPercentBetweenDates(
+                                                        budgetRange,
+                                                        //dateForRange,
+                                                        DateTime.now(),
+                                                      ),
                                           ),
                                         ),
                                         widget.isPastBudget == true

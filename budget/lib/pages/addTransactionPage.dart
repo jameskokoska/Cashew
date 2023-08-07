@@ -2240,18 +2240,28 @@ Future<TransactionAssociatedTitle?> getLikeAssociatedTitle(String text) async {
 }
 
 getRelatingAssociatedTitle(String text) async {
-  List<TransactionAssociatedTitle> allTitles =
-      (await database.getAllAssociatedTitles());
-
   int categoryFk = -1;
   TransactionAssociatedTitle? selectedTitleLocal;
-  for (TransactionAssociatedTitle title in allTitles) {
-    if (text.toLowerCase().contains(title.title.toLowerCase())) {
-      categoryFk = title.categoryFk;
-      selectedTitleLocal = title;
-      break;
-    }
-  }
+
+  // getLikeAssociatedTitle is more efficient since it uses queries
+  //
+  // Alternative:
+  // be more efficient when finding
+  // lookup if title matches exactly category name in database
+  // then get list of all associated titles that contain that title in database
+  // then loop through those to see which match
+  // instead of getting all then looping
+
+  // List<TransactionAssociatedTitle> allTitles =
+  //     (await database.getAllAssociatedTitles());
+
+  // for (TransactionAssociatedTitle title in allTitles) {
+  //   if (text.toLowerCase().contains(title.title.toLowerCase())) {
+  //     categoryFk = title.categoryFk;
+  //     selectedTitleLocal = title;
+  //     break;
+  //   }
+  // }
 
   bool foundFromCategoryLocal = false;
   if (categoryFk == -1) {

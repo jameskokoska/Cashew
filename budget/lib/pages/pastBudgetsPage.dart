@@ -94,26 +94,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     List<Stream<double?>> watchedBudgetTotals = [];
     List<Stream<double?>> watchedCategoryTotals = [];
     for (int index = 0; index < amountLoaded; index++) {
-      DateTime datePast = DateTime(
-        DateTime.now().year -
-            (widget.budget.reoccurrence == BudgetReoccurence.yearly
-                ? index * widget.budget.periodLength
-                : 0),
-        DateTime.now().month -
-            (widget.budget.reoccurrence == BudgetReoccurence.monthly
-                ? index * widget.budget.periodLength
-                : 0),
-        DateTime.now().day -
-            (widget.budget.reoccurrence == BudgetReoccurence.daily
-                ? index * widget.budget.periodLength
-                : 0) -
-            (widget.budget.reoccurrence == BudgetReoccurence.weekly
-                ? index * 7 * widget.budget.periodLength
-                : 0),
-        0,
-        0,
-        1,
-      );
+      DateTime datePast =
+          getDatePastToDetermineBudgetDate(index, widget.budget);
       DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
       dateTimeRanges.add(budgetRange);
       watchedBudgetTotals.add(database.watchTotalSpentInTimeRangeFromCategories(
@@ -659,6 +641,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 },
                 budgetColorScheme: budgetColorScheme,
                 loadLines: loadLines,
+                backgroundColor: backgroundColor,
               ),
               SliverToBoxAdapter(child: SizedBox(height: 10)),
             ],
@@ -676,6 +659,7 @@ class PastBudgetContainerList extends StatefulWidget {
     required this.setAmountLoaded,
     required this.budgetColorScheme,
     required this.loadLines,
+    required this.backgroundColor,
     super.key,
   });
 
@@ -684,6 +668,7 @@ class PastBudgetContainerList extends StatefulWidget {
   final Function(int) setAmountLoaded;
   final ColorScheme budgetColorScheme;
   final Function loadLines;
+  final Color backgroundColor;
 
   @override
   State<PastBudgetContainerList> createState() =>
@@ -708,39 +693,35 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
     return MultiSliver(children: [
       getIsFullScreen(context) == false
           ? SliverPadding(
-              padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
+              padding: EdgeInsets.only(
+                bottom: 15,
+                left: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+                right: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+              ),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    DateTime datePast = DateTime(
-                      DateTime.now().year -
-                          (widget.budget.reoccurrence ==
-                                  BudgetReoccurence.yearly
-                              ? index * widget.budget.periodLength
-                              : 0),
-                      DateTime.now().month -
-                          (widget.budget.reoccurrence ==
-                                  BudgetReoccurence.monthly
-                              ? index * widget.budget.periodLength
-                              : 0),
-                      DateTime.now().day -
-                          (widget.budget.reoccurrence == BudgetReoccurence.daily
-                              ? index * widget.budget.periodLength
-                              : 0) -
-                          (widget.budget.reoccurrence ==
-                                  BudgetReoccurence.weekly
-                              ? index * 7 * widget.budget.periodLength
-                              : 0),
-                      0,
-                      0,
-                      1,
-                    );
+                    DateTime datePast =
+                        getDatePastToDetermineBudgetDate(index, widget.budget);
                     return FadeIn(
                       duration: Duration(milliseconds: 400),
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 200),
                         decoration: BoxDecoration(
-                          boxShadow: appStateSettings["materialYou"]
+                          border: Border(
+                            top: BorderSide(
+                              color: widget.budgetColorScheme.secondaryContainer
+                                  .withOpacity(0.5),
+                              width: index == 0 ? 2 : 0,
+                            ),
+                            bottom: BorderSide(
+                              color: widget.budgetColorScheme.secondaryContainer
+                                  .withOpacity(0.5),
+                              width: touchedBudgetIndex == null ? 2 : 0,
+                            ),
+                          ),
+                          boxShadow: getPlatform() == PlatformOS.isIOS ||
+                                  appStateSettings["materialYou"]
                               ? []
                               : touchedBudgetIndex == null ||
                                       widget.amountLoaded -
@@ -750,12 +731,14 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                   ? boxShadowCheck(boxShadowGeneral(context))
                                   : [BoxShadow(color: Colors.transparent)],
                         ),
-                        padding: EdgeInsets.only(
-                          bottom: touchedBudgetIndex != null ||
-                                  index == widget.amountLoaded - 1
-                              ? 0
-                              : 13.0,
-                        ),
+                        padding: getPlatform() == PlatformOS.isIOS
+                            ? EdgeInsets.zero
+                            : EdgeInsets.only(
+                                bottom: touchedBudgetIndex != null ||
+                                        index == widget.amountLoaded - 1
+                                    ? 0
+                                    : 13.0,
+                              ),
                         child: AnimatedSize(
                           duration: Duration(milliseconds: 1000),
                           curve: Curves.easeInOutCubicEmphasized,
@@ -775,6 +758,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                     isPastBudget: index == 0 ? false : true,
                                     isPastBudgetButCurrentPeriod: index == 0,
                                     budgetColorScheme: widget.budgetColorScheme,
+                                    backgroundColor: widget.backgroundColor,
                                   )
                                 : Container(
                                     key: ValueKey(
@@ -790,7 +774,9 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
               ),
             )
           : SliverPadding(
-              padding: EdgeInsets.only(bottom: 15, left: 13, right: 13),
+              padding: getPlatform() == PlatformOS.isIOS
+                  ? EdgeInsets.zero
+                  : EdgeInsets.only(bottom: 15, left: 13, right: 13),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 600,
@@ -799,29 +785,8 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    DateTime datePast = DateTime(
-                      DateTime.now().year -
-                          (widget.budget.reoccurrence ==
-                                  BudgetReoccurence.yearly
-                              ? index * widget.budget.periodLength
-                              : 0),
-                      DateTime.now().month -
-                          (widget.budget.reoccurrence ==
-                                  BudgetReoccurence.monthly
-                              ? index * widget.budget.periodLength
-                              : 0),
-                      DateTime.now().day -
-                          (widget.budget.reoccurrence == BudgetReoccurence.daily
-                              ? index * widget.budget.periodLength
-                              : 0) -
-                          (widget.budget.reoccurrence ==
-                                  BudgetReoccurence.weekly
-                              ? index * 7 * widget.budget.periodLength
-                              : 0),
-                      0,
-                      0,
-                      1,
-                    );
+                    DateTime datePast =
+                        getDatePastToDetermineBudgetDate(index, widget.budget);
                     return FadeIn(
                       duration: Duration(milliseconds: 400),
                       child: AnimatedOpacity(
@@ -833,12 +798,29 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                             : 0.5,
                         child: Container(
                           decoration: BoxDecoration(
-                            boxShadow: appStateSettings["materialYou"]
+                            border: Border(
+                              top: BorderSide(
+                                color: widget
+                                    .budgetColorScheme.secondaryContainer
+                                    .withOpacity(0.5),
+                                width: index == 0 ? 2 : 0,
+                              ),
+                              bottom: BorderSide(
+                                color: widget
+                                    .budgetColorScheme.secondaryContainer
+                                    .withOpacity(0.5),
+                                width: 2,
+                              ),
+                            ),
+                            boxShadow: getPlatform() == PlatformOS.isIOS ||
+                                    appStateSettings["materialYou"]
                                 ? []
                                 : boxShadowCheck(boxShadowGeneral(context)),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.only(bottom: 13.0),
+                            padding: getPlatform() == PlatformOS.isIOS
+                                ? EdgeInsets.zero
+                                : EdgeInsets.only(bottom: 13.0),
                             child: PastBudgetContainer(
                               budget: widget.budget,
                               smallBudgetContainer: true,
@@ -848,6 +830,7 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                               isPastBudget: index == 0 ? false : true,
                               isPastBudgetButCurrentPeriod: index == 0,
                               budgetColorScheme: widget.budgetColorScheme,
+                              backgroundColor: widget.backgroundColor,
                             ),
                           ),
                         ),
@@ -907,6 +890,7 @@ class PastBudgetContainer extends StatelessWidget {
     this.isPastBudget = false,
     this.isPastBudgetButCurrentPeriod = false,
     required this.budgetColorScheme,
+    required this.backgroundColor,
   }) : super(key: key);
 
   final Budget budget;
@@ -916,6 +900,7 @@ class PastBudgetContainer extends StatelessWidget {
   final bool? isPastBudget;
   final bool? isPastBudgetButCurrentPeriod;
   final ColorScheme budgetColorScheme;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -973,7 +958,9 @@ class PastBudgetContainer extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               TextFont(
-                                text: (isPastBudgetButCurrentPeriod == true)
+                                text: getPercentBetweenDates(
+                                            budgetRange, DateTime.now()) <=
+                                        100
                                     ? "current-budget-period".tr()
                                     : getWordedDateShortMore(budgetRange.start),
                                 fontSize: 20,
@@ -1172,14 +1159,16 @@ class PastBudgetContainer extends StatelessWidget {
     );
     return Container(
       child: OpenContainerNavigation(
-        borderRadius: 20,
-        closedColor: appStateSettings["materialYou"]
-            ? dynamicPastel(
-                context,
-                budgetColorScheme.secondaryContainer,
-                amount: 0.5,
-              )
-            : getColor(context, "lightDarkAccentHeavyLight"),
+        borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 20,
+        closedColor: getPlatform() == PlatformOS.isIOS
+            ? backgroundColor
+            : appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context,
+                    budgetColorScheme.secondaryContainer,
+                    amount: 0.5,
+                  )
+                : getColor(context, "lightDarkAccentHeavyLight"),
         button: (openContainer) {
           return Tappable(
             onTap: () {
@@ -1193,15 +1182,17 @@ class PastBudgetContainer extends StatelessWidget {
                 ),
               );
             },
-            borderRadius: 20,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 20,
             child: widget,
-            color: appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context,
-                    budgetColorScheme.secondaryContainer,
-                    amount: 0.3,
-                  )
-                : getColor(context, "lightDarkAccentHeavyLight"),
+            color: getPlatform() == PlatformOS.isIOS
+                ? backgroundColor
+                : appStateSettings["materialYou"]
+                    ? dynamicPastel(
+                        context,
+                        budgetColorScheme.secondaryContainer,
+                        amount: 0.3,
+                      )
+                    : getColor(context, "lightDarkAccentHeavyLight"),
           );
         },
         openPage: BudgetPage(

@@ -6,6 +6,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BudgetHistoryLineGraph extends StatefulWidget {
@@ -167,9 +168,19 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                 touchedValue = null;
                 return;
               }
+
               double value = touchResponse.lineBarSpots![0].x;
               if (touchedValue != value.toInt()) if (widget.onTouchedIndex !=
                   null) widget.onTouchedIndex!(value.toInt());
+
+              if (event.runtimeType == FlLongPressStart) {
+                HapticFeedback.lightImpact();
+              } else if (touchedValue != value.toInt() &&
+                  (event.runtimeType == FlLongPressMoveUpdate ||
+                      event.runtimeType == FlPanUpdateEvent)) {
+                HapticFeedback.lightImpact();
+              }
+
               touchedValue = value.toInt();
             },
             enabled: true,

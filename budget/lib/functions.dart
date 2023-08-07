@@ -317,6 +317,42 @@ setTextInput(inputController, value) {
   );
 }
 
+DateTime getDatePastToDetermineBudgetDate(int index, Budget budget,
+    {bool isChecking = true}) {
+  BudgetReoccurence? reoccurrence = budget.reoccurrence;
+  int periodLength = budget.periodLength;
+  if (reoccurrence == null) return DateTime.now();
+
+  int year = DateTime.now().year -
+      (reoccurrence == BudgetReoccurence.yearly ? index * periodLength : 0);
+  int month = DateTime.now().month -
+      (reoccurrence == BudgetReoccurence.monthly ? index * periodLength : 0);
+  // This fixes a bug where if the currentDate is the 31 of a month, February for example won't be considered since it doesn't have 30 days
+  // Every monthly budget will have a day that falls on the first!
+  int day = reoccurrence == BudgetReoccurence.monthly
+      ? 1
+      : DateTime.now().day -
+          (reoccurrence == BudgetReoccurence.daily ? index * periodLength : 0) -
+          (reoccurrence == BudgetReoccurence.weekly
+              ? index * 7 * periodLength
+              : 0);
+
+  // This ensures that there will always be a current period, since we start
+  // on the first of the month, the current period may not be shown and we have to remove
+  // one from the index, for E.g. if the budget resets between the first of the month and the 7th and it is the 7th
+  // It will NOT show the current period, this is here to fix that.
+  // Only needed for months
+  if (isChecking && reoccurrence == BudgetReoccurence.monthly) {
+    DateTimeRange budgetRange = getBudgetDate(
+        budget, getDatePastToDetermineBudgetDate(0, budget, isChecking: false));
+    if (budgetRange.end.isBefore(DateTime.now().subtract(Duration(days: 1))))
+      return getDatePastToDetermineBudgetDate(index - 1, budget,
+          isChecking: false);
+  }
+
+  return DateTime(year, month, day, 0, 0, 1);
+}
+
 BudgetReoccurence mapRecurrence(String? recurrenceString) {
   if (recurrenceString == null) {
     return BudgetReoccurence.monthly;
@@ -351,15 +387,11 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           currentDateLoopStart.year,
           currentDateLoopStart.month + budget.periodLength,
           currentDateLoopStart.day);
-      // This fixes a bug where if the currentDate is the 31 of a month, February for example won't be considered since it doesn't have 30 days
-      // TODO this still needs fixing...
-      // currentDate = DateTime(currentDate.year, currentDate.month, 1);
     } else if (budget.reoccurrence == BudgetReoccurence.yearly) {
       currentDateLoopEnd = DateTime(
           currentDateLoopStart.year + budget.periodLength,
           currentDateLoopStart.month,
           currentDateLoopStart.day);
-      // currentDate = DateTime(currentDate.year, currentDate.month, 1,);
     }
     // print("START");
     // print(currentDate);
@@ -367,8 +399,12 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
     // print("--------");
     if (currentDate.millisecondsSinceEpoch <=
         currentDateLoopEnd.millisecondsSinceEpoch) {
-      for (int i = 0; i < 10000; i++) {
-        // print(currentDateLoopStart.toString() + currentDateLoopEnd.toString());
+      for (int i = 0; i < 100000; i++) {
+        // print("Current loop: " +
+        //     i.toString() +
+        //     " " +
+        //     currentDateLoopStart.toString() +
+        //     currentDateLoopEnd.toString());
         // dont set this one >= only >, the other if statement will catch it
         if (currentDate.millisecondsSinceEpoch >
                 currentDateLoopStart.millisecondsSinceEpoch &&
@@ -407,7 +443,7 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
       }
     } else if (currentDate.millisecondsSinceEpoch >=
         currentDateLoopEnd.millisecondsSinceEpoch) {
-      for (int i = 0; i < 10000; i++) {
+      for (int i = 0; i < 100000; i++) {
         // print(currentDateLoopStart.toString() + currentDateLoopEnd.toString());
         if (currentDate.millisecondsSinceEpoch >=
                 currentDateLoopStart.millisecondsSinceEpoch &&

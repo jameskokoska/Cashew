@@ -28,47 +28,7 @@ class PremiumPage extends StatelessWidget {
           child: Center(
             child: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      tileMode: TileMode.mirror,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        dynamicPastel(
-                            context, Theme.of(context).colorScheme.tertiary,
-                            amountDark: 0, amountLight: 0.4),
-                        dynamicPastel(
-                            context, Theme.of(context).colorScheme.primary,
-                            amountDark: 0, amountLight: 0.4),
-                        dynamicPastel(
-                            context, Theme.of(context).colorScheme.tertiary,
-                            amountDark: 0, amountLight: 0.4),
-                      ],
-                      stops: [
-                        0,
-                        0.5,
-                        1,
-                      ],
-                    ),
-                    backgroundBlendMode: BlendMode.srcOver,
-                  ),
-                  child: PlasmaRenderer(
-                    type: PlasmaType.infinity,
-                    particles: 7,
-                    color: Color(0x44B6B6B6),
-                    blur: 0.4,
-                    size: 0.8,
-                    speed: 3,
-                    offset: 0,
-                    blendMode: BlendMode.plus,
-                    particleType: ParticleType.atlas,
-                    variation1: 0,
-                    variation2: 0,
-                    variation3: 0,
-                    rotation: 0,
-                  ),
-                ),
+                PremiumBackground(),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -134,6 +94,8 @@ class PremiumPage extends StatelessWidget {
                               SubscriptionFeature(
                                 iconData: Icons.thumb_up_rounded,
                                 label: "support-the-developer".tr(),
+                                description:
+                                    "support-the-developer-description".tr(),
                               ),
                               SubscriptionFeature(
                                 iconData: MoreIcons.chart_pie,
@@ -417,5 +379,164 @@ Future premiumPopupAddTransaction(BuildContext context) async {
         "premiumPopupAddTransactionLastShown", DateTime.now.toString(),
         updateGlobalState: false);
     await pushRoute(context, PremiumPage());
+  }
+}
+
+class PremiumBackground extends StatelessWidget {
+  const PremiumBackground({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          tileMode: TileMode.mirror,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            dynamicPastel(
+                context,
+                Theme.of(context).brightness == Brightness.light
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.tertiary,
+                amountDark: 0,
+                amountLight: 0.4),
+            dynamicPastel(
+                context,
+                Theme.of(context).brightness == Brightness.light
+                    ? Theme.of(context).colorScheme.primaryContainer
+                    : Theme.of(context).colorScheme.primary,
+                amountDark: 0,
+                amountLight: 0.4),
+            dynamicPastel(
+                context,
+                Theme.of(context).brightness == Brightness.light
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.tertiary,
+                amountDark: 0,
+                amountLight: 0.4),
+          ],
+          stops: [
+            0,
+            0.3,
+            1.3,
+          ],
+        ),
+        backgroundBlendMode: BlendMode.srcOver,
+      ),
+      child: PlasmaRenderer(
+        type: PlasmaType.infinity,
+        particles: 7,
+        color: Theme.of(context).brightness == Brightness.light
+            ? Color(0x28B4B4B4)
+            : Color(0x44B6B6B6),
+        blur: 0.4,
+        size: 0.8,
+        speed: Theme.of(context).brightness == Brightness.light ? 4 : 3,
+        offset: 0,
+        blendMode: BlendMode.plus,
+        particleType: ParticleType.atlas,
+        variation1: 0,
+        variation2: 0,
+        variation3: 0,
+        rotation: 0,
+      ),
+    );
+  }
+}
+
+class PremiumBanner extends StatelessWidget {
+  const PremiumBanner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          boxShadow: boxShadowSharp(context),
+          borderRadius: BorderRadius.circular(15)),
+      margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 0),
+      child: Tappable(
+        color: Colors.transparent,
+        borderRadius: 15,
+        onTap: () {
+          if (kIsWeb)
+            openUrl("https://ko-fi.com/dapperappdeveloper");
+          else
+            pushRoute(context, PremiumPage());
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: IntrinsicHeight(
+            child: Stack(
+              children: [
+                Opacity(
+                  opacity: Theme.of(context).brightness == Brightness.light
+                      ? 0.7
+                      : 0.9,
+                  child: PremiumBackground(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 25, right: 17, top: 17, bottom: 17),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              TextFont(
+                                text: globalAppName,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 23,
+                                textColor: Colors.black,
+                              ),
+                              SizedBox(width: 2),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(100),
+                                  boxShadow: boxShadowGeneral(context),
+                                ),
+                                child: TextFont(
+                                  text: "Pro",
+                                  textColor:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              )
+                            ],
+                          ),
+                          TextFont(
+                            text: "budget-like-a-pro".tr() +
+                                " " +
+                                globalAppName +
+                                " " +
+                                "Pro",
+                            fontSize: 15,
+                            textColor: Colors.black,
+                          ),
+                        ],
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Colors.black,
+                        size: 20,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
