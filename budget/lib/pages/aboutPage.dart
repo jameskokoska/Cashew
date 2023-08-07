@@ -30,7 +30,7 @@ class AboutPage extends StatelessWidget {
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
           child: Wrap(
             alignment: WrapAlignment.center,
             runAlignment: WrapAlignment.center,
@@ -94,7 +94,7 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {
               openUrl("https://github.com/jameskokoska/Cashew");
@@ -125,8 +125,9 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
+        TranslationsHelp(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {
               openUrl('mailto:dapperappdeveloper@gmail.com');
@@ -165,7 +166,7 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {},
             color: getColor(context, "lightDarkAccent"),
@@ -199,7 +200,7 @@ class AboutPage extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 23),
+                padding: const EdgeInsets.only(left: 15),
                 child: Button(
                   label: "view-app-intro".tr(),
                   onTap: () {
@@ -215,7 +216,7 @@ class AboutPage extends StatelessWidget {
             SizedBox(width: 10),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 23),
+                padding: const EdgeInsets.only(right: 15),
                 child: Button(
                   label: "view-changelog".tr(),
                   onTap: () {
@@ -229,7 +230,7 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 15),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "graphics".tr(),
@@ -254,7 +255,7 @@ class AboutPage extends StatelessWidget {
         ),
         Container(height: 15),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "major-tools".tr(),
@@ -290,7 +291,7 @@ class AboutPage extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 23),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
                   label: "view-licenses-and-legalese".tr(),
                   color: Theme.of(context).colorScheme.tertiary,
@@ -320,7 +321,7 @@ class AboutPage extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 23),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
                   label: "privacy-policy".tr(),
                   color: Theme.of(context).colorScheme.tertiary,
@@ -336,7 +337,7 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
           child: Center(
             child: TextFont(
               text: "made-in-canada".tr() + " 🍁",
@@ -348,7 +349,7 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 50),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
           child: Button(
             label: "delete-all-data".tr(),
             onTap: () {
@@ -416,7 +417,7 @@ class AboutInfoBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          padding ?? const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
+          padding ?? const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Tappable(
         onTap: () async {
           openUrl(link);
@@ -443,6 +444,61 @@ class AboutInfoBox extends StatelessWidget {
                 fontSize: 14,
                 textAlign: TextAlign.center,
                 textColor: getColor(context, "textLight"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TranslationsHelp extends StatelessWidget {
+  const TranslationsHelp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Tappable(
+        onTap: () {
+          openUrl('mailto:dapperappdeveloper@gmail.com');
+        },
+        color:
+            Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+        borderRadius: 15,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Icon(
+                  Icons.connect_without_contact_rounded,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: 31,
+                ),
+              ),
+              Expanded(
+                child: TextFont(
+                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                  richTextSpan: [
+                    TextSpan(
+                      text: 'dapperappdeveloper@gmail.com',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationStyle: TextDecorationStyle.solid,
+                        decorationColor:
+                            getColor(context, "unPaidOverdue").withOpacity(0.8),
+                        color:
+                            getColor(context, "unPaidOverdue").withOpacity(0.8),
+                      ),
+                    ),
+                  ],
+                  text: "translations-help".tr() + " ",
+                  maxLines: 5,
+                  fontSize: 13,
+                ),
               ),
             ],
           ),

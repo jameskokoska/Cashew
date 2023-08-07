@@ -401,5 +401,8 @@
   "edit-spending-goals": "지출 목표를 편집합니다",
   "spending-goals": "지출 목표",
   "added-budget-description": "이 예산에는 추가 된 거래 만 포함됩니다.",
-  "history": "역사"
+  "history": "역사",
+  "backup": "지원",
+  "google-drive-backup": "Google 드라이브 백업",
+  "google-drive-backup-description": "모든 백업은 개인 Google 드라이브에서 생성되며 개발자가 액세스 할 수 없습니다. 자세한 내용은 개인 정보 보호 정책을 읽으십시오."
 }

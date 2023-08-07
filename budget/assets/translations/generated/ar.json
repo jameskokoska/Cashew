@@ -401,5 +401,8 @@
   "edit-spending-goals": "تحرير أهداف الإنفاق",
   "spending-goals": "أهداف الإنفاق",
   "added-budget-description": "ستشمل هذه الميزانية فقط المعاملات التي تمت إضافتها إليها.",
-  "history": "تاريخ"
+  "history": "تاريخ",
+  "backup": "دعم",
+  "google-drive-backup": "Google Drive Backup",
+  "google-drive-backup-description": "يتم إنشاء جميع النسخ الاحتياطية على محرك Google Personal الخاص بك ولا يمكن الوصول إليه للمطور. اقرأ سياسة الخصوصية لمزيد من التفاصيل."
 }

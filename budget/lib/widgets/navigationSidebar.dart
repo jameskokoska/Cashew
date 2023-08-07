@@ -144,7 +144,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                             ),
                             NavigationSidebarButton(
                               icon: MoreIcons.chart_pie,
-                              iconSize: 15,
+                              iconScale: 0.87,
                               label: "budgets".tr(),
                               isSelected: selectedIndex == 2,
                               onTap: () {
@@ -391,7 +391,7 @@ class NavigationSidebarButton extends StatelessWidget {
   const NavigationSidebarButton({
     super.key,
     required this.icon,
-    this.iconSize = 30,
+    this.iconScale = 1,
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -400,7 +400,7 @@ class NavigationSidebarButton extends StatelessWidget {
   });
 
   final IconData icon;
-  final double iconSize;
+  final double iconScale;
   final String label;
   final bool isSelected;
   final Widget trailing;
@@ -437,11 +437,14 @@ class NavigationSidebarButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
             child: Row(
               children: [
-                Icon(
-                  icon,
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.onSecondaryContainer
-                      : Theme.of(context).colorScheme.secondary,
+                Transform.scale(
+                  scale: iconScale,
+                  child: Icon(
+                    icon,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.onSecondaryContainer
+                        : Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
                 SizedBox(width: 15),
                 Expanded(

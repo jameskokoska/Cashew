@@ -567,44 +567,84 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
       return AnimatedSwitcher(
         duration: Duration(milliseconds: 600),
         child: googleUser == null
-            ? NavigationSidebarButton(
-                key: ValueKey("login"),
-                label: "login".tr(),
-                icon: MoreIcons.google,
-                onTap: () async {
-                  login();
-                },
-                isSelected: false,
-              )
-            : NavigationSidebarButton(
-                key: ValueKey("user"),
-                label: googleUser!.displayName ?? "",
-                icon: Icons.person_rounded,
-                onTap: () async {
-                  if (widget.onTap != null) widget.onTap!();
-                },
-                isSelected: widget.isButtonSelected,
-              ),
+            ? getPlatform() == PlatformOS.isIOS
+                ? NavigationSidebarButton(
+                    key: ValueKey("login"),
+                    label: "backup".tr(),
+                    icon: MoreIcons.google_drive,
+                    iconScale: 0.87,
+                    onTap: () async {
+                      login();
+                    },
+                    isSelected: false,
+                  )
+                : NavigationSidebarButton(
+                    key: ValueKey("login"),
+                    label: "login".tr(),
+                    icon: MoreIcons.google,
+                    onTap: () async {
+                      login();
+                    },
+                    isSelected: false,
+                  )
+            : getPlatform() == PlatformOS.isIOS
+                ? NavigationSidebarButton(
+                    key: ValueKey("user"),
+                    label: "backup".tr(),
+                    icon: MoreIcons.google_drive,
+                    iconScale: 0.87,
+                    onTap: () async {
+                      if (widget.onTap != null) widget.onTap!();
+                    },
+                    isSelected: widget.isButtonSelected,
+                  )
+                : NavigationSidebarButton(
+                    key: ValueKey("user"),
+                    label: googleUser!.displayName ?? "",
+                    icon: Icons.person_rounded,
+                    onTap: () async {
+                      if (widget.onTap != null) widget.onTap!();
+                    },
+                    isSelected: widget.isButtonSelected,
+                  ),
       );
     }
     return googleUser == null
         ? Padding(
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-            child: SettingsContainer(
-              isOutlined: true,
-              onTap: () async {
-                login();
-              },
-              title: "login".tr(),
-              icon: MoreIcons.google,
-            ),
+            child: getPlatform() == PlatformOS.isIOS
+                ? SettingsContainer(
+                    isOutlined: true,
+                    onTap: () async {
+                      login();
+                    },
+                    title: "backup".tr(),
+                    icon: MoreIcons.google_drive,
+                    iconScale: 0.87,
+                  )
+                : SettingsContainer(
+                    isOutlined: true,
+                    onTap: () async {
+                      login();
+                    },
+                    title: "login".tr(),
+                    icon: MoreIcons.google,
+                  ),
           )
-        : SettingsContainerOpenPage(
-            openPage: AccountsPage(),
-            title: googleUser!.displayName ?? "",
-            icon: Icons.person_rounded,
-            isOutlined: true,
-          );
+        : getPlatform() == PlatformOS.isIOS
+            ? SettingsContainerOpenPage(
+                openPage: AccountsPage(),
+                title: "backup".tr(),
+                icon: MoreIcons.google_drive,
+                isOutlined: true,
+                iconScale: 0.87,
+              )
+            : SettingsContainerOpenPage(
+                openPage: AccountsPage(),
+                title: googleUser!.displayName ?? "",
+                icon: Icons.person_rounded,
+                isOutlined: true,
+              );
   }
 }
 
@@ -707,7 +747,9 @@ class _BackupManagementState extends State<BackupManagement> {
       subtitle: widget.isClientSync
           ? "manage-syncing-info".tr()
           : widget.isManaging
-              ? null
+              ? appStateSettings["backupLimit"].toString() +
+                  " " +
+                  "stored-backups".tr()
               : "overwrite-warning".tr(),
       child: Column(
         children: [
@@ -830,7 +872,9 @@ class _BackupManagementState extends State<BackupManagement> {
                   ),
                 )
               : SizedBox.shrink(),
-          widget.isManaging && widget.isClientSync == false
+          widget.isManaging &&
+                  widget.isClientSync == false &&
+                  appStateSettings["showBackupLimit"]
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: SettingsContainerDropdown(

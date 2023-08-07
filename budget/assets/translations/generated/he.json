@@ -401,5 +401,8 @@
   "edit-spending-goals": "ערוך יעדי הוצאות",
   "spending-goals": "יעדי הוצאות",
   "added-budget-description": "תקציב זה יכלול רק עסקאות שנוספו לו.",
-  "history": "הִיסטוֹרִיָה"
+  "history": "הִיסטוֹרִיָה",
+  "backup": "גיבוי",
+  "google-drive-backup": "גיבוי של Google Drive",
+  "google-drive-backup-description": "כל הגיבויים נוצרים בכונן Google האישי שלך ואינם נגישים למפתח. קרא את מדיניות הפרטיות לקבלת פרטים נוספים."
 }

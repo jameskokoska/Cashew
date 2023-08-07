@@ -401,5 +401,8 @@
   "edit-spending-goals": "Editați obiectivele de cheltuieli",
   "spending-goals": "Cheltuirea obiectivelor",
   "added-budget-description": "Acest buget va include doar tranzacții care i -au fost adăugate.",
-  "history": "Istorie"
+  "history": "Istorie",
+  "backup": "Backup",
+  "google-drive-backup": "Backup Google Drive",
+  "google-drive-backup-description": "Toate backup -urile sunt create pe unitatea dvs. personală Google și nu este accesibilă dezvoltatorului. Citiți Politica de confidențialitate pentru mai multe detalii."
 }

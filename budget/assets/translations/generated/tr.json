@@ -401,5 +401,8 @@
   "edit-spending-goals": "Harcama Hedefleri Düzenle",
   "spending-goals": "Hedef harcama",
   "added-budget-description": "Bu bütçe yalnızca kendisine eklenen işlemleri içerecektir.",
-  "history": "Tarih"
+  "history": "Tarih",
+  "backup": "Destek olmak",
+  "google-drive-backup": "Google Drive Yedekleme",
+  "google-drive-backup-description": "Tüm yedeklemeler kişisel Google Drive'ınızda oluşturulur ve geliştirici için erişilemez. Daha fazla ayrıntı için Gizlilik Politikasını okuyun."
 }

@@ -401,5 +401,8 @@
   "edit-spending-goals": "Upravit výdajové cíle",
   "spending-goals": "Utrácet cíle",
   "added-budget-description": "Tento rozpočet bude zahrnovat pouze transakce, které byly přidány.",
-  "history": "Dějiny"
+  "history": "Dějiny",
+  "backup": "Záloha",
+  "google-drive-backup": "Zálohování Disku Google",
+  "google-drive-backup-description": "Všechny zálohy jsou vytvořeny na vašem osobním disku Google a nejsou přístupné vývojáři. Další podrobnosti si přečtěte zásady ochrany osobních údajů."
 }

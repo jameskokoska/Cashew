@@ -401,5 +401,8 @@
   "edit-spending-goals": "Edite objetivos de gastos",
   "spending-goals": "Objetivos de gastar",
   "added-budget-description": "Esse orçamento incluirá apenas transações que foram adicionadas a ele.",
-  "history": "História"
+  "history": "História",
+  "backup": "Cópia de segurança",
+  "google-drive-backup": "Backup do Google Drive",
+  "google-drive-backup-description": "Todos os backups são criados no seu Google Drive pessoal e não são acessíveis ao desenvolvedor. Leia a Política de Privacidade para obter mais detalhes."
 }

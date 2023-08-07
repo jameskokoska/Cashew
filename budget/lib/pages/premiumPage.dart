@@ -12,6 +12,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 
 class PremiumPage extends StatelessWidget {
   const PremiumPage({super.key});
@@ -450,92 +451,102 @@ class PremiumBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double borderRadius = 15;
     return Container(
       decoration: BoxDecoration(
           boxShadow: boxShadowSharp(context),
-          borderRadius: BorderRadius.circular(15)),
+          borderRadius: BorderRadius.circular(borderRadius)),
       margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 0),
-      child: Tappable(
-        color: Colors.transparent,
-        borderRadius: 15,
-        onTap: () {
-          if (kIsWeb)
-            openUrl("https://ko-fi.com/dapperappdeveloper");
-          else
-            pushRoute(context, PremiumPage());
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: IntrinsicHeight(
-            child: Stack(
-              children: [
-                Opacity(
-                  opacity: Theme.of(context).brightness == Brightness.light
-                      ? 0.7
-                      : 0.9,
-                  child: PremiumBackground(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 25, right: 17, top: 17, bottom: 17),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      child: OpenContainerNavigation(
+        borderRadius: borderRadius,
+        openPage: PremiumPage(),
+        closedColor: Theme.of(context).colorScheme.secondary,
+        button: (openContainer) {
+          return Tappable(
+            color: Colors.transparent,
+            borderRadius: borderRadius,
+            onTap: () {
+              if (kIsWeb)
+                openUrl("https://ko-fi.com/dapperappdeveloper");
+              else
+                openContainer();
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: IntrinsicHeight(
+                child: Stack(
+                  children: [
+                    Opacity(
+                      opacity: Theme.of(context).brightness == Brightness.light
+                          ? 0.7
+                          : 0.9,
+                      child: PremiumBackground(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 25, right: 17, top: 17, bottom: 17),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  TextFont(
+                                    text: globalAppName,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 23,
+                                    textColor: Colors.black,
+                                  ),
+                                  SizedBox(width: 2),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 5),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(100),
+                                      boxShadow: boxShadowGeneral(context),
+                                    ),
+                                    child: TextFont(
+                                      text: "Pro",
+                                      textColor: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  )
+                                ],
+                              ),
                               TextFont(
-                                text: globalAppName,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23,
+                                text: "budget-like-a-pro".tr() +
+                                    " " +
+                                    globalAppName +
+                                    " " +
+                                    "Pro",
+                                fontSize: 15,
                                 textColor: Colors.black,
                               ),
-                              SizedBox(width: 2),
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 5),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(100),
-                                  boxShadow: boxShadowGeneral(context),
-                                ),
-                                child: TextFont(
-                                  text: "Pro",
-                                  textColor:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              )
                             ],
                           ),
-                          TextFont(
-                            text: "budget-like-a-pro".tr() +
-                                " " +
-                                globalAppName +
-                                " " +
-                                "Pro",
-                            fontSize: 15,
-                            textColor: Colors.black,
-                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.black,
+                            size: 20,
+                          )
                         ],
                       ),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Colors.black,
-                        size: 20,
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

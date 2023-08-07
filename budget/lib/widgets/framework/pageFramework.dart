@@ -740,6 +740,21 @@ class BlurBehindAppBar extends StatelessWidget {
   }
 }
 
+// Small blur, used behind popups on iOS
+class BlurBehind extends StatelessWidget {
+  const BlurBehind({required this.child, super.key});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (getPlatform() != PlatformOS.isIOS) return child;
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
+      child: child,
+    );
+  }
+}
+
 // customTitleBuilder: (_animationControllerShift) {
 //   return AnimatedBuilder(
 //     animation: _animationControllerShift,

@@ -401,5 +401,8 @@
   "edit-spending-goals": "支出の目標を編集します",
   "spending-goals": "支出目標",
   "added-budget-description": "この予算には、追加されたトランザクションのみが含まれます。",
-  "history": "歴史"
+  "history": "歴史",
+  "backup": "バックアップ",
+  "google-drive-backup": "Googleドライブのバックアップ",
+  "google-drive-backup-description": "すべてのバックアップは、個人のGoogleドライブで作成されており、開発者がアクセスできません。詳細については、プライバシーポリシーをお読みください。"
 }

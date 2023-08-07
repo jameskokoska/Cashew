@@ -54,7 +54,9 @@ class AccountsPageState extends State<AccountsPage> {
       horizontalPadding: getHorizontalPaddingConstrained(context),
       dragDownToDismiss: true,
       expandedHeight: 56,
-      title: "account-and-backup".tr(),
+      title: getPlatform() == PlatformOS.isIOS
+          ? "backup".tr()
+          : "account-and-backup".tr(),
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart:
           Theme.of(context).colorScheme.secondaryContainer,
@@ -95,26 +97,44 @@ class AccountsPageState extends State<AccountsPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 35),
-                      ClipOval(
-                        child: googleUser == null ||
-                                googleUser!.photoUrl == null
-                            ? profileWidget
-                            : FadeInImage.memoryNetwork(
-                                fadeInDuration: Duration(milliseconds: 100),
-                                fadeOutDuration: Duration(milliseconds: 100),
-                                placeholder: kTransparentImage,
-                                image: googleUser!.photoUrl.toString(),
-                                height: 95,
-                                width: 95,
-                                imageErrorBuilder: (BuildContext context,
-                                    Object exception, StackTrace? stackTrace) {
-                                  return profileWidget;
-                                },
+                      getPlatform() == PlatformOS.isIOS
+                          ? Container(
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                shape: BoxShape.circle,
                               ),
-                      ),
+                              child: Icon(
+                                MoreIcons.google_drive,
+                                size: 50,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            )
+                          : ClipOval(
+                              child: googleUser == null ||
+                                      googleUser!.photoUrl == null
+                                  ? profileWidget
+                                  : FadeInImage.memoryNetwork(
+                                      fadeInDuration:
+                                          Duration(milliseconds: 100),
+                                      fadeOutDuration:
+                                          Duration(milliseconds: 100),
+                                      placeholder: kTransparentImage,
+                                      image: googleUser!.photoUrl.toString(),
+                                      height: 95,
+                                      width: 95,
+                                      imageErrorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return profileWidget;
+                                      },
+                                    ),
+                            ),
                       SizedBox(height: 10),
                       TextFont(
-                        text: (googleUser?.displayName ?? "").toString(),
+                        text: getPlatform() == PlatformOS.isIOS
+                            ? "google-drive-backup".tr()
+                            : (googleUser?.displayName ?? "").toString(),
                         textAlign: TextAlign.center,
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -218,7 +238,31 @@ class AccountsPageState extends State<AccountsPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 75),
+                      getPlatform() == PlatformOS.isIOS
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 7),
+                              child: Tappable(
+                                borderRadius: 15,
+                                onTap: () {
+                                  openUrl(
+                                      "https://cashewapp.web.app/policy.html");
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 10),
+                                  child: TextFont(
+                                    text:
+                                        "google-drive-backup-description".tr(),
+                                    textAlign: TextAlign.center,
+                                    fontSize: 14,
+                                    maxLines: 10,
+                                    textColor: getColor(context, "textLight"),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : SizedBox(height: 75),
                     ],
                   ),
           ),

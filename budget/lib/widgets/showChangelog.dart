@@ -10,6 +10,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.6
+    Fixed recommended spending amount sizes
+    Backup limit shown in backup popup
+    iOS Google backups are branded as Google Drive
+    Fixed scroll to top for transactions list page
+    Backup limit option hidden
+    Premium banner uses open container animation
+    Moved translation help to about page 
     < 3.7.5
     Cashew Pro banner in settings
     Removed old implementation of associated titles lookup

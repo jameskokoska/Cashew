@@ -401,5 +401,8 @@
   "edit-spending-goals": "Edit Spending Goals",
   "spending-goals": "Spending Goals",
   "added-budget-description": "This budget will only include transactions that have been added to it.",
-  "history": "History"
+  "history": "History",
+  "backup": "Backup",
+  "google-drive-backup": "Google Drive Backup",
+  "google-drive-backup-description": "All backups are created on your personal Google Drive and is not accessible to the developer. Read the Privacy Policy for more details."
 }

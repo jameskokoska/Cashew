@@ -19,6 +19,8 @@ class MoreIcons {
       IconData(0xf200, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chart_line =
       IconData(0xf201, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData google_drive =
+      IconData(0xf3aa, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData money_bill_alt =
       IconData(0xf3d1, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData money_bill_wave =

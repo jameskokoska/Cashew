@@ -401,5 +401,8 @@
   "edit-spending-goals": "Szerkessze a kiadási célokat",
   "spending-goals": "Kiadások",
   "added-budget-description": "Ez a költségvetés csak olyan tranzakciókat foglal magában, amelyeket hozzáadtak.",
-  "history": "Történelem"
+  "history": "Történelem",
+  "backup": "biztonsági mentés",
+  "google-drive-backup": "A Google Drive biztonsági mentése",
+  "google-drive-backup-description": "Az összes biztonsági másolatot a személyes Google Drive -on készítik, és nem érhető el a fejlesztő számára. Olvassa el az adatvédelmi irányelvet további részletekért."
 }

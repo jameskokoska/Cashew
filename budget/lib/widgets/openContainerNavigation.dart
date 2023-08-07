@@ -15,7 +15,7 @@ class OpenContainerNavigation extends StatelessWidget {
   }) : super(key: key);
 
   final Widget openPage;
-  final Widget Function(VoidCallback) button;
+  final Widget Function(VoidCallback openContainer) button;
   final Color? closedColor;
   final double borderRadius;
   final double? closedElevation;

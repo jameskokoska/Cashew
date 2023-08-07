@@ -401,5 +401,8 @@
   "edit-spending-goals": "Modifier les objectifs de dépenses",
   "spending-goals": "Dépenser des objectifs",
   "added-budget-description": "Ce budget ne comprendra que des transactions qui y ont été ajoutées.",
-  "history": "Histoire"
+  "history": "Histoire",
+  "backup": "Sauvegarde",
+  "google-drive-backup": "Sauvegarde Google Drive",
+  "google-drive-backup-description": "Toutes les sauvegardes sont créées sur votre lecteur Google personnel et ne sont pas accessibles au développeur. Lisez la politique de confidentialité pour plus de détails."
 }

@@ -401,5 +401,8 @@
   "edit-spending-goals": "Rediger udgiftsmål",
   "spending-goals": "Udgifter til mål",
   "added-budget-description": "Dette budget inkluderer kun transaktioner, der er føjet til det.",
-  "history": "Historie"
+  "history": "Historie",
+  "backup": "Backup",
+  "google-drive-backup": "Google Drive Backup",
+  "google-drive-backup-description": "Alle sikkerhedskopier oprettes på dit personlige Google Drive og er ikke tilgængelig for udvikleren. Læs fortrolighedspolitikken for flere detaljer."
 }

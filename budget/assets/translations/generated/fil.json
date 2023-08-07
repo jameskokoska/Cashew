@@ -401,5 +401,8 @@
   "edit-spending-goals": "I -edit ang mga layunin sa paggastos",
   "spending-goals": "Mga layunin sa paggastos",
   "added-budget-description": "Kasama lamang sa badyet na ito ang mga transaksyon na naidagdag dito.",
-  "history": "Kasaysayan"
+  "history": "Kasaysayan",
+  "backup": "Backup",
+  "google-drive-backup": "Backup ng Google Drive",
+  "google-drive-backup-description": "Ang lahat ng mga backup ay nilikha sa iyong personal na Google Drive at hindi naa -access sa developer. Basahin ang Patakaran sa Pagkapribado para sa higit pang mga detalye."
 }

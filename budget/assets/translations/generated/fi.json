@@ -401,5 +401,8 @@
   "edit-spending-goals": "Muokkaa menotavoitteita",
   "spending-goals": "Kulutus tavoitteet",
   "added-budget-description": "Tämä budjetti sisältää vain siihen lisättyjä tapahtumia.",
-  "history": "Historia"
+  "history": "Historia",
+  "backup": "Varmuuskopioida",
+  "google-drive-backup": "Google Drive -varmuuskopio",
+  "google-drive-backup-description": "Kaikki varmuuskopiot luodaan henkilökohtaiseen Google -asemaasi, eikä kehittäjälle ole saatavana. Lue lisätietoja tietosuojakäytännöstä."
 }

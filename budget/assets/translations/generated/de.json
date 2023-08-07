@@ -202,7 +202,7 @@
   "discard": "Verwerfen",
   "changelog": "Änderungsprotokoll",
   "view-changelog": "Änderungsprotokoll",
-  "view-app-intro": "In Bord",
+  "view-app-intro": "Onboarding",
   "app-is-open-source": "{app} ist Open Source!",
   "open-source": "Open Source",
   "lead-developer": "Leitender Entwickler",
@@ -401,5 +401,8 @@
   "edit-spending-goals": "Ausgabenziele bearbeiten",
   "spending-goals": "Ziele ausgeben",
   "added-budget-description": "Dieses Budget enthält nur Transaktionen, die hinzugefügt wurden.",
-  "history": "Geschichte"
+  "history": "Geschichte",
+  "backup": "Backup",
+  "google-drive-backup": "Google Drive Backup",
+  "google-drive-backup-description": "Alle Backups werden auf Ihrem persönlichen Google -Laufwerk erstellt und sind für den Entwickler nicht zugänglich. Lesen Sie die Datenschutzrichtlinie für weitere Details."
 }

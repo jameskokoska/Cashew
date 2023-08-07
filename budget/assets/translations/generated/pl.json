@@ -401,5 +401,8 @@
   "edit-spending-goals": "Edytuj cele wydawania",
   "spending-goals": "Wydawanie celów",
   "added-budget-description": "Budżet ten będzie obejmował tylko transakcje, które zostały do ​​niego dodane.",
-  "history": "Historia"
+  "history": "Historia",
+  "backup": "Kopia zapasowa",
+  "google-drive-backup": "Kopia zapasowa Dysku Google",
+  "google-drive-backup-description": "Wszystkie kopie zapasowe są tworzone na Twoim osobistym dysku Google i nie są dostępne dla programisty. Przeczytaj Politykę prywatności, aby uzyskać więcej informacji."
 }

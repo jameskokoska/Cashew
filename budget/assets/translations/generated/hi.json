@@ -401,5 +401,8 @@
   "edit-spending-goals": "खर्च करने के लक्ष्यों को संपादित करें",
   "spending-goals": "लक्ष्य खर्च",
   "added-budget-description": "इस बजट में केवल लेनदेन शामिल होंगे जो इसमें जोड़े गए हैं।",
-  "history": "इतिहास"
+  "history": "इतिहास",
+  "backup": "बैकअप",
+  "google-drive-backup": "Google ड्राइव बैकअप",
+  "google-drive-backup-description": "सभी बैकअप आपके व्यक्तिगत Google ड्राइव पर बनाए गए हैं और डेवलपर के लिए सुलभ नहीं हैं। अधिक जानकारी के लिए गोपनीयता नीति पढ़ें।"
 }

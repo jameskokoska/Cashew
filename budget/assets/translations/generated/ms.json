@@ -401,5 +401,8 @@
   "edit-spending-goals": "Edit matlamat perbelanjaan",
   "spending-goals": "Matlamat perbelanjaan",
   "added-budget-description": "Anggaran ini hanya termasuk urus niaga yang telah ditambah kepadanya.",
-  "history": "Sejarah"
+  "history": "Sejarah",
+  "backup": "Sandaran",
+  "google-drive-backup": "Sandaran Google Drive",
+  "google-drive-backup-description": "Semua sandaran dibuat pada Google Drive peribadi anda dan tidak dapat diakses oleh pemaju. Baca Dasar Privasi untuk maklumat lanjut."
 }

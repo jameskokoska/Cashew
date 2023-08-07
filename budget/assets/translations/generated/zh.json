@@ -201,7 +201,7 @@
   "discard-changes-description": "您确定要丢弃更改吗？",
   "discard": "丢弃",
   "changelog": "ChangElog",
-  "view-changelog": "ChangElog",
+  "view-changelog": "Changelog",
   "view-app-intro": "入职",
   "app-is-open-source": "{app}是开源！",
   "open-source": "开源",
@@ -401,5 +401,8 @@
   "edit-spending-goals": "编辑支出目标",
   "spending-goals": "花费目标",
   "added-budget-description": "该预算仅包括已添加的交易。",
-  "history": "历史"
+  "history": "历史",
+  "backup": "备份",
+  "google-drive-backup": "Google Drive备份",
+  "google-drive-backup-description": "所有备份都是在您的个人Google驱动器上创建的，开发人员无法访问。阅读隐私政策以获取更多详细信息。"
 }

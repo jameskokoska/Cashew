@@ -30,9 +30,15 @@ class TransactionsListPageState extends State<TransactionsListPage>
     setState(() {});
   }
 
-  void scrollToTop() {
+  void scrollToTop({int duration = 1200}) {
     _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 1200), curve: Curves.elasticOut);
+        duration: Duration(
+            milliseconds:
+                (getPlatform() == PlatformOS.isIOS ? duration * 0.2 : duration)
+                    .round()),
+        curve: getPlatform() == PlatformOS.isIOS
+            ? Curves.easeInOut
+            : Curves.elasticOut);
   }
 
   @override

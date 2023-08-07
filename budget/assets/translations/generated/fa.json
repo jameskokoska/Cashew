@@ -401,5 +401,8 @@
   "edit-spending-goals": "اهداف خرج را ویرایش کنید",
   "spending-goals": "خرج کردن اهداف",
   "added-budget-description": "این بودجه فقط شامل معاملات است که به آن اضافه شده است.",
-  "history": "تاریخ"
+  "history": "تاریخ",
+  "backup": "پشتیبان گیری",
+  "google-drive-backup": "پشتیبان گیری از Google Drive",
+  "google-drive-backup-description": "همه نسخه های پشتیبان در درایو Google شخصی شما ایجاد شده و در دسترس توسعه دهنده نیست. برای اطلاعات بیشتر خط مشی رازداری را بخوانید."
 }

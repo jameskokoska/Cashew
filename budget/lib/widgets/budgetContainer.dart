@@ -430,51 +430,55 @@ class DaySpending extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
         budgetRange.start.difference(DateTime.now()).inDays > 0;
+    Widget textWidget = Padding(
+      padding: EdgeInsets.symmetric(horizontal: large ? 10 : 15),
+      child: large && isOutOfRange
+          ? SizedBox(height: 1)
+          : TextFont(
+              textColor: getColor(context, "black").withAlpha(80),
+              text: isOutOfRange
+                  ? ""
+                  : amount < 0
+                      ? "saving-tracking".tr() +
+                          " " +
+                          convertToMoney(
+                              Provider.of<AllWallets>(context), amount.abs()) +
+                          " " +
+                          "for".tr() +
+                          " " +
+                          budgetRange.end
+                              .difference(DateTime.now())
+                              .inDays
+                              .toString() +
+                          " " +
+                          "more-days".tr()
+                      : "spending-tracking".tr() +
+                          " " +
+                          convertToMoney(
+                              Provider.of<AllWallets>(context), amount.abs()) +
+                          " " +
+                          "for".tr() +
+                          " " +
+                          budgetRange.end
+                              .difference(DateTime.now())
+                              .inDays
+                              .toString() +
+                          " " +
+                          "more-days".tr(),
+              fontSize: large ? 14 : 13,
+              textAlign: TextAlign.center,
+              maxLines: 4,
+            ),
+    );
     return Padding(
       padding: large && isOutOfRange ? EdgeInsets.zero : padding,
       child: Center(
-        child: FittedBox(
-          fit: BoxFit.fitWidth,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: large && isOutOfRange
-                ? SizedBox(height: 1)
-                : TextFont(
-                    textColor: getColor(context, "black").withAlpha(80),
-                    text: isOutOfRange
-                        ? ""
-                        : amount < 0
-                            ? "saving-tracking".tr() +
-                                " " +
-                                convertToMoney(Provider.of<AllWallets>(context),
-                                    amount.abs()) +
-                                " " +
-                                "for".tr() +
-                                " " +
-                                budgetRange.end
-                                    .difference(DateTime.now())
-                                    .inDays
-                                    .toString() +
-                                " " +
-                                "more-days".tr()
-                            : "spending-tracking".tr() +
-                                " " +
-                                convertToMoney(Provider.of<AllWallets>(context),
-                                    amount.abs()) +
-                                " " +
-                                "for".tr() +
-                                " " +
-                                budgetRange.end
-                                    .difference(DateTime.now())
-                                    .inDays
-                                    .toString() +
-                                " " +
-                                "more-days".tr(),
-                    fontSize: large ? 15 : 13,
-                    textAlign: TextAlign.center,
-                  ),
-          ),
-        ),
+        child: large
+            ? textWidget
+            : FittedBox(
+                fit: BoxFit.fitWidth,
+                child: textWidget,
+              ),
       ),
     );
   }

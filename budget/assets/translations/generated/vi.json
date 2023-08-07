@@ -401,5 +401,8 @@
   "edit-spending-goals": "Chỉnh sửa mục tiêu chi tiêu",
   "spending-goals": "Mục tiêu chi tiêu",
   "added-budget-description": "Ngân sách này sẽ chỉ bao gồm các giao dịch đã được thêm vào nó.",
-  "history": "Lịch sử"
+  "history": "Lịch sử",
+  "backup": "Hỗ trợ",
+  "google-drive-backup": "Google Drive Sao lưu",
+  "google-drive-backup-description": "Tất cả các bản sao lưu được tạo trên Google Drive cá nhân của bạn và không thể truy cập được cho nhà phát triển. Đọc chính sách bảo mật để biết thêm chi tiết."
 }

@@ -401,5 +401,8 @@
   "edit-spending-goals": "Edit tujuan pengeluaran",
   "spending-goals": "Menghabiskan tujuan",
   "added-budget-description": "Anggaran ini hanya akan mencakup transaksi yang telah ditambahkan ke dalamnya.",
-  "history": "Sejarah"
+  "history": "Sejarah",
+  "backup": "Cadangan",
+  "google-drive-backup": "Pencadangan Google Drive",
+  "google-drive-backup-description": "Semua cadangan dibuat di Google Drive pribadi Anda dan tidak dapat diakses oleh pengembang. Baca Kebijakan Privasi untuk lebih jelasnya."
 }

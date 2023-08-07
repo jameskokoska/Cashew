@@ -401,5 +401,8 @@
   "edit-spending-goals": "Bestedendoelen bewerken",
   "spending-goals": "Doelen besteden",
   "added-budget-description": "Dit budget bevat alleen transacties die eraan zijn toegevoegd.",
-  "history": "Geschiedenis"
+  "history": "Geschiedenis",
+  "backup": "Back -up",
+  "google-drive-backup": "Google Drive back -up",
+  "google-drive-backup-description": "Alle back -ups worden gemaakt op uw persoonlijke Google Drive en zijn niet toegankelijk voor de ontwikkelaar. Lees het privacybeleid voor meer informatie."
 }
