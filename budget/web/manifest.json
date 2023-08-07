@@ -1,11 +1,11 @@
 {
-    "name": "budget",
-    "short_name": "budget",
+    "name": "Cashew",
+    "short_name": "Cashew",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#5f85c2",
-    "description": "A new Flutter project.",
+    "description": "A budget and financial tracking application designed for you",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
