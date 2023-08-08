@@ -172,6 +172,15 @@ class DebugPage extends StatelessWidget {
           icon: Icons.apple_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Disable blur",
+          onSwitched: (value) {
+            updateSettings("disableBlur", value,
+                pagesNeedingRefresh: [0], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["disableBlur"],
+          icon: Icons.blur_off_rounded,
+        ),
+        SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("legacyTransactionAmountColors", value,
                 updateGlobalState: true);

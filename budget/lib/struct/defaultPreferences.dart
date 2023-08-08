@@ -99,5 +99,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showBackupLimit": false,
     "premiumPopupAddTransactionCount": -5,
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
+    "disableBlur": false,
   };
 }

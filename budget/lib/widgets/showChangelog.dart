@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.7.7
+    Added disable blur option
     Fixed iOS onboarding page
     Changelog can always be opened when forced
     < 3.7.6
