@@ -1931,7 +1931,8 @@ class _SelectTitleState extends State<SelectTitle> {
                             ),
                           ),
                         )
-                      : SizedBox.shrink()
+                      : SizedBox.shrink(),
+                  SizedBox(height: 10),
                 ],
               ),
             ],

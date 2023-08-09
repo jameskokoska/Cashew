@@ -801,20 +801,22 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                             : 0.5,
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: widget
-                                    .budgetColorScheme.secondaryContainer
-                                    .withOpacity(0.5),
-                                width: index == 0 ? 2 : 0,
-                              ),
-                              bottom: BorderSide(
-                                color: widget
-                                    .budgetColorScheme.secondaryContainer
-                                    .withOpacity(0.5),
-                                width: 2,
-                              ),
-                            ),
+                            border: getPlatform() == PlatformOS.isIOS
+                                ? Border(
+                                    top: BorderSide(
+                                      color: widget
+                                          .budgetColorScheme.secondaryContainer
+                                          .withOpacity(0.5),
+                                      width: index == 0 ? 2 : 0,
+                                    ),
+                                    bottom: BorderSide(
+                                      color: widget
+                                          .budgetColorScheme.secondaryContainer
+                                          .withOpacity(0.5),
+                                      width: touchedBudgetIndex == null ? 2 : 0,
+                                    ),
+                                  )
+                                : null,
                             boxShadow: getPlatform() == PlatformOS.isIOS ||
                                     appStateSettings["materialYou"]
                                 ? []
