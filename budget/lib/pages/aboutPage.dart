@@ -49,10 +49,11 @@ class AboutPage extends StatelessWidget {
                   Tappable(
                     borderRadius: 15,
                     onLongPress: () {
-                      pushRoute(
-                        context,
-                        DebugPage(),
-                      );
+                      if (allowDebugFlags)
+                        pushRoute(
+                          context,
+                          DebugPage(),
+                        );
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

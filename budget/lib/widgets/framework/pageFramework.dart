@@ -26,7 +26,7 @@ class PageFramework extends StatefulWidget {
     this.backButton = true,
     this.subtitle = null,
     this.subtitleSize = null,
-    this.subtitleAnimationSpeed = 5,
+    this.subtitleAnimationSpeed,
     this.onBottomReached,
     this.pinned = true,
     this.subtitleAlignment = Alignment.bottomCenter,
@@ -61,7 +61,7 @@ class PageFramework extends StatefulWidget {
   final Color? appBarBackgroundColorStart;
   final Widget? subtitle;
   final double? subtitleSize;
-  final double subtitleAnimationSpeed;
+  final double? subtitleAnimationSpeed;
   final VoidCallback? onBottomReached;
   final bool pinned;
   final Alignment subtitleAlignment;
@@ -407,10 +407,6 @@ class PageFrameworkState extends State<PageFramework>
                   ),
           ],
         ),
-        //       );
-        //     },
-        //   ),
-        // ),
       );
     }
 
@@ -486,6 +482,13 @@ class PageFrameworkState extends State<PageFramework>
       child: child,
     );
 
+    child = MediaQuery.removePadding(
+      context: context,
+      removeLeft: true,
+      removeRight: true,
+      child: child,
+    );
+
     if (widget.sharedBudgetRefresh == true) {
       return SharedBudgetRefresh(
         child: child,
@@ -507,7 +510,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.backButton = true,
     this.subtitle = null,
     this.subtitleSize = null,
-    this.subtitleAnimationSpeed = 5,
+    this.subtitleAnimationSpeed,
     this.onBottomReached,
     this.pinned = true,
     this.subtitleAlignment = Alignment.bottomCenter,
@@ -529,7 +532,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final Color? appBarBackgroundColorStart;
   final Widget? subtitle;
   final double? subtitleSize;
-  final double subtitleAnimationSpeed;
+  final double? subtitleAnimationSpeed;
   final VoidCallback? onBottomReached;
   final bool pinned;
   final Alignment subtitleAlignment;
@@ -554,7 +557,13 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     if (appBarBGColorCalculated != null &&
         safeToIgnoreBG &&
         getPlatform() == PlatformOS.isIOS) {
-      appBarBGColorCalculated = Theme.of(context).canvasColor;
+      if (appStateSettings["disableBlur"] == false) {
+        appBarBGColorCalculated = Theme.of(context).canvasColor;
+      } else {
+        appBarBGColorCalculated = dynamicPastel(
+            context, Theme.of(context).colorScheme.secondaryContainer,
+            amount: appStateSettings["materialYou"] ? 0.4 : 0.55);
+      }
     }
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && backButton;
@@ -569,7 +578,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 ? Brightness.dark
                 : Brightness.light,
       ),
-      shadowColor: safeToIgnoreBG && getPlatform() == PlatformOS.isIOS
+      shadowColor: safeToIgnoreBG &&
+              getPlatform() == PlatformOS.isIOS &&
+              appStateSettings["disableBlur"] == false
           ? Colors.transparent
           : Theme.of(context).shadowColor.withAlpha(130),
       leading: backButtonEnabled == true && animationControllerOpacity != null
@@ -686,12 +697,18 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     ? AnimatedBuilder(
                         animation: animationControllerShift!,
                         builder: (_, child) {
+                          double expandedHeightHeaderPercent =
+                              getExpandedHeaderHeight(context, expandedHeight);
+                          expandedHeightHeaderPercent =
+                              (expandedHeightHeaderPercent - 100) / 100;
+                          // print(expandedHeightHeaderPercent * 150 + 50);
                           return Transform.translate(
                             offset: Offset(
                               0,
-                              -(subtitleSize ?? 0) *
-                                  (animationControllerShift!.value) *
-                                  subtitleAnimationSpeed,
+                              -(animationControllerShift!.value) *
+                                  (subtitleAnimationSpeed ?? 100) *
+                                  (expandedHeightHeaderPercent * 150 + 50) /
+                                  200,
                             ),
                             child: child,
                           );
@@ -748,11 +765,12 @@ class BlurBehind extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (getPlatform() != PlatformOS.isIOS || appStateSettings["disableBlur"])
-      return child;
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
-      child: child,
+    if (getPlatform() != PlatformOS.isIOS) return child;
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
+        child: child,
+      ),
     );
   }
 }

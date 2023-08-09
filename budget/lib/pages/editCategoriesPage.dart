@@ -386,11 +386,11 @@ void deleteCategoryPopup(context, TransactionCategory category,
         );
         if (afterDelete != null) afterDelete();
       },
-      onExtra: () {
+      onExtra2: () {
         Navigator.pop(context);
         mergeCategoryPopup(context, category);
       },
-      onExtraLabel: "Merge",
+      onExtraLabel2: "merge-category".tr(),
       onSubmitLabel: "delete".tr(),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -346,8 +348,6 @@ class LockedFeature extends StatelessWidget {
   }
 }
 
-bool premiumPopupEnabled = true && !kIsWeb;
-
 Future premiumPopupPushRoute(BuildContext context) async {
   if (premiumPopupEnabled) {
     return pushRoute(context, PremiumPage());
@@ -384,11 +384,12 @@ Future premiumPopupAddTransaction(BuildContext context) async {
 }
 
 class PremiumBackground extends StatelessWidget {
-  const PremiumBackground({super.key});
+  const PremiumBackground({this.disableAnimation = false, super.key});
+  final bool disableAnimation;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    Widget background = Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           tileMode: TileMode.mirror,
@@ -417,32 +418,46 @@ class PremiumBackground extends StatelessWidget {
                 amountDark: 0,
                 amountLight: 0.4),
           ],
-          stops: [
-            0,
-            0.3,
-            1.3,
-          ],
+          stops: disableAnimation
+              ? [0, 0.4, 2.5]
+              : [
+                  0,
+                  0.3,
+                  1.3,
+                ],
         ),
         backgroundBlendMode: BlendMode.srcOver,
       ),
-      child: PlasmaRenderer(
-        type: PlasmaType.infinity,
-        particles: 7,
-        color: Theme.of(context).brightness == Brightness.light
-            ? Color(0x28B4B4B4)
-            : Color(0x44B6B6B6),
-        blur: 0.4,
-        size: 0.8,
-        speed: Theme.of(context).brightness == Brightness.light ? 4 : 3,
-        offset: 0,
-        blendMode: BlendMode.plus,
-        particleType: ParticleType.atlas,
-        variation1: 0,
-        variation2: 0,
-        variation3: 0,
-        rotation: 0,
-      ),
+      child: disableAnimation
+          ? Container()
+          : PlasmaRenderer(
+              type: PlasmaType.infinity,
+              particles: 7,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Color(0x28B4B4B4)
+                  : Color(0x44B6B6B6),
+              blur: 0.4,
+              size: 0.8,
+              speed: Theme.of(context).brightness == Brightness.light ? 4 : 3,
+              offset: 0,
+              blendMode: BlendMode.plus,
+              particleType: ParticleType.atlas,
+              variation1: 0,
+              variation2: 0,
+              variation3: 0,
+              rotation: 0,
+            ),
     );
+    if (disableAnimation) {
+      return BreathingWidget(
+        curve: Curves.easeIn,
+        duration: Duration(milliseconds: 1000),
+        endScale: 1.7,
+        child: background,
+      );
+    } else {
+      return background;
+    }
   }
 }
 
@@ -460,7 +475,9 @@ class PremiumBanner extends StatelessWidget {
       child: OpenContainerNavigation(
         borderRadius: borderRadius,
         openPage: PremiumPage(),
-        closedColor: Theme.of(context).colorScheme.secondary,
+        closedColor: Theme.of(context).brightness == Brightness.light
+            ? Theme.of(context).colorScheme.secondaryContainer
+            : Theme.of(context).colorScheme.secondary,
         button: (openContainer) {
           return Tappable(
             color: Colors.transparent,
@@ -480,7 +497,10 @@ class PremiumBanner extends StatelessWidget {
                       opacity: Theme.of(context).brightness == Brightness.light
                           ? 0.7
                           : 0.9,
-                      child: PremiumBackground(),
+                      child: PremiumBackground(
+                        disableAnimation:
+                            getPlatform() == PlatformOS.isIOS || kIsWeb,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -488,50 +508,62 @@ class PremiumBanner extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  TextFont(
-                                    text: globalAppName,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 23,
-                                    textColor: Colors.black,
-                                  ),
-                                  SizedBox(width: 2),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 5),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(100),
-                                      boxShadow: boxShadowGeneral(context),
-                                    ),
-                                    child: TextFont(
-                                      text: "Pro",
-                                      textColor: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    TextFont(
+                                      text: globalAppName,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      fontSize: 23,
+                                      textColor: Colors.black,
                                     ),
-                                  )
-                                ],
-                              ),
-                              TextFont(
-                                text: "budget-like-a-pro".tr() +
-                                    " " +
-                                    globalAppName +
-                                    " " +
-                                    "Pro",
-                                fontSize: 15,
-                                textColor: Colors.black,
-                              ),
-                            ],
+                                    SizedBox(width: 2),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 5),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        boxShadow: boxShadowGeneral(context),
+                                      ),
+                                      child: TextFont(
+                                        text: "Pro",
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Flexible(
+                                      child: TextFont(
+                                        text: "budget-like-a-pro".tr() +
+                                            " " +
+                                            globalAppName +
+                                            " " +
+                                            "Pro",
+                                        fontSize: 15,
+                                        maxLines: 3,
+                                        textColor: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           Icon(
                             Icons.arrow_forward_ios_rounded,

@@ -181,7 +181,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             ),
             subtitleAlignment: Alignment.bottomLeft,
             subtitleSize: 10,
-            subtitleAnimationSpeed: 10,
             backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(

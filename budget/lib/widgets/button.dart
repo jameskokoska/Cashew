@@ -22,7 +22,7 @@ class Button extends StatefulWidget {
     this.expandToFillBottomExtraSafeArea = false,
     this.icon,
     this.iconColor,
-    this.borderRadius = 20,
+    this.borderRadius,
     this.changeScale = true,
     this.expandedLayout = false,
     this.disabled = false,
@@ -39,7 +39,7 @@ class Button extends StatefulWidget {
   final bool expandToFillBottomExtraSafeArea;
   final IconData? icon;
   final Color? iconColor;
-  final double borderRadius;
+  final double? borderRadius;
   final bool changeScale;
   final bool expandedLayout;
   final bool disabled;
@@ -116,7 +116,9 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
             if (widget.disabled == false) widget.onTap();
           },
           borderRadius:
-              getPlatform() == PlatformOS.isIOS ? 10 : widget.borderRadius,
+              getPlatform() == PlatformOS.isIOS && widget.borderRadius == null
+                  ? 10
+                  : widget.borderRadius ?? 20,
           child: Padding(
             padding: EdgeInsets.only(
               bottom: widget.expandToFillBottomExtraSafeArea

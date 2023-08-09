@@ -293,7 +293,6 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         ),
       ],
       subtitleSize: 10,
-      subtitleAnimationSpeed: 9.8,
       subtitleAlignment: Alignment.bottomLeft,
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
       textColor: getColor(context, "black"),
@@ -708,18 +707,22 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 200),
                         decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              color: widget.budgetColorScheme.secondaryContainer
-                                  .withOpacity(0.5),
-                              width: index == 0 ? 2 : 0,
-                            ),
-                            bottom: BorderSide(
-                              color: widget.budgetColorScheme.secondaryContainer
-                                  .withOpacity(0.5),
-                              width: touchedBudgetIndex == null ? 2 : 0,
-                            ),
-                          ),
+                          border: getPlatform() == PlatformOS.isIOS
+                              ? Border(
+                                  top: BorderSide(
+                                    color: widget
+                                        .budgetColorScheme.secondaryContainer
+                                        .withOpacity(0.5),
+                                    width: index == 0 ? 2 : 0,
+                                  ),
+                                  bottom: BorderSide(
+                                    color: widget
+                                        .budgetColorScheme.secondaryContainer
+                                        .withOpacity(0.5),
+                                    width: touchedBudgetIndex == null ? 2 : 0,
+                                  ),
+                                )
+                              : null,
                           boxShadow: getPlatform() == PlatformOS.isIOS ||
                                   appStateSettings["materialYou"]
                               ? []

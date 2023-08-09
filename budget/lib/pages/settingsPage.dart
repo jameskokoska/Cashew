@@ -39,7 +39,10 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 //Generate new OAuth and put JSON in budget\android\app folder
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key, this.hasMorePages = true}) : super(key: key);
+  const SettingsPage({
+    Key? key,
+    this.hasMorePages = true,
+  }) : super(key: key);
   final bool hasMorePages;
 
   @override

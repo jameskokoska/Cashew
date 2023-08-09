@@ -496,7 +496,9 @@ class AnimatedGooBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appStateSettings["batterySaver"] || kIsWeb) {
+    if (appStateSettings["batterySaver"] ||
+        kIsWeb ||
+        getPlatform() == PlatformOS.isIOS) {
       return Container(
         decoration: BoxDecoration(
           color:

@@ -220,6 +220,8 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                             ),
                             SyncButton(),
                             SizedBox(height: 10),
+                            SizedBox(
+                                height: MediaQuery.of(context).padding.bottom),
                           ],
                         ),
                       ],
@@ -240,40 +242,43 @@ class SidebarClock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TimerBuilder.periodic(
-      Duration(seconds: 5),
-      builder: (context) {
-        DateTime now = DateTime.now();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFont(
-              textColor: getColor(context, "black"),
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-              text: DateFormat.jm(context.locale.toString())
-                  .format(now)
-                  .replaceAll("AM", "")
-                  .replaceAll("PM", "")
-                  .replaceAll(" ", ""),
-            ),
-            TextFont(
-              textColor: getColor(context, "black").withOpacity(0.5),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              text: DateFormat('EEEE', context.locale.toString()).format(now),
-            ),
-            SizedBox(height: 5),
-            TextFont(
-              textColor: getColor(context, "black").withOpacity(0.5),
-              fontSize: 18,
-              text: DateFormat('MMMM d, y', context.locale.toString())
-                  .format(now),
-            ),
-          ],
-        );
-      },
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: TimerBuilder.periodic(
+        Duration(seconds: 5),
+        builder: (context) {
+          DateTime now = DateTime.now();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFont(
+                textColor: getColor(context, "black"),
+                fontSize: 48,
+                fontWeight: FontWeight.bold,
+                text: DateFormat.jm(context.locale.toString())
+                    .format(now)
+                    .replaceAll("AM", "")
+                    .replaceAll("PM", "")
+                    .replaceAll(" ", ""),
+              ),
+              TextFont(
+                textColor: getColor(context, "black").withOpacity(0.5),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                text: DateFormat('EEEE', context.locale.toString()).format(now),
+              ),
+              SizedBox(height: 5),
+              TextFont(
+                textColor: getColor(context, "black").withOpacity(0.5),
+                fontSize: 18,
+                text: DateFormat('MMMM d, y', context.locale.toString())
+                    .format(now),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

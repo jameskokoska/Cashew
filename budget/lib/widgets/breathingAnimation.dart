@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 
 class BreathingWidget extends StatefulWidget {
   final Widget child;
-
-  const BreathingWidget({Key? key, required this.child}) : super(key: key);
+  final Curve curve;
+  final Duration duration;
+  final double endScale;
+  const BreathingWidget({
+    Key? key,
+    required this.child,
+    this.curve = Curves.ease,
+    this.duration = const Duration(milliseconds: 3000),
+    this.endScale = 1.3,
+  }) : super(key: key);
 
   @override
   _BreathingWidgetState createState() => _BreathingWidgetState();
@@ -18,7 +26,7 @@ class _BreathingWidgetState extends State<BreathingWidget>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: widget.duration,
     )..repeat(
         reverse: true,
       );
@@ -33,10 +41,10 @@ class _BreathingWidgetState extends State<BreathingWidget>
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
-      scale: Tween(begin: 1.0, end: 1.3).animate(
-        new CurvedAnimation(
+      scale: Tween(begin: 1.0, end: widget.endScale).animate(
+        CurvedAnimation(
           parent: _animationController,
-          curve: Curves.ease,
+          curve: widget.curve,
         ),
       ),
       child: widget.child,

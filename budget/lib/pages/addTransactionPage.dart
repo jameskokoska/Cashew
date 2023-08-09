@@ -505,21 +505,22 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       Future.delayed(Duration(milliseconds: 0), () async {
         await premiumPopupAddTransaction(context);
         openBottomSheet(
-            context,
-            appStateSettings["askForTransactionTitle"]
-                ? SelectTitle(
-                    selectedTitle: selectedTitle,
-                    setSelectedNote: setSelectedNoteController,
-                    setSelectedTitle: setSelectedTitleController,
-                    setSelectedTags: setSelectedTags,
-                    selectedCategory: selectedCategory,
-                    setSelectedCategory: setSelectedCategory,
-                    next: () {
-                      openBottomSheet(context, afterSetTitle());
-                    },
-                  )
-                : afterSetTitle(),
-            snap: appStateSettings["askForTransactionTitle"] != true);
+          context,
+          appStateSettings["askForTransactionTitle"]
+              ? SelectTitle(
+                  selectedTitle: selectedTitle,
+                  setSelectedNote: setSelectedNoteController,
+                  setSelectedTitle: setSelectedTitleController,
+                  setSelectedTags: setSelectedTags,
+                  selectedCategory: selectedCategory,
+                  setSelectedCategory: setSelectedCategory,
+                  next: () {
+                    openBottomSheet(context, afterSetTitle());
+                  },
+                )
+              : afterSetTitle(),
+          snap: appStateSettings["askForTransactionTitle"] != true,
+        );
       });
     }
     Future.delayed(Duration.zero, () async {
@@ -808,50 +809,46 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             padding: false,
                             title: "enter-amount".tr(),
                             underTitleSpace: false,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: SelectAmount(
-                                enableWalletPicker: true,
-                                selectedWallet: selectedWallet,
-                                setSelectedWallet: setSelectedWalletPk,
-                                padding: EdgeInsets.symmetric(horizontal: 18),
-                                walletPkForCurrency: selectedWalletPk,
-                                // onlyShowCurrencyIcon:
-                                //     appStateSettings[
-                                //             "selectedWallet"] ==
-                                //         selectedWalletPk,
-                                onlyShowCurrencyIcon: true,
-                                amountPassed:
-                                    (selectedAmount ?? "0").toString(),
-                                setSelectedAmount: setSelectedAmount,
-                                next: () async {
-                                  if (selectedCategory == null) {
-                                    Navigator.pop(context);
-                                    openBottomSheet(
-                                      context,
-                                      PopupFramework(
-                                        title: "select-category".tr(),
-                                        child: SelectCategory(
-                                          selectedCategory: selectedCategory,
-                                          setSelectedCategory:
-                                              setSelectedCategory,
-                                          next: () async {
-                                            // await addTransaction();
-                                            // Navigator.pop(context);
-                                          },
-                                        ),
+                            child: SelectAmount(
+                              enableWalletPicker: true,
+                              selectedWallet: selectedWallet,
+                              setSelectedWallet: setSelectedWalletPk,
+                              padding: EdgeInsets.symmetric(horizontal: 18),
+                              walletPkForCurrency: selectedWalletPk,
+                              // onlyShowCurrencyIcon:
+                              //     appStateSettings[
+                              //             "selectedWallet"] ==
+                              //         selectedWalletPk,
+                              onlyShowCurrencyIcon: true,
+                              amountPassed: (selectedAmount ?? "0").toString(),
+                              setSelectedAmount: setSelectedAmount,
+                              next: () async {
+                                if (selectedCategory == null) {
+                                  Navigator.pop(context);
+                                  openBottomSheet(
+                                    context,
+                                    PopupFramework(
+                                      title: "select-category".tr(),
+                                      child: SelectCategory(
+                                        selectedCategory: selectedCategory,
+                                        setSelectedCategory:
+                                            setSelectedCategory,
+                                        next: () async {
+                                          // await addTransaction();
+                                          // Navigator.pop(context);
+                                        },
                                       ),
-                                    );
-                                  } else {
-                                    await addTransaction();
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                nextLabel: selectedCategory == null
-                                    ? "select-category".tr()
-                                    : textAddTransaction,
-                              ),
+                                    ),
+                                  );
+                                } else {
+                                  await addTransaction();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              nextLabel: selectedCategory == null
+                                  ? "select-category".tr()
+                                  : textAddTransaction,
                             ),
                           ),
                         );
@@ -952,32 +949,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             : Container(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22),
-          child: Tappable(
-            color: (appStateSettings["materialYou"]
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : getColor(context, "canvasContainer")),
-            onTap: () {
-              openBottomSheet(
-                context,
-                SelectTitle(
-                  setSelectedTitle: setSelectedTitle,
-                  setSelectedNote: setSelectedNoteController,
-                  setSelectedCategory: setSelectedCategory,
-                  setSelectedTags: setSelectedTags,
-                  selectedTitle: selectedTitle,
-                ),
-              );
+          child: TextInput(
+            padding: EdgeInsets.zero,
+            labelText: "title-placeholder".tr(),
+            icon: Icons.title_rounded,
+            controller: _titleInputController,
+            onChanged: (text) async {
+              setSelectedTitle(text, setInput: false);
             },
-            borderRadius: 15,
-            child: TextInput(
-              padding: EdgeInsets.zero,
-              labelText: "title-placeholder".tr(),
-              icon: Icons.title_rounded,
-              controller: _titleInputController,
-              onChanged: (text) async {
-                setSelectedTitle(text, setInput: false);
-              },
-            ),
           ),
         ),
         Container(height: 14),
@@ -1790,6 +1769,7 @@ class _SelectTitleState extends State<SelectTitle> {
   Widget build(BuildContext context) {
     return PopupFramework(
       title: "enter-title".tr(),
+      hasBottomSafeArea: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,

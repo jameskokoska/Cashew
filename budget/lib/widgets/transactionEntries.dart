@@ -212,8 +212,8 @@ class TransactionEntries extends StatelessWidget {
                                     transactionList[realIndex].transaction,
                                 onSelected:
                                     (Transaction transaction, bool selected) {
-                                  onSelected ??
-                                      onSelected!(transaction, selected);
+                                  if (onSelected != null)
+                                    onSelected!(transaction, selected);
                                 },
                                 listID: listID,
                               ),

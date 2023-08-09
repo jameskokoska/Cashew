@@ -11,6 +11,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -29,7 +30,6 @@ class DebugPage extends StatelessWidget {
         child: TextFont(text: "Use at your own risk"),
       ),
       subtitleAlignment: Alignment.bottomLeft,
-      subtitleAnimationSpeed: 10,
       subtitleSize: 10,
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
@@ -86,6 +86,16 @@ class DebugPage extends StatelessWidget {
           },
           initialValue: appStateSettings["showPastSpendingTrajectory"],
           icon: Icons.blur_circular_rounded,
+        ),
+        SettingsContainerSwitch(
+          title: "battery-saver".tr(),
+          description: "battery-saver-description".tr(),
+          onSwitched: (value) {
+            updateSettings("batterySaver", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          initialValue: appStateSettings["batterySaver"],
+          icon: Icons.battery_charging_full_rounded,
         ),
         SettingsContainerSwitch(
           title: "Mass edit selected transactions",

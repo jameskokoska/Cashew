@@ -326,7 +326,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             return;
           }
 
-          print(event.runtimeType);
+          // print(event.runtimeType);
 
           double value = touchResponse.lineBarSpots![0].x;
           if (event.runtimeType == FlLongPressStart) {

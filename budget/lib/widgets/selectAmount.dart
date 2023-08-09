@@ -754,130 +754,129 @@ class _SelectAmountState extends State<SelectAmount> {
               SizedBox(height: 5),
               Padding(
                 padding: widget.padding,
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          children: [
-                            CalculatorButton(
-                              disabled: !canChange(),
-                              label: "1",
-                              editAmount: () {
-                                addToAmount("1");
-                              },
-                              topLeft: true,
-                            ),
-                            CalculatorButton(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Center(
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 400),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              CalculatorButton(
                                 disabled: !canChange(),
-                                label: "2",
+                                label: "1",
                                 editAmount: () {
-                                  addToAmount("2");
-                                }),
-                            CalculatorButton(
+                                  addToAmount("1");
+                                },
+                              ),
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "2",
+                                  editAmount: () {
+                                    addToAmount("2");
+                                  }),
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "3",
+                                  editAmount: () {
+                                    addToAmount("3");
+                                  }),
+                              CalculatorButton(
+                                label: "÷",
+                                editAmount: () {
+                                  addToAmount("÷");
+                                },
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "4",
+                                  editAmount: () {
+                                    addToAmount("4");
+                                  }),
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "5",
+                                  editAmount: () {
+                                    addToAmount("5");
+                                  }),
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "6",
+                                  editAmount: () {
+                                    addToAmount("6");
+                                  }),
+                              CalculatorButton(
+                                  label: "×",
+                                  editAmount: () {
+                                    addToAmount("×");
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "7",
+                                  editAmount: () {
+                                    addToAmount("7");
+                                  }),
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "8",
+                                  editAmount: () {
+                                    addToAmount("8");
+                                  }),
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "9",
+                                  editAmount: () {
+                                    addToAmount("9");
+                                  }),
+                              CalculatorButton(
+                                  label: "-",
+                                  editAmount: () {
+                                    addToAmount("-");
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              CalculatorButton(
                                 disabled: !canChange(),
-                                label: "3",
+                                label: getDecimalSeparator(),
                                 editAmount: () {
-                                  addToAmount("3");
-                                }),
-                            CalculatorButton(
-                              label: "÷",
-                              editAmount: () {
-                                addToAmount("÷");
-                              },
-                              topRight: true,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CalculatorButton(
-                                disabled: !canChange(),
-                                label: "4",
+                                  addToAmount(".");
+                                },
+                              ),
+                              CalculatorButton(
+                                  disabled: !canChange(),
+                                  label: "0",
+                                  editAmount: () {
+                                    addToAmount("0");
+                                  }),
+                              CalculatorButton(
+                                label: "<",
                                 editAmount: () {
-                                  addToAmount("4");
-                                }),
-                            CalculatorButton(
-                                disabled: !canChange(),
-                                label: "5",
+                                  removeToAmount();
+                                },
+                                onLongPress: removeAll,
+                              ),
+                              CalculatorButton(
+                                label: "+",
                                 editAmount: () {
-                                  addToAmount("5");
-                                }),
-                            CalculatorButton(
-                                disabled: !canChange(),
-                                label: "6",
-                                editAmount: () {
-                                  addToAmount("6");
-                                }),
-                            CalculatorButton(
-                                label: "×",
-                                editAmount: () {
-                                  addToAmount("×");
-                                }),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CalculatorButton(
-                                disabled: !canChange(),
-                                label: "7",
-                                editAmount: () {
-                                  addToAmount("7");
-                                }),
-                            CalculatorButton(
-                                disabled: !canChange(),
-                                label: "8",
-                                editAmount: () {
-                                  addToAmount("8");
-                                }),
-                            CalculatorButton(
-                                disabled: !canChange(),
-                                label: "9",
-                                editAmount: () {
-                                  addToAmount("9");
-                                }),
-                            CalculatorButton(
-                                label: "-",
-                                editAmount: () {
-                                  addToAmount("-");
-                                }),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CalculatorButton(
-                              disabled: !canChange(),
-                              label: getDecimalSeparator(),
-                              editAmount: () {
-                                addToAmount(".");
-                              },
-                              bottomLeft: true,
-                            ),
-                            CalculatorButton(
-                                disabled: !canChange(),
-                                label: "0",
-                                editAmount: () {
-                                  addToAmount("0");
-                                }),
-                            CalculatorButton(
-                              label: "<",
-                              editAmount: () {
-                                removeToAmount();
-                              },
-                              onLongPress: removeAll,
-                            ),
-                            CalculatorButton(
-                              label: "+",
-                              editAmount: () {
-                                addToAmount("+");
-                              },
-                              bottomRight: true,
-                            ),
-                          ],
-                        ),
-                      ],
+                                  addToAmount("+");
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -932,19 +931,11 @@ class CalculatorButton extends StatelessWidget {
     Key? key,
     required this.label,
     required this.editAmount,
-    this.topRight = false,
-    this.topLeft = false,
-    this.bottomLeft = false,
-    this.bottomRight = false,
     this.onLongPress = null,
     this.disabled = false,
   }) : super(key: key);
   final String label;
   final VoidCallback editAmount;
-  final bool topRight;
-  final bool topLeft;
-  final bool bottomLeft;
-  final bool bottomRight;
   final VoidCallback? onLongPress;
   final bool disabled;
   @override
@@ -955,41 +946,21 @@ class CalculatorButton extends StatelessWidget {
         opacity: disabled ? 0.5 : 1,
         child: IgnorePointer(
           ignoring: disabled,
-          child: Material(
+          child: Tappable(
             color: appStateSettings["materialYou"]
-                ? Theme.of(context)
-                    .colorScheme
-                    .secondaryContainer
-                    .withOpacity(0.9)
+                ? Theme.of(context).colorScheme.secondaryContainer
                 : getColor(context, "lightDarkAccentHeavy"),
-            borderRadius: BorderRadius.only(
-              topRight: topRight ? Radius.circular(15) : Radius.circular(0),
-              topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
-              bottomLeft: bottomLeft ? Radius.circular(15) : Radius.circular(0),
-              bottomRight:
-                  bottomRight ? Radius.circular(15) : Radius.circular(0),
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.only(
-                topRight: topRight ? Radius.circular(15) : Radius.circular(0),
-                topLeft: topLeft ? Radius.circular(15) : Radius.circular(0),
-                bottomLeft:
-                    bottomLeft ? Radius.circular(15) : Radius.circular(0),
-                bottomRight:
-                    bottomRight ? Radius.circular(15) : Radius.circular(0),
-              ),
-              onLongPress: onLongPress,
-              onTap: editAmount,
-              child: Container(
-                height: 60,
-                child: Center(
-                  child: label != "<"
-                      ? TextFont(
-                          fontSize: 24,
-                          text: label,
-                        )
-                      : Icon(Icons.backspace_rounded),
-                ),
+            onLongPress: onLongPress,
+            onTap: editAmount,
+            child: Container(
+              height: 60,
+              child: Center(
+                child: label != "<"
+                    ? TextFont(
+                        fontSize: 24,
+                        text: label,
+                      )
+                    : Icon(Icons.backspace_rounded),
               ),
             ),
           ),
@@ -1192,92 +1163,98 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
           ),
         ),
         Container(height: 10),
-        Row(
-          children: [
-            CalculatorButton(
-              label: "1",
-              editAmount: () {
-                addToAmount("1");
-              },
-              topLeft: true,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Center(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 400),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      CalculatorButton(
+                        label: "1",
+                        editAmount: () {
+                          addToAmount("1");
+                        },
+                      ),
+                      CalculatorButton(
+                          label: "2",
+                          editAmount: () {
+                            addToAmount("2");
+                          }),
+                      CalculatorButton(
+                          label: "3",
+                          editAmount: () {
+                            addToAmount("3");
+                          }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      CalculatorButton(
+                          label: "4",
+                          editAmount: () {
+                            addToAmount("4");
+                          }),
+                      CalculatorButton(
+                          label: "5",
+                          editAmount: () {
+                            addToAmount("5");
+                          }),
+                      CalculatorButton(
+                          label: "6",
+                          editAmount: () {
+                            addToAmount("6");
+                          }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      CalculatorButton(
+                          label: "7",
+                          editAmount: () {
+                            addToAmount("7");
+                          }),
+                      CalculatorButton(
+                          label: "8",
+                          editAmount: () {
+                            addToAmount("8");
+                          }),
+                      CalculatorButton(
+                          label: "9",
+                          editAmount: () {
+                            addToAmount("9");
+                          }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      CalculatorButton(
+                        label: getDecimalSeparator(),
+                        editAmount: () {
+                          addToAmount(".");
+                        },
+                      ),
+                      CalculatorButton(
+                          label: "0",
+                          editAmount: () {
+                            addToAmount("0");
+                          }),
+                      CalculatorButton(
+                        label: "<",
+                        editAmount: () {
+                          removeToAmount();
+                        },
+                        onLongPress: removeAll,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            CalculatorButton(
-                label: "2",
-                editAmount: () {
-                  addToAmount("2");
-                }),
-            CalculatorButton(
-              label: "3",
-              editAmount: () {
-                addToAmount("3");
-              },
-              topRight: true,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            CalculatorButton(
-                label: "4",
-                editAmount: () {
-                  addToAmount("4");
-                }),
-            CalculatorButton(
-                label: "5",
-                editAmount: () {
-                  addToAmount("5");
-                }),
-            CalculatorButton(
-                label: "6",
-                editAmount: () {
-                  addToAmount("6");
-                }),
-          ],
-        ),
-        Row(
-          children: [
-            CalculatorButton(
-                label: "7",
-                editAmount: () {
-                  addToAmount("7");
-                }),
-            CalculatorButton(
-                label: "8",
-                editAmount: () {
-                  addToAmount("8");
-                }),
-            CalculatorButton(
-                label: "9",
-                editAmount: () {
-                  addToAmount("9");
-                }),
-          ],
-        ),
-        Row(
-          children: [
-            CalculatorButton(
-              label: getDecimalSeparator(),
-              editAmount: () {
-                addToAmount(".");
-              },
-              bottomLeft: true,
-            ),
-            CalculatorButton(
-                label: "0",
-                editAmount: () {
-                  addToAmount("0");
-                }),
-            CalculatorButton(
-              label: "<",
-              editAmount: () {
-                removeToAmount();
-              },
-              onLongPress: () {
-                removeAll();
-              },
-              bottomRight: true,
-            ),
-          ],
+          ),
         ),
         Container(height: 15),
         AnimatedSwitcher(

@@ -49,7 +49,11 @@ class BottomNavBarState extends State<BottomNavBar> {
       return BlurBehindAppBar(
         child: Container(
           decoration: BoxDecoration(
-            color: getColor(context, "lightDarkAccent").withOpacity(0.6),
+            color: appStateSettings["disableBlur"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amount: appStateSettings["materialYou"] ? 0.4 : 0.55)
+                : getColor(context, "lightDarkAccent").withOpacity(0.6),
             boxShadow: boxShadowSharp(context),
           ),
           child: Column(
@@ -115,12 +119,10 @@ class BottomNavBarState extends State<BottomNavBar> {
               boxShadow: boxShadowCheck(
                 [
                   BoxShadow(
-                    color: MediaQuery.of(context).size.width >= 600
-                        ? getColor(context, "shadowColorLight").withOpacity(0.3)
-                        : Theme.of(context).brightness == Brightness.light
-                            ? getColor(context, "shadowColorLight")
-                                .withOpacity(0.35)
-                            : Colors.black.withOpacity(0.8),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? getColor(context, "shadowColorLight")
+                            .withOpacity(0.35)
+                        : Colors.black.withOpacity(0.8),
                     blurRadius: 20,
                     offset: Offset(0, 4),
                     spreadRadius: 9,

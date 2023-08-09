@@ -1,6 +1,5 @@
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/button.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 
@@ -81,26 +80,16 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
           ),
           Tappable(
             onTap: widget.disabled ? () {} : widget.onTap,
-            child: AnimatedClipRRect(
-              duration: Duration(milliseconds: 500),
-              borderRadius: isKeyboardOpen
-                  ? BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))
-                  : BorderRadius.circular(20),
-              curve: Curves.easeInOutCubic,
-              child: Padding(
-                padding: widget.margin,
-                child: Button(
-                  changeScale: !isKeyboardOpen,
-                  borderRadius: isKeyboardOpen ? 0 : 20,
-                  label: widget.label,
-                  disabled: widget.disabled,
-                  onTap: widget.onTap,
-                  hasBottomExtraSafeArea: true,
-                  expandToFillBottomExtraSafeArea: true,
-                  color: widget.color,
-                ),
+            child: Padding(
+              padding: widget.margin,
+              child: Button(
+                changeScale: !isKeyboardOpen,
+                label: widget.label,
+                disabled: widget.disabled,
+                onTap: widget.onTap,
+                hasBottomExtraSafeArea: true,
+                expandToFillBottomExtraSafeArea: false,
+                color: widget.color,
               ),
             ),
           ),

@@ -14,6 +14,7 @@ class PopupFramework extends StatelessWidget {
     this.padding = true,
     this.underTitleSpace = true,
     this.showCloseButton = false,
+    this.hasBottomSafeArea = true,
     this.icon,
   }) : super(key: key);
   final Widget child;
@@ -22,6 +23,7 @@ class PopupFramework extends StatelessWidget {
   final bool padding;
   final bool underTitleSpace;
   final bool showCloseButton;
+  final bool hasBottomSafeArea;
   final Widget? icon;
   @override
   Widget build(BuildContext context) {
@@ -131,12 +133,28 @@ class PopupFramework extends StatelessWidget {
                   : Container(height: 13),
               Padding(
                 padding: padding
-                    ? EdgeInsets.only(left: 18, right: 18, bottom: 10)
+                    ? EdgeInsets.only(left: 18, right: 18)
                     : EdgeInsets.zero,
                 child: child,
               ),
-              // Test this with iOS... appears to be inconsistent especially on older versions of Android
-              // Container(height: 10 + MediaQuery.of(context).padding.bottom),
+              hasBottomSafeArea
+                  ? Builder(builder: (context) {
+                      double initialBottomPadding = 10;
+                      double bottomSafeAreaPadding =
+                          MediaQuery.of(context).padding.bottom;
+
+                      bottomSafeAreaPadding =
+                          bottomSafeAreaPadding - initialBottomPadding;
+
+                      if (bottomSafeAreaPadding < initialBottomPadding) {
+                        bottomSafeAreaPadding = initialBottomPadding;
+                      }
+
+                      // print(MediaQuery.of(context).padding.bottom);
+                      // print(bottomSafeAreaPadding);
+                      return SizedBox(height: bottomSafeAreaPadding);
+                    })
+                  : SizedBox.shrink()
             ],
           ),
         ),

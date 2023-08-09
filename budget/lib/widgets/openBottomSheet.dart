@@ -23,6 +23,19 @@ double getWidthBottomSheet(context) {
 }
 
 double getHorizontalPaddingConstrained(context) {
+  if (MediaQuery.of(context).size.width >= 550 &&
+      MediaQuery.of(context).size.width <= 1000 &&
+      getIsFullScreen(context) == false) {
+    double returnedPadding = 0;
+    returnedPadding = MediaQuery.of(context).size.width / 3 - 140;
+    return returnedPadding < 0 ? 0 : returnedPadding;
+  } else if (MediaQuery.of(context).size.width <= 1000 &&
+      getIsFullScreen(context)) {
+    double returnedPadding = 0;
+    returnedPadding = MediaQuery.of(context).size.width / 5 - 125;
+    return returnedPadding < 0 ? 0 : returnedPadding;
+  }
+
   return (MediaQuery.of(context).size.width - getWidthBottomSheet(context)) / 3;
 }
 
@@ -49,6 +62,7 @@ Future openBottomSheet(
           : getColor(context, "lightDarkAccent"), builder: (context) {
     double deviceAspectRatio =
         MediaQuery.of(context).size.height / MediaQuery.of(context).size.width;
+
     return SlidingSheetDialog(
       maxWidth: getWidthBottomSheet(context),
       scrollSpec: ScrollSpec(
@@ -87,7 +101,7 @@ Future openBottomSheet(
       snapSpec: SnapSpec(
         snap: snap,
         snappings: getIsFullScreen(context) == false && deviceAspectRatio > 2
-            ? [0.6, 1]
+            ? [0.75, 1]
             : [0.95, 1],
         positioning: SnapPositioning.relativeToAvailableSpace,
       ),

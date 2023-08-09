@@ -41,7 +41,9 @@ class OpenContainerNavigation extends StatelessWidget {
         return openPage;
       },
       tappable: false,
-      transitionDuration: Duration(milliseconds: 350),
+      transitionDuration: getPlatform() == PlatformOS.isIOS
+          ? Duration(milliseconds: 475)
+          : Duration(milliseconds: 350),
       closedElevation: closedElevation ?? 0,
       openColor: closedColor ?? Colors.transparent,
       closedColor: closedColor ?? Colors.transparent,

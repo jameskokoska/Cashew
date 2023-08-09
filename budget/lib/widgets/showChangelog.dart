@@ -10,6 +10,21 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.7.8
+    Fixed border on past budgets page when not in iOS
+    Bottom safe area for popups
+    Extra action now located as a full bottom button for popup
+    Refactored select amount widget
+    New tappable widget for iOS - Fade animation
+    Better horizontal padding resizing
+    Increased width when using horizontal padding constrained
+    Fixed safe area in horizontal mode, left and right safe areas
+    Fixed subtitle animation speed
+    Long press vibration on iOS
+    Slow open container animation iOS
+    Animated budget containers disabled on iOS
+    Animated Premium banner disabled on iOS
+    Removed blur effects by default on iOS
     < 3.7.7
     Added disable blur option
     Fixed iOS onboarding page
