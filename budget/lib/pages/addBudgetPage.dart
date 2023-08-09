@@ -1,12 +1,15 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/editBudgetLimitsPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -451,32 +454,49 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             }
           },
           actions: [
-            IconButton(
-              padding: EdgeInsets.all(15),
-              tooltip: "pin-to-home".tr(),
-              onPressed: () {
-                setSelectedPin();
-              },
-              icon: Icon(selectedPin
-                  ? Icons.push_pin_rounded
-                  : Icons.push_pin_outlined),
+            CustomPopupMenuButton(
+              showButtons: widget.budget == null || enableDoubleColumn(context),
+              keepOutFirst: true,
+              items: [
+                if (widget.budget != null)
+                  DropdownItemMenu(
+                    id: "delete-budget",
+                    label: "delete-budget".tr(),
+                    icon: Icons.delete_rounded,
+                    action: () {
+                      deleteBudgetPopup(context, widget.budget!,
+                          afterDelete: () {
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+                      });
+                    },
+                  ),
+                DropdownItemMenu(
+                  id: "pin-to-home",
+                  label: "pin-to-home".tr(),
+                  icon: selectedPin
+                      ? Icons.push_pin_rounded
+                      : Icons.push_pin_outlined,
+                  action: () {
+                    setSelectedPin();
+                  },
+                ),
+                if (widget.budget != null)
+                  DropdownItemMenu(
+                    id: "spending-goals",
+                    label: "spending-goals".tr(),
+                    icon: Icons.fact_check_rounded,
+                    action: () {
+                      pushRoute(
+                        context,
+                        EditBudgetLimitsPage(
+                          budget: widget.budget!,
+                        ),
+                      );
+                    },
+                  ),
+              ],
             ),
-            ...(widget.budget != null
-                ? [
-                    IconButton(
-                      padding: EdgeInsets.all(15),
-                      tooltip: "delete-budget".tr(),
-                      onPressed: () {
-                        deleteBudgetPopup(context, widget.budget!,
-                            afterDelete: () {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                        });
-                      },
-                      icon: Icon(Icons.delete_rounded),
-                    )
-                  ]
-                : []),
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,

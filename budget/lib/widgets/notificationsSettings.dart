@@ -94,7 +94,11 @@ class _DailyNotificationsSettingsState
                 : Container(),
           ),
         ),
-        Divider(indent: 20, endIndent: 20),
+        Divider(
+          indent: 20,
+          endIndent: 20,
+          color: getColor(context, "dividerColor"),
+        ),
       ],
     );
   }

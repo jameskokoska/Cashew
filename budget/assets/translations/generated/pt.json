@@ -404,5 +404,14 @@
   "history": "História",
   "backup": "Cópia de segurança",
   "google-drive-backup": "Backup do Google Drive",
-  "google-drive-backup-description": "Todos os backups são criados no seu Google Drive pessoal e não são acessíveis ao desenvolvedor. Leia a Política de Privacidade para obter mais detalhes."
+  "google-drive-backup-description": "Todos os backups são criados no seu Google Drive pessoal e não são acessíveis ao desenvolvedor. Leia a Política de Privacidade para obter mais detalhes.",
+  "stored-backups": "Os backups serão armazenados.",
+  "lets-go": "Vamos!",
+  "transactions-for-selected-category": "Mostrando transações da categoria selecionada",
+  "select-start-date": "Selecione a data de início",
+  "all-time": "Tempo todo",
+  "icon-suggestion-details": "Não consegue encontrar um ícone que você deseja? Sugira alguns e eles podem ser adicionados!",
+  "suggestion": "Sugestão",
+  "icon-suggestion-privacy": "Somente a sugestão será compartilhada.",
+  "suggest-icon": "Sugerir ícone"
 }

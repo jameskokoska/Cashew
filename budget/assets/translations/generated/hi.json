@@ -398,11 +398,20 @@
   "google-login": "गूगल लॉगिन",
   "continue": "जारी रखना",
   "set-name": "नाम भरें",
-  "edit-spending-goals": "खर्च करने के लक्ष्यों को संपादित करें",
+  "edit-spending-goals": "खर्च करने के लक्ष्य संपादित करें",
   "spending-goals": "लक्ष्य खर्च",
   "added-budget-description": "इस बजट में केवल लेनदेन शामिल होंगे जो इसमें जोड़े गए हैं।",
   "history": "इतिहास",
   "backup": "बैकअप",
   "google-drive-backup": "Google ड्राइव बैकअप",
-  "google-drive-backup-description": "सभी बैकअप आपके व्यक्तिगत Google ड्राइव पर बनाए गए हैं और डेवलपर के लिए सुलभ नहीं हैं। अधिक जानकारी के लिए गोपनीयता नीति पढ़ें।"
+  "google-drive-backup-description": "सभी बैकअप आपके व्यक्तिगत Google ड्राइव पर बनाए गए हैं और डेवलपर के लिए सुलभ नहीं हैं। अधिक जानकारी के लिए गोपनीयता नीति पढ़ें।",
+  "stored-backups": "बैकअप संग्रहीत किया जाएगा।",
+  "lets-go": "चल दर!",
+  "transactions-for-selected-category": "चयनित श्रेणी से लेनदेन दिखाना",
+  "select-start-date": "प्रारंभ तिथि का चयन करें",
+  "all-time": "पूरे समय",
+  "icon-suggestion-details": "एक आइकन नहीं मिल सकता है जिसे आप चाहते हैं? कुछ सुझाव दें और उन्हें जोड़ा जा सकता है!",
+  "suggestion": "सुझाव",
+  "icon-suggestion-privacy": "केवल सुझाव साझा किया जाएगा।",
+  "suggest-icon": "आइकन का सुझाव दें"
 }

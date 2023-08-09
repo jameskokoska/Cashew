@@ -404,5 +404,14 @@
   "history": "History",
   "backup": "Backup",
   "google-drive-backup": "Google Drive Backup",
-  "google-drive-backup-description": "All backups are created on your personal Google Drive and is not accessible to the developer. Read the Privacy Policy for more details."
+  "google-drive-backup-description": "All backups are created on your personal Google Drive and is not accessible to the developer. Read the Privacy Policy for more details.",
+  "stored-backups": "backups will be stored.",
+  "lets-go": "Let's go!",
+  "transactions-for-selected-category": "Showing transactions from selected category",
+  "select-start-date": "Select Start Date",
+  "all-time": "All Time",
+  "icon-suggestion-details": "Can't find an icon you want? Suggest some and they can be added!",
+  "suggestion": "Suggestion",
+  "icon-suggestion-privacy": "Only the suggestion will be shared.",
+  "suggest-icon": "Suggest Icon"
 }

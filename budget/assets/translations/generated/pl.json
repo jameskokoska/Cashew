@@ -360,7 +360,7 @@
   "notification-reminder-26": "Pozostań na bieżąco z budżetem, dodając codzienne transakcje do aplikacji.",
   "notification-reminder-title": "Dodaj transakcje",
   "notification-upcoming-transaction-title": "Nadchodząca transakcja należna",
-  "translations-help": "Jeśli chcesz pomóc w tłumaczeniach, napisz do e -maila",
+  "translations-help": "Jeśli chcesz pomóc w tłumaczeniach, napisz e -mail",
   "no-transactions-for": "Brak transakcji dla",
   "average-spent": "Średnia wydana",
   "select-icon": "Wybierz ikonę",
@@ -395,7 +395,7 @@
   "colorful-interface": "Kolorowy interfejs",
   "theme-color": "Kolor motywu",
   "google-login-apple-disclaimer": "Login Google nie jest używany do konfigurowania ani uwierzytelniania podstawowego konta użytkownika za pomocą aplikacji. Służy do przechowywania lub importowania danych zapasowych przechowywanych na własnym osobistym dysku Google.",
-  "google-login": "Logowanie Google",
+  "google-login": "Login Google",
   "continue": "Kontynuować",
   "set-name": "Ustaw nazwę",
   "edit-spending-goals": "Edytuj cele wydawania",
@@ -404,5 +404,14 @@
   "history": "Historia",
   "backup": "Kopia zapasowa",
   "google-drive-backup": "Kopia zapasowa Dysku Google",
-  "google-drive-backup-description": "Wszystkie kopie zapasowe są tworzone na Twoim osobistym dysku Google i nie są dostępne dla programisty. Przeczytaj Politykę prywatności, aby uzyskać więcej informacji."
+  "google-drive-backup-description": "Wszystkie kopie zapasowe są tworzone na Twoim osobistym dysku Google i nie są dostępne dla programisty. Przeczytaj Politykę prywatności, aby uzyskać więcej informacji.",
+  "stored-backups": "Kopie zapasowe będą przechowywane.",
+  "lets-go": "Chodźmy!",
+  "transactions-for-selected-category": "Pokazanie transakcji z wybranej kategorii",
+  "select-start-date": "Wybierz datę rozpoczęcia",
+  "all-time": "Cały czas",
+  "icon-suggestion-details": "Nie możesz znaleźć ikony, którą chcesz? Zaproponuj niektóre i można je dodać!",
+  "suggestion": "Sugestia",
+  "icon-suggestion-privacy": "Tylko sugestia zostanie udostępniona.",
+  "suggest-icon": "Zaproponuj ikonę"
 }

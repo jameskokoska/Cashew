@@ -357,7 +357,7 @@
   "notification-reminder-23": "Sørg for å legge til eventuelle utgifter fra i dag til budsjettsporeren.",
   "notification-reminder-24": "Husk å registrere transaksjonene dine for dagen for å få et fullstendig bilde av forbruksvanene dine.",
   "notification-reminder-25": "Legg til dine daglige transaksjoner i appen for å holde budsjettet på sporet.",
-  "notification-reminder-26": "Hold deg oppdatert på budsjettet ved å legge dine daglige transaksjoner til appen.",
+  "notification-reminder-26": "Hold deg oppdatert på budsjettet ditt ved å legge dine daglige transaksjoner til appen.",
   "notification-reminder-title": "Legg til transaksjoner",
   "notification-upcoming-transaction-title": "Kommende transaksjon forfaller",
   "translations-help": "Hvis du vil hjelpe deg med oversettelser, kan du sende en e -post",
@@ -404,5 +404,14 @@
   "history": "Historie",
   "backup": "Sikkerhetskopi",
   "google-drive-backup": "Google Drive Backup",
-  "google-drive-backup-description": "Alle sikkerhetskopiering er opprettet på din personlige Google -stasjon og er ikke tilgjengelig for utvikleren. Les personvernreglene for mer informasjon."
+  "google-drive-backup-description": "Alle sikkerhetskopiering er opprettet på din personlige Google -stasjon og er ikke tilgjengelig for utvikleren. Les personvernreglene for mer informasjon.",
+  "stored-backups": "Sikkerhetskopiering vil bli lagret.",
+  "lets-go": "La oss gå!",
+  "transactions-for-selected-category": "Viser transaksjoner fra valgt kategori",
+  "select-start-date": "Velg startdato",
+  "all-time": "Hele tiden",
+  "icon-suggestion-details": "Finner du ikke et ikon du vil ha? Foreslå noen og de kan legges til!",
+  "suggestion": "Forslag",
+  "icon-suggestion-privacy": "Bare forslaget vil bli delt.",
+  "suggest-icon": "Foreslå ikon"
 }

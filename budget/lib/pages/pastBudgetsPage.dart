@@ -547,15 +547,17 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           sliver: MultiSliver(
             children: [
               SliverToBoxAdapter(
-                child: BudgetSpenderSummary(
-                  budget: widget.budget,
-                  budgetRange: budgetRange,
-                  budgetColorScheme: budgetColorScheme,
-                  setSelectedMember: (member) {},
-                  disableMemberSelection: true,
-                  allTime: true,
-                  isLarge: true,
-                ),
+                child: appStateSettings["sharedBudgets"]
+                    ? BudgetSpenderSummary(
+                        budget: widget.budget,
+                        budgetRange: budgetRange,
+                        budgetColorScheme: budgetColorScheme,
+                        setSelectedMember: (member) {},
+                        disableMemberSelection: true,
+                        allTime: true,
+                        isLarge: true,
+                      )
+                    : SizedBox.shrink(),
               ),
               (selectedCategoryFks ?? []).length > 0
                   ? SliverToBoxAdapter(
@@ -710,15 +712,11 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                           border: getPlatform() == PlatformOS.isIOS
                               ? Border(
                                   top: BorderSide(
-                                    color: widget
-                                        .budgetColorScheme.secondaryContainer
-                                        .withOpacity(0.5),
+                                    color: getColor(context, "dividerColor"),
                                     width: index == 0 ? 2 : 0,
                                   ),
                                   bottom: BorderSide(
-                                    color: widget
-                                        .budgetColorScheme.secondaryContainer
-                                        .withOpacity(0.5),
+                                    color: getColor(context, "dividerColor"),
                                     width: touchedBudgetIndex == null ? 2 : 0,
                                   ),
                                 )
@@ -804,15 +802,11 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                             border: getPlatform() == PlatformOS.isIOS
                                 ? Border(
                                     top: BorderSide(
-                                      color: widget
-                                          .budgetColorScheme.secondaryContainer
-                                          .withOpacity(0.5),
+                                      color: getColor(context, "dividerColor"),
                                       width: index == 0 ? 2 : 0,
                                     ),
                                     bottom: BorderSide(
-                                      color: widget
-                                          .budgetColorScheme.secondaryContainer
-                                          .withOpacity(0.5),
+                                      color: getColor(context, "dividerColor"),
                                       width: touchedBudgetIndex == null ? 2 : 0,
                                     ),
                                   )
@@ -1282,7 +1276,7 @@ class CategoryAverageSpent extends StatelessWidget {
                                               (amountSpent / amountPeriods)
                                                   .abs()) +
                                       " " +
-                                      "average-spent".tr(),
+                                      "average-spent".tr().toLowerCase(),
                                   fontSize: 13,
                                   textColor: getColor(context, "textLight"),
                                 );

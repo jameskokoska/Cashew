@@ -397,12 +397,21 @@
   "google-login-apple-disclaimer": "Log masuk Google tidak digunakan untuk menyediakan atau mengesahkan akaun utama pengguna dengan aplikasinya. Ia digunakan untuk menyimpan atau mengimport data sandaran yang disimpan pada Google Drive peribadi anda sendiri.",
   "google-login": "Log masuk Google",
   "continue": "Teruskan",
-  "set-name": "Tetapkan nama",
+  "set-name": "Tetapkan Nama",
   "edit-spending-goals": "Edit matlamat perbelanjaan",
   "spending-goals": "Matlamat perbelanjaan",
   "added-budget-description": "Anggaran ini hanya termasuk urus niaga yang telah ditambah kepadanya.",
   "history": "Sejarah",
   "backup": "Sandaran",
   "google-drive-backup": "Sandaran Google Drive",
-  "google-drive-backup-description": "Semua sandaran dibuat pada Google Drive peribadi anda dan tidak dapat diakses oleh pemaju. Baca Dasar Privasi untuk maklumat lanjut."
+  "google-drive-backup-description": "Semua sandaran dibuat pada Google Drive peribadi anda dan tidak dapat diakses oleh pemaju. Baca Dasar Privasi untuk maklumat lanjut.",
+  "stored-backups": "Backup akan disimpan.",
+  "lets-go": "Mari pergi!",
+  "transactions-for-selected-category": "Menunjukkan urus niaga dari kategori yang dipilih",
+  "select-start-date": "Pilih Tarikh Mula",
+  "all-time": "Setiap masa",
+  "icon-suggestion-details": "Tidak dapat mencari ikon yang anda mahukan? Cadangkan beberapa dan mereka boleh ditambah!",
+  "suggestion": "Cadangan",
+  "icon-suggestion-privacy": "Hanya cadangan yang akan dikongsi.",
+  "suggest-icon": "Cadangkan ikon"
 }

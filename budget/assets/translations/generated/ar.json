@@ -404,5 +404,14 @@
   "history": "تاريخ",
   "backup": "دعم",
   "google-drive-backup": "Google Drive Backup",
-  "google-drive-backup-description": "يتم إنشاء جميع النسخ الاحتياطية على محرك Google Personal الخاص بك ولا يمكن الوصول إليه للمطور. اقرأ سياسة الخصوصية لمزيد من التفاصيل."
+  "google-drive-backup-description": "يتم إنشاء جميع النسخ الاحتياطية على محرك Google Personal الخاص بك ولا يمكن الوصول إليه للمطور. اقرأ سياسة الخصوصية لمزيد من التفاصيل.",
+  "stored-backups": "سيتم تخزين النسخ الاحتياطية.",
+  "lets-go": "دعنا نذهب!",
+  "transactions-for-selected-category": "عرض المعاملات من فئة محددة",
+  "select-start-date": "حدد تاريخ البدء",
+  "all-time": "كل الوقت",
+  "icon-suggestion-details": "لا يمكنك العثور على أيقونة تريدها؟ اقترح البعض ويمكن إضافتها!",
+  "suggestion": "اقتراح",
+  "icon-suggestion-privacy": "سيتم مشاركة الاقتراح فقط.",
+  "suggest-icon": "اقترح أيقونة"
 }

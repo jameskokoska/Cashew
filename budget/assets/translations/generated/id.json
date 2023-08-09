@@ -387,7 +387,7 @@
   "support-the-developer-description": "Lebih dari 2 tahun pembangunan",
   "unlimited-budgets": "Anggaran yang tidak terbatas",
   "unlimited-budgets-description": "Buat lebih dari 1 anggaran",
-  "past-budget-periods": "Periode anggaran sebelumnya",
+  "past-budget-periods": "Periode anggaran masa lalu",
   "past-budget-periods-description": "Lihat rincian anggaran dari periode sebelumnya",
   "unlimited-color-picker": "Pemetik warna yang tidak terbatas",
   "unlimited-color-picker-description": "Pilih warna apa pun yang Anda inginkan",
@@ -404,5 +404,14 @@
   "history": "Sejarah",
   "backup": "Cadangan",
   "google-drive-backup": "Pencadangan Google Drive",
-  "google-drive-backup-description": "Semua cadangan dibuat di Google Drive pribadi Anda dan tidak dapat diakses oleh pengembang. Baca Kebijakan Privasi untuk lebih jelasnya."
+  "google-drive-backup-description": "Semua cadangan dibuat di Google Drive pribadi Anda dan tidak dapat diakses oleh pengembang. Baca Kebijakan Privasi untuk lebih jelasnya.",
+  "stored-backups": "Cadangan akan disimpan.",
+  "lets-go": "Ayo pergi!",
+  "transactions-for-selected-category": "Menunjukkan transaksi dari kategori yang dipilih",
+  "select-start-date": "Pilih Tanggal Mulai",
+  "all-time": "Sepanjang waktu",
+  "icon-suggestion-details": "Tidak dapat menemukan ikon yang Anda inginkan? Sarankan beberapa dan mereka dapat ditambahkan!",
+  "suggestion": "Saran",
+  "icon-suggestion-privacy": "Hanya saran yang akan dibagikan.",
+  "suggest-icon": "Sarankan ikon"
 }

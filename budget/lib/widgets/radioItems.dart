@@ -52,7 +52,7 @@ class _RadioItemsState extends State<RadioItems> {
               title: Transform.translate(
                 offset: Offset(-12, 0),
                 child: TextFont(
-                  fontSize: 20,
+                  fontSize: 18,
                   text: widget.displayFilter == null
                       ? item
                       : widget.displayFilter!(item),
@@ -61,6 +61,7 @@ class _RadioItemsState extends State<RadioItems> {
               ),
               dense: true,
               leading: Radio<String>(
+                visualDensity: VisualDensity.compact,
                 value: item,
                 groupValue: currentValue,
                 onChanged: (String? value) {

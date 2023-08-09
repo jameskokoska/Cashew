@@ -388,7 +388,7 @@
   "unlimited-budgets": "بودجه نامحدود",
   "unlimited-budgets-description": "بیش از 1 بودجه ایجاد کنید",
   "past-budget-periods": "دوره بودجه گذشته",
-  "past-budget-periods-description": "مشاهده خرابی بودجه دوره های گذشته",
+  "past-budget-periods-description": "مشاهده بودجه دوره های گذشته",
   "unlimited-color-picker": "انتخاب نامحدود رنگ",
   "unlimited-color-picker-description": "هر رنگی را که می خواهید انتخاب کنید",
   "continue-for-free": "به صورت رایگان ادامه دهید",
@@ -404,5 +404,14 @@
   "history": "تاریخ",
   "backup": "پشتیبان گیری",
   "google-drive-backup": "پشتیبان گیری از Google Drive",
-  "google-drive-backup-description": "همه نسخه های پشتیبان در درایو Google شخصی شما ایجاد شده و در دسترس توسعه دهنده نیست. برای اطلاعات بیشتر خط مشی رازداری را بخوانید."
+  "google-drive-backup-description": "همه نسخه های پشتیبان در درایو Google شخصی شما ایجاد شده و در دسترس توسعه دهنده نیست. برای اطلاعات بیشتر خط مشی رازداری را بخوانید.",
+  "stored-backups": "پشتیبان گیری ذخیره می شود.",
+  "lets-go": "بیا بریم!",
+  "transactions-for-selected-category": "نمایش معاملات از دسته انتخاب شده",
+  "select-start-date": "تاریخ شروع را انتخاب کنید",
+  "all-time": "همیشه",
+  "icon-suggestion-details": "آیا نمادی را که می خواهید پیدا نمی کنید؟ برخی را پیشنهاد کنید و می توان آنها را اضافه کرد!",
+  "suggestion": "پیشنهاد",
+  "icon-suggestion-privacy": "فقط این پیشنهاد به اشتراک گذاشته می شود.",
+  "suggest-icon": "نماد پیشنهاد"
 }

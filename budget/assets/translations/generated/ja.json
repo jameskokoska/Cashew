@@ -404,5 +404,14 @@
   "history": "歴史",
   "backup": "バックアップ",
   "google-drive-backup": "Googleドライブのバックアップ",
-  "google-drive-backup-description": "すべてのバックアップは、個人のGoogleドライブで作成されており、開発者がアクセスできません。詳細については、プライバシーポリシーをお読みください。"
+  "google-drive-backup-description": "すべてのバックアップは、個人のGoogleドライブで作成されており、開発者がアクセスできません。詳細については、プライバシーポリシーをお読みください。",
+  "stored-backups": "バックアップは保存されます。",
+  "lets-go": "さあ行こう！",
+  "transactions-for-selected-category": "選択したカテゴリからのトランザクションを表示します",
+  "select-start-date": "[開始日]を選択します",
+  "all-time": "いつも",
+  "icon-suggestion-details": "必要なアイコンが見つかりませんか？いくつか提案すると、追加できます！",
+  "suggestion": "提案",
+  "icon-suggestion-privacy": "提案のみが共有されます。",
+  "suggest-icon": "アイコンを提案します"
 }

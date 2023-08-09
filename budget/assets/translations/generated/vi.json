@@ -404,5 +404,14 @@
   "history": "Lịch sử",
   "backup": "Hỗ trợ",
   "google-drive-backup": "Google Drive Sao lưu",
-  "google-drive-backup-description": "Tất cả các bản sao lưu được tạo trên Google Drive cá nhân của bạn và không thể truy cập được cho nhà phát triển. Đọc chính sách bảo mật để biết thêm chi tiết."
+  "google-drive-backup-description": "Tất cả các bản sao lưu được tạo trên Google Drive cá nhân của bạn và không thể truy cập được cho nhà phát triển. Đọc chính sách bảo mật để biết thêm chi tiết.",
+  "stored-backups": "Sao lưu sẽ được lưu trữ.",
+  "lets-go": "Đi nào!",
+  "transactions-for-selected-category": "Hiển thị các giao dịch từ danh mục được chọn",
+  "select-start-date": "Chọn Ngày bắt đầu",
+  "all-time": "Tất cả thời gian",
+  "icon-suggestion-details": "Không thể tìm thấy một biểu tượng bạn muốn? Đề xuất một số và họ có thể được thêm vào!",
+  "suggestion": "Gợi ý",
+  "icon-suggestion-privacy": "Chỉ có đề xuất sẽ được chia sẻ.",
+  "suggest-icon": "Đề xuất biểu tượng"
 }

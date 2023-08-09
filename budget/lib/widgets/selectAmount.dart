@@ -949,7 +949,9 @@ class CalculatorButton extends StatelessWidget {
           child: Tappable(
             color: appStateSettings["materialYou"]
                 ? Theme.of(context).colorScheme.secondaryContainer
-                : getColor(context, "lightDarkAccentHeavy"),
+                : Theme.of(context).brightness == Brightness.light
+                    ? getColor(context, "lightDarkAccentHeavy")
+                    : getColor(context, "lightDarkAccentHeavyLight"),
             onLongPress: onLongPress,
             onTap: editAmount,
             child: Container(

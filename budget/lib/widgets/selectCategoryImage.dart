@@ -1,7 +1,11 @@
+import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/widgets/textInput.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
@@ -115,6 +119,107 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
               }).toList(),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: SuggestIcon(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SuggestIcon extends StatelessWidget {
+  const SuggestIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: () {
+        openBottomSheet(context, SuggestIconPopup());
+      },
+      color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+      borderRadius: 15,
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 15, right: 10, top: 12, bottom: 12),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Icon(
+                Icons.reviews_rounded,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 31,
+              ),
+            ),
+            Expanded(
+              child: TextFont(
+                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                richTextSpan: [],
+                text: "icon-suggestion-details".tr(),
+                maxLines: 5,
+                fontSize: 14,
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 25,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SuggestIconPopup extends StatefulWidget {
+  const SuggestIconPopup({super.key});
+
+  @override
+  State<SuggestIconPopup> createState() => _SuggestIconPopupState();
+}
+
+class _SuggestIconPopupState extends State<SuggestIconPopup> {
+  TextEditingController _feedbackController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "suggest-icon".tr(),
+      child: Column(
+        children: [
+          TextInput(
+            labelText: "suggestion".tr(),
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 3,
+            padding: EdgeInsets.zero,
+            controller: _feedbackController,
+          ),
+          SizedBox(height: 10),
+          Opacity(
+            opacity: 0.4,
+            child: TextFont(
+              text: "icon-suggestion-privacy".tr(),
+              textAlign: TextAlign.center,
+              fontSize: 12,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 15),
+          Button(
+            label: "submit".tr(),
+            onTap: () async {
+              shareFeedback(-1, _feedbackController.text, "icon");
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
     );

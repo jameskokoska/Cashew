@@ -171,7 +171,7 @@ class _EditHomePageState extends State<EditHomePage> {
               openBottomSheet(
                 context,
                 PopupFramework(
-                  title: "Select Start Date",
+                  title: "select-start-date".tr(),
                   child: SelectStartDate(
                     initialDateTime:
                         appStateSettings["incomeExpenseStartDate"] == null
@@ -437,7 +437,7 @@ class _SelectStartDateState extends State<SelectStartDate> {
         ),
         TappableTextEntry(
           title: selectedDate == null
-              ? "All Time"
+              ? "all-time".tr()
               : getWordedDateShortMore(selectedDate!, includeYear: true),
           placeholder: "",
           onTap: () async {

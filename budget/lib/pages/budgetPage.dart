@@ -419,20 +419,22 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   ),
                                 ),
                               ),
-                              BudgetSpenderSummary(
-                                budget: widget.budget,
-                                budgetRange: budgetRange,
-                                budgetColorScheme: budgetColorScheme,
-                                setSelectedMember: (member) {
-                                  setState(() {
-                                    selectedMember = member;
-                                    selectedCategory = null;
-                                    selectedCategoryPk = -1;
-                                  });
-                                  _pieChartDisplayStateKey.currentState!
-                                      .setTouchedIndex(-1);
-                                },
-                              ),
+                              appStateSettings["sharedBudgets"]
+                                  ? BudgetSpenderSummary(
+                                      budget: widget.budget,
+                                      budgetRange: budgetRange,
+                                      budgetColorScheme: budgetColorScheme,
+                                      setSelectedMember: (member) {
+                                        setState(() {
+                                          selectedMember = member;
+                                          selectedCategory = null;
+                                          selectedCategoryPk = -1;
+                                        });
+                                        _pieChartDisplayStateKey.currentState!
+                                            .setTouchedIndex(-1);
+                                      },
+                                    )
+                                  : SizedBox.shrink(),
                               if (snapshot.data!.length > 0)
                                 SizedBox(height: 30),
                               if (snapshot.data!.length > 0)
@@ -467,7 +469,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: Transform.translate(
-                                    offset: Offset(-9, 10),
+                                    offset: Offset(
+                                        -9 -
+                                            getHorizontalPaddingConstrained(
+                                                context),
+                                        10),
                                     child: IconButton(
                                       padding: EdgeInsets.all(15),
                                       onPressed: () {
@@ -513,8 +519,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 left: 13, right: 15, top: 5, bottom: 15),
                             child: Center(
                               child: TextFont(
-                                text:
-                                    "Showing transactions from selected category",
+                                text: "transactions-for-selected-category".tr(),
                                 maxLines: 10,
                                 textAlign: TextAlign.center,
                                 fontSize: 13,

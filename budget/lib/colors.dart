@@ -68,6 +68,9 @@ generateColors() {
           ? Colors.black
           : Color(0xFFCA5A5A),
       "starYellow": Color(0xFFFFD723),
+      "dividerColor": appStateSettings["materialYou"]
+          ? Color(0x0F000000)
+          : Color(0xFFF0F0F0),
     },
   );
   appColorsDark = AppColors(
@@ -103,6 +106,9 @@ generateColors() {
           ? Colors.white
           : Color(0xFFDA7272),
       "starYellow": Colors.yellow,
+      "dividerColor": appStateSettings["materialYou"]
+          ? Color(0x13FFFFFF)
+          : Color(0xFF161616),
     },
   );
 }

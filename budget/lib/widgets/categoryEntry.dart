@@ -407,10 +407,16 @@ class CategoryIconPercent extends StatelessWidget {
           child: AnimatedCircularProgress(
             percent: percent / 100,
             backgroundColor: progressBackgroundColor,
-            foregroundColor: darkenPastel(
-                HexColor(category.colour,
-                    defaultColor: Theme.of(context).colorScheme.primary),
-                amount: 0.25),
+            foregroundColor: dynamicPastel(
+              context,
+              HexColor(
+                category.colour,
+                defaultColor: Theme.of(context).colorScheme.primary,
+              ),
+              inverse: true,
+              amountLight: 0.1,
+              amountDark: 0.25,
+            ),
           ),
         ),
       ),

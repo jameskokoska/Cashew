@@ -174,11 +174,11 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                   null) widget.onTouchedIndex!(value.toInt());
 
               if (event.runtimeType == FlLongPressStart) {
-                HapticFeedback.lightImpact();
+                HapticFeedback.selectionClick();
               } else if (touchedValue != value.toInt() &&
                   (event.runtimeType == FlLongPressMoveUpdate ||
                       event.runtimeType == FlPanUpdateEvent)) {
-                HapticFeedback.lightImpact();
+                HapticFeedback.selectionClick();
               }
 
               touchedValue = value.toInt();

@@ -201,7 +201,7 @@
   "discard-changes-description": "您确定要丢弃更改吗？",
   "discard": "丢弃",
   "changelog": "ChangElog",
-  "view-changelog": "Changelog",
+  "view-changelog": "ChangElog",
   "view-app-intro": "入职",
   "app-is-open-source": "{app}是开源！",
   "open-source": "开源",
@@ -404,5 +404,14 @@
   "history": "历史",
   "backup": "备份",
   "google-drive-backup": "Google Drive备份",
-  "google-drive-backup-description": "所有备份都是在您的个人Google驱动器上创建的，开发人员无法访问。阅读隐私政策以获取更多详细信息。"
+  "google-drive-backup-description": "所有备份都是在您的个人Google驱动器上创建的，开发人员无法访问。阅读隐私政策以获取更多详细信息。",
+  "stored-backups": "备份将存储。",
+  "lets-go": "我们走吧！",
+  "transactions-for-selected-category": "显示从选定类别的交易",
+  "select-start-date": "选择“开始日期”",
+  "all-time": "整天",
+  "icon-suggestion-details": "找不到想要的图标？建议一些，可以添加！",
+  "suggestion": "建议",
+  "icon-suggestion-privacy": "只有建议将被共享。",
+  "suggest-icon": "建议图标"
 }

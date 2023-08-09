@@ -354,7 +354,7 @@
   "notification-reminder-20": "Zaznamenejte své transakce za den, abyste získali úplný obrázek o svých výdajových návycích.",
   "notification-reminder-21": "Nezapomeňte přidat své denní transakce, abyste zůstali na dobré cestě s rozpočtem.",
   "notification-reminder-22": "Udělejte si několik minut a aktualizujte svůj rozpočet s dnešními výdaji.",
-  "notification-reminder-23": "Nezapomeňte přidat jakékoli výdaje od dnešního dne do svého rozpočtového sledovače.",
+  "notification-reminder-23": "Nezapomeňte přidat jakékoli výdaje od dnešního dne do svého rozpočtového sledování.",
   "notification-reminder-24": "Nezapomeňte zaznamenat své transakce za den, abyste získali úplný obrázek o svých výdajových návycích.",
   "notification-reminder-25": "Přidejte své denní transakce do aplikace, abyste udrželi svůj rozpočet na správné cestě.",
   "notification-reminder-26": "Zůstaňte na vrcholu svého rozpočtu přidáním denních transakcí do aplikace.",
@@ -404,5 +404,14 @@
   "history": "Dějiny",
   "backup": "Záloha",
   "google-drive-backup": "Zálohování Disku Google",
-  "google-drive-backup-description": "Všechny zálohy jsou vytvořeny na vašem osobním disku Google a nejsou přístupné vývojáři. Další podrobnosti si přečtěte zásady ochrany osobních údajů."
+  "google-drive-backup-description": "Všechny zálohy jsou vytvořeny na vašem osobním disku Google a nejsou přístupné vývojáři. Další podrobnosti si přečtěte zásady ochrany osobních údajů.",
+  "stored-backups": "Zálohy budou uloženy.",
+  "lets-go": "Pojďme!",
+  "transactions-for-selected-category": "Zobrazení transakcí z vybrané kategorie",
+  "select-start-date": "Vyberte datum zahájení",
+  "all-time": "Pořád",
+  "icon-suggestion-details": "Nemůžete najít ikonu, kterou chcete? Navrhněte některé a lze je přidat!",
+  "suggestion": "Návrh",
+  "icon-suggestion-privacy": "Bude sdílen pouze návrh.",
+  "suggest-icon": "Navrhněte ikonu"
 }

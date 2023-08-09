@@ -126,7 +126,6 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        TranslationsHelp(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Tappable(
@@ -445,61 +444,6 @@ class AboutInfoBox extends StatelessWidget {
                 fontSize: 14,
                 textAlign: TextAlign.center,
                 textColor: getColor(context, "textLight"),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class TranslationsHelp extends StatelessWidget {
-  const TranslationsHelp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      child: Tappable(
-        onTap: () {
-          openUrl('mailto:dapperappdeveloper@gmail.com');
-        },
-        color:
-            Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
-        borderRadius: 15,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Icon(
-                  Icons.connect_without_contact_rounded,
-                  color: Theme.of(context).colorScheme.secondary,
-                  size: 31,
-                ),
-              ),
-              Expanded(
-                child: TextFont(
-                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                  richTextSpan: [
-                    TextSpan(
-                      text: 'dapperappdeveloper@gmail.com',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationStyle: TextDecorationStyle.solid,
-                        decorationColor:
-                            getColor(context, "unPaidOverdue").withOpacity(0.8),
-                        color:
-                            getColor(context, "unPaidOverdue").withOpacity(0.8),
-                      ),
-                    ),
-                  ],
-                  text: "translations-help".tr() + " ",
-                  maxLines: 5,
-                  fontSize: 13,
-                ),
               ),
             ],
           ),

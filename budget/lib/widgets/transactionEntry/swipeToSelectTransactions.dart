@@ -47,7 +47,7 @@ class _SwipeToSelectTransactionsState extends State<SwipeToSelectTransactions> {
                     globalSelectedID.value[widget.listID]!
                         .add(target.transactionKey!);
                     globalSelectedID.notifyListeners();
-                    HapticFeedback.heavyImpact();
+                    HapticFeedback.selectionClick();
                   }
                 } else if (selectingTransactionsActive == -1) {
                   if (globalSelectedID.value[widget.listID]!
@@ -55,7 +55,7 @@ class _SwipeToSelectTransactionsState extends State<SwipeToSelectTransactions> {
                     globalSelectedID.value[widget.listID]!
                         .remove(target.transactionKey);
                     globalSelectedID.notifyListeners();
-                    HapticFeedback.heavyImpact();
+                    HapticFeedback.selectionClick();
                   }
                 }
               }

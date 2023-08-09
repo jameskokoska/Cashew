@@ -227,15 +227,16 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       opacity: refresh ? 1 : 0.99,
       child: WillPopScope(
         onWillPop: () async {
-          //Handle global back button
-
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
           // Deselect selected transactions
+          int notEmpty = 0;
           for (String key in globalSelectedID.value.keys) {
+            if (globalSelectedID.value[key]?.isNotEmpty == true) notEmpty++;
             globalSelectedID.value[key] = [];
           }
           globalSelectedID.notifyListeners();
+
+          // Allow the back button to exit the app
+          if (notEmpty <= 0) return true;
 
           return false;
         },

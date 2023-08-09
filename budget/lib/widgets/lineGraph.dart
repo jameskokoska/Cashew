@@ -4,7 +4,6 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
@@ -330,11 +329,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
           double value = touchResponse.lineBarSpots![0].x;
           if (event.runtimeType == FlLongPressStart) {
-            HapticFeedback.lightImpact();
+            HapticFeedback.selectionClick();
           } else if (touchedValue != value.toInt() &&
               (event.runtimeType == FlLongPressMoveUpdate ||
                   event.runtimeType == FlPanUpdateEvent)) {
-            HapticFeedback.lightImpact();
+            HapticFeedback.selectionClick();
           }
 
           touchedValue = value.toInt();
@@ -637,13 +636,19 @@ class LineChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Pair maxPair = getMaxPoint(points);
+    Pair minPair = getMinPoint(points);
+    if (maxPair.y == minPair.y) {
+      minPair.y = minPair.y - 1;
+      maxPair.y = maxPair.y + 1;
+    }
     return ClipRect(
       child: Container(
-        height: kIsWeb && MediaQuery.of(context).size.width > 700 ? 300 : 175,
+        height: MediaQuery.of(context).size.width > 700 ? 300 : 175,
         child: _LineChart(
           spots: convertPoints(filterPointsList(points)),
-          maxPair: getMaxPoint(points),
-          minPair: getMinPoint(points),
+          maxPair: maxPair,
+          minPair: minPair,
           color: color == null ? Theme.of(context).colorScheme.primary : color!,
           isCurved: isCurved,
           endDate: endDate,

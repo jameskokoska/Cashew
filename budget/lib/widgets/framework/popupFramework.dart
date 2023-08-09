@@ -106,7 +106,7 @@ class PopupFramework extends StatelessWidget {
                                     ? SizedBox.shrink()
                                     : TextFont(
                                         text: title ?? "",
-                                        fontSize: title!.length > 16 ? 24 : 32,
+                                        fontSize: title!.length > 16 ? 23 : 29,
                                         fontWeight: FontWeight.bold,
                                         maxLines: 5,
                                       ),

@@ -18,6 +18,7 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -25,6 +26,8 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -202,41 +205,74 @@ class SettingsPageState extends State<SettingsPage>
                 icon: Icons.lock_rounded,
               )
             : SizedBox.shrink(),
-
-        SettingsContainerDropdown(
-          title: "language".tr(),
-          icon: Icons.language_rounded,
-          initial: appStateSettings["locale"].toString(),
-          items: [
-            "System",
-            for (String languageCode in supportedLanguagesSet) languageCode,
-          ],
-          getLabel: (String item) {
+        Builder(builder: (context) {
+          Function(String) displayFilter = (String item) {
             if (languageNamesJSON[item] != null) {
-              return languageNamesJSON[item]
-                  .toString()
-                  .capitalizeFirstofEach
-                  .replaceAll(" ", "\n");
+              return languageNamesJSON[item].toString().capitalizeFirstofEach;
             }
             // if (supportedLanguagesSet.contains(item))
             //   return supportedLanguagesSet[item];
             if (item == "System") return "system".tr();
             return item;
-          },
-          onChanged: (value) {
-            if (value == "System") {
-              context.resetLocale();
-            } else {
-              context.setLocale(Locale(value));
-            }
-            updateSettings(
-              "locale",
-              value,
-              pagesNeedingRefresh: [],
-              updateGlobalState: false,
-            );
-          },
-        ),
+          };
+          return SettingsContainer(
+            title: "language".tr(),
+            icon: Icons.language_rounded,
+            afterWidget: Tappable(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              borderRadius: 10,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: TextFont(
+                  text: displayFilter(appStateSettings["locale"].toString()),
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            onTap: () {
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  title: "language".tr(),
+                  showCloseButton: true,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: TranslationsHelp(),
+                      ),
+                      RadioItems(
+                        items: [
+                          "System",
+                          for (String languageCode in supportedLanguagesSet)
+                            languageCode,
+                        ],
+                        initial: appStateSettings["locale"].toString(),
+                        displayFilter: displayFilter,
+                        onChanged: (value) async {
+                          if (value == "System") {
+                            context.resetLocale();
+                          } else {
+                            context.setLocale(Locale(value));
+                          }
+                          updateSettings(
+                            "locale",
+                            value,
+                            pagesNeedingRefresh: [],
+                            updateGlobalState: false,
+                          );
+                          await Future.delayed(Duration(milliseconds: 500));
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }),
 
         SettingsHeader(title: "automation".tr()),
         // SettingsContainerOpenPage(
@@ -507,4 +543,55 @@ Future enterNameBottomSheet(context) async {
       ),
     ),
   );
+}
+
+class TranslationsHelp extends StatelessWidget {
+  const TranslationsHelp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: () {
+        openUrl('mailto:dapperappdeveloper@gmail.com');
+      },
+      color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+      borderRadius: 15,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Icon(
+                Icons.connect_without_contact_rounded,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 31,
+              ),
+            ),
+            Expanded(
+              child: TextFont(
+                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                richTextSpan: [
+                  TextSpan(
+                    text: 'dapperappdeveloper@gmail.com',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.solid,
+                      decorationColor:
+                          getColor(context, "unPaidOverdue").withOpacity(0.8),
+                      color:
+                          getColor(context, "unPaidOverdue").withOpacity(0.8),
+                    ),
+                  ),
+                ],
+                text: "translations-help".tr() + " ",
+                maxLines: 5,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

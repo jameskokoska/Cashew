@@ -331,7 +331,7 @@
   "daily-notifications": "روزانہ کی اطلاعات",
   "daily-notifications-description": "اگر ایپ کو نہیں کھولا گیا تھا",
   "alert-time": "الرٹ ٹائم",
-  "upcoming-transactions": "آنے والے لین دین",
+  "upcoming-transactions": "آئندہ لین دین",
   "notification-reminder-1": "آج سے لین دین شامل کرنا نہ بھولیں!",
   "notification-reminder-2": "ٹریک پر رہنے کے لئے اپنے روزانہ کے لین دین شامل کریں۔",
   "notification-reminder-3": "آج کے اخراجات کے ساتھ اپنے بجٹ کو اپ ڈیٹ کریں۔",
@@ -360,7 +360,7 @@
   "notification-reminder-26": "ایپ میں اپنے روزانہ کے لین دین کو شامل کرکے اپنے بجٹ کے اوپری حصے پر رہیں۔",
   "notification-reminder-title": "لین دین شامل کریں",
   "notification-upcoming-transaction-title": "آئندہ لین دین کی وجہ سے",
-  "translations-help": "اگر آپ ترجمے میں مدد کرنا چاہتے ہیں تو ، براہ کرم ای میل کریں",
+  "translations-help": "اگر آپ ترجموں میں مدد کرنا چاہتے ہیں تو ، براہ کرم ای میل کریں",
   "no-transactions-for": "کے لئے کوئی لین دین نہیں ہے",
   "average-spent": "اوسط خرچ",
   "select-icon": "آئیکن منتخب کریں",
@@ -404,5 +404,14 @@
   "history": "تاریخ",
   "backup": "بیک اپ",
   "google-drive-backup": "گوگل ڈرائیو بیک اپ",
-  "google-drive-backup-description": "آپ کے ذاتی گوگل ڈرائیو پر تمام بیک اپ بنائے گئے ہیں اور یہ ڈویلپر تک قابل رسائی نہیں ہے۔ مزید تفصیلات کے لئے رازداری کی پالیسی پڑھیں۔"
+  "google-drive-backup-description": "آپ کے ذاتی گوگل ڈرائیو پر تمام بیک اپ بنائے گئے ہیں اور یہ ڈویلپر تک قابل رسائی نہیں ہے۔ مزید تفصیلات کے لئے رازداری کی پالیسی پڑھیں۔",
+  "stored-backups": "بیک اپ اسٹور کیا جائے گا۔",
+  "lets-go": "چلو!",
+  "transactions-for-selected-category": "منتخب کردہ زمرے سے لین دین دکھا رہا ہے",
+  "select-start-date": "شروع کی تاریخ منتخب کریں",
+  "all-time": "تمام وقت",
+  "icon-suggestion-details": "آپ چاہتے ہیں کوئی آئیکن نہیں مل سکتا؟ کچھ تجویز کریں اور انہیں شامل کیا جاسکتا ہے!",
+  "suggestion": "مشورہ",
+  "icon-suggestion-privacy": "صرف مشورہ ہی شیئر کیا جائے گا۔",
+  "suggest-icon": "آئیکن تجویز کریں"
 }

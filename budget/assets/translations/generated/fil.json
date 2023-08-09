@@ -360,7 +360,7 @@
   "notification-reminder-26": "Manatili sa tuktok ng iyong badyet sa pamamagitan ng pagdaragdag ng iyong pang -araw -araw na mga transaksyon sa app.",
   "notification-reminder-title": "Magdagdag ng mga transaksyon",
   "notification-upcoming-transaction-title": "Paparating na transaksyon",
-  "translations-help": "Kung nais mong tumulong sa mga pagsasalin, mangyaring mag -email",
+  "translations-help": "Kung nais mong makatulong sa mga pagsasalin, mangyaring mag -email",
   "no-transactions-for": "Walang mga transaksyon para sa",
   "average-spent": "average na ginugol",
   "select-icon": "Piliin ang icon",
@@ -404,5 +404,14 @@
   "history": "Kasaysayan",
   "backup": "Backup",
   "google-drive-backup": "Backup ng Google Drive",
-  "google-drive-backup-description": "Ang lahat ng mga backup ay nilikha sa iyong personal na Google Drive at hindi naa -access sa developer. Basahin ang Patakaran sa Pagkapribado para sa higit pang mga detalye."
+  "google-drive-backup-description": "Ang lahat ng mga backup ay nilikha sa iyong personal na Google Drive at hindi naa -access sa developer. Basahin ang Patakaran sa Pagkapribado para sa higit pang mga detalye.",
+  "stored-backups": "Ang mga backup ay maiimbak.",
+  "lets-go": "Tayo na!",
+  "transactions-for-selected-category": "Nagpapakita ng mga transaksyon mula sa napiling kategorya",
+  "select-start-date": "Piliin ang petsa ng pagsisimula",
+  "all-time": "Lahat ng oras",
+  "icon-suggestion-details": "Hindi mahanap ang isang icon na gusto mo? Magmungkahi ng ilan at maaari silang maidagdag!",
+  "suggestion": "Mungkahi",
+  "icon-suggestion-privacy": "Ang mungkahi lamang ang ibabahagi.",
+  "suggest-icon": "Magmungkahi ng icon"
 }

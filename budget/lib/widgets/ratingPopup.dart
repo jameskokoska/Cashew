@@ -113,7 +113,7 @@ class _RatingPopupState extends State<RatingPopup> {
           Button(
             label: "submit".tr(),
             onTap: () async {
-              shareFeedback(selectedStars, _feedbackController.text);
+              shareFeedback(selectedStars, _feedbackController.text, "rating");
               updateSettings("submittedFeedback", true,
                   pagesNeedingRefresh: [], updateGlobalState: false);
               Navigator.pop(context);
@@ -126,7 +126,7 @@ class _RatingPopupState extends State<RatingPopup> {
   }
 }
 
-Future<bool> shareFeedback(selectedStars, feedbackText) async {
+Future<bool> shareFeedback(selectedStars, feedbackText, feedbackType) async {
   loadingIndeterminateKey.currentState!.setVisibility(true);
   try {
     if ((selectedStars ?? 0) >= 4 && await inAppReview.isAvailable()) {
@@ -151,6 +151,7 @@ Future<bool> shareFeedback(selectedStars, feedbackText) async {
       "stars": (selectedStars ?? -1) + 1,
       "feedback": feedbackText,
       "dateTime": DateTime.now(),
+      "feedbackType": feedbackType,
     };
 
     DocumentReference feedbackCreatedOnCloud =

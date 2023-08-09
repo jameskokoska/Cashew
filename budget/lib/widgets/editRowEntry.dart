@@ -284,7 +284,7 @@ class EditRowEntry extends StatelessWidget {
           getPlatform() == PlatformOS.isIOS && index == 0
               ? Container(
                   height: 1.5,
-                  color: getColor(context, "lightDarkAccent"),
+                  color: getColor(context, "dividerColor"),
                 )
               : SizedBox.shrink(),
           Padding(
@@ -296,7 +296,7 @@ class EditRowEntry extends StatelessWidget {
           getPlatform() == PlatformOS.isIOS
               ? Container(
                   height: 1.5,
-                  color: getColor(context, "lightDarkAccent"),
+                  color: getColor(context, "dividerColor"),
                 )
               : SizedBox.shrink(),
         ],
@@ -310,7 +310,7 @@ class EditRowEntry extends StatelessWidget {
           getPlatform() == PlatformOS.isIOS && index == 0
               ? Container(
                   height: 1.5,
-                  color: getColor(context, "lightDarkAccent"),
+                  color: getColor(context, "dividerColor"),
                 )
               : SizedBox.shrink(),
           Padding(
@@ -325,7 +325,7 @@ class EditRowEntry extends StatelessWidget {
           getPlatform() == PlatformOS.isIOS
               ? Container(
                   height: 1.5,
-                  color: getColor(context, "lightDarkAccent"),
+                  color: getColor(context, "dividerColor"),
                 )
               : SizedBox.shrink(),
         ],

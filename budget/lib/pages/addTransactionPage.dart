@@ -1932,7 +1932,6 @@ class _SelectTitleState extends State<SelectTitle> {
                           ),
                         )
                       : SizedBox.shrink(),
-                  SizedBox(height: 10),
                 ],
               ),
             ],
@@ -1974,7 +1973,8 @@ class _SelectTitleState extends State<SelectTitle> {
                     }
                   },
                 )
-              : SizedBox.shrink()
+              : SizedBox.shrink(),
+          SizedBox(height: 10),
         ],
       ),
     );
@@ -2444,7 +2444,7 @@ class HorizontalBreakAbove extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 10),
           height: 2,
           decoration: BoxDecoration(
-            color: getColor(context, "lightDarkAccent"),
+            color: getColor(context, "dividerColor"),
             borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
         ),

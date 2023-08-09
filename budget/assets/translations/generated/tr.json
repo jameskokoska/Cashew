@@ -404,5 +404,14 @@
   "history": "Tarih",
   "backup": "Destek olmak",
   "google-drive-backup": "Google Drive Yedekleme",
-  "google-drive-backup-description": "Tüm yedeklemeler kişisel Google Drive'ınızda oluşturulur ve geliştirici için erişilemez. Daha fazla ayrıntı için Gizlilik Politikasını okuyun."
+  "google-drive-backup-description": "Tüm yedeklemeler kişisel Google Drive'ınızda oluşturulur ve geliştirici için erişilemez. Daha fazla ayrıntı için Gizlilik Politikasını okuyun.",
+  "stored-backups": "Yedeklemeler saklanacak.",
+  "lets-go": "Hadi gidelim!",
+  "transactions-for-selected-category": "Seçilen kategoriden işlemleri gösterme",
+  "select-start-date": "Başlangıç ​​Tarihini seçin",
+  "all-time": "Her zaman",
+  "icon-suggestion-details": "İstediğiniz bir simge bulamıyor musunuz? Biraz önerin ve eklenebilirler!",
+  "suggestion": "Telkin",
+  "icon-suggestion-privacy": "Sadece öneri paylaşılacak.",
+  "suggest-icon": "Simge Öner"
 }

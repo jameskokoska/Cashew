@@ -10,8 +10,19 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
-    < 3.7.8
+    < 3.7.9
+    Suggest icon popup and suggestion container
+    New divider colors
+    New language picker
+    Fixed income and expense start date
+    Spending goals button to edit budget page
+    Budget page progress bars contrast color fixes
+    Selection click vibration instead of impacts
+    Fixed biometrics crash
+    Back button exits app on Android
     Fixed border on past budgets page when not in iOS
+    Edit spending goals button directly above categories on bigger screens
+    < 3.7.8
     Bottom safe area for popups
     Extra action now located as a full bottom button for popup
     Refactored select amount widget

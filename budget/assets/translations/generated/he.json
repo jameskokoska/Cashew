@@ -149,7 +149,7 @@
   "select-categories": "בחר קטגוריות",
   "transaction-filters": "מסנני עסקאות",
   "category-spending-goals": "יעדי הוצאות קטגוריות",
-  "saving-tracking": "אתה צריך לחסוך",
+  "saving-tracking": "אתה צריך לשמור",
   "for": "ל",
   "more-days": "עוד ימים",
   "spending-tracking": "אתה יכול להמשיך לבזבז",
@@ -202,7 +202,7 @@
   "discard": "להשליך",
   "changelog": "Changelog",
   "view-changelog": "Changelog",
-  "view-app-intro": "על סיפונה",
+  "view-app-intro": "על הסיפון",
   "app-is-open-source": "{app} הוא קוד פתוח!",
   "open-source": "קוד פתוח",
   "lead-developer": "המפתח המוביל",
@@ -404,5 +404,14 @@
   "history": "הִיסטוֹרִיָה",
   "backup": "גיבוי",
   "google-drive-backup": "גיבוי של Google Drive",
-  "google-drive-backup-description": "כל הגיבויים נוצרים בכונן Google האישי שלך ואינם נגישים למפתח. קרא את מדיניות הפרטיות לקבלת פרטים נוספים."
+  "google-drive-backup-description": "כל הגיבויים נוצרים בכונן Google האישי שלך ואינם נגישים למפתח. קרא את מדיניות הפרטיות לקבלת פרטים נוספים.",
+  "stored-backups": "גיבויים יאוחסנו.",
+  "lets-go": "בוא נלך!",
+  "transactions-for-selected-category": "מציג עסקאות מהקטגוריה שנבחרה",
+  "select-start-date": "בחר תאריך התחלה",
+  "all-time": "כל הזמן",
+  "icon-suggestion-details": "לא מצליחים למצוא אייקון שאתה רוצה? הצע כמה וניתן להוסיף אותם!",
+  "suggestion": "הַצָעָה",
+  "icon-suggestion-privacy": "רק ההצעה תשותף.",
+  "suggest-icon": "הצע אייקון"
 }

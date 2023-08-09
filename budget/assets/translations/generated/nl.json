@@ -404,5 +404,14 @@
   "history": "Geschiedenis",
   "backup": "Back -up",
   "google-drive-backup": "Google Drive back -up",
-  "google-drive-backup-description": "Alle back -ups worden gemaakt op uw persoonlijke Google Drive en zijn niet toegankelijk voor de ontwikkelaar. Lees het privacybeleid voor meer informatie."
+  "google-drive-backup-description": "Alle back -ups worden gemaakt op uw persoonlijke Google Drive en zijn niet toegankelijk voor de ontwikkelaar. Lees het privacybeleid voor meer informatie.",
+  "stored-backups": "Back -ups worden opgeslagen.",
+  "lets-go": "Laten we gaan!",
+  "transactions-for-selected-category": "Transacties weergeven uit de geselecteerde categorie",
+  "select-start-date": "Selecteer Startdatum",
+  "all-time": "Altijd",
+  "icon-suggestion-details": "Kunt u geen pictogram vinden dat u wilt? Stel wat voor en ze kunnen worden toegevoegd!",
+  "suggestion": "Suggestie",
+  "icon-suggestion-privacy": "Alleen de suggestie zal worden gedeeld.",
+  "suggest-icon": "Stel pictogram voor"
 }

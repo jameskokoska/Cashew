@@ -3398,7 +3398,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               transactions.paid.equals(true) &
               evaluateIfNull(
                   transactions.walletFk.equals(walletPk ?? 0), walletPk, true) &
-              onlyShowBasedOnTimeRange(transactions, null, startDate, null) &
+              onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
               evaluateIfNull(transactions.income.equals(isIncome ?? true),
                   isIncome, true) &
               onlyShowBasedOnIncome(transactions, isIncome));
