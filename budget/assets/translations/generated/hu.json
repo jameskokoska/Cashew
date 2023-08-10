@@ -412,6 +412,13 @@
   "all-time": "Mindig",
   "icon-suggestion-details": "Nem talál olyan ikont, amelyet szeretne? Javasolj néhányat, és hozzáadhatók!",
   "suggestion": "Javaslat",
-  "icon-suggestion-privacy": "Csak a javaslatot osztják meg.",
-  "suggest-icon": "Javasoljon ikont"
+  "icon-suggestion-privacy": "Csak a javaslatot és a dátumot osztják meg.",
+  "suggest-icon": "Javasoljon ikont",
+  "preview-demo": "Előnézeti bemutató",
+  "preview-demo-description": "Vegyünk egy túrát az alkalmazás felületéről és a funkciókról a véletlenszerűen generált mintadatok felhasználásával. Kerüljön ki az előnézetből, amikor csak tetszik.",
+  "activate": "Aktiválja",
+  "preview-demo-warning": "Az előnézeti bemutató jelenleg aktív, és automatikusan generált adatokat használnak. Nem ajánlott az alkalmazást demo módban használni, mivel ez adatvesztést okozhat. A generált adatok eltávolításához és a kilépési előnézeti bemutató kilépéséhez érintse meg itt.",
+  "exit-demo": "Kilépési demo",
+  "not-available-in-preview-demo": "Nem érhető el az előnézeti bemutatóban",
+  "not-available-in-preview-demo-description": "Tiltsa le az előnézeti demo módot a szolgáltatás használatához."
 }

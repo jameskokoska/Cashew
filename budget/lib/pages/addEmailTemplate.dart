@@ -349,7 +349,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
     return ScannerTemplate(
       scannerTemplatePk: widget.scannerTemplate != null
           ? widget.scannerTemplate!.scannerTemplatePk
-          : DateTime.now().millisecondsSinceEpoch,
+          : "-1",
       dateCreated: widget.scannerTemplate != null
           ? widget.scannerTemplate!.dateCreated
           : DateTime.now(),
@@ -361,7 +361,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
       templateName: selectedName ?? "",
       titleTransactionAfter: titleTransactionAfter ?? "",
       titleTransactionBefore: titleTransactionBefore ?? "",
-      walletFk: 0,
+      walletFk: "0",
       ignore: false,
     );
   }

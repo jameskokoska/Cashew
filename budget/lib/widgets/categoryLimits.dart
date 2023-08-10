@@ -25,8 +25,8 @@ class CategoryLimits extends StatefulWidget {
     required this.isAbsoluteSpendingLimit,
     super.key,
   });
-  final int budgetPk;
-  final List<int> selectedCategories;
+  final String budgetPk;
+  final List<String> selectedCategories;
   final double budgetLimit;
   final bool showAddCategoryButton;
   final bool isAbsoluteSpendingLimit;
@@ -45,7 +45,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
         stream: database.watchAllCategories(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<int> allCategoryFks = [
+            List<String> allCategoryFks = [
               for (TransactionCategory category in snapshot.data!)
                 category.categoryPk
             ];
@@ -155,7 +155,7 @@ class CategoryLimitEntry extends StatefulWidget {
   final TransactionCategory category;
   final double budgetLimit;
   final CategoryBudgetLimit? categoryLimit;
-  final int budgetPk;
+  final String budgetPk;
   final bool isAbsoluteSpendingLimit;
 
   @override
@@ -296,7 +296,7 @@ void enterCategoryLimitPopup(
   context,
   TransactionCategory category,
   CategoryBudgetLimit? categoryLimit,
-  int budgetPk,
+  String budgetPk,
   Function(double) setSelectedAmount,
   bool isAbsoluteSpendingLimit,
 ) async {
@@ -359,7 +359,7 @@ void enterCategoryLimitPopup(
     database.createOrUpdateCategoryLimit(
       insert: true,
       CategoryBudgetLimit(
-        categoryLimitPk: -1,
+        categoryLimitPk: "-1",
         categoryFk: category.categoryPk,
         budgetFk: budgetPk,
         amount: amount,

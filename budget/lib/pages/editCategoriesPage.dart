@@ -173,7 +173,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                 StreamBuilder<List<int?>>(
                                   stream: database
                                       .watchTotalCountOfTransactionsInWalletInCategory(
-                                          appStateSettings["selectedWallet"],
+                                          appStateSettings["selectedWalletPk"],
                                           category.categoryPk),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData &&

@@ -412,6 +412,13 @@
   "all-time": "Alle Zeit",
   "icon-suggestion-details": "Sie können kein Symbol finden, das Sie wollen? Schlagen Sie einige vor und sie können hinzugefügt werden!",
   "suggestion": "Anregung",
-  "icon-suggestion-privacy": "Nur der Vorschlag wird geteilt.",
-  "suggest-icon": "Ikone vorschlagen"
+  "icon-suggestion-privacy": "Nur der Vorschlag und das Datum werden geteilt.",
+  "suggest-icon": "Ikone vorschlagen",
+  "preview-demo": "Vorschau -Demo",
+  "preview-demo-description": "Machen Sie eine Tour durch die Schnittstelle und Funktionen der App mit zufällig generierten Beispieldaten. Beenden Sie die Vorschau, wann immer Sie möchten.",
+  "activate": "aktivieren Sie",
+  "preview-demo-warning": "Die Vorschau-Demo ist derzeit aktiv und es werden automatische Daten verwendet. Es wird nicht empfohlen, die Anwendung im Demo -Modus zu verwenden, da dies zu Datenverlust führen kann. Tippen Sie hier, um generierte Daten zu entfernen und die Vorschau -Demo zu beenden.",
+  "exit-demo": "Demo beenden",
+  "not-available-in-preview-demo": "Nicht in der Vorschau -Demo verfügbar",
+  "not-available-in-preview-demo-description": "Deaktivieren Sie den Vorschau -Demo -Modus, um diese Funktion zu verwenden."
 }

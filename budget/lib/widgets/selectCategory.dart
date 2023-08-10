@@ -33,9 +33,9 @@ class SelectCategory extends StatefulWidget {
     this.hideCategoryFks,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
-  final Function(List<int>)? setSelectedCategories;
+  final Function(List<String>)? setSelectedCategories;
   final TransactionCategory? selectedCategory;
-  final List<int>? selectedCategories;
+  final List<String>? selectedCategories;
   final VoidCallback? next;
   final bool? skipIfSet;
   final String? nextLabel;
@@ -45,15 +45,15 @@ class SelectCategory extends StatefulWidget {
   final bool labelIcon;
   final bool addButton;
   final bool scaleWhenSelected;
-  final List<int>? categoryFks;
-  final List<int>? hideCategoryFks;
+  final List<String>? categoryFks;
+  final List<String>? hideCategoryFks;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
 }
 
 class _SelectCategoryState extends State<SelectCategory> {
-  List<int> selectedCategories = [];
+  List<String> selectedCategories = [];
   bool updatedInitial = false;
   late ScrollController _scrollController;
 
@@ -92,7 +92,7 @@ class _SelectCategoryState extends State<SelectCategory> {
       });
     } else if (widget.selectedCategory != null) {
       setState(() {
-        selectedCategories.add(-1);
+        selectedCategories.add("-1");
       });
     }
   }

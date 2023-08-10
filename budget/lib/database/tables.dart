@@ -18,7 +18,7 @@ import 'package:budget/struct/currencyFunctions.dart';
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 36;
+int schemaVersionGlobal = 37;
 
 // Generate database code
 // dart run build_runner build
@@ -70,7 +70,7 @@ const allBudgetTransactionFilters = [
 
 enum ThemeSetting { dark, light }
 
-enum MethodAdded { email, shared, csv }
+enum MethodAdded { email, shared, csv, preview }
 
 enum SharedStatus { waiting, shared, error }
 
@@ -109,7 +109,10 @@ class StringListInColumnConverter extends TypeConverter<List<String>, String> {
   const StringListInColumnConverter();
   @override
   List<String> fromSql(String string_from_db) {
-    return new List<String>.from(json.decode(string_from_db));
+    List<dynamic> dynamicList = List<dynamic>.from(json.decode(string_from_db));
+    List<String> stringList =
+        dynamicList.map((dynamic item) => item.toString()).toList();
+    return stringList;
   }
 
   @override
@@ -153,16 +156,19 @@ enum UpdateLogType {
 
 @DataClassName('DeleteLog')
 class DeleteLogs extends Table {
-  IntColumn get deleteLogPk => integer().autoIncrement()();
+  TextColumn get deleteLogPk => text().clientDefault(() => uuid.v4())();
+  TextColumn get entryPk => text()();
   IntColumn get type => intEnum<DeleteLogType>()();
-  IntColumn get entryPk => integer()();
   DateTimeColumn get dateTimeModified =>
       dateTime().withDefault(Constant(DateTime.now()))();
+
+  @override
+  Set<Column> get primaryKey => {deleteLogPk};
 }
 
 @DataClassName('TransactionWallet')
 class Wallets extends Table {
-  IntColumn get walletPk => integer().autoIncrement()();
+  TextColumn get walletPk => text().clientDefault(() => uuid.v4())();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   TextColumn get colour => text().withLength(max: COLOUR_LIMIT).nullable()();
   TextColumn get iconName => text().nullable()(); // Money symbol
@@ -173,16 +179,19 @@ class Wallets extends Table {
   IntColumn get order => integer()();
   TextColumn get currency => text().nullable()();
   IntColumn get decimals => integer().withDefault(Constant(2))();
+
+  @override
+  Set<Column> get primaryKey => {walletPk};
 }
 
 @DataClassName('Transaction')
 class Transactions extends Table {
-  IntColumn get transactionPk => integer().autoIncrement()();
+  TextColumn get transactionPk => text().clientDefault(() => uuid.v4())();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   RealColumn get amount => real()();
   TextColumn get note => text().withLength(max: NOTE_LIMIT)();
-  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
-  IntColumn get walletFk => integer().references(Wallets, #walletPk)();
+  TextColumn get categoryFk => text().references(Categories, #categoryPk)();
+  TextColumn get walletFk => text().references(Wallets, #walletPk)();
   // TextColumn get labelFks =>
   //     text().map(const IntListInColumnConverter()).nullable()();
   DateTimeColumn get dateCreated =>
@@ -218,12 +227,15 @@ class Transactions extends Table {
   IntColumn get sharedStatus => intEnum<SharedStatus>().nullable()();
   DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
   // the budget this transaction belongs to
-  IntColumn get sharedReferenceBudgetPk => integer().nullable()();
+  TextColumn get sharedReferenceBudgetPk => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {transactionPk};
 }
 
 @DataClassName('TransactionCategory')
 class Categories extends Table {
-  IntColumn get categoryPk => integer().autoIncrement()();
+  TextColumn get categoryPk => text().clientDefault(() => uuid.v4())();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   TextColumn get colour => text().withLength(max: COLOUR_LIMIT).nullable()();
   TextColumn get iconName => text().nullable()();
@@ -241,16 +253,22 @@ class Categories extends Table {
   // DateTimeColumn get sharedDateUpdated => dateTime().nullable()();
   // TextColumn get sharedMembers =>
   //     text().map(const StringListInColumnConverter()).nullable()();
+
+  @override
+  Set<Column> get primaryKey => {categoryPk};
 }
 
 @DataClassName('CategoryBudgetLimit')
 class CategoryBudgetLimits extends Table {
-  IntColumn get categoryLimitPk => integer().autoIncrement()();
-  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
-  IntColumn get budgetFk => integer().references(Budgets, #budgetPk)();
+  TextColumn get categoryLimitPk => text().clientDefault(() => uuid.v4())();
+  TextColumn get categoryFk => text().references(Categories, #categoryPk)();
+  TextColumn get budgetFk => text().references(Budgets, #budgetPk)();
   RealColumn get amount => real()();
   DateTimeColumn get dateTimeModified =>
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
+
+  @override
+  Set<Column> get primaryKey => {categoryLimitPk};
 }
 
 //If a title is in a smart label, automatically choose this category
@@ -259,15 +277,18 @@ class CategoryBudgetLimits extends Table {
 // Then when user sets title to pineapple, it will set the category to Food. Because "apple" is in "pineapple".
 @DataClassName('TransactionAssociatedTitle')
 class AssociatedTitles extends Table {
-  IntColumn get associatedTitlePk => integer().autoIncrement()();
+  TextColumn get associatedTitlePk => text().clientDefault(() => uuid.v4())();
+  TextColumn get categoryFk => text().references(Categories, #categoryPk)();
   TextColumn get title => text().withLength(max: NAME_LIMIT)();
-  IntColumn get categoryFk => integer().references(Categories, #categoryPk)();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   DateTimeColumn get dateTimeModified =>
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
   IntColumn get order => integer()();
   BoolColumn get isExactMatch => boolean().withDefault(const Constant(false))();
+
+  @override
+  Set<Column> get primaryKey => {associatedTitlePk};
 }
 
 // @DataClassName('TransactionLabel')
@@ -284,7 +305,7 @@ class AssociatedTitles extends Table {
 
 @DataClassName('Budget')
 class Budgets extends Table {
-  IntColumn get budgetPk => integer().autoIncrement()();
+  TextColumn get budgetPk => text().clientDefault(() => uuid.v4())();
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   RealColumn get amount => real()();
   TextColumn get colour => text()
@@ -293,7 +314,7 @@ class Budgets extends Table {
   DateTimeColumn get startDate => dateTime()();
   DateTimeColumn get endDate => dateTime()();
   TextColumn get categoryFks =>
-      text().map(const IntListInColumnConverter()).nullable()();
+      text().map(const StringListInColumnConverter()).nullable()();
   BoolColumn get allCategoryFks => boolean()();
   BoolColumn get addedTransactionsOnly =>
       boolean().withDefault(const Constant(false))();
@@ -305,7 +326,7 @@ class Budgets extends Table {
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
   IntColumn get order => integer()();
-  IntColumn get walletFk => integer().references(Wallets, #walletPk)();
+  TextColumn get walletFk => text().references(Wallets, #walletPk)();
   TextColumn get budgetTransactionFilters => text()
       .nullable()
       .withDefault(const Constant(null))
@@ -325,11 +346,15 @@ class Budgets extends Table {
       text().map(const StringListInColumnConverter()).nullable()();
   BoolColumn get isAbsoluteSpendingLimit =>
       boolean().withDefault(const Constant(false))();
+
+  @override
+  Set<Column> get primaryKey => {budgetPk};
 }
 // Server entry
 
 @DataClassName('AppSetting')
 class AppSettings extends Table {
+  // We can keep it as an IntColumn, there will only ever be one entry at id 0
   IntColumn get settingsPk => integer().autoIncrement()();
   TextColumn get settingsJSON =>
       text()(); // This is the JSON stored as a string for shared prefs 'userSettings'
@@ -339,7 +364,7 @@ class AppSettings extends Table {
 
 @DataClassName('ScannerTemplate')
 class ScannerTemplates extends Table {
-  IntColumn get scannerTemplatePk => integer().autoIncrement()();
+  TextColumn get scannerTemplatePk => text().clientDefault(() => uuid.v4())();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   DateTimeColumn get dateTimeModified =>
@@ -351,11 +376,14 @@ class ScannerTemplates extends Table {
   TextColumn get amountTransactionBefore =>
       text().withLength(max: NAME_LIMIT)();
   TextColumn get amountTransactionAfter => text().withLength(max: NAME_LIMIT)();
-  IntColumn get defaultCategoryFk =>
-      integer().references(Categories, #categoryPk)();
-  IntColumn get walletFk => integer().references(Wallets, #walletPk)();
+  TextColumn get defaultCategoryFk =>
+      text().references(Categories, #categoryPk)();
+  TextColumn get walletFk => text().references(Wallets, #walletPk)();
   // TODO: if it contains certain keyword ignore these emails
   BoolColumn get ignore => boolean().withDefault(const Constant(false))();
+
+  @override
+  Set<Column> get primaryKey => {scannerTemplatePk};
 }
 
 class TransactionWithCategory {
@@ -366,7 +394,7 @@ class TransactionWithCategory {
 
 class AllWallets {
   final List<TransactionWallet> list;
-  final Map<int, TransactionWallet> indexedByPk;
+  final Map<String, TransactionWallet> indexedByPk;
   AllWallets({required this.list, required this.indexedByPk});
 }
 
@@ -569,6 +597,68 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (from <= 35) {
             await migrator.alterTable(TableMigration(transactions));
           }
+          if (from <= 36) {
+            await migrator.alterTable(
+              TableMigration(deleteLogs, columnTransformer: {
+                deleteLogs.deleteLogPk: deleteLogs.deleteLogPk.cast<String>(),
+                deleteLogs.entryPk: deleteLogs.entryPk.cast<String>(),
+              }),
+            );
+            await migrator.alterTable(
+              TableMigration(wallets, columnTransformer: {
+                wallets.walletPk: wallets.walletPk.cast<String>(),
+              }),
+            );
+            await migrator.alterTable(
+              TableMigration(transactions, columnTransformer: {
+                transactions.transactionPk:
+                    transactions.transactionPk.cast<String>(),
+                transactions.categoryFk: transactions.categoryFk.cast<String>(),
+                transactions.walletFk: transactions.walletFk.cast<String>(),
+                transactions.sharedReferenceBudgetPk:
+                    transactions.sharedReferenceBudgetPk.cast<String>(),
+              }),
+            );
+            await migrator.alterTable(
+              TableMigration(categories, columnTransformer: {
+                categories.categoryPk: categories.categoryPk.cast<String>(),
+              }),
+            );
+            await migrator.alterTable(
+              TableMigration(categoryBudgetLimits, columnTransformer: {
+                categoryBudgetLimits.categoryLimitPk:
+                    categoryBudgetLimits.categoryLimitPk.cast<String>(),
+                categoryBudgetLimits.categoryFk:
+                    categoryBudgetLimits.categoryFk.cast<String>(),
+                categoryBudgetLimits.budgetFk:
+                    categoryBudgetLimits.budgetFk.cast<String>(),
+              }),
+            );
+            await migrator.alterTable(
+              TableMigration(associatedTitles, columnTransformer: {
+                associatedTitles.associatedTitlePk:
+                    associatedTitles.associatedTitlePk.cast<String>(),
+                associatedTitles.categoryFk:
+                    associatedTitles.categoryFk.cast<String>(),
+              }),
+            );
+            await migrator.alterTable(
+              TableMigration(budgets, columnTransformer: {
+                budgets.budgetPk: budgets.budgetPk.cast<String>(),
+                budgets.walletFk: budgets.walletFk.cast<String>(),
+              }),
+            );
+            await migrator.alterTable(
+              TableMigration(scannerTemplates, columnTransformer: {
+                scannerTemplates.scannerTemplatePk:
+                    scannerTemplates.scannerTemplatePk.cast<String>(),
+                scannerTemplates.defaultCategoryFk:
+                    scannerTemplates.defaultCategoryFk.cast<String>(),
+                scannerTemplates.walletFk:
+                    scannerTemplates.walletFk.cast<String>(),
+              }),
+            );
+          }
         },
       );
 
@@ -633,13 +723,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime date, {
     String search = "",
     // Search will be ignored... if these params are passed in
-    List<int> categoryFks = const [],
-    List<int> walletFks = const [],
+    List<String> categoryFks = const [],
+    List<String> walletFks = const [],
     bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
     required List<String>? memberTransactionFilters,
     String? member,
-    int? onlyShowTransactionsBelongingToBudget,
+    String? onlyShowTransactionsBelongingToBudgetPk,
     SearchFilters? searchFilters,
   }) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
@@ -656,7 +746,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowBasedOnIncome(tbl, income) &
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(
-                    tbl, onlyShowTransactionsBelongingToBudget) &
+                    tbl, onlyShowTransactionsBelongingToBudgetPk) &
                 (categories.name
                         .lower()
                         .like("%" + search.toLowerCase() + "%") |
@@ -715,13 +805,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     required DateTime? end,
     String search = "",
     // Search will be ignored... if these params are passed in
-    List<int> categoryFks = const [],
-    List<int> walletFks = const [],
+    List<String> categoryFks = const [],
+    List<String> walletFks = const [],
     bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
     required List<String>? memberTransactionFilters,
     String? member,
-    int? onlyShowTransactionsBelongingToBudget,
+    String? onlyShowTransactionsBelongingToBudgetPk,
     Budget? budget,
     int? limit,
     SearchFilters? searchFilters,
@@ -754,7 +844,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           onlyShowBasedOnIncome(transactions, income) &
           onlyShowIfMember(transactions, member) &
           onlyShowIfCertainBudget(
-              transactions, onlyShowTransactionsBelongingToBudget))
+              transactions, onlyShowTransactionsBelongingToBudgetPk))
       ..addColumns([transactions.dateCreated])
       ..where(transactions.dateCreated.isNotNull())
       ..limit(limit ?? DEFAULT_LIMIT, offset: null);
@@ -780,7 +870,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime date, {
     String search = "",
     // Search will be ignored... if these params are passed in
-    List<int> categoryFks = const [],
+    List<String> categoryFks = const [],
   }) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
     if (categoryFks.length > 0) {
@@ -831,7 +921,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       DateTime? endDate,
       String search = "",
       // Search will be ignored... if these params are passed in
-      List<int> categoryFks = const []}) {
+      List<String> categoryFks = const []}) {
     if (categoryFks.length > 0) {
       final query = (select(transactions)
         ..where((tbl) {
@@ -1060,12 +1150,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (query.watch(), query.get());
   }
 
-  Stream<Budget> getBudget(int budgetPk) {
+  Stream<Budget> getBudget(String budgetPk) {
     return (select(budgets)..where((b) => b.budgetPk.equals(budgetPk)))
         .watchSingle();
   }
 
-  Stream<TransactionWallet> getWallet(int walletPk) {
+  Stream<TransactionWallet> getWallet(String walletPk) {
     return (select(wallets)..where((w) => w.walletPk.equals(walletPk)))
         .watchSingle();
   }
@@ -1074,7 +1164,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (await select(budgets).get()).length;
   }
 
-  Future moveBudget(int budgetPk, int newPosition, int oldPosition) async {
+  Future<List<Transaction>> getAllPreviewTransactions() {
+    return (select(transactions)
+          ..where((tbl) =>
+              tbl.methodAdded.equalsValue(MethodAdded.preview) &
+              tbl.methodAdded.isNotNull()))
+        .get();
+  }
+
+  Future moveBudget(String budgetPk, int newPosition, int oldPosition) async {
     List<Budget> budgetsList = await (select(budgets)
           ..orderBy([(b) => OrderingTerm.asc(b.order)]))
         .get();
@@ -1149,7 +1247,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(wallets)..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .watch()
         .map((wallets) {
-      Map<int, TransactionWallet> indexedByPk = {
+      Map<String, TransactionWallet> indexedByPk = {
         for (TransactionWallet wallet in wallets) wallet.walletPk: wallet,
       };
       return AllWallets(list: wallets, indexedByPk: indexedByPk);
@@ -1254,7 +1352,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (await select(budgets).get()).length;
   }
 
-  Future moveWallet(int walletPk, int newPosition, int oldPosition) async {
+  Future moveWallet(String walletPk, int newPosition, int oldPosition) async {
     List<TransactionWallet> walletsList = await (select(wallets)
           ..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .get();
@@ -1335,7 +1433,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return select(deleteLogs).get();
   }
 
-  Future<bool> createDeleteLog(DeleteLogType type, int deletedPk) async {
+  Future<bool> createDeleteLog(DeleteLogType type, String deletedPk) async {
     await into(deleteLogs).insert(
       DeleteLogsCompanion.insert(
         type: type,
@@ -1348,9 +1446,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<bool> createDeleteLogs(
-      DeleteLogType type, List<int> deletedPks) async {
+      DeleteLogType type, List<String> deletedPks) async {
     List<DeleteLogsCompanion> deleteLogsToInsert = [];
-    for (int deletePk in deletedPks) {
+    for (String deletePk in deletedPks) {
       deleteLogsToInsert.add(
         DeleteLogsCompanion.insert(
           type: type,
@@ -1413,6 +1511,9 @@ class FinanceDatabase extends _$FinanceDatabase {
       {bool insert = false}) {
     categoryLimit =
         categoryLimit.copyWith(dateTimeModified: Value(DateTime.now()));
+
+    print(categoryLimit);
+
     CategoryBudgetLimitsCompanion companionToInsert =
         categoryLimit.toCompanion(true);
 
@@ -1450,7 +1551,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<TransactionAssociatedTitle> getRelatingAssociatedTitleWithCategory(
-      String searchFor, int categoryFk,
+      String searchFor, String categoryFk,
       {int? limit, int? offset}) async {
     return (await (select(associatedTitles)
               ..where((t) =>
@@ -1486,7 +1587,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
-    int categoryFk,
+    String categoryFk,
   ) {
     return (select(associatedTitles)
           ..where((t) => t.categoryFk.equals(categoryFk))
@@ -1495,7 +1596,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<List<TransactionAssociatedTitle>> getAllAssociatedTitlesInCategory(
-    int categoryFk,
+    String categoryFk,
   ) {
     return (select(associatedTitles)
           ..where((t) => t.categoryFk.equals(categoryFk))
@@ -1503,15 +1604,19 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
-  Stream<List<CategoryBudgetLimit>> watchAllCategoryLimitsInBudget(int budgetPk,
-      {int? limit, int? offset}) {
+  Stream<List<CategoryBudgetLimit>> watchAllCategoryLimitsInBudget(
+      String budgetPk,
+      {int? limit,
+      int? offset}) {
     return (select(categoryBudgetLimits)
           ..where((t) => t.budgetFk.equals(budgetPk)))
         .watch();
   }
 
   Future<bool> toggleAbsolutePercentSpendingCategoryBudgetLimits(
-      int budgetPk, double budgetSetAmount, bool absoluteToPercentage) async {
+      String budgetPk,
+      double budgetSetAmount,
+      bool absoluteToPercentage) async {
     List<CategoryBudgetLimit> categorySpendingLimits =
         await (select(categoryBudgetLimits)
               ..where((t) => t.budgetFk.equals(budgetPk)))
@@ -1537,38 +1642,39 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   (Stream<CategoryBudgetLimit?>, Future<CategoryBudgetLimit?>) getCategoryLimit(
-      int? budgetPk, int? categoryPk) {
+      String? budgetPk, String? categoryPk) {
     SimpleSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
         query = (select(categoryBudgetLimits)
           ..where((t) =>
-              evaluateIfNull(t.budgetFk.equals(budgetPk ?? 0), budgetPk, true) &
               evaluateIfNull(
-                  t.categoryFk.equals(categoryPk ?? 0), categoryPk, true)));
+                  t.budgetFk.equals(budgetPk ?? "0"), budgetPk, true) &
+              evaluateIfNull(
+                  t.categoryFk.equals(categoryPk ?? "0"), categoryPk, true)));
     return (query.watchSingleOrNull(), query.getSingleOrNull());
   }
 
   (Stream<CategoryBudgetLimit>, Future<CategoryBudgetLimit>)
-      getCategoryBudgetLimitInstance(int categoryLimitPk) {
+      getCategoryBudgetLimitInstance(String categoryLimitPk) {
     final SimpleSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
         query = (select(categoryBudgetLimits)
           ..where((t) => t.categoryLimitPk.equals(categoryLimitPk)));
     return (query.watchSingle(), query.getSingle());
   }
 
-  Stream<TransactionCategory> watchCategory(int categoryPk) {
+  Stream<TransactionCategory> watchCategory(String categoryPk) {
     return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
         .watchSingle();
   }
 
   (Stream<TransactionCategory>, Future<TransactionCategory>) getCategory(
-      int categoryPk) {
+      String categoryPk) {
     final SimpleSelectStatement<$CategoriesTable, TransactionCategory> query =
         (select(categories)..where((t) => t.categoryPk.equals(categoryPk)));
     return (query.watchSingle(), query.getSingle());
   }
 
   (Stream<TransactionAssociatedTitle>, Future<TransactionAssociatedTitle>)
-      getAssociatedTitleInstance(int associatedTitlePk) {
+      getAssociatedTitleInstance(String associatedTitlePk) {
     final SimpleSelectStatement<$AssociatedTitlesTable,
         TransactionAssociatedTitle> query = (select(associatedTitles)
       ..where((t) => t.associatedTitlePk.equals(associatedTitlePk)));
@@ -1603,7 +1709,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future moveAssociatedTitle(
-      int associatedTitlePk, int newPosition, int oldPosition) async {
+      String associatedTitlePk, int newPosition, int oldPosition) async {
     List<TransactionAssociatedTitle> associatedTitlesList =
         await (select(associatedTitles)
               ..orderBy([(t) => OrderingTerm.asc(t.order)]))
@@ -1781,7 +1887,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             await createOrUpdateTransaction(
               insert: true,
               transaction.copyWith(
-                transactionPk: -1,
+                transactionPk: "-1",
                 sharedKey: Value(null),
                 // transactionOwnerEmail: Value(null),
                 // transactionOriginalOwnerEmail: Value(null),
@@ -1817,7 +1923,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           await createOrUpdateTransaction(
               insert: true,
               transaction.copyWith(
-                transactionPk: -1,
+                transactionPk: "-1",
                 sharedKey: Value(null),
                 transactionOwnerEmail: Value(null),
                 transactionOriginalOwnerEmail: Value(null),
@@ -1838,6 +1944,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       // Use auto incremented ID when inserting
       companionToInsert =
           companionToInsert.copyWith(transactionPk: Value.absent());
+    }
+
+    if (insert == false && transaction.methodAdded == MethodAdded.preview) {
+      companionToInsert = companionToInsert.copyWith(methodAdded: Value(null));
     }
 
     return into(transactions)
@@ -2388,13 +2498,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get category given key
-  Future<TransactionCategory> getCategoryInstance(int categoryPk) {
+  Future<TransactionCategory> getCategoryInstance(String categoryPk) {
     return (select(categories)..where((t) => t.categoryPk.equals(categoryPk)))
         .getSingle();
   }
 
   // get budget given key
-  Future<Budget> getBudgetInstance(int budgetPk) {
+  Future<Budget> getBudgetInstance(String budgetPk) {
     return (select(budgets)..where((t) => t.budgetPk.equals(budgetPk)))
         .getSingle();
   }
@@ -2418,7 +2528,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  Stream<Map<int, TransactionCategory>> watchAllCategoriesMapped(
+  Stream<Map<String, TransactionCategory>> watchAllCategoriesMapped(
       {int? limit, int? offset}) {
     return (select(categories)
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
@@ -2428,7 +2538,10 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<List<TransactionCategory>> getAllCategories(
-      {int? limit, int? offset, List<int>? categoryFks, bool? allCategories}) {
+      {int? limit,
+      int? offset,
+      List<String>? categoryFks,
+      bool? allCategories}) {
     return (select(categories)
           ..where((c) => (allCategories != false
               ? Constant(true)
@@ -2438,8 +2551,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
-  Future<List<int>> getAllCategoryPks(
-      {int? limit, int? offset, List<int>? categoryFks, bool? allCategories}) {
+  Future<List<String>> getAllCategoryPks(
+      {int? limit,
+      int? offset,
+      List<String>? categoryFks,
+      bool? allCategories}) {
     return (select(categories)
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
@@ -2493,7 +2609,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (await select(associatedTitles).get()).length;
   }
 
-  Future moveCategory(int categoryPk, int newPosition, int oldPosition) async {
+  Future moveCategory(
+      String categoryPk, int newPosition, int oldPosition) async {
     List<TransactionCategory> categoriesList = await (select(categories)
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
@@ -2570,12 +2687,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get wallet given id
-  Future<TransactionWallet> getWalletInstance(int walletPk) {
+  Future<TransactionWallet> getWalletInstance(String walletPk) {
     return (select(wallets)..where((w) => w.walletPk.equals(walletPk)))
         .getSingle();
   }
 
-  Future<ScannerTemplate> getScannerTemplateInstance(int scannerTemplatePk) {
+  Future<ScannerTemplate> getScannerTemplateInstance(String scannerTemplatePk) {
     return (select(scannerTemplates)
           ..where((s) => s.scannerTemplatePk.equals(scannerTemplatePk)))
         .getSingle();
@@ -2616,7 +2733,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete transaction given key
-  Future deleteTransaction(int transactionPk,
+  Future deleteTransaction(String transactionPk,
       {bool updateSharedEntry = true}) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
@@ -2637,12 +2754,12 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
-  Future deleteTransactions(List<int> transactionPks,
+  Future deleteTransactions(List<String> transactionPks,
       {bool updateSharedEntry = true}) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
     // Send the delete log to the server
-    for (int transactionPk in transactionPks) {
+    for (String transactionPk in transactionPks) {
       if (updateSharedEntry) {
         Transaction transactionToDelete =
             await database.getTransactionFromPk(transactionPk);
@@ -2661,21 +2778,25 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
-  Future deleteCategoryBudgetLimitsInBudget(int budgetPk) async {
+  Future forceDeleteBudgets(List<String> budgetPks) async {
+    return (delete(budgets)..where((t) => t.budgetPk.isIn(budgetPks))).go();
+  }
+
+  Future deleteCategoryBudgetLimitsInBudget(String budgetPk) async {
     await createDeleteLog(DeleteLogType.Budget, budgetPk);
     return (delete(categoryBudgetLimits)
           ..where((t) => t.budgetFk.equals(budgetPk)))
         .go();
   }
 
-  Future deleteCategoryBudgetLimitsInCategory(int categoryPk) async {
+  Future deleteCategoryBudgetLimitsInCategory(String categoryPk) async {
     await createDeleteLog(DeleteLogType.TransactionCategory, categoryPk);
     return (delete(categoryBudgetLimits)
           ..where((t) => t.categoryFk.equals(categoryPk)))
         .go();
   }
 
-  Future deleteCategoryBudgetLimit(int categoryLimitPk) async {
+  Future deleteCategoryBudgetLimit(String categoryLimitPk) async {
     await createDeleteLog(DeleteLogType.CategoryBudgetLimit, categoryLimitPk);
     return (delete(categoryBudgetLimits)
           ..where((t) => t.categoryLimitPk.equals(categoryLimitPk)))
@@ -2683,7 +2804,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete category given key
-  Future deleteCategory(int categoryPk, int order) async {
+  Future deleteCategory(String categoryPk, int order) async {
     List<TransactionAssociatedTitle> allAssociatedTitles =
         await getAllAssociatedTitles();
     for (TransactionAssociatedTitle associatedTitle in allAssociatedTitles) {
@@ -2718,11 +2839,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete transactions that belong to specific category key
-  Future deleteCategoryTransactions(int categoryPk) async {
+  Future deleteCategoryTransactions(String categoryPk) async {
     List<Transaction> transactionsToDelete = await (select(transactions)
           ..where((t) => t.categoryFk.equals(categoryPk)))
         .get();
-    List<int> transactionPks = transactionsToDelete
+    List<String> transactionPks = transactionsToDelete
         .map((transaction) => transaction.transactionPk)
         .toList();
     await createDeleteLogs(DeleteLogType.Transaction, transactionPks);
@@ -2731,8 +2852,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete wallet given key
-  Future deleteWallet(int walletPk, int order) async {
-    if (walletPk == 0) {
+  Future deleteWallet(String walletPk, int order) async {
+    if (walletPk == "0") {
       throw "Can't delete default wallet";
     }
     await database.shiftWallets(-1, order);
@@ -2741,7 +2862,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<bool> moveWalletTransactons(
-      AllWallets allWallets, int walletPk, int toWalletPk) async {
+      AllWallets allWallets, String walletPk, String toWalletPk) async {
     List<Transaction> transactionsForMove = await (select(transactions)
           ..where((tbl) {
             return tbl.walletFk.equals(walletPk);
@@ -2763,7 +2884,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future deleteScannerTemplate(int scannerTemplatePk) async {
+  Future deleteScannerTemplate(String scannerTemplatePk) async {
     await createDeleteLog(DeleteLogType.ScannerTemplate, scannerTemplatePk);
     return (delete(scannerTemplates)
           ..where((s) => s.scannerTemplatePk.equals(scannerTemplatePk)))
@@ -2771,13 +2892,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete transactions that belong to specific wallet key
-  Future deleteWalletsTransactions(int walletPk) async {
+  Future deleteWalletsTransactions(String walletPk) async {
     List<Transaction> transactionPkForDelete = await (select(transactions)
           ..where((tbl) {
             return tbl.walletFk.equals(walletPk);
           }))
         .get();
-    List<int> transactionIds =
+    List<String> transactionIds =
         transactionPkForDelete.map((t) => t.transactionPk).toList();
     await createDeleteLogs(DeleteLogType.Transaction, transactionIds);
     return (delete(transactions)..where((t) => t.walletFk.equals(walletPk)))
@@ -2785,7 +2906,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   //delete associated title given key
-  Future deleteAssociatedTitle(int associatedTitlePk, int order) async {
+  Future deleteAssociatedTitle(String associatedTitlePk, int order) async {
     await database.shiftAssociatedTitles(-1, order);
     await createDeleteLog(
         DeleteLogType.TransactionAssociatedTitle, associatedTitlePk);
@@ -2832,7 +2953,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<CategoryWithTotal>> totalCategoryTotalStream(
       List<Stream<List<CategoryWithTotal>>> mergedStreams) {
     return StreamZip(mergedStreams).map((lists) {
-      final Map<int, CategoryWithTotal> categoryTotals = {};
+      final Map<String, CategoryWithTotal> categoryTotals = {};
       for (final list in lists) {
         for (final item in list) {
           categoryTotals[item.category.categoryPk] = CategoryWithTotal(
@@ -2852,7 +2973,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfCategoryLimitsInBudgetWithCategories(
-      int budgetPk, List<int> categoryPks) {
+      String budgetPk, List<String> categoryPks) {
     final totalAmt = categoryBudgetLimits.amount.sum();
     JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
         query;
@@ -2866,7 +2987,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalSpentGivenList(
-      AllWallets allWallets, List<int> transactionPks) {
+      AllWallets allWallets, List<String> transactionPks) {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
@@ -2893,12 +3014,12 @@ class FinanceDatabase extends _$FinanceDatabase {
       AllWallets allWallets,
       DateTime start,
       DateTime end,
-      List<int>? categoryFks,
+      List<String>? categoryFks,
       bool allCategories,
       List<BudgetTransactionFilters>? budgetTransactionFilters,
       List<String>? memberTransactionFilters,
       {bool allCashFlow = false,
-      int? onlyShowTransactionsBelongingToBudget,
+      String? onlyShowTransactionsBelongingToBudgetPk,
       Budget? budget}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -2918,7 +3039,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                     ? transactions.income.isIn([true, false])
                     : transactions.income.equals(false)) &
                 onlyShowIfCertainBudget(
-                    transactions, onlyShowTransactionsBelongingToBudget) &
+                    transactions, onlyShowTransactionsBelongingToBudgetPk) &
                 transactions.walletFk.equals(wallet.walletPk) &
                 onlyShowIfFollowsFilters(transactions,
                     budgetTransactionFilters: budgetTransactionFilters,
@@ -2935,7 +3056,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                     ? transactions.income.isIn([true, false])
                     : transactions.income.equals(false)) &
                 onlyShowIfCertainBudget(
-                    transactions, onlyShowTransactionsBelongingToBudget) &
+                    transactions, onlyShowTransactionsBelongingToBudgetPk) &
                 transactions.walletFk.equals(wallet.walletPk) &
                 onlyShowIfFollowsFilters(transactions,
                     budgetTransactionFilters: budgetTransactionFilters,
@@ -3107,7 +3228,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     AllWallets allWallets,
     DateTime start,
     DateTime end,
-    int budgetPk,
+    String budgetPk,
   ) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -3142,10 +3263,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       AllWallets allWallets,
       DateTime start,
       DateTime end,
-      List<int> categoryFks,
+      List<String> categoryFks,
       bool allCategories,
       String userEmail,
-      int onlyShowTransactionsBelongingToBudget,
+      String onlyShowTransactionsBelongingToBudgetPk,
       {bool allTime = false}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -3166,7 +3287,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             isInCategory(transactions, allCategories, categoryFks) &
             transactions.transactionOwnerEmail.equals(userEmail) &
             transactions.sharedReferenceBudgetPk
-                .equals(onlyShowTransactionsBelongingToBudget)));
+                .equals(onlyShowTransactionsBelongingToBudgetPk)));
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
@@ -3180,7 +3301,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit,
       required DateTime start,
       required DateTime end,
-      required List<int> categoryFks,
+      required List<String> categoryFks,
       required bool allCategories,
       required String userEmail}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
@@ -3199,7 +3320,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> isInCategory(
-      $TransactionsTable tbl, bool allCategories, List<int> categoryFks) {
+      $TransactionsTable tbl, bool allCategories, List<String> categoryFks) {
     return allCategories
         ? tbl.categoryFk.isNotNull()
         : tbl.categoryFk.isIn(categoryFks);
@@ -3216,14 +3337,14 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowBasedOnCategoryFks(
-      $TransactionsTable tbl, List<int>? categoryFks) {
+      $TransactionsTable tbl, List<String>? categoryFks) {
     return (categoryFks != null && categoryFks.length > 0
         ? tbl.categoryFk.isIn(categoryFks)
         : Constant(true));
   }
 
   Expression<bool> onlyShowBasedOnWalletFks(
-      $TransactionsTable tbl, List<int>? walletFks) {
+      $TransactionsTable tbl, List<String>? walletFks) {
     return (walletFks != null && walletFks.length > 0
         ? tbl.walletFk.isIn(walletFks)
         : Constant(true));
@@ -3237,16 +3358,16 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowBasedOnBudgetFks(
-      $TransactionsTable tbl, List<int?>? budgetFks) {
+      $TransactionsTable tbl, List<String?>? budgetFks) {
     return budgetFks != null && budgetFks.contains(null) && budgetFks.length > 1
         ? tbl.sharedReferenceBudgetPk
-                .isIn(budgetFks.map((value) => value ?? 0).toList()) |
+                .isIn(budgetFks.map((value) => value ?? "0").toList()) |
             tbl.sharedReferenceBudgetPk.isNull()
         : (budgetFks ?? []).contains(null)
             ? tbl.sharedReferenceBudgetPk.isNull()
             : (budgetFks != null && budgetFks.length > 0
                 ? tbl.sharedReferenceBudgetPk
-                    .isIn(budgetFks.map((value) => value ?? 0).toList())
+                    .isIn(budgetFks.map((value) => value ?? "0").toList())
                 : Constant(true));
   }
 
@@ -3277,7 +3398,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowIfCertainBudget(
-      $TransactionsTable tbl, int? budgetPk) {
+      $TransactionsTable tbl, String? budgetPk) {
     return (budgetPk != null
         ? tbl.sharedReferenceBudgetPk.equals(budgetPk)
         : Constant(true));
@@ -3291,15 +3412,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     AllWallets allWallets,
     DateTime start,
     DateTime end,
-    List<int> categoryFks,
+    List<String> categoryFks,
     bool allCategories,
     List<BudgetTransactionFilters>? budgetTransactionFilters,
     List<String>? memberTransactionFilters, {
     String? member,
-    int? onlyShowTransactionsBelongingToBudget,
+    String? onlyShowTransactionsBelongingToBudgetPk,
     Budget? budget,
     bool allTime = false,
-    int? walletPk,
+    String? walletPk,
     bool? income = false,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
@@ -3324,7 +3445,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   memberTransactionFilters: memberTransactionFilters) &
               onlyShowIfMember(tbl, member) &
               onlyShowIfCertainBudget(
-                  tbl, onlyShowTransactionsBelongingToBudget);
+                  tbl, onlyShowTransactionsBelongingToBudgetPk);
         })
         ..orderBy([(c) => OrderingTerm.desc(c.dateCreated)]));
       mergedStreams.add((query.join([
@@ -3334,7 +3455,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             categoryBudgetLimits,
             categoryBudgetLimits.categoryFk.equalsExp(categories.categoryPk) &
                 evaluateIfNull(
-                    categoryBudgetLimits.budgetFk.equals(budget?.budgetPk ?? 0),
+                    categoryBudgetLimits.budgetFk
+                        .equals(budget?.budgetPk ?? "0"),
                     budget,
                     false))
       ])
@@ -3382,7 +3504,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfWallet(
-    int? walletPk, {
+    String? walletPk, {
     bool? isIncome = null,
     DateTime? startDate,
     required AllWallets allWallets,
@@ -3396,8 +3518,8 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..addColumns([totalAmt])
           ..where(transactions.walletFk.equals(wallet.walletPk) &
               transactions.paid.equals(true) &
-              evaluateIfNull(
-                  transactions.walletFk.equals(walletPk ?? 0), walletPk, true) &
+              evaluateIfNull(transactions.walletFk.equals(walletPk ?? "0"),
+                  walletPk, true) &
               onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
               evaluateIfNull(transactions.income.equals(isIncome ?? true),
                   isIncome, true) &
@@ -3428,7 +3550,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
   }
 
-  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(int? walletPk,
+  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(String? walletPk,
       {bool? isIncome = null}) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
@@ -3554,7 +3676,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<int?>> watchTotalCountOfTransactionsInWalletInCategory(
-      int walletPk, int categoryPk) {
+      String walletPk, String categoryPk) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
@@ -3575,7 +3697,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalCount)).get();
   }
 
-  Future<int?> getTotalCountOfTransactionsInBudget(int budgetPk) async {
+  Future<int?> getTotalCountOfTransactionsInBudget(String budgetPk) async {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..where(transactions.sharedReferenceBudgetPk.equals(budgetPk))
@@ -3588,16 +3710,16 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
     DateTime start,
     DateTime end,
-    List<int> categoryFks,
+    List<String> categoryFks,
     bool allCategories,
     bool isPaidOnly,
     bool? isIncome,
     List<BudgetTransactionFilters>? budgetTransactionFilters,
     List<String>? memberTransactionFilters, {
     String? member,
-    int? onlyShowTransactionsBelongingToBudget,
+    String? onlyShowTransactionsBelongingToBudgetPk,
     Budget? budget,
-    List<int>? walletPks,
+    List<String>? walletPks,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -3612,7 +3734,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowBasedOnTimeRange(tbl, startDate, endDate, budget) &
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(
-                    tbl, onlyShowTransactionsBelongingToBudget) &
+                    tbl, onlyShowTransactionsBelongingToBudgetPk) &
                 onlyShowBasedOnWalletFks(tbl, walletPks) &
                 onlyShowBasedOnIncome(tbl, isIncome);
           })
@@ -3622,16 +3744,16 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Stream<double?> getTotalBeforeStartDateInTimeRangeFromCategories(
     DateTime start,
-    List<int> categoryFks,
+    List<String> categoryFks,
     bool allCategories,
     bool isPaidOnly,
     bool? isIncome,
     List<BudgetTransactionFilters>? budgetTransactionFilters,
     List<String>? memberTransactionFilters, {
     String? member,
-    int? onlyShowTransactionsBelongingToBudget,
+    String? onlyShowTransactionsBelongingToBudgetPk,
     Budget? budget,
-    List<int>? walletPks,
+    List<String>? walletPks,
     required AllWallets allWallets,
   }) {
     // the date, which acts as the end point and everything before this day is inclusive
@@ -3652,7 +3774,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             onlyShowBasedOnTimeRange(transactions, null, startDate, budget) &
             onlyShowIfMember(transactions, member) &
             onlyShowIfCertainBudget(
-                transactions, onlyShowTransactionsBelongingToBudget) &
+                transactions, onlyShowTransactionsBelongingToBudgetPk) &
             onlyShowBasedOnWalletFks(transactions, walletPks) &
             onlyShowBasedOnIncome(transactions, isIncome));
       mergedStreams.add(query
@@ -3664,7 +3786,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
-  Future<Transaction> getTransactionFromPk(int transactionPk) {
+  Future<Transaction> getTransactionFromPk(String transactionPk) {
     return (select(transactions)
           ..where((t) => t.transactionPk.equals(transactionPk)))
         .getSingle();
@@ -3687,7 +3809,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   // transactions not belonging to a category should be deleted
   Future<bool> deleteWanderingTransactions() async {
     List<TransactionCategory> allCategories = await getAllCategories();
-    List<int> categoryPks =
+    List<String> categoryPks =
         allCategories.map((category) => category.categoryPk).toList();
     List<Transaction> wanderingTransactions = await (select(transactions)
           ..where((t) => t.categoryFk.isNotIn(categoryPks)))

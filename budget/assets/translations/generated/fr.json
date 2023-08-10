@@ -412,6 +412,13 @@
   "all-time": "Tout le temps",
   "icon-suggestion-details": "Vous ne trouvez pas une icône que vous voulez? Suggérez certains et ils peuvent être ajoutés!",
   "suggestion": "Suggestion",
-  "icon-suggestion-privacy": "Seule la suggestion sera partagée.",
-  "suggest-icon": "Suggérer l'icône"
+  "icon-suggestion-privacy": "Seule la suggestion et la date seront partagées.",
+  "suggest-icon": "Suggérer l'icône",
+  "preview-demo": "Aperçu de la démo",
+  "preview-demo-description": "Faites une visite de l'interface et des fonctionnalités de l'application à l'aide de données d'échantillons générées au hasard. Quittez l'aperçu quand vous le souhaitez.",
+  "activate": "Activer",
+  "preview-demo-warning": "La démo de prévisualisation est actuellement active et les données générées par automatiquement sont utilisées. Il n'est pas recommandé d'utiliser l'application en mode démo, car il peut entraîner une perte de données. Pour supprimer les données générées et quitter la démo d'aperçu, appuyez ici.",
+  "exit-demo": "Démo de sortie",
+  "not-available-in-preview-demo": "Non disponible dans la démo de prévisualisation",
+  "not-available-in-preview-demo-description": "Désactivez le mode de démonstration d'aperçu pour utiliser cette fonctionnalité."
 }

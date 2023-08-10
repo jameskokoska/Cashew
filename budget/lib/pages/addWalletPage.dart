@@ -101,9 +101,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Future<TransactionWallet> createTransactionWallet() async {
     int numberOfWallets = (await database.getTotalCountOfWallets())[0] ?? 0;
     return TransactionWallet(
-      walletPk: widget.wallet != null
-          ? widget.wallet!.walletPk
-          : DateTime.now().millisecondsSinceEpoch,
+      walletPk: widget.wallet != null ? widget.wallet!.walletPk : "-1",
       name: selectedTitle ?? "",
       colour: toHexString(selectedColor),
       dateCreated:

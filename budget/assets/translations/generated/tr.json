@@ -412,6 +412,13 @@
   "all-time": "Her zaman",
   "icon-suggestion-details": "İstediğiniz bir simge bulamıyor musunuz? Biraz önerin ve eklenebilirler!",
   "suggestion": "Telkin",
-  "icon-suggestion-privacy": "Sadece öneri paylaşılacak.",
-  "suggest-icon": "Simge Öner"
+  "icon-suggestion-privacy": "Yalnızca öneri ve tarih paylaşılacaktır.",
+  "suggest-icon": "Simge Öner",
+  "preview-demo": "Önizleme demosu",
+  "preview-demo-description": "Rastgele oluşturulan örnek verileri kullanarak uygulamanın arayüzünü ve özelliklerini gezin. İstediğiniz zaman önizlemeden çıkın.",
+  "activate": "Etkinleştirmek",
+  "preview-demo-warning": "Önizleme Demosu şu anda etkin ve otomatik olarak oluşturulan veriler kullanılıyor. Veri kaybına yol açabileceğinden, uygulamanın demo modunda kullanılması önerilmez. Oluşturulan verileri kaldırmak ve önizleme demosundan çıkmak için buraya dokunun.",
+  "exit-demo": "Demo Çıkışı",
+  "not-available-in-preview-demo": "Önizleme Demosunda Mevcut Değil",
+  "not-available-in-preview-demo-description": "Bu özelliği kullanmak için önizleme demo modunu devre dışı bırakın."
 }

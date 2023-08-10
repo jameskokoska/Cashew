@@ -507,7 +507,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       note = row[assignedColumns["note"]!["setHeaderIndex"]].toString();
     }
 
-    int categoryFk = 0;
+    String categoryFk = "0";
     TransactionCategory selectedCategory;
     try {
       selectedCategory = await database.getCategoryInstanceGivenName(
@@ -536,7 +536,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       await database.createOrUpdateCategory(
         insert: true,
         TransactionCategory(
-          categoryPk: -1,
+          categoryPk: "-1",
           name: row[assignedColumns["category"]!["setHeaderIndex"]],
           dateCreated: DateTime.now(),
           dateTimeModified: null,
@@ -557,9 +557,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       await addAssociatedTitles(name, selectedCategory);
     }
 
-    int walletFk = 0;
+    String walletFk = "0";
     if (assignedColumns["wallet"]!["setHeaderIndex"] == -1) {
-      walletFk = appStateSettings["selectedWallet"];
+      walletFk = appStateSettings["selectedWalletPk"];
     } else {
       try {
         walletFk = (await database.getWalletInstanceGivenName(
@@ -598,7 +598,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     await database.createOrUpdateTransaction(
       insert: true,
       Transaction(
-        transactionPk: -1,
+        transactionPk: "-1",
         name: name,
         amount: amount,
         note: note,

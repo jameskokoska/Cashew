@@ -82,7 +82,6 @@ class HomePageLineGraph extends StatelessWidget {
                                           getBudgetDate(budget, DateTime.now()),
                                       isPastBudget: false,
                                       selectedCategory: null,
-                                      selectedCategoryPk: -1,
                                       showPastSpending: false,
                                     ),
                                   ],
@@ -109,7 +108,7 @@ class PastSpendingGraph extends StatelessWidget {
   final bool? isIncome;
   final int monthsToLoad;
   final DateTime? customStartDate;
-  final List<int>? walletPks;
+  final List<String>? walletPks;
   final double extraLeftPaddingIfSmall;
 
   @override

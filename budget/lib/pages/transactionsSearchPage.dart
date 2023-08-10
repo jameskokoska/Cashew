@@ -459,7 +459,7 @@ class AppliedFilterChips extends StatelessWidget {
       ));
     }
     // Wallets
-    for (int walletPk in searchFilters.walletPks) {
+    for (String walletPk in searchFilters.walletPks) {
       out.add(AppliedFilterChip(
         label: allWallets.indexedByPk[walletPk]?.name ?? "",
         customBorderColor: HexColor(allWallets.indexedByPk[walletPk]?.colour),
@@ -619,9 +619,9 @@ class SearchFilters {
   }
   //if the value is empty, it means all/ignore
   // think of it, if the tag is added it will be considered in the search
-  List<int> walletPks;
-  List<int> categoryPks;
-  List<int?> budgetPks;
+  List<String> walletPks;
+  List<String> categoryPks;
+  List<String?> budgetPks;
   List<ExpenseIncome> expenseIncome;
   List<PaidStatus> paidStatus;
   List<TransactionSpecialType?> transactionTypes;
@@ -710,7 +710,7 @@ class _TransactionFiltersSelectionState
             showSelectedAllCategoriesIfNoneSelected: true,
             addButton: false,
             selectedCategories: selectedFilters.categoryPks,
-            setSelectedCategories: (List<int>? categories) {
+            setSelectedCategories: (List<String>? categories) {
               selectedFilters.categoryPks = categories ?? [];
               setSearchFilters();
             },

@@ -9,7 +9,6 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/util/debouncer.dart';
@@ -163,7 +162,7 @@ class SyncLog {
   DeleteLogType? deleteLogType;
   UpdateLogType? updateLogType;
   DateTime? transactionDateTime;
-  int pk;
+  String pk;
   dynamic itemToUpdate;
 
   @override
@@ -402,7 +401,7 @@ Future<bool> syncData(BuildContext context) async {
 
   try {
     print("UPDATED WALLET CURRENCY");
-    await database.getWalletInstance(appStateSettings["selectedWallet"]);
+    await database.getWalletInstance(appStateSettings["selectedWalletPk"]);
   } catch (e) {
     print("Selected wallet not found: " + e.toString());
     await setPrimaryWallet((await database.getAllWallets())[0].walletPk);

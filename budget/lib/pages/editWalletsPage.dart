@@ -131,10 +131,10 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                         amountLight: 0.55,
                         amountDark: 0.35);
                     return EditRowEntry(
-                      extraIcon:
-                          appStateSettings["selectedWallet"] == wallet.walletPk
-                              ? Icons.star_rounded
-                              : Icons.star_outline,
+                      extraIcon: appStateSettings["selectedWalletPk"] ==
+                              wallet.walletPk
+                          ? Icons.star_rounded
+                          : Icons.star_outline,
                       onExtra: () async {
                         setPrimaryWallet(wallet.walletPk);
                       },
@@ -307,9 +307,9 @@ void deleteWalletPopup(context, TransactionWallet wallet,
         await database.moveWalletTransactons(
             Provider.of<AllWallets>(context, listen: false),
             wallet.walletPk,
-            int.parse(result.toString()));
-        if (appStateSettings["selectedWallet"] == wallet.walletPk) {
-          setPrimaryWallet(0);
+            result.toString());
+        if (appStateSettings["selectedWalletPk"] == wallet.walletPk) {
+          setPrimaryWallet("0");
         }
         database.deleteWallet(wallet.walletPk, wallet.order);
         Navigator.pop(context);
@@ -322,8 +322,8 @@ void deleteWalletPopup(context, TransactionWallet wallet,
     onSubmit: () async {
       await database.deleteWalletsTransactions(wallet.walletPk);
       // If we delete the selected wallet, set it back to the default
-      if (appStateSettings["selectedWallet"] == wallet.walletPk) {
-        setPrimaryWallet(0);
+      if (appStateSettings["selectedWalletPk"] == wallet.walletPk) {
+        setPrimaryWallet("0");
       }
       database.deleteWallet(wallet.walletPk, wallet.order);
       Navigator.pop(context);

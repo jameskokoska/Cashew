@@ -412,6 +412,13 @@
   "all-time": "Hela tiden",
   "icon-suggestion-details": "Kan du inte hitta en ikon du vill ha? Föreslå några och de kan läggas till!",
   "suggestion": "Förslag",
-  "icon-suggestion-privacy": "Endast förslaget kommer att delas.",
-  "suggest-icon": "Föreslå ikonen"
+  "icon-suggestion-privacy": "Endast förslaget och datumet kommer att delas.",
+  "suggest-icon": "Föreslå ikonen",
+  "preview-demo": "Förhandsgranskning",
+  "preview-demo-description": "Ta en rundtur i appens gränssnitt och funktioner med slumpmässigt genererade provdata. Avsluta förhandsgranskningen när du vill.",
+  "activate": "Aktivera",
+  "preview-demo-warning": "Förhandsvisningsdemo är för närvarande aktiv och auto-genererade data används. Det rekommenderas inte att använda applikationen i demoläge, eftersom det kan leda till dataförlust. För att ta bort genererade data och exitförhandsgranskning, tryck här.",
+  "exit-demo": "Utgångsdemo",
+  "not-available-in-preview-demo": "Ej tillgängligt i förhandsgranskning",
+  "not-available-in-preview-demo-description": "Inaktivera förhandsvisningsdemo -läge för att använda den här funktionen."
 }

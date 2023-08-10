@@ -24,7 +24,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "syncEveryChange": kIsWeb,
     "devicesHaveBeenSynced": 1,
     "theme": "system",
-    "selectedWallet": 0,
+    "selectedWalletPk": "0",
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "accentSystemColor": supportsSystemColor(),
@@ -100,5 +100,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupAddTransactionCount": -5,
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
     "disableBlur": true,
+    "previewDemo": false,
   };
 }

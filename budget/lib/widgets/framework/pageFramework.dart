@@ -610,18 +610,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       pinned: enableDoubleColumn(context) ? true : pinned,
       expandedHeight: getExpandedHeaderHeight(context, expandedHeight),
       collapsedHeight: collapsedHeight,
-      actions: [
-        ...(actions ?? []).asMap().entries.map((action) {
-          int idx = action.key;
-          int length = (actions ?? []).length;
-          Widget widget = action.value;
-          double offsetX = (length - 1 - idx) * 7;
-          return Transform.translate(
-            offset: Offset(offsetX, 0),
-            child: widget,
-          );
-        })
-      ],
+      actions: pushActionsTogether(actions),
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         // print('constraints=' + constraints.toString());
@@ -741,6 +730,19 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       // ),
     );
   }
+}
+
+List<Widget> pushActionsTogether(List<Widget>? actions) {
+  return (actions ?? []).asMap().entries.map((action) {
+    int idx = action.key;
+    int length = (actions ?? []).length;
+    Widget widget = action.value;
+    double offsetX = (length - 1 - idx) * 7;
+    return Transform.translate(
+      offset: Offset(offsetX, 0),
+      child: widget,
+    );
+  }).toList();
 }
 
 // Only blur if iOS

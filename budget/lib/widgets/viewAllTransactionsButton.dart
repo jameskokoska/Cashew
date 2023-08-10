@@ -25,9 +25,11 @@ class ViewAllTransactionsButton extends StatelessWidget {
 }
 
 class LowKeyButton extends StatelessWidget {
-  const LowKeyButton({super.key, required this.onTap, required this.text});
+  const LowKeyButton(
+      {super.key, required this.onTap, required this.text, this.extraWidget});
   final VoidCallback onTap;
   final String text;
+  final Widget? extraWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +39,17 @@ class LowKeyButton extends StatelessWidget {
           : getColor(context, "lightDarkAccent"),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        child: TextFont(
-          text: text,
-          textAlign: TextAlign.center,
-          fontSize: 14,
-          textColor: getColor(context, "textLight"),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFont(
+              text: text,
+              textAlign: TextAlign.center,
+              fontSize: 14,
+              textColor: getColor(context, "textLight"),
+            ),
+            extraWidget ?? SizedBox.shrink(),
+          ],
         ),
       ),
       onTap: onTap,

@@ -339,7 +339,7 @@ Future<int> downloadTransactionsFromBudgets(
     await database.createOrUpdateFromSharedBudget(
       insert: true,
       Budget(
-        budgetPk: -1,
+        budgetPk: "-1",
         name: budgetDecoded["name"],
         amount: budgetDecoded["amount"].toDouble(),
         colour: budgetDecoded["colour"],
@@ -354,7 +354,7 @@ Future<int> downloadTransactionsFromBudgets(
         dateTimeModified: null,
         pinned: true,
         order: 0,
-        walletFk: 0,
+        walletFk: "0",
         sharedKey: budget.id,
         sharedOwnerMember: FirebaseAuth.instance.currentUser!.email ==
                 budgetDecoded["ownerEmail"]
@@ -403,7 +403,7 @@ Future<int> downloadTransactionsFromBudgets(
           await database.createOrUpdateCategory(
             insert: true,
             TransactionCategory(
-              categoryPk: -1,
+              categoryPk: "-1",
               name: transactionDecoded["categoryName"],
               dateCreated: DateTime.now(),
               dateTimeModified: null,
@@ -421,12 +421,12 @@ Future<int> downloadTransactionsFromBudgets(
         await database.createOrUpdateFromSharedTransaction(
           insert: true,
           Transaction(
-            transactionPk: -1,
+            transactionPk: "-1",
             name: transactionDecoded["name"],
             amount: transactionDecoded["amount"].toDouble(),
             note: transactionDecoded["note"],
             categoryFk: selectedCategory.categoryPk,
-            walletFk: 0,
+            walletFk: "0",
             dateCreated: transactionDecoded["dateTimeCreated"].toDate(),
             dateTimeModified: null,
             income: transactionDecoded["income"],
@@ -657,7 +657,7 @@ Future<bool> syncPendingQueueOnServer() async {
       Budget budget;
       try {
         budget = await database.getBudgetInstance(
-            int.parse(currentSendTransactionsToServerQueue[key]["budgetPk"]));
+            currentSendTransactionsToServerQueue[key]["budgetPk"].toString());
       } catch (e) {
         print(e.toString());
         // budget was probably deleted, we don't need to sync anything...
@@ -672,8 +672,9 @@ Future<bool> syncPendingQueueOnServer() async {
             budget);
       }
 
-      Transaction transaction = await database.getTransactionFromPk(int.parse(
-          currentSendTransactionsToServerQueue[key]["transactionPk"]));
+      Transaction transaction = await database.getTransactionFromPk(
+          currentSendTransactionsToServerQueue[key]["transactionPk"]
+              .toString());
       print("UPLOADING THIS TRANSACTION");
       print(transaction);
       if (currentSendTransactionsToServerQueue[key]["action"] ==

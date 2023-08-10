@@ -1,3 +1,4 @@
+import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -20,22 +21,32 @@ import '../functions.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 
 class OnBoardingPage extends StatelessWidget {
-  const OnBoardingPage({Key? key, this.popNavigationWhenDone = false})
-      : super(key: key);
+  const OnBoardingPage({
+    Key? key,
+    this.popNavigationWhenDone = false,
+    this.showPreviewDemoButton = true,
+  }) : super(key: key);
 
   final bool popNavigationWhenDone;
+  final bool showPreviewDemoButton;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: OnBoardingPageBody(popNavigationWhenDone: popNavigationWhenDone));
+        body: OnBoardingPageBody(
+            popNavigationWhenDone: popNavigationWhenDone,
+            showPreviewDemoButton: showPreviewDemoButton));
   }
 }
 
 class OnBoardingPageBody extends StatefulWidget {
-  const OnBoardingPageBody({Key? key, this.popNavigationWhenDone = false})
-      : super(key: key);
+  const OnBoardingPageBody({
+    Key? key,
+    this.popNavigationWhenDone = false,
+    this.showPreviewDemoButton = true,
+  }) : super(key: key);
   final bool popNavigationWhenDone;
+  final bool showPreviewDemoButton;
 
   @override
   State<OnBoardingPageBody> createState() => OnBoardingPageBodyState();
@@ -53,13 +64,13 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
   DateTime? selectedEndDate;
   String selectedRecurrence = "Monthly";
 
-  nextNavigation() async {
+  nextNavigation({bool generatePreview = false}) async {
     if (selectedAmount != null && selectedAmount != 0) {
       int order = await database.getAmountOfBudgets();
       await database.createOrUpdateBudget(
         insert: true,
         Budget(
-          budgetPk: -1,
+          budgetPk: "-1",
           name: "default-budget-name".tr(),
           amount: selectedAmount ?? 0,
           startDate: selectedStartDate,
@@ -70,11 +81,16 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           dateCreated: DateTime.now(),
           pinned: true,
           order: order,
-          walletFk: 0,
+          walletFk: "0",
           reoccurrence: mapRecurrence(selectedRecurrence),
           isAbsoluteSpendingLimit: false,
         ),
       );
+    }
+    if (generatePreview) {
+      openLoadingPopup(context);
+      await generatePreviewData();
+      Navigator.pop(context);
     }
     if (widget.popNavigationWhenDone) {
       Navigator.pop(context);
@@ -210,6 +226,11 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           ),
           SizedBox(height: 55),
         ],
+        bottomWidget: widget.showPreviewDemoButton
+            ? PreviewDemoButton(
+                nextNavigation: nextNavigation,
+              )
+            : null,
       ),
       OnBoardPage(
         widgets: [
@@ -569,23 +590,36 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
 }
 
 class OnBoardPage extends StatelessWidget {
-  const OnBoardPage({Key? key, required this.widgets}) : super(key: key);
+  const OnBoardPage({Key? key, required this.widgets, this.bottomWidget})
+      : super(key: key);
   final List<Widget> widgets;
+  final Widget? bottomWidget;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-          Column(
-            children: [
-              SizedBox(height: 20),
-              ...widgets,
-              SizedBox(height: 80),
+    return Stack(
+      children: [
+        Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Column(
+                children: [
+                  SizedBox(height: 20),
+                  ...widgets,
+                  SizedBox(height: 80),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 70),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: bottomWidget ?? SizedBox.shrink(),
+          ),
+        ),
+      ],
     );
   }
 }

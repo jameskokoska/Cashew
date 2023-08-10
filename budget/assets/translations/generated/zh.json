@@ -412,6 +412,13 @@
   "all-time": "整天",
   "icon-suggestion-details": "找不到想要的图标？建议一些，可以添加！",
   "suggestion": "建议",
-  "icon-suggestion-privacy": "只有建议将被共享。",
-  "suggest-icon": "建议图标"
+  "icon-suggestion-privacy": "只有建议和日期将共享。",
+  "suggest-icon": "建议图标",
+  "preview-demo": "预览演示",
+  "preview-demo-description": "使用随机生成的示例数据访问应用程序的界面和功能。随时退出预览。",
+  "activate": "启用",
+  "preview-demo-warning": "预览演示目前处于活动状态，并且正在使用自动生成数据。不建议在演示模式下使用该应用程序，因为它可能导致数据丢失。要删除生成的数据并退出预览演示，请点击此处。",
+  "exit-demo": "退出演示",
+  "not-available-in-preview-demo": "预览演示中没有",
+  "not-available-in-preview-demo-description": "禁用预览演示模式以使用此功能。"
 }

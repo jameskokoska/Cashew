@@ -412,6 +412,13 @@
   "all-time": "Tot timpul",
   "icon-suggestion-details": "Nu găsiți o pictogramă pe care o doriți? Sugerați -vă unele și pot fi adăugate!",
   "suggestion": "Sugestie",
-  "icon-suggestion-privacy": "Doar sugestia va fi împărtășită.",
-  "suggest-icon": "Sugerează pictograma"
+  "icon-suggestion-privacy": "Doar sugestia și data vor fi partajate.",
+  "suggest-icon": "Sugerează pictograma",
+  "preview-demo": "Demo de previzualizare",
+  "preview-demo-description": "Faceți un tur al interfeței și caracteristicilor aplicației folosind date de eșantion generate aleatoriu. Ieșiți din previzualizare ori de câte ori doriți.",
+  "activate": "Activati",
+  "preview-demo-warning": "Demo de previzualizare este în prezent activ și se utilizează date generate automate. Nu este recomandat să utilizați aplicația în modul demo, deoarece poate duce la pierderi de date. Pentru a elimina datele generate de date și ieșire de previzualizare, atingeți aici.",
+  "exit-demo": "Demo de ieșire",
+  "not-available-in-preview-demo": "Nu este disponibil în demo de previzualizare",
+  "not-available-in-preview-demo-description": "Dezactivați modul demo de previzualizare pentru a utiliza această caracteristică."
 }

@@ -128,7 +128,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
           await database.getCategoryInstance(widget.category!.categoryPk);
     }
     return TransactionCategory(
-      categoryPk: widget.category != null ? widget.category!.categoryPk : -1,
+      categoryPk: widget.category != null ? widget.category!.categoryPk : "-1",
       name: (selectedTitle ?? "").trim(),
       dateCreated: widget.category != null
           ? widget.category!.dateCreated
@@ -380,9 +380,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           child: CategoryIcon(
                             key: ValueKey((selectedImage ?? "") +
                                 selectedColor.toString()),
-                            categoryPk: 0,
+                            categoryPk: "-1",
                             category: TransactionCategory(
-                              categoryPk: 0,
+                              categoryPk: "-1",
                               name: "",
                               dateCreated: DateTime.now(),
                               dateTimeModified: null,
@@ -498,9 +498,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                               await database.createOrUpdateAssociatedTitle(
                                 insert: true,
                                 TransactionAssociatedTitle(
-                                  associatedTitlePk: -1,
+                                  associatedTitlePk: "-1",
                                   categoryFk: widget.category == null
-                                      ? -1
+                                      ? "-1"
                                       : widget.category!.categoryPk,
                                   isExactMatch: false,
                                   title: text.trim(),
@@ -519,7 +519,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 : StreamBuilder<List<TransactionAssociatedTitle>>(
                     stream: database.watchAllAssociatedTitlesInCategory(
                       widget.category == null
-                          ? -1
+                          ? "-1"
                           : widget.category!.categoryPk,
                     ),
                     builder: (context, snapshot) {
@@ -541,7 +541,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                       associatedTitlePk:
                                           associatedTitle.associatedTitlePk,
                                       categoryFk: widget.category == null
-                                          ? -1
+                                          ? "-1"
                                           : widget.category!.categoryPk,
                                       isExactMatch:
                                           associatedTitle.isExactMatch,

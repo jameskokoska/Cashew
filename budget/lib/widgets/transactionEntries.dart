@@ -33,7 +33,7 @@ class TransactionEntries extends StatelessWidget {
     this.budgetTransactionFilters,
     this.memberTransactionFilters,
     this.member,
-    this.onlyShowTransactionsBelongingToBudget,
+    this.onlyShowTransactionsBelongingToBudgetPk,
     this.simpleListRender = false,
     this.budget,
     this.dateDividerColor,
@@ -52,8 +52,8 @@ class TransactionEntries extends StatelessWidget {
   final DateTime? startDay;
   final DateTime? endDay;
   final String search;
-  final List<int> categoryFks;
-  final List<int> walletFks;
+  final List<String> categoryFks;
+  final List<String> walletFks;
   final Function(Transaction, bool)? onSelected;
   final String? listID;
   final bool? income;
@@ -62,7 +62,7 @@ class TransactionEntries extends StatelessWidget {
   final List<BudgetTransactionFilters>? budgetTransactionFilters;
   final List<String>? memberTransactionFilters;
   final String? member;
-  final int? onlyShowTransactionsBelongingToBudget;
+  final String? onlyShowTransactionsBelongingToBudgetPk;
   final bool simpleListRender;
   final Budget? budget;
   final Color? dateDividerColor;
@@ -90,8 +90,8 @@ class TransactionEntries extends StatelessWidget {
         budgetTransactionFilters: budgetTransactionFilters,
         memberTransactionFilters: memberTransactionFilters,
         member: member,
-        onlyShowTransactionsBelongingToBudget:
-            onlyShowTransactionsBelongingToBudget,
+        onlyShowTransactionsBelongingToBudgetPk:
+            onlyShowTransactionsBelongingToBudgetPk,
         budget: budget,
         limit: limit,
         searchFilters: searchFilters,
@@ -145,8 +145,8 @@ class TransactionEntries extends StatelessWidget {
                   budgetTransactionFilters: budgetTransactionFilters,
                   memberTransactionFilters: memberTransactionFilters,
                   member: member,
-                  onlyShowTransactionsBelongingToBudget:
-                      onlyShowTransactionsBelongingToBudget,
+                  onlyShowTransactionsBelongingToBudgetPk:
+                      onlyShowTransactionsBelongingToBudgetPk,
                   searchFilters: searchFilters,
                 ),
                 builder: (context, snapshot) {

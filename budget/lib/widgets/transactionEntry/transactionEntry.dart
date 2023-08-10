@@ -20,16 +20,16 @@ import 'transactionEntryAmount.dart';
 import 'transactionEntryNote.dart';
 import 'associatedBudgetLabel.dart';
 
-ValueNotifier<Map<String, List<int>>> globalSelectedID =
-    ValueNotifier<Map<String, List<int>>>({});
+ValueNotifier<Map<String, List<String>>> globalSelectedID =
+    ValueNotifier<Map<String, List<String>>>({});
 
 class TransactionEntryHitBox extends RenderProxyBox {
-  int? transactionKey;
+  String? transactionKey;
   TransactionEntryHitBox(this.transactionKey);
 }
 
 class TransactionEntryBox extends SingleChildRenderObjectWidget {
-  final int transactionKey;
+  final String transactionKey;
 
   TransactionEntryBox(
       {required Widget child, required this.transactionKey, Key? key})
@@ -126,12 +126,12 @@ class TransactionEntry extends StatelessWidget {
         amount: 0.3);
 
     bool showOtherCurrency =
-        transaction.walletFk != appStateSettings["selectedWallet"] &&
+        transaction.walletFk != appStateSettings["selectedWalletPk"] &&
             ((Provider.of<AllWallets>(context)
                     .indexedByPk[transaction.walletFk]
                     ?.currency) !=
                 Provider.of<AllWallets>(context)
-                    .indexedByPk[appStateSettings["selectedWallet"]]
+                    .indexedByPk[appStateSettings["selectedWalletPk"]]
                     ?.currency);
 
     return Padding(

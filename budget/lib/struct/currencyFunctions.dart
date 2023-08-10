@@ -31,7 +31,7 @@ Future<bool> getExchangeRates() async {
 }
 
 double? amountRatioToPrimaryCurrencyGivenPk(
-    AllWallets allWallets, int walletPk) {
+    AllWallets allWallets, String walletPk) {
   return amountRatioToPrimaryCurrency(
       allWallets, allWallets.indexedByPk[walletPk]?.currency);
 }
@@ -39,19 +39,19 @@ double? amountRatioToPrimaryCurrencyGivenPk(
 double? amountRatioToPrimaryCurrency(
     AllWallets allWallets, String? walletCurrency) {
   if (walletCurrency == null) {
-    return 0;
+    return 1;
   }
   if (appStateSettings["cachedCurrencyExchange"][walletCurrency] == null) {
-    return 0;
+    return 1;
   }
-  if (allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.currency ==
+  if (allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency ==
       walletCurrency) {
     return 1;
   }
-  double exchangeRateFromUSDToTarget = appStateSettings[
-              "cachedCurrencyExchange"]
-          [allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.currency]
-      .toDouble();
+  double exchangeRateFromUSDToTarget =
+      appStateSettings["cachedCurrencyExchange"][allWallets
+              .indexedByPk[appStateSettings["selectedWalletPk"]]?.currency]
+          .toDouble();
   double exchangeRateFromCurrentToUSD =
       1 / appStateSettings["cachedCurrencyExchange"][walletCurrency].toDouble();
   return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
@@ -76,7 +76,7 @@ double? amountRatioFromToCurrency(
 // assume selected wallets currency
 String getCurrencyString(AllWallets allWallets, {String? currencyKey}) {
   String? selectedWalletCurrency =
-      allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.currency;
+      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency;
   return currencyKey != null &&
           currenciesJSON[currencyKey] != null &&
           currenciesJSON[currencyKey]["Symbol"] != null

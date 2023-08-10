@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 List<TransactionCategory> defaultCategories() {
   return [
     TransactionCategory(
-      categoryPk: 1,
+      categoryPk: "1",
       name: "default-category-dining".tr(),
       colour: toHexString(Colors.blueGrey),
       iconName: "cutlery.png",
@@ -16,7 +16,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 2,
+      categoryPk: "2",
       name: "default-category-groceries".tr(),
       colour: toHexString(Colors.green),
       iconName: "groceries.png",
@@ -26,7 +26,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 3,
+      categoryPk: "3",
       name: "default-category-shopping".tr(),
       colour: toHexString(Colors.pink),
       iconName: "shopping.png",
@@ -36,7 +36,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 4,
+      categoryPk: "4",
       name: "default-category-transit".tr(),
       colour: toHexString(Colors.yellow),
       iconName: "tram.png",
@@ -46,7 +46,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 5,
+      categoryPk: "5",
       name: "default-category-entertainment".tr(),
       colour: toHexString(Colors.blue),
       iconName: "popcorn.png",
@@ -56,7 +56,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 6,
+      categoryPk: "6",
       name: "default-category-bills-fees".tr(),
       colour: toHexString(Colors.green),
       iconName: "bills.png",
@@ -66,7 +66,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     // TransactionCategory(
-    //   categoryPk: 7,
+    //   categoryPk: "7,
     //   name: "Education",
     //   colour: toHexString(Colors.blue),
     //   iconName: "graduation.png",
@@ -76,7 +76,7 @@ List<TransactionCategory> defaultCategories() {
     //   income: false,
     // ),
     TransactionCategory(
-      categoryPk: 7,
+      categoryPk: "7",
       name: "default-category-gifts".tr(),
       colour: toHexString(Colors.red),
       iconName: "gift.png",
@@ -86,7 +86,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 8,
+      categoryPk: "8",
       name: "default-category-sports".tr(),
       colour: toHexString(Colors.cyan),
       iconName: "sports.png",
@@ -96,7 +96,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 9,
+      categoryPk: "9",
       name: "default-category-beauty".tr(),
       colour: toHexString(Colors.purple),
       iconName: "flower.png",
@@ -106,7 +106,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 10,
+      categoryPk: "10",
       name: "default-category-work".tr(),
       colour: toHexString(Colors.brown),
       iconName: "briefcase.png",
@@ -116,7 +116,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: 11,
+      categoryPk: "11",
       name: "default-category-travel".tr(),
       colour: toHexString(Colors.orange),
       iconName: "plane.png",

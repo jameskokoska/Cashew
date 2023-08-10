@@ -412,6 +412,13 @@
   "all-time": "Tất cả thời gian",
   "icon-suggestion-details": "Không thể tìm thấy một biểu tượng bạn muốn? Đề xuất một số và họ có thể được thêm vào!",
   "suggestion": "Gợi ý",
-  "icon-suggestion-privacy": "Chỉ có đề xuất sẽ được chia sẻ.",
-  "suggest-icon": "Đề xuất biểu tượng"
+  "icon-suggestion-privacy": "Chỉ có đề xuất và ngày sẽ được chia sẻ.",
+  "suggest-icon": "Đề xuất biểu tượng",
+  "preview-demo": "Xem trước bản demo",
+  "preview-demo-description": "Thực hiện một chuyến tham quan giao diện của ứng dụng và các tính năng bằng cách sử dụng dữ liệu mẫu được tạo ngẫu nhiên. Thoát khỏi bản xem trước bất cứ khi nào bạn muốn.",
+  "activate": "Kích hoạt",
+  "preview-demo-warning": "Bản trình diễn xem trước hiện đang hoạt động và dữ liệu được tạo tự động đang được sử dụng. Không nên sử dụng ứng dụng trong chế độ demo, vì nó có thể dẫn đến mất dữ liệu. Để xóa dữ liệu được tạo và thoát xem trước bản demo, nhấn vào đây.",
+  "exit-demo": "Thoát khỏi bản demo",
+  "not-available-in-preview-demo": "Không có sẵn trong bản demo xem trước",
+  "not-available-in-preview-demo-description": "Vô hiệu hóa Chế độ demo xem trước để sử dụng tính năng này."
 }

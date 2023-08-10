@@ -412,6 +412,13 @@
   "all-time": "Sempre",
   "icon-suggestion-details": "Non riesci a trovare un'icona che desideri? Suggerisci alcuni e possono essere aggiunti!",
   "suggestion": "Suggerimento",
-  "icon-suggestion-privacy": "Solo il suggerimento sarà condiviso.",
-  "suggest-icon": "Suggerire l'icona"
+  "icon-suggestion-privacy": "Solo il suggerimento e la data saranno condivisi.",
+  "suggest-icon": "Suggerire l'icona",
+  "preview-demo": "Demo di anteprima",
+  "preview-demo-description": "Fai un tour dell'interfaccia dell'app e funzionalità utilizzando dati di esempio generati casualmente. Esci dall'anteprima ogni volta che vuoi.",
+  "activate": "Attivare",
+  "preview-demo-warning": "La demo di anteprima è attualmente attiva e vengono utilizzati dati auto-generati. Non è consigliabile utilizzare l'applicazione in modalità demo, in quanto può portare alla perdita di dati. Per rimuovere i dati generati ed uscire dalla demo di anteprima, tocca qui.",
+  "exit-demo": "ESSERE DEMO",
+  "not-available-in-preview-demo": "Non disponibile nella demo di anteprima",
+  "not-available-in-preview-demo-description": "Disabilita l'anteprima della modalità demo per utilizzare questa funzione."
 }

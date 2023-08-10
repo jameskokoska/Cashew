@@ -412,6 +412,13 @@
   "all-time": "Sepanjang waktu",
   "icon-suggestion-details": "Tidak dapat menemukan ikon yang Anda inginkan? Sarankan beberapa dan mereka dapat ditambahkan!",
   "suggestion": "Saran",
-  "icon-suggestion-privacy": "Hanya saran yang akan dibagikan.",
-  "suggest-icon": "Sarankan ikon"
+  "icon-suggestion-privacy": "Hanya saran dan tanggal yang akan dibagikan.",
+  "suggest-icon": "Sarankan ikon",
+  "preview-demo": "Pratinjau demo",
+  "preview-demo-description": "Ikuti tur antarmuka aplikasi dan fitur menggunakan data sampel yang dihasilkan secara acak. Keluarlah pratinjau kapan pun Anda suka.",
+  "activate": "Mengaktifkan",
+  "preview-demo-warning": "Demo pratinjau saat ini aktif, dan data yang dihasilkan otomatis sedang digunakan. Tidak disarankan untuk menggunakan aplikasi dalam mode demo, karena dapat menyebabkan kehilangan data. Untuk menghapus data yang dihasilkan dan keluar demo pratinjau, ketuk di sini.",
+  "exit-demo": "Demo Keluar",
+  "not-available-in-preview-demo": "Tidak tersedia dalam demo pratinjau",
+  "not-available-in-preview-demo-description": "Nonaktifkan mode demo pratinjau untuk menggunakan fitur ini."
 }

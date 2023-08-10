@@ -1,6 +1,7 @@
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class HomePageUsername extends StatelessWidget {
@@ -72,7 +73,9 @@ class HomePageUsername extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 9),
             child: TextFont(
-              text: !showUsername ? "Home" : appStateSettings["username"] ?? "",
+              text: !showUsername
+                  ? "home".tr()
+                  : appStateSettings["username"] ?? "",
               fontWeight: FontWeight.bold,
               fontSize: 33,
               textColor: Theme.of(context).colorScheme.onPrimaryContainer,

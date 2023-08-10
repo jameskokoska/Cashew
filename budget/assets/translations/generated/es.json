@@ -412,6 +412,13 @@
   "all-time": "Todo el tiempo",
   "icon-suggestion-details": "¿No puedes encontrar un icono que quieras? ¡Sugerir algunos y se pueden agregar!",
   "suggestion": "Sugerencia",
-  "icon-suggestion-privacy": "Solo se compartirá la sugerencia.",
-  "suggest-icon": "Sugerir icono"
+  "icon-suggestion-privacy": "Solo se compartirán la sugerencia y la fecha.",
+  "suggest-icon": "Sugerir icono",
+  "preview-demo": "Vista previa de demostración",
+  "preview-demo-description": "Haga un recorrido por la interfaz y las características de la aplicación utilizando datos de muestra generados aleatoriamente. Salga de la vista previa cuando lo desee.",
+  "activate": "Activar",
+  "preview-demo-warning": "La demostración de vista previa está actualmente activa y se están utilizando datos generados automáticamente. No se recomienda usar la aplicación en modo demo, ya que puede conducir a la pérdida de datos. Para eliminar los datos generados y la demostración de vista previa de salida, toque aquí.",
+  "exit-demo": "Demo de salida",
+  "not-available-in-preview-demo": "No disponible en la demostración de vista previa",
+  "not-available-in-preview-demo-description": "Desactivar el modo de demostración de vista previa para usar esta función."
 }

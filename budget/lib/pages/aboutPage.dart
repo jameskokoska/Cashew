@@ -206,7 +206,10 @@ class AboutPage extends StatelessWidget {
                   onTap: () {
                     pushRoute(
                       context,
-                      OnBoardingPage(popNavigationWhenDone: true),
+                      OnBoardingPage(
+                        popNavigationWhenDone: true,
+                        showPreviewDemoButton: false,
+                      ),
                     );
                   },
                   expandedLayout: true,

@@ -1,3 +1,4 @@
+import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
@@ -111,12 +112,12 @@ class HomePageState extends State<HomePage>
         child: Stack(
           children: [
             Scaffold(
-              // resizeToAvoidBottomInset: false,
               resizeToAvoidBottomInset: true,
               body: ScrollbarWrap(
                 child: ListView(
                   controller: _scrollController,
                   children: [
+                    PreviewDemoWarning(),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -132,24 +133,6 @@ class HomePageState extends State<HomePage>
                                 },
                                 icon: Icon(Icons.more_vert_rounded),
                               ),
-                        // PopupMenuButton<String>(
-                        //   icon: Opacity(
-                        //     opacity: 0.5,
-                        //     child: Icon(Icons.more_vert_rounded),
-                        //   ),
-                        //   onSelected: (option) {
-                        //     if (option == "Edit")
-                        //       pushRoute(context, EditHomePage());
-                        //   },
-                        //   itemBuilder: (BuildContext context) {
-                        //     return {'Edit'}.map((String choice) {
-                        //       return PopupMenuItem<String>(
-                        //         value: choice,
-                        //         child: Text(choice),
-                        //       );
-                        //     }).toList();
-                        //   },
-                        // ),
                       ],
                     ),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
@@ -167,25 +150,6 @@ class HomePageState extends State<HomePage>
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // Profile icon
-                            // AnimatedBuilder(
-                            //   animation: _animationControllerHeader,
-                            //   builder: (_, child) {
-                            //     return Transform.scale(
-                            //       alignment: Alignment.bottomRight,
-                            //       scale: _animationControllerHeader.value < 0.5
-                            //           ? 0.25 + 0.5
-                            //           : (_animationControllerHeader.value) * 0.5 +
-                            //               0.5,
-                            //       child: child,
-                            //     );
-                            //   },
-                            //   child: Container(
-                            //     width: 50,
-                            //     height: 50,
-                            //     color: Colors.red,
-                            //   ),
-                            // ),
                             HomePageUsername(
                               animationControllerHeader:
                                   _animationControllerHeader,

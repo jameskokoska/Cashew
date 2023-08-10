@@ -15,17 +15,21 @@ Future<bool> initializeDefaultDatabase() async {
   }
   if ((await database.getAllWallets()).length <= 0) {
     await database.createOrUpdateWallet(
-      TransactionWallet(
-        walletPk: 0,
-        name: "default-wallet-name".tr(),
-        dateCreated: DateTime.now(),
-        order: 0,
-        currency: getDevicesDefaultCurrencyCode(),
-        dateTimeModified: null,
-        decimals: 2,
-      ),
+      defaultWallet(),
       customDateTimeModified: DateTime(0),
     );
   }
   return true;
+}
+
+TransactionWallet defaultWallet() {
+  return TransactionWallet(
+    walletPk: "0",
+    name: "default-wallet-name".tr(),
+    dateCreated: DateTime.now(),
+    order: 0,
+    currency: getDevicesDefaultCurrencyCode(),
+    dateTimeModified: null,
+    decimals: 2,
+  );
 }

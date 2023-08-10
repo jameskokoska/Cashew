@@ -412,6 +412,13 @@
   "all-time": "Hele tiden",
   "icon-suggestion-details": "Finner du ikke et ikon du vil ha? Foreslå noen og de kan legges til!",
   "suggestion": "Forslag",
-  "icon-suggestion-privacy": "Bare forslaget vil bli delt.",
-  "suggest-icon": "Foreslå ikon"
+  "icon-suggestion-privacy": "Bare forslaget og datoen vil bli delt.",
+  "suggest-icon": "Foreslå ikon",
+  "preview-demo": "Forhåndsvisning av demo",
+  "preview-demo-description": "Ta en omvisning i appens grensesnitt og funksjoner ved hjelp av tilfeldig genererte prøvedata. Avslutt forhåndsvisningen når du vil.",
+  "activate": "Aktivere",
+  "preview-demo-warning": "Forhåndsvisningsdemo er for tiden aktiv, og automatisk genererte data brukes. Det anbefales ikke å bruke applikasjonen i demomodus, da det kan føre til tap av data. For å fjerne genererte data og avslutte forhåndsvisning av demo, trykk her.",
+  "exit-demo": "Avslutt demo",
+  "not-available-in-preview-demo": "Ikke tilgjengelig i forhåndsvisningsdemo",
+  "not-available-in-preview-demo-description": "Deaktiver forhåndsvisning av demomodus for å bruke denne funksjonen."
 }

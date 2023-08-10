@@ -48,6 +48,7 @@ Future openBottomSheet(
   bool snap = true,
   bool resizeForKeyboard = true,
   bool showScrollbar = false,
+  bool fullSnap = false,
 }) async {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
@@ -100,8 +101,10 @@ Future openBottomSheet(
       // },
       snapSpec: SnapSpec(
         snap: snap,
-        snappings: getIsFullScreen(context) == false && deviceAspectRatio > 2
-            ? [0.75, 1]
+        snappings: fullSnap == false &&
+                getIsFullScreen(context) == false &&
+                deviceAspectRatio > 2
+            ? [0.6, 1]
             : [0.95, 1],
         positioning: SnapPositioning.relativeToAvailableSpace,
       ),

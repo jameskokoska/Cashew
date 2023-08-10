@@ -104,7 +104,7 @@ String convertToMoney(
   bool? addCurrencyName,
 }) {
   int numberDecimals = decimals ??
-      allWallets.indexedByPk[appStateSettings["selectedWallet"]]?.decimals ??
+      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals ??
       2;
   numberDecimals = numberDecimals > 2 &&
           (finalNumber ?? amount).toString().split('.').length > 1

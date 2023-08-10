@@ -28,7 +28,7 @@ class CategoryIcon extends StatelessWidget {
     this.cacheImage = false,
   }) : super(key: key);
 
-  final int? categoryPk;
+  final String? categoryPk;
   final double size;
   final VoidCallback? onTap;
   final bool label;

@@ -235,7 +235,6 @@ class SettingsPageState extends State<SettingsPage>
                 context,
                 PopupFramework(
                   title: "language".tr(),
-                  showCloseButton: true,
                   child: Column(
                     children: [
                       Padding(

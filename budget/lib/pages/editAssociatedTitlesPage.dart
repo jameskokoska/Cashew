@@ -127,7 +127,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
               icon: Icons.add_box_rounded,
             ),
           ),
-          StreamBuilder<Map<int, TransactionCategory>>(
+          StreamBuilder<Map<String, TransactionCategory>>(
               stream: database.watchAllCategoriesMapped(),
               builder: (context, mappedCategoriesSnapshot) {
                 return StreamBuilder<List<TransactionAssociatedTitle>>(

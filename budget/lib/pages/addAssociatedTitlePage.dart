@@ -54,8 +54,9 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
       TransactionAssociatedTitle(
         associatedTitlePk: widget.associatedTitle != null
             ? widget.associatedTitle!.associatedTitlePk
-            : -1,
-        categoryFk: selectedCategory == null ? 0 : selectedCategory!.categoryPk,
+            : "-1",
+        categoryFk:
+            selectedCategory == null ? "0" : selectedCategory!.categoryPk,
         isExactMatch: false,
         title: selectedTitle?.trim() ?? "",
         dateCreated: DateTime.now(),

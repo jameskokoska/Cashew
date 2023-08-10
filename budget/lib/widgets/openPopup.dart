@@ -86,15 +86,18 @@ Future<T?> openPopup<T extends Object?>(
                         child: Column(
                           children: [
                             SizedBox(height: 17),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 10),
-                              child: Icon(
-                                icon,
-                                size: 65,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
+                            icon != null
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 10),
+                                    child: Icon(
+                                      icon,
+                                      size: 65,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8.0, horizontal: 10),

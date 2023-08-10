@@ -412,6 +412,13 @@
   "all-time": "いつも",
   "icon-suggestion-details": "必要なアイコンが見つかりませんか？いくつか提案すると、追加できます！",
   "suggestion": "提案",
-  "icon-suggestion-privacy": "提案のみが共有されます。",
-  "suggest-icon": "アイコンを提案します"
+  "icon-suggestion-privacy": "提案と日付のみが共有されます。",
+  "suggest-icon": "アイコンを提案します",
+  "preview-demo": "プレビューデモ",
+  "preview-demo-description": "ランダムに生成されたサンプルデータを使用して、アプリのインターフェイスと機能のツアーに参加します。好きなときにプレビューを終了します。",
+  "activate": "活性化",
+  "preview-demo-warning": "プレビューデモは現在アクティブであり、自動生成データが使用されています。データの損失につながる可能性があるため、アプリケーションをデモモードで使用することはお勧めしません。生成されたデータを削除してプレビューデモを終了するには、こちらをタップします。",
+  "exit-demo": "デモを終了します",
+  "not-available-in-preview-demo": "プレビューデモでは利用できません",
+  "not-available-in-preview-demo-description": "この機能を使用するには、プレビューデモモードを無効にします。"
 }

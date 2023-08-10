@@ -20,7 +20,7 @@ import 'package:provider/provider.dart';
 
 class WatchedWalletDetailsPage extends StatelessWidget {
   const WatchedWalletDetailsPage({required this.walletPk, super.key});
-  final int walletPk;
+  final String walletPk;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<TransactionWallet>(
@@ -44,7 +44,7 @@ class WalletDetailsPage extends StatefulWidget {
 }
 
 class _WalletDetailsPageState extends State<WalletDetailsPage> {
-  int selectedCategoryPk = -1;
+  String selectedCategoryPk = "-1";
   late String listID = widget.wallet == null
       ? "All Spending Summary"
       : widget.wallet!.walletPk.toString() + " Wallet Summary";
@@ -59,7 +59,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                 defaultColor: Theme.of(context).colorScheme.primary),
             brightness: determineBrightnessTheme(context),
           );
-    int? walletPk = widget.wallet == null ? null : widget.wallet!.walletPk;
+    String? walletPk = widget.wallet == null ? null : widget.wallet!.walletPk;
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[listID] ?? []).length > 0) {
@@ -168,7 +168,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                     WalletCategoryPieChart(
                       wallet: widget.wallet,
                       walletColorScheme: walletColorScheme,
-                      onSelectedCategory: (int categoryPk) {
+                      onSelectedCategory: (String categoryPk) {
                         // pageState.currentState?.scrollTo(500);
                         setState(() {
                           selectedCategoryPk = categoryPk;
@@ -183,11 +183,11 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                 null,
                 categoryFks: [selectedCategoryPk],
                 walletFks: walletPk == null ? [] : [walletPk],
-                limit: selectedCategoryPk == -1 ? 0 : 10,
+                limit: selectedCategoryPk == "-1" ? 0 : 10,
                 listID: listID,
                 showNoResults: false,
               ),
-              selectedCategoryPk == -1
+              selectedCategoryPk == "-1"
                   ? SliverToBoxAdapter(
                       child: SizedBox.shrink(),
                     )
@@ -223,14 +223,14 @@ class WalletCategoryPieChart extends StatefulWidget {
 
   final TransactionWallet? wallet;
   final ColorScheme walletColorScheme;
-  final Function(int) onSelectedCategory;
+  final Function(String) onSelectedCategory;
 
   @override
   State<WalletCategoryPieChart> createState() => _WalletCategoryPieChartState();
 }
 
 class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
-  int selectedCategoryPk = -1;
+  String selectedCategoryPk = "-1";
   TransactionCategory? selectedCategory = null;
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
   bool tiledCategoryEntries = false;
@@ -297,12 +297,12 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                           if (selectedCategoryPk ==
                               category.category.categoryPk) {
                             setState(() {
-                              selectedCategoryPk = -1;
+                              selectedCategoryPk = "-1";
                               selectedCategory = null;
                             });
                             _pieChartDisplayStateKey.currentState!
                                 .setTouchedIndex(-1);
-                            widget.onSelectedCategory(-1);
+                            widget.onSelectedCategory("-1");
                           } else {
                             setState(() {
                               selectedCategoryPk = category.category.categoryPk;
@@ -316,7 +316,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                         },
                         selected:
                             selectedCategoryPk == category.category.categoryPk,
-                        allSelected: selectedCategoryPk == -1,
+                        allSelected: selectedCategoryPk == "-1",
                         showIncomeExpenseIcons: true,
                       ),
                     );
@@ -378,7 +378,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
 
 class WalletDetailsLineGraph extends StatefulWidget {
   const WalletDetailsLineGraph({super.key, required this.walletPks});
-  final List<int>? walletPks;
+  final List<String>? walletPks;
 
   @override
   State<WalletDetailsLineGraph> createState() => _WalletDetailsLineGraphState();

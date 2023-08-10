@@ -12,13 +12,11 @@ class $WalletsTable extends Wallets
   static const VerificationMeta _walletPkMeta =
       const VerificationMeta('walletPk');
   @override
-  late final GeneratedColumn<int> walletPk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> walletPk = GeneratedColumn<String>(
       'wallet_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      clientDefault: () => uuid.v4());
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -149,7 +147,7 @@ class $WalletsTable extends Wallets
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return TransactionWallet(
       walletPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}wallet_pk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}wallet_pk'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       colour: attachedDatabase.typeMapping
@@ -177,7 +175,7 @@ class $WalletsTable extends Wallets
 
 class TransactionWallet extends DataClass
     implements Insertable<TransactionWallet> {
-  final int walletPk;
+  final String walletPk;
   final String name;
   final String? colour;
   final String? iconName;
@@ -199,7 +197,7 @@ class TransactionWallet extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['wallet_pk'] = Variable<int>(walletPk);
+    map['wallet_pk'] = Variable<String>(walletPk);
     map['name'] = Variable<String>(name);
     if (!nullToAbsent || colour != null) {
       map['colour'] = Variable<String>(colour);
@@ -244,7 +242,7 @@ class TransactionWallet extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TransactionWallet(
-      walletPk: serializer.fromJson<int>(json['walletPk']),
+      walletPk: serializer.fromJson<String>(json['walletPk']),
       name: serializer.fromJson<String>(json['name']),
       colour: serializer.fromJson<String?>(json['colour']),
       iconName: serializer.fromJson<String?>(json['iconName']),
@@ -260,7 +258,7 @@ class TransactionWallet extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'walletPk': serializer.toJson<int>(walletPk),
+      'walletPk': serializer.toJson<String>(walletPk),
       'name': serializer.toJson<String>(name),
       'colour': serializer.toJson<String?>(colour),
       'iconName': serializer.toJson<String?>(iconName),
@@ -273,7 +271,7 @@ class TransactionWallet extends DataClass
   }
 
   TransactionWallet copyWith(
-          {int? walletPk,
+          {String? walletPk,
           String? name,
           Value<String?> colour = const Value.absent(),
           Value<String?> iconName = const Value.absent(),
@@ -330,7 +328,7 @@ class TransactionWallet extends DataClass
 }
 
 class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
-  final Value<int> walletPk;
+  final Value<String> walletPk;
   final Value<String> name;
   final Value<String?> colour;
   final Value<String?> iconName;
@@ -339,6 +337,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
   final Value<int> order;
   final Value<String?> currency;
   final Value<int> decimals;
+  final Value<int> rowid;
   const WalletsCompanion({
     this.walletPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -349,6 +348,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.order = const Value.absent(),
     this.currency = const Value.absent(),
     this.decimals = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   WalletsCompanion.insert({
     this.walletPk = const Value.absent(),
@@ -360,10 +360,11 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     required int order,
     this.currency = const Value.absent(),
     this.decimals = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionWallet> custom({
-    Expression<int>? walletPk,
+    Expression<String>? walletPk,
     Expression<String>? name,
     Expression<String>? colour,
     Expression<String>? iconName,
@@ -372,6 +373,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     Expression<int>? order,
     Expression<String>? currency,
     Expression<int>? decimals,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (walletPk != null) 'wallet_pk': walletPk,
@@ -383,11 +385,12 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       if (order != null) 'order': order,
       if (currency != null) 'currency': currency,
       if (decimals != null) 'decimals': decimals,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   WalletsCompanion copyWith(
-      {Value<int>? walletPk,
+      {Value<String>? walletPk,
       Value<String>? name,
       Value<String?>? colour,
       Value<String?>? iconName,
@@ -395,7 +398,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       Value<DateTime?>? dateTimeModified,
       Value<int>? order,
       Value<String?>? currency,
-      Value<int>? decimals}) {
+      Value<int>? decimals,
+      Value<int>? rowid}) {
     return WalletsCompanion(
       walletPk: walletPk ?? this.walletPk,
       name: name ?? this.name,
@@ -406,6 +410,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       order: order ?? this.order,
       currency: currency ?? this.currency,
       decimals: decimals ?? this.decimals,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -413,7 +418,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (walletPk.present) {
-      map['wallet_pk'] = Variable<int>(walletPk.value);
+      map['wallet_pk'] = Variable<String>(walletPk.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -439,6 +444,9 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     if (decimals.present) {
       map['decimals'] = Variable<int>(decimals.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -453,7 +461,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('currency: $currency, ')
-          ..write('decimals: $decimals')
+          ..write('decimals: $decimals, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -468,13 +477,11 @@ class $CategoriesTable extends Categories
   static const VerificationMeta _categoryPkMeta =
       const VerificationMeta('categoryPk');
   @override
-  late final GeneratedColumn<int> categoryPk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> categoryPk = GeneratedColumn<String>(
       'category_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      clientDefault: () => uuid.v4());
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -610,7 +617,7 @@ class $CategoriesTable extends Categories
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return TransactionCategory(
       categoryPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_pk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}category_pk'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       colour: attachedDatabase.typeMapping
@@ -644,7 +651,7 @@ class $CategoriesTable extends Categories
 
 class TransactionCategory extends DataClass
     implements Insertable<TransactionCategory> {
-  final int categoryPk;
+  final String categoryPk;
   final String name;
   final String? colour;
   final String? iconName;
@@ -666,7 +673,7 @@ class TransactionCategory extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['category_pk'] = Variable<int>(categoryPk);
+    map['category_pk'] = Variable<String>(categoryPk);
     map['name'] = Variable<String>(name);
     if (!nullToAbsent || colour != null) {
       map['colour'] = Variable<String>(colour);
@@ -712,7 +719,7 @@ class TransactionCategory extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TransactionCategory(
-      categoryPk: serializer.fromJson<int>(json['categoryPk']),
+      categoryPk: serializer.fromJson<String>(json['categoryPk']),
       name: serializer.fromJson<String>(json['name']),
       colour: serializer.fromJson<String?>(json['colour']),
       iconName: serializer.fromJson<String?>(json['iconName']),
@@ -729,7 +736,7 @@ class TransactionCategory extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'categoryPk': serializer.toJson<int>(categoryPk),
+      'categoryPk': serializer.toJson<String>(categoryPk),
       'name': serializer.toJson<String>(name),
       'colour': serializer.toJson<String?>(colour),
       'iconName': serializer.toJson<String?>(iconName),
@@ -743,7 +750,7 @@ class TransactionCategory extends DataClass
   }
 
   TransactionCategory copyWith(
-          {int? categoryPk,
+          {String? categoryPk,
           String? name,
           Value<String?> colour = const Value.absent(),
           Value<String?> iconName = const Value.absent(),
@@ -800,7 +807,7 @@ class TransactionCategory extends DataClass
 }
 
 class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
-  final Value<int> categoryPk;
+  final Value<String> categoryPk;
   final Value<String> name;
   final Value<String?> colour;
   final Value<String?> iconName;
@@ -809,6 +816,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<int> order;
   final Value<bool> income;
   final Value<MethodAdded?> methodAdded;
+  final Value<int> rowid;
   const CategoriesCompanion({
     this.categoryPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -819,6 +827,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.order = const Value.absent(),
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.categoryPk = const Value.absent(),
@@ -830,10 +839,11 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     required int order,
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
   static Insertable<TransactionCategory> custom({
-    Expression<int>? categoryPk,
+    Expression<String>? categoryPk,
     Expression<String>? name,
     Expression<String>? colour,
     Expression<String>? iconName,
@@ -842,6 +852,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<int>? order,
     Expression<bool>? income,
     Expression<int>? methodAdded,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (categoryPk != null) 'category_pk': categoryPk,
@@ -853,11 +864,12 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (order != null) 'order': order,
       if (income != null) 'income': income,
       if (methodAdded != null) 'method_added': methodAdded,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   CategoriesCompanion copyWith(
-      {Value<int>? categoryPk,
+      {Value<String>? categoryPk,
       Value<String>? name,
       Value<String?>? colour,
       Value<String?>? iconName,
@@ -865,7 +877,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<DateTime?>? dateTimeModified,
       Value<int>? order,
       Value<bool>? income,
-      Value<MethodAdded?>? methodAdded}) {
+      Value<MethodAdded?>? methodAdded,
+      Value<int>? rowid}) {
     return CategoriesCompanion(
       categoryPk: categoryPk ?? this.categoryPk,
       name: name ?? this.name,
@@ -876,6 +889,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       order: order ?? this.order,
       income: income ?? this.income,
       methodAdded: methodAdded ?? this.methodAdded,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -883,7 +897,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (categoryPk.present) {
-      map['category_pk'] = Variable<int>(categoryPk.value);
+      map['category_pk'] = Variable<String>(categoryPk.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -910,6 +924,9 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       final converter = $CategoriesTable.$convertermethodAddedn;
       map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -924,7 +941,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
-          ..write('methodAdded: $methodAdded')
+          ..write('methodAdded: $methodAdded, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -939,13 +957,11 @@ class $TransactionsTable extends Transactions
   static const VerificationMeta _transactionPkMeta =
       const VerificationMeta('transactionPk');
   @override
-  late final GeneratedColumn<int> transactionPk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> transactionPk = GeneratedColumn<String>(
       'transaction_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      clientDefault: () => uuid.v4());
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -968,18 +984,18 @@ class $TransactionsTable extends Transactions
   static const VerificationMeta _categoryFkMeta =
       const VerificationMeta('categoryFk');
   @override
-  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> categoryFk = GeneratedColumn<String>(
       'category_fk', aliasedName, false,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES categories (category_pk)'));
   static const VerificationMeta _walletFkMeta =
       const VerificationMeta('walletFk');
   @override
-  late final GeneratedColumn<int> walletFk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> walletFk = GeneratedColumn<String>(
       'wallet_fk', aliasedName, false,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES wallets (wallet_pk)'));
@@ -1137,9 +1153,9 @@ class $TransactionsTable extends Transactions
   static const VerificationMeta _sharedReferenceBudgetPkMeta =
       const VerificationMeta('sharedReferenceBudgetPk');
   @override
-  late final GeneratedColumn<int> sharedReferenceBudgetPk =
-      GeneratedColumn<int>('shared_reference_budget_pk', aliasedName, true,
-          type: DriftSqlType.int, requiredDuringInsert: false);
+  late final GeneratedColumn<String> sharedReferenceBudgetPk =
+      GeneratedColumn<String>('shared_reference_budget_pk', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -1308,7 +1324,7 @@ class $TransactionsTable extends Transactions
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Transaction(
       transactionPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}transaction_pk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}transaction_pk'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       amount: attachedDatabase.typeMapping
@@ -1316,9 +1332,9 @@ class $TransactionsTable extends Transactions
       note: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}note'])!,
       categoryFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}category_fk'])!,
       walletFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}wallet_fk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}wallet_fk'])!,
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       dateTimeModified: attachedDatabase.typeMapping.read(
@@ -1362,7 +1378,7 @@ class $TransactionsTable extends Transactions
       sharedDateUpdated: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}shared_date_updated']),
       sharedReferenceBudgetPk: attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
+          DriftSqlType.string,
           data['${effectivePrefix}shared_reference_budget_pk']),
     );
   }
@@ -1394,12 +1410,12 @@ class $TransactionsTable extends Transactions
 }
 
 class Transaction extends DataClass implements Insertable<Transaction> {
-  final int transactionPk;
+  final String transactionPk;
   final String name;
   final double amount;
   final String note;
-  final int categoryFk;
-  final int walletFk;
+  final String categoryFk;
+  final String walletFk;
   final DateTime dateCreated;
   final DateTime? dateTimeModified;
   final bool income;
@@ -1417,7 +1433,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final String? sharedOldKey;
   final SharedStatus? sharedStatus;
   final DateTime? sharedDateUpdated;
-  final int? sharedReferenceBudgetPk;
+  final String? sharedReferenceBudgetPk;
   const Transaction(
       {required this.transactionPk,
       required this.name,
@@ -1446,12 +1462,12 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['transaction_pk'] = Variable<int>(transactionPk);
+    map['transaction_pk'] = Variable<String>(transactionPk);
     map['name'] = Variable<String>(name);
     map['amount'] = Variable<double>(amount);
     map['note'] = Variable<String>(note);
-    map['category_fk'] = Variable<int>(categoryFk);
-    map['wallet_fk'] = Variable<int>(walletFk);
+    map['category_fk'] = Variable<String>(categoryFk);
+    map['wallet_fk'] = Variable<String>(walletFk);
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeModified != null) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
@@ -1504,7 +1520,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     }
     if (!nullToAbsent || sharedReferenceBudgetPk != null) {
       map['shared_reference_budget_pk'] =
-          Variable<int>(sharedReferenceBudgetPk);
+          Variable<String>(sharedReferenceBudgetPk);
     }
     return map;
   }
@@ -1571,12 +1587,12 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Transaction(
-      transactionPk: serializer.fromJson<int>(json['transactionPk']),
+      transactionPk: serializer.fromJson<String>(json['transactionPk']),
       name: serializer.fromJson<String>(json['name']),
       amount: serializer.fromJson<double>(json['amount']),
       note: serializer.fromJson<String>(json['note']),
-      categoryFk: serializer.fromJson<int>(json['categoryFk']),
-      walletFk: serializer.fromJson<int>(json['walletFk']),
+      categoryFk: serializer.fromJson<String>(json['categoryFk']),
+      walletFk: serializer.fromJson<String>(json['walletFk']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeModified:
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
@@ -1605,19 +1621,19 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       sharedDateUpdated:
           serializer.fromJson<DateTime?>(json['sharedDateUpdated']),
       sharedReferenceBudgetPk:
-          serializer.fromJson<int?>(json['sharedReferenceBudgetPk']),
+          serializer.fromJson<String?>(json['sharedReferenceBudgetPk']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'transactionPk': serializer.toJson<int>(transactionPk),
+      'transactionPk': serializer.toJson<String>(transactionPk),
       'name': serializer.toJson<String>(name),
       'amount': serializer.toJson<double>(amount),
       'note': serializer.toJson<String>(note),
-      'categoryFk': serializer.toJson<int>(categoryFk),
-      'walletFk': serializer.toJson<int>(walletFk),
+      'categoryFk': serializer.toJson<String>(categoryFk),
+      'walletFk': serializer.toJson<String>(walletFk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'income': serializer.toJson<bool>(income),
@@ -1644,17 +1660,17 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           $TransactionsTable.$convertersharedStatusn.toJson(sharedStatus)),
       'sharedDateUpdated': serializer.toJson<DateTime?>(sharedDateUpdated),
       'sharedReferenceBudgetPk':
-          serializer.toJson<int?>(sharedReferenceBudgetPk),
+          serializer.toJson<String?>(sharedReferenceBudgetPk),
     };
   }
 
   Transaction copyWith(
-          {int? transactionPk,
+          {String? transactionPk,
           String? name,
           double? amount,
           String? note,
-          int? categoryFk,
-          int? walletFk,
+          String? categoryFk,
+          String? walletFk,
           DateTime? dateCreated,
           Value<DateTime?> dateTimeModified = const Value.absent(),
           bool? income,
@@ -1672,7 +1688,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Value<String?> sharedOldKey = const Value.absent(),
           Value<SharedStatus?> sharedStatus = const Value.absent(),
           Value<DateTime?> sharedDateUpdated = const Value.absent(),
-          Value<int?> sharedReferenceBudgetPk = const Value.absent()}) =>
+          Value<String?> sharedReferenceBudgetPk = const Value.absent()}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -1812,12 +1828,12 @@ class Transaction extends DataClass implements Insertable<Transaction> {
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
-  final Value<int> transactionPk;
+  final Value<String> transactionPk;
   final Value<String> name;
   final Value<double> amount;
   final Value<String> note;
-  final Value<int> categoryFk;
-  final Value<int> walletFk;
+  final Value<String> categoryFk;
+  final Value<String> walletFk;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeModified;
   final Value<bool> income;
@@ -1835,7 +1851,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<String?> sharedOldKey;
   final Value<SharedStatus?> sharedStatus;
   final Value<DateTime?> sharedDateUpdated;
-  final Value<int?> sharedReferenceBudgetPk;
+  final Value<String?> sharedReferenceBudgetPk;
+  final Value<int> rowid;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -1861,14 +1878,15 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedStatus = const Value.absent(),
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.transactionPk = const Value.absent(),
     required String name,
     required double amount,
     required String note,
-    required int categoryFk,
-    required int walletFk,
+    required String categoryFk,
+    required String walletFk,
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
     this.income = const Value.absent(),
@@ -1887,18 +1905,19 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedStatus = const Value.absent(),
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         note = Value(note),
         categoryFk = Value(categoryFk),
         walletFk = Value(walletFk);
   static Insertable<Transaction> custom({
-    Expression<int>? transactionPk,
+    Expression<String>? transactionPk,
     Expression<String>? name,
     Expression<double>? amount,
     Expression<String>? note,
-    Expression<int>? categoryFk,
-    Expression<int>? walletFk,
+    Expression<String>? categoryFk,
+    Expression<String>? walletFk,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeModified,
     Expression<bool>? income,
@@ -1916,7 +1935,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<String>? sharedOldKey,
     Expression<int>? sharedStatus,
     Expression<DateTime>? sharedDateUpdated,
-    Expression<int>? sharedReferenceBudgetPk,
+    Expression<String>? sharedReferenceBudgetPk,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (transactionPk != null) 'transaction_pk': transactionPk,
@@ -1948,16 +1968,17 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (sharedDateUpdated != null) 'shared_date_updated': sharedDateUpdated,
       if (sharedReferenceBudgetPk != null)
         'shared_reference_budget_pk': sharedReferenceBudgetPk,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   TransactionsCompanion copyWith(
-      {Value<int>? transactionPk,
+      {Value<String>? transactionPk,
       Value<String>? name,
       Value<double>? amount,
       Value<String>? note,
-      Value<int>? categoryFk,
-      Value<int>? walletFk,
+      Value<String>? categoryFk,
+      Value<String>? walletFk,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeModified,
       Value<bool>? income,
@@ -1975,7 +1996,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<String?>? sharedOldKey,
       Value<SharedStatus?>? sharedStatus,
       Value<DateTime?>? sharedDateUpdated,
-      Value<int?>? sharedReferenceBudgetPk}) {
+      Value<String?>? sharedReferenceBudgetPk,
+      Value<int>? rowid}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
       name: name ?? this.name,
@@ -2006,6 +2028,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       sharedDateUpdated: sharedDateUpdated ?? this.sharedDateUpdated,
       sharedReferenceBudgetPk:
           sharedReferenceBudgetPk ?? this.sharedReferenceBudgetPk,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -2013,7 +2036,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (transactionPk.present) {
-      map['transaction_pk'] = Variable<int>(transactionPk.value);
+      map['transaction_pk'] = Variable<String>(transactionPk.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -2025,10 +2048,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['note'] = Variable<String>(note.value);
     }
     if (categoryFk.present) {
-      map['category_fk'] = Variable<int>(categoryFk.value);
+      map['category_fk'] = Variable<String>(categoryFk.value);
     }
     if (walletFk.present) {
-      map['wallet_fk'] = Variable<int>(walletFk.value);
+      map['wallet_fk'] = Variable<String>(walletFk.value);
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
@@ -2091,7 +2114,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (sharedReferenceBudgetPk.present) {
       map['shared_reference_budget_pk'] =
-          Variable<int>(sharedReferenceBudgetPk.value);
+          Variable<String>(sharedReferenceBudgetPk.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -2125,7 +2151,8 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('sharedOldKey: $sharedOldKey, ')
           ..write('sharedStatus: $sharedStatus, ')
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
-          ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk')
+          ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -2139,13 +2166,11 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static const VerificationMeta _budgetPkMeta =
       const VerificationMeta('budgetPk');
   @override
-  late final GeneratedColumn<int> budgetPk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> budgetPk = GeneratedColumn<String>(
       'budget_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      clientDefault: () => uuid.v4());
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -2180,10 +2205,10 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static const VerificationMeta _categoryFksMeta =
       const VerificationMeta('categoryFks');
   @override
-  late final GeneratedColumnWithTypeConverter<List<int>?, String> categoryFks =
-      GeneratedColumn<String>('category_fks', aliasedName, true,
+  late final GeneratedColumnWithTypeConverter<List<String>?, String>
+      categoryFks = GeneratedColumn<String>('category_fks', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
-          .withConverter<List<int>?>($BudgetsTable.$convertercategoryFksn);
+          .withConverter<List<String>?>($BudgetsTable.$convertercategoryFksn);
   static const VerificationMeta _allCategoryFksMeta =
       const VerificationMeta('allCategoryFks');
   @override
@@ -2259,9 +2284,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static const VerificationMeta _walletFkMeta =
       const VerificationMeta('walletFk');
   @override
-  late final GeneratedColumn<int> walletFk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> walletFk = GeneratedColumn<String>(
       'wallet_fk', aliasedName, false,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES wallets (wallet_pk)'));
@@ -2493,7 +2518,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Budget(
       budgetPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}budget_pk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}budget_pk'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       amount: attachedDatabase.typeMapping
@@ -2526,7 +2551,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       order: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       walletFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}wallet_fk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}wallet_fk'])!,
       budgetTransactionFilters: $BudgetsTable
           .$converterbudgetTransactionFiltersn
           .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
@@ -2559,9 +2584,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     return $BudgetsTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<List<int>, String> $convertercategoryFks =
-      const IntListInColumnConverter();
-  static TypeConverter<List<int>?, String?> $convertercategoryFksn =
+  static TypeConverter<List<String>, String> $convertercategoryFks =
+      const StringListInColumnConverter();
+  static TypeConverter<List<String>?, String?> $convertercategoryFksn =
       NullAwareTypeConverter.wrap($convertercategoryFks);
   static JsonTypeConverter2<BudgetReoccurence, int, int>
       $converterreoccurrence =
@@ -2597,13 +2622,13 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
 }
 
 class Budget extends DataClass implements Insertable<Budget> {
-  final int budgetPk;
+  final String budgetPk;
   final String name;
   final double amount;
   final String? colour;
   final DateTime startDate;
   final DateTime endDate;
-  final List<int>? categoryFks;
+  final List<String>? categoryFks;
   final bool allCategoryFks;
   final bool addedTransactionsOnly;
   final int periodLength;
@@ -2612,7 +2637,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final DateTime? dateTimeModified;
   final bool pinned;
   final int order;
-  final int walletFk;
+  final String walletFk;
   final List<BudgetTransactionFilters>? budgetTransactionFilters;
   final List<String>? memberTransactionFilters;
   final String? sharedKey;
@@ -2649,7 +2674,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['budget_pk'] = Variable<int>(budgetPk);
+    map['budget_pk'] = Variable<String>(budgetPk);
     map['name'] = Variable<String>(name);
     map['amount'] = Variable<double>(amount);
     if (!nullToAbsent || colour != null) {
@@ -2674,7 +2699,7 @@ class Budget extends DataClass implements Insertable<Budget> {
     }
     map['pinned'] = Variable<bool>(pinned);
     map['order'] = Variable<int>(order);
-    map['wallet_fk'] = Variable<int>(walletFk);
+    map['wallet_fk'] = Variable<String>(walletFk);
     if (!nullToAbsent || budgetTransactionFilters != null) {
       final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
       map['budget_transaction_filters'] =
@@ -2763,13 +2788,13 @@ class Budget extends DataClass implements Insertable<Budget> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Budget(
-      budgetPk: serializer.fromJson<int>(json['budgetPk']),
+      budgetPk: serializer.fromJson<String>(json['budgetPk']),
       name: serializer.fromJson<String>(json['name']),
       amount: serializer.fromJson<double>(json['amount']),
       colour: serializer.fromJson<String?>(json['colour']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime>(json['endDate']),
-      categoryFks: serializer.fromJson<List<int>?>(json['categoryFks']),
+      categoryFks: serializer.fromJson<List<String>?>(json['categoryFks']),
       allCategoryFks: serializer.fromJson<bool>(json['allCategoryFks']),
       addedTransactionsOnly:
           serializer.fromJson<bool>(json['addedTransactionsOnly']),
@@ -2781,7 +2806,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
       pinned: serializer.fromJson<bool>(json['pinned']),
       order: serializer.fromJson<int>(json['order']),
-      walletFk: serializer.fromJson<int>(json['walletFk']),
+      walletFk: serializer.fromJson<String>(json['walletFk']),
       budgetTransactionFilters:
           serializer.fromJson<List<BudgetTransactionFilters>?>(
               json['budgetTransactionFilters']),
@@ -2803,13 +2828,13 @@ class Budget extends DataClass implements Insertable<Budget> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'budgetPk': serializer.toJson<int>(budgetPk),
+      'budgetPk': serializer.toJson<String>(budgetPk),
       'name': serializer.toJson<String>(name),
       'amount': serializer.toJson<double>(amount),
       'colour': serializer.toJson<String?>(colour),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime>(endDate),
-      'categoryFks': serializer.toJson<List<int>?>(categoryFks),
+      'categoryFks': serializer.toJson<List<String>?>(categoryFks),
       'allCategoryFks': serializer.toJson<bool>(allCategoryFks),
       'addedTransactionsOnly': serializer.toJson<bool>(addedTransactionsOnly),
       'periodLength': serializer.toJson<int>(periodLength),
@@ -2819,7 +2844,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'pinned': serializer.toJson<bool>(pinned),
       'order': serializer.toJson<int>(order),
-      'walletFk': serializer.toJson<int>(walletFk),
+      'walletFk': serializer.toJson<String>(walletFk),
       'budgetTransactionFilters': serializer
           .toJson<List<BudgetTransactionFilters>?>(budgetTransactionFilters),
       'memberTransactionFilters':
@@ -2837,13 +2862,13 @@ class Budget extends DataClass implements Insertable<Budget> {
   }
 
   Budget copyWith(
-          {int? budgetPk,
+          {String? budgetPk,
           String? name,
           double? amount,
           Value<String?> colour = const Value.absent(),
           DateTime? startDate,
           DateTime? endDate,
-          Value<List<int>?> categoryFks = const Value.absent(),
+          Value<List<String>?> categoryFks = const Value.absent(),
           bool? allCategoryFks,
           bool? addedTransactionsOnly,
           int? periodLength,
@@ -2852,7 +2877,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           Value<DateTime?> dateTimeModified = const Value.absent(),
           bool? pinned,
           int? order,
-          int? walletFk,
+          String? walletFk,
           Value<List<BudgetTransactionFilters>?> budgetTransactionFilters =
               const Value.absent(),
           Value<List<String>?> memberTransactionFilters = const Value.absent(),
@@ -2993,13 +3018,13 @@ class Budget extends DataClass implements Insertable<Budget> {
 }
 
 class BudgetsCompanion extends UpdateCompanion<Budget> {
-  final Value<int> budgetPk;
+  final Value<String> budgetPk;
   final Value<String> name;
   final Value<double> amount;
   final Value<String?> colour;
   final Value<DateTime> startDate;
   final Value<DateTime> endDate;
-  final Value<List<int>?> categoryFks;
+  final Value<List<String>?> categoryFks;
   final Value<bool> allCategoryFks;
   final Value<bool> addedTransactionsOnly;
   final Value<int> periodLength;
@@ -3008,7 +3033,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<DateTime?> dateTimeModified;
   final Value<bool> pinned;
   final Value<int> order;
-  final Value<int> walletFk;
+  final Value<String> walletFk;
   final Value<List<BudgetTransactionFilters>?> budgetTransactionFilters;
   final Value<List<String>?> memberTransactionFilters;
   final Value<String?> sharedKey;
@@ -3017,6 +3042,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<List<String>?> sharedMembers;
   final Value<List<String>?> sharedAllMembersEver;
   final Value<bool> isAbsoluteSpendingLimit;
+  final Value<int> rowid;
   const BudgetsCompanion({
     this.budgetPk = const Value.absent(),
     this.name = const Value.absent(),
@@ -3042,6 +3068,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.sharedMembers = const Value.absent(),
     this.sharedAllMembersEver = const Value.absent(),
     this.isAbsoluteSpendingLimit = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   BudgetsCompanion.insert({
     this.budgetPk = const Value.absent(),
@@ -3059,7 +3086,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.dateTimeModified = const Value.absent(),
     this.pinned = const Value.absent(),
     required int order,
-    required int walletFk,
+    required String walletFk,
     this.budgetTransactionFilters = const Value.absent(),
     this.memberTransactionFilters = const Value.absent(),
     this.sharedKey = const Value.absent(),
@@ -3068,6 +3095,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.sharedMembers = const Value.absent(),
     this.sharedAllMembersEver = const Value.absent(),
     this.isAbsoluteSpendingLimit = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
         startDate = Value(startDate),
@@ -3077,7 +3105,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
         order = Value(order),
         walletFk = Value(walletFk);
   static Insertable<Budget> custom({
-    Expression<int>? budgetPk,
+    Expression<String>? budgetPk,
     Expression<String>? name,
     Expression<double>? amount,
     Expression<String>? colour,
@@ -3092,7 +3120,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<DateTime>? dateTimeModified,
     Expression<bool>? pinned,
     Expression<int>? order,
-    Expression<int>? walletFk,
+    Expression<String>? walletFk,
     Expression<String>? budgetTransactionFilters,
     Expression<String>? memberTransactionFilters,
     Expression<String>? sharedKey,
@@ -3101,6 +3129,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<String>? sharedMembers,
     Expression<String>? sharedAllMembersEver,
     Expression<bool>? isAbsoluteSpendingLimit,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (budgetPk != null) 'budget_pk': budgetPk,
@@ -3132,17 +3161,18 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
         'shared_all_members_ever': sharedAllMembersEver,
       if (isAbsoluteSpendingLimit != null)
         'is_absolute_spending_limit': isAbsoluteSpendingLimit,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   BudgetsCompanion copyWith(
-      {Value<int>? budgetPk,
+      {Value<String>? budgetPk,
       Value<String>? name,
       Value<double>? amount,
       Value<String?>? colour,
       Value<DateTime>? startDate,
       Value<DateTime>? endDate,
-      Value<List<int>?>? categoryFks,
+      Value<List<String>?>? categoryFks,
       Value<bool>? allCategoryFks,
       Value<bool>? addedTransactionsOnly,
       Value<int>? periodLength,
@@ -3151,7 +3181,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<DateTime?>? dateTimeModified,
       Value<bool>? pinned,
       Value<int>? order,
-      Value<int>? walletFk,
+      Value<String>? walletFk,
       Value<List<BudgetTransactionFilters>?>? budgetTransactionFilters,
       Value<List<String>?>? memberTransactionFilters,
       Value<String?>? sharedKey,
@@ -3159,7 +3189,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<DateTime?>? sharedDateUpdated,
       Value<List<String>?>? sharedMembers,
       Value<List<String>?>? sharedAllMembersEver,
-      Value<bool>? isAbsoluteSpendingLimit}) {
+      Value<bool>? isAbsoluteSpendingLimit,
+      Value<int>? rowid}) {
     return BudgetsCompanion(
       budgetPk: budgetPk ?? this.budgetPk,
       name: name ?? this.name,
@@ -3189,6 +3220,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       sharedAllMembersEver: sharedAllMembersEver ?? this.sharedAllMembersEver,
       isAbsoluteSpendingLimit:
           isAbsoluteSpendingLimit ?? this.isAbsoluteSpendingLimit,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3196,7 +3228,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (budgetPk.present) {
-      map['budget_pk'] = Variable<int>(budgetPk.value);
+      map['budget_pk'] = Variable<String>(budgetPk.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -3245,7 +3277,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['order'] = Variable<int>(order.value);
     }
     if (walletFk.present) {
-      map['wallet_fk'] = Variable<int>(walletFk.value);
+      map['wallet_fk'] = Variable<String>(walletFk.value);
     }
     if (budgetTransactionFilters.present) {
       final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
@@ -3282,6 +3314,9 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['is_absolute_spending_limit'] =
           Variable<bool>(isAbsoluteSpendingLimit.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -3311,7 +3346,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedMembers: $sharedMembers, ')
           ..write('sharedAllMembersEver: $sharedAllMembersEver, ')
-          ..write('isAbsoluteSpendingLimit: $isAbsoluteSpendingLimit')
+          ..write('isAbsoluteSpendingLimit: $isAbsoluteSpendingLimit, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3326,28 +3362,26 @@ class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
   static const VerificationMeta _categoryLimitPkMeta =
       const VerificationMeta('categoryLimitPk');
   @override
-  late final GeneratedColumn<int> categoryLimitPk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> categoryLimitPk = GeneratedColumn<String>(
       'category_limit_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      clientDefault: () => uuid.v4());
   static const VerificationMeta _categoryFkMeta =
       const VerificationMeta('categoryFk');
   @override
-  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> categoryFk = GeneratedColumn<String>(
       'category_fk', aliasedName, false,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES categories (category_pk)'));
   static const VerificationMeta _budgetFkMeta =
       const VerificationMeta('budgetFk');
   @override
-  late final GeneratedColumn<int> budgetFk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> budgetFk = GeneratedColumn<String>(
       'budget_fk', aliasedName, false,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES budgets (budget_pk)'));
@@ -3418,12 +3452,12 @@ class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
   CategoryBudgetLimit map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CategoryBudgetLimit(
-      categoryLimitPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_limit_pk'])!,
+      categoryLimitPk: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}category_limit_pk'])!,
       categoryFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}category_fk'])!,
       budgetFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}budget_fk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}budget_fk'])!,
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
       dateTimeModified: attachedDatabase.typeMapping.read(
@@ -3439,9 +3473,9 @@ class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
 
 class CategoryBudgetLimit extends DataClass
     implements Insertable<CategoryBudgetLimit> {
-  final int categoryLimitPk;
-  final int categoryFk;
-  final int budgetFk;
+  final String categoryLimitPk;
+  final String categoryFk;
+  final String budgetFk;
   final double amount;
   final DateTime? dateTimeModified;
   const CategoryBudgetLimit(
@@ -3453,9 +3487,9 @@ class CategoryBudgetLimit extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['category_limit_pk'] = Variable<int>(categoryLimitPk);
-    map['category_fk'] = Variable<int>(categoryFk);
-    map['budget_fk'] = Variable<int>(budgetFk);
+    map['category_limit_pk'] = Variable<String>(categoryLimitPk);
+    map['category_fk'] = Variable<String>(categoryFk);
+    map['budget_fk'] = Variable<String>(budgetFk);
     map['amount'] = Variable<double>(amount);
     if (!nullToAbsent || dateTimeModified != null) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
@@ -3479,9 +3513,9 @@ class CategoryBudgetLimit extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CategoryBudgetLimit(
-      categoryLimitPk: serializer.fromJson<int>(json['categoryLimitPk']),
-      categoryFk: serializer.fromJson<int>(json['categoryFk']),
-      budgetFk: serializer.fromJson<int>(json['budgetFk']),
+      categoryLimitPk: serializer.fromJson<String>(json['categoryLimitPk']),
+      categoryFk: serializer.fromJson<String>(json['categoryFk']),
+      budgetFk: serializer.fromJson<String>(json['budgetFk']),
       amount: serializer.fromJson<double>(json['amount']),
       dateTimeModified:
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
@@ -3491,18 +3525,18 @@ class CategoryBudgetLimit extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'categoryLimitPk': serializer.toJson<int>(categoryLimitPk),
-      'categoryFk': serializer.toJson<int>(categoryFk),
-      'budgetFk': serializer.toJson<int>(budgetFk),
+      'categoryLimitPk': serializer.toJson<String>(categoryLimitPk),
+      'categoryFk': serializer.toJson<String>(categoryFk),
+      'budgetFk': serializer.toJson<String>(budgetFk),
       'amount': serializer.toJson<double>(amount),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
     };
   }
 
   CategoryBudgetLimit copyWith(
-          {int? categoryLimitPk,
-          int? categoryFk,
-          int? budgetFk,
+          {String? categoryLimitPk,
+          String? categoryFk,
+          String? budgetFk,
           double? amount,
           Value<DateTime?> dateTimeModified = const Value.absent()}) =>
       CategoryBudgetLimit(
@@ -3542,33 +3576,37 @@ class CategoryBudgetLimit extends DataClass
 
 class CategoryBudgetLimitsCompanion
     extends UpdateCompanion<CategoryBudgetLimit> {
-  final Value<int> categoryLimitPk;
-  final Value<int> categoryFk;
-  final Value<int> budgetFk;
+  final Value<String> categoryLimitPk;
+  final Value<String> categoryFk;
+  final Value<String> budgetFk;
   final Value<double> amount;
   final Value<DateTime?> dateTimeModified;
+  final Value<int> rowid;
   const CategoryBudgetLimitsCompanion({
     this.categoryLimitPk = const Value.absent(),
     this.categoryFk = const Value.absent(),
     this.budgetFk = const Value.absent(),
     this.amount = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   CategoryBudgetLimitsCompanion.insert({
     this.categoryLimitPk = const Value.absent(),
-    required int categoryFk,
-    required int budgetFk,
+    required String categoryFk,
+    required String budgetFk,
     required double amount,
     this.dateTimeModified = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : categoryFk = Value(categoryFk),
         budgetFk = Value(budgetFk),
         amount = Value(amount);
   static Insertable<CategoryBudgetLimit> custom({
-    Expression<int>? categoryLimitPk,
-    Expression<int>? categoryFk,
-    Expression<int>? budgetFk,
+    Expression<String>? categoryLimitPk,
+    Expression<String>? categoryFk,
+    Expression<String>? budgetFk,
     Expression<double>? amount,
     Expression<DateTime>? dateTimeModified,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (categoryLimitPk != null) 'category_limit_pk': categoryLimitPk,
@@ -3576,21 +3614,24 @@ class CategoryBudgetLimitsCompanion
       if (budgetFk != null) 'budget_fk': budgetFk,
       if (amount != null) 'amount': amount,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   CategoryBudgetLimitsCompanion copyWith(
-      {Value<int>? categoryLimitPk,
-      Value<int>? categoryFk,
-      Value<int>? budgetFk,
+      {Value<String>? categoryLimitPk,
+      Value<String>? categoryFk,
+      Value<String>? budgetFk,
       Value<double>? amount,
-      Value<DateTime?>? dateTimeModified}) {
+      Value<DateTime?>? dateTimeModified,
+      Value<int>? rowid}) {
     return CategoryBudgetLimitsCompanion(
       categoryLimitPk: categoryLimitPk ?? this.categoryLimitPk,
       categoryFk: categoryFk ?? this.categoryFk,
       budgetFk: budgetFk ?? this.budgetFk,
       amount: amount ?? this.amount,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3598,19 +3639,22 @@ class CategoryBudgetLimitsCompanion
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (categoryLimitPk.present) {
-      map['category_limit_pk'] = Variable<int>(categoryLimitPk.value);
+      map['category_limit_pk'] = Variable<String>(categoryLimitPk.value);
     }
     if (categoryFk.present) {
-      map['category_fk'] = Variable<int>(categoryFk.value);
+      map['category_fk'] = Variable<String>(categoryFk.value);
     }
     if (budgetFk.present) {
-      map['budget_fk'] = Variable<int>(budgetFk.value);
+      map['budget_fk'] = Variable<String>(budgetFk.value);
     }
     if (amount.present) {
       map['amount'] = Variable<double>(amount.value);
     }
     if (dateTimeModified.present) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -3622,7 +3666,8 @@ class CategoryBudgetLimitsCompanion
           ..write('categoryFk: $categoryFk, ')
           ..write('budgetFk: $budgetFk, ')
           ..write('amount: $amount, ')
-          ..write('dateTimeModified: $dateTimeModified')
+          ..write('dateTimeModified: $dateTimeModified, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3637,13 +3682,20 @@ class $AssociatedTitlesTable extends AssociatedTitles
   static const VerificationMeta _associatedTitlePkMeta =
       const VerificationMeta('associatedTitlePk');
   @override
-  late final GeneratedColumn<int> associatedTitlePk = GeneratedColumn<int>(
-      'associated_title_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  late final GeneratedColumn<String> associatedTitlePk =
+      GeneratedColumn<String>('associated_title_pk', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          clientDefault: () => uuid.v4());
+  static const VerificationMeta _categoryFkMeta =
+      const VerificationMeta('categoryFk');
+  @override
+  late final GeneratedColumn<String> categoryFk = GeneratedColumn<String>(
+      'category_fk', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES categories (category_pk)'));
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
@@ -3651,15 +3703,6 @@ class $AssociatedTitlesTable extends AssociatedTitles
       additionalChecks: GeneratedColumn.checkTextLength(),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  static const VerificationMeta _categoryFkMeta =
-      const VerificationMeta('categoryFk');
-  @override
-  late final GeneratedColumn<int> categoryFk = GeneratedColumn<int>(
-      'category_fk', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES categories (category_pk)'));
   static const VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   @override
@@ -3697,8 +3740,8 @@ class $AssociatedTitlesTable extends AssociatedTitles
   @override
   List<GeneratedColumn> get $columns => [
         associatedTitlePk,
-        title,
         categoryFk,
+        title,
         dateCreated,
         dateTimeModified,
         order,
@@ -3720,12 +3763,6 @@ class $AssociatedTitlesTable extends AssociatedTitles
           associatedTitlePk.isAcceptableOrUnknown(
               data['associated_title_pk']!, _associatedTitlePkMeta));
     }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
     if (data.containsKey('category_fk')) {
       context.handle(
           _categoryFkMeta,
@@ -3733,6 +3770,12 @@ class $AssociatedTitlesTable extends AssociatedTitles
               data['category_fk']!, _categoryFkMeta));
     } else if (isInserting) {
       context.missing(_categoryFkMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
     }
     if (data.containsKey('date_created')) {
       context.handle(
@@ -3769,11 +3812,11 @@ class $AssociatedTitlesTable extends AssociatedTitles
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return TransactionAssociatedTitle(
       associatedTitlePk: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}associated_title_pk'])!,
+          DriftSqlType.string, data['${effectivePrefix}associated_title_pk'])!,
+      categoryFk: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category_fk'])!,
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      categoryFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}category_fk'])!,
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       dateTimeModified: attachedDatabase.typeMapping.read(
@@ -3793,17 +3836,17 @@ class $AssociatedTitlesTable extends AssociatedTitles
 
 class TransactionAssociatedTitle extends DataClass
     implements Insertable<TransactionAssociatedTitle> {
-  final int associatedTitlePk;
+  final String associatedTitlePk;
+  final String categoryFk;
   final String title;
-  final int categoryFk;
   final DateTime dateCreated;
   final DateTime? dateTimeModified;
   final int order;
   final bool isExactMatch;
   const TransactionAssociatedTitle(
       {required this.associatedTitlePk,
-      required this.title,
       required this.categoryFk,
+      required this.title,
       required this.dateCreated,
       this.dateTimeModified,
       required this.order,
@@ -3811,9 +3854,9 @@ class TransactionAssociatedTitle extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['associated_title_pk'] = Variable<int>(associatedTitlePk);
+    map['associated_title_pk'] = Variable<String>(associatedTitlePk);
+    map['category_fk'] = Variable<String>(categoryFk);
     map['title'] = Variable<String>(title);
-    map['category_fk'] = Variable<int>(categoryFk);
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeModified != null) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
@@ -3826,8 +3869,8 @@ class TransactionAssociatedTitle extends DataClass
   AssociatedTitlesCompanion toCompanion(bool nullToAbsent) {
     return AssociatedTitlesCompanion(
       associatedTitlePk: Value(associatedTitlePk),
-      title: Value(title),
       categoryFk: Value(categoryFk),
+      title: Value(title),
       dateCreated: Value(dateCreated),
       dateTimeModified: dateTimeModified == null && nullToAbsent
           ? const Value.absent()
@@ -3841,9 +3884,9 @@ class TransactionAssociatedTitle extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TransactionAssociatedTitle(
-      associatedTitlePk: serializer.fromJson<int>(json['associatedTitlePk']),
+      associatedTitlePk: serializer.fromJson<String>(json['associatedTitlePk']),
+      categoryFk: serializer.fromJson<String>(json['categoryFk']),
       title: serializer.fromJson<String>(json['title']),
-      categoryFk: serializer.fromJson<int>(json['categoryFk']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeModified:
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
@@ -3855,9 +3898,9 @@ class TransactionAssociatedTitle extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'associatedTitlePk': serializer.toJson<int>(associatedTitlePk),
+      'associatedTitlePk': serializer.toJson<String>(associatedTitlePk),
+      'categoryFk': serializer.toJson<String>(categoryFk),
       'title': serializer.toJson<String>(title),
-      'categoryFk': serializer.toJson<int>(categoryFk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
@@ -3866,17 +3909,17 @@ class TransactionAssociatedTitle extends DataClass
   }
 
   TransactionAssociatedTitle copyWith(
-          {int? associatedTitlePk,
+          {String? associatedTitlePk,
+          String? categoryFk,
           String? title,
-          int? categoryFk,
           DateTime? dateCreated,
           Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           bool? isExactMatch}) =>
       TransactionAssociatedTitle(
         associatedTitlePk: associatedTitlePk ?? this.associatedTitlePk,
-        title: title ?? this.title,
         categoryFk: categoryFk ?? this.categoryFk,
+        title: title ?? this.title,
         dateCreated: dateCreated ?? this.dateCreated,
         dateTimeModified: dateTimeModified.present
             ? dateTimeModified.value
@@ -3888,8 +3931,8 @@ class TransactionAssociatedTitle extends DataClass
   String toString() {
     return (StringBuffer('TransactionAssociatedTitle(')
           ..write('associatedTitlePk: $associatedTitlePk, ')
-          ..write('title: $title, ')
           ..write('categoryFk: $categoryFk, ')
+          ..write('title: $title, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
@@ -3899,15 +3942,15 @@ class TransactionAssociatedTitle extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(associatedTitlePk, title, categoryFk,
+  int get hashCode => Object.hash(associatedTitlePk, categoryFk, title,
       dateCreated, dateTimeModified, order, isExactMatch);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is TransactionAssociatedTitle &&
           other.associatedTitlePk == this.associatedTitlePk &&
-          other.title == this.title &&
           other.categoryFk == this.categoryFk &&
+          other.title == this.title &&
           other.dateCreated == this.dateCreated &&
           other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
@@ -3916,69 +3959,76 @@ class TransactionAssociatedTitle extends DataClass
 
 class AssociatedTitlesCompanion
     extends UpdateCompanion<TransactionAssociatedTitle> {
-  final Value<int> associatedTitlePk;
+  final Value<String> associatedTitlePk;
+  final Value<String> categoryFk;
   final Value<String> title;
-  final Value<int> categoryFk;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeModified;
   final Value<int> order;
   final Value<bool> isExactMatch;
+  final Value<int> rowid;
   const AssociatedTitlesCompanion({
     this.associatedTitlePk = const Value.absent(),
-    this.title = const Value.absent(),
     this.categoryFk = const Value.absent(),
+    this.title = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
     this.isExactMatch = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   AssociatedTitlesCompanion.insert({
     this.associatedTitlePk = const Value.absent(),
+    required String categoryFk,
     required String title,
-    required int categoryFk,
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
     required int order,
     this.isExactMatch = const Value.absent(),
-  })  : title = Value(title),
-        categoryFk = Value(categoryFk),
+    this.rowid = const Value.absent(),
+  })  : categoryFk = Value(categoryFk),
+        title = Value(title),
         order = Value(order);
   static Insertable<TransactionAssociatedTitle> custom({
-    Expression<int>? associatedTitlePk,
+    Expression<String>? associatedTitlePk,
+    Expression<String>? categoryFk,
     Expression<String>? title,
-    Expression<int>? categoryFk,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
     Expression<bool>? isExactMatch,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (associatedTitlePk != null) 'associated_title_pk': associatedTitlePk,
-      if (title != null) 'title': title,
       if (categoryFk != null) 'category_fk': categoryFk,
+      if (title != null) 'title': title,
       if (dateCreated != null) 'date_created': dateCreated,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
       if (isExactMatch != null) 'is_exact_match': isExactMatch,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   AssociatedTitlesCompanion copyWith(
-      {Value<int>? associatedTitlePk,
+      {Value<String>? associatedTitlePk,
+      Value<String>? categoryFk,
       Value<String>? title,
-      Value<int>? categoryFk,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeModified,
       Value<int>? order,
-      Value<bool>? isExactMatch}) {
+      Value<bool>? isExactMatch,
+      Value<int>? rowid}) {
     return AssociatedTitlesCompanion(
       associatedTitlePk: associatedTitlePk ?? this.associatedTitlePk,
-      title: title ?? this.title,
       categoryFk: categoryFk ?? this.categoryFk,
+      title: title ?? this.title,
       dateCreated: dateCreated ?? this.dateCreated,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
       isExactMatch: isExactMatch ?? this.isExactMatch,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3986,13 +4036,13 @@ class AssociatedTitlesCompanion
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (associatedTitlePk.present) {
-      map['associated_title_pk'] = Variable<int>(associatedTitlePk.value);
+      map['associated_title_pk'] = Variable<String>(associatedTitlePk.value);
+    }
+    if (categoryFk.present) {
+      map['category_fk'] = Variable<String>(categoryFk.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
-    }
-    if (categoryFk.present) {
-      map['category_fk'] = Variable<int>(categoryFk.value);
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
@@ -4006,6 +4056,9 @@ class AssociatedTitlesCompanion
     if (isExactMatch.present) {
       map['is_exact_match'] = Variable<bool>(isExactMatch.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -4013,12 +4066,13 @@ class AssociatedTitlesCompanion
   String toString() {
     return (StringBuffer('AssociatedTitlesCompanion(')
           ..write('associatedTitlePk: $associatedTitlePk, ')
-          ..write('title: $title, ')
           ..write('categoryFk: $categoryFk, ')
+          ..write('title: $title, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
-          ..write('isExactMatch: $isExactMatch')
+          ..write('isExactMatch: $isExactMatch, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -4253,13 +4307,11 @@ class $ScannerTemplatesTable extends ScannerTemplates
   static const VerificationMeta _scannerTemplatePkMeta =
       const VerificationMeta('scannerTemplatePk');
   @override
-  late final GeneratedColumn<int> scannerTemplatePk = GeneratedColumn<int>(
-      'scanner_template_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  late final GeneratedColumn<String> scannerTemplatePk =
+      GeneratedColumn<String>('scanner_template_pk', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          clientDefault: () => uuid.v4());
   static const VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   @override
@@ -4327,18 +4379,18 @@ class $ScannerTemplatesTable extends ScannerTemplates
   static const VerificationMeta _defaultCategoryFkMeta =
       const VerificationMeta('defaultCategoryFk');
   @override
-  late final GeneratedColumn<int> defaultCategoryFk = GeneratedColumn<int>(
-      'default_category_fk', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES categories (category_pk)'));
+  late final GeneratedColumn<String> defaultCategoryFk =
+      GeneratedColumn<String>('default_category_fk', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'REFERENCES categories (category_pk)'));
   static const VerificationMeta _walletFkMeta =
       const VerificationMeta('walletFk');
   @override
-  late final GeneratedColumn<int> walletFk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> walletFk = GeneratedColumn<String>(
       'wallet_fk', aliasedName, false,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES wallets (wallet_pk)'));
@@ -4471,7 +4523,7 @@ class $ScannerTemplatesTable extends ScannerTemplates
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ScannerTemplate(
       scannerTemplatePk: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}scanner_template_pk'])!,
+          DriftSqlType.string, data['${effectivePrefix}scanner_template_pk'])!,
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       dateTimeModified: attachedDatabase.typeMapping.read(
@@ -4493,9 +4545,9 @@ class $ScannerTemplatesTable extends ScannerTemplates
           DriftSqlType.string,
           data['${effectivePrefix}amount_transaction_after'])!,
       defaultCategoryFk: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}default_category_fk'])!,
+          DriftSqlType.string, data['${effectivePrefix}default_category_fk'])!,
       walletFk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}wallet_fk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}wallet_fk'])!,
       ignore: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}ignore'])!,
     );
@@ -4508,7 +4560,7 @@ class $ScannerTemplatesTable extends ScannerTemplates
 }
 
 class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
-  final int scannerTemplatePk;
+  final String scannerTemplatePk;
   final DateTime dateCreated;
   final DateTime? dateTimeModified;
   final String templateName;
@@ -4517,8 +4569,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   final String titleTransactionAfter;
   final String amountTransactionBefore;
   final String amountTransactionAfter;
-  final int defaultCategoryFk;
-  final int walletFk;
+  final String defaultCategoryFk;
+  final String walletFk;
   final bool ignore;
   const ScannerTemplate(
       {required this.scannerTemplatePk,
@@ -4536,7 +4588,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['scanner_template_pk'] = Variable<int>(scannerTemplatePk);
+    map['scanner_template_pk'] = Variable<String>(scannerTemplatePk);
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeModified != null) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
@@ -4548,8 +4600,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     map['amount_transaction_before'] =
         Variable<String>(amountTransactionBefore);
     map['amount_transaction_after'] = Variable<String>(amountTransactionAfter);
-    map['default_category_fk'] = Variable<int>(defaultCategoryFk);
-    map['wallet_fk'] = Variable<int>(walletFk);
+    map['default_category_fk'] = Variable<String>(defaultCategoryFk);
+    map['wallet_fk'] = Variable<String>(walletFk);
     map['ignore'] = Variable<bool>(ignore);
     return map;
   }
@@ -4577,7 +4629,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ScannerTemplate(
-      scannerTemplatePk: serializer.fromJson<int>(json['scannerTemplatePk']),
+      scannerTemplatePk: serializer.fromJson<String>(json['scannerTemplatePk']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeModified:
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
@@ -4591,8 +4643,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           serializer.fromJson<String>(json['amountTransactionBefore']),
       amountTransactionAfter:
           serializer.fromJson<String>(json['amountTransactionAfter']),
-      defaultCategoryFk: serializer.fromJson<int>(json['defaultCategoryFk']),
-      walletFk: serializer.fromJson<int>(json['walletFk']),
+      defaultCategoryFk: serializer.fromJson<String>(json['defaultCategoryFk']),
+      walletFk: serializer.fromJson<String>(json['walletFk']),
       ignore: serializer.fromJson<bool>(json['ignore']),
     );
   }
@@ -4600,7 +4652,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'scannerTemplatePk': serializer.toJson<int>(scannerTemplatePk),
+      'scannerTemplatePk': serializer.toJson<String>(scannerTemplatePk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'templateName': serializer.toJson<String>(templateName),
@@ -4612,14 +4664,14 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           serializer.toJson<String>(amountTransactionBefore),
       'amountTransactionAfter':
           serializer.toJson<String>(amountTransactionAfter),
-      'defaultCategoryFk': serializer.toJson<int>(defaultCategoryFk),
-      'walletFk': serializer.toJson<int>(walletFk),
+      'defaultCategoryFk': serializer.toJson<String>(defaultCategoryFk),
+      'walletFk': serializer.toJson<String>(walletFk),
       'ignore': serializer.toJson<bool>(ignore),
     };
   }
 
   ScannerTemplate copyWith(
-          {int? scannerTemplatePk,
+          {String? scannerTemplatePk,
           DateTime? dateCreated,
           Value<DateTime?> dateTimeModified = const Value.absent(),
           String? templateName,
@@ -4628,8 +4680,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           String? titleTransactionAfter,
           String? amountTransactionBefore,
           String? amountTransactionAfter,
-          int? defaultCategoryFk,
-          int? walletFk,
+          String? defaultCategoryFk,
+          String? walletFk,
           bool? ignore}) =>
       ScannerTemplate(
         scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
@@ -4703,7 +4755,7 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
 }
 
 class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
-  final Value<int> scannerTemplatePk;
+  final Value<String> scannerTemplatePk;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeModified;
   final Value<String> templateName;
@@ -4712,9 +4764,10 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   final Value<String> titleTransactionAfter;
   final Value<String> amountTransactionBefore;
   final Value<String> amountTransactionAfter;
-  final Value<int> defaultCategoryFk;
-  final Value<int> walletFk;
+  final Value<String> defaultCategoryFk;
+  final Value<String> walletFk;
   final Value<bool> ignore;
+  final Value<int> rowid;
   const ScannerTemplatesCompanion({
     this.scannerTemplatePk = const Value.absent(),
     this.dateCreated = const Value.absent(),
@@ -4728,6 +4781,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     this.defaultCategoryFk = const Value.absent(),
     this.walletFk = const Value.absent(),
     this.ignore = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   ScannerTemplatesCompanion.insert({
     this.scannerTemplatePk = const Value.absent(),
@@ -4739,9 +4793,10 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     required String titleTransactionAfter,
     required String amountTransactionBefore,
     required String amountTransactionAfter,
-    required int defaultCategoryFk,
-    required int walletFk,
+    required String defaultCategoryFk,
+    required String walletFk,
     this.ignore = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : templateName = Value(templateName),
         contains = Value(contains),
         titleTransactionBefore = Value(titleTransactionBefore),
@@ -4751,7 +4806,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
         defaultCategoryFk = Value(defaultCategoryFk),
         walletFk = Value(walletFk);
   static Insertable<ScannerTemplate> custom({
-    Expression<int>? scannerTemplatePk,
+    Expression<String>? scannerTemplatePk,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeModified,
     Expression<String>? templateName,
@@ -4760,9 +4815,10 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     Expression<String>? titleTransactionAfter,
     Expression<String>? amountTransactionBefore,
     Expression<String>? amountTransactionAfter,
-    Expression<int>? defaultCategoryFk,
-    Expression<int>? walletFk,
+    Expression<String>? defaultCategoryFk,
+    Expression<String>? walletFk,
     Expression<bool>? ignore,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (scannerTemplatePk != null) 'scanner_template_pk': scannerTemplatePk,
@@ -4781,11 +4837,12 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
       if (defaultCategoryFk != null) 'default_category_fk': defaultCategoryFk,
       if (walletFk != null) 'wallet_fk': walletFk,
       if (ignore != null) 'ignore': ignore,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   ScannerTemplatesCompanion copyWith(
-      {Value<int>? scannerTemplatePk,
+      {Value<String>? scannerTemplatePk,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeModified,
       Value<String>? templateName,
@@ -4794,9 +4851,10 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
       Value<String>? titleTransactionAfter,
       Value<String>? amountTransactionBefore,
       Value<String>? amountTransactionAfter,
-      Value<int>? defaultCategoryFk,
-      Value<int>? walletFk,
-      Value<bool>? ignore}) {
+      Value<String>? defaultCategoryFk,
+      Value<String>? walletFk,
+      Value<bool>? ignore,
+      Value<int>? rowid}) {
     return ScannerTemplatesCompanion(
       scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
       dateCreated: dateCreated ?? this.dateCreated,
@@ -4814,6 +4872,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
       defaultCategoryFk: defaultCategoryFk ?? this.defaultCategoryFk,
       walletFk: walletFk ?? this.walletFk,
       ignore: ignore ?? this.ignore,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -4821,7 +4880,7 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (scannerTemplatePk.present) {
-      map['scanner_template_pk'] = Variable<int>(scannerTemplatePk.value);
+      map['scanner_template_pk'] = Variable<String>(scannerTemplatePk.value);
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
@@ -4852,13 +4911,16 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
           Variable<String>(amountTransactionAfter.value);
     }
     if (defaultCategoryFk.present) {
-      map['default_category_fk'] = Variable<int>(defaultCategoryFk.value);
+      map['default_category_fk'] = Variable<String>(defaultCategoryFk.value);
     }
     if (walletFk.present) {
-      map['wallet_fk'] = Variable<int>(walletFk.value);
+      map['wallet_fk'] = Variable<String>(walletFk.value);
     }
     if (ignore.present) {
       map['ignore'] = Variable<bool>(ignore.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -4877,7 +4939,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
           ..write('amountTransactionAfter: $amountTransactionAfter, ')
           ..write('defaultCategoryFk: $defaultCategoryFk, ')
           ..write('walletFk: $walletFk, ')
-          ..write('ignore: $ignore')
+          ..write('ignore: $ignore, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -4892,25 +4955,23 @@ class $DeleteLogsTable extends DeleteLogs
   static const VerificationMeta _deleteLogPkMeta =
       const VerificationMeta('deleteLogPk');
   @override
-  late final GeneratedColumn<int> deleteLogPk = GeneratedColumn<int>(
+  late final GeneratedColumn<String> deleteLogPk = GeneratedColumn<String>(
       'delete_log_pk', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
+      type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+      clientDefault: () => uuid.v4());
+  static const VerificationMeta _entryPkMeta =
+      const VerificationMeta('entryPk');
+  @override
+  late final GeneratedColumn<String> entryPk = GeneratedColumn<String>(
+      'entry_pk', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<DeleteLogType, int> type =
       GeneratedColumn<int>('type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
           .withConverter<DeleteLogType>($DeleteLogsTable.$convertertype);
-  static const VerificationMeta _entryPkMeta =
-      const VerificationMeta('entryPk');
-  @override
-  late final GeneratedColumn<int> entryPk = GeneratedColumn<int>(
-      'entry_pk', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _dateTimeModifiedMeta =
       const VerificationMeta('dateTimeModified');
   @override
@@ -4921,7 +4982,7 @@ class $DeleteLogsTable extends DeleteLogs
           defaultValue: Constant(DateTime.now()));
   @override
   List<GeneratedColumn> get $columns =>
-      [deleteLogPk, type, entryPk, dateTimeModified];
+      [deleteLogPk, entryPk, type, dateTimeModified];
   @override
   String get aliasedName => _alias ?? 'delete_logs';
   @override
@@ -4937,13 +4998,13 @@ class $DeleteLogsTable extends DeleteLogs
           deleteLogPk.isAcceptableOrUnknown(
               data['delete_log_pk']!, _deleteLogPkMeta));
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('entry_pk')) {
       context.handle(_entryPkMeta,
           entryPk.isAcceptableOrUnknown(data['entry_pk']!, _entryPkMeta));
     } else if (isInserting) {
       context.missing(_entryPkMeta);
     }
+    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('date_time_modified')) {
       context.handle(
           _dateTimeModifiedMeta,
@@ -4960,11 +5021,11 @@ class $DeleteLogsTable extends DeleteLogs
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DeleteLog(
       deleteLogPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}delete_log_pk'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}delete_log_pk'])!,
+      entryPk: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entry_pk'])!,
       type: $DeleteLogsTable.$convertertype.fromSql(attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}type'])!),
-      entryPk: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}entry_pk'])!,
       dateTimeModified: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified'])!,
     );
@@ -4980,24 +5041,24 @@ class $DeleteLogsTable extends DeleteLogs
 }
 
 class DeleteLog extends DataClass implements Insertable<DeleteLog> {
-  final int deleteLogPk;
+  final String deleteLogPk;
+  final String entryPk;
   final DeleteLogType type;
-  final int entryPk;
   final DateTime dateTimeModified;
   const DeleteLog(
       {required this.deleteLogPk,
-      required this.type,
       required this.entryPk,
+      required this.type,
       required this.dateTimeModified});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['delete_log_pk'] = Variable<int>(deleteLogPk);
+    map['delete_log_pk'] = Variable<String>(deleteLogPk);
+    map['entry_pk'] = Variable<String>(entryPk);
     {
       final converter = $DeleteLogsTable.$convertertype;
       map['type'] = Variable<int>(converter.toSql(type));
     }
-    map['entry_pk'] = Variable<int>(entryPk);
     map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
     return map;
   }
@@ -5005,8 +5066,8 @@ class DeleteLog extends DataClass implements Insertable<DeleteLog> {
   DeleteLogsCompanion toCompanion(bool nullToAbsent) {
     return DeleteLogsCompanion(
       deleteLogPk: Value(deleteLogPk),
-      type: Value(type),
       entryPk: Value(entryPk),
+      type: Value(type),
       dateTimeModified: Value(dateTimeModified),
     );
   }
@@ -5015,10 +5076,10 @@ class DeleteLog extends DataClass implements Insertable<DeleteLog> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return DeleteLog(
-      deleteLogPk: serializer.fromJson<int>(json['deleteLogPk']),
+      deleteLogPk: serializer.fromJson<String>(json['deleteLogPk']),
+      entryPk: serializer.fromJson<String>(json['entryPk']),
       type: $DeleteLogsTable.$convertertype
           .fromJson(serializer.fromJson<int>(json['type'])),
-      entryPk: serializer.fromJson<int>(json['entryPk']),
       dateTimeModified: serializer.fromJson<DateTime>(json['dateTimeModified']),
     );
   }
@@ -5026,90 +5087,97 @@ class DeleteLog extends DataClass implements Insertable<DeleteLog> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'deleteLogPk': serializer.toJson<int>(deleteLogPk),
+      'deleteLogPk': serializer.toJson<String>(deleteLogPk),
+      'entryPk': serializer.toJson<String>(entryPk),
       'type':
           serializer.toJson<int>($DeleteLogsTable.$convertertype.toJson(type)),
-      'entryPk': serializer.toJson<int>(entryPk),
       'dateTimeModified': serializer.toJson<DateTime>(dateTimeModified),
     };
   }
 
   DeleteLog copyWith(
-          {int? deleteLogPk,
+          {String? deleteLogPk,
+          String? entryPk,
           DeleteLogType? type,
-          int? entryPk,
           DateTime? dateTimeModified}) =>
       DeleteLog(
         deleteLogPk: deleteLogPk ?? this.deleteLogPk,
-        type: type ?? this.type,
         entryPk: entryPk ?? this.entryPk,
+        type: type ?? this.type,
         dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       );
   @override
   String toString() {
     return (StringBuffer('DeleteLog(')
           ..write('deleteLogPk: $deleteLogPk, ')
-          ..write('type: $type, ')
           ..write('entryPk: $entryPk, ')
+          ..write('type: $type, ')
           ..write('dateTimeModified: $dateTimeModified')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(deleteLogPk, type, entryPk, dateTimeModified);
+  int get hashCode => Object.hash(deleteLogPk, entryPk, type, dateTimeModified);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is DeleteLog &&
           other.deleteLogPk == this.deleteLogPk &&
-          other.type == this.type &&
           other.entryPk == this.entryPk &&
+          other.type == this.type &&
           other.dateTimeModified == this.dateTimeModified);
 }
 
 class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
-  final Value<int> deleteLogPk;
+  final Value<String> deleteLogPk;
+  final Value<String> entryPk;
   final Value<DeleteLogType> type;
-  final Value<int> entryPk;
   final Value<DateTime> dateTimeModified;
+  final Value<int> rowid;
   const DeleteLogsCompanion({
     this.deleteLogPk = const Value.absent(),
-    this.type = const Value.absent(),
     this.entryPk = const Value.absent(),
+    this.type = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   DeleteLogsCompanion.insert({
     this.deleteLogPk = const Value.absent(),
+    required String entryPk,
     required DeleteLogType type,
-    required int entryPk,
     this.dateTimeModified = const Value.absent(),
-  })  : type = Value(type),
-        entryPk = Value(entryPk);
+    this.rowid = const Value.absent(),
+  })  : entryPk = Value(entryPk),
+        type = Value(type);
   static Insertable<DeleteLog> custom({
-    Expression<int>? deleteLogPk,
+    Expression<String>? deleteLogPk,
+    Expression<String>? entryPk,
     Expression<int>? type,
-    Expression<int>? entryPk,
     Expression<DateTime>? dateTimeModified,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (deleteLogPk != null) 'delete_log_pk': deleteLogPk,
-      if (type != null) 'type': type,
       if (entryPk != null) 'entry_pk': entryPk,
+      if (type != null) 'type': type,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   DeleteLogsCompanion copyWith(
-      {Value<int>? deleteLogPk,
+      {Value<String>? deleteLogPk,
+      Value<String>? entryPk,
       Value<DeleteLogType>? type,
-      Value<int>? entryPk,
-      Value<DateTime>? dateTimeModified}) {
+      Value<DateTime>? dateTimeModified,
+      Value<int>? rowid}) {
     return DeleteLogsCompanion(
       deleteLogPk: deleteLogPk ?? this.deleteLogPk,
-      type: type ?? this.type,
       entryPk: entryPk ?? this.entryPk,
+      type: type ?? this.type,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -5117,17 +5185,20 @@ class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (deleteLogPk.present) {
-      map['delete_log_pk'] = Variable<int>(deleteLogPk.value);
+      map['delete_log_pk'] = Variable<String>(deleteLogPk.value);
+    }
+    if (entryPk.present) {
+      map['entry_pk'] = Variable<String>(entryPk.value);
     }
     if (type.present) {
       final converter = $DeleteLogsTable.$convertertype;
       map['type'] = Variable<int>(converter.toSql(type.value));
     }
-    if (entryPk.present) {
-      map['entry_pk'] = Variable<int>(entryPk.value);
-    }
     if (dateTimeModified.present) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -5136,9 +5207,10 @@ class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
   String toString() {
     return (StringBuffer('DeleteLogsCompanion(')
           ..write('deleteLogPk: $deleteLogPk, ')
-          ..write('type: $type, ')
           ..write('entryPk: $entryPk, ')
-          ..write('dateTimeModified: $dateTimeModified')
+          ..write('type: $type, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }

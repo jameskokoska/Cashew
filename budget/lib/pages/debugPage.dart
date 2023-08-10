@@ -274,16 +274,17 @@ class DebugPage extends StatelessWidget {
                 await database.createOrUpdateTransaction(
                   insert: true,
                   Transaction(
-                    transactionPk: -1,
+                    transactionPk: "-1",
                     name: "Test" + randomDouble[i].toString(),
                     amount: randomInt[i].toDouble(),
                     note: "",
                     categoryFk: categories[i].categoryPk,
-                    walletFk: 0,
+                    walletFk: "0",
                     dateCreated: DateTime.now(),
                     income: false,
                     paid: true,
                     skipPaid: false,
+                    methodAdded: MethodAdded.preview,
                   ),
                 );
               }

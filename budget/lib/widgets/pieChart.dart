@@ -15,14 +15,14 @@ class CategoryTotal {
     this.total,
   );
 
-  int categoryPk;
+  String categoryPk;
   double total;
 }
 
 class CategoryTotalDetailed {
   CategoryTotalDetailed(this.categoryPk, this.total, this.categoryDetails);
 
-  int categoryPk;
+  String categoryPk;
   double total;
   TransactionCategory categoryDetails;
 }
@@ -54,7 +54,8 @@ class PieChartWrapper extends StatelessWidget {
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
-  final Function(int, TransactionCategory?) setSelectedCategory;
+  final Function(String categoryPk, TransactionCategory? category)
+      setSelectedCategory;
   final bool isPastBudget;
   final pieChartDisplayStateKey;
   final Color? middleColor;
@@ -117,7 +118,8 @@ class PieChartDisplay extends StatefulWidget {
       : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
-  final Function(int, TransactionCategory?) setSelectedCategory;
+  final Function(String categoryPk, TransactionCategory? category)
+      setSelectedCategory;
 
   @override
   State<StatefulWidget> createState() => PieChartDisplayState();
@@ -187,7 +189,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                     widget.data[touchedIndex].category);
               } else if (event.runtimeType == FlTapDownEvent) {
                 touchedIndex = -1;
-                widget.setSelectedCategory(-1, null);
+                widget.setSelectedCategory("-1", null);
               } else if (event.runtimeType == FlLongPressMoveUpdate) {
                 touchedIndex =
                     pieTouchResponse.touchedSection!.touchedSectionIndex;

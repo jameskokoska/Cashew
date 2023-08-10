@@ -412,6 +412,13 @@
   "all-time": "Pořád",
   "icon-suggestion-details": "Nemůžete najít ikonu, kterou chcete? Navrhněte některé a lze je přidat!",
   "suggestion": "Návrh",
-  "icon-suggestion-privacy": "Bude sdílen pouze návrh.",
-  "suggest-icon": "Navrhněte ikonu"
+  "icon-suggestion-privacy": "Bude sdílen pouze návrh a datum.",
+  "suggest-icon": "Navrhněte ikonu",
+  "preview-demo": "Demo náhledu",
+  "preview-demo-description": "Vydejte se na prohlídku rozhraní aplikace a funkcí pomocí náhodně generovaných ukázkových dat. Opusťte náhled kdykoli chcete.",
+  "activate": "aktivovat",
+  "preview-demo-warning": "Demo náhledu je aktuálně aktivní a používá se automatická data. Nedoporučuje se používat aplikaci v demo režimu, protože může vést ke ztrátě dat. Chcete -li odebrat vygenerovaná dema dat a ukončení náhledu, klepněte zde.",
+  "exit-demo": "Ukončit demo",
+  "not-available-in-preview-demo": "Není k dispozici v demo náhledu",
+  "not-available-in-preview-demo-description": "Zakázat demo režim náhledu a použít tuto funkci."
 }

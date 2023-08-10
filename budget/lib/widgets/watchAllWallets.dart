@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 // Provider.of<AllWallets>(context).indexedByPk
 
 // Examples: Get the current selected wallets decimals
-// Provider.of<AllWallets>(context).indexedByPk[appStateSettings["selectedWallet"]]?.decimals
+// Provider.of<AllWallets>(context).indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals
 
 class WatchAllWallets extends StatelessWidget {
   const WatchAllWallets({required this.child, super.key});

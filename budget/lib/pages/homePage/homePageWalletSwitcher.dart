@@ -29,7 +29,7 @@ class HomePageWalletSwitcher extends StatelessWidget {
                   children: [
                     for (TransactionWallet wallet in snapshot.data!)
                       WalletEntry(
-                        selected: appStateSettings["selectedWallet"] ==
+                        selected: appStateSettings["selectedWalletPk"] ==
                             wallet.walletPk,
                         wallet: wallet,
                       ),

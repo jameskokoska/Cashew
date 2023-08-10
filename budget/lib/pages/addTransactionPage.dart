@@ -91,10 +91,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
   bool selectedIncome = false;
   String? selectedPayer;
-  int? selectedBudgetPk;
+  String? selectedBudgetPk;
   Budget? selectedBudget;
   bool selectedBudgetIsShared = false;
-  int selectedWalletPk = appStateSettings["selectedWallet"];
+  String selectedWalletPk = appStateSettings["selectedWalletPk"];
   TransactionWallet? selectedWallet;
   late TabController _incomeTabController =
       TabController(length: 2, vsync: this);
@@ -386,13 +386,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
     Transaction createdTransaction = Transaction(
       transactionPk:
-          widget.transaction != null ? widget.transaction!.transactionPk : -1,
+          widget.transaction != null ? widget.transaction!.transactionPk : "-1",
       name: (selectedTitle ?? "").trim(),
       amount: (selectedIncome
           ? (selectedAmount ?? 0).abs()
           : (selectedAmount ?? 0).abs() * -1),
       note: selectedNote ?? "",
-      categoryFk: selectedCategory?.categoryPk ?? 0,
+      categoryFk: selectedCategory?.categoryPk ?? "-1",
       dateCreated: selectedDate,
       dateTimeModified: null,
       income: selectedIncome,
@@ -506,6 +506,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         await premiumPopupAddTransaction(context);
         openBottomSheet(
           context,
+          fullSnap: true,
           appStateSettings["askForTransactionTitle"]
               ? SelectTitle(
                   selectedTitle: selectedTitle,
@@ -526,7 +527,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     Future.delayed(Duration.zero, () async {
       selectedWallet = await database.getWalletInstance(
           widget.transaction == null
-              ? appStateSettings["selectedWallet"]
+              ? appStateSettings["selectedWalletPk"]
               : widget.transaction!.walletFk);
       setState(() {});
     });
@@ -562,6 +563,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               next: () {
                 openBottomSheet(
                   context,
+                  fullSnap: true,
                   PopupFramework(
                     title: "enter-amount".tr(),
                     underTitleSpace: false,
@@ -573,7 +575,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       padding: EdgeInsets.symmetric(horizontal: 18),
                       walletPkForCurrency: selectedWalletPk,
                       onlyShowCurrencyIcon:
-                          appStateSettings["selectedWallet"] ==
+                          appStateSettings["selectedWalletPk"] ==
                               selectedWalletPk,
                       amountPassed: (selectedAmount ?? "0").toString(),
                       setSelectedAmount: setSelectedAmount,
@@ -591,7 +593,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           ),
           selectedCategory != null
               ? CategoryIcon(
-                  categoryPk: 0,
+                  categoryPk: "-1",
                   size: 50,
                   category: selectedCategory,
                 )
@@ -608,7 +610,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       Budget? getBudget;
       try {
         getBudget = await database.getBudgetInstance(
-            widget.transaction!.sharedReferenceBudgetPk ?? -1);
+            widget.transaction!.sharedReferenceBudgetPk ?? "-1");
       } catch (e) {}
 
       setState(() {
@@ -805,6 +807,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       onTap: () {
                         openBottomSheet(
                           context,
+                          fullSnap: true,
                           PopupFramework(
                             padding: false,
                             title: "enter-amount".tr(),
@@ -817,7 +820,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               walletPkForCurrency: selectedWalletPk,
                               // onlyShowCurrencyIcon:
                               //     appStateSettings[
-                              //             "selectedWallet"] ==
+                              //             "selectedWalletPk"] ==
                               //         selectedWalletPk,
                               onlyShowCurrencyIcon: true,
                               amountPassed: (selectedAmount ?? "0").toString(),
@@ -884,14 +887,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             ),
                             Provider.of<AllWallets>(context).list.length <= 1 ||
                                     selectedWallet?.walletPk ==
-                                        appStateSettings["selectedWallet"] ||
+                                        appStateSettings["selectedWalletPk"] ||
                                     ((Provider.of<AllWallets>(context)
                                             .indexedByPk[
                                                 selectedWallet?.walletPk]
                                             ?.currency) ==
                                         Provider.of<AllWallets>(context)
                                             .indexedByPk[appStateSettings[
-                                                "selectedWallet"]]
+                                                "selectedWalletPk"]]
                                             ?.currency)
                                 ? AnimatedSwitcher(
                                     duration: Duration(milliseconds: 350),
@@ -1162,6 +1165,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     if (selectedAmount == null)
                                       openBottomSheet(
                                         context,
+                                        fullSnap: true,
                                         PopupFramework(
                                           title: "enter-amount".tr(),
                                           padding: false,
@@ -1177,7 +1181,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                                 selectedWalletPk,
                                             onlyShowCurrencyIcon:
                                                 appStateSettings[
-                                                        "selectedWallet"] ==
+                                                        "selectedWalletPk"] ==
                                                     selectedWalletPk,
                                             amountPassed:
                                                 (selectedAmount ?? "0")
@@ -1205,6 +1209,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               onTap: () {
                                 openBottomSheet(
                                   context,
+                                  fullSnap: true,
                                   PopupFramework(
                                     title: "enter-amount".tr(),
                                     padding: false,
@@ -1216,9 +1221,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 18),
                                       walletPkForCurrency: selectedWalletPk,
-                                      onlyShowCurrencyIcon:
-                                          appStateSettings["selectedWallet"] ==
-                                              selectedWalletPk,
+                                      onlyShowCurrencyIcon: appStateSettings[
+                                              "selectedWalletPk"] ==
+                                          selectedWalletPk,
                                       amountPassed:
                                           (selectedAmount ?? "0").toString(),
                                       setSelectedAmount: setSelectedAmount,
@@ -1822,13 +1827,13 @@ class _SelectTitleState extends State<SelectTitle> {
                         List result = await getRelatingAssociatedTitle(text);
                         TransactionAssociatedTitle? selectedTitleLocal =
                             result[0];
-                        int categoryFk = result[1];
+                        String categoryFk = result[1];
                         bool foundFromCategoryLocal = result[2];
 
                         if (selectedTitleLocal == null) {
                           selectedTitleLocal =
                               await getLikeAssociatedTitle(text);
-                          categoryFk = selectedTitleLocal?.categoryFk ?? -1;
+                          categoryFk = selectedTitleLocal?.categoryFk ?? "-1";
                           foundFromCategoryLocal = false;
                         }
 
@@ -1883,7 +1888,7 @@ class _SelectTitleState extends State<SelectTitle> {
                                 child: Row(
                                   children: [
                                     CategoryIcon(
-                                      categoryPk: 0,
+                                      categoryPk: "-1",
                                       size: 40,
                                       category: selectedCategory,
                                       margin: EdgeInsets.zero,
@@ -2180,7 +2185,7 @@ class _EnterTextButtonState extends State<EnterTextButton> {
 }
 
 getRelatingAssociatedTitleLimited(String text) async {
-  int categoryFk = -1;
+  String categoryFk = "-1";
   bool foundFromCategoryLocal = false;
   TransactionAssociatedTitle? selectedTitleLocal;
 
@@ -2205,7 +2210,7 @@ getRelatingAssociatedTitleLimited(String text) async {
     TransactionCategory category = relatingCategory;
     categoryFk = category.categoryPk;
     selectedTitleLocal = TransactionAssociatedTitle(
-      associatedTitlePk: 0,
+      associatedTitlePk: "-1",
       title: category.name,
       categoryFk: category.categoryPk,
       dateCreated: category.dateCreated,
@@ -2228,7 +2233,7 @@ Future<TransactionAssociatedTitle?> getLikeAssociatedTitle(String text) async {
 }
 
 getRelatingAssociatedTitle(String text) async {
-  int categoryFk = -1;
+  String categoryFk = "-1";
   TransactionAssociatedTitle? selectedTitleLocal;
 
   // getLikeAssociatedTitle is more efficient since it uses queries
@@ -2259,7 +2264,7 @@ getRelatingAssociatedTitle(String text) async {
       if (text.toLowerCase().contains(category.name.toLowerCase())) {
         categoryFk = category.categoryPk;
         selectedTitleLocal = TransactionAssociatedTitle(
-          associatedTitlePk: 0,
+          associatedTitlePk: "-1",
           title: category.name,
           categoryFk: category.categoryPk,
           dateCreated: category.dateCreated,
@@ -2315,7 +2320,7 @@ Future<bool> addAssociatedTitles(
       await database.createOrUpdateAssociatedTitle(
         insert: true,
         TransactionAssociatedTitle(
-          associatedTitlePk: -1,
+          associatedTitlePk: "-1",
           categoryFk: selectedCategory.categoryPk,
           isExactMatch: false,
           title: selectedTitle.trim(),
@@ -2339,7 +2344,7 @@ class SelectAddedBudget extends StatefulWidget {
     super.key,
   });
   final Function(Budget?, {bool isSharedBudget}) setSelectedBudget;
-  final int? selectedBudgetPk;
+  final String? selectedBudgetPk;
   final double? extraHorizontalPadding;
   final bool? wrapped;
   final bool? horizontalBreak;
@@ -2349,7 +2354,7 @@ class SelectAddedBudget extends StatefulWidget {
 }
 
 class _SelectAddedBudgetState extends State<SelectAddedBudget> {
-  late int? selectedBudgetPk = widget.selectedBudgetPk;
+  late String? selectedBudgetPk = widget.selectedBudgetPk;
 
   @override
   void didUpdateWidget(covariant SelectAddedBudget oldWidget) {

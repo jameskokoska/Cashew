@@ -157,7 +157,7 @@ class WalletEntry extends StatelessWidget {
 }
 
 // set selectedWallet, update selectedWallet
-Future<bool> setPrimaryWallet(int walletPk) async {
-  await updateSettings("selectedWallet", walletPk, updateGlobalState: true);
+Future<bool> setPrimaryWallet(String walletPk) async {
+  await updateSettings("selectedWalletPk", walletPk, updateGlobalState: true);
   return true;
 }

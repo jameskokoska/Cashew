@@ -412,6 +412,13 @@
   "all-time": "Altijd",
   "icon-suggestion-details": "Kunt u geen pictogram vinden dat u wilt? Stel wat voor en ze kunnen worden toegevoegd!",
   "suggestion": "Suggestie",
-  "icon-suggestion-privacy": "Alleen de suggestie zal worden gedeeld.",
-  "suggest-icon": "Stel pictogram voor"
+  "icon-suggestion-privacy": "Alleen de suggestie en datum worden gedeeld.",
+  "suggest-icon": "Stel pictogram voor",
+  "preview-demo": "Preview Demo",
+  "preview-demo-description": "Volg een rondleiding door de interface van de app en functies met behulp van willekeurig gegenereerde voorbeeldgegevens. Verlaat de preview wanneer u maar wilt.",
+  "activate": "Activeren",
+  "preview-demo-warning": "Preview Demo is momenteel actief en automatisch gegenereerde gegevens worden gebruikt. Het wordt niet aanbevolen om de toepassing in de demo -modus te gebruiken, omdat dit kan leiden tot gegevensverlies. Tik hier om gegenereerde gegevens en exit preview -demo te verwijderen.",
+  "exit-demo": "Exit demo",
+  "not-available-in-preview-demo": "Niet beschikbaar in preview -demo",
+  "not-available-in-preview-demo-description": "Schakel de voorbeeldmodus uit om deze functie te gebruiken."
 }

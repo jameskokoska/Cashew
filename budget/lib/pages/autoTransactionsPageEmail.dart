@@ -263,7 +263,7 @@ Future<void> parseEmailsInBackground(context,
 
         List result = await getRelatingAssociatedTitle(title);
         TransactionAssociatedTitle? foundTitle = result[0];
-        int categoryId;
+        String categoryId;
 
         if (foundTitle != null) {
           print("FOUND TITLE");
@@ -299,12 +299,12 @@ Future<void> parseEmailsInBackground(context,
         await addAssociatedTitles(title, selectedCategory);
 
         Transaction transactionToAdd = Transaction(
-          transactionPk: -1,
+          transactionPk: "-1",
           name: title,
           amount: (amountDouble).abs() * -1,
           note: "",
           categoryFk: categoryId,
-          walletFk: appStateSettings["selectedWallet"],
+          walletFk: appStateSettings["selectedWalletPk"],
           dateCreated: messageDate,
           dateTimeModified: null,
           income: selectedCategory.income,

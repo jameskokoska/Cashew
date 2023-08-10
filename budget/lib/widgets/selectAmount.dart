@@ -52,7 +52,7 @@ class SelectAmount extends StatefulWidget {
   final bool popWithAmount;
   final String? nextLabel;
   final String? currencyKey;
-  final int? walletPkForCurrency;
+  final String? walletPkForCurrency;
   final bool onlyShowCurrencyIcon;
   final bool allowZero;
   final EdgeInsets padding;
@@ -71,7 +71,7 @@ class _SelectAmountState extends State<SelectAmount> {
   FocusNode _focusNode = FocusNode();
   late FocusAttachment _focusAttachment;
   late TransactionWallet? selectedWallet;
-  late int? walletPkForCurrency;
+  late String? walletPkForCurrency;
 
   bool isControlPressed = false;
 
@@ -83,7 +83,7 @@ class _SelectAmountState extends State<SelectAmount> {
     walletPkForCurrency = widget.walletPkForCurrency;
     numberDecimals = widget.selectedWallet?.decimals ??
         Provider.of<AllWallets>(context, listen: false)
-            .indexedByPk[appStateSettings["selectedWallet"]]
+            .indexedByPk[appStateSettings["selectedWalletPk"]]
             ?.decimals ??
         2;
     try {
@@ -536,7 +536,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                           duration: Duration(milliseconds: 200),
                                           child: selectedWallet?.walletPk ==
                                                       appStateSettings[
-                                                          "selectedWallet"] ||
+                                                          "selectedWalletPk"] ||
                                                   ((Provider.of<AllWallets>(
                                                               context)
                                                           .indexedByPk[
@@ -547,7 +547,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                               context)
                                                           .indexedByPk[
                                                               appStateSettings[
-                                                                  "selectedWallet"]]
+                                                                  "selectedWalletPk"]]
                                                           ?.currency)
                                               ? Container(
                                                   key: ValueKey(1),
@@ -573,7 +573,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                             .list) {
                                                       if (wallet.walletPk ==
                                                           appStateSettings[
-                                                              "selectedWallet"]) {
+                                                              "selectedWalletPk"]) {
                                                         break;
                                                       }
                                                       index++;
@@ -606,7 +606,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                                   listen: false)
                                                               .indexedByPk[
                                                                   appStateSettings[
-                                                                      "selectedWallet"]]
+                                                                      "selectedWalletPk"]]
                                                               ?.decimals ??
                                                           2;
                                                       try {
@@ -656,7 +656,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                                                       context)
                                                                   .indexedByPk[
                                                                       appStateSettings[
-                                                                          "selectedWallet"]]
+                                                                          "selectedWalletPk"]]
                                                                   ?.currency
                                                                   .toString()
                                                                   .toUpperCase() ??
@@ -707,7 +707,7 @@ class _SelectAmountState extends State<SelectAmount> {
                             numberDecimals = selectedWallet?.decimals ??
                                 Provider.of<AllWallets>(context)
                                     .indexedByPk[
-                                        appStateSettings["selectedWallet"]]
+                                        appStateSettings["selectedWalletPk"]]
                                     ?.decimals ??
                                 2;
                             try {

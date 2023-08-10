@@ -412,6 +412,13 @@
   "all-time": "All Time",
   "icon-suggestion-details": "Can't find an icon you want? Suggest some and they can be added!",
   "suggestion": "Suggestion",
-  "icon-suggestion-privacy": "Only the suggestion will be shared.",
-  "suggest-icon": "Suggest Icon"
+  "icon-suggestion-privacy": "Only the suggestion and date will be shared.",
+  "suggest-icon": "Suggest Icon",
+  "preview-demo": "Preview Demo",
+  "preview-demo-description": "Take a tour of the app's interface and features using randomly generated sample data. Exit the preview whenever you like.",
+  "activate": "Activate",
+  "preview-demo-warning": "Preview Demo is currently active, and auto-generated data is being used. It is not recommended to use the application in Demo mode, as it may lead to data loss. To remove generated data and exit Preview Demo, tap here.",
+  "exit-demo": "Exit Demo",
+  "not-available-in-preview-demo": "Not Available in Preview Demo",
+  "not-available-in-preview-demo-description": "Disable Preview Demo mode to use this feature."
 }

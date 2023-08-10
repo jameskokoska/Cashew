@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
+import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -79,7 +80,7 @@ Future<bool> signInGoogle(
     bool? silentSignIn,
     Function()? next}) async {
   // bool isConnected = false;
-
+  if (await checkLockedFeatureIfInDemoMode(context) == false) return false;
   if (appStateSettings["emailScanning"] == false) gMailPermissions = false;
 
   try {

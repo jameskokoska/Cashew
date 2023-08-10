@@ -6,6 +6,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -33,7 +34,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: globalSelectedID,
       builder: (context, value, widget) {
-        List<int> listOfIDs = (value)[pageID] ?? [];
+        List<String> listOfIDs = (value)[pageID] ?? [];
         bool animateIn = (value)[pageID] != null && (value)[pageID]!.length > 0;
         return AnimatedPositioned(
           left: 0,
@@ -156,31 +157,29 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                         ),
                       ),
                       Row(
-                        children: [
-                          appStateSettings["massEditSelectedTransactions"] ==
-                                  false
-                              ? SizedBox.shrink()
-                              : IconButton(
-                                  padding: EdgeInsets.all(15),
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
+                        children: pushActionsTogether([
+                          if (appStateSettings[
+                                  "massEditSelectedTransactions"] ==
+                              true)
+                            IconButton(
+                              padding: EdgeInsets.all(15),
+                              color: Theme.of(context).colorScheme.secondary,
+                              icon: Icon(
+                                Icons.edit,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              onPressed: () {
+                                openPopupCustom(
+                                  context,
+                                  title: "Edit " +
+                                      (value)[pageID]!.length.toString() +
+                                      " Selected",
+                                  child: EditSelectedTransactions(
+                                    transactionIDs: value[pageID]!,
                                   ),
-                                  onPressed: () {
-                                    openPopupCustom(
-                                      context,
-                                      title: "Edit " +
-                                          (value)[pageID]!.length.toString() +
-                                          " Selected",
-                                      child: EditSelectedTransactions(
-                                        transactionIDs: value[pageID]!,
-                                      ),
-                                    );
-                                  },
-                                ),
+                                );
+                              },
+                            ),
                           IconButton(
                             padding: EdgeInsets.all(15),
                             color: Theme.of(context).colorScheme.secondary,
@@ -233,7 +232,44 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               );
                             },
                           ),
-                        ],
+                          if (listOfIDs.length == 1)
+                            IconButton(
+                              padding: EdgeInsets.all(15),
+                              color: Theme.of(context).colorScheme.secondary,
+                              icon: Transform.scale(
+                                scale: 0.95,
+                                child: Icon(
+                                  Icons.file_copy_rounded,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                              onPressed: () async {
+                                Transaction transaction = await database
+                                    .getTransactionFromPk(value[pageID]!.first);
+                                await database.createOrUpdateTransaction(
+                                    transaction,
+                                    insert: true);
+                                String transactionName = transaction.name;
+                                if (transactionName.trim() == "") {
+                                  transactionName =
+                                      (await database.getCategoryInstance(
+                                              transaction.categoryFk))
+                                          .name;
+                                }
+                                openSnackbar(
+                                  SnackbarMessage(
+                                    icon: Icons.file_copy_rounded,
+                                    title: "Created copy",
+                                    description:
+                                        "Copied" + " " + transactionName,
+                                  ),
+                                );
+                                globalSelectedID.value[pageID] = [];
+                                globalSelectedID.notifyListeners();
+                              },
+                            ),
+                        ]),
                       ),
                     ],
                   ),
@@ -249,7 +285,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
 
 class EditSelectedTransactions extends StatefulWidget {
   const EditSelectedTransactions({super.key, required this.transactionIDs});
-  final List<int> transactionIDs;
+  final List<String> transactionIDs;
 
   @override
   State<EditSelectedTransactions> createState() =>
@@ -279,6 +315,7 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
   Future<void> selectAmount(BuildContext context) async {
     openBottomSheet(
       context,
+      fullSnap: true,
       PopupFramework(
         title: "enter-amount".tr(),
         underTitleSpace: false,
@@ -380,8 +417,9 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
               ),
               margin: EdgeInsets.zero,
               canEditByLongPress: false,
-              categoryPk:
-                  selectedCategory == null ? -1 : selectedCategory!.categoryPk,
+              categoryPk: selectedCategory == null
+                  ? "-1"
+                  : selectedCategory!.categoryPk,
               category: selectedCategory,
               size: 40,
               noBackground: false,
@@ -452,7 +490,8 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                         onCancelLabel: "cancel".tr(),
                         onSubmit: () async {
                           if (selectedAmount != null) {
-                            for (int transactionID in widget.transactionIDs) {
+                            for (String transactionID
+                                in widget.transactionIDs) {
                               Transaction transaction = await database
                                   .getTransactionFromPk(transactionID);
                               Transaction transactionEdited;
@@ -499,7 +538,8 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                             }
                           }
                           if (selectedCategory != null) {
-                            for (int transactionID in widget.transactionIDs) {
+                            for (String transactionID
+                                in widget.transactionIDs) {
                               Transaction transaction = await database
                                   .getTransactionFromPk(transactionID);
                               if (transaction.sharedKey != null) {

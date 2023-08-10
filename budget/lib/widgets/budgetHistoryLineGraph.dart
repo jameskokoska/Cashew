@@ -32,8 +32,8 @@ class BudgetHistoryLineGraph extends StatefulWidget {
   final double? horizontalLineAt;
   final double maxY;
   final Function(int?)? onTouchedIndex;
-  final Map<int, List<FlSpot>> extraCategorySpots;
-  final Map<int, TransactionCategory> categoriesMapped;
+  final Map<String, List<FlSpot>> extraCategorySpots;
+  final Map<String, TransactionCategory> categoriesMapped;
 
   @override
   State<BudgetHistoryLineGraph> createState() => _BudgetHistoryLineGraphState();
@@ -112,7 +112,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
         dotData: FlDotData(show: false),
         color: Colors.transparent,
       ),
-      for (int categoryPk in widget.extraCategorySpots.keys)
+      for (String categoryPk in widget.extraCategorySpots.keys)
         LineChartBarData(
           isStrokeCapRound: true,
           spots: widget.extraCategorySpots[categoryPk],

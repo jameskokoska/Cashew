@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.1
+    Added spending limits to preview
+    If currency conversions are null, a factor of 1 is used as conversion
+    Preview demo mode
+    Migrated database to use String UUIDs
+    Reduced popup snapping, increased snapping to max on certain popups
+    Action bar has create transaction copy button
     < 3.8.0
     Cashew pro background now extends past scrollable area - support for iOS over-scroll
     Proper currency for editing wallets row entry

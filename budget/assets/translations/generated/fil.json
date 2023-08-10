@@ -412,6 +412,13 @@
   "all-time": "Lahat ng oras",
   "icon-suggestion-details": "Hindi mahanap ang isang icon na gusto mo? Magmungkahi ng ilan at maaari silang maidagdag!",
   "suggestion": "Mungkahi",
-  "icon-suggestion-privacy": "Ang mungkahi lamang ang ibabahagi.",
-  "suggest-icon": "Magmungkahi ng icon"
+  "icon-suggestion-privacy": "Tanging ang mungkahi at petsa ay ibabahagi.",
+  "suggest-icon": "Magmungkahi ng icon",
+  "preview-demo": "Preview Demo",
+  "preview-demo-description": "Kumuha ng isang paglilibot sa interface ng app at mga tampok gamit ang random na nabuo na sample data. Lumabas sa preview tuwing gusto mo.",
+  "activate": "Buhayin",
+  "preview-demo-warning": "Kasalukuyang aktibo ang Preview Demo, at ginagamit ang data na nabuo ng auto. Hindi inirerekomenda na gamitin ang application sa mode ng demo, dahil maaaring humantong ito sa pagkawala ng data. Upang alisin ang nabuong data at exit preview demo, mag -tap dito.",
+  "exit-demo": "Lumabas ng demo",
+  "not-available-in-preview-demo": "Hindi magagamit sa preview demo",
+  "not-available-in-preview-demo-description": "Huwag paganahin ang mode ng Demo ng Preview upang magamit ang tampok na ito."
 }

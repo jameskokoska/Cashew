@@ -42,7 +42,7 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
       );
       Transaction newTransaction = transaction.copyWith(
         paid: false,
-        transactionPk: -1,
+        transactionPk: "-1",
         dateCreated: newDate,
         createdAnotherFutureTransaction: Value(false),
       );
@@ -104,6 +104,7 @@ Future openPayPopup(
       if (transaction.amount == 0) {
         amount = await openBottomSheet(
           context,
+          fullSnap: true,
           PopupFramework(
             title: "enter-amount".tr(),
             underTitleSpace: false,

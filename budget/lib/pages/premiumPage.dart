@@ -17,7 +17,8 @@ import 'package:sa3_liquid/sa3_liquid.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 
 class PremiumPage extends StatelessWidget {
-  const PremiumPage({super.key});
+  const PremiumPage({this.canDismiss = false, super.key});
+  final bool canDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,8 @@ class PremiumPage extends StatelessWidget {
         PremiumBackground(),
         PageFramework(
           enableHeader: false,
-          dragDownToDismiss: false,
+          dragDownToDismiss: canDismiss,
+          dragDownToDissmissBackground: Colors.transparent,
           bottomPadding: false,
           backgroundColor: Colors.transparent,
           slivers: [
@@ -172,31 +174,35 @@ class PremiumPage extends StatelessWidget {
                               SizedBox(height: 15),
                             ],
                           ),
-                          Opacity(
-                            opacity: 0.5,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Tappable(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                color: darkenPastel(
-                                        Theme.of(context).colorScheme.primary,
-                                        amount: 0.3)
-                                    .withOpacity(0.5),
-                                borderRadius: 15,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  child: TextFont(
-                                    text: "continue-for-free".tr(),
-                                    fontSize: 13,
-                                    textColor: Colors.white,
+                          canDismiss
+                              ? SizedBox.shrink()
+                              : Opacity(
+                                  opacity: 0.5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Tappable(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      color: darkenPastel(
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              amount: 0.3)
+                                          .withOpacity(0.5),
+                                      borderRadius: 15,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
+                                        child: TextFont(
+                                          text: "continue-for-free".tr(),
+                                          fontSize: 13,
+                                          textColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -213,7 +219,8 @@ class PremiumPage extends StatelessWidget {
                             getPlatform() == PlatformOS.isIOS
                                 ? Icons.chevron_left_rounded
                                 : Icons.arrow_back_rounded,
-                            color: Colors.black.withOpacity(0.16),
+                            color: Colors.black
+                                .withOpacity(canDismiss ? 0.9 : 0.16),
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -400,7 +407,7 @@ Future premiumPopupAddTransaction(BuildContext context) async {
     updateSettings(
         "premiumPopupAddTransactionLastShown", DateTime.now.toString(),
         updateGlobalState: false);
-    await pushRoute(context, PremiumPage());
+    await pushRoute(context, PremiumPage(canDismiss: true));
   }
 }
 
@@ -495,7 +502,7 @@ class PremiumBanner extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 0),
       child: OpenContainerNavigation(
         borderRadius: borderRadius,
-        openPage: PremiumPage(),
+        openPage: PremiumPage(canDismiss: true),
         closedColor: Theme.of(context).brightness == Brightness.light
             ? Theme.of(context).colorScheme.secondaryContainer
             : Theme.of(context).colorScheme.secondary,

@@ -36,12 +36,12 @@ import '../widgets/util/widgetSize.dart';
 class BudgetPage extends StatelessWidget {
   const BudgetPage({
     super.key,
-    required int this.budgetPk,
+    required this.budgetPk,
     this.dateForRange,
     this.isPastBudget = false,
     this.isPastBudgetButCurrentPeriod = false,
   });
-  final int budgetPk;
+  final String budgetPk;
   final DateTime? dateForRange;
   final bool? isPastBudget;
   final bool? isPastBudgetButCurrentPeriod;
@@ -85,7 +85,6 @@ class _BudgetPageContent extends StatefulWidget {
 
 class _BudgetPageContentState extends State<_BudgetPageContent> {
   double budgetHeaderHeight = 0;
-  int selectedCategoryPk = -1;
   String? selectedMember = null;
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
@@ -150,7 +149,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         widget.budget.budgetTransactionFilters,
                         widget.budget.memberTransactionFilters,
                         member: selectedMember,
-                        onlyShowTransactionsBelongingToBudget:
+                        onlyShowTransactionsBelongingToBudgetPk:
                             widget.budget.sharedKey != null ||
                                     widget.budget.addedTransactionsOnly == true
                                 ? widget.budget.budgetPk
@@ -271,7 +270,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       widget.budget.budgetTransactionFilters,
                       widget.budget.memberTransactionFilters,
                       member: selectedMember,
-                      onlyShowTransactionsBelongingToBudget:
+                      onlyShowTransactionsBelongingToBudgetPk:
                           widget.budget.sharedKey != null ||
                                   widget.budget.addedTransactionsOnly == true
                               ? widget.budget.budgetPk
@@ -308,27 +307,24 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             transactionCount: category.transactionCount,
                             categorySpent: category.total.abs(),
                             onTap: () {
-                              if (selectedCategoryPk ==
+                              if (selectedCategory?.categoryPk ==
                                   category.category.categoryPk) {
                                 setState(() {
-                                  selectedCategoryPk = -1;
                                   selectedCategory = null;
                                 });
                                 _pieChartDisplayStateKey.currentState!
                                     .setTouchedIndex(-1);
                               } else {
                                 setState(() {
-                                  selectedCategoryPk =
-                                      category.category.categoryPk;
                                   selectedCategory = category.category;
                                 });
                                 _pieChartDisplayStateKey.currentState!
                                     .setTouchedIndex(index);
                               }
                             },
-                            selected: selectedCategoryPk ==
+                            selected: selectedCategory?.categoryPk ==
                                 category.category.categoryPk,
-                            allSelected: selectedCategoryPk == -1,
+                            allSelected: selectedCategory == null,
                           ));
                         });
                         return SliverToBoxAdapter(
@@ -428,7 +424,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         setState(() {
                                           selectedMember = member;
                                           selectedCategory = null;
-                                          selectedCategoryPk = -1;
                                         });
                                         _pieChartDisplayStateKey.currentState!
                                             .setTouchedIndex(-1);
@@ -452,7 +447,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     setSelectedCategory:
                                         (categoryPk, category) {
                                       setState(() {
-                                        selectedCategoryPk = categoryPk;
                                         selectedCategory = category;
                                       });
                                     },
@@ -512,7 +506,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   curve: Curves.easeInOutCubicEmphasized,
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: selectedCategoryPk != -1
+                    child: selectedCategory != null
                         ? Padding(
                             key: ValueKey(1),
                             padding: const EdgeInsets.only(
@@ -551,7 +545,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                     child: BudgetLineGraph(
                       budget: widget.budget,
                       dateForRange: dateForRange,
-                      selectedCategoryPk: selectedCategoryPk,
                       isPastBudget: widget.isPastBudget,
                       selectedCategory: selectedCategory,
                       budgetRange: budgetRange,
@@ -566,8 +559,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               TransactionEntries(
                 budgetRange.start,
                 budgetRange.end,
-                categoryFks: selectedCategoryPk != -1
-                    ? [selectedCategoryPk]
+                categoryFks: selectedCategory != null
+                    ? [selectedCategory?.categoryPk ?? "-1"]
                     : widget.budget.categoryFks ?? [],
                 income: false,
                 listID: pageId,
@@ -576,7 +569,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 memberTransactionFilters:
                     widget.budget.memberTransactionFilters,
                 member: selectedMember,
-                onlyShowTransactionsBelongingToBudget:
+                onlyShowTransactionsBelongingToBudgetPk:
                     widget.budget.sharedKey != null ||
                             widget.budget.addedTransactionsOnly == true
                         ? widget.budget.budgetPk
@@ -607,7 +600,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         widget.budget.budgetTransactionFilters,
                         widget.budget.memberTransactionFilters,
                         member: selectedMember,
-                        onlyShowTransactionsBelongingToBudget:
+                        onlyShowTransactionsBelongingToBudgetPk:
                             widget.budget.sharedKey != null ||
                                     widget.budget.addedTransactionsOnly == true
                                 ? widget.budget.budgetPk
@@ -738,7 +731,6 @@ class BudgetLineGraph extends StatefulWidget {
   const BudgetLineGraph({
     required this.budget,
     required this.dateForRange,
-    required this.selectedCategoryPk,
     required this.isPastBudget,
     required this.selectedCategory,
     required this.budgetRange,
@@ -751,7 +743,6 @@ class BudgetLineGraph extends StatefulWidget {
 
   final Budget budget;
   final DateTime? dateForRange;
-  final int selectedCategoryPk;
   final bool? isPastBudget;
   final TransactionCategory? selectedCategory;
   final DateTimeRange budgetRange;
@@ -829,7 +820,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
             false,
             widget.budget.budgetTransactionFilters,
             widget.budget.memberTransactionFilters,
-            onlyShowTransactionsBelongingToBudget:
+            onlyShowTransactionsBelongingToBudgetPk:
                 widget.budget.sharedKey != null ||
                         widget.budget.addedTransactionsOnly == true
                     ? widget.budget.budgetPk
@@ -885,9 +876,9 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               //can be optimized...
               double totalForDay = 0;
               for (Transaction transaction in snapshot.data![snapshotIndex]) {
-                if (widget.selectedCategoryPk == -1 ||
-                    -transaction.categoryFk ==
-                        -widget.selectedCategoryPk) if (indexDay
+                if (widget.selectedCategory == null ||
+                    transaction.categoryFk ==
+                        widget.selectedCategory?.categoryPk) if (indexDay
                             .year ==
                         transaction.dateCreated.year &&
                     indexDay.month == transaction.dateCreated.month &&
@@ -907,10 +898,10 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
             }
             pointsList.add(points);
           }
-          Color lineColor =
-              widget.selectedCategoryPk != -1 && widget.selectedCategory != null
-                  ? HexColor(widget.selectedCategory!.colour)
-                  : widget.budgetColorScheme.primary;
+          Color lineColor = widget.selectedCategory?.categoryPk != null &&
+                  widget.selectedCategory != null
+              ? HexColor(widget.selectedCategory!.colour)
+              : widget.budgetColorScheme.primary;
           if (widget.showIfNone == false && totalZeroes == pointsList[0].length)
             return SizedBox.shrink();
           return Padding(
@@ -932,7 +923,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                 for (int index = 0; index < snapshot.data!.length; index++)
                   index == 0
                       ? lineColor
-                      : (widget.selectedCategoryPk != -1 &&
+                      : (widget.selectedCategory?.categoryPk != null &&
                                   widget.selectedCategory != null
                               ? lineColor
                               : widget.budgetColorScheme.tertiary)

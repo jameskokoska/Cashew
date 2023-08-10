@@ -412,6 +412,13 @@
   "all-time": "Tempo todo",
   "icon-suggestion-details": "Não consegue encontrar um ícone que você deseja? Sugira alguns e eles podem ser adicionados!",
   "suggestion": "Sugestão",
-  "icon-suggestion-privacy": "Somente a sugestão será compartilhada.",
-  "suggest-icon": "Sugerir ícone"
+  "icon-suggestion-privacy": "Somente a sugestão e a data serão compartilhadas.",
+  "suggest-icon": "Sugerir ícone",
+  "preview-demo": "Demonstração de visualização",
+  "preview-demo-description": "Faça um tour pela interface e recursos do aplicativo usando dados de amostra gerados aleatoriamente. Saia da visualização sempre que quiser.",
+  "activate": "Ativar",
+  "preview-demo-warning": "A demonstração de visualização está atualmente ativa e os dados gerados automaticamente estão sendo usados. Não é recomendável usar o aplicativo no modo de demonstração, pois pode levar à perda de dados. Para remover os dados gerados e a demonstração de visualização de saída, toque aqui.",
+  "exit-demo": "Demoção de saída",
+  "not-available-in-preview-demo": "Não disponível na demonstração de visualização",
+  "not-available-in-preview-demo-description": "Desative o modo de demonstração de visualização para usar esse recurso."
 }

@@ -412,6 +412,13 @@
   "all-time": "Cały czas",
   "icon-suggestion-details": "Nie możesz znaleźć ikony, którą chcesz? Zaproponuj niektóre i można je dodać!",
   "suggestion": "Sugestia",
-  "icon-suggestion-privacy": "Tylko sugestia zostanie udostępniona.",
-  "suggest-icon": "Zaproponuj ikonę"
+  "icon-suggestion-privacy": "Tylko sugestia i data zostaną udostępnione.",
+  "suggest-icon": "Zaproponuj ikonę",
+  "preview-demo": "Podgląd demo",
+  "preview-demo-description": "Wybierz się na interfejs i funkcje aplikacji przy użyciu losowo wygenerowanych przykładowych danych. Wyjdź z podglądu, gdy chcesz.",
+  "activate": "Aktywuj",
+  "preview-demo-warning": "Demo podglądu jest obecnie aktywne i wykorzystywane są automatyczne dane. Nie zaleca się korzystania z aplikacji w trybie demo, ponieważ może to prowadzić do utraty danych. Aby usunąć wygenerowane dane i wyjść z wersji demo podglądu, dotknij tutaj.",
+  "exit-demo": "Demo wyjścia",
+  "not-available-in-preview-demo": "Niedostępne w wersji demo podglądu",
+  "not-available-in-preview-demo-description": "Wyłącz podgląd tryb demo, aby użyć tej funkcji."
 }

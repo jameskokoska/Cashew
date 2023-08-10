@@ -412,6 +412,13 @@
   "all-time": "Hele tiden",
   "icon-suggestion-details": "Kan du ikke finde et ikon, du ønsker? Foreslå nogle, og de kan tilføjes!",
   "suggestion": "Forslag",
-  "icon-suggestion-privacy": "Kun forslaget deles.",
-  "suggest-icon": "Foreslå ikon"
+  "icon-suggestion-privacy": "Kun forslaget og datoen deles.",
+  "suggest-icon": "Foreslå ikon",
+  "preview-demo": "Preview Demo",
+  "preview-demo-description": "Tag en rundvisning i appens grænseflade og funktioner ved hjælp af tilfældigt genererede eksempler på data. Gå ud af forhåndsvisningen, når du vil.",
+  "activate": "Aktivér",
+  "preview-demo-warning": "Preview-demo er i øjeblikket aktiv, og der bruges auto-genererede data. Det anbefales ikke at bruge applikationen i demo -tilstand, da det kan føre til datatab. For at fjerne genererede data og exit -preview -demo skal du trykke på her.",
+  "exit-demo": "Afslut demo",
+  "not-available-in-preview-demo": "Ikke tilgængelig i preview -demo",
+  "not-available-in-preview-demo-description": "Deaktiver preview Demo -tilstand for at bruge denne funktion."
 }

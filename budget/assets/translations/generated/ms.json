@@ -412,6 +412,13 @@
   "all-time": "Setiap masa",
   "icon-suggestion-details": "Tidak dapat mencari ikon yang anda mahukan? Cadangkan beberapa dan mereka boleh ditambah!",
   "suggestion": "Cadangan",
-  "icon-suggestion-privacy": "Hanya cadangan yang akan dikongsi.",
-  "suggest-icon": "Cadangkan ikon"
+  "icon-suggestion-privacy": "Hanya cadangan dan tarikh akan dikongsi.",
+  "suggest-icon": "Cadangkan ikon",
+  "preview-demo": "Demo pratonton",
+  "preview-demo-description": "Mengambil lawatan ke antara muka dan ciri aplikasi menggunakan data sampel yang dijana secara rawak. Keluar dari pratonton apabila anda suka.",
+  "activate": "Aktifkan",
+  "preview-demo-warning": "Demo pratonton kini aktif, dan data yang dihasilkan secara automatik sedang digunakan. Ia tidak disyorkan untuk menggunakan aplikasi dalam mod demo, kerana ia boleh menyebabkan kehilangan data. Untuk mengalih keluar data pratonton data dan keluar, ketik di sini.",
+  "exit-demo": "Demo Keluar",
+  "not-available-in-preview-demo": "Tidak terdapat dalam demo pratonton",
+  "not-available-in-preview-demo-description": "Lumpuhkan mod demo pratonton untuk menggunakan ciri ini."
 }

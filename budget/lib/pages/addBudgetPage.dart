@@ -89,7 +89,7 @@ dynamic enumRecurrence = {
 
 class _AddBudgetPageState extends State<AddBudgetPage> {
   bool? canAddBudget;
-  List<int>? selectedCategories;
+  List<String>? selectedCategoryPks;
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
@@ -140,17 +140,17 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         selectedShared = false;
       }
       if (addedOnly) {
-        selectedCategories = [];
+        selectedCategoryPks = [];
         selectedAllCategories = true;
       }
       setSelectedCategories([]);
     });
   }
 
-  void setSelectedCategories(List<int> categories) {
+  void setSelectedCategories(List<String> categories) {
     if (categories.length <= 0) {
       setState(() {
-        selectedCategories = categories;
+        selectedCategoryPks = categories;
         selectedAllCategories = true;
       });
       setState(() {
@@ -158,7 +158,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       });
     } else {
       setState(() {
-        selectedCategories = categories;
+        selectedCategoryPks = categories;
         selectedAllCategories = false;
       });
       if (categories.length == 1) {
@@ -263,13 +263,13 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           await database.getBudgetInstance(widget.budget!.budgetPk);
     }
     return await Budget(
-      budgetPk: widget.budget != null ? widget.budget!.budgetPk : -1,
+      budgetPk: widget.budget != null ? widget.budget!.budgetPk : "-1",
       name: selectedTitle ?? "",
       amount: selectedAmount ?? 0,
       colour: toHexString(selectedColor),
       startDate: selectedStartDate,
       endDate: selectedEndDate ?? DateTime.now(),
-      categoryFks: selectedCategories,
+      categoryFks: selectedCategoryPks,
       allCategoryFks: selectedAllCategories,
       addedTransactionsOnly: selectedAddedTransactionsOnly,
       // TODO make this work excludeAddedTransactions
@@ -281,7 +281,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       order: widget.budget != null
           ? widget.budget!.order
           : await database.getAmountOfBudgets(),
-      walletFk: 0,
+      walletFk: "0",
       pinned: selectedPin,
       sharedKey: widget.budget != null ? currentInstance!.sharedKey : null,
       sharedOwnerMember:
@@ -706,7 +706,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               height: 100,
                               child: SelectCategory(
                                 horizontalList: true,
-                                selectedCategories: selectedCategories,
+                                selectedCategories: selectedCategoryPks,
                                 setSelectedCategories: setSelectedCategories,
                                 showSelectedAllCategoriesIfNoneSelected: true,
                               ),
@@ -1137,6 +1137,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   Future<void> selectAmount(BuildContext context) async {
     openBottomSheet(
       context,
+      fullSnap: true,
       PopupFramework(
         title: "enter-amount".tr(),
         underTitleSpace: false,

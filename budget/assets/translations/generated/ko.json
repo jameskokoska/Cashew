@@ -412,6 +412,13 @@
   "all-time": "항상",
   "icon-suggestion-details": "원하는 아이콘을 찾을 수 없습니까? 일부를 제안하면 추가 할 수 있습니다!",
   "suggestion": "제안",
-  "icon-suggestion-privacy": "제안 만 공유됩니다.",
-  "suggest-icon": "아이콘 제안"
+  "icon-suggestion-privacy": "제안과 날짜 만 공유됩니다.",
+  "suggest-icon": "아이콘 제안",
+  "preview-demo": "미리보기 데모",
+  "preview-demo-description": "무작위로 생성 된 샘플 데이터를 사용하여 앱의 인터페이스 및 기능을 둘러보십시오. 원할 때마다 미리보기를 종료하십시오.",
+  "activate": "활성화",
+  "preview-demo-warning": "미리보기 데모는 현재 활성화되어 있으며 자동 생성 데이터가 사용되고 있습니다. 데이터 손실로 이어질 수 있으므로 데모 모드에서 응용 프로그램을 사용하는 것이 좋습니다. 생성 된 데이터를 제거하고 미리보기 데모를 종료하려면 여기를 누릅니다.",
+  "exit-demo": "데모를 종료하십시오",
+  "not-available-in-preview-demo": "미리보기 데모에서는 사용할 수 없습니다",
+  "not-available-in-preview-demo-description": "미리보기 데모 모드를 비활성화 하여이 기능을 사용하십시오."
 }

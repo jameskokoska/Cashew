@@ -33,8 +33,8 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/countNumber.dart';
 
 class PastBudgetsPage extends StatelessWidget {
-  const PastBudgetsPage({super.key, required int this.budgetPk});
-  final int budgetPk;
+  const PastBudgetsPage({super.key, required String this.budgetPk});
+  final String budgetPk;
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +68,11 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   Stream<List<double?>>? mergedStreamsCategoriesTotal;
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 8;
-  late List<int>? selectedCategoryFks =
+  late List<String>? selectedCategoryFks =
       (appStateSettings["watchedCategoriesOnBudget"]
                   [widget.budget.budgetPk.toString()] ??
               [])
-          .cast<int>();
+          .cast<String>();
   GlobalKey<_PastBudgetContainerListState>
       _pastBudgetContainerListStateStateKey = GlobalKey();
 
@@ -106,14 +106,14 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         widget.budget.allCategoryFks,
         widget.budget.budgetTransactionFilters,
         widget.budget.memberTransactionFilters,
-        onlyShowTransactionsBelongingToBudget:
+        onlyShowTransactionsBelongingToBudgetPk:
             widget.budget.sharedKey != null ||
                     widget.budget.addedTransactionsOnly == true
                 ? widget.budget.budgetPk
                 : null,
         budget: widget.budget,
       ));
-      for (int categoryFk in selectedCategoryFks ?? []) {
+      for (String categoryFk in selectedCategoryFks ?? []) {
         watchedCategoryTotals
             .add(database.watchTotalSpentInTimeRangeFromCategories(
           Provider.of<AllWallets>(context, listen: false),
@@ -123,7 +123,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           false,
           widget.budget.budgetTransactionFilters,
           widget.budget.memberTransactionFilters,
-          onlyShowTransactionsBelongingToBudget:
+          onlyShowTransactionsBelongingToBudgetPk:
               widget.budget.sharedKey != null ||
                       widget.budget.addedTransactionsOnly == true
                   ? widget.budget.budgetPk
@@ -145,7 +145,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     // );
   }
 
-  void updateSetting(List<int> selectedCategoryFks) {
+  void updateSetting(List<String> selectedCategoryFks) {
     if (appStateSettings["watchedCategoriesOnBudget"]
             [widget.budget.budgetPk.toString()] ==
         null) {
@@ -208,7 +208,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       labelIcon: true,
                       addButton: false,
                       selectedCategories: selectedCategoryFks,
-                      setSelectedCategories: (List<int> selectedCategoryFks) {
+                      setSelectedCategories:
+                          (List<String> selectedCategoryFks) {
                         setState(() {
                           this.selectedCategoryFks = selectedCategoryFks;
                           updateSetting(selectedCategoryFks);
@@ -313,7 +314,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       color: backgroundColor,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 5),
-                        child: StreamBuilder<Map<int, TransactionCategory>>(
+                        child: StreamBuilder<Map<String, TransactionCategory>>(
                             stream: database.watchAllCategoriesMapped(),
                             builder: (context, snapshotCategoriesMapped) {
                               if (snapshotCategoriesMapped.hasData) {
@@ -352,7 +353,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                           stream: mergedStreamsCategoriesTotal,
                                           builder: (context,
                                               snapshotMergedStreamsCategoriesTotal) {
-                                            Map<int, List<FlSpot>>
+                                            Map<String, List<FlSpot>>
                                                 categorySpentPoints = {};
                                             if (snapshotMergedStreamsCategoriesTotal
                                                     .hasData &&
@@ -373,7 +374,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                                   [])
                                                               .length;
                                                   day++) {
-                                                for (int categoryFk
+                                                for (String categoryFk
                                                     in (selectedCategoryFks ??
                                                             [])
                                                         .reversed) {
@@ -563,7 +564,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                   ? SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: StreamBuilder<Map<int, TransactionCategory>>(
+                        child: StreamBuilder<Map<String, TransactionCategory>>(
                           stream: database.watchAllCategoriesMapped(),
                           builder: (context, snapshotCategoriesMapped) {
                             if (snapshotCategoriesMapped.hasData) {
@@ -572,7 +573,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                 builder: (context, snapshotCategoriesTotal) {
                                   if (snapshotCategoriesTotal.hasData) {
                                     List<Widget> children = [];
-                                    Map<int, double> categoryTotals = {};
+                                    Map<String, double> categoryTotals = {};
                                     for (int period = 0;
                                         period <
                                             amountLoaded *
@@ -598,7 +599,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                     0);
                                       }
                                     }
-                                    for (int categoryPk
+                                    for (String categoryPk
                                         in categoryTotals.keys) {
                                       TransactionCategory? category =
                                           snapshotCategoriesMapped
@@ -925,7 +926,7 @@ class PastBudgetContainer extends StatelessWidget {
             budget.allCategoryFks,
             budget.budgetTransactionFilters,
             budget.memberTransactionFilters,
-            onlyShowTransactionsBelongingToBudget:
+            onlyShowTransactionsBelongingToBudgetPk:
                 budget.sharedKey != null || budget.addedTransactionsOnly == true
                     ? budget.budgetPk
                     : null,

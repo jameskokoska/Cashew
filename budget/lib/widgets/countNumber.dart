@@ -123,7 +123,7 @@ class _CountNumberState extends State<CountNumber> {
       decimals = 0;
     } else {
       int currentSelectedDecimals = Provider.of<AllWallets>(context)
-              .indexedByPk[appStateSettings["selectedWallet"]]
+              .indexedByPk[appStateSettings["selectedWalletPk"]]
               ?.decimals ??
           2;
       decimals = ((widget.decimals ?? currentSelectedDecimals) > 2
