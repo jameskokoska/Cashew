@@ -8,6 +8,7 @@ class SaveBottomButton extends StatefulWidget {
   final Function() onTap;
   final bool disabled;
   final Color? color;
+  final Color? labelColor;
   final EdgeInsets margin;
   const SaveBottomButton({
     super.key,
@@ -15,6 +16,7 @@ class SaveBottomButton extends StatefulWidget {
     required this.onTap,
     this.disabled = false,
     this.color,
+    this.labelColor,
     this.margin = EdgeInsets.zero,
   });
 
@@ -90,6 +92,7 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
                 hasBottomExtraSafeArea: true,
                 expandToFillBottomExtraSafeArea: false,
                 color: widget.color,
+                textColor: widget.labelColor,
               ),
             ),
           ),

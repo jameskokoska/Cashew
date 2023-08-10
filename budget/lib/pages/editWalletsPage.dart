@@ -161,9 +161,12 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                               return TextFont(
                                 textAlign: TextAlign.left,
                                 text: convertToMoney(
-                                        Provider.of<AllWallets>(context),
-                                        snapshot.data ?? 0 * -1)
-                                    .toString(),
+                                  Provider.of<AllWallets>(context),
+                                  snapshot.data ?? 0 * -1,
+                                  currencyKey: wallet.currency,
+                                  decimals: wallet.decimals,
+                                  addCurrencyName: true,
+                                ).toString(),
                                 fontSize: 15,
                               );
                             },

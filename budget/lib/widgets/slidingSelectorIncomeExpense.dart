@@ -19,6 +19,9 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BorderRadius borderRadius = getPlatform() == PlatformOS.isIOS
+        ? BorderRadius.circular(10)
+        : BorderRadius.circular(15);
     return Container(
       decoration:
           BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
@@ -36,7 +39,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
             child: SizedBox(
               height: alternateTheme ? 40 : 45,
               child: Material(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: borderRadius,
                 color: getColor(context, "lightDarkAccentHeavyLight"),
                 child: Theme(
                   data: ThemeData().copyWith(
@@ -44,7 +47,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                   ),
                   child: TabBar(
                     splashFactory: Theme.of(context).splashFactory,
-                    splashBorderRadius: BorderRadius.circular(15),
+                    splashBorderRadius: borderRadius,
                     onTap: (value) {
                       onSelected(value + 1);
                     },
@@ -58,7 +61,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                               .primary
                               .withOpacity(0.3)
                           : getColor(context, "black").withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: borderRadius,
                     ),
                     labelColor: getColor(context, "black"),
                     unselectedLabelColor: getColor(context, "textLight"),

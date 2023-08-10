@@ -420,7 +420,7 @@ class NavigationSidebarButton extends StatelessWidget {
         duration: Duration(milliseconds: 300),
         child: Tappable(
           key: ValueKey(isSelected),
-          borderRadius: 50,
+          borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 50,
           color: isSelected
               ? Theme.of(context).colorScheme.secondaryContainer
               : null,
@@ -486,7 +486,8 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
         NavigationSidebarButton(
           icon: Icons.edit_document,
           label: "edit-data".tr(),
-          isSelected: false,
+          isSelected: showEditDataButtons == false &&
+              [9, 10, 11, 12].contains(widget.selectedIndex),
           onTap: () {
             setState(() {
               showEditDataButtons = !showEditDataButtons;

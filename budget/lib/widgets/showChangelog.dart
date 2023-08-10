@@ -10,6 +10,14 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.0
+    Cashew pro background now extends past scrollable area - support for iOS over-scroll
+    Proper currency for editing wallets row entry
+    Fixed iOS tappable long press but incomplete would freeze animation
+    Swipe along checks to select transaction
+    New transaction selection enabled for web
+    iOS new selection check icon for transactions
+    iOS rounded corners style for more components
     < 3.7.9
     Suggest icon popup and suggestion container
     New divider colors

@@ -963,7 +963,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(
+                getPlatform() == PlatformOS.isIOS ? 8 : 15),
             child: Column(
               children: [
                 Focus(
@@ -1260,6 +1261,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   ? Theme.of(context)
                                       .colorScheme
                                       .tertiaryContainer
+                                  : null,
+                              labelColor: isTransactionActionDealtWith(
+                                      createTransaction())
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onTertiaryContainer
                                   : null,
                               label: widget.transaction != null
                                   ? getTransactionActionNameFromType(

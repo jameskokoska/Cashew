@@ -196,16 +196,18 @@ class ScaledAnimatedSwitcher extends StatelessWidget {
   const ScaledAnimatedSwitcher({
     required this.keyToWatch,
     required this.child,
+    this.duration = const Duration(milliseconds: 450),
     Key? key,
   }) : super(key: key);
 
   final String keyToWatch;
   final Widget child;
+  final Duration duration;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 450),
+      duration: duration,
       switchInCurve: Curves.easeInOutCubic,
       switchOutCurve: Curves.easeOut,
       transitionBuilder: (Widget child, Animation<double> animation) {

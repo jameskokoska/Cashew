@@ -59,24 +59,10 @@ class Tappable extends StatelessWidget {
         onLongPress: onLongPress,
       ),
     );
-    if (!kIsWeb) {
+    if (!kIsWeb && onLongPress != null) {
       return tappable;
     }
-    // return ContextMenuRegion(
-    //   contextMenu: ContextMenuButton(
-    //     ContextMenuButtonConfig(
-    //       "test",
-    //       icon: Icon(Icons.edit),
-    //       onPressed: () {
-    //         return;
-    //       },
-    //     ),
-    //     style: ContextMenuButtonStyle(
-    //       bgColor: Theme.of(context).colorScheme.secondaryContainer,
-    //     ),
-    //   ),
-    //   child: tappable,
-    // );
+
     Future<void> _onPointerDown(PointerDownEvent event) async {
       // Check if right mouse button clicked
       if (event.kind == PointerDeviceKind.mouse &&
@@ -116,7 +102,7 @@ class FadedButton extends StatefulWidget {
 
 class _FadedButtonState extends State<FadedButton>
     with SingleTickerProviderStateMixin {
-  static const Duration kFadeOutDuration = Duration(milliseconds: 160);
+  static const Duration kFadeOutDuration = Duration(milliseconds: 150);
   static const Duration kFadeInDuration = Duration(milliseconds: 230);
   final Tween<double> _opacityTween = Tween<double>(begin: 1.0);
 
@@ -160,6 +146,10 @@ class _FadedButtonState extends State<FadedButton>
     if (_buttonHeldDown) {
       _buttonHeldDown = false;
     }
+    if (_animationController.value >= 1) {
+      _animationController.animateTo(0.0,
+          duration: kFadeInDuration, curve: Curves.easeOutCubic);
+    }
   }
 
   void _handleTapCancel() {
@@ -185,7 +175,7 @@ class _FadedButtonState extends State<FadedButton>
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
+    Widget tappable = MouseRegion(
       cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
       child: IgnorePointer(
         ignoring: widget.onLongPress == null && widget.onTap == null,
@@ -214,6 +204,23 @@ class _FadedButtonState extends State<FadedButton>
           ),
         ),
       ),
+    );
+
+    if (!kIsWeb && widget.onLongPress != null) {
+      return tappable;
+    }
+
+    Future<void> _onPointerDown(PointerDownEvent event) async {
+      // Check if right mouse button clicked
+      if (event.kind == PointerDeviceKind.mouse &&
+          event.buttons == kSecondaryMouseButton) {
+        if (widget.onLongPress != null) widget.onLongPress!();
+      }
+    }
+
+    return Listener(
+      child: tappable,
+      onPointerDown: _onPointerDown,
     );
   }
 }

@@ -35,7 +35,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 // Requires hot reload when changed
 bool enableDevicePreview = false && kDebugMode;
-bool allowDebugFlags = true;
+bool allowDebugFlags = true || kIsWeb;
 bool premiumPopupEnabled = false && !kIsWeb;
 
 void main() async {

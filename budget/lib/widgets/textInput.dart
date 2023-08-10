@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
@@ -78,7 +79,8 @@ class TextInput extends StatelessWidget {
                   (appStateSettings["materialYou"]
                       ? Theme.of(context).colorScheme.secondaryContainer
                       : getColor(context, "canvasContainer")),
-          borderRadius: borderRadius ?? BorderRadius.circular(15),
+          borderRadius: borderRadius ??
+              BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 8 : 15),
         ),
         child: Center(
           child: TextFormField(

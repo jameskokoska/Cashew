@@ -21,190 +21,211 @@ class PremiumPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageFramework(
-      enableHeader: false,
-      dragDownToDismiss: false,
-      bottomPadding: false,
-      slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Center(
-            child: Stack(
-              children: [
-                PremiumBackground(),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
+    return Stack(
+      children: [
+        PremiumBackground(),
+        PageFramework(
+          enableHeader: false,
+          dragDownToDismiss: false,
+          bottomPadding: false,
+          backgroundColor: Colors.transparent,
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).viewPadding.top +
-                                MediaQuery.of(context).size.height * 0.1,
-                          ),
                           Column(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              SizedBox(
+                                height: MediaQuery.of(context).viewPadding.top +
+                                    MediaQuery.of(context).size.height * 0.1,
+                              ),
+                              Column(
                                 children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextFont(
+                                        text: globalAppName,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 35,
+                                        textColor: Colors.black,
+                                      ),
+                                      SizedBox(width: 4),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(horizontal: 5),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          boxShadow: boxShadowGeneral(context),
+                                        ),
+                                        child: TextFont(
+                                          text: "Pro",
+                                          textColor: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 21,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 4),
                                   TextFont(
-                                    text: globalAppName,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 35,
+                                    text: "budget-like-a-pro".tr() +
+                                        " " +
+                                        globalAppName +
+                                        " " +
+                                        "Pro",
+                                    fontSize: 16,
                                     textColor: Colors.black,
                                   ),
-                                  SizedBox(width: 4),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 5),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(100),
-                                      boxShadow: boxShadowGeneral(context),
-                                    ),
-                                    child: TextFont(
-                                      text: "Pro",
-                                      textColor: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 21,
-                                    ),
-                                  )
                                 ],
                               ),
-                              SizedBox(height: 4),
+                              SizedBox(
+                                  height: 15 +
+                                      MediaQuery.of(context).size.height *
+                                          0.024),
+                              IntrinsicWidth(
+                                child: Column(children: [
+                                  SubscriptionFeature(
+                                    iconData: Icons.thumb_up_rounded,
+                                    label: "support-the-developer".tr(),
+                                    description:
+                                        "support-the-developer-description"
+                                            .tr(),
+                                  ),
+                                  SubscriptionFeature(
+                                    iconData: MoreIcons.chart_pie,
+                                    label: "unlimited-budgets".tr(),
+                                    description:
+                                        "unlimited-budgets-description".tr(),
+                                  ),
+                                  SubscriptionFeature(
+                                    iconData: Icons.history_rounded,
+                                    label: "past-budget-periods".tr(),
+                                    description:
+                                        "past-budget-periods-description".tr(),
+                                  ),
+                                  SubscriptionFeature(
+                                    iconData: Icons.color_lens_rounded,
+                                    label: "unlimited-color-picker".tr(),
+                                    description:
+                                        "unlimited-color-picker-description"
+                                            .tr(),
+                                  ),
+                                ]),
+                              ),
+                              SizedBox(
+                                  height: 15 +
+                                      MediaQuery.of(context).size.height *
+                                          0.024),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: getHorizontalPaddingConstrained(
+                                            context) +
+                                        20),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Column(
+                                    children: [
+                                      SubscriptionOption(
+                                        label: "Yearly",
+                                        price: "\$19.99 / year",
+                                        extraPadding:
+                                            EdgeInsets.only(top: 13 / 2),
+                                      ),
+                                      SubscriptionOption(
+                                        label: "Monthly",
+                                        price: "\$1.99 / month",
+                                      ),
+                                      SubscriptionOption(
+                                        label: "One Time",
+                                        price: "\$29.99",
+                                        extraPadding:
+                                            EdgeInsets.only(bottom: 13 / 2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 7),
                               TextFont(
-                                text: "budget-like-a-pro".tr() +
-                                    " " +
-                                    globalAppName +
-                                    " " +
-                                    "Pro",
-                                fontSize: 16,
+                                text: "Just one coffee a month! ☕",
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
                                 textColor: Colors.black,
                               ),
+                              SizedBox(height: 15),
                             ],
                           ),
-                          SizedBox(
-                              height: 15 +
-                                  MediaQuery.of(context).size.height * 0.024),
-                          IntrinsicWidth(
-                            child: Column(children: [
-                              SubscriptionFeature(
-                                iconData: Icons.thumb_up_rounded,
-                                label: "support-the-developer".tr(),
-                                description:
-                                    "support-the-developer-description".tr(),
-                              ),
-                              SubscriptionFeature(
-                                iconData: MoreIcons.chart_pie,
-                                label: "Unlimited budgets".tr(),
-                                description:
-                                    "unlimited-budgets-description".tr(),
-                              ),
-                              SubscriptionFeature(
-                                iconData: Icons.history_rounded,
-                                label: "past-budget-periods".tr(),
-                                description:
-                                    "past-budget-periods-description".tr(),
-                              ),
-                              SubscriptionFeature(
-                                iconData: Icons.color_lens_rounded,
-                                label: "unlimited-color-picker".tr(),
-                                description:
-                                    "unlimited-color-picker-description".tr(),
-                              ),
-                            ]),
-                          ),
-                          SizedBox(
-                              height: 15 +
-                                  MediaQuery.of(context).size.height * 0.024),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    getHorizontalPaddingConstrained(context) +
-                                        20),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Column(
-                                children: [
-                                  SubscriptionOption(
-                                    label: "Yearly",
-                                    price: "\$19.99 / year",
-                                    extraPadding: EdgeInsets.only(top: 13 / 2),
+                          Opacity(
+                            opacity: 0.5,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Tappable(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                color: darkenPastel(
+                                        Theme.of(context).colorScheme.primary,
+                                        amount: 0.3)
+                                    .withOpacity(0.5),
+                                borderRadius: 15,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  child: TextFont(
+                                    text: "continue-for-free".tr(),
+                                    fontSize: 13,
+                                    textColor: Colors.white,
                                   ),
-                                  SubscriptionOption(
-                                    label: "Monthly",
-                                    price: "\$1.99 / month",
-                                  ),
-                                  SubscriptionOption(
-                                    label: "One Time",
-                                    price: "\$29.99",
-                                    extraPadding:
-                                        EdgeInsets.only(bottom: 13 / 2),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
-                      Opacity(
-                        opacity: 0.5,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Tappable(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            color: darkenPastel(
-                                    Theme.of(context).colorScheme.primary,
-                                    amount: 0.3)
-                                .withOpacity(0.5),
-                            borderRadius: 15,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              child: TextFont(
-                                text: "continue-for-free".tr(),
-                                fontSize: 13,
-                                textColor: Colors.white,
-                              ),
-                            ),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).viewPadding.left,
+                          top: MediaQuery.of(context).viewPadding.top,
+                        ),
+                        child: IconButton(
+                          padding: EdgeInsets.all(15),
+                          icon: Icon(
+                            getPlatform() == PlatformOS.isIOS
+                                ? Icons.chevron_left_rounded
+                                : Icons.arrow_back_rounded,
+                            color: Colors.black.withOpacity(0.16),
                           ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: MediaQuery.of(context).viewPadding.left,
-                      top: MediaQuery.of(context).viewPadding.top,
                     ),
-                    child: IconButton(
-                      padding: EdgeInsets.all(15),
-                      icon: Icon(
-                        getPlatform() == PlatformOS.isIOS
-                            ? Icons.chevron_left_rounded
-                            : Icons.arrow_back_rounded,
-                        color: Colors.black.withOpacity(0.16),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );

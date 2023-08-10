@@ -274,7 +274,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: getPlatform() == PlatformOS.isIOS
+                    ? BorderRadius.circular(10)
+                    : BorderRadius.circular(15),
                 child: Material(
                   color: Theme.of(context)
                       .colorScheme

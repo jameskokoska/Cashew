@@ -754,11 +754,12 @@ class _SelectAmountState extends State<SelectAmount> {
               SizedBox(height: 5),
               Padding(
                 padding: widget.padding,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Center(
-                    child: Container(
-                      constraints: BoxConstraints(maxWidth: 400),
+                child: Center(
+                  child: Container(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          getPlatform() == PlatformOS.isIOS ? 8 : 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -1165,11 +1166,12 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
           ),
         ),
         Container(height: 10),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Center(
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 400),
+        Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 400),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                  getPlatform() == PlatformOS.isIOS ? 8 : 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

@@ -50,6 +50,7 @@ class PageFramework extends StatefulWidget {
     this.scrollToTopButton = false,
     this.bottomPadding = true,
     this.enableHeader = true,
+    this.scrollPhysics,
   }) : super(key: key);
 
   final String title;
@@ -85,6 +86,7 @@ class PageFramework extends StatefulWidget {
   final bool scrollToTopButton;
   final bool bottomPadding;
   final bool enableHeader;
+  final ScrollPhysics? scrollPhysics;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -295,6 +297,7 @@ class PageFrameworkState extends State<PageFramework>
         children: [
           ScrollbarWrap(
             child: CustomScrollView(
+              physics: widget.scrollPhysics,
               controller: _scrollController,
               slivers: [
                 ...(widget.enableHeader
