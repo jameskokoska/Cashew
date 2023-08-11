@@ -420,5 +420,20 @@
   "preview-demo-warning": "미리보기 데모는 현재 활성화되어 있으며 자동 생성 데이터가 사용되고 있습니다. 데이터 손실로 이어질 수 있으므로 데모 모드에서 응용 프로그램을 사용하는 것이 좋습니다. 생성 된 데이터를 제거하고 미리보기 데모를 종료하려면 여기를 누릅니다.",
   "exit-demo": "데모를 종료하십시오",
   "not-available-in-preview-demo": "미리보기 데모에서는 사용할 수 없습니다",
-  "not-available-in-preview-demo-description": "미리보기 데모 모드를 비활성화 하여이 기능을 사용하십시오."
+  "not-available-in-preview-demo-description": "미리보기 데모 모드를 비활성화 하여이 기능을 사용하십시오.",
+  "copied": "복사",
+  "created-copy": "생성 된 사본",
+  "create-copy": "사본을 만듭니다",
+  "delete-transactions": "트랜잭션 삭제",
+  "change-wallet": "지갑을 변경하십시오",
+  "add-to-budget": "예산에 추가하십시오",
+  "select-wallet": "지갑을 선택하십시오",
+  "delete-wallet-description": "이 지갑과 관련된 모든 트랜잭션이 삭제됩니다.",
+  "move-to-other-wallet-button": "트랜잭션을 다른 지갑으로 이동하고 삭제하십시오",
+  "changed-wallet": "변경된 지갑",
+  "added-to-budget": "예산에 추가되었습니다",
+  "no-addable-budgets": "거래를 추가 할 예산이 없습니다",
+  "create-addable-budget": "'추가'예산을 만듭니다",
+  "delete-budget-added-warning": "이 예산에 추가 된 거래는 더 이상이 예산과 관련이 없습니다. 그들은 삭제되지 않습니다.",
+  "removed-from-budget": "예산에서 제거되었습니다"
 }

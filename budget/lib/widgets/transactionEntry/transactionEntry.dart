@@ -256,13 +256,8 @@ class TransactionEntry extends StatelessWidget {
                                 ? SizedBox(
                                     width: 10,
                                   )
-                                : AnimatedSwitcher(
-                                    duration: Duration(milliseconds: 800),
-                                    child: Tooltip(
-                                      key: ValueKey(transaction.paid
-                                              .toString() +
-                                          transaction.type.toString() +
-                                          transaction.transactionPk.toString()),
+                                : Builder(builder: (context) {
+                                    Widget actionButton = Tooltip(
                                       message: getTransactionActionNameFromType(
                                           transaction),
                                       child: GestureDetector(
@@ -321,8 +316,15 @@ class TransactionEntry extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                    return AnimatedSwitcher(
+                                      duration: Duration(milliseconds: 800),
+                                      child: isTransactionActionDealtWith(
+                                              transaction)
+                                          ? Container(child: actionButton)
+                                          : actionButton,
+                                    );
+                                  }),
                             Expanded(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,

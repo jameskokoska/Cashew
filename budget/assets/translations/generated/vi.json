@@ -420,5 +420,20 @@
   "preview-demo-warning": "Bản trình diễn xem trước hiện đang hoạt động và dữ liệu được tạo tự động đang được sử dụng. Không nên sử dụng ứng dụng trong chế độ demo, vì nó có thể dẫn đến mất dữ liệu. Để xóa dữ liệu được tạo và thoát xem trước bản demo, nhấn vào đây.",
   "exit-demo": "Thoát khỏi bản demo",
   "not-available-in-preview-demo": "Không có sẵn trong bản demo xem trước",
-  "not-available-in-preview-demo-description": "Vô hiệu hóa Chế độ demo xem trước để sử dụng tính năng này."
+  "not-available-in-preview-demo-description": "Vô hiệu hóa Chế độ demo xem trước để sử dụng tính năng này.",
+  "copied": "Đã sao chép",
+  "created-copy": "Đã tạo bản sao",
+  "create-copy": "Tạo bản sao",
+  "delete-transactions": "Xóa giao dịch",
+  "change-wallet": "Thay đổi ví",
+  "add-to-budget": "Thêm vào ngân sách",
+  "select-wallet": "Chọn ví",
+  "delete-wallet-description": "Điều này sẽ xóa tất cả các giao dịch liên quan đến ví này.",
+  "move-to-other-wallet-button": "Di chuyển các giao dịch sang ví khác và xóa",
+  "changed-wallet": "Thay ví",
+  "added-to-budget": "Thêm vào ngân sách",
+  "no-addable-budgets": "Không có ngân sách để thêm giao dịch vào",
+  "create-addable-budget": "Tạo ngân sách 'chỉ thêm'",
+  "delete-budget-added-warning": "Các giao dịch được thêm vào ngân sách này sẽ không còn được liên kết với ngân sách này. Họ sẽ không bị xóa.",
+  "removed-from-budget": "Bị loại khỏi ngân sách"
 }

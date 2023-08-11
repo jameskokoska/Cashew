@@ -420,5 +420,20 @@
   "preview-demo-warning": "Die Vorschau-Demo ist derzeit aktiv und es werden automatische Daten verwendet. Es wird nicht empfohlen, die Anwendung im Demo -Modus zu verwenden, da dies zu Datenverlust führen kann. Tippen Sie hier, um generierte Daten zu entfernen und die Vorschau -Demo zu beenden.",
   "exit-demo": "Demo beenden",
   "not-available-in-preview-demo": "Nicht in der Vorschau -Demo verfügbar",
-  "not-available-in-preview-demo-description": "Deaktivieren Sie den Vorschau -Demo -Modus, um diese Funktion zu verwenden."
+  "not-available-in-preview-demo-description": "Deaktivieren Sie den Vorschau -Demo -Modus, um diese Funktion zu verwenden.",
+  "copied": "Kopiert",
+  "created-copy": "Kopie erstellt",
+  "create-copy": "Kopie erstellen",
+  "delete-transactions": "Transaktionen löschen",
+  "change-wallet": "Brieftasche wechseln",
+  "add-to-budget": "Zum Budget hinzufügen",
+  "select-wallet": "Wählen Sie Brieftasche",
+  "delete-wallet-description": "Dadurch wird alle mit dieser Brieftasche verbundenen Transaktionen gelöscht.",
+  "move-to-other-wallet-button": "Bewegen Sie Transaktionen in eine andere Brieftasche und löschen Sie",
+  "changed-wallet": "Brieftasche geändert",
+  "added-to-budget": "Zu Budget hinzugefügt",
+  "no-addable-budgets": "Keine Budgets zum Hinzufügen von Transaktionen zu",
+  "create-addable-budget": "Erstellen Sie das Budget \"nur\" hinzugefügt \"",
+  "delete-budget-added-warning": "Zu diesem Budget hinzugefügte Transaktionen werden nicht mehr mit diesem Budget in Verbindung gebracht. Sie werden nicht gelöscht.",
+  "removed-from-budget": "Aus dem Budget entfernt"
 }

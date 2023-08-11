@@ -420,5 +420,20 @@
   "preview-demo-warning": "הדגמת תצוגה מקדימה פעילה כעת, ונעשה שימוש בנתונים שנוצרו אוטומטית. לא מומלץ להשתמש ביישום במצב הדגמה, מכיוון שהוא עלול להוביל לאובדן נתונים. להסרת נתונים שנוצרו והדגמת תצוגה מקדימה של יציאה, הקש כאן.",
   "exit-demo": "הדגמת יציאה",
   "not-available-in-preview-demo": "לא זמין בהדגמת תצוגה מקדימה",
-  "not-available-in-preview-demo-description": "השבת את מצב הדגמה מקדימה כדי להשתמש בתכונה זו."
+  "not-available-in-preview-demo-description": "השבת את מצב הדגמה מקדימה כדי להשתמש בתכונה זו.",
+  "copied": "מוּעֲתָק",
+  "created-copy": "עותק נוצר",
+  "create-copy": "צור עותק",
+  "delete-transactions": "מחק עסקאות",
+  "change-wallet": "שנה ארנק",
+  "add-to-budget": "הוסף לתקציב",
+  "select-wallet": "בחר ארנק",
+  "delete-wallet-description": "זה ימחק את כל העסקאות הקשורות לארנק זה.",
+  "move-to-other-wallet-button": "העבר עסקאות לארנק אחר ולמחוק",
+  "changed-wallet": "ארנק שונה",
+  "added-to-budget": "נוסף לתקציב",
+  "no-addable-budgets": "אין תקציבים להוסיף עסקאות",
+  "create-addable-budget": "צור תקציב 'נוסף בלבד'",
+  "delete-budget-added-warning": "עסקאות שנוספו לתקציב זה כבר לא ייקשרו לתקציב זה. הם לא יימחקו.",
+  "removed-from-budget": "הוסר מהתקציב"
 }

@@ -1827,17 +1827,17 @@ class _SelectTitleState extends State<SelectTitle> {
                         List result = await getRelatingAssociatedTitle(text);
                         TransactionAssociatedTitle? selectedTitleLocal =
                             result[0];
-                        String categoryFk = result[1];
+                        String? categoryFk = result[1];
                         bool foundFromCategoryLocal = result[2];
 
                         if (selectedTitleLocal == null) {
                           selectedTitleLocal =
                               await getLikeAssociatedTitle(text);
-                          categoryFk = selectedTitleLocal?.categoryFk ?? "-1";
+                          categoryFk = selectedTitleLocal?.categoryFk;
                           foundFromCategoryLocal = false;
                         }
 
-                        if (categoryFk != -1 && categoryFk != 0) {
+                        if (categoryFk != null) {
                           TransactionCategory? foundCategory =
                               await database.getCategoryInstance(categoryFk);
                           // Update the size of the bottom sheet
@@ -2185,7 +2185,7 @@ class _EnterTextButtonState extends State<EnterTextButton> {
 }
 
 getRelatingAssociatedTitleLimited(String text) async {
-  String categoryFk = "-1";
+  String? categoryFk;
   bool foundFromCategoryLocal = false;
   TransactionAssociatedTitle? selectedTitleLocal;
 
@@ -2198,7 +2198,7 @@ getRelatingAssociatedTitleLimited(String text) async {
     print("No relating titles found!");
   }
 
-  if (categoryFk == -1) {
+  if (categoryFk == null) {
     TransactionCategory relatingCategory;
     try {
       relatingCategory = await database.getRelatingCategory(text);
@@ -2233,7 +2233,7 @@ Future<TransactionAssociatedTitle?> getLikeAssociatedTitle(String text) async {
 }
 
 getRelatingAssociatedTitle(String text) async {
-  String categoryFk = "-1";
+  String? categoryFk = null;
   TransactionAssociatedTitle? selectedTitleLocal;
 
   // getLikeAssociatedTitle is more efficient since it uses queries
@@ -2257,7 +2257,7 @@ getRelatingAssociatedTitle(String text) async {
   // }
 
   bool foundFromCategoryLocal = false;
-  if (categoryFk == -1) {
+  if (categoryFk != null) {
     List<TransactionCategory> allCategories =
         (await database.getAllCategories());
     for (TransactionCategory category in allCategories) {

@@ -420,5 +420,20 @@
   "preview-demo-warning": "Demo podglądu jest obecnie aktywne i wykorzystywane są automatyczne dane. Nie zaleca się korzystania z aplikacji w trybie demo, ponieważ może to prowadzić do utraty danych. Aby usunąć wygenerowane dane i wyjść z wersji demo podglądu, dotknij tutaj.",
   "exit-demo": "Demo wyjścia",
   "not-available-in-preview-demo": "Niedostępne w wersji demo podglądu",
-  "not-available-in-preview-demo-description": "Wyłącz podgląd tryb demo, aby użyć tej funkcji."
+  "not-available-in-preview-demo-description": "Wyłącz podgląd tryb demo, aby użyć tej funkcji.",
+  "copied": "Skopiowane",
+  "created-copy": "Utworzona kopia",
+  "create-copy": "Utwórz kopię",
+  "delete-transactions": "Usunąć transakcje",
+  "change-wallet": "Zmień portfel",
+  "add-to-budget": "Dodaj do budżetu",
+  "select-wallet": "Wybierz portfel",
+  "delete-wallet-description": "Spowoduje to usunięcie wszystkich transakcji związanych z tym portfelem.",
+  "move-to-other-wallet-button": "Przesuń transakcje do innego portfela i usuń",
+  "changed-wallet": "Zmieniony portfel",
+  "added-to-budget": "Dodane do budżetu",
+  "no-addable-budgets": "Brak budżetów, aby dodać transakcje",
+  "create-addable-budget": "Utwórz budżet „tylko dodany”",
+  "delete-budget-added-warning": "Transakcje dodane do tego budżetu nie będą już powiązane z tym budżetem. Nie zostaną usunięte.",
+  "removed-from-budget": "Usunięte z budżetu"
 }

@@ -420,5 +420,20 @@
   "preview-demo-warning": "La démo de prévisualisation est actuellement active et les données générées par automatiquement sont utilisées. Il n'est pas recommandé d'utiliser l'application en mode démo, car il peut entraîner une perte de données. Pour supprimer les données générées et quitter la démo d'aperçu, appuyez ici.",
   "exit-demo": "Démo de sortie",
   "not-available-in-preview-demo": "Non disponible dans la démo de prévisualisation",
-  "not-available-in-preview-demo-description": "Désactivez le mode de démonstration d'aperçu pour utiliser cette fonctionnalité."
+  "not-available-in-preview-demo-description": "Désactivez le mode de démonstration d'aperçu pour utiliser cette fonctionnalité.",
+  "copied": "Copié",
+  "created-copy": "Copie créée",
+  "create-copy": "Créer une copie",
+  "delete-transactions": "Supprimer les transactions",
+  "change-wallet": "Changer de portefeuille",
+  "add-to-budget": "Ajouter au budget",
+  "select-wallet": "Sélectionner le portefeuille",
+  "delete-wallet-description": "Cela supprimera toutes les transactions associées à ce portefeuille.",
+  "move-to-other-wallet-button": "Déplacer les transactions vers un autre portefeuille et supprimer",
+  "changed-wallet": "Portefeuille modifié",
+  "added-to-budget": "Ajouté au budget",
+  "no-addable-budgets": "Aucun budget pour ajouter des transactions à",
+  "create-addable-budget": "Créer un budget «ajouté»",
+  "delete-budget-added-warning": "Les transactions ajoutées à ce budget ne seront plus liées à ce budget. Ils ne seront pas supprimés.",
+  "removed-from-budget": "Supprimé du budget"
 }

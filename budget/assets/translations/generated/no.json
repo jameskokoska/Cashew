@@ -420,5 +420,20 @@
   "preview-demo-warning": "Forhåndsvisningsdemo er for tiden aktiv, og automatisk genererte data brukes. Det anbefales ikke å bruke applikasjonen i demomodus, da det kan føre til tap av data. For å fjerne genererte data og avslutte forhåndsvisning av demo, trykk her.",
   "exit-demo": "Avslutt demo",
   "not-available-in-preview-demo": "Ikke tilgjengelig i forhåndsvisningsdemo",
-  "not-available-in-preview-demo-description": "Deaktiver forhåndsvisning av demomodus for å bruke denne funksjonen."
+  "not-available-in-preview-demo-description": "Deaktiver forhåndsvisning av demomodus for å bruke denne funksjonen.",
+  "copied": "Kopiert",
+  "created-copy": "Opprettet kopi",
+  "create-copy": "Opprett kopi",
+  "delete-transactions": "Slett transaksjoner",
+  "change-wallet": "Bytt lommebok",
+  "add-to-budget": "Legg til budsjett",
+  "select-wallet": "Velg lommebok",
+  "delete-wallet-description": "Dette vil slette alle transaksjoner tilknyttet denne lommeboken.",
+  "move-to-other-wallet-button": "Flytt transaksjoner til en annen lommebok og slett",
+  "changed-wallet": "Endret lommebok",
+  "added-to-budget": "Lagt til budsjettet",
+  "no-addable-budgets": "Ingen budsjetter å legge til transaksjoner til",
+  "create-addable-budget": "Lag bare \"lagt til\" budsjett",
+  "delete-budget-added-warning": "Transaksjoner lagt til dette budsjettet vil ikke lenger være knyttet til dette budsjettet. De vil ikke bli slettet.",
+  "removed-from-budget": "Fjernet fra budsjettet"
 }

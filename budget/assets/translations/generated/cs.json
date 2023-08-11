@@ -420,5 +420,20 @@
   "preview-demo-warning": "Demo náhledu je aktuálně aktivní a používá se automatická data. Nedoporučuje se používat aplikaci v demo režimu, protože může vést ke ztrátě dat. Chcete -li odebrat vygenerovaná dema dat a ukončení náhledu, klepněte zde.",
   "exit-demo": "Ukončit demo",
   "not-available-in-preview-demo": "Není k dispozici v demo náhledu",
-  "not-available-in-preview-demo-description": "Zakázat demo režim náhledu a použít tuto funkci."
+  "not-available-in-preview-demo-description": "Zakázat demo režim náhledu a použít tuto funkci.",
+  "copied": "Zkopírováno",
+  "created-copy": "Vytvořená kopie",
+  "create-copy": "Vytvořte kopii",
+  "delete-transactions": "Odstranit transakce",
+  "change-wallet": "Změnit peněženku",
+  "add-to-budget": "Přidat k rozpočtu",
+  "select-wallet": "Vyberte peněženku",
+  "delete-wallet-description": "Tím se odstraní všechny transakce spojené s touto peněženku.",
+  "move-to-other-wallet-button": "Přesuňte transakce do jiné peněženky a smažte",
+  "changed-wallet": "Změněná peněženka",
+  "added-to-budget": "Přidáno k rozpočtu",
+  "no-addable-budgets": "Žádné rozpočty, které by přidaly transakce",
+  "create-addable-budget": "Vytvořte rozpočet „přidaného pouze“",
+  "delete-budget-added-warning": "Transakce přidané k tomuto rozpočtu již nebudou spojeny s tímto rozpočtem. Nebudou smazány.",
+  "removed-from-budget": "Odstraněno z rozpočtu"
 }

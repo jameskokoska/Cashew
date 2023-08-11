@@ -6,6 +6,7 @@ import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -15,6 +16,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
@@ -440,4 +442,86 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
       onSubmitLabel: "delete".tr(),
     );
   }
+}
+
+// either "none", null, or a Budget type
+Future<dynamic> selectAddableBudgetPopup(BuildContext context,
+    {String? removeWalletPk}) async {
+  dynamic budget = await openPopupCustom(
+    context,
+    title: "select-budget".tr(),
+    child: StreamBuilder<List<Budget>>(
+      stream: database.watchAllAddableBudgets(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            (snapshot.data != null && snapshot.data!.length > 0)) {
+          List<Budget> addableBudgets = snapshot.data!;
+          return SelectChips(
+            wrapped: true,
+            items: [null, ...addableBudgets],
+            getLabel: (Budget? item) {
+              if (item == null) return "no-budget".tr();
+              return item.name;
+            },
+            onLongPress: (Budget? item) {
+              pushRoute(
+                context,
+                AddBudgetPage(
+                  isAddedOnlyBudget: true,
+                ),
+              );
+            },
+            onSelected: (Budget? item) {
+              Navigator.pop(context, item);
+            },
+            getSelected: (Budget? item) {
+              return false;
+            },
+            getCustomBorderColor: (Budget? item) {
+              if (item == null) return null;
+              return dynamicPastel(
+                context,
+                lightenPastel(
+                  HexColor(
+                    item.colour,
+                    defaultColor: Colors.transparent,
+                  ),
+                  amount: 0.3,
+                ),
+                amount: 0.4,
+              );
+            },
+          );
+        }
+        return Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: TextFont(
+                text: "no-addable-budgets",
+                fontSize: 15,
+              ),
+            ),
+            SizedBox(height: 15),
+            IntrinsicWidth(
+              child: Button(
+                label: "create-addable-budget".tr(),
+                onTap: () {
+                  pushRoute(
+                    context,
+                    AddBudgetPage(
+                      isAddedOnlyBudget: true,
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        );
+      },
+    ),
+  );
+  if (budget is Budget) return budget;
+  if (budget == "none") return "none";
+  return null;
 }

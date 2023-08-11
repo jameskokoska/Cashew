@@ -242,72 +242,24 @@ void deleteWalletPopup(context, TransactionWallet wallet,
     {Function? afterDelete}) {
   openPopup(
     context,
-    title: "Delete " + wallet.name + " wallet?",
-    description:
-        "This will delete all transactions associated with this wallet.",
+    title: "delete".tr().capitalizeFirst + " " + wallet.name + "?",
+    description: "delete-wallet-description".tr(),
     icon: Icons.delete_rounded,
     onCancel: () {
       Navigator.pop(context);
     },
     onCancelLabel: "cancel".tr(),
-    onExtraLabel2: "Move Transactions To Another Wallet and Delete",
+    onExtraLabel2: "move-to-other-wallet-button".tr(),
     onExtra2: () async {
       Navigator.pop(context);
-      var result = await openPopupCustom(
-        context,
-        title: "Select Wallet",
-        child: StreamBuilder<List<TransactionWallet>>(
-          stream: database.watchAllWallets(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<TransactionWallet> walletsWithoutOneDeleted = snapshot.data!;
-              walletsWithoutOneDeleted.removeWhere(
-                  (TransactionWallet w) => w.walletPk == wallet.walletPk);
-              return SelectChips(
-                wrapped: true,
-                items: walletsWithoutOneDeleted,
-                getLabel: (TransactionWallet item) {
-                  return item.name;
-                },
-                onLongPress: (TransactionWallet? item) {
-                  pushRoute(
-                    context,
-                    AddWalletPage(
-                      wallet: item,
-                    ),
-                  );
-                },
-                onSelected: (TransactionWallet item) {
-                  Navigator.pop(context, item.walletPk);
-                },
-                getSelected: (TransactionWallet item) {
-                  return false;
-                },
-                getCustomBorderColor: (TransactionWallet item) {
-                  return dynamicPastel(
-                    context,
-                    lightenPastel(
-                      HexColor(
-                        item.colour,
-                        defaultColor: Colors.transparent,
-                      ),
-                      amount: 0.3,
-                    ),
-                    amount: 0.4,
-                  );
-                },
-              );
-            } else {
-              return SizedBox.shrink();
-            }
-          },
-        ),
-      );
-      if (isNumber(result)) {
+      var result =
+          await selectWalletPopup(context, removeWalletPk: wallet.walletPk);
+      if (result != null) {
         await database.moveWalletTransactons(
-            Provider.of<AllWallets>(context, listen: false),
-            wallet.walletPk,
-            result.toString());
+          Provider.of<AllWallets>(context, listen: false),
+          wallet.walletPk,
+          result.walletPk,
+        );
         if (appStateSettings["selectedWalletPk"] == wallet.walletPk) {
           setPrimaryWallet("0");
         }
@@ -317,7 +269,7 @@ void deleteWalletPopup(context, TransactionWallet wallet,
           SnackbarMessage(title: "Deleted " + wallet.name, icon: Icons.delete),
         );
         if (afterDelete != null) afterDelete();
-      } else {}
+      }
     },
     onSubmit: () async {
       await database.deleteWalletsTransactions(wallet.walletPk);
@@ -334,4 +286,61 @@ void deleteWalletPopup(context, TransactionWallet wallet,
     },
     onSubmitLabel: "delete".tr(),
   );
+}
+
+Future<TransactionWallet?> selectWalletPopup(BuildContext context,
+    {String? removeWalletPk}) async {
+  dynamic wallet = await openPopupCustom(
+    context,
+    title: "select-wallet".tr(),
+    child: StreamBuilder<List<TransactionWallet>>(
+      stream: database.watchAllWallets(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<TransactionWallet> walletsWithoutOneDeleted = snapshot.data!;
+          if (removeWalletPk != null)
+            walletsWithoutOneDeleted.removeWhere(
+                (TransactionWallet w) => w.walletPk == removeWalletPk);
+          return SelectChips(
+            wrapped: true,
+            items: walletsWithoutOneDeleted,
+            getLabel: (TransactionWallet item) {
+              return item.name;
+            },
+            onLongPress: (TransactionWallet? item) {
+              pushRoute(
+                context,
+                AddWalletPage(
+                  wallet: item,
+                ),
+              );
+            },
+            onSelected: (TransactionWallet item) {
+              Navigator.pop(context, item);
+            },
+            getSelected: (TransactionWallet item) {
+              return false;
+            },
+            getCustomBorderColor: (TransactionWallet item) {
+              return dynamicPastel(
+                context,
+                lightenPastel(
+                  HexColor(
+                    item.colour,
+                    defaultColor: Colors.transparent,
+                  ),
+                  amount: 0.3,
+                ),
+                amount: 0.4,
+              );
+            },
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
+    ),
+  );
+  if (wallet is TransactionWallet) return wallet;
+  return null;
 }

@@ -1512,8 +1512,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     categoryLimit =
         categoryLimit.copyWith(dateTimeModified: Value(DateTime.now()));
 
-    print(categoryLimit);
-
     CategoryBudgetLimitsCompanion companionToInsert =
         categoryLimit.toCompanion(true);
 
@@ -1867,7 +1865,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       return 0;
     }
 
-    // we are saying we still need this category!
+    // we are saying we still need this category! - for syncing
     TransactionCategory categoryInUse =
         await getCategoryInstance(transaction.categoryFk);
     await createOrUpdateCategory(
@@ -2378,13 +2376,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
   }
 
-  Future<Budget> getSharedBudget(sharedKey) async {
+  Future<Budget> getSharedBudget(String sharedKey) async {
     return (await (select(budgets)..where((t) => t.sharedKey.equals(sharedKey)))
             .get())
         .first;
   }
 
-  Future<List<Transaction>> getAllTransactionsFromCategory(categoryPk) {
+  Future<List<Transaction>> getAllTransactionsFromCategory(String categoryPk) {
     return (select(transactions)
           ..where((tbl) {
             return tbl.categoryFk.equals(categoryPk) & tbl.paid.equals(true);
@@ -2394,7 +2392,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<List<Transaction>> getAllTransactionsBelongingToSharedBudget(
-      budgetPk) {
+      String budgetPk) {
     return (select(transactions)
           ..where((tbl) {
             return tbl.sharedReferenceBudgetPk.equals(budgetPk) &
@@ -2405,7 +2403,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<int> createOrUpdateFromSharedTransaction(Transaction transaction,
-      {insert = false}) async {
+      {bool insert = false}) async {
     if (transaction.sharedKey != null) {
       Transaction sharedTransaction;
       try {
@@ -2439,7 +2437,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
   }
 
-  Future<int> deleteFromSharedTransaction(sharedTransactionKey) async {
+  Future<int> deleteFromSharedTransaction(String sharedTransactionKey) async {
     Transaction transactionToDelete = (await (select(transactions)
               ..where((t) => t.sharedKey.equals(sharedTransactionKey)))
             .get())
@@ -2862,22 +2860,41 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<bool> moveWalletTransactons(
-      AllWallets allWallets, String walletPk, String toWalletPk) async {
-    List<Transaction> transactionsForMove = await (select(transactions)
-          ..where((tbl) {
-            return tbl.walletFk.equals(walletPk);
-          }))
-        .get();
+    AllWallets allWallets,
+    String? walletPk,
+    String toWalletPk, {
+    List<Transaction>? transactionsToMove,
+  }) async {
+    List<Transaction> transactionsForMove = transactionsToMove ??
+        await (select(transactions)
+              ..where((tbl) {
+                return tbl.walletFk.equals(walletPk!);
+              }))
+            .get();
     List<Transaction> allTransactionsToUpdate = [];
     for (Transaction transaction in transactionsForMove) {
       allTransactionsToUpdate.add(transaction.copyWith(
         amount: (amountRatioFromToCurrency(
-                    allWallets.indexedByPk[walletPk]?.currency ?? "usd",
+                    allWallets.indexedByPk[transaction.walletFk]?.currency ??
+                        "usd",
                     allWallets.indexedByPk[toWalletPk]?.currency ?? "usd") ??
                 1) *
             transaction.amount,
         dateTimeModified: Value(DateTime.now()),
         walletFk: toWalletPk,
+      ));
+    }
+    await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
+    return true;
+  }
+
+  Future<bool> moveTransactionsToBudget(
+      List<Transaction> transactionsToMove, String? addedBudgetPk) async {
+    List<Transaction> allTransactionsToUpdate = [];
+    for (Transaction transaction in transactionsToMove) {
+      allTransactionsToUpdate.add(transaction.copyWith(
+        sharedReferenceBudgetPk: Value(addedBudgetPk),
+        dateTimeModified: Value(DateTime.now()),
       ));
     }
     await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
@@ -3790,6 +3807,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(transactions)
           ..where((t) => t.transactionPk.equals(transactionPk)))
         .getSingle();
+  }
+
+  Future<List<Transaction>> getTransactionsFromPk(List<String> transactionPks) {
+    return (select(transactions)
+          ..where((t) => t.transactionPk.isIn(transactionPks)))
+        .get();
   }
 
   // when a change is made we can listen to it, debounce and sync after debounce timer

@@ -420,5 +420,20 @@
   "preview-demo-warning": "Förhandsvisningsdemo är för närvarande aktiv och auto-genererade data används. Det rekommenderas inte att använda applikationen i demoläge, eftersom det kan leda till dataförlust. För att ta bort genererade data och exitförhandsgranskning, tryck här.",
   "exit-demo": "Utgångsdemo",
   "not-available-in-preview-demo": "Ej tillgängligt i förhandsgranskning",
-  "not-available-in-preview-demo-description": "Inaktivera förhandsvisningsdemo -läge för att använda den här funktionen."
+  "not-available-in-preview-demo-description": "Inaktivera förhandsvisningsdemo -läge för att använda den här funktionen.",
+  "copied": "Kopierad",
+  "created-copy": "Skapad kopia",
+  "create-copy": "Skapa kopia",
+  "delete-transactions": "Ta bort transaktioner",
+  "change-wallet": "Ändra plånbok",
+  "add-to-budget": "Lägga till budgeten",
+  "select-wallet": "Välj plånbok",
+  "delete-wallet-description": "Detta kommer att ta bort alla transaktioner som är associerade med denna plånbok.",
+  "move-to-other-wallet-button": "Flytta transaktioner till en annan plånbok och ta bort",
+  "changed-wallet": "Ändrad plånbok",
+  "added-to-budget": "Tillagd till budgeten",
+  "no-addable-budgets": "Inga budgetar för att lägga till transaktioner till",
+  "create-addable-budget": "Skapa \"tillagd endast\" budget",
+  "delete-budget-added-warning": "Transaktioner som läggs till denna budget kommer inte längre att kopplas till denna budget. De kommer inte att raderas.",
+  "removed-from-budget": "Borttagen från budgeten"
 }

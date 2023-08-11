@@ -420,5 +420,20 @@
   "preview-demo-warning": "Demo pratinjau saat ini aktif, dan data yang dihasilkan otomatis sedang digunakan. Tidak disarankan untuk menggunakan aplikasi dalam mode demo, karena dapat menyebabkan kehilangan data. Untuk menghapus data yang dihasilkan dan keluar demo pratinjau, ketuk di sini.",
   "exit-demo": "Demo Keluar",
   "not-available-in-preview-demo": "Tidak tersedia dalam demo pratinjau",
-  "not-available-in-preview-demo-description": "Nonaktifkan mode demo pratinjau untuk menggunakan fitur ini."
+  "not-available-in-preview-demo-description": "Nonaktifkan mode demo pratinjau untuk menggunakan fitur ini.",
+  "copied": "Disalin",
+  "created-copy": "Salinan yang dibuat",
+  "create-copy": "Buat salinan",
+  "delete-transactions": "Hapus transaksi",
+  "change-wallet": "Ubah dompet",
+  "add-to-budget": "Tambahkan ke anggaran",
+  "select-wallet": "Pilih Dompet",
+  "delete-wallet-description": "Ini akan menghapus semua transaksi yang terkait dengan dompet ini.",
+  "move-to-other-wallet-button": "Pindahkan transaksi ke dompet lain dan hapus",
+  "changed-wallet": "Dompet yang Diubah",
+  "added-to-budget": "Ditambahkan ke anggaran",
+  "no-addable-budgets": "Tidak ada anggaran untuk menambahkan transaksi ke",
+  "create-addable-budget": "Buat anggaran 'hanya ditambahkan'",
+  "delete-budget-added-warning": "Transaksi yang ditambahkan ke anggaran ini tidak akan lagi dikaitkan dengan anggaran ini. Mereka tidak akan dihapus.",
+  "removed-from-budget": "Dihapus dari anggaran"
 }

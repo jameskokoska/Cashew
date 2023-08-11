@@ -119,12 +119,14 @@ class DropdownItemMenu {
   final String label;
   final IconData icon;
   final Function action;
+  final double? iconScale;
 
   DropdownItemMenu({
     required this.id,
     required this.label,
     required this.icon,
     required this.action,
+    this.iconScale,
   });
 }
 
@@ -161,13 +163,19 @@ class CustomPopupMenuButton extends StatelessWidget {
             double offsetX = (length - 1 - idx) * 7;
             return Transform.translate(
               offset: Offset(offsetX, 0),
-              child: IconButton(
-                padding: EdgeInsets.all(15),
-                onPressed: () {
-                  item.value.action();
-                },
-                icon: Icon(
-                  item.value.icon,
+              child: Tooltip(
+                message: item.value.label,
+                child: IconButton(
+                  padding: EdgeInsets.all(15),
+                  onPressed: () {
+                    item.value.action();
+                  },
+                  icon: Transform.scale(
+                    scale: item.value.iconScale ?? 1,
+                    child: Icon(
+                      item.value.icon,
+                    ),
+                  ),
                 ),
               ),
             );
@@ -181,13 +189,19 @@ class CustomPopupMenuButton extends StatelessWidget {
         if (keepOutFirst)
           Transform.translate(
             offset: Offset(7, 0),
-            child: IconButton(
-              padding: EdgeInsets.all(15),
-              onPressed: () {
-                items[0].action();
-              },
-              icon: Icon(
-                items[0].icon,
+            child: Tooltip(
+              message: items[0].label,
+              child: IconButton(
+                padding: EdgeInsets.all(15),
+                onPressed: () {
+                  items[0].action();
+                },
+                icon: Transform.scale(
+                  scale: items[0].iconScale ?? 1,
+                  child: Icon(
+                    items[0].icon,
+                  ),
+                ),
               ),
             ),
           ),
@@ -208,7 +222,10 @@ class CustomPopupMenuButton extends StatelessWidget {
                 value: item.id,
                 child: Row(
                   children: [
-                    Icon(item.icon),
+                    Transform.scale(
+                      scale: item.iconScale ?? 1,
+                      child: Icon(item.icon),
+                    ),
                     SizedBox(width: 7),
                     Text(
                       item.label,

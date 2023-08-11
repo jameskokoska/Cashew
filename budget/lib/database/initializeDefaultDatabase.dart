@@ -8,16 +8,21 @@ import 'package:budget/struct/defaultCategories.dart';
 Future<bool> initializeDefaultDatabase() async {
   //Initialize default categories
   if ((await database.getAllCategories()).length <= 0) {
-    for (TransactionCategory category in defaultCategories()) {
-      await database.createOrUpdateCategory(category,
-          customDateTimeModified: DateTime(0));
-    }
+    createDefaultCategories();
   }
   if ((await database.getAllWallets()).length <= 0) {
     await database.createOrUpdateWallet(
       defaultWallet(),
       customDateTimeModified: DateTime(0),
     );
+  }
+  return true;
+}
+
+Future<bool> createDefaultCategories() async {
+  for (TransactionCategory category in defaultCategories()) {
+    await database.createOrUpdateCategory(category,
+        customDateTimeModified: DateTime(0));
   }
   return true;
 }

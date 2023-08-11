@@ -420,5 +420,20 @@
   "preview-demo-warning": "Preview Demo is currently active, and auto-generated data is being used. It is not recommended to use the application in Demo mode, as it may lead to data loss. To remove generated data and exit Preview Demo, tap here.",
   "exit-demo": "Exit Demo",
   "not-available-in-preview-demo": "Not Available in Preview Demo",
-  "not-available-in-preview-demo-description": "Disable Preview Demo mode to use this feature."
+  "not-available-in-preview-demo-description": "Disable Preview Demo mode to use this feature.",
+  "copied": "Copied",
+  "created-copy": "Created Copy",
+  "create-copy": "Create copy",
+  "delete-transactions": "Delete transactions",
+  "change-wallet": "Change wallet",
+  "add-to-budget": "Add to budget",
+  "select-wallet": "Select Wallet",
+  "delete-wallet-description": "This will delete all transactions associated with this wallet.",
+  "move-to-other-wallet-button": "Move Transactions To Another Wallet and Delete",
+  "changed-wallet": "Changed Wallet",
+  "added-to-budget": "Added to Budget",
+  "no-addable-budgets": "No budgets to add transactions to",
+  "create-addable-budget": "Create 'Added Only' budget",
+  "delete-budget-added-warning": "Transactions added to this budget will no longer be linked to this budget. They will not be deleted.",
+  "removed-from-budget": "Removed From Budget"
 }

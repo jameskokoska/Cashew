@@ -364,35 +364,43 @@ void deleteCategoryPopup(context, TransactionCategory category,
     onSubmitLabel: "delete".tr(),
   );
   if (result == true) {
-    openPopup(
-      context,
-      title: "Delete all " + category.name + " transactions?",
-      description:
-          "Deleting a category will delete all transactions associated with this category. Merge the category to move transactions to another category.",
-      icon: Icons.warning_amber_rounded,
-      onCancel: () {
-        Navigator.pop(context);
-      },
-      onCancelLabel: "cancel".tr(),
-      onSubmit: () async {
-        loadingIndeterminateKey.currentState!.setVisibility(true);
-        await database.deleteCategory(category.categoryPk, category.order);
-        await database.deleteCategoryTransactions(category.categoryPk);
-        loadingIndeterminateKey.currentState!.setVisibility(false);
-        Navigator.pop(context, true);
-        openSnackbar(
-          SnackbarMessage(
-              title: "Deleted " + category.name, icon: Icons.delete),
-        );
-        if (afterDelete != null) afterDelete();
-      },
-      onExtra2: () {
-        Navigator.pop(context);
-        mergeCategoryPopup(context, category);
-      },
-      onExtraLabel2: "merge-category".tr(),
-      onSubmitLabel: "delete".tr(),
-    );
+    int transactionsFromCategoryLength =
+        (await database.getAllTransactionsFromCategory(category.categoryPk))
+            .length;
+    dynamic result = true;
+    if (transactionsFromCategoryLength > 0) {
+      result = await openPopup(
+        context,
+        title: "Delete all " + category.name + " transactions?",
+        description:
+            "Deleting a category will delete all transactions associated with this category. Merge the category to move transactions to another category.",
+        icon: Icons.warning_amber_rounded,
+        onCancel: () {
+          Navigator.pop(context, false);
+        },
+        onCancelLabel: "cancel".tr(),
+        onSubmit: () async {
+          Navigator.pop(context, true);
+        },
+        onExtra2: () {
+          Navigator.pop(context, false);
+          mergeCategoryPopup(context, category);
+        },
+        onExtraLabel2: "merge-category".tr(),
+        onSubmitLabel: "delete".tr(),
+      );
+    }
+    if (result == true) {
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      await database.deleteCategory(category.categoryPk, category.order);
+      await database.deleteCategoryTransactions(category.categoryPk);
+      loadingIndeterminateKey.currentState!.setVisibility(false);
+      Navigator.pop(context, true);
+      openSnackbar(
+        SnackbarMessage(title: "Deleted " + category.name, icon: Icons.delete),
+      );
+      if (afterDelete != null) afterDelete();
+    }
   }
 }
 

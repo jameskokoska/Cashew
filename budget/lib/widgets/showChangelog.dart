@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.2
+    If category deleted, generate preview still functions
+    Preview data has random times added
+    Ability to change budget on selected transactions
+    Ability to change wallet on selected transactions
+    Fixed recommended associated titles
+    Pre-cached onboarding images
     < 3.8.1
     Added spending limits to preview
     If currency conversions are null, a factor of 1 is used as conversion
@@ -353,7 +360,7 @@ Future<void> showChangelog(context, {forceShow = false}) async {
     < 3.3.2
     Fixed button label colors
     Budget container background follows theme of budget
-    Fixed adding shared transactions would tink it was income
+    Fixed adding shared transactions would think it was income
     Placeholder when percent is 0 for category spending goals
     Debts and credit renamed to Lent and Borrowed
     Upcoming and overdue transaction page total centered

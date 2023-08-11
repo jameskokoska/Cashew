@@ -420,5 +420,20 @@
   "preview-demo-warning": "Az előnézeti bemutató jelenleg aktív, és automatikusan generált adatokat használnak. Nem ajánlott az alkalmazást demo módban használni, mivel ez adatvesztést okozhat. A generált adatok eltávolításához és a kilépési előnézeti bemutató kilépéséhez érintse meg itt.",
   "exit-demo": "Kilépési demo",
   "not-available-in-preview-demo": "Nem érhető el az előnézeti bemutatóban",
-  "not-available-in-preview-demo-description": "Tiltsa le az előnézeti demo módot a szolgáltatás használatához."
+  "not-available-in-preview-demo-description": "Tiltsa le az előnézeti demo módot a szolgáltatás használatához.",
+  "copied": "Másolt",
+  "created-copy": "Létrehozott másolat",
+  "create-copy": "Készítsen másolatot",
+  "delete-transactions": "Törölje a tranzakciókat",
+  "change-wallet": "Cserélje ki a pénztárcát",
+  "add-to-budget": "Adja hozzá a költségvetést",
+  "select-wallet": "Válassza ki a pénztárcát",
+  "delete-wallet-description": "Ez törli az ehhez a pénztárcához kapcsolódó összes tranzakciót.",
+  "move-to-other-wallet-button": "Vigye a tranzakciókat egy másik pénztárcába, és törölje",
+  "changed-wallet": "Megváltozott pénztárca",
+  "added-to-budget": "Hozzáadva a költségvetéshez",
+  "no-addable-budgets": "Nincs olyan költségvetés, amely a tranzakciókat hozzáadja",
+  "create-addable-budget": "Hozzon létre 'csak hozzáadott' költségvetést",
+  "delete-budget-added-warning": "A költségvetéshez hozzáadott tranzakciók már nem kapcsolódnak ehhez a költségvetéshez. Nem törlik őket.",
+  "removed-from-budget": "Eltávolítva a költségvetésből"
 }

@@ -420,5 +420,20 @@
   "preview-demo-warning": "A demonstração de visualização está atualmente ativa e os dados gerados automaticamente estão sendo usados. Não é recomendável usar o aplicativo no modo de demonstração, pois pode levar à perda de dados. Para remover os dados gerados e a demonstração de visualização de saída, toque aqui.",
   "exit-demo": "Demoção de saída",
   "not-available-in-preview-demo": "Não disponível na demonstração de visualização",
-  "not-available-in-preview-demo-description": "Desative o modo de demonstração de visualização para usar esse recurso."
+  "not-available-in-preview-demo-description": "Desative o modo de demonstração de visualização para usar esse recurso.",
+  "copied": "Copiado",
+  "created-copy": "Cópia criada",
+  "create-copy": "Crie cópia",
+  "delete-transactions": "Excluir transações",
+  "change-wallet": "Altere a carteira",
+  "add-to-budget": "Adicione ao orçamento",
+  "select-wallet": "Selecione a carteira",
+  "delete-wallet-description": "Isso excluirá todas as transações associadas a esta carteira.",
+  "move-to-other-wallet-button": "Mover transações para outra carteira e excluir",
+  "changed-wallet": "Carteira alterada",
+  "added-to-budget": "Adicionado ao orçamento",
+  "no-addable-budgets": "Sem orçamentos para adicionar transações a",
+  "create-addable-budget": "Crie orçamento 'adicionado apenas'",
+  "delete-budget-added-warning": "As transações adicionadas a esse orçamento não serão mais vinculadas a esse orçamento. Eles não serão excluídos.",
+  "removed-from-budget": "Removido do orçamento"
 }

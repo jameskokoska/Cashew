@@ -420,5 +420,20 @@
   "preview-demo-warning": "预览演示目前处于活动状态，并且正在使用自动生成数据。不建议在演示模式下使用该应用程序，因为它可能导致数据丢失。要删除生成的数据并退出预览演示，请点击此处。",
   "exit-demo": "退出演示",
   "not-available-in-preview-demo": "预览演示中没有",
-  "not-available-in-preview-demo-description": "禁用预览演示模式以使用此功能。"
+  "not-available-in-preview-demo-description": "禁用预览演示模式以使用此功能。",
+  "copied": "复制",
+  "created-copy": "创建的副本",
+  "create-copy": "创建副本",
+  "delete-transactions": "删除交易",
+  "change-wallet": "更改钱包",
+  "add-to-budget": "增加预算",
+  "select-wallet": "选择钱包",
+  "delete-wallet-description": "这将删除与此钱包相关的所有交易。",
+  "move-to-other-wallet-button": "将交易移至另一个钱包并删除",
+  "changed-wallet": "改变了钱包",
+  "added-to-budget": "添加到预算中",
+  "no-addable-budgets": "没有预算将交易添加到",
+  "create-addable-budget": "创建“仅添加”预算",
+  "delete-budget-added-warning": "添加到该预算的交易将不再与该预算有关。它们不会被删除。",
+  "removed-from-budget": "从预算中删除"
 }

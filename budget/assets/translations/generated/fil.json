@@ -420,5 +420,20 @@
   "preview-demo-warning": "Kasalukuyang aktibo ang Preview Demo, at ginagamit ang data na nabuo ng auto. Hindi inirerekomenda na gamitin ang application sa mode ng demo, dahil maaaring humantong ito sa pagkawala ng data. Upang alisin ang nabuong data at exit preview demo, mag -tap dito.",
   "exit-demo": "Lumabas ng demo",
   "not-available-in-preview-demo": "Hindi magagamit sa preview demo",
-  "not-available-in-preview-demo-description": "Huwag paganahin ang mode ng Demo ng Preview upang magamit ang tampok na ito."
+  "not-available-in-preview-demo-description": "Huwag paganahin ang Preview Demo Mode upang magamit ang tampok na ito.",
+  "copied": "Kinopya",
+  "created-copy": "Nilikha na kopya",
+  "create-copy": "Lumikha ng kopya",
+  "delete-transactions": "Tanggalin ang mga transaksyon",
+  "change-wallet": "Baguhin ang pitaka",
+  "add-to-budget": "Idagdag sa badyet",
+  "select-wallet": "Piliin ang Wallet",
+  "delete-wallet-description": "Tatanggalin nito ang lahat ng mga transaksyon na nauugnay sa pitaka na ito.",
+  "move-to-other-wallet-button": "Ilipat ang mga transaksyon sa isa pang pitaka at tanggalin",
+  "changed-wallet": "Binago ang pitaka",
+  "added-to-budget": "Idinagdag sa badyet",
+  "no-addable-budgets": "Walang mga badyet upang magdagdag ng mga transaksyon sa",
+  "create-addable-budget": "Lumikha ng badyet na 'Idinagdag lamang'",
+  "delete-budget-added-warning": "Ang mga transaksyon na idinagdag sa badyet na ito ay hindi na maiugnay sa badyet na ito. Hindi sila tatanggalin.",
+  "removed-from-budget": "Tinanggal mula sa badyet"
 }

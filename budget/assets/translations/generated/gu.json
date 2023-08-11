@@ -420,5 +420,20 @@
   "preview-demo-warning": "પૂર્વાવલોકન ડેમો હાલમાં સક્રિય છે, અને સ્વચાલિત ડેટાનો ઉપયોગ કરવામાં આવી રહ્યો છે. ડેમો મોડમાં એપ્લિકેશનનો ઉપયોગ કરવાની ભલામણ કરવામાં આવતી નથી, કારણ કે તે ડેટા ખોટ તરફ દોરી શકે છે. જનરેટ કરેલા ડેટાને દૂર કરવા અને પૂર્વાવલોકન ડેમોમાંથી બહાર નીકળવા માટે, અહીં ટેપ કરો.",
   "exit-demo": "બહાર નીકળવું",
   "not-available-in-preview-demo": "પૂર્વાવલોકન ડેમોમાં ઉપલબ્ધ નથી",
-  "not-available-in-preview-demo-description": "આ સુવિધાનો ઉપયોગ કરવા માટે પૂર્વાવલોકન ડેમો મોડને અક્ષમ કરો."
+  "not-available-in-preview-demo-description": "આ સુવિધાનો ઉપયોગ કરવા માટે પૂર્વાવલોકન ડેમો મોડને અક્ષમ કરો.",
+  "copied": "Copઠવું",
+  "created-copy": "બનાવેલી નકલ",
+  "create-copy": "પ્રત",
+  "delete-transactions": "વ્યવહાર કા delete ી નાખો",
+  "change-wallet": "પાકીટ બદલો",
+  "add-to-budget": "બજેટ ઉમેરો",
+  "select-wallet": "વ let લેટ પસંદ કરો",
+  "delete-wallet-description": "આ આ વ let લેટ સાથે સંકળાયેલા તમામ વ્યવહારોને કા delete ી નાખશે.",
+  "move-to-other-wallet-button": "બીજા વ let લેટમાં વ્યવહાર ખસેડો અને કા delete ી નાખો",
+  "changed-wallet": "બદલાયેલ વ let લેટ",
+  "added-to-budget": "બજેટ ઉમેર્યું",
+  "no-addable-budgets": "વ્યવહાર ઉમેરવા માટે કોઈ બજેટ નથી",
+  "create-addable-budget": "'ફક્ત ઉમેર્યું' બજેટ બનાવો",
+  "delete-budget-added-warning": "આ બજેટમાં ઉમેરવામાં આવેલા વ્યવહારો હવે આ બજેટ સાથે જોડવામાં આવશે નહીં. તેઓ કા deleted ી નાખવામાં આવશે નહીં.",
+  "removed-from-budget": "બજેટથી કા remવામાં"
 }

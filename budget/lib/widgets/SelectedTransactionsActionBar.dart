@@ -2,12 +2,16 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -156,38 +160,15 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Row(
-                        children: pushActionsTogether([
-                          if (appStateSettings[
-                                  "massEditSelectedTransactions"] ==
-                              true)
-                            IconButton(
-                              padding: EdgeInsets.all(15),
-                              color: Theme.of(context).colorScheme.secondary,
-                              icon: Icon(
-                                Icons.edit,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              onPressed: () {
-                                openPopupCustom(
-                                  context,
-                                  title: "Edit " +
-                                      (value)[pageID]!.length.toString() +
-                                      " Selected",
-                                  child: EditSelectedTransactions(
-                                    transactionIDs: value[pageID]!,
-                                  ),
-                                );
-                              },
-                            ),
-                          IconButton(
-                            padding: EdgeInsets.all(15),
-                            color: Theme.of(context).colorScheme.secondary,
-                            icon: Icon(
-                              Icons.delete,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            onPressed: () {
+                      CustomPopupMenuButton(
+                        showButtons: enableDoubleColumn(context),
+                        keepOutFirst: true,
+                        items: [
+                          DropdownItemMenu(
+                            id: "delete-transactions",
+                            label: "delete-transactions".tr(),
+                            icon: Icons.delete,
+                            action: () {
                               openPopup(
                                 context,
                                 title: "delete-selected-transactions".tr(),
@@ -232,19 +213,13 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               );
                             },
                           ),
-                          if (listOfIDs.length == 1)
-                            IconButton(
-                              padding: EdgeInsets.all(15),
-                              color: Theme.of(context).colorScheme.secondary,
-                              icon: Transform.scale(
-                                scale: 0.95,
-                                child: Icon(
-                                  Icons.file_copy_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                              ),
-                              onPressed: () async {
+                          if (value[pageID]?.length == 1)
+                            DropdownItemMenu(
+                              id: "create-copy",
+                              label: "create-copy".tr(),
+                              icon: Icons.file_copy_rounded,
+                              iconScale: 0.97,
+                              action: () async {
                                 Transaction transaction = await database
                                     .getTransactionFromPk(value[pageID]!.first);
                                 await database.createOrUpdateTransaction(
@@ -260,17 +235,110 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 openSnackbar(
                                   SnackbarMessage(
                                     icon: Icons.file_copy_rounded,
-                                    title: "Created copy",
+                                    title: "created-copy".tr(),
                                     description:
-                                        "Copied" + " " + transactionName,
+                                        "copied".tr() + " " + transactionName,
                                   ),
                                 );
                                 globalSelectedID.value[pageID] = [];
                                 globalSelectedID.notifyListeners();
                               },
                             ),
-                        ]),
+                          DropdownItemMenu(
+                            id: "change-wallet",
+                            label: "change-wallet".tr(),
+                            icon: Icons.account_balance_wallet_rounded,
+                            action: () async {
+                              TransactionWallet? wallet =
+                                  await selectWalletPopup(context);
+                              if (wallet == null) return;
+                              List<Transaction> transactions = await database
+                                  .getTransactionsFromPk(value[pageID]!);
+                              await database.moveWalletTransactons(
+                                Provider.of<AllWallets>(context, listen: false),
+                                null,
+                                wallet.walletPk,
+                                transactionsToMove: transactions,
+                              );
+                              openSnackbar(
+                                SnackbarMessage(
+                                  icon: Icons.account_balance_wallet_rounded,
+                                  title: "changed-wallet".tr(),
+                                  description: "for".tr().capitalizeFirst +
+                                      " " +
+                                      transactions.length.toString() +
+                                      " " +
+                                      (transactions.length == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
+                                ),
+                              );
+                              globalSelectedID.value[pageID] = [];
+                              globalSelectedID.notifyListeners();
+                            },
+                          ),
+                          DropdownItemMenu(
+                            id: "add-to-budget",
+                            label: "add-to-budget".tr(),
+                            iconScale: 0.85,
+                            icon: MoreIcons.chart_pie,
+                            action: () async {
+                              dynamic budget =
+                                  await selectAddableBudgetPopup(context);
+                              if (budget == null) return;
+
+                              String? budgetPkToMoveTo;
+                              if (budget == "none") {
+                                budgetPkToMoveTo = null;
+                              } else {
+                                budgetPkToMoveTo = budget.budgetPk;
+                              }
+                              List<Transaction> transactions = await database
+                                  .getTransactionsFromPk(value[pageID]!);
+                              await database.moveTransactionsToBudget(
+                                  transactions, budgetPkToMoveTo);
+                              openSnackbar(
+                                SnackbarMessage(
+                                  icon: MoreIcons.chart_pie,
+                                  title: budget == "none"
+                                      ? "removed-from-budget".tr()
+                                      : "added-to-budget".tr(),
+                                  description: "for".tr().capitalizeFirst +
+                                      " " +
+                                      transactions.length.toString() +
+                                      " " +
+                                      (transactions.length == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
+                                ),
+                              );
+                              globalSelectedID.value[pageID] = [];
+                              globalSelectedID.notifyListeners();
+                            },
+                          ),
+                        ],
                       ),
+                      if (appStateSettings["massEditSelectedTransactions"] ==
+                          true)
+                        IconButton(
+                          padding: EdgeInsets.all(15),
+                          color: Theme.of(context).colorScheme.secondary,
+                          icon: Icon(
+                            Icons.edit,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          onPressed: () {
+                            openPopupCustom(
+                              context,
+                              title: "Edit " +
+                                  (value)[pageID]!.length.toString() +
+                                  " Selected",
+                              child: EditSelectedTransactions(
+                                transactionIDs: value[pageID]!,
+                              ),
+                            );
+                          },
+                        ),
                     ],
                   ),
                 ),

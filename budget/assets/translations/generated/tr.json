@@ -420,5 +420,20 @@
   "preview-demo-warning": "Önizleme Demosu şu anda etkin ve otomatik olarak oluşturulan veriler kullanılıyor. Veri kaybına yol açabileceğinden, uygulamanın demo modunda kullanılması önerilmez. Oluşturulan verileri kaldırmak ve önizleme demosundan çıkmak için buraya dokunun.",
   "exit-demo": "Demo Çıkışı",
   "not-available-in-preview-demo": "Önizleme Demosunda Mevcut Değil",
-  "not-available-in-preview-demo-description": "Bu özelliği kullanmak için önizleme demo modunu devre dışı bırakın."
+  "not-available-in-preview-demo-description": "Bu özelliği kullanmak için önizleme demo modunu devre dışı bırakın.",
+  "copied": "Kopyalanmış",
+  "created-copy": "Oluşturulan kopya",
+  "create-copy": "Kopya Oluştur",
+  "delete-transactions": "İşlemleri Sil",
+  "change-wallet": "Cüzdanı değiştir",
+  "add-to-budget": "Bütçeye ekle",
+  "select-wallet": "Cüzdan seçin",
+  "delete-wallet-description": "Bu, bu cüzdanla ilişkili tüm işlemleri silecektir.",
+  "move-to-other-wallet-button": "İşlemleri başka bir cüzdana taşıyın ve silin",
+  "changed-wallet": "Değiştirilen cüzdan",
+  "added-to-budget": "Bütçeye eklendi",
+  "no-addable-budgets": "İşlemler ekleyecek bütçe yok",
+  "create-addable-budget": "'Yalnızca Ek' Bütçe Oluştur",
+  "delete-budget-added-warning": "Bu bütçeye eklenen işlemler artık bu bütçeyle bağlantılı olmayacaktır. Silinmeyecekler.",
+  "removed-from-budget": "Bütçeden kaldırıldı"
 }

@@ -64,6 +64,25 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
   DateTime? selectedEndDate;
   String selectedRecurrence = "Monthly";
 
+  bool showImage = false;
+  final Image imageLanding1 = Image(
+    image: AssetImage("assets/landing/Graph.png"),
+  );
+  final Image imageLanding2 = Image(
+    image: AssetImage("assets/landing/BankOrPig.png"),
+  );
+  final Image imageLanding3 = Image(
+    image: AssetImage("assets/landing/PigBank.png"),
+  );
+
+  @override
+  void didChangeDependencies() {
+    precacheImage(imageLanding1.image, context);
+    precacheImage(imageLanding2.image, context);
+    precacheImage(imageLanding3.image, context);
+    super.didChangeDependencies();
+  }
+
   nextNavigation({bool generatePreview = false}) async {
     if (selectedAmount != null && selectedAmount != 0) {
       int order = await database.getAmountOfBudgets();
@@ -199,9 +218,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         MediaQuery.of(context).size.width
                     ? MediaQuery.of(context).size.height * 0.5
                     : 300),
-            child: Image(
-              image: AssetImage("assets/landing/Graph.png"),
-            ),
+            child: imageLanding1,
           ),
           SizedBox(height: 15),
           Padding(
@@ -240,9 +257,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         MediaQuery.of(context).size.width
                     ? MediaQuery.of(context).size.height * 0.5
                     : 300),
-            child: Image(
-              image: AssetImage("assets/landing/BankOrPig.png"),
-            ),
+            child: imageLanding2,
           ),
           SizedBox(height: 15),
           Padding(
@@ -310,9 +325,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         MediaQuery.of(context).size.width
                     ? MediaQuery.of(context).size.height * 0.5
                     : 300),
-            child: Image(
-              image: AssetImage("assets/landing/PigBank.png"),
-            ),
+            child: imageLanding3,
           ),
           SizedBox(height: 15),
           Padding(

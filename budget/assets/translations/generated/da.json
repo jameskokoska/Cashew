@@ -420,5 +420,20 @@
   "preview-demo-warning": "Preview-demo er i øjeblikket aktiv, og der bruges auto-genererede data. Det anbefales ikke at bruge applikationen i demo -tilstand, da det kan føre til datatab. For at fjerne genererede data og exit -preview -demo skal du trykke på her.",
   "exit-demo": "Afslut demo",
   "not-available-in-preview-demo": "Ikke tilgængelig i preview -demo",
-  "not-available-in-preview-demo-description": "Deaktiver preview Demo -tilstand for at bruge denne funktion."
+  "not-available-in-preview-demo-description": "Deaktiver preview -demo -tilstand for at bruge denne funktion.",
+  "copied": "Kopieret",
+  "created-copy": "Oprettet kopi",
+  "create-copy": "Opret kopi",
+  "delete-transactions": "Slet transaktioner",
+  "change-wallet": "Skift tegnebog",
+  "add-to-budget": "Føj til budgettet",
+  "select-wallet": "Vælg tegnebog",
+  "delete-wallet-description": "Dette sletter alle transaktioner, der er forbundet med denne tegnebog.",
+  "move-to-other-wallet-button": "Flyt transaktioner til en anden tegnebog og slet",
+  "changed-wallet": "Ændret tegnebog",
+  "added-to-budget": "Tilføjet til budgettet",
+  "no-addable-budgets": "Ingen budgetter til at tilføje transaktioner til",
+  "create-addable-budget": "Opret kun 'tilføjet' budget",
+  "delete-budget-added-warning": "Transaktioner tilføjet til dette budget vil ikke længere være knyttet til dette budget. De vil ikke blive slettet.",
+  "removed-from-budget": "Fjernet fra budgettet"
 }

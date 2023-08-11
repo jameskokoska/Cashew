@@ -420,5 +420,20 @@
   "preview-demo-warning": "プレビューデモは現在アクティブであり、自動生成データが使用されています。データの損失につながる可能性があるため、アプリケーションをデモモードで使用することはお勧めしません。生成されたデータを削除してプレビューデモを終了するには、こちらをタップします。",
   "exit-demo": "デモを終了します",
   "not-available-in-preview-demo": "プレビューデモでは利用できません",
-  "not-available-in-preview-demo-description": "この機能を使用するには、プレビューデモモードを無効にします。"
+  "not-available-in-preview-demo-description": "この機能を使用するには、プレビューデモモードを無効にします。",
+  "copied": "コピー",
+  "created-copy": "作成したコピー",
+  "create-copy": "コピーを作成します",
+  "delete-transactions": "トランザクションを削除します",
+  "change-wallet": "ウォレットを変更します",
+  "add-to-budget": "予算に追加します",
+  "select-wallet": "ウォレットを選択します",
+  "delete-wallet-description": "これにより、このウォレットに関連付けられたすべてのトランザクションが削除されます。",
+  "move-to-other-wallet-button": "トランザクションを別のウォレットに移動して削除します",
+  "changed-wallet": "ウォレットを変更しました",
+  "added-to-budget": "予算に追加されました",
+  "no-addable-budgets": "取引を追加する予算はありません",
+  "create-addable-budget": "「追加のみ」予算を作成します",
+  "delete-budget-added-warning": "この予算に追加された取引は、この予算に関連しなくなります。それらは削除されません。",
+  "removed-from-budget": "予算から削除されました"
 }

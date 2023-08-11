@@ -420,5 +420,20 @@
   "preview-demo-warning": "Demo pratonton kini aktif, dan data yang dihasilkan secara automatik sedang digunakan. Ia tidak disyorkan untuk menggunakan aplikasi dalam mod demo, kerana ia boleh menyebabkan kehilangan data. Untuk mengalih keluar data pratonton data dan keluar, ketik di sini.",
   "exit-demo": "Demo Keluar",
   "not-available-in-preview-demo": "Tidak terdapat dalam demo pratonton",
-  "not-available-in-preview-demo-description": "Lumpuhkan mod demo pratonton untuk menggunakan ciri ini."
+  "not-available-in-preview-demo-description": "Lumpuhkan mod demo pratonton untuk menggunakan ciri ini.",
+  "copied": "Disalin",
+  "created-copy": "Salinan yang dibuat",
+  "create-copy": "Buat salinan",
+  "delete-transactions": "Padam urus niaga",
+  "change-wallet": "Tukar dompet",
+  "add-to-budget": "Tambah kepada belanjawan",
+  "select-wallet": "Pilih dompet",
+  "delete-wallet-description": "Ini akan memadam semua urus niaga yang berkaitan dengan dompet ini.",
+  "move-to-other-wallet-button": "Gerakkan transaksi ke dompet lain dan padamkan",
+  "changed-wallet": "Dompet berubah",
+  "added-to-budget": "Ditambah kepada belanjawan",
+  "no-addable-budgets": "Tiada belanjawan untuk menambah urus niaga ke",
+  "create-addable-budget": "Buat bajet 'tambah hanya'",
+  "delete-budget-added-warning": "Transaksi yang ditambah kepada belanjawan ini tidak lagi dikaitkan dengan belanjawan ini. Mereka tidak akan dipadamkan.",
+  "removed-from-budget": "Dikeluarkan dari belanjawan"
 }

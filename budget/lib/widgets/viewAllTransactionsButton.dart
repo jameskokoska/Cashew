@@ -46,7 +46,7 @@ class LowKeyButton extends StatelessWidget {
               text: text,
               textAlign: TextAlign.center,
               fontSize: 14,
-              textColor: getColor(context, "textLight"),
+              textColor: getColor(context, "black").withOpacity(0.5),
             ),
             extraWidget ?? SizedBox.shrink(),
           ],

@@ -420,5 +420,20 @@
   "preview-demo-warning": "La demostración de vista previa está actualmente activa y se están utilizando datos generados automáticamente. No se recomienda usar la aplicación en modo demo, ya que puede conducir a la pérdida de datos. Para eliminar los datos generados y la demostración de vista previa de salida, toque aquí.",
   "exit-demo": "Demo de salida",
   "not-available-in-preview-demo": "No disponible en la demostración de vista previa",
-  "not-available-in-preview-demo-description": "Desactivar el modo de demostración de vista previa para usar esta función."
+  "not-available-in-preview-demo-description": "Desactivar el modo de demostración de vista previa para usar esta función.",
+  "copied": "Copiado",
+  "created-copy": "Copia creada",
+  "create-copy": "Crear copia",
+  "delete-transactions": "Eliminar transacciones",
+  "change-wallet": "Cambiar la billetera",
+  "add-to-budget": "Agregar al presupuesto",
+  "select-wallet": "Seleccionar billetera",
+  "delete-wallet-description": "Esto eliminará todas las transacciones asociadas con esta billetera.",
+  "move-to-other-wallet-button": "Mover las transacciones a otra billetera y eliminar",
+  "changed-wallet": "Billetera cambiada",
+  "added-to-budget": "Agregado al presupuesto",
+  "no-addable-budgets": "No hay presupuestos para agregar transacciones a",
+  "create-addable-budget": "Crear presupuesto 'agregado solo'",
+  "delete-budget-added-warning": "Las transacciones agregadas a este presupuesto ya no estarán vinculadas a este presupuesto. No serán eliminados.",
+  "removed-from-budget": "Eliminado del presupuesto"
 }

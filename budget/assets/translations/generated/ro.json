@@ -420,5 +420,20 @@
   "preview-demo-warning": "Demo de previzualizare este în prezent activ și se utilizează date generate automate. Nu este recomandat să utilizați aplicația în modul demo, deoarece poate duce la pierderi de date. Pentru a elimina datele generate de date și ieșire de previzualizare, atingeți aici.",
   "exit-demo": "Demo de ieșire",
   "not-available-in-preview-demo": "Nu este disponibil în demo de previzualizare",
-  "not-available-in-preview-demo-description": "Dezactivați modul demo de previzualizare pentru a utiliza această caracteristică."
+  "not-available-in-preview-demo-description": "Dezactivați modul demo de previzualizare pentru a utiliza această caracteristică.",
+  "copied": "Copiat",
+  "created-copy": "Copie creată",
+  "create-copy": "Creați copie",
+  "delete-transactions": "Ștergeți tranzacțiile",
+  "change-wallet": "Schimbați portofelul",
+  "add-to-budget": "Adăugați la buget",
+  "select-wallet": "Selectați portofel",
+  "delete-wallet-description": "Aceasta va șterge toate tranzacțiile asociate cu acest portofel.",
+  "move-to-other-wallet-button": "Mutați tranzacțiile într -un alt portofel și ștergeți",
+  "changed-wallet": "Portofel schimbat",
+  "added-to-budget": "Adăugat la buget",
+  "no-addable-budgets": "Fără bugete pentru a adăuga tranzacții la",
+  "create-addable-budget": "Creați bugetul „Adăugat doar”",
+  "delete-budget-added-warning": "Tranzacțiile adăugate la acest buget nu vor mai fi legate de acest buget. Nu vor fi șterse.",
+  "removed-from-budget": "Eliminat din buget"
 }
