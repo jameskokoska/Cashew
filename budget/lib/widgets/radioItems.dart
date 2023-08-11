@@ -1,13 +1,16 @@
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
-class RadioItems extends StatefulWidget {
-  final String initial;
-  final List<String> items;
-  final Function(String) onChanged;
-  final Function(String)? displayFilter;
-  final Function(String)? onLongPress;
+class RadioItems<T> extends StatefulWidget {
+  final T initial;
+  final List<T> items;
+  final Function(T item) onChanged;
+  final String Function(T item)? displayFilter;
+  final Color? Function(T item)? colorFilter;
+  final Function(T item)? onLongPress;
+  final bool ifNullSelectNone;
 
   const RadioItems({
     Key? key,
@@ -16,14 +19,16 @@ class RadioItems extends StatefulWidget {
     required this.onChanged,
     this.onLongPress,
     this.displayFilter,
+    this.colorFilter,
+    this.ifNullSelectNone = false,
   }) : super(key: key);
 
   @override
-  State<RadioItems> createState() => _RadioItemsState();
+  State<RadioItems<T>> createState() => _RadioItemsState<T>();
 }
 
-class _RadioItemsState extends State<RadioItems> {
-  String? currentValue;
+class _RadioItemsState<T> extends State<RadioItems<T>> {
+  T? currentValue;
 
   @override
   void initState() {
@@ -33,15 +38,23 @@ class _RadioItemsState extends State<RadioItems> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        for (var item in widget.items)
-          Tappable(
+    List<Widget> children = [];
+    for (T item in widget.items) {
+      bool selected = false;
+      if (currentValue == item) selected = true;
+      if (item == null && widget.ifNullSelectNone == true) selected = false;
+      children.add(
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 150),
+          child: Tappable(
+            key: ValueKey((currentValue == item).toString()),
             onLongPress: widget.onLongPress != null
                 ? () => widget.onLongPress!(item)
                 : null,
-            borderRadius: 20,
-            color: Colors.transparent,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 20,
+            color: selected
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : Colors.transparent,
             onTap: () {
               setState(() {
                 currentValue = item;
@@ -54,7 +67,7 @@ class _RadioItemsState extends State<RadioItems> {
                 child: TextFont(
                   fontSize: 18,
                   text: widget.displayFilter == null
-                      ? item
+                      ? item.toString()
                       : widget.displayFilter!(item),
                   maxLines: 3,
                 ),
@@ -62,19 +75,28 @@ class _RadioItemsState extends State<RadioItems> {
               dense: true,
               leading: Radio<String>(
                 visualDensity: VisualDensity.compact,
-                value: item,
-                groupValue: currentValue,
-                onChanged: (String? value) {
+                value: selected ? "true" : "false",
+                groupValue: "true",
+                onChanged: (_) {
                   setState(() {
-                    currentValue = value;
+                    currentValue = item;
                   });
                   widget.onChanged(item);
                 },
+                fillColor: widget.colorFilter != null &&
+                        widget.colorFilter!(item) != null
+                    ? MaterialStateColor.resolveWith(
+                        (states) => widget.colorFilter!(item)!)
+                    : null,
                 activeColor: Theme.of(context).colorScheme.primary,
               ),
             ),
-          )
-      ],
+          ),
+        ),
+      );
+    }
+    return Column(
+      children: children,
     );
   }
 }

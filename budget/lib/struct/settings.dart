@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultPreferences.dart';
@@ -29,6 +30,8 @@ Future<bool> initializeSettings() async {
           userSettings[key] = userPreferencesDefault[key];
         }
       });
+      // Always reset the language when restoring a backup
+      userSettings["language"] = "System";
       updateSettings("databaseJustImported", false, updateGlobalState: false);
       print("Settings were restored");
     } catch (e) {
@@ -43,6 +46,12 @@ Future<bool> initializeSettings() async {
   // Do some actions based on loaded settings
 
   appStateSettings["accentColor"] = await getAccentColorSystemString();
+
+  // Disable sync every change is not on web
+  // It will still sync when user pulls down to refresh
+  if (!kIsWeb) {
+    appStateSettings["syncEveryChange"] = false;
+  }
 
   if (appStateSettings["hasOnboarded"] == true) {
     updateSettings("numLogins", appStateSettings["numLogins"] + 1,

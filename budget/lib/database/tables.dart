@@ -411,6 +411,12 @@ class CategoryWithTotal {
   });
 }
 
+bool canAddToBudget(bool? income, TransactionSpecialType? transactionType) {
+  return income != true &&
+      transactionType != TransactionSpecialType.credit &&
+      transactionType != TransactionSpecialType.debt;
+}
+
 // when adding a new table, make sure to enable syncing and that
 // all relevant delete queries create delete logs
 @DriftDatabase(tables: [
@@ -2888,17 +2894,21 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<bool> moveTransactionsToBudget(
+  // Returns the number of updates transactions
+  Future<int> moveTransactionsToBudget(
       List<Transaction> transactionsToMove, String? addedBudgetPk) async {
     List<Transaction> allTransactionsToUpdate = [];
     for (Transaction transaction in transactionsToMove) {
-      allTransactionsToUpdate.add(transaction.copyWith(
-        sharedReferenceBudgetPk: Value(addedBudgetPk),
-        dateTimeModified: Value(DateTime.now()),
-      ));
+      if (addedBudgetPk == null ||
+          canAddToBudget(transaction.income, transaction.type)) {
+        allTransactionsToUpdate.add(transaction.copyWith(
+          sharedReferenceBudgetPk: Value(addedBudgetPk),
+          dateTimeModified: Value(DateTime.now()),
+        ));
+      }
     }
     await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
-    return true;
+    return allTransactionsToUpdate.length;
   }
 
   Future deleteScannerTemplate(String scannerTemplatePk) async {

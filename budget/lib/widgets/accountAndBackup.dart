@@ -9,6 +9,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/accountsPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
@@ -426,7 +427,7 @@ Future<void> chooseBackup(context,
 }
 
 Future<void> loadBackup(
-    context, drive.DriveApi driveApi, drive.File file) async {
+    BuildContext context, drive.DriveApi driveApi, drive.File file) async {
   try {
     openLoadingPopup(context);
 
@@ -460,7 +461,7 @@ Future<void> loadBackup(
         // if this is added, it doesn't restore the database properly on web
         // await database.close();
         Navigator.of(context).pop();
-
+        resetLanguageToSystem(context);
         await updateSettings("databaseJustImported", true,
             pagesNeedingRefresh: [], updateGlobalState: false);
         print(appStateSettings);
@@ -795,25 +796,32 @@ class _BackupManagementState extends State<BackupManagement> {
                 )
               : SizedBox.shrink(),
           widget.isClientSync
-              ? SettingsContainerSwitch(
-                  enableBorderRadius: true,
-                  onSwitched: (value) {
-                    updateSettings("backupSync", value,
-                        pagesNeedingRefresh: [], updateGlobalState: true);
-                    setState(() {
-                      backupSync = value;
-                    });
-                    Future.delayed(Duration(milliseconds: 100), () {
-                      bottomSheetControllerGlobal.snapToExtent(0);
-                    });
-                  },
-                  initialValue: appStateSettings["backupSync"],
-                  title: "sync-data".tr(),
-                  description: "sync-data-description".tr(),
-                  icon: Icons.cloud_sync_rounded,
+              ? Padding(
+                  padding: EdgeInsets.only(
+                      bottom: widget.isClientSync && kIsWeb ? 0 : 10),
+                  child: SettingsContainerSwitch(
+                    enableBorderRadius: true,
+                    onSwitched: (value) {
+                      // Only update global is the sidebar is shown
+                      updateSettings("backupSync", value,
+                          pagesNeedingRefresh: [],
+                          updateGlobalState: getIsFullScreen(context));
+                      setState(() {
+                        backupSync = value;
+                      });
+                      // Future.delayed(Duration(milliseconds: 100), () {
+                      //   bottomSheetControllerGlobal.snapToExtent(0);
+                      // });
+                    },
+                    initialValue: appStateSettings["backupSync"],
+                    title: "sync-data".tr(),
+                    description: "sync-data-description".tr(),
+                    icon: Icons.cloud_sync_rounded,
+                  ),
                 )
               : SizedBox.shrink(),
-          widget.isClientSync
+          // Only allow sync on every change for web
+          widget.isClientSync && kIsWeb
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: AnimatedSize(

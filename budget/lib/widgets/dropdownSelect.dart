@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
@@ -132,19 +133,11 @@ class DropdownItemMenu {
 
 class CustomPopupMenuButton extends StatelessWidget {
   final List<DropdownItemMenu> items;
-  final EdgeInsetsGeometry padding;
-  final ShapeBorder shape;
   final bool showButtons;
   final bool keepOutFirst;
 
   CustomPopupMenuButton({
     required this.items,
-    this.padding = const EdgeInsets.all(15),
-    this.shape = const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(10),
-      ),
-    ),
     this.showButtons = false,
     this.keepOutFirst = true,
   });
@@ -206,8 +199,12 @@ class CustomPopupMenuButton extends StatelessWidget {
             ),
           ),
         PopupMenuButton<String>(
-          padding: padding,
-          shape: shape,
+          padding: EdgeInsets.all(15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
+            ),
+          ),
           onSelected: (value) {
             for (DropdownItemMenu item in items) {
               if (item.id == value) {
@@ -221,15 +218,17 @@ class CustomPopupMenuButton extends StatelessWidget {
               return PopupMenuItem<String>(
                 value: item.id,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Transform.scale(
                       scale: item.iconScale ?? 1,
                       child: Icon(item.icon),
                     ),
-                    SizedBox(width: 7),
-                    Text(
-                      item.label,
-                      style: TextStyle(fontSize: 14.5),
+                    SizedBox(width: 9),
+                    TextFont(
+                      text: item.label,
+                      fontSize: 14.5,
                     ),
                   ],
                 ),

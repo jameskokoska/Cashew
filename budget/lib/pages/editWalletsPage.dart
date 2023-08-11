@@ -6,16 +6,17 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/walletEntry.dart';
-import 'package:budget/widgets/selectChips.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
@@ -290,57 +291,54 @@ void deleteWalletPopup(context, TransactionWallet wallet,
 
 Future<TransactionWallet?> selectWalletPopup(BuildContext context,
     {String? removeWalletPk}) async {
-  dynamic wallet = await openPopupCustom(
+  dynamic wallet = await openBottomSheet(
     context,
-    title: "select-wallet".tr(),
-    child: StreamBuilder<List<TransactionWallet>>(
-      stream: database.watchAllWallets(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<TransactionWallet> walletsWithoutOneDeleted = snapshot.data!;
-          if (removeWalletPk != null)
-            walletsWithoutOneDeleted.removeWhere(
-                (TransactionWallet w) => w.walletPk == removeWalletPk);
-          return SelectChips(
-            wrapped: true,
-            items: walletsWithoutOneDeleted,
-            getLabel: (TransactionWallet item) {
-              return item.name;
-            },
-            onLongPress: (TransactionWallet? item) {
-              pushRoute(
-                context,
-                AddWalletPage(
-                  wallet: item,
-                ),
-              );
-            },
-            onSelected: (TransactionWallet item) {
-              Navigator.pop(context, item);
-            },
-            getSelected: (TransactionWallet item) {
-              return false;
-            },
-            getCustomBorderColor: (TransactionWallet item) {
-              return dynamicPastel(
-                context,
-                lightenPastel(
-                  HexColor(
-                    item.colour,
-                    defaultColor: Colors.transparent,
+    PopupFramework(
+      title: "select-wallet".tr(),
+      child: StreamBuilder<List<TransactionWallet>>(
+        stream: database.watchAllWallets(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<TransactionWallet> walletsWithoutOneDeleted = snapshot.data!;
+            if (removeWalletPk != null)
+              walletsWithoutOneDeleted.removeWhere(
+                  (TransactionWallet w) => w.walletPk == removeWalletPk);
+            return RadioItems(
+              items: walletsWithoutOneDeleted,
+              colorFilter: (TransactionWallet? wallet) {
+                if (wallet == null) return null;
+                return dynamicPastel(
+                  context,
+                  lightenPastel(
+                    HexColor(
+                      wallet.colour,
+                      defaultColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    amount: 0.2,
                   ),
-                  amount: 0.3,
-                ),
-                amount: 0.4,
-              );
-            },
-          );
-        } else {
-          return SizedBox.shrink();
-        }
-      },
+                  amount: 0.1,
+                );
+              },
+              displayFilter: (TransactionWallet? wallet) {
+                return (wallet?.name ?? "") +
+                    " " +
+                    "(" +
+                    (wallet?.currency ?? "").allCaps +
+                    ")";
+              },
+              initial: null,
+              onChanged: (TransactionWallet? wallet) async {
+                Navigator.of(context).pop(wallet);
+              },
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      ),
     ),
   );
+
   if (wallet is TransactionWallet) return wallet;
   return null;
 }

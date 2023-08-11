@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -124,8 +125,8 @@ class _EditHomePageState extends State<EditHomePage> {
                             budget.budgetPk.toString()
                         ],
                         onChangedSingleItem: (value) async {
-                          Budget budget = allBudgets[allBudgets.indexWhere(
-                              (item) => item.budgetPk == int.parse(value))];
+                          Budget budget = allBudgets[allBudgets
+                              .indexWhere((item) => item.budgetPk == value)];
                           Budget budgetToUpdate =
                               await database.getBudgetInstance(budget.budgetPk);
                           await database.createOrUpdateBudget(
@@ -214,6 +215,24 @@ class _EditHomePageState extends State<EditHomePage> {
                           budget.budgetPk.toString()
                       ],
                     ],
+                    colorFilter: (budgetPk) {
+                      for (Budget budget in allBudgets)
+                        if (budget.budgetPk.toString() == budgetPk.toString()) {
+                          return dynamicPastel(
+                            context,
+                            lightenPastel(
+                              HexColor(
+                                budget.colour,
+                                defaultColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                              amount: 0.2,
+                            ),
+                            amount: 0.1,
+                          );
+                        }
+                      return null;
+                    },
                     displayFilter: (budgetPk) {
                       for (Budget budget in allBudgets)
                         if (budget.budgetPk.toString() == budgetPk.toString()) {
@@ -271,7 +290,7 @@ class _EditHomePageState extends State<EditHomePage> {
                       } else {
                         updateSettings(
                           "lineGraphReferenceBudgetPk",
-                          int.parse(value),
+                          value,
                           pagesNeedingRefresh: [],
                           updateGlobalState: false,
                         );

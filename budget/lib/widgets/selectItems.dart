@@ -1,3 +1,4 @@
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class _SelectItemsState extends State<SelectItems> {
               title: Transform.translate(
                 offset: Offset(-12, 0),
                 child: TextFont(
-                    fontSize: 20,
+                    fontSize: 18,
                     text: widget.displayFilter == null
                         ? item
                         : widget.displayFilter!(item)),
@@ -72,22 +73,25 @@ class _SelectItemsState extends State<SelectItems> {
                       widget.checkboxCustomIconSelected != null
                   ? Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: AnimatedScale(
-                        duration: Duration(milliseconds: 700),
-                        curve: Curves.elasticOut,
-                        scale: currentItems.contains(item) ? 1.1 : 0.9,
-                        child: AnimatedSwitcher(
+                      child: Builder(builder: (context) {
+                        bool selected = currentItems.contains(item);
+                        return ScaledAnimatedSwitcher(
+                          keyToWatch: selected.toString(),
                           duration: Duration(milliseconds: 400),
-                          child: Icon(
-                            key: ValueKey(currentItems.contains(item)),
-                            currentItems.contains(item)
-                                ? widget.checkboxCustomIconSelected
-                                : widget.checkboxCustomIconUnselected,
-                            size: 30,
-                            color: Theme.of(context).colorScheme.primary,
+                          child: Opacity(
+                            opacity: selected ? 1 : 0.8,
+                            child: Icon(
+                              selected
+                                  ? widget.checkboxCustomIconSelected
+                                  : widget.checkboxCustomIconUnselected,
+                              size: 30,
+                              color: selected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     )
                   : Checkbox(
                       onChanged: (_) {},

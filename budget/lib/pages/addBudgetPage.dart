@@ -473,7 +473,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   ),
                 DropdownItemMenu(
                   id: "pin-to-home",
-                  label: "pin-to-home".tr(),
+                  label: selectedPin
+                      ? "pinned-to-homepage".tr()
+                      : "unpinned-to-homepage".tr(),
                   icon: selectedPin
                       ? Icons.push_pin_rounded
                       : Icons.push_pin_outlined,

@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -216,7 +217,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                           if (value[pageID]?.length == 1)
                             DropdownItemMenu(
                               id: "create-copy",
-                              label: "create-copy".tr(),
+                              label: "duplicate".tr(),
                               icon: Icons.file_copy_rounded,
                               iconScale: 0.97,
                               action: () async {
@@ -285,6 +286,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                             action: () async {
                               dynamic budget =
                                   await selectAddableBudgetPopup(context);
+                              print(budget);
                               if (budget == null) return;
 
                               String? budgetPkToMoveTo;
@@ -295,8 +297,15 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               }
                               List<Transaction> transactions = await database
                                   .getTransactionsFromPk(value[pageID]!);
-                              await database.moveTransactionsToBudget(
-                                  transactions, budgetPkToMoveTo);
+                              int numberMoved =
+                                  await database.moveTransactionsToBudget(
+                                      transactions, budgetPkToMoveTo);
+
+                              // Some transactions weren't moved to a budget
+                              if (transactions.length != numberMoved) {
+                                showIncomeCannotBeAddedToBudgetWarning();
+                              }
+
                               openSnackbar(
                                 SnackbarMessage(
                                   icon: MoreIcons.chart_pie,
@@ -305,13 +314,14 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                       : "added-to-budget".tr(),
                                   description: "for".tr().capitalizeFirst +
                                       " " +
-                                      transactions.length.toString() +
+                                      numberMoved.toString() +
                                       " " +
-                                      (transactions.length == 1
+                                      (numberMoved == 1
                                           ? "transaction".tr().toLowerCase()
                                           : "transactions".tr().toLowerCase()),
                                 ),
                               );
+
                               globalSelectedID.value[pageID] = [];
                               globalSelectedID.notifyListeners();
                             },

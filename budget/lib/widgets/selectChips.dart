@@ -1,4 +1,3 @@
-import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -66,9 +65,10 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
         }
       });
       Future.delayed(Duration(milliseconds: 1000), () {
-        setState(() {
-          isDoneAnimation = true;
-        });
+        if (mounted)
+          setState(() {
+            isDoneAnimation = true;
+          });
       });
     }
     super.initState();
@@ -85,33 +85,36 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           String label = widget.getLabel(item);
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Tappable(
-              onLongPress: () {
-                if (widget.onLongPress != null) widget.onLongPress!(item);
-              },
+            child: Material(
               color: Colors.transparent,
-              child: Theme(
-                data:
-                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
-                child: ChoiceChip(
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  selectedColor: appStateSettings["materialYou"]
-                      ? null
-                      : getColor(context, "lightDarkAccentHeavy"),
-                  side: widget.getCustomBorderColor == null ||
-                          widget.getCustomBorderColor!(item) == null
-                      ? null
-                      : BorderSide(
-                          color: widget.getCustomBorderColor!(item)!,
-                        ),
-                  label: TextFont(
-                    text: label,
-                    fontSize: 15,
+              child: Tappable(
+                onLongPress: () {
+                  if (widget.onLongPress != null) widget.onLongPress!(item);
+                },
+                color: Colors.transparent,
+                child: Theme(
+                  data: Theme.of(context)
+                      .copyWith(canvasColor: Colors.transparent),
+                  child: ChoiceChip(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    selectedColor: appStateSettings["materialYou"]
+                        ? null
+                        : getColor(context, "lightDarkAccentHeavy"),
+                    side: widget.getCustomBorderColor == null ||
+                            widget.getCustomBorderColor!(item) == null
+                        ? null
+                        : BorderSide(
+                            color: widget.getCustomBorderColor!(item)!,
+                          ),
+                    label: TextFont(
+                      text: label,
+                      fontSize: 15,
+                    ),
+                    selected: selected,
+                    onSelected: (bool selected) {
+                      widget.onSelected(item);
+                    },
                   ),
-                  selected: selected,
-                  onSelected: (bool selected) {
-                    widget.onSelected(item);
-                  },
                 ),
               ),
             ),

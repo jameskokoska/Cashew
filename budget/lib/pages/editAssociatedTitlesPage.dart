@@ -69,10 +69,11 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "add-title".tr(),
-              openPage: AddAssociatedTitlePage(),
+              openPage: SizedBox.shrink(),
               onTap: () {
                 openBottomSheet(
                   context,
+                  fullSnap: true,
                   AddAssociatedTitlePage(),
                 );
               },
@@ -166,6 +167,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                             onTap: () {
                               openBottomSheet(
                                 context,
+                                fullSnap: true,
                                 AddAssociatedTitlePage(
                                   associatedTitle: associatedTitle,
                                 ),

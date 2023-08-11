@@ -9,6 +9,7 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/noResults.dart';
@@ -16,7 +17,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/selectChips.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
@@ -447,80 +448,85 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
 // either "none", null, or a Budget type
 Future<dynamic> selectAddableBudgetPopup(BuildContext context,
     {String? removeWalletPk}) async {
-  dynamic budget = await openPopupCustom(
+  dynamic budget = await openBottomSheet(
     context,
-    title: "select-budget".tr(),
-    child: StreamBuilder<List<Budget>>(
-      stream: database.watchAllAddableBudgets(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData &&
-            (snapshot.data != null && snapshot.data!.length > 0)) {
-          List<Budget> addableBudgets = snapshot.data!;
-          return SelectChips(
-            wrapped: true,
-            items: [null, ...addableBudgets],
-            getLabel: (Budget? item) {
-              if (item == null) return "no-budget".tr();
-              return item.name;
-            },
-            onLongPress: (Budget? item) {
-              pushRoute(
-                context,
-                AddBudgetPage(
-                  isAddedOnlyBudget: true,
-                ),
-              );
-            },
-            onSelected: (Budget? item) {
-              Navigator.pop(context, item);
-            },
-            getSelected: (Budget? item) {
-              return false;
-            },
-            getCustomBorderColor: (Budget? item) {
-              if (item == null) return null;
-              return dynamicPastel(
-                context,
-                lightenPastel(
-                  HexColor(
-                    item.colour,
-                    defaultColor: Colors.transparent,
-                  ),
-                  amount: 0.3,
-                ),
-                amount: 0.4,
-              );
-            },
-          );
-        }
-        return Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: TextFont(
-                text: "no-addable-budgets",
-                fontSize: 15,
-              ),
-            ),
-            SizedBox(height: 15),
-            IntrinsicWidth(
-              child: Button(
-                label: "create-addable-budget".tr(),
-                onTap: () {
-                  pushRoute(
-                    context,
-                    AddBudgetPage(
-                      isAddedOnlyBudget: true,
+    PopupFramework(
+      title: "select-budget".tr(),
+      child: StreamBuilder<List<Budget>>(
+        stream: database.watchAllAddableBudgets(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              (snapshot.data != null && snapshot.data!.length > 0)) {
+            List<Budget> addableBudgets = snapshot.data!;
+            return RadioItems(
+              ifNullSelectNone: true,
+              items: [null, ...addableBudgets],
+              colorFilter: (Budget? budget) {
+                if (budget == null) return null;
+                return dynamicPastel(
+                  context,
+                  lightenPastel(
+                    HexColor(
+                      budget.colour,
+                      defaultColor: Theme.of(context).colorScheme.primary,
                     ),
-                  );
-                },
-              ),
-            )
-          ],
-        );
-      },
+                    amount: 0.2,
+                  ),
+                  amount: 0.1,
+                );
+              },
+              displayFilter: (Budget? budget) {
+                return budget?.name ?? "no-budget".tr();
+              },
+              initial: null,
+              onChanged: (Budget? budget) async {
+                if (budget == null)
+                  Navigator.of(context).pop("none");
+                else
+                  Navigator.of(context).pop(budget);
+              },
+            );
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: TextFont(
+                        text: "no-addable-budgets".tr(),
+                        fontSize: 15,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                IntrinsicWidth(
+                  child: Button(
+                    label: "create-addable-budget".tr(),
+                    onTap: () {
+                      pushRoute(
+                        context,
+                        AddBudgetPage(
+                          isAddedOnlyBudget: true,
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            );
+          }
+        },
+      ),
     ),
   );
+
   if (budget is Budget) return budget;
   if (budget == "none") return "none";
   return null;

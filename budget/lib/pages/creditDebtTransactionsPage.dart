@@ -169,6 +169,9 @@ class CreditDebtTransactions extends StatelessWidget {
                   }
                 },
               ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 75),
+              ),
             ],
           ),
           SelectedTransactionsActionBar(

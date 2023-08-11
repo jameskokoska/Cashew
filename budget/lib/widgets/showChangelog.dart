@@ -10,6 +10,25 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.3
+    Select wallet and select budget now uses radio buttons bottom popup
+    Added rounding to decimal precision when converting to money
+    Radio item now highlighted when selected
+    Radio items support colors
+    Only expenses can be added to budgets when using add to budget action bar
+    When ask for transaction title disabled, full snap is not used anymore
+    Fixed home page graph and selecting budget graph - using old number values for id
+    Added bottom spacing to avoid add button for borrowed and lent pages
+    Fixed long press actions - such as long press to reorder for categories on iOS
+    Back button returns to homepage before exiting app
+    Removed sync on every change option for non-web
+    Fixed select budgets pin on home page edit
+    ScaledAnimatedSwitcher now used on selecting budgets pin icon
+    Current pinned to homepage status of budget shown in dropdown menu
+    Language is reset when restoring a backup - fixes issue with language label not correctly matching when restoring
+    Note: Language cannot be restored because initializeSettings when databaseJustImported is false does not have access to context
+    Removed delay after selecting language
+    Add or edit titles snaps to full screen always
     < 3.8.2
     If category deleted, generate preview still functions
     Preview data has random times added

@@ -235,8 +235,14 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           }
           globalSelectedID.notifyListeners();
 
-          // Allow the back button to exit the app
-          if (notEmpty <= 0) return true;
+          // Allow the back button to exit the app when on home
+          if (notEmpty <= 0) {
+            if (currentPage == 0) {
+              return true;
+            } else {
+              changePage(0);
+            }
+          }
 
           return false;
         },

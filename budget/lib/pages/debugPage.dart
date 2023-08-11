@@ -158,6 +158,21 @@ class DebugPage extends StatelessWidget {
           icon: Icons.share_rounded,
         ),
         SettingsContainerSwitch(
+          enableBorderRadius: true,
+          onSwitched: (value) {
+            updateSettings("syncEveryChange", value,
+                pagesNeedingRefresh: [], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["syncEveryChange"],
+          title: "sync-every-change".tr(),
+          descriptionWithValue: (value) {
+            return value
+                ? "sync-every-change-description1".tr()
+                : "sync-every-change-description2".tr();
+          },
+          icon: Icons.all_inbox_rounded,
+        ),
+        SettingsContainerSwitch(
           title: "Emulate iOS",
           description: "Enables scroll behaviour and icons from iOS",
           onSwitched: (value) {

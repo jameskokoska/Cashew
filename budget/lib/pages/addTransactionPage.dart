@@ -178,14 +178,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   void setSelectedType(String type) {
+    if (selectedType == TransactionSpecialType.credit ||
+        selectedType == TransactionSpecialType.debt) {
+      setSelectedIncome(selectedCategory?.income ?? false);
+    }
     setState(() {
       selectedType = transactionTypeDisplayToEnum[type];
     });
     if (selectedType == TransactionSpecialType.credit) {
-      selectedIncome = false;
+      setSelectedIncome(false);
       setSelectedBudgetPk(null);
     } else if (selectedType == TransactionSpecialType.debt) {
-      selectedIncome = true;
+      setSelectedIncome(true);
       setSelectedBudgetPk(null);
     }
     return;
@@ -302,17 +306,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedWalletPk = selectedWalletPassed.walletPk;
       selectedWallet = selectedWalletPassed;
     });
-  }
-
-  void showIncomeCannotBeAddedToBudgetWarning() {
-    openSnackbar(
-      SnackbarMessage(
-        icon: Icons.sticky_note_2_rounded,
-        title: "Note",
-        description: "Income cannot be added to a specefic budget",
-        timeout: Duration(milliseconds: 5000),
-      ),
-    );
   }
 
   Future<bool> addTransaction() async {
@@ -506,7 +499,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         await premiumPopupAddTransaction(context);
         openBottomSheet(
           context,
-          fullSnap: true,
+          // Only allow full snap when entering a title
+          fullSnap: appStateSettings["askForTransactionTitle"] == true,
           appStateSettings["askForTransactionTitle"]
               ? SelectTitle(
                   selectedTitle: selectedTitle,
@@ -520,7 +514,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   },
                 )
               : afterSetTitle(),
-          snap: appStateSettings["askForTransactionTitle"] != true,
         );
       });
     }
@@ -1526,19 +1519,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             duration: Duration(milliseconds: 1000),
                             curve: Curves.easeInOutCubicEmphasized,
                             child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 300),
-                              child: selectedIncome == true ||
-                                      selectedType ==
-                                          TransactionSpecialType.credit ||
-                                      selectedType ==
-                                          TransactionSpecialType.debt
-                                  ? Container(key: ValueKey(1))
-                                  : SelectAddedBudget(
-                                      horizontalBreak: true,
-                                      selectedBudgetPk: selectedBudgetPk,
-                                      setSelectedBudget: setSelectedBudgetPk,
-                                    ),
-                            ),
+                                duration: Duration(milliseconds: 300),
+                                child: canAddToBudget(
+                                        selectedIncome, selectedType)
+                                    ? SelectAddedBudget(
+                                        horizontalBreak: true,
+                                        selectedBudgetPk: selectedBudgetPk,
+                                        setSelectedBudget: setSelectedBudgetPk,
+                                      )
+                                    : Container(key: ValueKey(1))),
                           ),
                           AnimatedSize(
                             duration: Duration(milliseconds: 400),
@@ -2464,4 +2453,15 @@ class HorizontalBreakAbove extends StatelessWidget {
       ],
     );
   }
+}
+
+void showIncomeCannotBeAddedToBudgetWarning() {
+  openSnackbar(
+    SnackbarMessage(
+      icon: Icons.sticky_note_2_rounded,
+      title: "expenses-only".tr(),
+      description: "expenses-only-description".tr(),
+      timeout: Duration(milliseconds: 5000),
+    ),
+  );
 }

@@ -59,7 +59,8 @@ class HomePageLineGraph extends StatelessWidget {
                           )
                         : StreamBuilder<Budget>(
                             stream: database.getBudget(
-                                appStateSettings["lineGraphReferenceBudgetPk"]),
+                                appStateSettings["lineGraphReferenceBudgetPk"]
+                                    .toString()),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 Budget budget = snapshot.data!;

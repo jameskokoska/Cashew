@@ -119,6 +119,9 @@ String convertToMoney(
   if (amount == double.infinity) {
     return "Infinity";
   }
+  amount = double.parse(amount.toStringAsFixed(numberDecimals));
+  if (finalNumber != null)
+    finalNumber = double.parse(finalNumber.toStringAsFixed(numberDecimals));
   NumberFormat currency = NumberFormat.currency(
     decimalDigits: allDecimals == true ||
             hasDecimalPoints(finalNumber) ||

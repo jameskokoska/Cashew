@@ -206,15 +206,6 @@ class SettingsPageState extends State<SettingsPage>
               )
             : SizedBox.shrink(),
         Builder(builder: (context) {
-          Function(String) displayFilter = (String item) {
-            if (languageNamesJSON[item] != null) {
-              return languageNamesJSON[item].toString().capitalizeFirstofEach;
-            }
-            // if (supportedLanguagesSet.contains(item))
-            //   return supportedLanguagesSet[item];
-            if (item == "System") return "system".tr();
-            return item;
-          };
           return SettingsContainer(
             title: "language".tr(),
             icon: Icons.language_rounded,
@@ -225,50 +216,14 @@ class SettingsPageState extends State<SettingsPage>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 child: TextFont(
-                  text: displayFilter(appStateSettings["locale"].toString()),
+                  text: languageDisplayFilter(
+                      appStateSettings["locale"].toString()),
                   fontSize: 14,
                 ),
               ),
             ),
             onTap: () {
-              openBottomSheet(
-                context,
-                PopupFramework(
-                  title: "language".tr(),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: TranslationsHelp(),
-                      ),
-                      RadioItems(
-                        items: [
-                          "System",
-                          for (String languageCode in supportedLanguagesSet)
-                            languageCode,
-                        ],
-                        initial: appStateSettings["locale"].toString(),
-                        displayFilter: displayFilter,
-                        onChanged: (value) async {
-                          if (value == "System") {
-                            context.resetLocale();
-                          } else {
-                            context.setLocale(Locale(value));
-                          }
-                          updateSettings(
-                            "locale",
-                            value,
-                            pagesNeedingRefresh: [],
-                            updateGlobalState: false,
-                          );
-                          await Future.delayed(Duration(milliseconds: 500));
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              openLanguagePicker(context);
             },
           );
         }),
@@ -554,7 +509,7 @@ class TranslationsHelp extends StatelessWidget {
         openUrl('mailto:dapperappdeveloper@gmail.com');
       },
       color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
-      borderRadius: 15,
+      borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
         child: Row(
@@ -593,4 +548,66 @@ class TranslationsHelp extends StatelessWidget {
       ),
     );
   }
+}
+
+// Returns the name of the language given a key, if key is System will return system translated label
+String languageDisplayFilter(String languageKey) {
+  if (languageNamesJSON[languageKey] != null) {
+    return languageNamesJSON[languageKey].toString().capitalizeFirstofEach;
+  }
+  // if (supportedLanguagesSet.contains(item))
+  //   return supportedLanguagesSet[item];
+  if (languageKey == "System") return "system".tr();
+  return languageKey;
+}
+
+void openLanguagePicker(BuildContext context) {
+  openBottomSheet(
+    context,
+    PopupFramework(
+      title: "language".tr(),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: TranslationsHelp(),
+          ),
+          RadioItems(
+            items: [
+              "System",
+              for (String languageCode in supportedLanguagesSet) languageCode,
+            ],
+            initial: appStateSettings["locale"].toString(),
+            displayFilter: languageDisplayFilter,
+            onChanged: (value) async {
+              if (value == "System") {
+                context.resetLocale();
+              } else {
+                context.setLocale(Locale(value));
+              }
+              updateSettings(
+                "locale",
+                value,
+                pagesNeedingRefresh: [],
+                updateGlobalState: false,
+              );
+              await Future.delayed(Duration(milliseconds: 50));
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+void resetLanguageToSystem(BuildContext context) {
+  if (appStateSettings["locale"].toString() == "System") return;
+  context.resetLocale();
+  updateSettings(
+    "locale",
+    "System",
+    pagesNeedingRefresh: [],
+    updateGlobalState: false,
+  );
 }

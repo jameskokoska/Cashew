@@ -185,10 +185,13 @@ class _FadedButtonState extends State<FadedButton>
           onTapUp: _handleTapUp,
           onTapCancel: _handleTapCancel,
           onTap: widget.onTap,
-          onLongPress: () {
-            _animate();
-            if (widget.onLongPress != null) widget.onLongPress!();
-          },
+          // Use null so other long press actions can be captured
+          onLongPress: widget.onLongPress == null
+              ? null
+              : () {
+                  _animate();
+                  widget.onLongPress!();
+                },
           child: Semantics(
             button: true,
             child: FadeTransition(
