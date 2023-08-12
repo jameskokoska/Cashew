@@ -626,7 +626,8 @@ class OnBoardPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 70),
+          padding: EdgeInsets.only(
+              bottom: 60 + MediaQuery.of(context).padding.bottom),
           child: Align(
             alignment: Alignment.bottomCenter,
             child: bottomWidget ?? SizedBox.shrink(),

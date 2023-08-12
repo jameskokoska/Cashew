@@ -1227,7 +1227,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   : textAddTransaction ?? "",
                               onTap: () async {
                                 bool result = await addTransaction();
-                                if (result) Navigator.of(context).pop();
+                                if (result) Navigator.of(context).maybePop();
                               },
                             ),
                 ),
@@ -1270,7 +1270,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     await addTransaction();
                                   },
                                 );
-                                if (result == true) Navigator.of(context).pop();
+                                if (result == true)
+                                  Navigator.of(context).maybePop();
                               },
                             ),
                           );

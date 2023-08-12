@@ -118,6 +118,7 @@ Future openPayPopup(
             ),
           ),
         );
+        amount = amount.abs() * (transaction.income ? 1 : -1);
       }
       Transaction transactionNew = transaction.copyWith(
         amount: amount,

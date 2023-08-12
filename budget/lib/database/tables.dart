@@ -15,14 +15,26 @@ import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'schema_versions.dart';
 
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
 int schemaVersionGlobal = 38;
 
-// Generate database code
-// dart run build_runner build
+// Migrations and Database changes
+// 0) Make sure you are in application root directory (/budget)
+
+// 1) Generate database code:
+// `dart run build_runner build`
+
+// 2) After change to schema, export the new schema:
+// Replace [schemaVersion] with the value of schemaVersionGlobal
+// `dart run drift_dev schema dump lib\database\tables.dart drift_schemas//drift_schema_v[schemaVersion].json`
+// Read more: https://drift.simonbinder.eu/docs/advanced-features/migrations/#exporting-the-schema
+
+// 3) Generate step-by-step migrations
+// `dart run drift_dev schema steps drift_schemas/ lib\database\schema_versions.dart`
 
 // Character Limits
 const int NAME_LIMIT = 250;
@@ -445,241 +457,283 @@ class FinanceDatabase extends _$FinanceDatabase {
   int get schemaVersion => schemaVersionGlobal;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-        onUpgrade: (migrator, from, to) async {
-          if (from <= 9) {
-            await migrator.createTable($AppSettingsTable(database));
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (migrator, from, to) async {
+        print("FROM" + from.toString());
+        if (from <= 9) {
+          await migrator.createTable($AppSettingsTable(database));
+        }
+        if (from <= 10) {
+          await migrator.alterTable(TableMigration(budgets));
+          await migrator.alterTable(TableMigration(categories));
+          await migrator.alterTable(TableMigration(wallets));
+        }
+        if (from <= 12) {
+          await migrator.addColumn(
+              transactions, transactions.createdAnotherFutureTransaction);
+        }
+        if (from <= 13) {
+          await migrator.createTable($ScannerTemplatesTable(database));
+        }
+        if (from <= 14) {
+          await migrator.addColumn(
+              transactions, transactions.transactionOwnerEmail);
+          await migrator.addColumn(transactions, transactions.sharedKey);
+          await migrator.addColumn(scannerTemplates, scannerTemplates.ignore);
+          // await migrator.addColumn(categories, categories.sharedKey);
+          // await migrator.addColumn(
+          //     transactions, transactions.dateTimeCreated);
+        }
+        if (from <= 15) {
+          // await migrator.addColumn(categories, categories.sharedOwnerMember);
+          // await migrator.addColumn(categories, categories.sharedDateUpdated);
+        }
+        if (from <= 19) {
+          await migrator.addColumn(transactions, transactions.sharedStatus);
+        }
+        if (from <= 20) {
+          await migrator.addColumn(
+              transactions, transactions.sharedDateUpdated);
+          // await migrator.addColumn(budgets, budgets.sharedTransactionsShow);
+        }
+        if (from <= 21) {
+          await migrator.addColumn(
+              transactions, transactions.transactionOriginalOwnerEmail);
+          // await migrator.addColumn(categories, categories.sharedMembers);
+        }
+        if (from <= 21) {
+          await migrator.addColumn(wallets, wallets.currency);
+        }
+        if (from <= 23) {
+          await migrator.addColumn(budgets, budgets.sharedKey);
+          await migrator.addColumn(budgets, budgets.sharedOwnerMember);
+          await migrator.addColumn(budgets, budgets.sharedDateUpdated);
+          await migrator.addColumn(budgets, budgets.sharedMembers);
+          await migrator.addColumn(
+              transactions, transactions.sharedReferenceBudgetPk);
+          await migrator.addColumn(transactions, transactions.sharedOldKey);
+          await migrator.addColumn(categories, categories.methodAdded);
+        }
+        if (from <= 24) {
+          try {
+            await migrator.addColumn(budgets, budgets.sharedAllMembersEver);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 10) {
-            await migrator.alterTable(TableMigration(budgets));
-            await migrator.alterTable(TableMigration(categories));
-            await migrator.alterTable(TableMigration(wallets));
+        }
+        if (from <= 25) {
+          try {
+            await migrator.addColumn(budgets, budgets.addedTransactionsOnly);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 12) {
+        }
+        if (from <= 26) {
+          try {
             await migrator.addColumn(
-                transactions, transactions.createdAnotherFutureTransaction);
+                transactions, transactions.upcomingTransactionNotification);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 13) {
-            await migrator.createTable($ScannerTemplatesTable(database));
+        }
+        if (from <= 27) {
+          await migrator.createTable($CategoryBudgetLimitsTable(database));
+        }
+        if (from <= 28) {
+          try {
+            await migrator.addColumn(budgets, budgets.budgetTransactionFilters);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 14) {
+          try {
+            await migrator.addColumn(budgets, budgets.memberTransactionFilters);
+          } catch (e) {
+            print(e.toString);
+          }
+        }
+        if (from <= 29) {
+          try {
+            await migrator.addColumn(budgets, budgets.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
+          }
+          await migrator.alterTable(TableMigration(budgets));
+        }
+        if (from <= 30) {
+          try {
+            await migrator.addColumn(wallets, wallets.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
+          }
+          try {
             await migrator.addColumn(
-                transactions, transactions.transactionOwnerEmail);
-            await migrator.addColumn(transactions, transactions.sharedKey);
-            await migrator.addColumn(scannerTemplates, scannerTemplates.ignore);
-            // await migrator.addColumn(categories, categories.sharedKey);
-            // await migrator.addColumn(
-            //     transactions, transactions.dateTimeCreated);
+                transactions, transactions.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 15) {
-            // await migrator.addColumn(categories, categories.sharedOwnerMember);
-            // await migrator.addColumn(categories, categories.sharedDateUpdated);
+          try {
+            await migrator.addColumn(categories, categories.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 19) {
-            await migrator.addColumn(transactions, transactions.sharedStatus);
-          }
-          if (from <= 20) {
+          try {
             await migrator.addColumn(
-                transactions, transactions.sharedDateUpdated);
-            // await migrator.addColumn(budgets, budgets.sharedTransactionsShow);
+                categoryBudgetLimits, categoryBudgetLimits.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 21) {
+          try {
             await migrator.addColumn(
-                transactions, transactions.transactionOriginalOwnerEmail);
-            // await migrator.addColumn(categories, categories.sharedMembers);
+                associatedTitles, associatedTitles.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 21) {
-            await migrator.addColumn(wallets, wallets.currency);
+          try {
+            await migrator.addColumn(budgets, budgets.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 23) {
-            await migrator.addColumn(budgets, budgets.sharedKey);
-            await migrator.addColumn(budgets, budgets.sharedOwnerMember);
-            await migrator.addColumn(budgets, budgets.sharedDateUpdated);
-            await migrator.addColumn(budgets, budgets.sharedMembers);
+          try {
             await migrator.addColumn(
-                transactions, transactions.sharedReferenceBudgetPk);
-            await migrator.addColumn(transactions, transactions.sharedOldKey);
-            await migrator.addColumn(categories, categories.methodAdded);
+                scannerTemplates, scannerTemplates.dateTimeModified);
+          } catch (e) {
+            print(e.toString);
           }
-          if (from <= 24) {
-            try {
-              await migrator.addColumn(budgets, budgets.sharedAllMembersEver);
-            } catch (e) {
-              print(e.toString);
-            }
-          }
-          if (from <= 25) {
-            try {
-              await migrator.addColumn(budgets, budgets.addedTransactionsOnly);
-            } catch (e) {
-              print(e.toString);
-            }
-          }
-          if (from <= 26) {
-            try {
-              await migrator.addColumn(
-                  transactions, transactions.upcomingTransactionNotification);
-            } catch (e) {
-              print(e.toString);
-            }
-          }
-          if (from <= 27) {
-            await migrator.createTable($CategoryBudgetLimitsTable(database));
-          }
-          if (from <= 28) {
-            try {
-              await migrator.addColumn(
-                  budgets, budgets.budgetTransactionFilters);
-            } catch (e) {
-              print(e.toString);
-            }
-            try {
-              await migrator.addColumn(
-                  budgets, budgets.memberTransactionFilters);
-            } catch (e) {
-              print(e.toString);
-            }
-          }
-          if (from <= 29) {
-            try {
-              await migrator.addColumn(budgets, budgets.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            await migrator.alterTable(TableMigration(budgets));
-          }
-          if (from <= 30) {
-            try {
-              await migrator.addColumn(wallets, wallets.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            try {
-              await migrator.addColumn(
-                  transactions, transactions.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            try {
-              await migrator.addColumn(categories, categories.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            try {
-              await migrator.addColumn(
-                  categoryBudgetLimits, categoryBudgetLimits.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            try {
-              await migrator.addColumn(
-                  associatedTitles, associatedTitles.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            try {
-              await migrator.addColumn(budgets, budgets.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            try {
-              await migrator.addColumn(
-                  scannerTemplates, scannerTemplates.dateTimeModified);
-            } catch (e) {
-              print(e.toString);
-            }
-            // await migrator.addColumn(labels, labels.dateTimeModified);
-          }
-          if (from <= 31) {
-            await migrator.alterTable(TableMigration(budgets));
-          }
-          if (from <= 32) {
-            await migrator.createTable($DeleteLogsTable(database));
-            await migrator.alterTable(TableMigration(categories));
-            await migrator.alterTable(TableMigration(transactions));
-            await migrator.deleteTable("Labels");
-          }
-          if (from <= 33) {
-            await migrator.addColumn(wallets, wallets.decimals);
-          }
-          if (from <= 34) {
-            await migrator.addColumn(budgets, budgets.isAbsoluteSpendingLimit);
-          }
-          if (from <= 35) {
-            await migrator.alterTable(TableMigration(transactions));
-          }
-          if (from <= 36) {
-            await migrator.alterTable(
-              TableMigration(deleteLogs, columnTransformer: {
-                deleteLogs.deleteLogPk: deleteLogs.deleteLogPk.cast<String>(),
-                deleteLogs.entryPk: deleteLogs.entryPk.cast<String>(),
+          // await migrator.addColumn(labels, labels.dateTimeModified);
+        }
+        if (from <= 31) {
+          await migrator.alterTable(TableMigration(budgets));
+        }
+        if (from <= 32) {
+          await migrator.createTable($DeleteLogsTable(database));
+          await migrator.alterTable(TableMigration(categories));
+          await migrator.alterTable(TableMigration(transactions));
+          await migrator.deleteTable("Labels");
+        }
+        await stepByStep(
+          from33To34: (m, schema) async {
+            await m.addColumn(schema.wallets, schema.wallets.decimals);
+          },
+          from34To35: (m, schema) async {
+            await m.addColumn(
+                schema.budgets, schema.budgets.isAbsoluteSpendingLimit);
+          },
+          from35To36: (m, schema) async {
+            await m.alterTable(TableMigration(schema.transactions));
+          },
+          from36To37: (m, schema) async {
+            await m.alterTable(
+              TableMigration(schema.deleteLogs, columnTransformer: {
+                schema.deleteLogs.deleteLogPk:
+                    schema.deleteLogs.deleteLogPk.cast<String>(),
+                schema.deleteLogs.entryPk:
+                    schema.deleteLogs.entryPk.cast<String>(),
               }),
             );
-            await migrator.alterTable(
-              TableMigration(wallets, columnTransformer: {
-                wallets.walletPk: wallets.walletPk.cast<String>(),
+            await m.alterTable(
+              TableMigration(schema.wallets, columnTransformer: {
+                schema.wallets.walletPk: schema.wallets.walletPk.cast<String>(),
               }),
             );
-            await migrator.alterTable(
-              TableMigration(transactions, columnTransformer: {
-                transactions.transactionPk:
-                    transactions.transactionPk.cast<String>(),
-                transactions.categoryFk: transactions.categoryFk.cast<String>(),
-                transactions.walletFk: transactions.walletFk.cast<String>(),
-                transactions.sharedReferenceBudgetPk:
-                    transactions.sharedReferenceBudgetPk.cast<String>(),
+            await m.alterTable(
+              TableMigration(schema.transactions, columnTransformer: {
+                schema.transactions.transactionPk:
+                    schema.transactions.transactionPk.cast<String>(),
+                schema.transactions.categoryFk:
+                    schema.transactions.categoryFk.cast<String>(),
+                schema.transactions.walletFk:
+                    schema.transactions.walletFk.cast<String>(),
+                schema.transactions.sharedReferenceBudgetPk:
+                    schema.transactions.sharedReferenceBudgetPk.cast<String>(),
               }),
             );
-            await migrator.alterTable(
-              TableMigration(categories, columnTransformer: {
-                categories.categoryPk: categories.categoryPk.cast<String>(),
+            await m.alterTable(
+              TableMigration(schema.categories, columnTransformer: {
+                schema.categories.categoryPk:
+                    schema.categories.categoryPk.cast<String>(),
               }),
             );
-            await migrator.alterTable(
-              TableMigration(categoryBudgetLimits, columnTransformer: {
-                categoryBudgetLimits.categoryLimitPk:
-                    categoryBudgetLimits.categoryLimitPk.cast<String>(),
-                categoryBudgetLimits.categoryFk:
-                    categoryBudgetLimits.categoryFk.cast<String>(),
-                categoryBudgetLimits.budgetFk:
-                    categoryBudgetLimits.budgetFk.cast<String>(),
+            await m.alterTable(
+              TableMigration(schema.categoryBudgetLimits, columnTransformer: {
+                schema.categoryBudgetLimits.categoryLimitPk:
+                    schema.categoryBudgetLimits.categoryLimitPk.cast<String>(),
+                schema.categoryBudgetLimits.categoryFk:
+                    schema.categoryBudgetLimits.categoryFk.cast<String>(),
+                schema.categoryBudgetLimits.budgetFk:
+                    schema.categoryBudgetLimits.budgetFk.cast<String>(),
               }),
             );
-            await migrator.alterTable(
-              TableMigration(associatedTitles, columnTransformer: {
-                associatedTitles.associatedTitlePk:
-                    associatedTitles.associatedTitlePk.cast<String>(),
-                associatedTitles.categoryFk:
-                    associatedTitles.categoryFk.cast<String>(),
+            await m.alterTable(
+              TableMigration(schema.associatedTitles, columnTransformer: {
+                schema.associatedTitles.associatedTitlePk:
+                    schema.associatedTitles.associatedTitlePk.cast<String>(),
+                schema.associatedTitles.categoryFk:
+                    schema.associatedTitles.categoryFk.cast<String>(),
               }),
             );
-            await migrator.alterTable(
-              TableMigration(budgets, columnTransformer: {
-                budgets.budgetPk: budgets.budgetPk.cast<String>(),
-                budgets.walletFk: budgets.walletFk.cast<String>(),
+            await m.alterTable(
+              TableMigration(schema.budgets, columnTransformer: {
+                schema.budgets.budgetPk: schema.budgets.budgetPk.cast<String>(),
+                schema.budgets.walletFk: schema.budgets.walletFk.cast<String>(),
               }),
             );
-            await migrator.alterTable(
-              TableMigration(scannerTemplates, columnTransformer: {
-                scannerTemplates.scannerTemplatePk:
-                    scannerTemplates.scannerTemplatePk.cast<String>(),
-                scannerTemplates.defaultCategoryFk:
-                    scannerTemplates.defaultCategoryFk.cast<String>(),
-                scannerTemplates.walletFk:
-                    scannerTemplates.walletFk.cast<String>(),
+            await m.alterTable(
+              TableMigration(schema.scannerTemplates, columnTransformer: {
+                schema.scannerTemplates.scannerTemplatePk:
+                    schema.scannerTemplates.scannerTemplatePk.cast<String>(),
+                schema.scannerTemplates.defaultCategoryFk:
+                    schema.scannerTemplates.defaultCategoryFk.cast<String>(),
+                schema.scannerTemplates.walletFk:
+                    schema.scannerTemplates.walletFk.cast<String>(),
               }),
             );
-          }
-          if (from <= 37) {
-            try {
-              await migrator.addColumn(
-                  transactions, transactions.originalDateDue);
-            } catch (e) {
-              print(e.toString);
-            }
-          }
-        },
-      );
+          },
+          from37To38: (m, schema) async {
+            await m.addColumn(
+                schema.transactions, schema.transactions.originalDateDue);
+          },
+        )(migrator, from, to);
+      },
+    );
+  }
+
+  // Migration history
+  // Use the line with global schema version
+  // git log -p -L 22,22:lib\database\tables.dart
+
+  // -int schemaVersionGlobal = 31;
+  // +int schemaVersionGlobal = 33;
+  // commit 2c8e50bbee8d8f75e2d537ab8ee28d1a2bb288c5
+  // Tue Mar 21 02:22:21 2023 -0400
+
+  // -int schemaVersionGlobal = 33;
+  // +int schemaVersionGlobal = 34;
+  // commit 812c0ada7ec346970d21e711d46f4fa11967b951
+  // Tue Apr 25 01:18:51 2023 -0400
+
+  // -int schemaVersionGlobal = 34;
+  // +int schemaVersionGlobal = 35;
+  // commit 339d6662acc413b03f0fdfbd828c6bca95897f17
+  // Sun Jun 18 17:50:44 2023 -0400
+
+  // -int schemaVersionGlobal = 35;
+  // +int schemaVersionGlobal = 36;
+  // commit 867daa0847f43c504b6a9b75f5613eb4d5b0fc71
+  // Mon Jun 26 02:03:47 2023 -0400
+
+  // -int schemaVersionGlobal = 36;
+  // +int schemaVersionGlobal = 37;
+  // Thu Aug 10 18:40:26 2023 -0400
+  // commit c5099cd91c20d05d84bb271e87ca051f55080665
+
+  // -int schemaVersionGlobal = 37;
+  // +int schemaVersionGlobal = 38;
+  // Sat Aug 12 03:26:31 2023 -0400
+  // commit 3b1e604950ec04eba0a545991ba743954156246e
 
   Future<void> deleteEverything() {
     return transaction(() async {
